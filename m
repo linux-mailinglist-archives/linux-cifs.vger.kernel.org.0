@@ -2,104 +2,65 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F3913C19
-	for <lists+linux-cifs@lfdr.de>; Sat,  4 May 2019 22:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CF3134A0
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 May 2019 23:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbfEDUfv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 4 May 2019 16:35:51 -0400
-Received: from 174968.cloudwaysapps.com ([167.99.71.181]:47641 "EHLO
-        174968.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727404AbfEDUfv (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 4 May 2019 16:35:51 -0400
-Received: from Shop01 (174968.cloudwaysapps.com [127.0.0.1])
-        by 174968.cloudwaysapps.com (Postfix) with SMTP id 4548D27D33;
-        Fri,  3 May 2019 17:42:39 +0000 (UTC)
-Received: from [144.7.227.162] by Shop01 with ESMTP id <659958-52664> for <grapz666@gmail.com>; Fri, 03 May 2019 19:41:48 +0100
-Message-ID: <67$ne-z-56$h5-8ig$-1$n75@c7kxchyvmlq>
-From:   "CYBER GATES LTD" <gameza@taekwondo.com>
-Reply-To: "CYBER GATES LTD" <gameza@taekwondo.com>
-To:     grapz666@gmail.com
-Subject: FRESH & NEW EMAIL LEADS TOOLS, RDP,EMAILS, SPYWARES, SMTP, MAILER, CVV
-Date:   Fri, 03 May 19 19:41:48 GMT
-X-Mailer: Microsoft Outlook Express 5.00.2615.200
+        id S1726597AbfECVIK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 3 May 2019 17:08:10 -0400
+Received: from hr2.samba.org ([144.76.82.148]:21658 "EHLO hr2.samba.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726022AbfECVIK (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 3 May 2019 17:08:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42627210; h=Message-ID:Cc:To:From:Date;
+        bh=VNspjs9VC9guH+qsODYRCpoC5byx9t2O+ooU/CXSptM=; b=npcDww1zWon1xqm5QuhvxcjztN
+        1E9N5PmxNp3GvYAF88f4QdMeMfMJNugx7JEGsh7XXjmvyWo5pPtCrEe8RdMnhHrbCc+4TGpm9J3F7
+        VX56CSd+HOk3VdVuGFt6cwJc7OWLmKtI/L9A0dFpAB1ClpNLzaurxzAUM2bJVuTe+97o=;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.2:ECDHE_ECDSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1hMfPb-0006fU-Q1; Fri, 03 May 2019 21:08:08 +0000
+Date:   Fri, 3 May 2019 23:08:03 +0200
+From:   David Disseldorp <ddiss@samba.org>
+To:     ronnie sahlberg <ronniesahlberg@gmail.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>,
+        Steve French <smfrench@gmail.com>,
+        Samba Technical <samba-technical@lists.samba.org>
+Subject: Re: SMB2 SET_ZERO_DATA and PUNCH_HOLE
+Message-ID: <20190503230803.58266ae2@samba.org>
+In-Reply-To: <CAN05THSthhyGctyByj5eun6C_KK58xWgNYer+7TKBrqyObNZsw@mail.gmail.com>
+References: <CAN05THSthhyGctyByj5eun6C_KK58xWgNYer+7TKBrqyObNZsw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary=".33_ADD8__7C4B._"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+On Thu, 25 Apr 2019 17:23:56 +1000, ronnie sahlberg wrote:
 
---.33_ADD8__7C4B._
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+> Folks.
+> 
+> In the cifs client  we use FSCTL_SET_ZERO_DATA when userspace wants to
+> punch a hole in a file. SET_ZERO_DATA maps quite well to the
+> PUNCH_HOLE semantics in that it will deallocate what it can and
+> overwrite what it can not with 0.
 
-DEAR CUSTOMERS
-We are happy to inform you about our new SMTP SERVER
-today I would like to introduce you to a page that provides services for U=
-NLIMITED SENDER
-We offer all the services that you desire now? 15x Domain Inbox SMTP  
-please check  http://www.cybergatesltd.net/index.php?route=3Dproduct/produ=
-ct&product_id=3D458
+Cool, I'd be interested to hear how things go when testing against
+a Samba SMB2+ server - it similarly maps FSCTL_SET_ZERO_DATA to
+PUNCH_HOLE.
 
-    Unlimited SMTP (Cheap and Inbox)
-    Unlimited PHP Mailer (Cheap and Inbox)
-    Unlimited WebMail Sever ( Cheap And Inbox)
-    RDP With AMS 4.3 (Warranty Full Time and On Sales)
-    Email Leads (New and Fresh)
-    Unlimited Cpanel Hosting (Use For Scampage, botnet,etc...)
-    VPN
-    Linux Root
-    Hacking Tools
-    zeus trojan Hacking
-    ScamPage
-    CVV,
-    BANK LOGINS,
-    DATING SITES LOGIN
-    SPYWARES
-    ETC
+> On windows 16/ntfs the deallocate blocksize is 64k.
+> 
+> Does anyone know if this is always 64k or if there is a way to query
+> the server for this?
 
-Top Services  http://www.cybergatesltd.net
-To impress the customers, so we decided to discout  price all products wit=
-h 10% discount code: http://www.cybergatesltd.net
+smbtorture4 includes a sparse_hole_dealloc test for checking this via
+incremental ZERO_DATA + QAR requests:
+https://git.samba.org/?p=samba.git;a=blob;f=source4/torture/smb2/ioctl.c#l3981
 
-You can see more
-Sale OFF 10% All Product
-How can I enter discount code?
-We also have 100 RDP WITH AMS program discounts to customers
-Click here to Order Now, be quick, limited    http://www.cybergatesltd.net=
-/index.php?route=3Dproduct/category&path=3D93
-Why is trusted by our customers?
-We always provide the best service for our customers, we guarantee custome=
-rs will be happy to have what they want, the first priority is to treat ou=
-r customers as god
-How to Order?
-Payment Method?
-We accept payment Via PerfectMoney
-We will try to accept multiple payment gateways to serve customers better
-Deliver
-We Delivered Via Email Within 0-2 hour
-You have any questions Other?
-Click here for see more //
-http://www.cybergatesltd.net/index.php?route=3D=
-product/category&path=3D59
-Are you ready to experience?
-READY TO GET STARTED?
-With us, you will not be disappointed, currently on the market there are m=
-any scam sites, selling quality goods, come to us, we will show you, Our s=
-ervice is best
-Customer Care Services
-Thank you for choosing cyber gates Store!
-chat with the admin for more information
-Perfect Money payments will be accepted using our LIVE CHAT payment proces=
-sor. 
+I don't recall seeing anything non-64k at the time, but I didn't check
+that thoroughly.
 
-skype( skytunnel1 
-chat ( rsmtp@yahoo.com
-www.cybergatesltd.net
-
---.33_ADD8__7C4B._--
-
+Cheers, David
