@@ -2,63 +2,109 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B35BA21520
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 May 2019 10:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7FB22165
+	for <lists+linux-cifs@lfdr.de>; Sat, 18 May 2019 05:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728704AbfEQIMg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 17 May 2019 04:12:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38196 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727624AbfEQIMf (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 May 2019 04:12:35 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hRXyj-0004tg-LP; Fri, 17 May 2019 08:12:33 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: fix memory leak of pneg_inbuf on -EOPNOTSUPP ioctl case
-Date:   Fri, 17 May 2019 09:12:33 +0100
-Message-Id: <20190517081233.11764-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727872AbfERDhp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 17 May 2019 23:37:45 -0400
+Received: from mail-pg1-f170.google.com ([209.85.215.170]:44669 "EHLO
+        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727309AbfERDhp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 May 2019 23:37:45 -0400
+Received: by mail-pg1-f170.google.com with SMTP id z16so4160879pgv.11;
+        Fri, 17 May 2019 20:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=OM8pwcWcC1FGoW4dfmsYMsxUg+FgS1R/aDdR26qmmWY=;
+        b=O28aqnJC3u+6XwLnAZZREUdByMbtkEhXPjqFit3ma36c76z1tnAIqmLPGje2CtuYQq
+         jU2qI++x2kB+ulwqGHUeOuxXqwGkTaCLs2hv00qjDf4uMAuQRWCeT6a83ZSc98B3UzE5
+         4IjRScEqG9xkXj+2ILNZW0sAfIF4VDM2WsSa11J0XogWpjl/QLNbA20sZcgaRGWxwbTo
+         77HmlL42mlnDIoMc9x/kZ5iuStOc4TWjKeNODBOYGhOj64XNXTSkVkwfb7IvB0vRYeIJ
+         iN2xgVPNUThuxzvs1Ds9F0GfRTMVqq2QhRXEIA4u0mJ9cpPkFTah86s8Uq2m3r2i+3yi
+         0khQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=OM8pwcWcC1FGoW4dfmsYMsxUg+FgS1R/aDdR26qmmWY=;
+        b=pmPVsr5+MRW0yKN+X7R4uCUkQ01Bv0zDQgv50lzexAyYVxBe1ogX82AwDBDjUovjsU
+         lk+0jDcgTUauVOAmwsa2Rz9EMyfKMrAmg6j9SNQHDkIfCuHT2hYmm6pSfEIv0TmAVMb3
+         IcLBnBgHjZVRkhwUJ8ABZCGP1rd84POpigfhRcwIFDDMDf+UG9KIcwJVayksYpraCcWB
+         Ne9B8xmLu8dnubE01xt2CZtZDedoovNptD1D73eflf6yYHW2xBYSNnNMM0q3tPYwuHUK
+         CLUOxiRUAZnsftY11hErucuTpGF/qOLNzpozg9ovUqSdGufMXcvNh34CRflwgcOcyN54
+         1Bmw==
+X-Gm-Message-State: APjAAAVWoUnz21Tm9q61iDbRgLwuJ38AQAwuf/NIvO9UwuXzGDzB+rPy
+        Sdc7Wb/bADARC2wZZ5PyyDeeVjG9Z1uxm7Gdbvk4kA==
+X-Google-Smtp-Source: APXvYqyUL2at8g6loPqY4hWfss78cxwdU0/jxRHyW1AUncUSQM/2bOOswHJOfKVJE+kMgx+PymPR8N6iJ+B+kzBB9lo=
+X-Received: by 2002:a62:2b82:: with SMTP id r124mr56423074pfr.235.1558150664230;
+ Fri, 17 May 2019 20:37:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 17 May 2019 22:37:33 -0500
+Message-ID: <CAH2r5msEB_bvDTOPLwtoH0Ty6ttXhb3RP+18d47xNjN7q0apYA@mail.gmail.com>
+Subject: [GIT PULL] SMB3 Fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Please pull the following changes since commit
+78d9affbb0e79d48fd82b34ef9cd673a7c86d6f2:
 
-Currently in the case where SMB2_ioctl returns the -EOPNOTSUPP error
-there is a memory leak of pneg_inbuf. Fix this by returning via
-the out_free_inbuf exit path that will perform the relevant kfree.
+  Merge tag '5.2-smb3' of git://git.samba.org/sfrench/cifs-2.6
+(2019-05-08 13:06:18 -0700)
 
-Addresses-Coverity: ("Resource leak")
-Fixes: 969ae8e8d4ee ("cifs: Accept validate negotiate if server return NT_STATUS_NOT_SUPPORTED")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- fs/cifs/smb2pdu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 710ceb875161..5b8d1482ffbd 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -1054,7 +1054,8 @@ int smb3_validate_negotiate(const unsigned int xid, struct cifs_tcon *tcon)
- 		 * not supported error. Client should accept it.
- 		 */
- 		cifs_dbg(VFS, "Server does not support validate negotiate\n");
--		return 0;
-+		rc = 0;
-+		goto out_free_inbuf;
- 	} else if (rc != 0) {
- 		cifs_dbg(VFS, "validate protocol negotiate failed: %d\n", rc);
- 		rc = -EIO;
--- 
-2.20.1
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.2-rc-smb3-fixes
 
+for you to fetch changes up to dece44e381ab4a9fd1021db45ba4472e8c85becb:
+
+  cifs: add support for SEEK_DATA and SEEK_HOLE (2019-05-15 22:27:53 -0500)
+
+----------------------------------------------------------------
+Minor cleanup and SMB3 fixes, one for stable, 4 RDMA (smbdirect)
+related. Also adds SEEK_HOLE support
+----------------------------------------------------------------
+Christoph Probst (1):
+      cifs: cleanup smb2ops.c and normalize strings
+
+Kovtunenko Oleksandr (1):
+      Fixed https://bugzilla.kernel.org/show_bug.cgi?id=202935 allow
+write on the same file
+
+Long Li (4):
+      cifs:smbd When reconnecting to server, call smbd_destroy() after
+all MIDs have been called
+      cifs:smbd Use the correct DMA direction when sending data
+      cifs: Don't match port on SMBDirect transport
+      cifs: Allocate memory for all iovs in smb2_ioctl
+
+Ronnie Sahlberg (2):
+      cifs: use the right include for signal_pending()
+      cifs: add support for SEEK_DATA and SEEK_HOLE
+
+Steve French (2):
+      smb3: display session id in debug data
+      smb3: trivial cleanup to smb2ops.c
+
+ fs/cifs/cifs_debug.c |   2 ++
+ fs/cifs/cifsfs.c     |  14 +++++++----
+ fs/cifs/cifsglob.h   |   2 ++
+ fs/cifs/connect.c    |  41 ++++++++++++++++++-------------
+ fs/cifs/smb2ops.c    | 134
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+ fs/cifs/smb2pdu.c    |  21 ++++++++++++++--
+ fs/cifs/smbdirect.c  |   8 +++---
+ fs/cifs/transport.c  |   2 +-
+ 8 files changed, 173 insertions(+), 51 deletions(-)
+
+
+--
+Thanks,
+
+Steve
