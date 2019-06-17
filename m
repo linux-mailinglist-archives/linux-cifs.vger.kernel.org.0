@@ -2,119 +2,117 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA76493CA
-	for <lists+linux-cifs@lfdr.de>; Mon, 17 Jun 2019 23:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114554953B
+	for <lists+linux-cifs@lfdr.de>; Tue, 18 Jun 2019 00:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728972AbfFQVd0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Jun 2019 17:33:26 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45945 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729812AbfFQV0F (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Jun 2019 17:26:05 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m23so10777126lje.12;
-        Mon, 17 Jun 2019 14:26:03 -0700 (PDT)
+        id S1726095AbfFQWir (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Jun 2019 18:38:47 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35832 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfFQWir (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Jun 2019 18:38:47 -0400
+Received: by mail-pf1-f194.google.com with SMTP id d126so6436431pfd.2
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Jun 2019 15:38:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SgrTuP6AQJPtUFPq6sFHz2StVLkigVx7MIwgSvRBi6w=;
-        b=l/ElTctsOi+gGau20KA8uGy9YGXLuScH8X8b1uZiNffsaZIVn790yRgvbVNt18Vswg
-         Hksl10Z1eZT0BUcY1/FloOBQ16pqcnEFzIjCMH6spvZbQ9BOS4f/LN4UhPtIa6MF/oLd
-         d3XWZr0jfQQv+SOg08BGYSL8ZlWOYncwEk46Fey8W0uzMXsEmnjSCTASr7tuEYNfa2ZM
-         WHHLdOPQ83V8oNsDZhm5maZrlD9liREWpos1XBZRpvj2Tc5CnxrIvW3t2KXYGo2D0kl5
-         BchRpImz1DkVhujje0XDQVFOHa4kpzL9fTKC6DWmg8lf0coYbcANLGwfTAXaPRoX9y3M
-         rNgA==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=pjiZXEZ4EwnxxNost5O//yy7iV5QE5TEsGkBJ1niPX8=;
+        b=I9gxulqxafE8lnd9FoTZeOoleaToE97ezPuAl63Hy4RjPGNih3xmjrcJNrGV+87tep
+         Frdtz52jsiBa99VVx9wcL6e36fqpuG8tqR9iQJn4YR7QcqZceOQUGmpzC1cSzgb5vdBx
+         aUrzm1N+GtDkNjUzidQFpvqIa/3KDR3HyxDM+djnlMlEC+9cmml8ID92Ti2OcKjT4HWQ
+         Fu0AuTWscHkHWS804AC1J0LqN228MEVWMKNYENL27ghje9+X2TrXqcWKBUQW1E69YpcX
+         SBmjy71TS8aCFJJS6+AwNq3w0jJf31AqJmB+6pDLjkUmJHH6vMnTHVLhNjpRJmMtioNX
+         fBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SgrTuP6AQJPtUFPq6sFHz2StVLkigVx7MIwgSvRBi6w=;
-        b=m7KKUBCGd+h8ShRLK6pkLG1Mp1zRnlydU1kl9WHeb9VJ6JPFSvWUR1b228nPhjCuKB
-         2/rUv1+G9nD1DrsVQ3Tau4rmLYI47t0jNTpmESeSnD0Uf7VkLkTyc6t11I8NL8R8apJK
-         tVADbjquvaQQrCCrYrkryuIjJ95byTPRmqpDunLXVi9OQjiUIWHU+r7McVkTve13fkiH
-         SBoh+qYrfLJKLbM0B6kVyeU5PbgLBr4ponVa3xeXSloqo/jOOTgGm51Je1jFb/5Jy4J8
-         O6MWaBQ1eAd+6HGed90RRQoyhz/pxOo5v/gYIf5ZsSeuOBPWddX8haNhzU/lJI8LOfuu
-         WxmQ==
-X-Gm-Message-State: APjAAAXr0e0b1t2gSA4QtuATxE0ob3uv5Okj65sd4R8vT9LxDUcjxm8Z
-        ci7yDt5oz9Q/4YusaMS0vA6pzqPRDnO1LWQyqg==
-X-Google-Smtp-Source: APXvYqxFledApKEXfw6Y6/el0MQeLQCJnRLGw147lUZtU+VV3t9B7No5NNn3uVNh8KWzfoCBP2jJpf2I1ZF2RDOZzp4=
-X-Received: by 2002:a2e:9997:: with SMTP id w23mr27645106lji.45.1560806762821;
- Mon, 17 Jun 2019 14:26:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=pjiZXEZ4EwnxxNost5O//yy7iV5QE5TEsGkBJ1niPX8=;
+        b=TVml4/pUxZo8F1NTkdhn8QaF6robyySad6cmmnIGhVrXy/ubfoupEbUvfzElajTQBq
+         /diWZAQmpQMtvliVvM4UoBtiviuUUVjlc5YKRrJt7bSG0DhZsTSWtsMn+W4WxgHNZAd6
+         ehufnqN9r0o+8mwf3HLb/aLswFcSE92OnTYc4kA7aB/lSzNVhkVypcj8fyp+7QGXmtJY
+         sk7/tNZKSDl2jhBPmjpVCmGKiHVUwWrEPirEvnbz9j8P/3mZj8kDt/KLTvtO6H3Mj8Ad
+         EtybeTrom90MlQflipaE/jVLhL6c1vxeHvp+aoGN1kJfINp7G/Wx1YkaGVpXQgHevG35
+         bqvw==
+X-Gm-Message-State: APjAAAVDELWRDc/Vat1W46H+govyQNgj/rGpVe0b0u/uobFZNTq+Vo7c
+        ddMpqtpexPsGzEyFkOWwHx4ZrrN74gcYZrKEsq+nO0kP
+X-Google-Smtp-Source: APXvYqy1cbDQaEVXEawhSlShj1t9Sx1jsgsGKX6419oTqJZLkJMjCmTOVOsBHI1kbxommYZ/ZfEJEp2U9a+ErbWCXQ8=
+X-Received: by 2002:a17:90a:2385:: with SMTP id g5mr1604032pje.12.1560811126418;
+ Mon, 17 Jun 2019 15:38:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190614030229.22375-1-lsahlber@redhat.com> <CAH2r5muLjnEer+6Fn2ikLRF6BuK2F2qCzXTHS5Kakhbk7mS4Lg@mail.gmail.com>
-In-Reply-To: <CAH2r5muLjnEer+6Fn2ikLRF6BuK2F2qCzXTHS5Kakhbk7mS4Lg@mail.gmail.com>
-From:   Pavel Shilovsky <piastryyy@gmail.com>
-Date:   Mon, 17 Jun 2019 14:25:51 -0700
-Message-ID: <CAKywueSaqY2qDvzbtL5ua8v18n1uY=SZDi5F4bUQRQ_Ft2ptfA@mail.gmail.com>
-Subject: Re: [PATCH] cifs: fix GlobalMid_Lock bug in cifs_reconnect
-To:     Steve French <smfrench@gmail.com>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 17 Jun 2019 17:38:35 -0500
+Message-ID: <CAH2r5mv=mW+zOgMUpXPjJbAzgUfigsod7YNVUq9-v5Da1Hu9Ug@mail.gmail.com>
+Subject: [PATCH][SMB3] if max_credits is specified on mount then display it in /proc/mounts
+To:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000c0967c058b8ca873"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Acked-by: Pavel Shilovsky <pshilov@microsoft.com>
+--000000000000c0967c058b8ca873
+Content-Type: text/plain; charset="UTF-8"
 
---
-Best regards,
-Pavel Shilovsky
+If "max_credits" is overridden from its default by specifying
+it on the smb3 mount then display it in /proc/mounts
 
-=D1=87=D1=82, 13 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 20:57, Steve Frenc=
-h <smfrench@gmail.com>:
->
-> tentatively merged into cifs-2.6.git for-next and to the github tree
->
-> On Thu, Jun 13, 2019 at 10:02 PM Ronnie Sahlberg <lsahlber@redhat.com> wr=
-ote:
-> >
-> > We can not hold the GlobalMid_Lock spinlock during the
-> > dfs processing in cifs_reconnect since it invokes things that may sleep
-> > and thus trigger :
-> >
-> > BUG: sleeping function called from invalid context at kernel/locking/rw=
-sem.c:23
-> >
-> > Thus we need to drop the spinlock during this code block.
-> >
-> > RHBZ: 1716743
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> > ---
-> >  fs/cifs/connect.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> > index 8c4121da624e..8dd6637a3cbb 100644
-> > --- a/fs/cifs/connect.c
-> > +++ b/fs/cifs/connect.c
-> > @@ -476,6 +476,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
-> >         spin_lock(&GlobalMid_Lock);
-> >         server->nr_targets =3D 1;
-> >  #ifdef CONFIG_CIFS_DFS_UPCALL
-> > +       spin_unlock(&GlobalMid_Lock);
-> >         cifs_sb =3D find_super_by_tcp(server);
-> >         if (IS_ERR(cifs_sb)) {
-> >                 rc =3D PTR_ERR(cifs_sb);
-> > @@ -493,6 +494,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
-> >         }
-> >         cifs_dbg(FYI, "%s: will retry %d target(s)\n", __func__,
-> >                  server->nr_targets);
-> > +       spin_lock(&GlobalMid_Lock);
-> >  #endif
-> >         if (server->tcpStatus =3D=3D CifsExiting) {
-> >                 /* the demux thread will exit normally
-> > --
-> > 2.13.6
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+Signed-off-by: Steve French <stfrench@microsoft.com>
+---
+ fs/cifs/cifsfs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index d06edebf3a73..786e07754107 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -554,6 +554,11 @@ cifs_show_options(struct seq_file *s, struct dentry *root)
+     seq_printf(s, ",bsize=%u", cifs_sb->bsize);
+     seq_printf(s, ",echo_interval=%lu",
+             tcon->ses->server->echo_interval / HZ);
++
++    /* Only display max_credits if it was overridden on mount */
++    if (tcon->ses->server->max_credits != SMB2_MAX_CREDITS_AVAILABLE)
++        seq_printf(s, ",max_credits=%u", tcon->ses->server->max_credits);
++
+     if (tcon->snapshot_time)
+         seq_printf(s, ",snapshot=%llu", tcon->snapshot_time);
+     if (tcon->handle_timeout)
+-- 
+
+
+-- 
+Thanks,
+
+Steve
+
+--000000000000c0967c058b8ca873
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb3-if-max_credits-is-specified-then-display-it-in-.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb3-if-max_credits-is-specified-then-display-it-in-.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_jx0ymqce0>
+X-Attachment-Id: f_jx0ymqce0
+
+RnJvbSBlMzVhZTFiZDY4ODE1MjllMTYyMGU4OTY2NDAxMTZmNjFhMzdjZjk5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IE1vbiwgMTcgSnVuIDIwMTkgMTc6MzQ6NTcgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
+bWIzOiBpZiBtYXhfY3JlZGl0cyBpcyBzcGVjaWZpZWQgdGhlbiBkaXNwbGF5IGl0IGluCiAvcHJv
+Yy9tb3VudHMKCklmICJtYXhfY3JlZGl0cyIgaXMgb3ZlcnJpZGRlbiBmcm9tIGl0cyBkZWZhdWx0
+IGJ5IHNwZWNpZnlpbmcKaXQgb24gdGhlIHNtYjMgbW91bnQgdGhlbiBkaXNwbGF5IGl0IGluIC9w
+cm9jL21vdW50cwoKU2lnbmVkLW9mZi1ieTogU3RldmUgRnJlbmNoIDxzdGZyZW5jaEBtaWNyb3Nv
+ZnQuY29tPgotLS0KIGZzL2NpZnMvY2lmc2ZzLmMgfCA1ICsrKysrCiAxIGZpbGUgY2hhbmdlZCwg
+NSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9jaWZzZnMuYyBiL2ZzL2NpZnMv
+Y2lmc2ZzLmMKaW5kZXggZDA2ZWRlYmYzYTczLi43ODZlMDc3NTQxMDcgMTAwNjQ0Ci0tLSBhL2Zz
+L2NpZnMvY2lmc2ZzLmMKKysrIGIvZnMvY2lmcy9jaWZzZnMuYwpAQCAtNTU0LDYgKzU1NCwxMSBA
+QCBjaWZzX3Nob3dfb3B0aW9ucyhzdHJ1Y3Qgc2VxX2ZpbGUgKnMsIHN0cnVjdCBkZW50cnkgKnJv
+b3QpCiAJc2VxX3ByaW50ZihzLCAiLGJzaXplPSV1IiwgY2lmc19zYi0+YnNpemUpOwogCXNlcV9w
+cmludGYocywgIixlY2hvX2ludGVydmFsPSVsdSIsCiAJCQl0Y29uLT5zZXMtPnNlcnZlci0+ZWNo
+b19pbnRlcnZhbCAvIEhaKTsKKworCS8qIE9ubHkgZGlzcGxheSBtYXhfY3JlZGl0cyBpZiBpdCB3
+YXMgb3ZlcnJpZGRlbiBvbiBtb3VudCAqLworCWlmICh0Y29uLT5zZXMtPnNlcnZlci0+bWF4X2Ny
+ZWRpdHMgIT0gU01CMl9NQVhfQ1JFRElUU19BVkFJTEFCTEUpCisJCXNlcV9wcmludGYocywgIixt
+YXhfY3JlZGl0cz0ldSIsIHRjb24tPnNlcy0+c2VydmVyLT5tYXhfY3JlZGl0cyk7CisKIAlpZiAo
+dGNvbi0+c25hcHNob3RfdGltZSkKIAkJc2VxX3ByaW50ZihzLCAiLHNuYXBzaG90PSVsbHUiLCB0
+Y29uLT5zbmFwc2hvdF90aW1lKTsKIAlpZiAodGNvbi0+aGFuZGxlX3RpbWVvdXQpCi0tIAoyLjIw
+LjEKCg==
+--000000000000c0967c058b8ca873--
