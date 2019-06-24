@@ -2,65 +2,71 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B52B44F6DF
-	for <lists+linux-cifs@lfdr.de>; Sat, 22 Jun 2019 18:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4BD5002E
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Jun 2019 05:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbfFVQ2x (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 22 Jun 2019 12:28:53 -0400
-Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:40336 "EHLO
-        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726412AbfFVQ2u (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
-X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
- lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
- 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
- b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
- lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
- 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
- 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
- O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
- RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
- 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
- q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
- P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
- BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
- ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
- FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
- ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
- 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
-Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        id S1726307AbfFXDW4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 23 Jun 2019 23:22:56 -0400
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:40907 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbfFXDWz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 23 Jun 2019 23:22:55 -0400
+Received: by mail-pf1-f175.google.com with SMTP id p184so6662196pfp.7;
+        Sun, 23 Jun 2019 20:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=3lQoXJ1dymJIS6Y/FsyTEm2UVd7fXkrqHDzZRX1Rv60=;
+        b=S8KUfqKQMkHor2arXMcbkxcoIxFB3ToewWpVaZzvCNeJlXcLTpzbT1nlJkFoKO2f5Q
+         P3B6dkRpKb/TiO3f2PBAVohE7TJj6/QHfCHCBtfu/SWVj//vFhuwd27uNB9+XmnRVgAM
+         9tjRy8QZC1h59160ttUcVqHvXR9KHWWr+lppHTNEegGHpxqTwbckb23RQWtfsLlkTDee
+         G/6/a3cXS7kJiF+ER8e7xGdtOwINA7VCZhRYPiAsF9R3OPf2vtjpE3fVmF40iSwbfRV+
+         Vn30t8RTXuh283L2I3ARNpE7tIKYwYBz8QFM3YcEz2/D5xy0oWVX4L0mfAJO8OTVBI0A
+         yt0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=3lQoXJ1dymJIS6Y/FsyTEm2UVd7fXkrqHDzZRX1Rv60=;
+        b=m2wdq3jCLbICCdBm5ypqDMN1RbOU/XgBBR6YEN+B61VDtr3jEp5+wnKVrgfEPuDL6c
+         iLoXkS8lK8s037hR0SRdH8Ja9L/xezNDL1t3PweepqizCTRRmxUbVkwj0DrajFqLA+vB
+         hZ9pGAOKIyiTnd+JjxzD7IP/LAtSrC/7CyrOw2hmDD6vWJ6hcx5y3XdhWZuq4D2jemFS
+         besQiQpfFYGZRNyhdxhQm14reu+t4DBz6YNv5U9HjM5jq2e5lVh3FS0/Ggapacyx0Vt/
+         e+4gZ/DUxtb+bzp1Znk6XjTG3gdK6NPMP/0wPiRYqAyD98sWDgOI/UDcgvZb9Zt40pmM
+         Og8w==
+X-Gm-Message-State: APjAAAVSd/vDKvkru8qk+Jj0ylNHr3OjPpcRJrq4FY7V0rPVS0j0vhTJ
+        GzWW1NfSBcGnJ+5brGPrFDQg0Pw9qT68L5doa5qhp/Ys
+X-Google-Smtp-Source: APXvYqyS4j3doQw4LGxfPJZzgFSkahgRxCPV+SvHbFoybnlz1Fq5vas82BPI0x65UNx9Gz4aYq/Lmb+1EuyumsjHMbw=
+X-Received: by 2002:a63:81c6:: with SMTP id t189mr18456341pgd.15.1561346574585;
+ Sun, 23 Jun 2019 20:22:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 23 Jun 2019 22:22:43 -0500
+Message-ID: <CAH2r5mv+oqGxZRkV_ROqdauNW0CYJ7X9uJCk+uYmercJ4De41w@mail.gmail.com>
+Subject: xfstest 531 and unlink of open file
+To:     samba-technical <samba-technical@lists.samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Xioli created a fairly simple unlink test failure reproducer loosely
+related to xfstest 531 (see
+https://bugzilla.kernel.org/show_bug.cgi?id=203271) which unlinks an
+open file then tries to create a file with the same name before
+closing the first file (which fails over SMB3/SMB3.11 mounts with
+STATUS_DELETE_PENDING).
 
+Presumably we could work around this by a "silly-rename" trick.
+During delete we set delete on close for the file, then close it but
+presumably we could check first if the file is open by another local
+process and if so try to rename it?
 
-From:Miss: Fatima Yusuf.
+Ideas?
 
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
+-- 
+Thanks,
 
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
-
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
+Steve
