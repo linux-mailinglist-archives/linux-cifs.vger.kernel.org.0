@@ -2,78 +2,133 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE435ECAC
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Jul 2019 21:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D7D5ECB8
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Jul 2019 21:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfGCTRJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 3 Jul 2019 15:17:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60144 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726574AbfGCTRJ (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 3 Jul 2019 15:17:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3C1FAAE20;
-        Wed,  3 Jul 2019 19:17:08 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>,
-        linux-cifs@vger.kernel.org
-Subject: Re: Many processes end up in uninterruptible sleep accessing cifs mounts
-In-Reply-To: <684ed01c-cbca-2716-bc28-b0a59a0f8521@prodrive-technologies.com>
-References: <684ed01c-cbca-2716-bc28-b0a59a0f8521@prodrive-technologies.com>
-Date:   Wed, 03 Jul 2019 21:17:06 +0200
-Message-ID: <875zojx70t.fsf@suse.com>
+        id S1726574AbfGCTY0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 3 Jul 2019 15:24:26 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46357 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726550AbfGCTY0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 3 Jul 2019 15:24:26 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 81so1730650pfy.13
+        for <linux-cifs@vger.kernel.org>; Wed, 03 Jul 2019 12:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tetU2zanNPWMdo1nsLxwipNkRG3/RQfguSDGa9ustTE=;
+        b=skExS2l/r7bdnvWZaPlwe+ozvG31O5ItfP0Y1MqH6CwqZfD1O5Hjrt0nJ+F6Y0zqbS
+         cS0V8bmjzlvJvmQeX+ZJdEymDlpMo3UZCWtiXPPWeRo9vK4268PD2qZ8wOPpkbiZIEdn
+         k8gwHFmjmdukcNpH49nlskTgnfrO6KYH8Hpg2aM3saOo4yrIf0oCri/mCrAzb8CEbNBp
+         IorAa4RHp0+m0pfRbG8nEGlPQu+3O0XahprAgNo3reAktQGSVQt8Kns7fEksOgo6ybtC
+         u2/kAZWjb/OWXWB3MWoN+NO6RohCJRCEiUShTGuVcYzgp2pedhZljb0HgkIiTTbCBp5S
+         tbgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tetU2zanNPWMdo1nsLxwipNkRG3/RQfguSDGa9ustTE=;
+        b=eWG7szS0ObtAk3J7mf2eDbi90mWMo/EqKcmHLaVBe9Zlw9MXJAXHca5qtQPAKkb7G+
+         Vfgvdyn4Ubx/NyCoM6hIu3UY3Z+95cv6TDwbglOzXrXk4ASajeml0tkX5fYr5EtYcniO
+         i2Qc791ghxHAOGQe/HRnhVpIvliZrCU4H6/sbwsbx34F9yLAGb8BErewd/5Ocdyit9Om
+         XKScSBg/ayYc4BdTOeIcBJCR4c6ObRGutL0clJWNKnqnbyWZngMeW0B4WQs0jD9u1kMO
+         f/sMYA0taEwohdsMsRSB124xnk73rAHcFShgUwNXv+eiZa4nWo2GMSNjk6pBqXaoStns
+         LoUg==
+X-Gm-Message-State: APjAAAWHopcU8CUBXdx8/YPZDgjBN1+uUSR8aR+47rtqeevJ1EsydkNO
+        1BqQ1brkNZJJ/86N5893IS+Xc8ZFmO1DQ7jk8R7LNpeAfVE=
+X-Google-Smtp-Source: APXvYqxwnrdOHmnuFcjD/j51faU66Ks1j2jAonWAKueHtChKe9QWpcw5iLer4V0QaX1zPJ02euUoK/ukzklxJqZKPCU=
+X-Received: by 2002:a63:d4c:: with SMTP id 12mr39772740pgn.30.1562181865380;
+ Wed, 03 Jul 2019 12:24:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <684ed01c-cbca-2716-bc28-b0a59a0f8521@prodrive-technologies.com> <875zojx70t.fsf@suse.com>
+In-Reply-To: <875zojx70t.fsf@suse.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 3 Jul 2019 14:24:14 -0500
+Message-ID: <CAH2r5mtAZeUx1MinUPhesFA9EPc1McC9jXV44jpLrmnfW1Raqw@mail.gmail.com>
+Subject: Re: Many processes end up in uninterruptible sleep accessing cifs mounts
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Martijn,
+Normally dynamic tracing is much easier and less noisy since you can
+selectively turn on and off tracing with it (especially easier now
+that good tutorials on how to use eBPF to make it even easier).
 
-Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com> writes:
-> One of the symptoms is that our monitoring system complains about not 
-> being able to stat() every now and then, the next scraping cycle, stat() 
-> works again. Even when the mounts are not accesses at all.
+"trace-cmd record -e cifs"
+then repro the problem
+then in another process "trace-cmd show"
+
+There are 70 events that can be individually turned on or off in
+         /sys/kernel/debug/tracing/events/cifs
+
+e.g. "trace-cmd record -e smb3_cmd_err -e smb3_enter -e smb3_exit_err"
+
+Also can look at /proc/fs/cifs/Stats which shows how many of each
+command and how many errors and if any reconnects
+
+On Wed, Jul 3, 2019 at 2:18 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote:
 >
-> Also, lot of applications get stuck on either accessing data on the 
-> mounts, or performing stat() like operations on the mounts.
+> Hi Martijn,
 >
-> For us, the worst part is that applications end up in 'D'. The number of 
-> 'D' processes pile up really quickly, blocking users from performing 
-> their work.
+> Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com> writes:
+> > One of the symptoms is that our monitoring system complains about not
+> > being able to stat() every now and then, the next scraping cycle, stat(=
+)
+> > works again. Even when the mounts are not accesses at all.
+> >
+> > Also, lot of applications get stuck on either accessing data on the
+> > mounts, or performing stat() like operations on the mounts.
+> >
+> > For us, the worst part is that applications end up in 'D'. The number o=
+f
+> > 'D' processes pile up really quickly, blocking users from performing
+> > their work.
+>
+> Gah, sorry to hear. Thanks for the report.
+>
+> If you could pin down a specific way to reproduce some of those hangs
+> that would be of great help.
+>
+> > We are running Linux 4.20.17 SMP PREEMPT on all machines. We tried
+> > upgrading to > 5.x, but caused even more problems and kernel hangs.
+>
+> 5.0 and 5.1 really fixed a lot of issues with credits and reconnection.
+>
+> > I do not really have a clue where to start debugging. I enabled kernel
+> > debug options suggested on the wiki, but the amount of logging is
+> > immense now.
+>
+> Yes that is normal.
+>
+> > Can you provide any pointers where to look or start debugging?
+> > Or any help on how to kill those D processes and get our Linux servers
+> > stable again?
+>
+> Are there any kernel oops/panic with stack traces and register dumps in
+> the log?
+>
+> You can inspect the kernel stack trace of the hung processes (to see wher=
+e
+> they are stuck) by printing the file /proc/<pid>/stack.
+>
+> Cheers,
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Linux GmbH, Maxfeldstra=C3=9Fe 5, 90409 N=C3=BCrnberg, Germany
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 21284 (AG N=C3=
+=BCrnberg)
 
-Gah, sorry to hear. Thanks for the report.
 
-If you could pin down a specific way to reproduce some of those hangs
-that would be of great help.
 
-> We are running Linux 4.20.17 SMP PREEMPT on all machines. We tried 
-> upgrading to > 5.x, but caused even more problems and kernel hangs.
+--=20
+Thanks,
 
-5.0 and 5.1 really fixed a lot of issues with credits and reconnection.
-
-> I do not really have a clue where to start debugging. I enabled kernel 
-> debug options suggested on the wiki, but the amount of logging is 
-> immense now.
-
-Yes that is normal.
-
-> Can you provide any pointers where to look or start debugging?
-> Or any help on how to kill those D processes and get our Linux servers 
-> stable again?
-
-Are there any kernel oops/panic with stack traces and register dumps in
-the log?
-
-You can inspect the kernel stack trace of the hung processes (to see where
-they are stuck) by printing the file /proc/<pid>/stack.
-
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Linux GmbH, Maxfeldstraße 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 21284 (AG Nürnberg)
+Steve
