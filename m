@@ -2,83 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3954461F70
-	for <lists+linux-cifs@lfdr.de>; Mon,  8 Jul 2019 15:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F51762D0D
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Jul 2019 02:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731264AbfGHNSF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Jul 2019 09:18:05 -0400
-Received: from mail.prodrive-technologies.com ([212.61.153.67]:65471 "EHLO
-        mail.prodrive-technologies.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727352AbfGHNSF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Jul 2019 09:18:05 -0400
-Received: from mail.prodrive-technologies.com (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id 5FAB933087_D23428CB;
-        Mon,  8 Jul 2019 13:18:04 +0000 (GMT)
-Received: from mail.prodrive-technologies.com (exc04.bk.prodrive.nl [10.1.1.213])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.prodrive-technologies.com", Issuer "Prodrive Technologies B.V. OV SSL Issuing CA" (verified OK))
-        by mail.prodrive-technologies.com (Sophos Email Appliance) with ESMTPS id C6B4030CFA_D23428BF;
-        Mon,  8 Jul 2019 13:18:03 +0000 (GMT)
-Received: from [10.10.163.76] (10.10.163.76) by EXC04.bk.prodrive.nl
- (10.1.1.213) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1591.10; Mon, 8
- Jul 2019 15:18:03 +0200
-Subject: Re: Many processes end up in uninterruptible sleep accessing cifs
- mounts
-To:     =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>,
-        Steve French <smfrench@gmail.com>
-CC:     Pavel Shilovsky <piastryyy@gmail.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-References: <684ed01c-cbca-2716-bc28-b0a59a0f8521@prodrive-technologies.com>
- <875zojx70t.fsf@suse.com>
- <1fc4f6d0-6cdc-69a5-4359-23484d6bdfc9@prodrive-technologies.com>
- <8736jmxcwi.fsf@suse.com>
- <5d4fd393-9c6c-c407-462e-441cd46bbdd8@prodrive-technologies.com>
- <CAKywueTpgXyFMxveRj6Hm-=vuCC6xh1z0W9bqAFcpCiREe6Vwg@mail.gmail.com>
- <325128ce-6ef7-9a18-a626-ee3505037c2c@prodrive-technologies.com>
- <CAH2r5mtXc+K5AMFFRmvPwyAx1kc2eciDKsHF_Sx2p+sjtYrtCw@mail.gmail.com>
- <49b1529a-6d0e-99cc-112c-fa226ddcab1a@prodrive-technologies.com>
- <875zocwzsj.fsf@suse.com>
-From:   Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
-Organization: Prodrive Technologies
-Message-ID: <759d44e9-839b-4cc9-a535-ca17065468d0@prodrive-technologies.com>
-Date:   Mon, 8 Jul 2019 15:18:03 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726322AbfGIA0e (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Jul 2019 20:26:34 -0400
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:45694 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfGIA0e (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Jul 2019 20:26:34 -0400
+Received: by mail-lf1-f50.google.com with SMTP id u10so12114106lfm.12
+        for <linux-cifs@vger.kernel.org>; Mon, 08 Jul 2019 17:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=4gUtk/SdD3BFcckA+JAJd5lvOV1LDJcX/BWqZbDgN5w=;
+        b=BCbhFfmVO1yENCcrPWAgFMkFuYhVU/HUZ5YivldZh+RJOq0tldCkA4zDJZRa8bHySh
+         ZDkHHI9Jzlwo7ymSjz5MRI42nxb3Lz82RndNzBSF3Tp1WfYZ59xxZLYOv/4rINenYFZP
+         8BjwiN2QK43WDQEDimfoqCjYh2MIkXaxLlGCNmTkUiB0O54eggIUtfB3UqCM3PXlytxy
+         VBv4tgk9hcXmmjlxiwflw1mVjq+2PsqxYQT/ab1LaOv/7fSh0HStgqm3/vVOjSfn3W7w
+         eAnjUw7lVZE8w3CeNESQmacOcBrtNyXRJ8qXImQdjQt2u9f1equIL/Nu4wEMLEIqTItd
+         6OgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=4gUtk/SdD3BFcckA+JAJd5lvOV1LDJcX/BWqZbDgN5w=;
+        b=QiqOmOunf8DuGPg4eM5NSckgwooAJ4DO/5KP6IeaTmFaWwS3YitQbA2E77gik/sLPY
+         83bFuhCWqW9xuRzf8izoM4ZW51sKtEqAF8QQBt7ic1pKTEscZ18PsPGn3rxbkeC5x7qt
+         CrSM2zA/nhVzLgADM692Gveo3SURcdDQTb47GWN8bcuf2fUiydTBvfy5khN6hiFEWVhr
+         NSw4qxnsRNo66CgwWmPCKGC9myOdEEqWlYnBm7kE4rgdIJNoeb9UGUSauiKbcHc003GF
+         atDiNjQQEqfKVmsHmbhx9WuJO2Me23vPxGmE/8XEZfZIhouKbZOe7DA0xVZS3c41pVGc
+         7Hcw==
+X-Gm-Message-State: APjAAAUqbdDnx5w6EmzU3DQM6m5xnfDxTGoS85VgoLsSywImWAYWJx7T
+        hR/TWCVYGGZ8laCJAj2IAzvoRFLjBqeSL7r+7S+o9WzCm4A=
+X-Google-Smtp-Source: APXvYqwfM+FmQdcDhOPzfJXRsZsQmGEjwdRjEUriZ0o6FEnT+SXb36bByJzPTZrvKVbkV6l6lnSwsEXIGPoCYhlX+t0=
+X-Received: by 2002:a05:6512:c1:: with SMTP id c1mr10665291lfp.35.1562631991550;
+ Mon, 08 Jul 2019 17:26:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <875zocwzsj.fsf@suse.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EXC03.bk.prodrive.nl (10.1.1.212) To EXC04.bk.prodrive.nl
- (10.1.1.213)
-X-SASI-RCODE: 200
+References: <CAO3V83L1Q9jCLBsjHgFE1jw2PPi_sHtQz4geDKC4jEPWkhNYBg@mail.gmail.com>
+In-Reply-To: <CAO3V83L1Q9jCLBsjHgFE1jw2PPi_sHtQz4geDKC4jEPWkhNYBg@mail.gmail.com>
+From:   Wout Mertens <wout.mertens@gmail.com>
+Date:   Tue, 9 Jul 2019 02:26:20 +0200
+Message-ID: <CAO3V83+iZRAQRZ5YzivPS3di0QM=-dJOg8rnVK1icUuuESd+=g@mail.gmail.com>
+Subject: Fwd: mount.cifs fails but smbclient succeeds
+To:     linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Aurélien,
+Hi,
 
-On 08-07-2019 13:06, Aurélien Aptel wrote:
-> Martijn, can you give a try to the PATCH (v2) I sent?
-> 
-> I wrote it on top of the 4.20 stable tree. I understand the process to
-> apply compile and install is not the easiest one but it would be
-> extremely helpful since you can reproduce the issue.
+I need to mount a file server that I only have credentials for and
+know nothing about.
 
-I was able to schedule a reboot some of the servers later this evening.
-Writing the patch for 4.20 is much appreciated!
+I have a completely vanilla setup without /etc/smb.conf, nor any Samba
+service running; only the samba client binaries are installed. The
+credentials are domain, username, password; Kerberos is not being used
+as confirmed by the smbclient debug output.
 
-Regards, Martijn
+When I connect using
 
-> 
-> Cheers,
-> 
+    smbclient -A credentials.txt //corp.local/mnt
 
--- 
-Martijn de Gouw
-Designer
-Prodrive Technologies
-Mobile: +31 63 17 76 161
-Phone:  +31 40 26 76 200
+it works fine. The name corp.local resolves using DNS and I can browse
+the datastore.
+
+When I mount using
+
+ mount -vvvvv -t cifs //corp.local/mnt --verbose
+-overs=3,credentials=credentials.txt,sec=ntlmssp /mnt
+
+I see that I get a STATUS_BAD_NETWORK_NAME back. If I change the
+credentials, I get a logon error, and if I change the mount name, I
+get a missing file error. So it seems that the path and the
+credentials are correct. If I change the version to 1, it fails in
+some other way. If I change the sec to ntlm, it complains about
+authentication.
+
+Any suggestions? This is driving me crazy :-/
+
+Many thanks!
+
+Wout.
