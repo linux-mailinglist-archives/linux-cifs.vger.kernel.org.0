@@ -2,27 +2,27 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCAE6901E
-	for <lists+linux-cifs@lfdr.de>; Mon, 15 Jul 2019 16:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3A569179
+	for <lists+linux-cifs@lfdr.de>; Mon, 15 Jul 2019 16:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390058AbfGOOTQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 15 Jul 2019 10:19:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40544 "EHLO mail.kernel.org"
+        id S2403801AbfGOO3p (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 15 Jul 2019 10:29:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41554 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390053AbfGOOTO (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:19:14 -0400
+        id S2391591AbfGOO3n (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:29:43 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 550DD212F5;
-        Mon, 15 Jul 2019 14:19:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F35AF205ED;
+        Mon, 15 Jul 2019 14:29:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200353;
-        bh=ycggOkc9DEYnBVnGgU+uoiSvOob3Bl168DfW2wA4MVA=;
+        s=default; t=1563200982;
+        bh=XGt7HG3CWpaK1IoKSka0Oy8SYxrJtZEdFeoTOenjdps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ovchs0c436UMbKH7ix38qIWAjp2jelGMfY6ksh+pTN4zXAbGGLMiThpWH3xbI8qoN
-         DClwi9z25fAkUnwGGtQCKH0LuV8zmDxRE1xj4Lqk3u0vdTx3oYqTZsJeoqOdR/jaq6
-         3mkDJICNq7gv4MlA0HwHHxQRh4dcqGRB8pQ3lfFk=
+        b=XKImWg6wrk5KWGreQjZUxURmY66WD31x1TZn43jt5u3W/GhfIQt/bqmZZLrgsAr+b
+         /UwZaCO+cFDPw56ehIKqlpUJpYj+4pVHGxbTaezua7QV/7rSt+F47+oLLgxrBRsJpr
+         RpqJL6lC047ZB9ZPLmDXWu6jXSAMA/h/DIxX7hiE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
@@ -30,12 +30,12 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Jeff Layton <jlayton@primarydata.com>,
         Steve French <smfrench@gmail.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 022/158] signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of force_sig
-Date:   Mon, 15 Jul 2019 10:15:53 -0400
-Message-Id: <20190715141809.8445-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 018/105] signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of force_sig
+Date:   Mon, 15 Jul 2019 10:27:12 -0400
+Message-Id: <20190715142839.9896-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
-References: <20190715141809.8445-1-sashal@kernel.org>
+In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
+References: <20190715142839.9896-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index f31339db45fd..82b3af47bce3 100644
+index 33cd844579ae..ebc5714fea95 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -2428,7 +2428,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
+@@ -2320,7 +2320,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
  
  	task = xchg(&server->tsk, NULL);
  	if (task)
