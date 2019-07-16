@@ -2,96 +2,70 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4976A0B8
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2019 05:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0E26A0BD
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2019 05:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730356AbfGPDGX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 15 Jul 2019 23:06:23 -0400
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:40344 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728256AbfGPDGX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 15 Jul 2019 23:06:23 -0400
-Received: by mail-pl1-f174.google.com with SMTP id a93so9306733pla.7
-        for <linux-cifs@vger.kernel.org>; Mon, 15 Jul 2019 20:06:22 -0700 (PDT)
+        id S1729334AbfGPDJw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 15 Jul 2019 23:09:52 -0400
+Received: from mail-io1-f46.google.com ([209.85.166.46]:33861 "EHLO
+        mail-io1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728256AbfGPDJw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 15 Jul 2019 23:09:52 -0400
+Received: by mail-io1-f46.google.com with SMTP id k8so37678758iot.1
+        for <linux-cifs@vger.kernel.org>; Mon, 15 Jul 2019 20:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ISDcDGUTk2/tqhKYeJw8UmYKp3pALcnWgmL7jCPj7YY=;
-        b=TX6xwPpalpIxp2bV1XANTWj4OeSFZeIlrx9BaJOXOHXe2xJE+tbgx+Vx2MTi7X5mw8
-         zVv6qdebZNBn3BzBqUd3mGlN0rfKIdh6OkChl+SOexf4HazWTJVq/4uCs+RUvBjj3oOA
-         AvtgphXX2fhUiSwtn7lVLzRpWfoZueR6FDnh2oEUI8+tBulK4wzBMR2lywquF2YDSRtl
-         49k33RGI4H/mtsu3PvbL2jBFuV5XFcBGVqTa4Neqv5vt/esMbfv6JnezoyiKLnBGQ4GO
-         JQZYTSTo5VGJKj9a3olom7+5gxp8PzEL7qOuLLuwH1s5a1kvAhoM1PUYJNvkWm5+mG/b
-         Rdzw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sFV7Lzloxa0WMeO4aQ8eBW2VyFIHf9UYmWEYqxnfAUM=;
+        b=bL4jbgYYQZpb34J/JJkr8gwtaAY6pxaJwyAkROuGwJa1vryR+rN93U5NIkBAnaKHeC
+         nU3qzLenhTPIvk2VlKZFHjcPERClfk0pL5jl3BljQB1LBF5f/PnUAtsY3sj386HH63Ju
+         9e8ZOs2UepXaMw/M4H4Tr1ypl49Mp0pN15p7l7Sk/Ad8lFQGr+/8GGWIST3Xg21RfNqE
+         sHI6zlYO5OVVxij4fWnvfdeUiX3Apy+PWI/Cl+9qh9h5em26Xkn+8xhD9tgMrhT+yN4i
+         n8uPvrTs2c3VncHzk3qYBf4/F4CBQN4c8jnM0Pz6zHyxW8/5PyQg91ztib3fq6fvtkYK
+         0dOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ISDcDGUTk2/tqhKYeJw8UmYKp3pALcnWgmL7jCPj7YY=;
-        b=ky2YqZFmHDW2LErh0IMildxkN5s93Z+LC83QseAKXrzNF1ju0RRiH/eTuPvJjro1gB
-         XSFgl8oXWienx33VQRQNlkJj1xwWqb/XFBRRNRu5pQxFd4z3c6LhxZaMEtFY/iFHfXci
-         8GAghXUGA0MHMy1JZyi1goz7vJirTL903+cKSJzQGX8wsklT8T4T4y4EDT6DWTg+f+vs
-         UB8lFA1JeH3DmMOgsnUWO9BkVvr6dWgjOauRTmvEvGV1LzBHjViKa4bP0YkXaaJMv43v
-         VT30UEGYtKtKJ0MTu9zXKTaaumHwnK+mXI7wo4i2E+xXJijgO1KjF1gfJcRklHAX8A5Q
-         DSMA==
-X-Gm-Message-State: APjAAAU7xJ8HHl/Y9Xp1sWD5Dq2/8fCbRWP1Dyfnx+lj9drxoNnf/x3j
-        hsNYkEbjjkEBRt0f//5Nv+cPi1v5lBPZoKkmZyZysHdI
-X-Google-Smtp-Source: APXvYqyxYTsKeYJKpUHlo6Y3LPtMjQsfNyGsUgH5XqWWgVvkq9QYYK3TatbqbsRELUWE95WFg6OjWrqwetjW6xZjPQQ=
-X-Received: by 2002:a17:902:2a29:: with SMTP id i38mr32500125plb.46.1563246382139;
- Mon, 15 Jul 2019 20:06:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sFV7Lzloxa0WMeO4aQ8eBW2VyFIHf9UYmWEYqxnfAUM=;
+        b=NFS3/WoYEwtFn4/vVGGJEM06ogMd+azIN/1pfQ0nOm8D9purcdWgSY6QKKB/11aB7x
+         Lm/lcP2F9Y35yhs7uYUSx3oc4MlNKTjpmPWqDRDJQo4r64N2w4cerYZh1EOhv9wvsaCW
+         8ZTrWF1oNK18QIbKC65LBZTMd4fmLV/GEwSskC/H2yQxFDXOKDWuDs6Uc/R/GxdT7+AY
+         AyHuNH3veDV+iYbizVFDJjGrr8fvSvKB9GcWYK4D+PWH7eXEFkna/bWaivq1DvwtXxDt
+         FEx2hlXopkSq/p1D6l7ouBKi/xcZQuP891JVmZNmEGg/RPc7hilDuHQyoL+y9SFqSkOw
+         /DvA==
+X-Gm-Message-State: APjAAAXv8Mz10bFSa8XKoKyNLvS+Vmj30hxIrW3e/PULxfx6z22kyhEA
+        xPieHB6rjSHziz1c9XCy9BqcxwYELvtzs/kkh7kktA==
+X-Google-Smtp-Source: APXvYqzQaoVfCsI3y3P9L+tj/JUaXxowhmckpah1ELJ3z5UfQOsSxMsSK7I2R7art43MjJdbY99eU738mTSgXJqnxb4=
+X-Received: by 2002:a6b:dc08:: with SMTP id s8mr28947288ioc.209.1563246591547;
+ Mon, 15 Jul 2019 20:09:51 -0700 (PDT)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 15 Jul 2019 22:06:11 -0500
-Message-ID: <CAH2r5mtkLjmjiT7QYLsGKqVHwx4JBU5=e68gTEztQ5BDCg0PWA@mail.gmail.com>
-Subject: [PATCH][SMB3] CONFIG_CIFS_SMB_DIRECT no longer experimental
-To:     CIFS <linux-cifs@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000004df102058dc3a974"
+References: <CAH2r5mtkLjmjiT7QYLsGKqVHwx4JBU5=e68gTEztQ5BDCg0PWA@mail.gmail.com>
+In-Reply-To: <CAH2r5mtkLjmjiT7QYLsGKqVHwx4JBU5=e68gTEztQ5BDCg0PWA@mail.gmail.com>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Tue, 16 Jul 2019 13:09:39 +1000
+Message-ID: <CAN05THSaUDRLyXazvL=Pao103AuJ0obqHPKsDrizZqpC7j=apw@mail.gmail.com>
+Subject: Re: [PATCH][SMB3] CONFIG_CIFS_SMB_DIRECT no longer experimental
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---0000000000004df102058dc3a974
-Content-Type: text/plain; charset="UTF-8"
+On Tue, Jul 16, 2019 at 1:06 PM Steve French <smfrench@gmail.com> wrote:
+>
+> Long Li has made good progress in fixing remaining xfstest results
+> over rdma smb3 mounts
 
-Long Li has made good progress in fixing remaining xfstest results
-over rdma smb3 mounts
+Acked-by: me
 
-
-
--- 
-Thanks,
-
-Steve
-
---0000000000004df102058dc3a974
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smb3-smbdirect-no-longer-experimental.patch"
-Content-Disposition: attachment; 
-	filename="0001-smb3-smbdirect-no-longer-experimental.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jy58issm0>
-X-Attachment-Id: f_jy58issm0
-
-RnJvbSA5ZmZmODgwNDc4N2Q1OWEzYjY4OGNlM2UwM2EyMzEyNzViNjFlY2RhIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IE1vbiwgMTUgSnVsIDIwMTkgMjE6NTk6NDEgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
-bWIzOiBzbWJkaXJlY3Qgbm8gbG9uZ2VyIGV4cGVyaW1lbnRhbAoKY2xhcmlmeSBLY29uZmlnIHRv
-IGluZGljYXRlIHRoYXQgc21iIGRpcmVjdAooU01CMyBvdmVyIFJETUEpIGlzIG5vIGxvbmdlciBl
-eHBlcmltZW50YWwuCgpPdmVyIHRoZSBsYXN0IHRocmVlIHJlbGVhc2VzIExvbmcgTGkgaGFzCmZp
-eGVkIHZhcmlvdXMgcHJvYmxlbXMgdW5jb3ZlcmVkIGJ5IHhmc3Rlc3RpbmcuCgpTaWduZWQtb2Zm
-LWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvY2lmcy9L
-Y29uZmlnIHwgNCArKy0tCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NpZnMvS2NvbmZpZyBiL2ZzL2NpZnMvS2NvbmZpZwpp
-bmRleCBlMzljMTUyNjdiYjQuLmQ2ZjcxZTNjNDc0OSAxMDA2NDQKLS0tIGEvZnMvY2lmcy9LY29u
-ZmlnCisrKyBiL2ZzL2NpZnMvS2NvbmZpZwpAQCAtMTk3LDEwICsxOTcsMTAgQEAgY29uZmlnIENJ
-RlNfTkZTRF9FWFBPUlQKIAkgIEFsbG93cyBORlMgc2VydmVyIHRvIGV4cG9ydCBhIENJRlMgbW91
-bnRlZCBzaGFyZSAobmZzZCBvdmVyIGNpZnMpCiAKIGNvbmZpZyBDSUZTX1NNQl9ESVJFQ1QKLQli
-b29sICJTTUIgRGlyZWN0IHN1cHBvcnQgKEV4cGVyaW1lbnRhbCkiCisJYm9vbCAiU01CIERpcmVj
-dCBzdXBwb3J0IgogCWRlcGVuZHMgb24gQ0lGUz1tICYmIElORklOSUJBTkQgJiYgSU5GSU5JQkFO
-RF9BRERSX1RSQU5TIHx8IENJRlM9eSAmJiBJTkZJTklCQU5EPXkgJiYgSU5GSU5JQkFORF9BRERS
-X1RSQU5TPXkKIAloZWxwCi0JICBFbmFibGVzIFNNQiBEaXJlY3QgZXhwZXJpbWVudGFsIHN1cHBv
-cnQgZm9yIFNNQiAzLjAsIDMuMDIgYW5kIDMuMS4xLgorCSAgRW5hYmxlcyBTTUIgRGlyZWN0IHN1
-cHBvcnQgZm9yIFNNQiAzLjAsIDMuMDIgYW5kIDMuMS4xLgogCSAgU01CIERpcmVjdCBhbGxvd3Mg
-dHJhbnNmZXJyaW5nIFNNQiBwYWNrZXRzIG92ZXIgUkRNQS4gSWYgdW5zdXJlLAogCSAgc2F5IE4u
-CiAKLS0gCjIuMjAuMQoK
---0000000000004df102058dc3a974--
+>
+>
+>
+> --
+> Thanks,
+>
+> Steve
