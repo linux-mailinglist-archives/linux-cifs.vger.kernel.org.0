@@ -2,87 +2,296 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D1C7255F
-	for <lists+linux-cifs@lfdr.de>; Wed, 24 Jul 2019 05:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33FF72569
+	for <lists+linux-cifs@lfdr.de>; Wed, 24 Jul 2019 05:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbfGXD1o (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 23 Jul 2019 23:27:44 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38041 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfGXD1o (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Jul 2019 23:27:44 -0400
-Received: by mail-pf1-f193.google.com with SMTP id y15so20166401pfn.5
-        for <linux-cifs@vger.kernel.org>; Tue, 23 Jul 2019 20:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0XCqLGB31XeenGmjW1ZGVvTF2OxpAvcXJWj+OVs7Y/Y=;
-        b=lx8x34YKyAyPonsbIsPqgwUJ9sw+xoXyc8+6cl9pGg/tns6wzNz9RYX82Xd+Lb9WOO
-         RWPlQT4y29wdEmM/d3RY3Ofx7tJk6dZssM6lzscuQaY6sGqeP+7iogVyuatbwuZfqWfI
-         JGClBgo93Dta0uP1/NImktGgoIOQveyf6yPgP2lZifyh7Zt6xIZhbrZu65xtgsTU0xGw
-         Cwai/Eq7L6/fhBznjzqQbcWile1ZKPDUuQapikcGTZWfPDoWqew5XXncZ6N7Fo9bNOTf
-         vfNaaRTjy+LGgYTzjou+pLChvR4Q56exGzjU1fJqJK7g+iCWRzVHrcWCDltc9i8ERLsH
-         VdQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0XCqLGB31XeenGmjW1ZGVvTF2OxpAvcXJWj+OVs7Y/Y=;
-        b=k77JJV+QPdHceGG3vgZW1i4C5mf5wIFQEfUrsBxUjCsK5CzU71q9n+MdTIp9zVsy2C
-         sEolidKuLvyk24QY/pZOg3RLXPe9FF0psxllG7srWNphTX7DQ0Dp4wIbGRsM7WLfOeVa
-         Cdf4sERCfEHhojuXh3hsJxrtWOePtaYCXnGKjbEbsdipTvhempuASwIf2ChyIBUMX5pV
-         FzVmNmHf3Ra4w1kzCzKEfCw4V84QSrmqAeWYmWwuxyu3eOIKS1q3wU7Qa7QG7YgPSlGv
-         GZcQKHx4PJoEZjS8gv0bksj5xJimg5skoR83Y3hVCSoNV2RF5Y2ojyX6XH81RnEzJ5Iv
-         iUUg==
-X-Gm-Message-State: APjAAAWSP23k5YnoedOcDeFOtUalYRHLp2y/S9dojT9Hfp3Sf5gsQT9Y
-        gl4iO7B0pslWR+soIT7ttgdeELxtXnreDx7d94U=
-X-Google-Smtp-Source: APXvYqxTpyWKhJTwZrKzVLcg+jvje1kLdqtAWaComyN92Jpi0pXhywfWng2yP+rxmre05aF1MR1j5VEEz8z+2LLJR1o=
-X-Received: by 2002:a17:90a:360c:: with SMTP id s12mr86667497pjb.30.1563938863715;
- Tue, 23 Jul 2019 20:27:43 -0700 (PDT)
+        id S1726343AbfGXDfS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 23 Jul 2019 23:35:18 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:45071 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725827AbfGXDfR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Jul 2019 23:35:17 -0400
+X-Greylist: delayed 7353 seconds by postgrey-1.27 at vger.kernel.org; Tue, 23 Jul 2019 23:35:15 EDT
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hq83d-0005OI-8R; Tue, 23 Jul 2019 21:35:13 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hq83c-0007ZL-12; Tue, 23 Jul 2019 21:35:13 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Steve French <smfrench@gmail.com>
+Cc:     ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Namjae Jeon <namjae.jeon@samsung.com>,
+        Jeff Layton <jlayton@primarydata.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
+        <20190715134655.4076-39-sashal@kernel.org>
+        <CAN05THSdj8m5g-xG5abYAZ=_PE2xT-RwLtVhKrtxPevJGCSxag@mail.gmail.com>
+        <CAH2r5mu9ncYa1WTHuuMEk3=4TU5-RBH6nBKME4Bm+dntOtORTQ@mail.gmail.com>
+        <87v9vs43pq.fsf@xmission.com>
+        <CAH2r5mtB=KO+9fxSYQHbjD+0K+5rGL6Q8TSU0_wsHUdqHy1rSw@mail.gmail.com>
+        <CAH2r5mvF-E6_3YLV02Mj0uSaKgHigV6wwU9LsGC-zFs7JnKa-Q@mail.gmail.com>
+        <CAH2r5mupXphkH0c6LVSgBAK1PQihX+h6UruMfPoood9PT+0RrA@mail.gmail.com>
+Date:   Tue, 23 Jul 2019 22:35:07 -0500
+In-Reply-To: <CAH2r5mupXphkH0c6LVSgBAK1PQihX+h6UruMfPoood9PT+0RrA@mail.gmail.com>
+        (Steve French's message of "Tue, 23 Jul 2019 21:28:31 -0500")
+Message-ID: <87blxk3y1g.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20190724014349.6479-1-lsahlber@redhat.com>
-In-Reply-To: <20190724014349.6479-1-lsahlber@redhat.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 23 Jul 2019 22:27:32 -0500
-Message-ID: <CAH2r5mtxMe=9Hki+eczZ7qHrQj7=n=t6no-F3M2KoW2tX+UoCQ@mail.gmail.com>
-Subject: Re: [PATCH] cifs: fix a comment for the timeouts when sending echos
-To:     Ronnie Sahlberg <lsahlber@redhat.com>
-Cc:     linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1hq83c-0007ZL-12;;;mid=<87blxk3y1g.fsf@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+9lgk1YztBX2M0RyG6u/ajVR0q2Y5VVmw=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_TooManySym_02,XMGappySubj_01,XMSubLong autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  0.5 XMGappySubj_01 Very gappy subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Steve French <smfrench@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 642 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 2.9 (0.5%), b_tie_ro: 2.1 (0.3%), parse: 1.22
+        (0.2%), extract_message_metadata: 15 (2.3%), get_uri_detail_list: 6
+        (0.9%), tests_pri_-1000: 10 (1.6%), tests_pri_-950: 1.14 (0.2%),
+        tests_pri_-900: 0.85 (0.1%), tests_pri_-90: 32 (5.0%), check_bayes: 31
+        (4.8%), b_tokenize: 12 (1.9%), b_tok_get_all: 10 (1.6%), b_comp_prob:
+        2.3 (0.4%), b_tok_touch_all: 3.8 (0.6%), b_finish: 0.68 (0.1%),
+        tests_pri_0: 566 (88.1%), check_dkim_signature: 0.46 (0.1%),
+        check_dkim_adsp: 2.3 (0.4%), poll_dns_idle: 1.01 (0.2%), tests_pri_10:
+        2.9 (0.5%), tests_pri_500: 7 (1.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH AUTOSEL 5.2 039/249] signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of force_sig
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+Steve French <smfrench@gmail.com> writes:
 
-On Tue, Jul 23, 2019 at 8:43 PM Ronnie Sahlberg <lsahlber@redhat.com> wrote:
+> I did some additional testing and it looks like the "allow_signal"
+> change may be safe enough
 >
-> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> ---
->  fs/cifs/connect.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
+> # git diff -a
 > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> index a4830ced0f98..78fb5cc37644 100644
+> index a4830ced0f98..a15a6e738eb5 100644
 > --- a/fs/cifs/connect.c
 > +++ b/fs/cifs/connect.c
-> @@ -712,7 +712,7 @@ server_unresponsive(struct TCP_Server_Info *server)
->          * We need to wait 3 echo intervals to make sure we handle such
->          * situations right:
->          * 1s  client sends a normal SMB request
-> -        * 3s  client gets a response
-> +        * 2s  client gets a response
->          * 30s echo workqueue job pops, and decides we got a response recently
->          *     and don't need to send another
->          * ...
-> --
-> 2.13.6
+> @@ -1113,6 +1113,7 @@ cifs_demultiplex_thread(void *p)
+>                 mempool_resize(cifs_req_poolp, length + cifs_min_rcv);
 >
+>         set_freezable();
+> +       allow_signal(SIGKILL);
+>         while (server->tcpStatus != CifsExiting) {
+>                 if (try_to_freeze())
+>                         continue;
+>
+> See below:
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# insmod ./cifs.ko
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# mount -t cifs
+> //localhost/scratch /mnt -o username=sfrench
+> Password for sfrench@//localhost/scratch:  ************
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# ps -A | grep cifsd
+>  5176 ?        00:00:00 cifsd
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# kill -9 5176
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# ls /mnt
+> 0444  dir0750  dir0754  newfile
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# umount /mnt
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# ps -A | grep cifsd
+> root@smf-Thinkpad-P51:~/cifs-2.6/fs/cifs# rmmod cifs
+
+Yes.  I just discovered that kthreadd calls a function named
+ignore_signals that set all signals to SIG_IGN.  Which becomes
+the default for all kernel threads.  So something like allow_signal
+to change the signal handler is necessary.  The blocking of SIGKILL is
+also concerning but apparently that is not the issue here.
+
+Ideally I think cifs should use kthread_stop, instead of signals for
+this purpose.  The logic is convoluted enough that reading through the
+cifs code quickly I don't see how sending SIGKILL to the daemon causes
+it to stop.
+
+Eric
 
 
--- 
-Thanks,
-
-Steve
+> On Tue, Jul 23, 2019 at 9:19 PM Steve French <smfrench@gmail.com> wrote:
+>>
+>> Pavel noticed I missed a line from the attempt to do a similar patch
+>> to Eric's suggestion
+>> (it still didn't work though - although "allow_signal" does albeit is
+>> possibly dangerous as user space can kill cifsd)
+>>
+>> # git diff -a
+>> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+>> index a4830ced0f98..8758dff18c15 100644
+>> --- a/fs/cifs/connect.c
+>> +++ b/fs/cifs/connect.c
+>> @@ -1104,6 +1104,7 @@ cifs_demultiplex_thread(void *p)
+>>         struct task_struct *task_to_wake = NULL;
+>>         struct mid_q_entry *mids[MAX_COMPOUND];
+>>         char *bufs[MAX_COMPOUND];
+>> +       sigset_t mask, oldmask;
+>>
+>>         current->flags |= PF_MEMALLOC;
+>>         cifs_dbg(FYI, "Demultiplex PID: %d\n", task_pid_nr(current));
+>> @@ -1113,6 +1114,9 @@ cifs_demultiplex_thread(void *p)
+>>                 mempool_resize(cifs_req_poolp, length + cifs_min_rcv);
+>>
+>>         set_freezable();
+>> +       sigfillset(&mask);
+>> +       sigdelset(&mask, SIGKILL);
+>> +       sigprocmask(SIG_BLOCK, &mask, &oldmask);
+>>         while (server->tcpStatus != CifsExiting) {
+>>                 if (try_to_freeze())
+>>                         continue;
+>>
+>> On Tue, Jul 23, 2019 at 9:02 PM Steve French <smfrench@gmail.com> wrote:
+>> >
+>> > On Tue, Jul 23, 2019 at 8:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> > >
+>> > > Steve French <smfrench@gmail.com> writes:
+>> > >
+>> > > > Very easy to see what caused the regression with this global change:
+>> > > >
+>> > > > mount (which launches "cifsd" thread to read the socket)
+>> > > > umount (which kills the "cifsd" thread)
+>> > > > rmmod   (rmmod now fails since "cifsd" thread is still active)
+>> > > >
+>> > > > mount launches a thread to read from the socket ("cifsd")
+>> > > > umount is supposed to kill that thread (but with the patch
+>> > > > "signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of
+>> > > > force_sig" that no longer works).  So the regression is that after
+>> > > > unmount you still see the "cifsd" thread, and the reason that cifsd
+>> > > > thread is still around is that that patch no longer force kills the
+>> > > > process (see line 2652 of fs/cifs/connect.c) which regresses module
+>> > > > removal.
+>> > > >
+>> > > > -               force_sig(SIGKILL, task);
+>> > > > +               send_sig(SIGKILL, task, 1);
+>> > > >
+>> > > > The comment in the changeset indicates "The signal SIGKILL can not be
+>> > > > ignored" but obviously it can be ignored - at least on 5.3-rc1 it is
+>> > > > being ignored.
+>> > > >
+>> > > > If send_sig(SIGKILL ...) doesn't work and if force_sig(SIGKILL, task)
+>> > > > is removed and no longer possible - how do we kill a helper process
+>> > > > ...
+>> > >
+>> > > I think I see what is happening.  It looks like as well as misuinsg
+>> > > force_sig, cifs is also violating the invariant that keeps SIGKILL out
+>> > > of the blocked signal set.
+>> > >
+>> > > For that force_sig will act differently.  I did not consider it because
+>> > > that is never supposed to happen.
+>> > >
+>> > > Can someone test this code below and confirm the issue goes away?
+>> > >
+>> > > diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+>> > > index 5d6d44bfe10a..2a782ebc7b65 100644
+>> > > --- a/fs/cifs/transport.c
+>> > > +++ b/fs/cifs/transport.c
+>> > > @@ -347,6 +347,7 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+>> > >          */
+>> > >
+>> > >         sigfillset(&mask);
+>> > > +       sigdelset(&mask, SIGKILL);
+>> > >         sigprocmask(SIG_BLOCK, &mask, &oldmask);
+>> > >
+>> > >         /* Generate a rfc1002 marker for SMB2+ */
+>> > >
+>> > >
+>> > > Eric
+>> >
+>> > I just tried your suggestion and it didn't work.   I also tried doing
+>> > a similar thing on the thread we are trying to kills ("cifsd" - ie
+>> > which is blocked in the function cifs_demultiplex_thread waiting to
+>> > read from the socket)
+>> > # git diff -a
+>> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+>> > index a4830ced0f98..b73062520a17 100644
+>> > --- a/fs/cifs/connect.c
+>> > +++ b/fs/cifs/connect.c
+>> > @@ -1104,6 +1104,7 @@ cifs_demultiplex_thread(void *p)
+>> >         struct task_struct *task_to_wake = NULL;
+>> >         struct mid_q_entry *mids[MAX_COMPOUND];
+>> >         char *bufs[MAX_COMPOUND];
+>> > +       sigset_t mask;
+>> >
+>> >         current->flags |= PF_MEMALLOC;
+>> >         cifs_dbg(FYI, "Demultiplex PID: %d\n", task_pid_nr(current));
+>> > @@ -1113,6 +1114,8 @@ cifs_demultiplex_thread(void *p)
+>> >                 mempool_resize(cifs_req_poolp, length + cifs_min_rcv);
+>> >
+>> >         set_freezable();
+>> > +       sigfillset(&mask);
+>> > +       sigdelset(&mask, SIGKILL);
+>> >         while (server->tcpStatus != CifsExiting) {
+>> >                 if (try_to_freeze())
+>> >                         continue;
+>> >
+>> >
+>> > That also didn't work.     The only thing I have been able to find
+>> > which worked was:
+>> >
+>> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+>> > index a4830ced0f98..e74f04163fc9 100644
+>> > --- a/fs/cifs/connect.c
+>> > +++ b/fs/cifs/connect.c
+>> > @@ -1113,6 +1113,7 @@ cifs_demultiplex_thread(void *p)
+>> >                 mempool_resize(cifs_req_poolp, length + cifs_min_rcv);
+>> >
+>> >         set_freezable();
+>> > +      allow_signal(SIGKILL);
+>> >         while (server->tcpStatus != CifsExiting) {
+>> >                 if (try_to_freeze())
+>> >                         continue;
+>> >
+>> >
+>> > That fixes the problem ... but ... as Ronnie and others have noted it
+>> > would allow a userspace process to make the mount unusable (all you
+>> > would have to do would be to do a kill -9 of the "cifsd" process from
+>> > some userspace process like bash and the mount would be unusable - so
+>> > this sounds dangerous.
+>> >
+>> > Is there an alternative that, in the process doing the unmount in
+>> > kernel, would allow us to do the equivalent of:
+>> >       "allow_signal(SIGKILL, <the id of the cifsd process>"
+>> > In otherwords, to minimize the risk of some userspace process killing
+>> > cifsd, could we delay enabling allow_signal(SIGKILL) till the unmount
+>> > begins by doing it for a different process (have the unmount process
+>> > enable signals for the cifsd process).   Otherwise is there a way to
+>> > force kill a process from the kernel as we used to do - without
+>> > running the risk of a user space process killing cifsd (which is bad).
+>> >
+>> > --
+>> > Thanks,
+>> >
+>> > Steve
+>>
+>>
+>>
+>> --
+>> Thanks,
+>>
+>> Steve
