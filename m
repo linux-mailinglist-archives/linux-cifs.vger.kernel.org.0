@@ -2,49 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B79792F6
-	for <lists+linux-cifs@lfdr.de>; Mon, 29 Jul 2019 20:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC4B79A83
+	for <lists+linux-cifs@lfdr.de>; Mon, 29 Jul 2019 22:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387676AbfG2SV4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 29 Jul 2019 14:21:56 -0400
-Received: from 173-219-29-31.plptcmtk03.com.sta.suddenlink.net ([173.219.29.31]:4325
-        "EHLO NEPDEX01.KrugervillePD.local" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387675AbfG2SV4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 29 Jul 2019 14:21:56 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 14:21:56 EDT
-Received: from NEPDEX01.KrugervillePD.local (192.168.1.11) by
- NEPDEX01.KrugervillePD.local (192.168.1.11) with Microsoft SMTP Server (TLS)
- id 15.0.847.32; Mon, 29 Jul 2019 13:08:07 -0500
-Received: from User (185.46.128.11) by NEPDEX01.KrugervillePD.local
- (192.168.1.11) with Microsoft SMTP Server id 15.0.847.32 via Frontend
- Transport; Mon, 29 Jul 2019 13:07:54 -0500
-Reply-To: <mrs.joanwilson717@aliyun.com>
-From:   "Ms. Joan Wilson" <info@northeastpolice.net>
-Subject: Your TRANSACTION CODE: 173.219.29.31
-Date:   Mon, 29 Jul 2019 20:06:52 +0200
+        id S1729502AbfG2U5i (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 29 Jul 2019 16:57:38 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37004 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729405AbfG2U5i (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 29 Jul 2019 16:57:38 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 40047C060204;
+        Mon, 29 Jul 2019 20:57:37 +0000 (UTC)
+Received: from redhat.com (ovpn-112-31.rdu2.redhat.com [10.10.112.31])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1D8C65C219;
+        Mon, 29 Jul 2019 20:57:24 +0000 (UTC)
+Date:   Mon, 29 Jul 2019 16:57:21 -0400
+From:   Jerome Glisse <jglisse@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     john.hubbard@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, samba-technical@lists.samba.org,
+        v9fs-developer@lists.sourceforge.net,
+        virtualization@lists.linux-foundation.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Minwoo Im <minwoo.im.dev@gmail.com>
+Subject: Re: [PATCH 03/12] block: bio_release_pages: use flags arg instead of
+ bool
+Message-ID: <20190729205721.GB3760@redhat.com>
+References: <20190724042518.14363-1-jhubbard@nvidia.com>
+ <20190724042518.14363-4-jhubbard@nvidia.com>
+ <20190724053053.GA18330@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <390d5b4c-1d52-408c-a0e9-5d637a53f80e@NEPDEX01.KrugervillePD.local>
-To:     Undisclosed recipients:;
-Received-SPF: SoftFail (NEPDEX01.KrugervillePD.local: domain of
- transitioning info@northeastpolice.net discourages use of 185.46.128.11 as
- permitted sender)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190724053053.GA18330@infradead.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 29 Jul 2019 20:57:38 +0000 (UTC)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-We wish to inform you of your abandoned fund which has been approved and is ready for payout. 
-Please respond to enable the payout department (E.F.C.C) to contact you with more details. 
-Mr John Ron E-mail: johnronconsultant@aliyun.com
+On Tue, Jul 23, 2019 at 10:30:53PM -0700, Christoph Hellwig wrote:
+> On Tue, Jul 23, 2019 at 09:25:09PM -0700, john.hubbard@gmail.com wrote:
+> > From: John Hubbard <jhubbard@nvidia.com>
+> > 
+> > In commit d241a95f3514 ("block: optionally mark pages dirty in
+> > bio_release_pages"), new "bool mark_dirty" argument was added to
+> > bio_release_pages.
+> > 
+> > In upcoming work, another bool argument (to indicate that the pages came
+> > from get_user_pages) is going to be added. That's one bool too many,
+> > because it's not desirable have calls of the form:
+> 
+> All pages releases by bio_release_pages should come from
+> get_get_user_pages, so I don't really see the point here.
 
-Sincerely,
-Mr. Ibrahim Mustafa Magu
-CHAIRMAN ECONOMIC & FINANCIAL CRIME COMMISSION 
-(EFCC) FOREIGN OPERATIONS DEP
+No they do not all comes from GUP for see various callers
+of bio_check_pages_dirty() for instance iomap_dio_zero()
+
+I have carefully tracked down all this and i did not do
+anyconvertion just for the fun of it :)
+
+Cheers,
+Jérôme
