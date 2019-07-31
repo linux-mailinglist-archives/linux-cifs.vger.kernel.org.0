@@ -2,89 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA097C151
-	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jul 2019 14:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B857C6B3
+	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jul 2019 17:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387606AbfGaM3c (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 31 Jul 2019 08:29:32 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:49476 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387594AbfGaM3c (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 31 Jul 2019 08:29:32 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6VCSffp017250;
-        Wed, 31 Jul 2019 12:29:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=corp-2018-07-02;
- bh=QinEdhda0QF80hZU/Agg8fmLabZy/oSbGrNclrokDBw=;
- b=UNwu0c4wPTcK+P1xidV4FT1LKRMkQxaz1cUkvPP0Ee+M+UU7Gz6OFj/z0zrdjsIBiIq4
- RR8DcnO5BwNTbkOvMba9ntx0ugykK37yx2s+Jx6DIgjqa48IZxcBXUaErA1PKGdhWr8G
- S8WWUkZgU4BlTabEqJIoeeOVWQGWLj0dAYvOkqC0FbbM0/OAXdFd2cjaI2oHoDA481B2
- +wEqkrBjyxFUHotQBrap0c7q5fg3j/fm9XhJXH2VLylTe5PSkrLLX5CH1ijL6LQ1clmv
- z5rKCBCAVw8gaAgmgUgsyHemIMKZ2yOeJ8PUZZ2MFFIg2K8J4ASWSTjwi0sYZWoA5hKV vg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2u0e1tw392-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Jul 2019 12:29:04 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6VCRT7A074339;
-        Wed, 31 Jul 2019 12:29:03 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2u2exbjc4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Jul 2019 12:29:03 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6VCSwSp004011;
-        Wed, 31 Jul 2019 12:28:58 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 31 Jul 2019 12:28:57 +0000
-Date:   Wed, 31 Jul 2019 15:28:41 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     =?iso-8859-1?Q?Aur=E9lien?= Aptel <aaptel@suse.com>
+        id S1726339AbfGaPem convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 31 Jul 2019 11:34:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45316 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725209AbfGaPem (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 31 Jul 2019 11:34:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CC5D1AC68;
+        Wed, 31 Jul 2019 15:34:40 +0000 (UTC)
+From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     Colin King <colin.king@canonical.com>,
         samba-technical@lists.samba.org, Steve French <sfrench@samba.org>,
-        linux-cifs@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-cifs@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] cifs: remove redundant assignment to variable rc
-Message-ID: <20190731122841.GA1974@kadam>
-References: <20190731090526.27245-1-colin.king@canonical.com>
- <87r266seg4.fsf@suse.com>
+In-Reply-To: <20190731122841.GA1974@kadam>
+References: <20190731090526.27245-1-colin.king@canonical.com> <87r266seg4.fsf@suse.com> <20190731122841.GA1974@kadam>
+Date:   Wed, 31 Jul 2019 17:34:39 +0200
+Message-ID: <87lfwerze8.fsf@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87r266seg4.fsf@suse.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907310127
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907310127
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 12:09:31PM +0200, Aur�lien Aptel wrote:
-> Colin King <colin.king@canonical.com> writes:
-> > Variable rc is being initialized with a value that is never read
-> > and rc is being re-assigned a little later on. The assignment is
-> > redundant and hence can be removed.
-> 
-> I think I would actually rather have rc set to an error by default than
-> uninitialized. Just my personal opinion.
+"Dan Carpenter" <dan.carpenter@oracle.com> writes:
+> You're just turning off GCC's static analysis (and introducing false
+> positives) when you do that.  We have seen bugs caused by this and never
+> seen any bugs prevented by this style.
 
-You're just turning off GCC's static analysis (and introducing false
-positives) when you do that.  We have seen bugs caused by this and never
-seen any bugs prevented by this style.
+You've never seen bugs prevented by initializing uninitialized
+variables? Code can change overtime and I don't think coverity is
+checked as often as it could be, meaning the var could end up being used
+while uninitialized in the future.
 
-regards,
-dan carpenter
+Anyway I won't die on this hill, merge this if you prefer.
+
+Cheers,
+-- 
+Aurélien Aptel / SUSE Labs Samba Team
+GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+SUSE Linux GmbH, Maxfeldstraße 5, 90409 Nürnberg, Germany
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 21284 (AG Nürnberg)
