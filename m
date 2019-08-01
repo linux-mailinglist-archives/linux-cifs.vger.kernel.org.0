@@ -2,78 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA47E508
-	for <lists+linux-cifs@lfdr.de>; Thu,  1 Aug 2019 23:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2D27E5DD
+	for <lists+linux-cifs@lfdr.de>; Fri,  2 Aug 2019 00:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730644AbfHAVy5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 1 Aug 2019 17:54:57 -0400
-Received: from ozlabs.org ([203.11.71.1]:34175 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730419AbfHAVy5 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 1 Aug 2019 17:54:57 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4603xB6btMz9s3Z;
-        Fri,  2 Aug 2019 07:54:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1564696495;
-        bh=KPSAi5E+QrUSQRNI6r1fH4edAAA6UKpIr2v3WfOzsUM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zjzn8KFhqkkNwUTuWoG0Xvc1yGBWR3A9ezgltqCmGPDn25E8O+0dQ8dECIltwbTiU
-         Uq3zA0LUOldzWueWuZKRyqqTLvQxzyx5/WSnw2uaE1UCj9CqdCKbP849IOOCsea3Lp
-         rpUOzcswmjphrkGjkvQB7QLaLrB38iISvWMeH0oWMI2oNt0NE5OOVSEZ2jqzdVhCX3
-         bVzgX+PpXcqgxMHy+g1CiFa+BNq4BRd8ubiwSOWgeAaMT2dsupwoSaKX7X7Zl5HfVn
-         wIUD1hxSXULnH84j6+v+yqWPA6Z6RtGX3jZBwfSR6mK2nnxoUQGvo2FVUttEQj7S6Q
-         aLJXzvIGNqY+A==
-Date:   Fri, 2 Aug 2019 07:54:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20190802075453.06066be1@canb.auug.org.au>
+        id S1730934AbfHAWmw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 1 Aug 2019 18:42:52 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34352 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728719AbfHAWmw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 1 Aug 2019 18:42:52 -0400
+Received: by mail-pl1-f194.google.com with SMTP id i2so32843631plt.1;
+        Thu, 01 Aug 2019 15:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fomdWM13prZfQ7vSZjiuPyioG/SgkiDt0SZpZ1hksfA=;
+        b=Ee16V7TyWma9ZzO+MfYbY01TWD+PJYsqu/sciLstLnhHA0GZKS0yflmkj0vw3mciM+
+         oRzxwP/T9fdmCduKRBSdymmttk0eOso7x+vDnZ7nwplyFrjHk5Uxhid68nQOMREFtu4I
+         6QtnzS02SldThmbP4SySSEq9MDMC2raoyF2ChOKFd+ZvgBv+KEt7JnLqJI8esWwHpj6X
+         uCFSjPkkDK6DRFKdgmUMPJmDPjRhtpRcSFGqXR+rS1zejPksAXh29y/7X0UeU98krnhP
+         sdTynsvRO+pDSLqZAw7Z+f0nH4jdV6VDu99+lw7g0w8ZEMuuEQ/LMkEr6ZXZvxLyWSYh
+         jtnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fomdWM13prZfQ7vSZjiuPyioG/SgkiDt0SZpZ1hksfA=;
+        b=bkETA5A5OO1sabbdCiaQYTafIr5fww6W/IJ6CCp+jE1HPK/Pl56sm/DwSWMVajoRPr
+         l5iZGUEvj9KtNBfNMsj791kex5fqBgsyAnhXlvi/NP1rsWg/YJRK/dCRCp9TQ1BcFdpo
+         G1QcmMTEWu5jsXe0on1MpxKF4nvhDKX1bu59M47p/ZZF/GGYVxyp04qbtzzoVRf450An
+         F3WLTcBMH2CsVbGc8kevNecJ/SMnnPW/p0sUl9iAEuN0OaVPZ/dUoZ01x7xvwPDkIq7M
+         NZ7SMCWvpwZKr8nvT3qPvBWHgZuq2a3TNw+ZJKVObHUCYHrKvDgGx+oSSyyioPqiulpW
+         g/+A==
+X-Gm-Message-State: APjAAAVaEVWMCDFkdrTqCALVT3CrtLLur3wQ8ScFPyQ0AV62ASmoGvbt
+        Rate39H2hNHEfcIxacp4Kkr2cUNeA0zrxv3/TXecj3S1
+X-Google-Smtp-Source: APXvYqymyfyz8/HNnj11yxmLGdBA4kOlsce5EmA7gV+DlPXeUby884J8R66Q3PaDByYFW0yTPM5bHW8972cOoq9vkUg=
+X-Received: by 2002:a17:902:2a29:: with SMTP id i38mr129344380plb.46.1564699371026;
+ Thu, 01 Aug 2019 15:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tvn2OBSDkwMEDVigN//YA/m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20190802075453.06066be1@canb.auug.org.au>
+In-Reply-To: <20190802075453.06066be1@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 1 Aug 2019 17:42:36 -0500
+Message-ID: <CAH2r5muO8rYmSEDHogiDkoWbMMm4bd367U-jzbpk_gixk7hkhg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---Sig_/Tvn2OBSDkwMEDVigN//YA/m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fixed
 
-Hi all,
+On Thu, Aug 1, 2019 at 4:55 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   c3ab166ec798 ("SMB3: Kernel oops mounting a encryptData share with CONFIG_DEBUG_VIRTUAL")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commit
 
-  c3ab166ec798 ("SMB3: Kernel oops mounting a encryptData share with CONFIG=
-_DEBUG_VIRTUAL")
 
-is missing a Signed-off-by from its committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Tvn2OBSDkwMEDVigN//YA/m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1DX60ACgkQAVBC80lX
-0GxHhgf+IB5SocUd0MMJ3udUo6oRImUgkO4C10Y5xlU9lvYlehoV4DT348vKYMYB
-mGqvq4Og5JHUXg3CG4XR06uLQATcXJn7ao7zUqHixOL1a+idvNAFCZ2mjqL74QsS
-9ZwqxwZFdGb5ELYWqoq1vxN2a6eTRpSmjRgf2XYinEzdNvR5BVkMDmXw7BkwLtN+
-zcBIFefBRWYoocKqbV4QkJlw3usjjnDWvSL2pSyim5yJlP6Bqax9wkqYkOHr3cFf
-jp43R8ytVZRH8Vnm8Wn2WAlUXCT8qlR+h2fIkVXttuRJYzh7kwT/TYZqLNEY/D4j
-EZyenU+Bdy1TUg7hvSO9X3jIVpjfmA==
-=Dju+
------END PGP SIGNATURE-----
-
---Sig_/Tvn2OBSDkwMEDVigN//YA/m--
+Steve
