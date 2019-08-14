@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE2F8C705
-	for <lists+linux-cifs@lfdr.de>; Wed, 14 Aug 2019 04:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3F08C8DE
+	for <lists+linux-cifs@lfdr.de>; Wed, 14 Aug 2019 04:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbfHNCUv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 13 Aug 2019 22:20:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50254 "EHLO mail.kernel.org"
+        id S1728865AbfHNCe0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 13 Aug 2019 22:34:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45938 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729703AbfHNCTW (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:19:22 -0400
+        id S1728460AbfHNCNw (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:13:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 30705214DA;
-        Wed, 14 Aug 2019 02:19:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AAE7920874;
+        Wed, 14 Aug 2019 02:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565749161;
-        bh=ndA4KxKtbR7lRQXfS31J4+E8hVJVSqZcUpl0AVYQsPI=;
+        s=default; t=1565748831;
+        bh=oUTvVHpGCXniprAY65ZrDbxr23TG1b7WMgMOcwgLu4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WhufkB0zw+H0a9cYVotwGqYYX5+p4AeSvUpVD+AWOIPST04hB6IeYdRBQGn1WC81F
-         Ea0/BhOA661P0K4kN3xELR8yYQokU7Yw7qMFX/8DSbE1OHHuFs7oCZXF9dWDjU4/Ox
-         ockZLV2yHl478DEFyWFloLJ9poOIvjIfQ5u6E/oM=
+        b=pscl496XrhIt36Hq0oFPQPAsvI4j+tv4/VKyuwY6U8ELJv+jfzBqgezSG8OkCjB0Z
+         s4/UKfXmNsC712iEMXikO83Yno3/ABr6tE0cA69GKm7shL5bRtaJFqz1+1hFG6Jmbs
+         tJKCIfB9yre/AZgzayEseYCli//EDypHrybkuNI0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sebastien Tisserant <stisserant@wallix.com>,
         Pavel Shilovsky <pshilov@microsoft.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 29/44] SMB3: Kernel oops mounting a encryptData share with CONFIG_DEBUG_VIRTUAL
-Date:   Tue, 13 Aug 2019 22:18:18 -0400
-Message-Id: <20190814021834.16662-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 091/123] SMB3: Kernel oops mounting a encryptData share with CONFIG_DEBUG_VIRTUAL
+Date:   Tue, 13 Aug 2019 22:10:15 -0400
+Message-Id: <20190814021047.14828-91-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814021834.16662-1-sashal@kernel.org>
-References: <20190814021834.16662-1-sashal@kernel.org>
+In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
+References: <20190814021047.14828-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,10 +60,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 23326b0cd5628..58a502e622aa4 100644
+index ae10d6e297c3a..42de31d206169 100644
 --- a/fs/cifs/smb2ops.c
 +++ b/fs/cifs/smb2ops.c
-@@ -2168,7 +2168,15 @@ fill_transform_hdr(struct smb2_transform_hdr *tr_hdr, struct smb_rqst *old_rq)
+@@ -3439,7 +3439,15 @@ fill_transform_hdr(struct smb2_transform_hdr *tr_hdr, unsigned int orig_len,
  static inline void smb2_sg_set_buf(struct scatterlist *sg, const void *buf,
  				   unsigned int buflen)
  {
@@ -79,7 +79,7 @@ index 23326b0cd5628..58a502e622aa4 100644
 +	sg_set_page(sg, addr, buflen, offset_in_page(buf));
  }
  
- static struct scatterlist *
+ /* Assumes the first rqst has a transform header as the first iov.
 -- 
 2.20.1
 
