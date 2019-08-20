@@ -2,69 +2,117 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD53951AD
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2019 01:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1CC95CD4
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2019 13:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728494AbfHSXfI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 19 Aug 2019 19:35:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57604 "EHLO mail.kernel.org"
+        id S1729564AbfHTLFS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 20 Aug 2019 07:05:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728351AbfHSXfH (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 19 Aug 2019 19:35:07 -0400
-Subject: Re: [GIT PULL] signal: Allow cifs and drbd to receive their
- terminating signals
+        id S1729553AbfHTLFS (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 20 Aug 2019 07:05:18 -0400
+Received: from tleilax.poochiereds.net (68-20-15-154.lightspeed.rlghnc.sbcglobal.net [68.20.15.154])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EFF55205C9;
+        Tue, 20 Aug 2019 11:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566257707;
-        bh=1GTf0DUmCNG7jWtw7ITXRRhv6CDLU7nXtAtPg8JJq78=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=QGLIacvFvQcMzDzL6cBTrvM2O2n93EVNCmGdpsWOVaeQXnefhh6fFuy0gLfcmtEP6
-         p/utnwOz3U1hcQ1EBfxkyo9WLjroDXXwvm65Hm4Rk740GbvL4PPaekfjgoUTfIIdp8
-         GJUhy9gyl3SA7KH4EjOgXScfwFN5VCBOuKirr6+Q=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87ftlwke3u.fsf_-_@xmission.com>
-References: <20190729083248.30362-1-christoph.boehmwalder@linbit.com>
- <1761552.9xIroHqhk7@fat-tyre>
- <1fcbb94c5f264c17af3394807438ad50@AcuMS.aculab.com>
- <2789113.VEJ2NpTmzX@fat-tyre> <87k1bclpmt.fsf_-_@xmission.com>
- <20190819083759.73ee5zct4yxbyyfd@gintonic.linbit>
- <87ftlwke3u.fsf_-_@xmission.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87ftlwke3u.fsf_-_@xmission.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
- siginfo-linus
-X-PR-Tracked-Commit-Id: 33da8e7c814f77310250bb54a9db36a44c5de784
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 287c55ed7df531c30f7a5093120339193dc7f166
-Message-Id: <156625770729.9031.17087152821165802570.pr-tracker-bot@kernel.org>
-Date:   Mon, 19 Aug 2019 23:35:07 +0000
-To:     ebiederm@xmission.com (Eric W. Biederman)
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        David Laight <David.Laight@aculab.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable\@vger.kernel.org" <stable@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Jeff Layton <jlayton@primarydata.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Christoph =?utf-8?Q?B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Oleg Nesterov <oleg@redhat.com>
+        s=default; t=1566299116;
+        bh=T0rmHh8w3H3bwdXLru7KFY2A/8hjJcNt2eMc9MdFvoU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=OWYdJNUzSee+UuIh6LQ3YFru0x6seE2TTCifysIDGNOjR8O4ScYkdj2Vrw5S/JeTB
+         qmDzLYeDaoNBfNwX5IDihFikAWZqI1dzLhII85Qm3JJy6zIH2yIFue45EEMtXZPwcN
+         fgzdH+WlULgP+SUhyw7NDBScX/I9XuZMIU+ITkEg=
+Message-ID: <27d1943a0027cb4f658334fad8dc880df133c22d.camel@kernel.org>
+Subject: Re: [PATCH v8 00/20] vfs: Add support for timestamp limits
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Deepa Dinamani <deepa.kernel@gmail.com>, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, y2038@lists.linaro.org,
+        arnd@arndb.de, adilger.kernel@dilger.ca, adrian.hunter@intel.com,
+        aivazian.tigran@gmail.com, al@alarsen.net,
+        anna.schumaker@netapp.com, anton@enomsg.org,
+        asmadeus@codewreck.org, ccross@android.com,
+        ceph-devel@vger.kernel.org, coda@cs.cmu.edu,
+        codalist@coda.cs.cmu.edu, darrick.wong@oracle.com,
+        dedekind1@gmail.com, devel@lists.orangefs.org, dsterba@suse.com,
+        dushistov@mail.ru, dwmw2@infradead.org, ericvh@gmail.com,
+        gregkh@linuxfoundation.org, hch@infradead.org, hch@lst.de,
+        hirofumi@mail.parknet.co.jp, hubcap@omnibond.com,
+        idryomov@gmail.com, jack@suse.com, jaegeuk@kernel.org,
+        jaharkes@cs.cmu.edu, jfs-discussion@lists.sourceforge.net,
+        jlbec@evilplan.org, keescook@chromium.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-karma-devel@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        lucho@ionkov.net, luisbg@kernel.org, martin@omnibond.com,
+        me@bobcopeland.com, mikulas@artax.karlin.mff.cuni.cz,
+        nico@fluxnic.net, phillip@squashfs.org.uk,
+        reiserfs-devel@vger.kernel.org, richard@nod.at, sage@redhat.com,
+        salah.triki@gmail.com, sfrench@samba.org, shaggy@kernel.org,
+        tj@kernel.org, tony.luck@intel.com,
+        trond.myklebust@hammerspace.com, tytso@mit.edu,
+        v9fs-developer@lists.sourceforge.net, yuchao0@huawei.com,
+        zyan@redhat.com
+Date:   Tue, 20 Aug 2019 07:05:10 -0400
+In-Reply-To: <20190818165817.32634-1-deepa.kernel@gmail.com>
+References: <20190818165817.32634-1-deepa.kernel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Mon, 19 Aug 2019 17:03:01 -0500:
+On Sun, 2019-08-18 at 09:57 -0700, Deepa Dinamani wrote:
+> The series is an update and a more complete version of the
+> previously posted series at
+> https://lore.kernel.org/linux-fsdevel/20180122020426.2988-1-deepa.kernel@gmail.com/
+> 
+> Thanks to Arnd Bergmann for doing a few preliminary reviews.
+> They helped me fix a few issues I had overlooked.
+> 
+> The limits (sometimes granularity also) for the filesystems updated here are according to the
+> following table:
+> 
+> File system   Time type                      Start year Expiration year Granularity
+> cramfs        fixed                          0          0
+> romfs         fixed                          0          0
+> pstore        ascii seconds (27 digit ascii) S64_MIN    S64_MAX         1
+> coda          INT64                          S64_MIN    S64_MAX         1
+> omfs          64-bit milliseconds            0          U64_MAX/ 1000   NSEC_PER_MSEC
+> befs          unsigned 48-bit seconds        0          0xffffffffffff  alloc_super
+> bfs           unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> efs           unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> ext2          signed 32-bit seconds          S32_MIN    S32_MAX         alloc_super
+> ext3          signed 32-bit seconds          S32_MIN    S32_MAX         alloc_super
+> ext4 (old)    signed 32-bit seconds          S32_MIN    S32_MAX         alloc_super
+> ext4 (extra)  34-bit seconds, 30-bit ns      S32_MIN    0x37fffffff	1
+> freevxfs      u32 secs/usecs                 0          U32_MAX         alloc_super
+> jffs2         unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> jfs           unsigned 32-bit seconds/ns     0          U32_MAX         1
+> minix         unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> orangefs      u64 seconds                    0          U64_MAX         alloc_super
+> qnx4          unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> qnx6          unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> reiserfs      unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> squashfs      unsigned 32-bit seconds        0          U32_MAX         alloc_super
+> ufs1          signed 32-bit seconds          S32_MIN    S32_MAX         NSEC_PER_SEC
+> ufs2          signed 64-bit seconds/u32 ns   S64_MIN    S64_MAX         1
+> xfs           signed 32-bit seconds/ns       S32_MIN    S32_MAX         1
+> ceph          unsigned 32-bit second/ns      0          U32_MAX         1000
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git siginfo-linus
+Looks reasonable, overall.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/287c55ed7df531c30f7a5093120339193dc7f166
+Note that the granularity changed recently for cephfs. See commit
+0f7cf80ae96c2a (ceph: initialize superblock s_time_gran to 1).
 
-Thank you!
+In any case, you can add my Acked-by
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Jeff Layton <jlayton@kernel.org>
+
