@@ -2,91 +2,132 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D9D99371
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2019 14:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897619A33C
+	for <lists+linux-cifs@lfdr.de>; Fri, 23 Aug 2019 00:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732751AbfHVM3X (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 22 Aug 2019 08:29:23 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:46961 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbfHVM3X (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 22 Aug 2019 08:29:23 -0400
-Received: by mail-lf1-f68.google.com with SMTP id n19so4365977lfe.13
-        for <linux-cifs@vger.kernel.org>; Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
+        id S2394173AbfHVWqX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 22 Aug 2019 18:46:23 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37869 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394171AbfHVWqX (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 22 Aug 2019 18:46:23 -0400
+Received: by mail-io1-f66.google.com with SMTP id q22so15593682iog.4
+        for <linux-cifs@vger.kernel.org>; Thu, 22 Aug 2019 15:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=Uh83TYpKL0GQ/nM6wFMlLCF+K/QQ+NWaS4ZIx2sQQvI0KNNqN/E6zTArGpXOLOBt/f
-         N6QFHzklBH631+fvsO6vTelavHgyHvvHVBwI+y20TBUOZtQ5/sT4JlP23bjtE/oA0X0A
-         xvXAKbCZ0pU5aA60LB4dH6xcUJXMTHD8lsxQmkm/vQ11xahFHBmNMIdacasF15YPXded
-         CUm/z2mtG67xtMwBBKPI8MsyFlOGkBdqomx6M8r6sJ/85QLiNUCv9kdIKNh8VC0ZCY5l
-         yK5dXChs/m/0WrIay4/uBCczsKiY1ayIx+UdL3eXQ5RZfdSnei35OgrfUOHzvU7muA6w
-         OR9g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=97giE2qTSf7Ll6aMfBGTim9Q2aKI/p1daYxAX6PB0Ho=;
+        b=T2Oi2D2+05kcdbN3eWZRIX31o/co5SQDSObCg1E23MCgscYzbj7nQzrEldQmMc6Eex
+         jTyBptkIXpS+7PEKsWmJNmDNDGlzJoYhN65ny4PFUOTFR1E9yDDgvLxrrSo2E8sv04ev
+         MqWKpPF289OZk0UkyColesuQDr8IZZnz/6L9Tglw8rzQSibtekXV4wND7bnLd6ywACJF
+         0se1vbZ5JEc1H1ex6aHcKGDMmz10gu8ixo4Ofs4lgLEh1AfrIxYZ8wuGfhzp0vMO4anw
+         KTQsfjtOd08hKn8eGK8D2ragYk7bnuH54smRyfUtkE/HFeggC+hxpdZ2h78apNJWyLaW
+         GM7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=PQqd3Vn7JTEG0HX0z3hCWJ5BdS4KHCmkzD/zftLeVyPiQNSvKNWnj3OYgUJ0fWBNra
-         6Wh8dkwDAbfbItopf1+vVGy8LFkqgI8yL9X0KTdfQaYikzoRL0TPipNFq//N67bt6Wpc
-         qH6+DjImxy1O4x3zy5AMZfLDGX8mGSsRti6xGYpkJD3abUC6v1x96tKMHhEn5CVF4Aig
-         9wK+Uz7l0O/B7uq1sEpg6Fp9ROBQK8RKmVsP3v//nKMWQOCevq99gIImCK9am/xV9kWq
-         Qg2mRA7N9SG5SG2uabLoXvjix04VBBxyCEZ8ETIj4mkfwrS85c79pchXpEtQwU+D3hOI
-         QX2w==
-X-Gm-Message-State: APjAAAWb4cXYs045pYDUFvmS9Qo8pe1OL2BOA8JJPUwElEUFPi9BEo82
-        Rr+ttBWa92GMwWYUPMVXVJhtB33Uc7pHIRKIlTI=
-X-Google-Smtp-Source: APXvYqw9sQwSpmxjAXS7bfZJ09F9JlAGXMwoQhntJWPTMt4Hq9l+6KygepnFg49Lj9VXPBN7VHtr8pRnDUQyUgeXodI=
-X-Received: by 2002:a19:ed11:: with SMTP id y17mr21470359lfy.141.1566476961148;
- Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=97giE2qTSf7Ll6aMfBGTim9Q2aKI/p1daYxAX6PB0Ho=;
+        b=C1BjJ7C/ip55krE+Ge/TCIbGayv7pPtsbnUnppUbUK6Wz3WtUJ6Fl64g871sw+ZCzt
+         A6H0RS5TA6hNS2YXQpQhe84DT3bjg8mAwIZ7WhgeOKFpUtWGlY4pnSkIVglef+5LFagV
+         fOEgH449dqs8QVXK6caevWUWiMF2s3syjrVr6ik3SyHPoPCuK4/GUwFSRcMgVZ1w7O7g
+         pEdGgQRC/08oQmm6ZIchGXUoIb4iYTBqcNSk+eaBXXIXdoj9xMv3QWHsp0o7Wi3yqZxH
+         5pF+Rd1h1xhdH8Tk0VsH1LGNiBWtm/tMAvDeLc93RJwfeVb4KaaHXEUvxz3DzGbkv+2M
+         dP9Q==
+X-Gm-Message-State: APjAAAWlGYXv6E34GksuB5zGUxsO+Ykxw3BhndqYBl0FqOVETYVNdWdj
+        it0iAdufNo2w6hCnzy+JlJ4RJobC6LUXpzMWTgE=
+X-Google-Smtp-Source: APXvYqzAy8rYnCA0SY03jGDLg/XVp9sl7XDNG8Xfb4Yz/SgbLyJQbnw6FVOdVcAlXIxv7yXdN7DTr+JTFo7zUZzR7dc=
+X-Received: by 2002:a6b:5a12:: with SMTP id o18mr2688362iob.159.1566513982756;
+ Thu, 22 Aug 2019 15:46:22 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a19:dc4f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:29:20
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <elenabaltach66@gmail.com>
-Date:   Thu, 22 Aug 2019 12:29:20 +0000
-Message-ID: <CAOGpsp6x-FLHmOKGyjMV8QnAdMQ5tZOzyu8q0D-N36-PB1LdEA@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
+References: <CAN05THT0OkbAoNu8ZVSHF-xY7w0ZW4q4i-jTxjNManrnz0OMfg@mail.gmail.com>
+ <20190815174854.05661672@suse.de> <CAN05THThHLkSF=oVBezJQBsre7QoH6eS=SLbxo3Z=w8M+fa=RQ@mail.gmail.com>
+ <CAN05THT3NF+eAd=H+gpmZQp0SWBQ0iFe32TT0VB5_rmibcN2Cw@mail.gmail.com>
+ <20190819183151.15642e8f@suse.de> <20190820000348.440ee8ce@suse.de> <MWHPR2101MB07318FE687DAC9C78A54D1D3A0AB0@MWHPR2101MB0731.namprd21.prod.outlook.com>
+In-Reply-To: <MWHPR2101MB07318FE687DAC9C78A54D1D3A0AB0@MWHPR2101MB0731.namprd21.prod.outlook.com>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Fri, 23 Aug 2019 08:46:10 +1000
+Message-ID: <CAN05THSu=z4RoenzSYZjTUqBpz86DfLSKaoX==uwwPKsDyBO2w@mail.gmail.com>
+Subject: Re: FSCTL_QUERY_ALLOCATED_RANGES issue with Windows2016
+To:     Tom Talpey <ttalpey@microsoft.com>
+Cc:     David Disseldorp <ddiss@suse.de>,
+        linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+On Wed, Aug 21, 2019 at 3:47 AM Tom Talpey <ttalpey@microsoft.com> wrote:
+>
+> > -----Original Message-----
+> > From: linux-cifs-owner@vger.kernel.org <linux-cifs-owner@vger.kernel.org> On
+> > Behalf Of David Disseldorp
+> > Sent: Monday, August 19, 2019 6:04 PM
+> > To: ronnie sahlberg <ronniesahlberg@gmail.com>
+> > Cc: linux-cifs <linux-cifs@vger.kernel.org>
+> > Subject: Re: FSCTL_QUERY_ALLOCATED_RANGES issue with Windows2016
+> >
+> > On Mon, 19 Aug 2019 18:31:51 +0200, David Disseldorp wrote:
+> >
+> > > Nothing stands out in the captures to me, but I'd be curious whether you
+> > > see any differences in behaviour if you set write-through on open or
+> > > explicitly FLUSH after the SET-SPARSE call.
+> >
+> > Hmm actually it looks like there's already a FLUSH shortly after the
+> > mtime update following the SetInfo(EOF). One thing that does look a
+> > little weird is the AllocationSize field before that FLUSH - in
+> > seek_bad.cap.gz it's 2M, whereas it's ~6M in seek_good.cap.gz.
+>
+> Another oddity is that the FSCTL_SET_SPARSE comes *after* the 2MB
+> write. It seems entirely possible that filesystem may have decided to
+> allocate additional blocks during the write, in expectation of more
+> writes. Since the EOF pointer is still 2MB, I believe the filesystem may
+> be well within its rights there. In any event there may be a timing thing
+> going on, because it's doing immediately:
+>
+> write 2MB
+> fsctl SET_SPARSE
+> setinfo EOF=4MB
+> compound open+mtime+close (why a new handle for setting mtime btw?)
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+It is because internally in the kernel API setting this timestamps is
+a path based call.
+We could search for and see if there is a writeable open handle and
+use that IF there is such handle but it would be more code and
+complexity.
+
+It was just easier to make it into a compound. It should be cheap
+enough and have no ill effects.
+
+> getinfo
+> flush
+> fsctl QUERY_ALLOCATED_RANGES
+>
+>
+> The NTFS developers were kind of skeptical of the approach of looking
+> at the block allocation counts to detect holes. The first example they
+> mentioned was a small file, like 400 bytes, for which the entire content
+> would fall into the MFT record. Such a file would show zero blocks
+> allocated, regardless of sparseness.
+
+Ok, fair enough.
+So if the filesystem has heuristics that can cause it to allocate
+extra blocks like that (not unreasonable)
+then it just means that these xfstests make assumptions about the
+filesystem that are just not guaranteed to be true
+when used with cifs.
+
+That is fair enough. It just means there is no bug. It is just that
+the test tool is not compatible with ntfs.
+I can live with that. I do run it against btrfs and there I get the
+result to allow me to run this part of the test in
+the regression testsuite. That is good enough for me.
+
+Thanks
+Ronnie Sahlberg
+
+>
+> Tom.
+>
