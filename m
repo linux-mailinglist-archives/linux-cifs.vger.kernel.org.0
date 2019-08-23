@@ -2,51 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8BE9A3D4
-	for <lists+linux-cifs@lfdr.de>; Fri, 23 Aug 2019 01:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D667A9AEF3
+	for <lists+linux-cifs@lfdr.de>; Fri, 23 Aug 2019 14:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfHVXbc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 22 Aug 2019 19:31:32 -0400
-Received: from mail.physics.pub.ro ([141.85.216.3]:59866 "EHLO
-        physics1.physics.pub.ro" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbfHVXbc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 22 Aug 2019 19:31:32 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by physics1.physics.pub.ro (Postfix) with ESMTP id 3FC47E37A2A;
-        Thu, 22 Aug 2019 13:37:33 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at physics.pub.ro
-Received: from physics1.physics.pub.ro ([127.0.0.1])
-        by localhost (physics1.physics.pub.ro [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1r1qxk-IzVNx; Thu, 22 Aug 2019 13:37:33 +0300 (EEST)
-Received: from [10.51.176.174] (unknown [105.4.6.61])
-        by physics1.physics.pub.ro (Postfix) with ESMTPSA id DB5ABE3BCD0;
-        Thu, 22 Aug 2019 13:37:24 +0300 (EEST)
-Content-Type: text/plain; charset="utf-8"
+        id S2391627AbfHWMQT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 23 Aug 2019 08:16:19 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:45608 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2389773AbfHWMQS (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 23 Aug 2019 08:16:18 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 78ABB5F6FD15DD49C872;
+        Fri, 23 Aug 2019 20:16:08 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 23 Aug 2019
+ 20:15:58 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <sfrench@samba.org>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] cifs: remove set but not used variables
+Date:   Fri, 23 Aug 2019 20:15:35 +0800
+Message-ID: <20190823121535.76296-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <niculae-tiberiu.puscas@physics.pub.ro>
-From:   ''Tayeb Souami'' <niculae-tiberiu.puscas@physics.pub.ro>
-Date:   Thu, 22 Aug 2019 12:37:20 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20190822103724.DB5ABE3BCD0@physics1.physics.pub.ro>
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Lieber Freund,
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
+fs/cifs/file.c: In function cifs_lock:
+fs/cifs/file.c:1696:24: warning: variable cinode set but not used [-Wunused-but-set-variable]
+fs/cifs/file.c: In function cifs_write:
+fs/cifs/file.c:1765:23: warning: variable cifs_sb set but not used [-Wunused-but-set-variable]
+fs/cifs/file.c: In function collect_uncached_read_data:
+fs/cifs/file.c:3578:20: warning: variable tcon set but not used [-Wunused-but-set-variable]
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+'cinode' is never used since introduced by
+commit 03776f4516bc ("CIFS: Simplify byte range locking code")
+'cifs_sb' is not used since commit cb7e9eabb2b5 ("CIFS: Use
+multicredits for SMB 2.1/3 writes").
+'tcon' is not used since commit d26e2903fc10 ("smb3: fix bytes_read statistics")
 
-Das ist dein Spendencode: [TS530342018]
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ fs/cifs/file.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Antworten Sie mit dem SPENDE-CODE an diese E-Mail:Tayebsouam.spende@gmail.com
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index ab07ae8..f16f6d2 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -1693,7 +1693,6 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
+ 	bool posix_lck = false;
+ 	struct cifs_sb_info *cifs_sb;
+ 	struct cifs_tcon *tcon;
+-	struct cifsInodeInfo *cinode;
+ 	struct cifsFileInfo *cfile;
+ 	__u32 type;
+ 
+@@ -1710,7 +1709,6 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
+ 	cifs_read_flock(flock, &type, &lock, &unlock, &wait_flag,
+ 			tcon->ses->server);
+ 	cifs_sb = CIFS_FILE_SB(file);
+-	cinode = CIFS_I(file_inode(file));
+ 
+ 	if (cap_unix(tcon->ses) &&
+ 	    (CIFS_UNIX_FCNTL_CAP & le64_to_cpu(tcon->fsUnixInfo.Capability)) &&
+@@ -1762,7 +1760,6 @@ cifs_write(struct cifsFileInfo *open_file, __u32 pid, const char *write_data,
+ 	int rc = 0;
+ 	unsigned int bytes_written = 0;
+ 	unsigned int total_written;
+-	struct cifs_sb_info *cifs_sb;
+ 	struct cifs_tcon *tcon;
+ 	struct TCP_Server_Info *server;
+ 	unsigned int xid;
+@@ -1770,8 +1767,6 @@ cifs_write(struct cifsFileInfo *open_file, __u32 pid, const char *write_data,
+ 	struct cifsInodeInfo *cifsi = CIFS_I(d_inode(dentry));
+ 	struct cifs_io_parms io_parms;
+ 
+-	cifs_sb = CIFS_SB(dentry->d_sb);
+-
+ 	cifs_dbg(FYI, "write %zd bytes to offset %lld of %pd\n",
+ 		 write_size, *offset, dentry);
+ 
+@@ -3575,10 +3570,8 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+ 	struct cifs_readdata *rdata, *tmp;
+ 	struct iov_iter *to = &ctx->iter;
+ 	struct cifs_sb_info *cifs_sb;
+-	struct cifs_tcon *tcon;
+ 	int rc;
+ 
+-	tcon = tlink_tcon(ctx->cfile->tlink);
+ 	cifs_sb = CIFS_SB(ctx->cfile->dentry->d_sb);
+ 
+ 	mutex_lock(&ctx->aio_mutex);
+-- 
+2.7.4
 
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
-Grüße
-Herr Tayeb Souami
