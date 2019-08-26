@@ -2,53 +2,142 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D879BF88
-	for <lists+linux-cifs@lfdr.de>; Sat, 24 Aug 2019 21:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FC09C6E4
+	for <lists+linux-cifs@lfdr.de>; Mon, 26 Aug 2019 02:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbfHXTA0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Sat, 24 Aug 2019 15:00:26 -0400
-Received: from smtp2.osep.mendoza.gov.ar ([200.16.135.145]:52858 "HELO
-        smtp2.osep.mendoza.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727900AbfHXTA0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 24 Aug 2019 15:00:26 -0400
-X-Greylist: delayed 9979 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Aug 2019 15:00:25 EDT
-Received: (qmail 402 invoked from network); 24 Aug 2019 14:14:38 -0000
-Received: from unknown (HELO zimbra.servers.dg.intranet) (10.10.195.224)
-  by smtp2.osep.mendoza.gov.ar with SMTP; 24 Aug 2019 14:14:38 -0000
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id DB8B3CF7CC66;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RViPrJdL95bg; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id 877BBCF7CC58;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-X-Virus-Scanned: amavisd-new at osep.mendoza.gov.ar
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9n2-6F1Dy9XD; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet (zimbra.servers.dg.intranet [10.10.195.224])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id BAAEBCF7CC40;
-        Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-Date:   Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-From:   "Herr.Robert Jackson" <liliana.marinero@osep.mendoza.gov.ar>
-Reply-To: SKY GROUP FINANCIAL <skygroupfinancial0@gmail.com>
-Message-ID: <1268244548.24999093.1566656076742.JavaMail.zimbra@osep.mendoza.gov.ar>
-Subject: 
+        id S1726539AbfHZAsK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 25 Aug 2019 20:48:10 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:44753 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbfHZAsJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 25 Aug 2019 20:48:09 -0400
+Received: by mail-io1-f67.google.com with SMTP id j4so24831977iog.11;
+        Sun, 25 Aug 2019 17:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W/51w5j8xEcYmqOnM2KI7Id/pY4RG7FnEXZK5a9W5RA=;
+        b=jiglPNpgKm4E5mpddxqvqDxY+bWhiTdGIiXT9uvxVz1duakfoA0qsNe5RK29mA6Dcp
+         kg+Wk9tznXQsM40KYC2TtpmG4f9oxaGSqH/PMDRfN6WLlY4IXrKLYga69MPDT1rcbU6s
+         JHwnkbxQiMHJTwzPvpaBKebn9G5xjknuQunqMDbIW5TIFb6CpTWl1NKGwpA1dY92vlqE
+         mGRkyznLTonRN/FzEbyM50uXHAW5ifkHfp2LHlf52/ypSZXw0P25Q62Q56Rgglfv7tgT
+         Tpdp15TuTcucREXfQLHhvQtiYaW0/sNb2oZYwk4jXp6GVtG0atQ99PLhoZPfve7XCAqk
+         UwYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W/51w5j8xEcYmqOnM2KI7Id/pY4RG7FnEXZK5a9W5RA=;
+        b=sNTmYi1sFzWWB9TBhvr3/NXfYQ+nCsoFCUepSGRCwvCHvEXG+Lx6lFHWggc0Fwn2Yb
+         nzvzs3T7ffLxBqGn0DR89OKOyJ78URtAEHDbsf5YKHGZOg648KRnnpoi2co9oSedDFgR
+         LYwJLlb882fh1MAYTs8WXHikr6qRyhsGcqgu/B9zgA71al/PELfheMgy2P21roOIezxg
+         KOGFellgLhIaCMZG0gQeCPTxqwYvsWoLN0wLBUBN4RqvG0KeHHdMLiagUEQ0C2XHtEqU
+         dM/p4D1qa3L5vYsqODHN6pVdbu5wUNnUBUiJQp2E+vkSKTdReBUvxGp+O6hg6w5Ge3Iy
+         Jc2g==
+X-Gm-Message-State: APjAAAVy6B8Qvt9dPF0Rly7CO4xfixWiXq7EBCcGyjI/le1zB0X7Ek4q
+        KcWk+RZ5heyb9W35stsIe9OCws4pLgBNbcH9r90=
+X-Google-Smtp-Source: APXvYqzXg9gVX/qKg0t2MCc7SoktEu+oMdiepBTfW0tBZwwwg2umaYojE9DZsKHbmvFwfWsBZdWs0TnBY8SLScsRhs4=
+X-Received: by 2002:a02:29ca:: with SMTP id p193mr15275350jap.88.1566780488682;
+ Sun, 25 Aug 2019 17:48:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [172.16.3.2]
-X-Mailer: Zimbra 8.6.0_GA_1153 (zclient/8.6.0_GA_1153)
-Thread-Topic: 
-Thread-Index: 9gdTMQJ8JBu8cvpzdFVmtKjzn0qahQ==
-To:     unlisted-recipients:; (no To-header on input)
+References: <20190823121535.76296-1-yuehaibing@huawei.com>
+In-Reply-To: <20190823121535.76296-1-yuehaibing@huawei.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 25 Aug 2019 19:47:57 -0500
+Message-ID: <CAH2r5mt0T=4qw9tuvX-QO7Lh2A_gzWPhLMyou4ZJNDJgmFXEsA@mail.gmail.com>
+Subject: Re: [PATCH -next] cifs: remove set but not used variables
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Steve French <sfrench@samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+merged into cifs-2.6.git for-next
+
+On Fri, Aug 23, 2019 at 6:11 PM YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> Fixes gcc '-Wunused-but-set-variable' warning:
+>
+> fs/cifs/file.c: In function cifs_lock:
+> fs/cifs/file.c:1696:24: warning: variable cinode set but not used [-Wunused-but-set-variable]
+> fs/cifs/file.c: In function cifs_write:
+> fs/cifs/file.c:1765:23: warning: variable cifs_sb set but not used [-Wunused-but-set-variable]
+> fs/cifs/file.c: In function collect_uncached_read_data:
+> fs/cifs/file.c:3578:20: warning: variable tcon set but not used [-Wunused-but-set-variable]
+>
+> 'cinode' is never used since introduced by
+> commit 03776f4516bc ("CIFS: Simplify byte range locking code")
+> 'cifs_sb' is not used since commit cb7e9eabb2b5 ("CIFS: Use
+> multicredits for SMB 2.1/3 writes").
+> 'tcon' is not used since commit d26e2903fc10 ("smb3: fix bytes_read statistics")
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  fs/cifs/file.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index ab07ae8..f16f6d2 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -1693,7 +1693,6 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
+>         bool posix_lck = false;
+>         struct cifs_sb_info *cifs_sb;
+>         struct cifs_tcon *tcon;
+> -       struct cifsInodeInfo *cinode;
+>         struct cifsFileInfo *cfile;
+>         __u32 type;
+>
+> @@ -1710,7 +1709,6 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
+>         cifs_read_flock(flock, &type, &lock, &unlock, &wait_flag,
+>                         tcon->ses->server);
+>         cifs_sb = CIFS_FILE_SB(file);
+> -       cinode = CIFS_I(file_inode(file));
+>
+>         if (cap_unix(tcon->ses) &&
+>             (CIFS_UNIX_FCNTL_CAP & le64_to_cpu(tcon->fsUnixInfo.Capability)) &&
+> @@ -1762,7 +1760,6 @@ cifs_write(struct cifsFileInfo *open_file, __u32 pid, const char *write_data,
+>         int rc = 0;
+>         unsigned int bytes_written = 0;
+>         unsigned int total_written;
+> -       struct cifs_sb_info *cifs_sb;
+>         struct cifs_tcon *tcon;
+>         struct TCP_Server_Info *server;
+>         unsigned int xid;
+> @@ -1770,8 +1767,6 @@ cifs_write(struct cifsFileInfo *open_file, __u32 pid, const char *write_data,
+>         struct cifsInodeInfo *cifsi = CIFS_I(d_inode(dentry));
+>         struct cifs_io_parms io_parms;
+>
+> -       cifs_sb = CIFS_SB(dentry->d_sb);
+> -
+>         cifs_dbg(FYI, "write %zd bytes to offset %lld of %pd\n",
+>                  write_size, *offset, dentry);
+>
+> @@ -3575,10 +3570,8 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+>         struct cifs_readdata *rdata, *tmp;
+>         struct iov_iter *to = &ctx->iter;
+>         struct cifs_sb_info *cifs_sb;
+> -       struct cifs_tcon *tcon;
+>         int rc;
+>
+> -       tcon = tlink_tcon(ctx->cfile->tlink);
+>         cifs_sb = CIFS_SB(ctx->cfile->dentry->d_sb);
+>
+>         mutex_lock(&ctx->aio_mutex);
+> --
+> 2.7.4
+>
+>
 
 
-Wir sind zuverlässige, vertrauenswürdige Kreditgeber, leihen wir Unternehmen und Einzelpersonen zu einem niedrigen Zinssatz von 2%, Sind Sie auf der Suche nach einem Geschäftskredit, Privatkredite, Schuldenkonsolidierung, unbesicherte Kredite, Risikokapital, wenn ja Kontaktieren Sie uns jetzt für weitere Einzelheiten.
+-- 
+Thanks,
+
+Steve
