@@ -2,31 +2,31 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 374F1A2B2F
-	for <lists+linux-cifs@lfdr.de>; Fri, 30 Aug 2019 01:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6396BA2B32
+	for <lists+linux-cifs@lfdr.de>; Fri, 30 Aug 2019 01:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfH2Xwk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 29 Aug 2019 19:52:40 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45780 "EHLO mx1.redhat.com"
+        id S1726416AbfH2XyD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 29 Aug 2019 19:54:03 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:36648 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726369AbfH2Xwk (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 29 Aug 2019 19:52:40 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        id S1726369AbfH2XyD (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 29 Aug 2019 19:54:03 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 037AD107DD00;
-        Thu, 29 Aug 2019 23:52:40 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 32B98C054C52;
+        Thu, 29 Aug 2019 23:54:03 +0000 (UTC)
 Received: from test1135.test.redhat.com (vpn2-54-71.bne.redhat.com [10.64.54.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F4F260605;
-        Thu, 29 Aug 2019 23:52:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B65E100194E;
+        Thu, 29 Aug 2019 23:54:02 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH] cifs: use existing handle for compount_op(OP_SET_INFO) when possible
-Date:   Fri, 30 Aug 2019 09:52:33 +1000
-Message-Id: <20190829235233.7749-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.64]); Thu, 29 Aug 2019 23:52:40 +0000 (UTC)
+Subject: [PATCH] cifs: use existing handle for compound_op(OP_SET_INFO) when possible
+Date:   Fri, 30 Aug 2019 09:53:56 +1000
+Message-Id: <20190829235356.8591-1-lsahlber@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 29 Aug 2019 23:54:03 +0000 (UTC)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
