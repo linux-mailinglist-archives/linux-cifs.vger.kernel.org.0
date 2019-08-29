@@ -2,113 +2,96 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C0DA102E
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Aug 2019 06:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3B8A10A1
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Aug 2019 07:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725826AbfH2EJt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 29 Aug 2019 00:09:49 -0400
-Received: from mail-io1-f51.google.com ([209.85.166.51]:34717 "EHLO
-        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbfH2EJs (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 29 Aug 2019 00:09:48 -0400
-Received: by mail-io1-f51.google.com with SMTP id s21so4202420ioa.1;
-        Wed, 28 Aug 2019 21:09:48 -0700 (PDT)
+        id S1725837AbfH2FCl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 29 Aug 2019 01:02:41 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35419 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfH2FCl (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 29 Aug 2019 01:02:41 -0400
+Received: by mail-pl1-f195.google.com with SMTP id gn20so1014312plb.2;
+        Wed, 28 Aug 2019 22:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YU1YHjbF48DNiDGJ/sscFH+VTiFvXEQv14JcR6j+IMU=;
-        b=bTpepsNJjZwXWh3JW5H4Ce7efx57U0QBAypMjHr2aJhmxYvbZ4l9uUtc6UMlNwMCVJ
-         rLlM8Vuv3UZLoMQqhxPfSciTslDnYspvytfvb/vz8K2fmL1kCztbZVNCT5neQNLSfNkp
-         qWBHRHtafx3W65LeuqM2KbWB2E3HPtZsAI/KMVTjkBAIPdQN7XKEbIKijAU6vjg9Fuaf
-         bp0Pn17+wxMtNr9KWvB+NPLxdLh1yE9mQhv4Mb2tA8gukZv0oRe5fsDjlDKE4B8fJ/bJ
-         XqKYm9LeOOGfR66D2NLd8hFML4RtuW4fzzWLP6+mCHpTLLGaGIuz1+mGmeSk0/c85frc
-         andQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=LgMi/tOCGdx9z9EgjX0DOVGstnnLhYUUExXCPTNrvk4=;
+        b=HGUOE0/GrUyV2OTY2CITe3OSYyiH1ZaPEVlYKIDE6D3wUi4KNgXz2F3Nw1NPJQvuQY
+         4q0hLcS6BC46Ir4eIlxdKcYm7KyFAIivvMpj+HTTjqwCNiKCrCdjcuICwnfZsUujsQEi
+         WvC5l3hqCtW/udICeHHBV1BnYq30TNVsRU14MTPKf1sUA9Ntw4ycWulsHVnyjj9ifCLI
+         yMPwWCnJrEx1ATI7rb75NRu0PGxbI0p46fNrYW73tEzdOcm96sd5vatezLa1lDGNDg+m
+         RqePAZfocxBvODzP9EvUraPX4W/GFY0k2GwTzUYFExEO511lgm6je1sK5cu9yDDP7dRM
+         74ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YU1YHjbF48DNiDGJ/sscFH+VTiFvXEQv14JcR6j+IMU=;
-        b=eLAWz4fngJKjXbzazP5gCM8VvF4EOgaYMVzeKIxzNq3Gmjy3DB9de0+MVvkbylZcZB
-         IbzxcF9KkR/kv7QvWIE5wpzZjBffGk0jT2G0EZlS8c/AJ25SYjEdFYrUZadmbLTKv4gr
-         W6D8zJBlJfcO4nYCDiRXqqgmYOz/ziPY7cqWvEjZmERlBcHCGWH8SRDto3E1FYXr6YHH
-         gt+QkFBEvEYuqQQS12qD+HM3iK0kH6efe8ikmMWZ9Yoqowy/moNqvuquMpcF1mYpqlOc
-         fh88KQhxtTgIFDfg2czYfrtzUDaHYcv2mzx8xENxhvIb7WkbQVhl6c3IaBd+UUaazVPT
-         hp/g==
-X-Gm-Message-State: APjAAAUoQN0OwQ3c9taNIq1aCuB8P7/pRey86aF+JXdrykNCeATsn+xV
-        lH3JGR/zSYzBuByXp9V5D8hq//JvI+B6FteAGNaBTg==
-X-Google-Smtp-Source: APXvYqwjBWoTXise9Yyur+0EvpWqlBurQEVkTw/X47GmfjP60IPzgICVqLLRTVW8GZeXgC76n+oVDlvxAVlDDLuFDis=
-X-Received: by 2002:a5e:da48:: with SMTP id o8mr8716584iop.252.1567051787467;
- Wed, 28 Aug 2019 21:09:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=LgMi/tOCGdx9z9EgjX0DOVGstnnLhYUUExXCPTNrvk4=;
+        b=jFblr3vrJ1ZSkVTTsAv6U9Xg6BGeoq/SkJObooCOuTa4TMmriN87rXimQu/pgtObu0
+         ToLYrY4FhjKgN6Tb/7gO9dh7eHA0n0rmlXpBZNeQayrrIZGfrk/t3+jQ1wj6ngRC2qrY
+         iC3hPVpTddYAG3g06Crc6BVwVLRLO9l0xVaXIz95RoNGsC+v+9BOqAOKM60IyuA0CA1m
+         xV3ZEv7der4rpKt8iAneic/ELNWXjx3zeYA31CI7Tjjan15VgvMYWKnItbSzV3wlOhYt
+         zibKB7UEwRYG8U2w/Of+aICWZ3bsITAUsH9B4VxynqM/yvFNgE64nYktKeywydrqCNVX
+         lSSg==
+X-Gm-Message-State: APjAAAXkw6/g2AdqzBvqFdi9o6YSkZr8JEhmwh77onO+en5GUCVfSb0T
+        /iDJy40tVtox7uip/1uqWmI=
+X-Google-Smtp-Source: APXvYqy2pYPQdzCT1BPAq+ZAXzjpkv7FaF1klfsNhhpKdjsKim7tOECfA/6XxqQTcmXrjMzD4/wGQg==
+X-Received: by 2002:a17:902:ff0c:: with SMTP id f12mr1164440plj.67.1567054960830;
+        Wed, 28 Aug 2019 22:02:40 -0700 (PDT)
+Received: from localhost ([39.7.51.95])
+        by smtp.gmail.com with ESMTPSA id s7sm1635703pfb.138.2019.08.28.22.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2019 22:02:40 -0700 (PDT)
+Date:   Thu, 29 Aug 2019 14:02:37 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+To:     Steve French <stfrench@microsoft.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: build_path_from_dentry_optional_prefix() may schedule from invalid
+ context
+Message-ID: <20190829050237.GA5161@jagdpanzerIV>
 MIME-Version: 1.0
-References: <20190829000006.24187-1-colin.king@canonical.com> <CAH2r5mtSSwS7_E2WkS3Lsk02BEf_UwZ4H9oCEFTSf94U=4Cm9Q@mail.gmail.com>
-In-Reply-To: <CAH2r5mtSSwS7_E2WkS3Lsk02BEf_UwZ4H9oCEFTSf94U=4Cm9Q@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Thu, 29 Aug 2019 14:09:35 +1000
-Message-ID: <CAN05THSTwX_a7hry4EpD86EEr7NaZ75XUhDKpr_Dgwqqt+rBuw@mail.gmail.com>
-Subject: Re: [PATCH][cifs-next] cifs: ensure variable rc is initialized at the
- after_open label
-To:     Steve French <smfrench@gmail.com>
-Cc:     Colin King <colin.king@canonical.com>,
-        Steve French <sfrench@samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 2:00 PM Steve French <smfrench@gmail.com> wrote:
->
-> Merged into cifs-2.6.git for-next
->
-> Ronnie,
-> You ok with merging this as a distinct patch?
+Hello,
 
-Sure thing.
-Thanks for the fix Colin.
+Looking at commit "cifs: create a helper to find a writeable handle
+by path name":
 
+->open_file_lock scope is atomic context, while build_path_from_dentry()
+can schedule - kmalloc(GFP_KERNEL)
 
->
-> On Wed, Aug 28, 2019 at 7:02 PM Colin King <colin.king@canonical.com> wrote:
-> >
-> > From: Colin Ian King <colin.king@canonical.com>
-> >
-> > A previous fix added a jump to after_open which now leaves variable
-> > rc in a uninitialized state. A couple of the cases in the following
-> > switch statement do not set variable rc, hence the error check on rc
-> > at the end of the switch statement is reading a garbage value in rc
-> > for those specific cases. Fix this by initializing rc to zero before
-> > the switch statement.
-> >
-> > Fixes: 955a9c5b39379 ("cifs: create a helper to find a writeable handle by path name")
-> > Addresses-Coverity: ("Uninitialized scalar variable")
-> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> > ---
-> >  fs/cifs/smb2inode.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/fs/cifs/smb2inode.c b/fs/cifs/smb2inode.c
-> > index 70342bcd89b4..939fc7b2234c 100644
-> > --- a/fs/cifs/smb2inode.c
-> > +++ b/fs/cifs/smb2inode.c
-> > @@ -116,6 +116,7 @@ smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
-> >         smb2_set_next_command(tcon, &rqst[num_rqst]);
-> >   after_open:
-> >         num_rqst++;
-> > +       rc = 0;
-> >
-> >         /* Operation */
-> >         switch (command) {
-> > --
-> > 2.20.1
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+       spin_lock(&tcon->open_file_lock);
+       list_for_each(tmp, &tcon->openFileList) {
+               cfile = list_entry(tmp, struct cifsFileInfo,
+                            tlist);
+               full_path = build_path_from_dentry(cfile->dentry);
+               if (full_path == NULL) {
+                       spin_unlock(&tcon->open_file_lock);
+                       return -ENOMEM;
+               }
+               if (strcmp(full_path, name)) {
+                       kfree(full_path);
+                       continue;
+               }
+               kfree(full_path);
+
+               cinode = CIFS_I(d_inode(cfile->dentry));
+               spin_unlock(&tcon->open_file_lock);
+               return cifs_get_writable_file(cinode, 0, ret_file);
+       }
+
+       spin_unlock(&tcon->open_file_lock);
+
+Additionally, kfree() can (and should) be done outside of
+->open_file_lock scope.
+
+	-ss
