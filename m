@@ -2,117 +2,129 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EE4A6F2C
-	for <lists+linux-cifs@lfdr.de>; Tue,  3 Sep 2019 18:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E0DA7756
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Sep 2019 00:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730694AbfICQaR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 3 Sep 2019 12:30:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51386 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730502AbfICQ2z (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:28:55 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1E06238F7;
-        Tue,  3 Sep 2019 16:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567528134;
-        bh=EIdcxOkdkMNL4Z0E6xJ4tDo5+bIlgiXBorMzcKhbaj4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OBmzOeksz1FQtG1+TqhAKJ7F2Bvo3UriCue9BJy+Op8aIhLxeDvpgvDsDYxkt/UQt
-         tFVwrVsl4STn/7aH1jUyZGdcAwVdTxrn/ox6O0dUsDX9PSxfh8freeLKykRfwdEWF7
-         PUrpSKsZjWBCGL2FSG3WFEwiNI58qKCwqq16fRKA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Paulo Alcantara (SUSE)" <paulo@paulo.ac>,
-        Steve French <stfrench@microsoft.com>,
-        Pavel Shilovsky <pshilove@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 129/167] cifs: Properly handle auto disabling of serverino option
-Date:   Tue,  3 Sep 2019 12:24:41 -0400
-Message-Id: <20190903162519.7136-129-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
-References: <20190903162519.7136-1-sashal@kernel.org>
+        id S1726090AbfICWy3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 Sep 2019 18:54:29 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:41298 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbfICWy3 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 Sep 2019 18:54:29 -0400
+Received: by mail-io1-f68.google.com with SMTP id f19so1469479iof.8
+        for <linux-cifs@vger.kernel.org>; Tue, 03 Sep 2019 15:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=XX6PnSS0XGg/J1ZrD4AQewrN8q/0nOz94IYH1WHzKjk=;
+        b=HDnpZZzGzCPGC3Wpm2akx2tC2hmTaty2GGI0YqIg89UeaTKrtF3HjiXpy7s+u7aua4
+         fTTlC+Gvy2/fN9YnN6Ox4WFTRa47SE4KfmH7UfoLlS5jhLfzd3Pg7p/WtmHQjlcjSH2I
+         GjhMjjXrhLGrMuu81xo2ji5Mubghht0jWqwnn0Bq0tRMI9CLNzHjFryx+MjgV4rjZG3Q
+         caZe1VXaQHm4bamKHxcV/1umzHeYaqevtN9kEjvLBTI3NF+0ENIuZRyCYVYomXXRAYlE
+         mmuw6IBgdfA5uQTR4gX5rUkM9fQ+54QuNvQw2AYMP/MJ2ckh8CQVftWkD5HHCyzIb0LI
+         mwog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=XX6PnSS0XGg/J1ZrD4AQewrN8q/0nOz94IYH1WHzKjk=;
+        b=hpPrQxojYeEHXnMqsZJBRyr6icqA7H5cs1kIXiDrNzvCMCb5j95rqSeq84ngg/YV11
+         uXwvRHumloQid7Hx3ZNHahhil1BiwLnDWxy0F+fceU3TFcBg/vHi+hQyvC8ckvRp499a
+         Mss8Rw1l1XMdPR7jfqOEJhcDs0UG2onyEbczFM3BE4yNVq36BFkY2QsIADQ8jHlj5on8
+         r/tsm8Jy12NpiDpsCrxP2Z2gk2Kr2KZ765u5LPjxgufgllWFUcEeBIZph5eJoIcuyFST
+         2WUleI94Gik7wmI/bLz9cKoriZCzfTd/VHZo8fjln8fe6jLL8YuoJpWgtuo9dJDFJa2X
+         beMQ==
+X-Gm-Message-State: APjAAAUgRZ5nt4dO14E/vJtE1+ElKorHwty+b13ukuCtkAiW5RTLdWRO
+        9acZJSDg/NIEsBgepTb+60iN33a/ryULqACkHlxQpVZgqhA=
+X-Google-Smtp-Source: APXvYqy7MJrikA6cZoW3mUqxKonOcNME2sfKdgUyF+KZXJfVpeBdjnL7cdGX0I3KFyK0uIxGxc69qqZfNntbTiAAEJY=
+X-Received: by 2002:a6b:6303:: with SMTP id p3mr1006199iog.169.1567551268258;
+ Tue, 03 Sep 2019 15:54:28 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 3 Sep 2019 17:54:17 -0500
+Message-ID: <CAH2r5mtzztgoW91TvG_wTYju10dNJ+=r8Ncx3f3bebstMZiCpA@mail.gmail.com>
+Subject: [PATCH] smb3: log warning if CSC policy conflicts with linux kernel
+ client cache mount option
+To:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: multipart/mixed; boundary="0000000000008327cd0591adf8db"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: "Paulo Alcantara (SUSE)" <paulo@paulo.ac>
+--0000000000008327cd0591adf8db
+Content-Type: text/plain; charset="UTF-8"
 
-[ Upstream commit 29fbeb7a908a60a5ae8c50fbe171cb8fdcef1980 ]
+If the server config (e.g. Samba smb.conf "csc policy = disable)
+for the share indicates that the share should not be cached, log
+a warning message in the Linux kernel client if forced client side
+caching ("cache=ro" or "cache=singleclient") was requested on mount.
 
-Fix mount options comparison when serverino option is turned off later
-in cifs_autodisable_serverino() and thus avoiding mismatch of new cifs
-mounts.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Paulo Alcantara (SUSE) <paulo@paulo.ac>
 Signed-off-by: Steve French <stfrench@microsoft.com>
-Reviewed-by: Pavel Shilovsky <pshilove@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifs_fs_sb.h | 5 +++++
- fs/cifs/connect.c    | 8 ++++++--
- fs/cifs/misc.c       | 1 +
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ fs/cifs/connect.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/cifs/cifs_fs_sb.h b/fs/cifs/cifs_fs_sb.h
-index 9731d0d891e7e..aba2b48d4da1a 100644
---- a/fs/cifs/cifs_fs_sb.h
-+++ b/fs/cifs/cifs_fs_sb.h
-@@ -72,5 +72,10 @@ struct cifs_sb_info {
- 	struct delayed_work prune_tlinks;
- 	struct rcu_head rcu;
- 	char *prepath;
-+	/*
-+	 * Indicate whether serverino option was turned off later
-+	 * (cifs_autodisable_serverino) in order to match new mounts.
-+	 */
-+	bool mnt_cifs_serverino_autodisabled;
- };
- #endif				/* _CIFS_FS_SB_H */
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index c53a2e86ed544..208430bb66fc6 100644
+index d9a995588c74..85f8d943a05a 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -3247,12 +3247,16 @@ compare_mount_options(struct super_block *sb, struct cifs_mnt_data *mnt_data)
- {
- 	struct cifs_sb_info *old = CIFS_SB(sb);
- 	struct cifs_sb_info *new = mnt_data->cifs_sb;
-+	unsigned int oldflags = old->mnt_cifs_flags & CIFS_MOUNT_MASK;
-+	unsigned int newflags = new->mnt_cifs_flags & CIFS_MOUNT_MASK;
- 
- 	if ((sb->s_flags & CIFS_MS_MASK) != (mnt_data->flags & CIFS_MS_MASK))
- 		return 0;
- 
--	if ((old->mnt_cifs_flags & CIFS_MOUNT_MASK) !=
--	    (new->mnt_cifs_flags & CIFS_MOUNT_MASK))
-+	if (old->mnt_cifs_serverino_autodisabled)
-+		newflags &= ~CIFS_MOUNT_SERVER_INUM;
-+
-+	if (oldflags != newflags)
- 		return 0;
- 
- 	/*
-diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
-index facc94e159a16..e45f8e321371c 100644
---- a/fs/cifs/misc.c
-+++ b/fs/cifs/misc.c
-@@ -523,6 +523,7 @@ cifs_autodisable_serverino(struct cifs_sb_info *cifs_sb)
- {
- 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_SERVER_INUM) {
- 		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_SERVER_INUM;
-+		cifs_sb->mnt_cifs_serverino_autodisabled = true;
- 		cifs_dbg(VFS, "Autodisabling the use of server inode numbers on %s. This server doesn't seem to support them properly. Hardlinks will not be recognized on this mount. Consider mounting with the \"noserverino\" option to silence this message.\n",
- 			 cifs_sb_master_tcon(cifs_sb)->treeName);
- 	}
--- 
-2.20.1
+@@ -3478,6 +3478,14 @@ cifs_get_tcon(struct cifs_ses *ses, struct
+smb_vol *volume_info)
+         tcon->use_resilient = true;
+     }
 
++    /* If the user really knows what they are doing they can override */
++    if (tcon->share_flags & SMB2_SHAREFLAG_NO_CACHING) {
++        if (volume_info->cache_ro)
++            cifs_dbg(VFS, "cache=ro requested on mount but NO_CACHING
+flag set on share\n");
++        else if (volume_info->cache_rw)
++            cifs_dbg(VFS, "cache=singleclient requested on mount but
+NO_CACHING flag set on share\n");
++    }
++
+     /*
+      * We can have only one retry value for a connection to a share so for
+      * resources mounted more than once to the same server share the last
+
+-- 
+Thanks,
+
+Steve
+
+--0000000000008327cd0591adf8db
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb3-log-warning-if-CSC-policy-conflicts-with-cache-.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb3-log-warning-if-CSC-policy-conflicts-with-cache-.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k04fjknu0>
+X-Attachment-Id: f_k04fjknu0
+
+RnJvbSBkYWU5MzFjMDJhZWQxNDQyN2VhNDAyMmM3ZTgwMzhhYjMxMDNiNGQ5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IFR1ZSwgMyBTZXAgMjAxOSAxNzo0OTo0NiAtMDUwMApTdWJqZWN0OiBbUEFUQ0hdIHNt
+YjM6IGxvZyB3YXJuaW5nIGlmIENTQyBwb2xpY3kgY29uZmxpY3RzIHdpdGggY2FjaGUgbW91bnQK
+IG9wdGlvbgoKSWYgdGhlIHNlcnZlciBjb25maWcgKGUuZy4gU2FtYmEgc21iLmNvbmYgImNzYyBw
+b2xpY3kgPSBkaXNhYmxlKQpmb3IgdGhlIHNoYXJlIGluZGljYXRlcyB0aGF0IHRoZSBzaGFyZSBz
+aG91bGQgbm90IGJlIGNhY2hlZCwgbG9nCmEgd2FybmluZyBtZXNzYWdlIGlmIGZvcmNlZCBjbGll
+bnQgc2lkZSBjYWNoaW5nICgiY2FjaGU9cm8iIG9yCiJjYWNoZT1zaW5nbGVjbGllbnQiKSBpcyBy
+ZXF1ZXN0ZWQgb24gbW91bnQuCgpTaWduZWQtb2ZmLWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNo
+QG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvY2lmcy9jb25uZWN0LmMgfCA4ICsrKysrKysrCiAxIGZp
+bGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9jb25uZWN0
+LmMgYi9mcy9jaWZzL2Nvbm5lY3QuYwppbmRleCBkOWE5OTU1ODhjNzQuLjg1ZjhkOTQzYTA1YSAx
+MDA2NDQKLS0tIGEvZnMvY2lmcy9jb25uZWN0LmMKKysrIGIvZnMvY2lmcy9jb25uZWN0LmMKQEAg
+LTM0NzgsNiArMzQ3OCwxNCBAQCBjaWZzX2dldF90Y29uKHN0cnVjdCBjaWZzX3NlcyAqc2VzLCBz
+dHJ1Y3Qgc21iX3ZvbCAqdm9sdW1lX2luZm8pCiAJCXRjb24tPnVzZV9yZXNpbGllbnQgPSB0cnVl
+OwogCX0KIAorCS8qIElmIHRoZSB1c2VyIHJlYWxseSBrbm93cyB3aGF0IHRoZXkgYXJlIGRvaW5n
+IHRoZXkgY2FuIG92ZXJyaWRlICovCisJaWYgKHRjb24tPnNoYXJlX2ZsYWdzICYgU01CMl9TSEFS
+RUZMQUdfTk9fQ0FDSElORykgeworCQlpZiAodm9sdW1lX2luZm8tPmNhY2hlX3JvKQorCQkJY2lm
+c19kYmcoVkZTLCAiY2FjaGU9cm8gcmVxdWVzdGVkIG9uIG1vdW50IGJ1dCBOT19DQUNISU5HIGZs
+YWcgc2V0IG9uIHNoYXJlXG4iKTsKKwkJZWxzZSBpZiAodm9sdW1lX2luZm8tPmNhY2hlX3J3KQor
+CQkJY2lmc19kYmcoVkZTLCAiY2FjaGU9c2luZ2xlY2xpZW50IHJlcXVlc3RlZCBvbiBtb3VudCBi
+dXQgTk9fQ0FDSElORyBmbGFnIHNldCBvbiBzaGFyZVxuIik7CisJfQorCiAJLyoKIAkgKiBXZSBj
+YW4gaGF2ZSBvbmx5IG9uZSByZXRyeSB2YWx1ZSBmb3IgYSBjb25uZWN0aW9uIHRvIGEgc2hhcmUg
+c28gZm9yCiAJICogcmVzb3VyY2VzIG1vdW50ZWQgbW9yZSB0aGFuIG9uY2UgdG8gdGhlIHNhbWUg
+c2VydmVyIHNoYXJlIHRoZSBsYXN0Ci0tIAoyLjIwLjEKCg==
+--0000000000008327cd0591adf8db--
