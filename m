@@ -2,26 +2,28 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F2DAD73B
-	for <lists+linux-cifs@lfdr.de>; Mon,  9 Sep 2019 12:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00A7AD954
+	for <lists+linux-cifs@lfdr.de>; Mon,  9 Sep 2019 14:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfIIKuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 9 Sep 2019 06:50:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52658 "EHLO mx1.suse.de"
+        id S1727436AbfIIMqx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 9 Sep 2019 08:46:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58908 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726141AbfIIKuM (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 9 Sep 2019 06:50:12 -0400
+        id S1727138AbfIIMqx (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 9 Sep 2019 08:46:53 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8D54EB052;
-        Mon,  9 Sep 2019 10:50:10 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 645ADAEB3;
+        Mon,  9 Sep 2019 12:46:51 +0000 (UTC)
 From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Murphy Zhou <jencce.kernel@gmail.com>, linux-cifs@vger.kernel.org
-Subject: Re: Are the xfstests exclusion files on wiki.samba.org up to date?
-In-Reply-To: <20190909104127.nsdxptzxcf5a6b72@XZHOUW.usersys.redhat.com>
-References: <20190909104127.nsdxptzxcf5a6b72@XZHOUW.usersys.redhat.com>
-Date:   Mon, 09 Sep 2019 12:50:09 +0200
-Message-ID: <87mufdiw0u.fsf@suse.com>
+To:     "Paulo Alcantara \(SUSE\)" <paulo@paulo.ac>, piastryyy@gmail.com,
+        samba-technical@lists.samba.org, linux-cifs@vger.kernel.org
+Subject: Re: [PATCH] mount.cifs: Fix double-free issue when mounting with
+ setuid root
+In-Reply-To: <20190905184935.30694-1-paulo@paulo.ac>
+References: <20190905184935.30694-1-paulo@paulo.ac>
+Date:   Mon, 09 Sep 2019 14:46:50 +0200
+Message-ID: <87k1ahiqmd.fsf@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
@@ -30,24 +32,69 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-"Murphy Zhou" <jencce.kernel@gmail.com> writes:
-> As $subject. Is this wiki being maintained ?
+" Paulo Alcantara (SUSE) " <paulo@paulo.ac> writes:
+> It can be easily reproduced with the following:
 >
-> Looks like the last update was in January 2019.
+>   # chmod +s `which mount.cifs`
+>   # echo "//localhost/share /mnt cifs \
+>     users,username=foo,password=XXXX" >> /etc/fstab
+>   # su - foo
+>   $ mount /mnt
+>   free(): double free detected in tcache 2
+>   Child process terminated abnormally.
 >
-> https://wiki.samba.org/index.php/Xfstesting-cifs#Exclusion_files
+> The problem was that check_fstab() already freed orgoptions pointer
+> and then we freed it again in main() function.
+>
+> Fixes: bf7f48f4c7dc ("mount.cifs.c: fix memory leaks in main func")
+> Signed-off-by: Paulo Alcantara (SUSE) <paulo@paulo.ac>
 
-We have a buildbot running xfstests relatively often here
+Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/
+I've compiled next branch with ASAN and can confirm the double-free and
+the fix works
 
-Each group has slightly different tests run, you can see which one gets
-run by clicking on a build:
+Compiling with ASAN
+-------------------
 
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/249
+$ CFLAGS=-fsanitize=address \
+  LDFLAGS=-fsanitize=address \
+  ac_cv_func_malloc_0_nonnull=yes \
+  ./configure
+$ make clean && make -j4  
 
-Overall xfstests+cifs is very finicky and frustrating to get working
-reliably. Not to mention long. So good luck :)
+Next branch
+-----------
+
+$ mount /mnt; echo $?
+=================================================================
+==29883==ERROR: AddressSanitizer: attempting double-free on 0x607000000020 in thread T0:
+    #0 0x7f69d480a1b8 in __interceptor_free (/usr/lib64/libasan.so.4+0xdc1b8)
+    #1 0x559381795f33 in main (/sbin/mount.cifs+0xef33)
+    #2 0x7f69d4394f89 in __libc_start_main (/lib64/libc.so.6+0x20f89)
+    #3 0x55938178e079 in _start (/sbin/mount.cifs+0x7079)
+
+0x607000000020 is located 0 bytes inside of 68-byte region [0x607000000020,0x607000000064)
+freed by thread T0 here:
+    #0 0x7f69d480a1b8 in __interceptor_free (/usr/lib64/libasan.so.4+0xdc1b8)
+    #1 0x55938178e372 in check_fstab (/sbin/mount.cifs+0x7372)
+    #2 0x559381794661 in assemble_mountinfo (/sbin/mount.cifs+0xd661)
+    #3 0x559381795eef in main (/sbin/mount.cifs+0xeeef)
+    #4 0x7f69d4394f89 in __libc_start_main (/lib64/libc.so.6+0x20f89)
+
+previously allocated by thread T0 here:
+    #0 0x7f69d480a510 in malloc (/usr/lib64/libasan.so.4+0xdc510)
+    #1 0x7f69d43fc2a9 in __GI___strndup (/lib64/libc.so.6+0x882a9)
+
+SUMMARY: AddressSanitizer: double-free (/usr/lib64/libasan.so.4+0xdc1b8) in __interceptor_free
+==29883==ABORTING
+1
+
+With fix
+--------
+
+$ mount /mnt; echo $?
+0
 
 Cheers,
 -- 
