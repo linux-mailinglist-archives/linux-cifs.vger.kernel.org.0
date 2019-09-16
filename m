@@ -2,48 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B2EB40D0
-	for <lists+linux-cifs@lfdr.de>; Mon, 16 Sep 2019 21:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D1AB44B2
+	for <lists+linux-cifs@lfdr.de>; Tue, 17 Sep 2019 01:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733225AbfIPTJ4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 16 Sep 2019 15:09:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35536 "EHLO mx1.suse.de"
+        id S1727989AbfIPXrg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 16 Sep 2019 19:47:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45326 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730194AbfIPTJ4 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 16 Sep 2019 15:09:56 -0400
+        id S1726118AbfIPXrg (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 16 Sep 2019 19:47:36 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DCD16AF43;
-        Mon, 16 Sep 2019 19:09:54 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id F2C0CAF19;
+        Mon, 16 Sep 2019 23:47:34 +0000 (UTC)
 From:   Aurelien Aptel <aaptel@suse.com>
 To:     linux-cifs@vger.kernel.org
 Cc:     smfrench@gmail.com, Aurelien Aptel <aaptel@suse.com>,
         Steve French <stfrench@microsoft.com>
-Subject: [PATCH v2 2/2] cifs: modefromsid: write mode ACE with DENY first
-Date:   Mon, 16 Sep 2019 21:09:43 +0200
-Message-Id: <20190916190943.21560-1-aaptel@suse.com>
+Subject: [PATCH v3 2/2] cifs: modefromsid: write mode ACE first
+Date:   Tue, 17 Sep 2019 01:47:27 +0200
+Message-Id: <20190916234727.1501-1-aaptel@suse.com>
 X-Mailer: git-send-email 2.16.4
-In-Reply-To: <CAH2r5mu+=ACLDGiauPAMh-7DDzhsORpuUvVKMoAhxC6WTT7bsw@mail.gmail.com>
-References: <CAH2r5mu+=ACLDGiauPAMh-7DDzhsORpuUvVKMoAhxC6WTT7bsw@mail.gmail.com>
+In-Reply-To: <20190916190943.21560-1-aaptel@suse.com>
+References: <20190916190943.21560-1-aaptel@suse.com>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-DACL should start with denying ACE first but we are putting it at the
+DACL should start with mode ACE first but we are putting it at the
 end. reorder them to put it first.
 
 Signed-off-by: Aurelien Aptel <aaptel@suse.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/cifs/cifsacl.c | 34 ++++++++++++++++++----------------
- 1 file changed, 18 insertions(+), 16 deletions(-)
+ fs/cifs/cifsacl.c | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-index 3e0c5ed9ca20..5cde4ec5534e 100644
+index 3e0c5ed9ca20..f842944a5c76 100644
 --- a/fs/cifs/cifsacl.c
 +++ b/fs/cifs/cifsacl.c
-@@ -809,18 +809,11 @@ static int set_chmod_dacl(struct cifs_acl *pndacl, struct cifs_sid *pownersid,
+@@ -809,30 +809,21 @@ static int set_chmod_dacl(struct cifs_acl *pndacl, struct cifs_sid *pownersid,
  			struct cifs_sid *pgrpsid, __u64 nmode, bool modefromsid)
  {
  	u16 size = 0;
@@ -63,9 +63,10 @@ index 3e0c5ed9ca20..5cde4ec5534e 100644
  	if (modefromsid) {
  		struct cifs_ace *pntace =
  			(struct cifs_ace *)((char *)pnndacl + size);
-@@ -828,11 +821,9 @@ static int set_chmod_dacl(struct cifs_acl *pndacl, struct cifs_sid *pownersid,
+ 		int i;
  
- 		pntace->type = ACCESS_DENIED;
+-		pntace->type = ACCESS_DENIED;
++		pntace->type = ACCESS_ALLOWED;
  		pntace->flags = 0x0;
 +		pntace->access_req = 0;
  		pntace->sid.num_subauth = 3;
