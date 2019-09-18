@@ -2,57 +2,59 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC23DB5AD8
-	for <lists+linux-cifs@lfdr.de>; Wed, 18 Sep 2019 07:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1548CB5D95
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Sep 2019 08:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727330AbfIRFXh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 Sep 2019 01:23:37 -0400
-Received: from mail-qt1-f178.google.com ([209.85.160.178]:32803 "EHLO
-        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727152AbfIRFXg (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Sep 2019 01:23:36 -0400
-Received: by mail-qt1-f178.google.com with SMTP id r5so7466719qtd.0
-        for <linux-cifs@vger.kernel.org>; Tue, 17 Sep 2019 22:23:36 -0700 (PDT)
+        id S1727741AbfIRGtS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 Sep 2019 02:49:18 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:35107 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfIRGtS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Sep 2019 02:49:18 -0400
+Received: by mail-io1-f45.google.com with SMTP id q10so13695226iop.2
+        for <linux-cifs@vger.kernel.org>; Tue, 17 Sep 2019 23:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monash.edu; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=K2W0K40xSFp5/GkLZhDmVETIJmQ1sHG91VA6A31r9b4=;
-        b=KBp+JDURtTKmvPMN8qR2kJDLmKWpsbwNaxAf35ASNd/4yF8pg6sCS9Jp4U2ef42Mf6
-         tCgIFKnv5UPa1lFCFKV9v+jkmFvPMdyChPrD7ol66aRZvr/RyPWqrvvwWVMlO0hXr2/+
-         AK1Tb//X0PRhAa/1cbPLD89PUEZKkB+gKYgQdp7Px23dl9qjnJPvkaaHAxDUEgjQEV7J
-         bUoR/a4cT1Xawne8EMppBJjsqpA2EeeqZLET3W+sHPzlw7cbLhHAwGWcjF8qLog97TBU
-         voawW3lwEjh13OsKVEvuDOhuCAQfI916QgZItOYkN939pr2j5TUdkV8UnGDRKKopjeLJ
-         1FMA==
+        bh=d1S2r4TSO4MpkEjLMzLAOQJwUwnnPclM0BYEpkUy4ao=;
+        b=ddt8MsMEiomC15L0EiVjiuX3boRGGW7vC+GPeOYVtqxo2yvMri6D9GoUAEM8WWRdIn
+         G/jNiviWdmkQfPDr934m5HhYG0wILaNdITu31pEEaSw67zYv/dDEyPbV9XJ4yJLwFiKX
+         gYqRqUSoIu6RnuCMefS3VAcCX8HF7ngqVXPEfDxCOVNE+UCCdefxcCPwHqZb0bAFBdD4
+         jpO0OXjIr5V2sp9cJKNFQDafsm4g+xMPE90Px3dYJwrA8aOt0xendKH0z7g/1Ctkg5Ak
+         U01nmIYrYsgM1HT5WzZKWxEUhlSuvwxfhAOwrhIsPRFThd/CgrirCnzJzsk5C5GXPNx+
+         Asrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=K2W0K40xSFp5/GkLZhDmVETIJmQ1sHG91VA6A31r9b4=;
-        b=XkM4l1Znv5wqQz8BDG/VIevscUTxvt71KVRU+VREVuKakKtiFaoF70Ss3MLiSy1k0/
-         sthjlYVrhqOJzt6wBGasUX3+ZmlZnVOacC0zokZMpYqJ9TNaiARR4dvFF/HOpSbofiOX
-         YcRiom2AmBCOIOl6m2dgBjYnr5WUATMAeUx0N0yJJWvwljIBlmyq3JV5QPqxScaeN6ye
-         H7PGZBjJQOwCHlWEMRF+HeZNFA/45yVUukwRP+WgmkW3xofKCvVYM/KkUWgg5WVh/pGY
-         5mVna7sL587hCcmGlun/5f2K1fK7/yJkRHGh1TqRidsPvFFXxf2yuN0w6YesAYwrXwfk
-         kXyg==
-X-Gm-Message-State: APjAAAXWwl9eGxHRMnLyX/C4nsYDKALIoJeKvNctHUZdMaDTArNSCGag
-        jf9MTLbPas0zccYkOWqTzQ2YthQF0GY2oK94vT8SQQ==
-X-Google-Smtp-Source: APXvYqxPOxMXQr0dAOjQc7csao0DBbzCUr95SuHCEkVLTClPn3xt9Dpd3komPDH2v8ebhfzFL/Ajzrb84AE0CtW2iDk=
-X-Received: by 2002:a0c:8a4f:: with SMTP id 15mr1769621qvu.188.1568784215651;
- Tue, 17 Sep 2019 22:23:35 -0700 (PDT)
+        bh=d1S2r4TSO4MpkEjLMzLAOQJwUwnnPclM0BYEpkUy4ao=;
+        b=jwcbUMn9g+kA9eC8znh4io/htcV9GxwNmAQDLPsAKAKaSwvrt3YdJ1B9bg/abm3mnq
+         095HiUX3Xi7pNM6KPingXvj1R7I/4hDKWZJUYIy/a2feDLbl+7q0QAI2ewkC5xWxtBgJ
+         WyBkVLcPRpoppgy80Isnrbl/E8y7Uh+/L61s5CIvx6+PITx58aK42KrPgPhnQba+2L9q
+         TcFfKgxui/bAv9ojulSbJSgcQ8I+0HTZxh4wYpEbCPErsDGc7/+K5tsoghBHjIHnoMgD
+         8kE1NnAvIqvWkMOYKkvErPYGyJovXMWQN649TlbdVPdIQy27ufua5WD3dTa2g+XViiQ/
+         YpVg==
+X-Gm-Message-State: APjAAAXpCY+6LY6funBPN+fy3e2bysuZsIPYX2h1sc0PnbtDquJmhv9p
+        0RSCgYIk/M32MweMp3OzkziM0RX/CxPJZLhHVW4=
+X-Google-Smtp-Source: APXvYqxojRAJpas1kFqFzJ9rirKFDesWcW34ugR+M9G3JHVJz+J7dsgDso9wok53viGRBOEr+W88rl65uPGI496wSrs=
+X-Received: by 2002:a02:5dca:: with SMTP id w193mr3172973jaa.94.1568789356042;
+ Tue, 17 Sep 2019 23:49:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAE78Er-YVBzqaf8jCBio_V_1J2kRiWZ_SH-HnHm7KG3t46=j6w@mail.gmail.com>
  <CAH2r5mu446ssSPrACP8q859Cs0ynUMpJopH0t5qAsR=sGrByFA@mail.gmail.com>
  <CAE78Er8KYhRts+zKNsP6_11ZVA0kaTrtjvZPhdLAkHqDXhKOWA@mail.gmail.com>
  <87pnkh7jh2.fsf@suse.com> <CAE78Er_ea5mtp-6VxyNPzCSDuPym7cXcD3=Udcpv=jGo80XhZg@mail.gmail.com>
- <CAKywueT2mr1i3Y6iNQOzXEc1CePMozfvoJUz=TJAmbnskdofhw@mail.gmail.com> <CAE78Er97k7O-GDGdMtp0qXtQ-q-1nS_d1AE6HHH+Kz6PV_G2uQ@mail.gmail.com>
-In-Reply-To: <CAE78Er97k7O-GDGdMtp0qXtQ-q-1nS_d1AE6HHH+Kz6PV_G2uQ@mail.gmail.com>
-From:   James Wettenhall <james.wettenhall@monash.edu>
-Date:   Wed, 18 Sep 2019 15:23:24 +1000
-Message-ID: <CAE78Er_L5fY31JdVaSUgbd7uyXpMAb+81adcVFD3GBQfMeWX0g@mail.gmail.com>
+ <CAKywueT2mr1i3Y6iNQOzXEc1CePMozfvoJUz=TJAmbnskdofhw@mail.gmail.com>
+ <CAE78Er97k7O-GDGdMtp0qXtQ-q-1nS_d1AE6HHH+Kz6PV_G2uQ@mail.gmail.com> <CAE78Er_L5fY31JdVaSUgbd7uyXpMAb+81adcVFD3GBQfMeWX0g@mail.gmail.com>
+In-Reply-To: <CAE78Er_L5fY31JdVaSUgbd7uyXpMAb+81adcVFD3GBQfMeWX0g@mail.gmail.com>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Wed, 18 Sep 2019 16:49:04 +1000
+Message-ID: <CAN05THRrUB0T5Zho+HjbmTzp4X6-Sx+N+QqaV5A4SDHrkqKWTA@mail.gmail.com>
 Subject: Re: Frequent reconnections / session startups?
-To:     Pavel Shilovsky <piastryyy@gmail.com>
-Cc:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+To:     James Wettenhall <james.wettenhall@monash.edu>
+Cc:     Pavel Shilovsky <piastryyy@gmail.com>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
         Steve French <smfrench@gmail.com>,
         CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -61,12 +63,20 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Thanks Pavel,
+On Wed, Sep 18, 2019 at 4:16 PM James Wettenhall
+<james.wettenhall@monash.edu> wrote:
+>
+> Thanks Pavel,
+>
+> We've been running Kernel v5.2.14 over the past week (updated using
+> Ukuu) and it seems to have improved the situation considerably.
 
-We've been running Kernel v5.2.14 over the past week (updated using
-Ukuu) and it seems to have improved the situation considerably.
+Thank you for the feedback.
+This is very good news.
 
-I assume that the "nohandlecache" mount option recommendation was just for v5.0.
 
-Cheers,
-James
+>
+> I assume that the "nohandlecache" mount option recommendation was just for v5.0.
+>
+> Cheers,
+> James
