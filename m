@@ -2,129 +2,105 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6BDB682C
-	for <lists+linux-cifs@lfdr.de>; Wed, 18 Sep 2019 18:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5593AB6A1B
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Sep 2019 19:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726941AbfIRQbg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 Sep 2019 12:31:36 -0400
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:11093 "EHLO mtaw.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726359AbfIRQbg (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 18 Sep 2019 12:31:36 -0400
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
+        id S1727000AbfIRR65 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 Sep 2019 13:58:57 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44876 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbfIRR65 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Sep 2019 13:58:57 -0400
+Received: by mail-lf1-f66.google.com with SMTP id q11so306736lfc.11
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Sep 2019 10:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1568823663; h=X-Virus-Scanned:Content-Type:
-         MIME-Version:Content-Transfer-Encoding:Content-Description:
-         Subject:To:From:Date:Reply-To:Message-Id:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-SAAS-TrackingID:X-NAIMIME-Disclaimer:X-NAIMIME-Modified:
-         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
-         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=K
-        jij0GhOpdKSaBiEpb4h9F2ukULK7Zgku7ZRRhmMNN
-        U=; b=d/365pebipImjiUHqIHPKnaoCEtNFy2ktcpplk627cfB
-        fRcYip2xWk+XSNreJaeCN4fshph8BvkdFxjUIr8PE8bZv+VR3C
-        XPpQwH2mo4FaRXCYPUAnQnlw34Kg2znYwgXw+Juch4XZrAhJHk
-        tNsZJg+E13iGuAvlLQuolA2AmqA=
-Received: from correo.seciti.cdmx.gob.mx (gdf-correo.cdmx.gob.mx [10.250.102.17]) by mtaw.cdmx.gob.mx with smtp
-         id 2377_dd49_db490965_d226_41a4_8cf3_efc45df86993;
-        Wed, 18 Sep 2019 11:21:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 1A862362D;
-        Wed, 18 Sep 2019 11:20:58 -0500 (CDT)
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 60CLunyG_bBF; Wed, 18 Sep 2019 11:20:57 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 449153117;
-        Wed, 18 Sep 2019 11:19:57 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at gdf-correo.df.gob.mx
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id O-EJwtXLtxUf; Wed, 18 Sep 2019 11:19:56 -0500 (CDT)
-Received: from [41.148.42.229] (8ta-148-42-229.telkomadsl.co.za [41.148.42.229])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id 1744932B2;
-        Wed, 18 Sep 2019 11:18:29 -0500 (CDT)
-Content-Type: text/plain;
-  charset="utf-8"
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2TOCR6CjifybQQWjmdVjJ+0VrD8tH3RreILxB1lNrIQ=;
+        b=tHeHkEaDPBCp/sN1OlZifiOg3ZmkMdsWzCYFm7rm3MV2jmsUjteLPPml060C+6e/4p
+         jv5BULE45uCFIjo/qnva2fifhHbj88XW/r/kfinadGMwzyGE4TLKGUnj0nyPkwAho4rB
+         69NLG3nJfq1s7UW1OCJXXJ1vS3gXMGAQS625hKVv7GKz+k6PLCaVnxQFwQnykDtl0P6m
+         /xNeY7BwU1bOH+8KRJPTEZWnUMZPgdxMjaxDJnLmss/hJCteYBTVfkUOB7NeEP5OtA5y
+         WnvKz1SrPiSNDqXezlrmJusFgMSxKvqozy/TDyxmTlS50vGzLImH6pb2MNW8GQA/JFgm
+         rBgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2TOCR6CjifybQQWjmdVjJ+0VrD8tH3RreILxB1lNrIQ=;
+        b=NnJBoiDXaS7jpeVM0HrBOKdDu+qF+vNcjCObRaeV7Jc3YJ7oRTvotB+9gg7EFwBH5c
+         2ltczRlCpTQ0RCWcTCkRLiQYVWVajwPACIEGk8EwSYJGt2ldiPQVeqZQFZWoqtJZKxf/
+         F8glnzkE8FnzeAHwdcxsefHvWlZvI67B2tE4lGwck/23JLex0pbalGBywCoRgY/FQMq+
+         wDuQCdhfaJ1CxlwA6JUriQYN/EagABLPDCHrHoxrkkXhax53sMXeR5mD2jv/AOrfJFbn
+         ylW9Q9/9ZrYbdlYXbqSSPFMS4Nb7DmHQi+I2eGgbRirb0y+zvjuEsPzDY+f4dNai3Yd3
+         lZZw==
+X-Gm-Message-State: APjAAAXqHN9z4HQXylNFufursNx7Dt7DWp0CsiuhdKK04hhbVwx8qJX5
+        VS5rIyHbrN8anj0yE2yHmKTa0/fXln8bjgfZhA==
+X-Google-Smtp-Source: APXvYqxZGj9qO7QkQlz1e5LjXmgW1IBGFljpjiKXUZn2WyTW0hvkSHYzc/LmUSTQ0D/8zLWwEihojoPRM0/I53h5pW0=
+X-Received: by 2002:a05:6512:304:: with SMTP id t4mr2844311lfp.15.1568829535311;
+ Wed, 18 Sep 2019 10:58:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Description: Mail message body
-Subject: Spende von 5 Millionen Euro
-To:     Recipients <mramirezg@mexicocity.gob.mx>
-From:   "Shane Missler" <mramirezg@mexicocity.gob.mx>
-Date:   Wed, 18 Sep 2019 18:18:17 +0200
-Reply-To: shanemissler3@gmail.com
-Message-Id: <20190918161830.1744932B2@gdf-correo.df.gob.mx>
-X-AnalysisOut: [v=2.2 cv=OqU/823t c=1 sm=1 tr=0 p=ELT1L0JgSr8A:10 p=09-KjH]
-X-AnalysisOut: [S_CW8A:10 p=bEr4i4eggGkA:10 p=emDABjehN2fqPHqc8RbT:22 p=Ly]
-X-AnalysisOut: [qu6MUUigPyaOuRX7ce:22 a=KsSCQl7LcZej77FuluUcQw==:117 a=oLf]
-X-AnalysisOut: [NtqljNgXPa7RrmTwnGA==:17 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:]
-X-AnalysisOut: [10 a=J70Eh1EUuV4A:10 a=pGLkceISAAAA:8 a=wN7rT8hNlMSaUXRpxS]
-X-AnalysisOut: [gA:9 a=K7tsimcRO30Sg2YH:21 a=QOCYt1FwmxBrUrRv:21 a=QEXdDO2]
-X-AnalysisOut: [ut3YA:10]
-X-SAAS-TrackingID: f69528d5.0.82508132.00-2260.138657167.s12p02m011.mxlogic.net
-X-NAIMIME-Disclaimer: 1
-X-NAIMIME-Modified: 1
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6637> : inlines <7142> : streams
- <1833128> : uri <2906038>
+References: <CAE78Er-YVBzqaf8jCBio_V_1J2kRiWZ_SH-HnHm7KG3t46=j6w@mail.gmail.com>
+ <CAH2r5mu446ssSPrACP8q859Cs0ynUMpJopH0t5qAsR=sGrByFA@mail.gmail.com>
+ <CAE78Er8KYhRts+zKNsP6_11ZVA0kaTrtjvZPhdLAkHqDXhKOWA@mail.gmail.com>
+ <87pnkh7jh2.fsf@suse.com> <CAE78Er_ea5mtp-6VxyNPzCSDuPym7cXcD3=Udcpv=jGo80XhZg@mail.gmail.com>
+ <CAKywueT2mr1i3Y6iNQOzXEc1CePMozfvoJUz=TJAmbnskdofhw@mail.gmail.com>
+ <CAE78Er97k7O-GDGdMtp0qXtQ-q-1nS_d1AE6HHH+Kz6PV_G2uQ@mail.gmail.com>
+ <CAE78Er_L5fY31JdVaSUgbd7uyXpMAb+81adcVFD3GBQfMeWX0g@mail.gmail.com> <CAN05THRrUB0T5Zho+HjbmTzp4X6-Sx+N+QqaV5A4SDHrkqKWTA@mail.gmail.com>
+In-Reply-To: <CAN05THRrUB0T5Zho+HjbmTzp4X6-Sx+N+QqaV5A4SDHrkqKWTA@mail.gmail.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Wed, 18 Sep 2019 10:58:44 -0700
+Message-ID: <CAKywueRr6n3LwgS3w3rhLHq-GedX2SnxdRFaauZqZdfoNoWyjg@mail.gmail.com>
+Subject: Re: Frequent reconnections / session startups?
+To:     ronnie sahlberg <ronniesahlberg@gmail.com>
+Cc:     James Wettenhall <james.wettenhall@monash.edu>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-RGllcyBpc3QgZWluZSBwZXJzw7ZubGljaGUgTWFpbCwgZGllIGljaCBhbiBTaWUgYWRyZXNzaWVy
-ZS4gSWNoIGJpbiBTSEFORSBNSVNTTEVSIGF1cyBGbG9yaWRhLCBVU0EuIFdpZSBTaWUgYmVyZWl0
-cyB3aXNzZW4sIGhhYmUgaWNoIGVpbmVuIExvdHRvLUphY2twb3QgaW4gSMO2aGUgdm9uIDQ1MSBN
-aW8uIFVTRCAoMzMwIE1pby4gR0JQKSBnZXdvbm5lbiB1bmQgZGFzIEdlbGQgaGF0IG1laW4gTGVi
-ZW4gdW5kIG1laW4gRmFtaWxpZW5sZWJlbiB2ZXLDpG5kZXJ0LCBhYmVyIGVzIHdpcmQgbWVpbiBI
-ZXJ6IG5pY2h0IHZlcsOkbmRlcm4sIHdpZSBpY2ggYW4gZGVtIFRhZyBzYWd0ZSwgYW4gZGVtIGlj
-aCBtZWluIEdlbGQgaGFiZSwgZGFzIGljaCB2ZXJ3ZW5kZW4gd2VyZGUgRGllc2VzIEdlbGQgZsO8
-ciBkaWUgSGlsZmUgZGVyIE1lbnNjaGhlaXQuIEljaCBoYWJlIGJlc2NobG9zc2VuLCBJaG5lbiB1
-bmQgSWhyZXIgR2VtZWluZGUgZWluZW4gQmV0cmFnIHZvbiA1IE1pbGxpb25lbiBFdXJvIHp1IHNw
-ZW5kZW4sIHVtIGRpZXNlIFNwZW5kZSBhbnp1Zm9yZGVybi4gRS1NYWlsOiAoc2hhbmVtaXNzbGVy
-MEBnbWFpbC5jb20pCgoKQ2VjaSBlc3QgdW4gY291cnJpZXIgcGVyc29ubmVsIHF1ZSBqZSB2b3Vz
-IGFkcmVzc2UuIEplIHN1aXMgU0hBTkUgTUlTU0xFUiwgZGUgRmxvcmlkZSwgw4l0YXRzLVVuaXMu
-IENvbW1lIHZvdXMgbGUgc2F2ZXogZMOpasOgLCBqJ2FpIGdhZ27DqSA0NTEgbWlsbGlvbnMgZGUg
-ZG9sbGFycyAoTG90dG8gSmFja3BvdCkgZXQgbCdhcmdlbnQgYSBjaGFuZ8OpIG1hIHZpZSBldCBj
-ZWxsZSBkZSBtYSBmYW1pbGxlLCBtYWlzIGNlbGEgbmUgY2hhbmdlcmEgcGFzIG1vbiBjxZN1ciwg
-Y29tbWUgamUgbCdhaSBkaXQgbGUgam91ciBvw7kgaidhaSBtb24gYXJnZW50LCBqJ3V0aWxpc2Vy
-YWkgY2V0IGFyZ2VudCBwb3VyIGwnYWlkZSBkZSBsJ2h1bWFuaXTDqS5KJ2FpIGTDqWNpZMOpIGRl
-IHZvdXMgZG9ubmVyIGxhIHNvbW1lIGRlIDUgbWlsbGlvbnMgZCdldXJvcyDDoCB2b3VzIGV0IMOg
-IHZvdHJlIGNvbW11bmF1dMOpLCBwb3VyIHLDqWNsYW1lciBjZSBkb24sIGVtYWlsLSAoc2hhbmVt
-aXNzbGVyMEBnbWFpbC5jb20pCgoKCgouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4KCgpMYSBpbmZvcm1hY2lvbiBjb250ZW5pZGEgZW4gZXN0ZSBjb3JyZW8sIGFzaSBj
-b21vIGxhIGNvbnRlbmlkYSBlbiBsb3MgZG9jdW1lbnRvcyBhbmV4b3MsIHB1ZWRlIGNvbnRlbmVy
-IGRhdG9zIHBlcnNvbmFsZXMsIHBvciBsbyBxdWUgc3UgZGlmdXNpb24gZXMgcmVzcG9uc2FiaWxp
-ZGFkIGRlIHF1aWVuIGxvcyB0cmFuc21pdGUgeSBxdWllbiBsb3MgcmVjaWJlLCBlbiB0w6lybWlu
-b3MgZGUgbG8gZGlzcHVlc3RvIHBvciBsYXMgZnJhY2Npb25lcyBJSSB5IFZJSSBkZWwgYXJ0aWN1
-bG8gNCwgdWx0aW1vIHBhcnJhZm8gZGVsIGFydGljdWxvIDgsIGFydGljdWxvIDM2IHBhcnJhZm8g
-SUksIDM4IGZyYWNjaW9uIEkgeSBkZW1hcyBhcGxpY2FibGVzIGRlIGxhIExleSBkZSBUcmFuc3Bh
-cmVuY2lhIHkgQWNjZXNvIGEgbGEgSW5mb3JtYWNpb24gUHVibGljYSBkZWwgRGlzdHJpdG8gRmVk
-ZXJhbC4NCkxvcyBEYXRvcyBQZXJzb25hbGVzIHNlIGVuY3VlbnRyYW4gcHJvdGVnaWRvcyBwb3Ig
-bGEgTGV5IGRlIFByb3RlY2Npb24gZGUgRGF0b3MgUGVyc29uYWxlcyBkZWwgRGlzdHJpdG8gRmVk
-ZXJhbCwgcG9yIGxvIHF1ZSBzdSBkaWZ1c2lvbiBzZSBlbmN1ZW50cmEgdHV0ZWxhZGEgZW4gc3Vz
-IGFydGljdWxvcyAyLCA1LCAxNiwgMjEsIDQxIHkgZGVtYXMgcmVsYXRpdm9zIHkgYXBsaWNhYmxl
-cywgZGViaWVuZG8gc3VqZXRhcnNlIGVuIHN1IGNhc28sIGEgbGFzIGRpc3Bvc2ljaW9uZXMgcmVs
-YXRpdmFzIGEgbGEgY3JlYWNpb24sIG1vZGlmaWNhY2lvbiBvIHN1cHJlc2lvbiBkZSBkYXRvcyBw
-ZXJzb25hbGVzIHByZXZpc3Rvcy4gQXNpbWlzbW8sIGRlYmVyYSBlc3RhcnNlIGEgbG8gc2XDsWFs
-YWRvIGVuIGxvcyBudW1lcmFsZXMgMSAsIDMsIDEyLCAxOCwgMTksIDIwLCAyMSwgMjMsIDI0LCAy
-OSwgMzUgeSBkZW1hcyBhcGxpY2FibGVzIGRlIGxvcyBMaW5lYW1pZW50b3MgcGFyYSBsYSBQcm90
-ZWNjaW9uIGRlIERhdG9zIFBlcnNvbmFsZXMgZW4gZWwgRGlzdHJpdG8gRmVkZXJhbC4NCkVuIGVs
-IHVzbyBkZSBsYXMgdGVjbm9sb2dpYXMgZGUgbGEgaW5mb3JtYWNpb24geSBjb211bmljYWNpb25l
-cyBkZWwgR29iaWVybm8gZGVsIERpc3RyaXRvIEZlZGVyYWwsIGRlYmVyYSBvYnNlcnZhcnNlIHB1
-bnR1YWxtZW50ZSBsbyBkaXNwdWVzdG8gcG9yIGxhIExleSBHb2JpZXJubyBFbGVjdHJvbmljbyBk
-ZWwgRGlzdHJpdG8gRmVkZXJhbCwgbGEgbGV5IHBhcmEgaGFjZXIgZGUgbGEgQ2l1ZGFkIGRlIE1l
-eGljbyB1bmEgQ2l1ZGFkIE1hcyBBYmllcnRhLCBlbCBhcGFydGFkbyAxMCBkZSBsYSBDaXJjdWxh
-ciBVbm8gdmlnZW50ZSB5IGxhcyBOb3JtYXMgR2VuZXJhbGVzIHF1ZSBkZWJlcmFuIG9ic2VydmFy
-c2UgZW4gbWF0ZXJpYSBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpb24gZW4gbGEgQWRtaW5p
-c3RyYWNpb24gUHVibGljYSBkZWwgRGlzdHJpdG8gRmVkZXJhbC4K
+=D0=B2=D1=82, 17 =D1=81=D0=B5=D0=BD=D1=82. 2019 =D0=B3. =D0=B2 23:49, ronni=
+e sahlberg <ronniesahlberg@gmail.com>:
+>
+> On Wed, Sep 18, 2019 at 4:16 PM James Wettenhall
+> <james.wettenhall@monash.edu> wrote:
+> >
+> > Thanks Pavel,
+> >
+> > We've been running Kernel v5.2.14 over the past week (updated using
+> > Ukuu) and it seems to have improved the situation considerably.
+>
+> Thank you for the feedback.
+> This is very good news.
+>
+>
+> >
+> > I assume that the "nohandlecache" mount option recommendation was just =
+for v5.0.
+
+Glad to know that the situation have improved for your workload.
+Thanks for the feedback.
+
+v5.2 kernel has many fixes preventing reconnects that's probably why
+you stopped observing the original problem. The latter haven't been
+completely fixed yet in v5.2.y yet. We have a patch in for-next that
+aims to fix it but it haven't been sent to the mainline yet, see
+
+https://git.samba.org/?p=3Dsfrench/cifs-2.6.git;a=3Dcommitdiff;h=3D96d9f7ed=
+00b86104bf03adeffc8980897e9694ab.
+
+Once it is there, it should be automatically picked up for backporting
+to all active stable kernels it applies to.
+
+In the meantime, If you start hitting the issue again, please try
+mount option "nohandlecache" as a workaround.
+
+--
+Best regards,
+Pavel Shilovsky
