@@ -2,128 +2,124 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40008B8EDB
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 Sep 2019 13:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DFFB9661
+	for <lists+linux-cifs@lfdr.de>; Fri, 20 Sep 2019 19:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392146AbfITLQY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 20 Sep 2019 07:16:24 -0400
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:12334 "EHLO mtaw.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390701AbfITLQY (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 20 Sep 2019 07:16:24 -0400
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
+        id S1729421AbfITROW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 20 Sep 2019 13:14:22 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:32997 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726020AbfITROW (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 Sep 2019 13:14:22 -0400
+Received: by mail-lf1-f67.google.com with SMTP id y127so5603651lfc.0
+        for <linux-cifs@vger.kernel.org>; Fri, 20 Sep 2019 10:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1568962501; h=X-Virus-Scanned:Content-Type:
-         MIME-Version:Content-Transfer-Encoding:Content-Description:
-         Subject:To:From:Date:Reply-To:Message-Id:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
-         X-NAIMIME-Disclaimer:X-NAIMIME-Modified:X-NAI-Spam-Flag:
-         X-NAI-Spam-Threshold:X-NAI-Spam-Score:X-NAI-Spam-Rules:
-         X-NAI-Spam-Version; bh=p7gWlwfEWOsbONfopC
-        8BPhtqdzKUJiGtXCGJ3YtSNOM=; b=b84t9REOpQbULW8rVhIh
-        aNu+/K7iNFI8pXgWzSz7HX5vcURb5V0pyvgIsxasUjHro6tucR
-        muJNeQnxQvABjbCGd/mzAkdUjGkKnU/NPrJ3ctjQyL3anJ95e5
-        L4XghMU5HZ1A6e8OT5w1Hx5Dk3zE67uhT6AHYxpaVQT1E+G/Wf
-        A=
-Received: from correo.seciti.cdmx.gob.mx (gdf-correo.cdmx.gob.mx [10.250.102.17]) by mtaw.cdmx.gob.mx with smtp
-         id 0865_803d_d98a59b4_cf08_483f_b2a2_9dca3bdb52d5;
-        Fri, 20 Sep 2019 01:55:00 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 7DA40330E;
-        Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Nvp7phlCJZEU; Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 3D07A3423;
-        Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at gdf-correo.df.gob.mx
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RLoqOr0ekBLR; Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
-Received: from [100.80.130.141] (8ta-250-0-72.telkomadsl.co.za [102.250.0.72])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id 322383421;
-        Fri, 20 Sep 2019 01:54:50 -0500 (CDT)
-Content-Type: text/plain;
-  charset="utf-8"
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ESelHwgO3+2i5rz/QsN8eVcv4qgUjVwoX52Nxx4zS84=;
+        b=hjKqmRJCPl40qD7zxg2LKEsqEBNkD20wHn7YdPpTvX5yP4s5YwEBKSL6akQAEyLQmJ
+         KTF5b4K00ibaDFdf+tzJ7KUcgtf/FweY+oNfoIKvoIx3yoF5sQjP4REJIKrFY9AMSO+Y
+         tcCDebC04dzdb603NNXd/iPiiVQsHvJdE0+/aG4TCoAQW8aTQSRpRCsbA4YDj2g89a4r
+         Ai0AWM4AKK8126fb8H39kf5pelIEvaZipvFqWwTj3CQpvLoRcEitNyQMn0xfsBN+a8gk
+         XoABSLooJAqql6eEXuEuVpziMX8KRSWqkIQuYfAjawlubyo+PVhUSUSL5T1+Xn6hvL4d
+         i5bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ESelHwgO3+2i5rz/QsN8eVcv4qgUjVwoX52Nxx4zS84=;
+        b=ZDJVDkM0GHfJeSu3JCqDTqrnmD0Jpv/zC1x7vmVW0vbbESgpxOPbf7ctNc8+OHTp5m
+         ANb4hzyp+9q7vRo2Eu/00+eoh4vtEo2Drl9SUoc+wRMGTGFKDpxLog2gNwvNoPrEggaO
+         MVXhrIb0XKsB0DDaxvwD2+2wCStvQkK/czwlw5fJ1aMlI+OqnunuZ8ELPndVLEXyzR7I
+         lv2DXEihdGMYMEp2HZkwmxjLsaGc1yG3dYSf/+Y7OlLYje6AGYzSHcTJNuNhtolADXdg
+         Itj4pnzdzrQ+1YCtg8IIlqt7h/FxswW90kSriUvtJ+9jj3ZnwS9RMDtx/yv4+JW+sG5G
+         o8Bw==
+X-Gm-Message-State: APjAAAVW7dhdYL/abWQWFwKGGUlmKcjAEvXloTvhJpyIm8xXDdYReOAQ
+        OiW/QeDG1KiS1FyQVoYmiUowltVhe/GcZRjwdA==
+X-Google-Smtp-Source: APXvYqxSS//pQQ+Tt4bM3mO16/k+oliOsClZKficPGR4VWE8Mb1aaCigHd1+4k9l+jzr2O3qSeQ1gmG1Mr5Pm1qEhYI=
+X-Received: by 2002:ac2:4308:: with SMTP id l8mr9201715lfh.25.1568999660621;
+ Fri, 20 Sep 2019 10:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Description: Mail message body
-Subject: Spende von 5 Millionen Euro
-To:     Recipients <mramirezg@mexicocity.gob.mx>
-From:   "Shane Missler" <mramirezg@mexicocity.gob.mx>
-Date:   Fri, 20 Sep 2019 08:54:57 +0200
-Reply-To: "shanemissler.spende11@gmail.comshanemissler.spende11"@gmail.com
-Message-Id: <20190920065451.322383421@gdf-correo.df.gob.mx>
-X-AnalysisOut: [v=2.2 cv=TNY1cxta c=1 sm=1 tr=0 p=09-KjHS_CW8A:10 p=bEr4i4]
-X-AnalysisOut: [eggGkA:10 p=Lyqu6MUUigPyaOuRX7ce:22 a=KsSCQl7LcZej77FuluUc]
-X-AnalysisOut: [Qw==:117 a=+/zS2XqOcqrzxqj0Epa8oQ==:17 a=IkcTkHD0fZMA:10 a]
-X-AnalysisOut: [=x7bEGLp0ZPQA:10 a=J70Eh1EUuV4A:10 a=pGLkceISAAAA:8 a=wN7r]
-X-AnalysisOut: [T8hNlMSaUXRpxSgA:9 a=K7tsimcRO30Sg2YH:21 a=QOCYt1FwmxBrUrR]
-X-AnalysisOut: [v:21 a=QEXdDO2ut3YA:10]
-X-SAAS-TrackingID: 5c7748d5.0.86176132.00-2293.144867564.s12p02m016.mxlogic.net
-X-NAIMIME-Disclaimer: 1
-X-NAIMIME-Modified: 1
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6638> : inlines <7144> : streams
- <1833282> : uri <2907330>
+References: <CAH2r5mvcRuSihH58GgrzXTAHuXnQ9a0N-d8AkLLOigQrqincKg@mail.gmail.com>
+ <CAH2r5mvAw3ShBpy39OodU8EgXqR0rFBmAk0TXJbug1N22R8o4w@mail.gmail.com>
+In-Reply-To: <CAH2r5mvAw3ShBpy39OodU8EgXqR0rFBmAk0TXJbug1N22R8o4w@mail.gmail.com>
+From:   Pavel Shilovsky <pavel.shilovsky@gmail.com>
+Date:   Fri, 20 Sep 2019 10:14:09 -0700
+Message-ID: <CAKywueQW84FxiG1QEmWSJdJiUAiVbYr+0hYVPc4ypW8OAtTZYQ@mail.gmail.com>
+Subject: Re: [SMB3][PATCH] dump encryption keys to allow wireshark debugging
+ of encrypted
+To:     Steve French <smfrench@gmail.com>
+Cc:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-RGllcyBpc3QgZWluZSBwZXJzw7ZubGljaGUgTWFpbCwgZGllIGljaCBhbiBTaWUgYWRyZXNzaWVy
-ZS4gSWNoIGJpbiBTSEFORSBNSVNTTEVSIGF1cyBGbG9yaWRhLCBVU0EuIFdpZSBTaWUgYmVyZWl0
-cyB3aXNzZW4sIGhhYmUgaWNoIGVpbmVuIExvdHRvLUphY2twb3QgaW4gSMO2aGUgdm9uIDQ1MSBN
-aW8uIFVTRCAoMzMwIE1pby4gR0JQKSBnZXdvbm5lbiB1bmQgZGFzIEdlbGQgaGF0IG1laW4gTGVi
-ZW4gdW5kIG1laW4gRmFtaWxpZW5sZWJlbiB2ZXLDpG5kZXJ0LCBhYmVyIGVzIHdpcmQgbWVpbiBI
-ZXJ6IG5pY2h0IHZlcsOkbmRlcm4sIHdpZSBpY2ggYW4gZGVtIFRhZyBzYWd0ZSwgYW4gZGVtIGlj
-aCBtZWluIEdlbGQgaGFiZSwgZGFzIGljaCB2ZXJ3ZW5kZW4gd2VyZGUgRGllc2VzIEdlbGQgZsO8
-ciBkaWUgSGlsZmUgZGVyIE1lbnNjaGhlaXQuIEljaCBoYWJlIGJlc2NobG9zc2VuLCBJaG5lbiB1
-bmQgSWhyZXIgR2VtZWluZGUgZWluZW4gQmV0cmFnIHZvbiA1IE1pbGxpb25lbiBFdXJvIHp1IHNw
-ZW5kZW4sIHVtIGRpZXNlIFNwZW5kZSBhbnp1Zm9yZGVybi4gRS1NYWlsOiAoc2hhbmVtaXNzbGVy
-MEBnbWFpbC5jb20pCgpDZWNpIGVzdCB1biBjb3VycmllciBwZXJzb25uZWwgcXVlIGplIHZvdXMg
-YWRyZXNzZS4gSmUgc3VpcyBTSEFORSBNSVNTTEVSLCBkZSBGbG9yaWRlLCDDiXRhdHMtVW5pcy4g
-Q29tbWUgdm91cyBsZSBzYXZleiBkw6lqw6AsIGonYWkgZ2FnbsOpIDQ1MSBtaWxsaW9ucyBkZSBk
-b2xsYXJzIChMb3R0byBKYWNrcG90KSBldCBsJ2FyZ2VudCBhIGNoYW5nw6kgbWEgdmllIGV0IGNl
-bGxlIGRlIG1hIGZhbWlsbGUsIG1haXMgY2VsYSBuZSBjaGFuZ2VyYSBwYXMgbW9uIGPFk3VyLCBj
-b21tZSBqZSBsJ2FpIGRpdCBsZSBqb3VyIG/DuSBqJ2FpIG1vbiBhcmdlbnQsIGondXRpbGlzZXJh
-aSBjZXQgYXJnZW50IHBvdXIgbCdhaWRlIGRlIGwnaHVtYW5pdMOpLkonYWkgZMOpY2lkw6kgZGUg
-dm91cyBkb25uZXIgbGEgc29tbWUgZGUgNSBtaWxsaW9ucyBkJ2V1cm9zIMOgIHZvdXMgZXQgw6Ag
-dm90cmUgY29tbXVuYXV0w6ksIHBvdXIgcsOpY2xhbWVyIGNlIGRvbiwgZW1haWwtIChzaGFuZW1p
-c3NsZXIwQGdtYWlsLmNvbSkKCgoKLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uCgoKTGEgaW5mb3JtYWNpb24gY29udGVuaWRhIGVuIGVzdGUgY29ycmVvLCBhc2kgY29t
-byBsYSBjb250ZW5pZGEgZW4gbG9zIGRvY3VtZW50b3MgYW5leG9zLCBwdWVkZSBjb250ZW5lciBk
-YXRvcyBwZXJzb25hbGVzLCBwb3IgbG8gcXVlIHN1IGRpZnVzaW9uIGVzIHJlc3BvbnNhYmlsaWRh
-ZCBkZSBxdWllbiBsb3MgdHJhbnNtaXRlIHkgcXVpZW4gbG9zIHJlY2liZSwgZW4gdMOpcm1pbm9z
-IGRlIGxvIGRpc3B1ZXN0byBwb3IgbGFzIGZyYWNjaW9uZXMgSUkgeSBWSUkgZGVsIGFydGljdWxv
-IDQsIHVsdGltbyBwYXJyYWZvIGRlbCBhcnRpY3VsbyA4LCBhcnRpY3VsbyAzNiBwYXJyYWZvIElJ
-LCAzOCBmcmFjY2lvbiBJIHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsYSBMZXkgZGUgVHJhbnNwYXJl
-bmNpYSB5IEFjY2VzbyBhIGxhIEluZm9ybWFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVy
-YWwuDQpMb3MgRGF0b3MgUGVyc29uYWxlcyBzZSBlbmN1ZW50cmFuIHByb3RlZ2lkb3MgcG9yIGxh
-IExleSBkZSBQcm90ZWNjaW9uIGRlIERhdG9zIFBlcnNvbmFsZXMgZGVsIERpc3RyaXRvIEZlZGVy
-YWwsIHBvciBsbyBxdWUgc3UgZGlmdXNpb24gc2UgZW5jdWVudHJhIHR1dGVsYWRhIGVuIHN1cyBh
-cnRpY3Vsb3MgMiwgNSwgMTYsIDIxLCA0MSB5IGRlbWFzIHJlbGF0aXZvcyB5IGFwbGljYWJsZXMs
-IGRlYmllbmRvIHN1amV0YXJzZSBlbiBzdSBjYXNvLCBhIGxhcyBkaXNwb3NpY2lvbmVzIHJlbGF0
-aXZhcyBhIGxhIGNyZWFjaW9uLCBtb2RpZmljYWNpb24gbyBzdXByZXNpb24gZGUgZGF0b3MgcGVy
-c29uYWxlcyBwcmV2aXN0b3MuIEFzaW1pc21vLCBkZWJlcmEgZXN0YXJzZSBhIGxvIHNlw7FhbGFk
-byBlbiBsb3MgbnVtZXJhbGVzIDEgLCAzLCAxMiwgMTgsIDE5LCAyMCwgMjEsIDIzLCAyNCwgMjks
-IDM1IHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsb3MgTGluZWFtaWVudG9zIHBhcmEgbGEgUHJvdGVj
-Y2lvbiBkZSBEYXRvcyBQZXJzb25hbGVzIGVuIGVsIERpc3RyaXRvIEZlZGVyYWwuDQpFbiBlbCB1
-c28gZGUgbGFzIHRlY25vbG9naWFzIGRlIGxhIGluZm9ybWFjaW9uIHkgY29tdW5pY2FjaW9uZXMg
-ZGVsIEdvYmllcm5vIGRlbCBEaXN0cml0byBGZWRlcmFsLCBkZWJlcmEgb2JzZXJ2YXJzZSBwdW50
-dWFsbWVudGUgbG8gZGlzcHVlc3RvIHBvciBsYSBMZXkgR29iaWVybm8gRWxlY3Ryb25pY28gZGVs
-IERpc3RyaXRvIEZlZGVyYWwsIGxhIGxleSBwYXJhIGhhY2VyIGRlIGxhIENpdWRhZCBkZSBNZXhp
-Y28gdW5hIENpdWRhZCBNYXMgQWJpZXJ0YSwgZWwgYXBhcnRhZG8gMTAgZGUgbGEgQ2lyY3VsYXIg
-VW5vIHZpZ2VudGUgeSBsYXMgTm9ybWFzIEdlbmVyYWxlcyBxdWUgZGViZXJhbiBvYnNlcnZhcnNl
-IGVuIG1hdGVyaWEgZGUgU2VndXJpZGFkIGRlIGxhIEluZm9ybWFjaW9uIGVuIGxhIEFkbWluaXN0
-cmFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVyYWwuCg==
+Thanks, this is very useful functionality! A couple comments below.
+
+kernel patch:
+
++ cifs_dbg(VFS, "ioctl dumpkey\n"); /* BB REMOVEME */
+
+please remove this or change to FYI.
+
+user space patch:
+
++ if (keys_info.cipher_type =3D=3D 1)
++ printf("CCM encryption");
++ else if (keys_info.cipher_type =3D=3D 2)
++ printf("GCM encryption");
++ else if (keys_info.cipher_type =3D=3D 0)
++ printf("SMB3.0 encryption");
+^^^
+SMB3.0 encryption is CCM, so, let's not confuse users and print "CCM
+encryption" for both cipher_type values of 0 and 1.
+
+
+Best regards,
+Pavel Shilovskiy
+
+=D0=BF=D1=82, 20 =D1=81=D0=B5=D0=BD=D1=82. 2019 =D0=B3. =D0=B2 00:20, Steve=
+ French via samba-technical
+<samba-technical@lists.samba.org>:
+>
+> And updated patch for cifs-utils ("smbinfo keys <filename>")
+>
+>
+> On Fri, Sep 20, 2019 at 2:07 AM Steve French <smfrench@gmail.com> wrote:
+> >
+> > kernel patch updated to check if encryption is enabled
+> >
+> > In order to debug certain problems it is important to be able
+> > to decrypt network traces (e.g. wireshark) but to do this we
+> > need to be able to dump out the encryption/decryption keys.
+> > Dumping them to an ioctl is safer than dumping then to dmesg,
+> > (and better than showing all keys in a pseudofile).
+> >
+> > Restrict this to root (CAP_SYS_ADMIN), and only for a mount
+> > that this admin has access to.
+> >
+> > Sample smbinfo output:
+> > SMB3.0 encryption
+> > Session Id:   0x82d2ec52
+> > Session Key:  a5 6d 81 d0 e c1 ca e1 d8 13 aa 20 e8 f2 cc 71
+> > Server Encryption Key:  1a c3 be ba 3d fc dc 3c e bc 93 9e 50 9e 19 c1
+> > Server Decryption Key:  e0 d4 d9 43 1b a2 1b e3 d8 76 77 49 56 f7 20 88
+> >
+> >
+> > --
+> > Thanks,
+> >
+> > Steve
+>
+>
+>
+> --
+> Thanks,
+>
+> Steve
