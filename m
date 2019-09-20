@@ -2,137 +2,128 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14178B8EC8
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 Sep 2019 13:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40008B8EDB
+	for <lists+linux-cifs@lfdr.de>; Fri, 20 Sep 2019 13:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408659AbfITLEM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 20 Sep 2019 07:04:12 -0400
-Received: from rigel.uberspace.de ([95.143.172.238]:38820 "EHLO
-        rigel.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406008AbfITLEM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 Sep 2019 07:04:12 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Sep 2019 07:04:11 EDT
-Received: (qmail 21475 invoked from network); 20 Sep 2019 10:57:29 -0000
-Received: from localhost (HELO webmail.rigel.uberspace.de) (127.0.0.1)
-  by ::1 with SMTP; 20 Sep 2019 10:57:29 -0000
+        id S2392146AbfITLQY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 20 Sep 2019 07:16:24 -0400
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:12334 "EHLO mtaw.cdmx.gob.mx"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390701AbfITLQY (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 20 Sep 2019 07:16:24 -0400
+X-NAI-Header: Modified by McAfee Email Gateway (4500)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
+        t=1568962501; h=X-Virus-Scanned:Content-Type:
+         MIME-Version:Content-Transfer-Encoding:Content-Description:
+         Subject:To:From:Date:Reply-To:Message-Id:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
+         X-NAIMIME-Disclaimer:X-NAIMIME-Modified:X-NAI-Spam-Flag:
+         X-NAI-Spam-Threshold:X-NAI-Spam-Score:X-NAI-Spam-Rules:
+         X-NAI-Spam-Version; bh=p7gWlwfEWOsbONfopC
+        8BPhtqdzKUJiGtXCGJ3YtSNOM=; b=b84t9REOpQbULW8rVhIh
+        aNu+/K7iNFI8pXgWzSz7HX5vcURb5V0pyvgIsxasUjHro6tucR
+        muJNeQnxQvABjbCGd/mzAkdUjGkKnU/NPrJ3ctjQyL3anJ95e5
+        L4XghMU5HZ1A6e8OT5w1Hx5Dk3zE67uhT6AHYxpaVQT1E+G/Wf
+        A=
+Received: from correo.seciti.cdmx.gob.mx (gdf-correo.cdmx.gob.mx [10.250.102.17]) by mtaw.cdmx.gob.mx with smtp
+         id 0865_803d_d98a59b4_cf08_483f_b2a2_9dca3bdb52d5;
+        Fri, 20 Sep 2019 01:55:00 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 7DA40330E;
+        Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
+Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
+        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Nvp7phlCJZEU; Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 3D07A3423;
+        Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
+X-Virus-Scanned: amavisd-new at gdf-correo.df.gob.mx
+Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
+        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RLoqOr0ekBLR; Fri, 20 Sep 2019 01:55:00 -0500 (CDT)
+Received: from [100.80.130.141] (8ta-250-0-72.telkomadsl.co.za [102.250.0.72])
+        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id 322383421;
+        Fri, 20 Sep 2019 01:54:50 -0500 (CDT)
+Content-Type: text/plain;
+  charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 20 Sep 2019 12:57:28 +0200
-From:   Moritz M <mailinglist@moritzmueller.ee>
-To:     linux-cifs@vger.kernel.org
-Subject: Possible timeout problem when opening a file twice on a SMB mount
-Message-ID: <61d3d6774247fe6159456b249dbc3c63@moritzmueller.ee>
-X-Sender: mailinglist@moritzmueller.ee
+Content-Transfer-Encoding: base64
+Content-Description: Mail message body
+Subject: Spende von 5 Millionen Euro
+To:     Recipients <mramirezg@mexicocity.gob.mx>
+From:   "Shane Missler" <mramirezg@mexicocity.gob.mx>
+Date:   Fri, 20 Sep 2019 08:54:57 +0200
+Reply-To: "shanemissler.spende11@gmail.comshanemissler.spende11"@gmail.com
+Message-Id: <20190920065451.322383421@gdf-correo.df.gob.mx>
+X-AnalysisOut: [v=2.2 cv=TNY1cxta c=1 sm=1 tr=0 p=09-KjHS_CW8A:10 p=bEr4i4]
+X-AnalysisOut: [eggGkA:10 p=Lyqu6MUUigPyaOuRX7ce:22 a=KsSCQl7LcZej77FuluUc]
+X-AnalysisOut: [Qw==:117 a=+/zS2XqOcqrzxqj0Epa8oQ==:17 a=IkcTkHD0fZMA:10 a]
+X-AnalysisOut: [=x7bEGLp0ZPQA:10 a=J70Eh1EUuV4A:10 a=pGLkceISAAAA:8 a=wN7r]
+X-AnalysisOut: [T8hNlMSaUXRpxSgA:9 a=K7tsimcRO30Sg2YH:21 a=QOCYt1FwmxBrUrR]
+X-AnalysisOut: [v:21 a=QEXdDO2ut3YA:10]
+X-SAAS-TrackingID: 5c7748d5.0.86176132.00-2293.144867564.s12p02m016.mxlogic.net
+X-NAIMIME-Disclaimer: 1
+X-NAIMIME-Modified: 1
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Threshold: 3
+X-NAI-Spam-Score: -5000
+X-NAI-Spam-Rules: 1 Rules triggered
+        WHITELISTED=-5000
+X-NAI-Spam-Version: 2.3.0.9418 : core <6638> : inlines <7144> : streams
+ <1833282> : uri <2907330>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello,
-
-I've some trouble with saving files with a particular software, LyX[0] 
-in this case.
-The problem is that saving a file on a SMB share makes the programm 
-freeze for 30 s
-due to creating an empty temp file.
-
-While investigating I created a small python script which mimics 
-(compared the strace output)
-the LyX behaviour and also freezes the python script for 30 s.
-That makes me believe that it could be a cifs problem.
-
-The python script is:
-
-#!/usr/bin/env python3
-
-import os, sys
-
-fd = os.open( "/mnt/share/foo.txt", 
-os.O_RDWR|os.O_CREAT|os.O_EXCL|os.O_CLOEXEC, 0o600 )
-fd = os.access( "/mnt/share/foo.txt", os.F_OK )
-fd = os.chmod( "/mnt/share/foo.txt", 0o755 )
-fd = os.open( "/mnt/share/foo.txt", os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 
-0o666 )
-
-# Close opened file
-os.close( fd )
-
-
-Stracing it with
-
-strace -f -t -T -e trace=openat,close,chmod,access python open.py
-
-gives
-
-23:18:52 openat(AT_FDCWD, "/mnt/share/foo.txt", 
-O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC, 0600) = 3 <0.002434>
-23:18:52 access("/mnt/share/foo.txt", F_OK) = 0 <0.000091>
-23:18:52 chmod("/mnt/share/foo.txt", 0755) = 0 <0.000168>
-23:18:52 openat(AT_FDCWD, "/mnt/share/foo.txt", 
-O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 4 <30.033585>
-
-The second openat call takes 30 s and freezes the script.
-
-When doing a os.close( fd ) after first open in the python script it 
-works as expected:
-
-23:22:11 openat(AT_FDCWD, "/mnt/share/foo.txt", 
-O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC, 0600) = 3 <0.002464>
-23:22:11 close(3)                       = 0 <0.001652>
-23:22:11 access("/mnt/share/foo.txt", F_OK) = 0 <0.000082>
-23:22:11 chmod("/mnt/share/foo.txt", 0755) = 0 <0.000175>
-23:22:11 openat(AT_FDCWD, "/mnt/share/foo.txt", 
-O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 3 <0.003221>
-
-My setup ist (server is a Synology Diskstation):
-
-$ uname -r
-5.1.21-1-MANJARO
-
-$ mount.cifs -V
-mount.cifs version: 6.8
-
-$ samba --version
-Version 4.4.16
-
-
-Display Internal CIFS Data Structures for Debugging
----------------------------------------------------
-CIFS Version 2.19
-Features: 
-DFS,FSCACHE,STATS,DEBUG,ALLOW_INSECURE_LEGACY,CIFS_POSIX,UPCALL(SPNEGO),XATTR,ACL
-CIFSMaxBufSize: 16384
-Active VFS Requests: 0
-Servers:
-Number of credits: 510 Dialect 0x311
-1) Name: x.x.x.x Uses: 1 Capability: 0x300045	Session Status: 1 TCP 
-status: 1 Instance: 1
-	Local Users To Server: 1 SecMode: 0x1 Req On Wire: 0 SessionId: 
-0x14e3311d
-	Shares:
-	0) IPC: \\server\IPC$ Mounts: 1 DevInfo: 0x0 Attributes: 0x0
-	PathComponentMax: 0 Status: 1 type: 0 Serial Number: 0x0
-	Share Capabilities: None	Share Flags: 0x0
-	tid: 0xf1884345	Maximal Access: 0x1f00a9
-
-	1) \\server\share Mounts: 1 DevInfo: 0x20 Attributes: 0x5006f
-	PathComponentMax: 255 Status: 1 type: DISK Serial Number: 0x1dc3f115
-	Share Capabilities: None Aligned, Partition Aligned,	Share Flags: 0x800
-	tid: 0xe3ad48c8	Optimal sector size: 0x200	Maximal Access: 0x1f01ff
-
-	MIDs:
-
-
-
-Does anybody has a clue why it takes exactly 30 s when opening a file 
-twice?
-Even more important: how can I prevent it?
-Any help is appreciated.
-
-Thanks
-Moritz
-
-[0]: https://www.lyx.org/
-
+RGllcyBpc3QgZWluZSBwZXJzw7ZubGljaGUgTWFpbCwgZGllIGljaCBhbiBTaWUgYWRyZXNzaWVy
+ZS4gSWNoIGJpbiBTSEFORSBNSVNTTEVSIGF1cyBGbG9yaWRhLCBVU0EuIFdpZSBTaWUgYmVyZWl0
+cyB3aXNzZW4sIGhhYmUgaWNoIGVpbmVuIExvdHRvLUphY2twb3QgaW4gSMO2aGUgdm9uIDQ1MSBN
+aW8uIFVTRCAoMzMwIE1pby4gR0JQKSBnZXdvbm5lbiB1bmQgZGFzIEdlbGQgaGF0IG1laW4gTGVi
+ZW4gdW5kIG1laW4gRmFtaWxpZW5sZWJlbiB2ZXLDpG5kZXJ0LCBhYmVyIGVzIHdpcmQgbWVpbiBI
+ZXJ6IG5pY2h0IHZlcsOkbmRlcm4sIHdpZSBpY2ggYW4gZGVtIFRhZyBzYWd0ZSwgYW4gZGVtIGlj
+aCBtZWluIEdlbGQgaGFiZSwgZGFzIGljaCB2ZXJ3ZW5kZW4gd2VyZGUgRGllc2VzIEdlbGQgZsO8
+ciBkaWUgSGlsZmUgZGVyIE1lbnNjaGhlaXQuIEljaCBoYWJlIGJlc2NobG9zc2VuLCBJaG5lbiB1
+bmQgSWhyZXIgR2VtZWluZGUgZWluZW4gQmV0cmFnIHZvbiA1IE1pbGxpb25lbiBFdXJvIHp1IHNw
+ZW5kZW4sIHVtIGRpZXNlIFNwZW5kZSBhbnp1Zm9yZGVybi4gRS1NYWlsOiAoc2hhbmVtaXNzbGVy
+MEBnbWFpbC5jb20pCgpDZWNpIGVzdCB1biBjb3VycmllciBwZXJzb25uZWwgcXVlIGplIHZvdXMg
+YWRyZXNzZS4gSmUgc3VpcyBTSEFORSBNSVNTTEVSLCBkZSBGbG9yaWRlLCDDiXRhdHMtVW5pcy4g
+Q29tbWUgdm91cyBsZSBzYXZleiBkw6lqw6AsIGonYWkgZ2FnbsOpIDQ1MSBtaWxsaW9ucyBkZSBk
+b2xsYXJzIChMb3R0byBKYWNrcG90KSBldCBsJ2FyZ2VudCBhIGNoYW5nw6kgbWEgdmllIGV0IGNl
+bGxlIGRlIG1hIGZhbWlsbGUsIG1haXMgY2VsYSBuZSBjaGFuZ2VyYSBwYXMgbW9uIGPFk3VyLCBj
+b21tZSBqZSBsJ2FpIGRpdCBsZSBqb3VyIG/DuSBqJ2FpIG1vbiBhcmdlbnQsIGondXRpbGlzZXJh
+aSBjZXQgYXJnZW50IHBvdXIgbCdhaWRlIGRlIGwnaHVtYW5pdMOpLkonYWkgZMOpY2lkw6kgZGUg
+dm91cyBkb25uZXIgbGEgc29tbWUgZGUgNSBtaWxsaW9ucyBkJ2V1cm9zIMOgIHZvdXMgZXQgw6Ag
+dm90cmUgY29tbXVuYXV0w6ksIHBvdXIgcsOpY2xhbWVyIGNlIGRvbiwgZW1haWwtIChzaGFuZW1p
+c3NsZXIwQGdtYWlsLmNvbSkKCgoKLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uCgoKTGEgaW5mb3JtYWNpb24gY29udGVuaWRhIGVuIGVzdGUgY29ycmVvLCBhc2kgY29t
+byBsYSBjb250ZW5pZGEgZW4gbG9zIGRvY3VtZW50b3MgYW5leG9zLCBwdWVkZSBjb250ZW5lciBk
+YXRvcyBwZXJzb25hbGVzLCBwb3IgbG8gcXVlIHN1IGRpZnVzaW9uIGVzIHJlc3BvbnNhYmlsaWRh
+ZCBkZSBxdWllbiBsb3MgdHJhbnNtaXRlIHkgcXVpZW4gbG9zIHJlY2liZSwgZW4gdMOpcm1pbm9z
+IGRlIGxvIGRpc3B1ZXN0byBwb3IgbGFzIGZyYWNjaW9uZXMgSUkgeSBWSUkgZGVsIGFydGljdWxv
+IDQsIHVsdGltbyBwYXJyYWZvIGRlbCBhcnRpY3VsbyA4LCBhcnRpY3VsbyAzNiBwYXJyYWZvIElJ
+LCAzOCBmcmFjY2lvbiBJIHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsYSBMZXkgZGUgVHJhbnNwYXJl
+bmNpYSB5IEFjY2VzbyBhIGxhIEluZm9ybWFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVy
+YWwuDQpMb3MgRGF0b3MgUGVyc29uYWxlcyBzZSBlbmN1ZW50cmFuIHByb3RlZ2lkb3MgcG9yIGxh
+IExleSBkZSBQcm90ZWNjaW9uIGRlIERhdG9zIFBlcnNvbmFsZXMgZGVsIERpc3RyaXRvIEZlZGVy
+YWwsIHBvciBsbyBxdWUgc3UgZGlmdXNpb24gc2UgZW5jdWVudHJhIHR1dGVsYWRhIGVuIHN1cyBh
+cnRpY3Vsb3MgMiwgNSwgMTYsIDIxLCA0MSB5IGRlbWFzIHJlbGF0aXZvcyB5IGFwbGljYWJsZXMs
+IGRlYmllbmRvIHN1amV0YXJzZSBlbiBzdSBjYXNvLCBhIGxhcyBkaXNwb3NpY2lvbmVzIHJlbGF0
+aXZhcyBhIGxhIGNyZWFjaW9uLCBtb2RpZmljYWNpb24gbyBzdXByZXNpb24gZGUgZGF0b3MgcGVy
+c29uYWxlcyBwcmV2aXN0b3MuIEFzaW1pc21vLCBkZWJlcmEgZXN0YXJzZSBhIGxvIHNlw7FhbGFk
+byBlbiBsb3MgbnVtZXJhbGVzIDEgLCAzLCAxMiwgMTgsIDE5LCAyMCwgMjEsIDIzLCAyNCwgMjks
+IDM1IHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsb3MgTGluZWFtaWVudG9zIHBhcmEgbGEgUHJvdGVj
+Y2lvbiBkZSBEYXRvcyBQZXJzb25hbGVzIGVuIGVsIERpc3RyaXRvIEZlZGVyYWwuDQpFbiBlbCB1
+c28gZGUgbGFzIHRlY25vbG9naWFzIGRlIGxhIGluZm9ybWFjaW9uIHkgY29tdW5pY2FjaW9uZXMg
+ZGVsIEdvYmllcm5vIGRlbCBEaXN0cml0byBGZWRlcmFsLCBkZWJlcmEgb2JzZXJ2YXJzZSBwdW50
+dWFsbWVudGUgbG8gZGlzcHVlc3RvIHBvciBsYSBMZXkgR29iaWVybm8gRWxlY3Ryb25pY28gZGVs
+IERpc3RyaXRvIEZlZGVyYWwsIGxhIGxleSBwYXJhIGhhY2VyIGRlIGxhIENpdWRhZCBkZSBNZXhp
+Y28gdW5hIENpdWRhZCBNYXMgQWJpZXJ0YSwgZWwgYXBhcnRhZG8gMTAgZGUgbGEgQ2lyY3VsYXIg
+VW5vIHZpZ2VudGUgeSBsYXMgTm9ybWFzIEdlbmVyYWxlcyBxdWUgZGViZXJhbiBvYnNlcnZhcnNl
+IGVuIG1hdGVyaWEgZGUgU2VndXJpZGFkIGRlIGxhIEluZm9ybWFjaW9uIGVuIGxhIEFkbWluaXN0
+cmFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVyYWwuCg==
