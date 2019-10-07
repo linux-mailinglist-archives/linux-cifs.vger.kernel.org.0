@@ -2,154 +2,126 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8DECC74C
-	for <lists+linux-cifs@lfdr.de>; Sat,  5 Oct 2019 04:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2E5CEDBD
+	for <lists+linux-cifs@lfdr.de>; Mon,  7 Oct 2019 22:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbfJECEq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Oct 2019 22:04:46 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41867 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbfJECEq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Oct 2019 22:04:46 -0400
-Received: by mail-io1-f68.google.com with SMTP id n26so17477640ioj.8;
-        Fri, 04 Oct 2019 19:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dKFFeqNEIfC6bfYX2MCvoQDPGT0qQ00+CPFZGAhucyY=;
-        b=XBe5Lfr1WO/ehyz2z39XQtwaT6/KSwCbVEkv+2+0BqSdThjVgBjDT1cuh1+asCPLPx
-         7QTCbGMiz4NzONlXxyuS+vu/g3czW4Fyux9aI/D8wbAdKY+FTdHb/l+Dimq5bdZeEzYD
-         4PjV2HAXhU3I46PSY0ygDCaTG+Ru7LcYyB6UX2Am/0LP7qsksngNjNGyBQyIMySnfFN1
-         726mZeM8PEajpVSZxXtpNoNmFFOwjt1cIweKDUr1Ruq9U/VrEnc87f0/bqTjY1C9PjRL
-         CvHxOHCgL0RXpJQPyzDv17vfNua7aQ2gBTO64mLIXl0NIDm8B29bBrZMGg41IB64Hpze
-         Hm2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dKFFeqNEIfC6bfYX2MCvoQDPGT0qQ00+CPFZGAhucyY=;
-        b=mjzsRr4SWmviCrF0sh+PRQSqmFbRjNK7kYT2kzNmQj5JqvyhLlrVf7LBeyN3jhS1AL
-         DeoUqWbAyNiJKKTtvxhJx56o1hOFGUCsOThIDyVo5dTitoOQRG5tgrhz0F+JiStxMPZ6
-         AmPRjasswn86AHBo+I/Qt809pN3/DrKSZbuX9rH7cKN/oOSEtjKOz0TFItuuxCFC1QrH
-         7jd+RrCAe67m2XigCBC3W+pY63i6BJPW3dK+/sxaqn1X+b2QwCDEZBaGaojox8kt50Sc
-         BjUyeWaWEpXIReBr5wnsO8HvAPCFxeEWmwaLI2oca8yaDmtM6pHKcB0J4H8/l3wVV7rH
-         0OBQ==
-X-Gm-Message-State: APjAAAXEU5nyCk8HT/pQsQ4iRMDPRrIpOxqM6iVh8XnLJMplcj341cY/
-        fz0+p9XccNF0ucDSTry6xFF2BOONymnSDF9TQBw=
-X-Google-Smtp-Source: APXvYqwBIAoHkqwaCUKDOqze9cchvM+P00vkTrkL1lxkk2uirCl29/HUsptcngeC6wh302S1+9ApJXpS9WjXydrEuD0=
-X-Received: by 2002:a5d:8f02:: with SMTP id f2mr8826897iof.272.1570241084953;
- Fri, 04 Oct 2019 19:04:44 -0700 (PDT)
+        id S1729405AbfJGUlp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Oct 2019 16:41:45 -0400
+Received: from ns1.tgtizmir.com ([217.116.196.59]:40154 "EHLO ns1.tgtizmir.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728187AbfJGUlo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 7 Oct 2019 16:41:44 -0400
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by ns1.tgtizmir.com (Postfix) with SMTP id D2D2954D2AE;
+        Mon,  7 Oct 2019 04:32:49 +0300 (+03)
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received-SPF: pass (ns1.tgtizmir.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=dave@dbsoundfactory.com; helo=127.0.0.1;
+Received: from [58.58.4.247] by 127.0.0.1 with ESMTP id 847C8D6DA6C; Mon, 07 Oct 2019 02:33:48 +0100
+Message-ID: <t6$b472ku0980l0r0$373$r-$ip@4ef9zi.o.ojm>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     linux@lists.openrisc.net
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Mon, 07 Oct 19 02:33:48 GMT
+X-Mailer: Microsoft Outlook, Build 10.0.2616
 MIME-Version: 1.0
-References: <20191004140503.9817-1-christian.brauner@ubuntu.com>
- <20191004142748.GG26530@ZenIV.linux.org.uk> <20191004143301.kfzcut6a6z5owfee@wittgenstein>
- <20191004151058.GH26530@ZenIV.linux.org.uk> <20191004152526.adgg3a7u7jylfk4a@wittgenstein>
- <20191004160219.GI26530@ZenIV.linux.org.uk> <20191004165428.GA28597@ZenIV.linux.org.uk>
-In-Reply-To: <20191004165428.GA28597@ZenIV.linux.org.uk>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 4 Oct 2019 21:04:33 -0500
-Message-ID: <CAH2r5msU43=Nc=Az05y9mXwKSpe5YC1gL1KHYiu7eowP+sYZog@mail.gmail.com>
-Subject: Re: [cifs] semantics of IPC$ shares (was Re: [PATCH] devpts: Fix NULL
- pointer dereference in dcache_readdir())
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Varad Gautam <vrd@amazon.de>, Stable <stable@vger.kernel.org>,
-        Jan Glauber <jglauber@marvell.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/alternative;
+        boundary="BB118ED_BAB2D5FF1EA50F"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Your questions are interesting and rarely asked.
 
-On Fri, Oct 4, 2019 at 11:57 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Fri, Oct 04, 2019 at 05:02:20PM +0100, Al Viro wrote:
->
-> >       * (possibly) cifs hitting the same on eviction by memory pressure alone
-> > (no locked inodes anywhere in sight).  Possibly == if cifs IPC$ share happens to
-> > show up non-empty (e.g. due to server playing silly buggers).
-> >       * (possibly) cifs hitting *another* lovely issue - lookup in one subdirectory
-> > of IPC$ root finding an alias for another subdirectory of said root, triggering
-> > d_move() of dentry of the latter.  IF the name happens to be long enough to be
-> > externally allocated and if dcache_readdir() on root is currently copying it to
-> > userland, Bad Things(tm) will happen.  That one almost certainly depends upon the
-> > server playing silly buggers and might or might not be possible.  I'm not familiar
-> > enough with CIFS to tell.
->
-> BTW, I would really appreciate somebody familiar with CIFS giving a braindump on
-> that.  Questions:
->
-> 1) What's normally (== without malicious/broken server) seen when you mount
-> an IPC$ share?
+--BB118ED_BAB2D5FF1EA50F
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-IPC$ is for "inter process communication" so is basically an
-abstraction for named pipes (used
-for remote procedure call queries using the old DCE/RPC standard).
+Greetings
 
-To Windows it is possible to mount IPC$, to Samba you can connect to
-the share but
-due to a Samba server bug you can't do a query info on "." (the 'root'
-of the IPC$ share).
+My name is Barrister Hans Erich.
+
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
+
+Your full names --------
 
 
-> 2) Does it ever have subdirectories (i.e. can we fail a lookup in its root if it
-> looks like returning a subdirectory)?
+Your urgent response will be appreciated
 
-In Samba you can't query subdirectories on IPC$ because even open of "."
-fails, but to Windows the query directory would get "STATUS_INVALID_INFO_CLASS"
+Thank you and God bless you.
 
-An interesting question, and one that I will bring up with the spec
-writers is whether
-there are info level which would be allowed for query directory (probably not).
+Barrister Hans Erich
 
-Another interesting question this brings up is ... "should we allow
-enumerating the 'services' under IPC$
-via readdir"?   You could imagine a case where mounting IPC$ would
-allow you to see the 'services'
-exported by the server over remote procedure call ("server service"
-and "workstation server" and "netlogon service"
-and the global name space (DFS) service and  perhaps "witness protocol
-services" and "branch cache service" etc.)
+Yours sincerely,
+Barrister Hans Erich
+CONTACT: hanserich9helmut@gmail.com
 
-And then thinking about Dave Howell's changes to the mount API -
-should this be a mechanism that is allowed to be
-used to either browse the valid shares or better access the root of
-the (DFS) global name space.
+--BB118ED_BAB2D5FF1EA50F--
 
-But the short answer is "no you can't query the directory contents
-under IPC$" (at least not without changing the
-abstraction that we export on the client) but I am open to ideas if
-this would fit with Dave Howell's changes to the
-mount API or other ideas.
-> 3) If it can be non-empty, is there way to ask the server about its contents?
-> Short of "look every possible name up", that is...
->
-> As it is, the thing is abusing either cifs_lookup() (if it really shouldn't
-> have any files in it) or dcache_readdir().  Sure, dcache_readdir() can (and
-> should) pin a dentry while copying the name to userland, but WTF kind of
-> semantics it is?  "ls will return the things you'd guessed to look up, until
-> there's enough memory pressure to have them forgotten, which can happen at
-> any point with no activity on server"?
-
-Server's realistically must expose a share "IPC$" so in theory it can be mounted
-(despite Samba server's current bug there) and there were some experiments
-that Shirish did a few years ago opening well known services under mounts
-to IPC$ (to allow doing remote procedure calls over SMB3 mounts which has
-some value) but AFAIK you would never do a readdir over IPC$ and no
-current users would ever mount IPC$
-
--- 
-Thanks,
-
-Steve
