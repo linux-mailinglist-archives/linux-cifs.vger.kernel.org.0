@@ -2,78 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 344A223C203
-	for <lists+linux-cifs@lfdr.de>; Wed,  5 Aug 2020 01:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A360623C267
+	for <lists+linux-cifs@lfdr.de>; Wed,  5 Aug 2020 01:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbgHDXBI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 4 Aug 2020 19:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S1727111AbgHDXw3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Aug 2020 19:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgHDXBG (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Aug 2020 19:01:06 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2FDC06174A
-        for <linux-cifs@vger.kernel.org>; Tue,  4 Aug 2020 16:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=BjIPXPsEY1+fBfym6eKtVHOmUukMG9y+tzxk4WidEQ4=; b=irAe9p2utg2KNankSP2+sxcfIH
-        Ljr9e650RAAFjo7PRA27Vk4rUhyAg2vcn4pbTZno0TcDN2f6kFv7ulAEXRoSst7ZJNuBccEwJCoEK
-        B+Wg3LUyJcqNlzdeFoysfwla2QinGCO6P1PwQX7xhPPBQcI18iSjK8GeGkxP9eNcGJg8H4XjEWuCH
-        Mm/WzV1Nr5qkQ4deZNI76GBWV05yAS6PplFzkefCFCHQDNRJA2wS2W0PjU77TTkHJfHQPeosMaNSI
-        vE652ILCi9gsmg2tgvAeOpZrMUi0QwLTN2prJ1LURgE47+QjIXzfyBy88wcWM+51HA3lBVTMy+frC
-        33SSbRH/Vjhnk/eKoxOYTyk0X6/VeDtxvmGAT7ggVGEHqDNt/XKzolCSt5bWB48wMq0P331cE8hD1
-        LB5sl+CgmqNsShvpXXsuh1xfl0k1JZ4Jl8FChHusawQpUZ1HayuV+EB+Ddo8J3wXlhY+oOvjkOfvo
-        5UsCeSOho0sAcMAiFhGqnNBC;
-Received: from [2a01:4f8:192:486::6:0] (port=49880 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1k35vX-0005j2-0K
-        for cifs-qa@samba.org; Tue, 04 Aug 2020 23:00:59 +0000
-Received: from [::1] (port=35840 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1k35vW-008ISB-Gd
-        for cifs-qa@samba.org; Tue, 04 Aug 2020 23:00:58 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 13795] Race condition in fs/cifs/connect.c causing "has not
- responded in 120 seconds. Reconnecting..."
-Date:   Tue, 04 Aug 2020 23:00:58 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: piastryyy@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-13795-10630-3TIbXgD7ZQ@https.bugzilla.samba.org/>
-In-Reply-To: <bug-13795-10630@https.bugzilla.samba.org/>
-References: <bug-13795-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1726011AbgHDXw2 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Aug 2020 19:52:28 -0400
+X-Greylist: delayed 86248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Aug 2020 16:52:27 PDT
+Received: from dockerbox (unknown [IPv6:2001:4800:7817:101:be76:4eff:fe04:a215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC72FC061756;
+        Tue,  4 Aug 2020 16:52:27 -0700 (PDT)
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by dockerbox (Postfix) with SMTP id 6F4DA5EC5A;
+        Mon,  7 Oct 2019 19:30:12 -0500 (CDT)
+Received: from [32.188.209.113] by 127.0.0.1 with SMTP; Mon, 07 Oct 2019 18:22:17 -0600
+Message-ID: <80v-q$4-o4pqyq0@6eeih174.p55>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     linkos@binet.lv
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Mon, 07 Oct 19 18:22:17 GMT
+X-Mailer: Microsoft Outlook Express 5.00.2615.200
 MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="_.A4476ECDD73A3"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D13795
 
---- Comment #3 from Pavel Shilovsky <piastryyy@gmail.com> ---
-The fix went into 5.3-rc1 (mainline) and 5.2.7, 4.19.65,  4.14.137, 4.9.224,
-4.4.224 (stable) kernel versions.
+--_.A4476ECDD73A3
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Greetings
+
+My name is Barrister Hans Erich.
+
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
+
+Your full names --------
+
+
+Your urgent response will be appreciated
+
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+CONTACT: hanserich9helmut@gmail.com
+
+--_.A4476ECDD73A3--
+
