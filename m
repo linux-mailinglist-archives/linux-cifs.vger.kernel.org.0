@@ -2,27 +2,29 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2502AD0F23
-	for <lists+linux-cifs@lfdr.de>; Wed,  9 Oct 2019 14:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6AD0FB9
+	for <lists+linux-cifs@lfdr.de>; Wed,  9 Oct 2019 15:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730843AbfJIMsv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 9 Oct 2019 08:48:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50126 "EHLO mx1.suse.de"
+        id S1731144AbfJINNE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 9 Oct 2019 09:13:04 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37118 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730789AbfJIMsv (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 9 Oct 2019 08:48:51 -0400
+        id S1731133AbfJINNE (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 9 Oct 2019 09:13:04 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 19C56B14A;
-        Wed,  9 Oct 2019 12:48:50 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 621D4B16B;
+        Wed,  9 Oct 2019 13:13:02 +0000 (UTC)
 From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
 To:     Kenneth D'souza <kdsouza@redhat.com>, piastryyy@gmail.com,
         smfrench@gmail.com, linux-cifs@vger.kernel.org
-Subject: Re: [PATCH v3] mount.cifs.rst: remove prefixpath mount option.
-In-Reply-To: <20191009060151.7913-1-kdsouza@redhat.com>
-References: <20191009060151.7913-1-kdsouza@redhat.com>
-Date:   Wed, 09 Oct 2019 14:48:49 +0200
-Message-ID: <87r23mf5ji.fsf@suse.com>
+Cc:     lsahlber@redhat.com
+Subject: Re: [PATCH] smb2quota.py: Userspace helper to display quota
+ information for the Linux SMB client file system (CIFS)
+In-Reply-To: <20190924045611.21689-1-kdsouza@redhat.com>
+References: <20190924045611.21689-1-kdsouza@redhat.com>
+Date:   Wed, 09 Oct 2019 15:13:01 +0200
+Message-ID: <87o8yqf4f6.fsf@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
@@ -31,7 +33,76 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+
+We now have 2 user scripts in the repo but the configure script doesn't
+know about them: they are not installed. If they are considered dev
+tools or experimental that's fine otherwise we should consider
+installing them on make install. I just wanted to point this out.
+
+A bit late but some comments on the script.
+
+Kenneth D'souza <kdsouza@redhat.com> writes:
+> +#!/usr/bin/env python
+
+We should script for python3 at this point I think. Python2 is on the
+way out.
+
+> +def usage():
+> +    print("Usage: %s [-h] <options>  <filename>" % sys.argv[0])
+> +    print("Try 'smb2quota -h' for more information")
+> +    sys.exit()
+
+argparse already generates usage message from its conf.
+
+> +
+> +def parser_check(path, flag):
+> +    titleused = "Amount Used"
+> +    titlelim = "Quota Limit"
+> +    titlethr = "Warning Level"
+> +    titlesid = "SID"
+> +    buf = array.array('B', [0] * 16384)
+> +    struct.pack_into('<I', buf, 0, 4)  # InfoType: Quota
+> +    struct.pack_into('<I', buf, 16, 16384)  # InputBufferLength
+> +    struct.pack_into('<I', buf, 20, 16)  # OutputBufferLength
+> +    struct.pack_into('b', buf, 24, 0)  # return single
+> +    struct.pack_into('b', buf, 25, 1)  # return single
+> +    try:
+> +        f = os.open(path, os.O_RDONLY)
+> +        fcntl.ioctl(f, CIFS_QUERY_INFO, buf, 1)
+> +        os.close(f)
+> +        if flag == 0:
+> +            print(BBOLD + " %-7s | %-7s | %-7s | %s " + ENDC) % (titleused, titlelim, titlethr, titlesid)
+> +        q = Quota(buf[24:24 + struct.unpack_from('<I', buf, 16)[0]], flag)
+> +        print(q)
+> +    except IOError as reason:
+> +        print("ioctl failed: %s" % reason)
+> +    except OSError as reason:
+> +        print("ioctl failed: %s" % reason)
+> +
+> +
+> +def main():
+> +    if len(sys.argv) < 2:
+> +        usage()
+> +
+> +    parser = argparse.ArgumentParser(description="Please specify an action to perform.", prog="smb2quota")
+
+description is used to generate a useful help/usage message. Maybe use
+"tool to display quota information for the Linux SMB client file system (CIFS)"
+
+> +    parser.add_argument("-tabular", "-t", metavar="", help="Print quota information in tabular format")
+> +    parser.add_argument("-csv", "-c", metavar="", help="Print quota information in csv format")
+> +    parser.add_argument("-list", "-l", metavar="", help="Print quota information in list format")
+
+* I think we should use 2 dashes (i.e. "--tabular") for long options.
+* For boolean flags, action="store_true" is what you want
+* You can put let argparse know about the path arg, and then use args.path
+
+    parser.add_argument("--tabular", "-t", action="store_true", help="Print quota information in tabular format")
+    parser.add_argument("--csv", "-c", action="store_true", help="Print quota information in csv format")
+    parser.add_argument("--list", "-l", action="store_true", help="Print quota information in list format")
+    parser.add_argument("path", help="Path to query")
+
+Cheers,
 -- 
 Aurélien Aptel / SUSE Labs Samba Team
 GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
