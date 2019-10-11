@@ -2,52 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 193CFD49F3
-	for <lists+linux-cifs@lfdr.de>; Fri, 11 Oct 2019 23:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2931D5505
+	for <lists+linux-cifs@lfdr.de>; Sun, 13 Oct 2019 09:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbfJKVfH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 11 Oct 2019 17:35:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726255AbfJKVfG (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 11 Oct 2019 17:35:06 -0400
-Subject: Re: [GIT PULL] SMB3 fixes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570829706;
-        bh=k3N+q3Kc0pFtCdUFv8UE1R0g5qFghOHbS19IcSqpwWg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Q3Au5qZYdi8SDS/y9uQ73T5WdEj3d7UI2GDeVPvNF3+hSKgyAvfYwhpJI+06vJmAn
-         zmfTTIzAa8D0fIvdRSlWL5KAFqqpuhldyLGe3h+K3hej4Ei58JeEOyMa5opoHJ6z9j
-         VLJMQknCan2rNrCiGTLny7X3O+yGrqWKWUsGip+Q=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mt06W-HjArS-+XMRjuY9FvMrZGWndKn0M8-0tc=jMmG-g@mail.gmail.com>
-References: <CAH2r5mt06W-HjArS-+XMRjuY9FvMrZGWndKn0M8-0tc=jMmG-g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mt06W-HjArS-+XMRjuY9FvMrZGWndKn0M8-0tc=jMmG-g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.4-rc2-smb3
-X-PR-Tracked-Commit-Id: 0b3d0ef9840f7be202393ca9116b857f6f793715
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c6ad7c3ce9800e91d6cc6d2f6f566339ebac5656
-Message-Id: <157082970639.1897.13945525587412899960.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Oct 2019 21:35:06 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        id S1728590AbfJMHgC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 13 Oct 2019 03:36:02 -0400
+Received: from [206.81.8.171] ([206.81.8.171]:56546 "EHLO varon.localdomain"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728198AbfJMHgB (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sun, 13 Oct 2019 03:36:01 -0400
+Received: from 127.0.0.1 (varon [127.0.0.1])
+        by varon.localdomain (Postfix) with SMTP id 290C355D635;
+        Fri, 11 Oct 2019 10:21:17 +0000 (UTC)
+Received: from (HELO 1iqb) [176.71.184.19] by 127.0.0.1 for <linhao63@jlonline.com>; Fri, 11 Oct 2019 03:19:21 -0700
+Message-ID: <4-806$5o5$$r$as6q109r731c@hkg.so2qo8>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     linhao63@jlonline.com
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA ??
+Date:   Fri, 11 Oct 19 03:19:21 GMT
+X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2910.0)
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="C.F387.BA..3D"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Fri, 11 Oct 2019 15:40:26 -0500:
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.4-rc2-smb3
+--C.F387.BA..3D
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c6ad7c3ce9800e91d6cc6d2f6f566339ebac5656
+Greetings
 
-Thank you!
+My name is Barrister Hans Erich.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
+
+Your full nameS -----------
+
+
+Your urgent response will be appreciated
+
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+
+--C.F387.BA..3D--
+
