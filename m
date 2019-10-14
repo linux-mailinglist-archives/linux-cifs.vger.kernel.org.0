@@ -2,44 +2,106 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A53CD681C
-	for <lists+linux-cifs@lfdr.de>; Mon, 14 Oct 2019 19:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8C8D6B54
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Oct 2019 23:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388373AbfJNRNl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 14 Oct 2019 13:13:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35990 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387910AbfJNRNl (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 14 Oct 2019 13:13:41 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id AE1F1B71E;
-        Mon, 14 Oct 2019 17:13:40 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     linux-cifs@vger.kernel.org
-Cc:     piastryyy@gmail.com, kdsouza@redhat.com, lsahlber@redhat.com
-Subject: Re: [PATCH 2/2] smbinfo: rewrite in python
-In-Reply-To: <20191014170738.21724-1-aaptel@suse.com>
-References: <20191014170738.21724-1-aaptel@suse.com>
-Date:   Mon, 14 Oct 2019 19:13:39 +0200
-Message-ID: <87a7a3b67w.fsf@suse.com>
+        id S1729889AbfJNVnZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 14 Oct 2019 17:43:25 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:32897 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729054AbfJNVnY (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Oct 2019 17:43:24 -0400
+Received: by mail-lj1-f195.google.com with SMTP id a22so18098432ljd.0;
+        Mon, 14 Oct 2019 14:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3qwTHsJQXtLByGWGmkMogTYtmXYBCZ8p7g4dCDAH2Hc=;
+        b=GkNSjhP0eZ80orHn4cAARxiyTXcvb5pPD7FRVCWSFff5/lJaJh7m0Eym/uVAhlJAK3
+         aOHaHKdueqDalt+cb9568WOvHFiduwq/KtHwrU6C7RUEO0UvH+kOatOoFvjlusem7ElO
+         4+eiy/B13KWx8QhR4CT9z8n/JZzaCtNEUWW8qB6UdWJqss3SHN/4IMdo8S2dyTVnsMqF
+         xwGi1bJhpw2ugWX5wToPEFZTe3kTp9fijpoJ039D1UCsXOR83LYsj6ftvPMB3vEpo9oE
+         MAuZ+SddrdhSAp9zO46QStgTyDk2WaXu4jbmygCQohW7F1sk3FGynVd9IdaF/UXvAQ+l
+         qplQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3qwTHsJQXtLByGWGmkMogTYtmXYBCZ8p7g4dCDAH2Hc=;
+        b=p/qd/PizWgxx65FLuAeC6FIELa6ulIclu/RTDT+OlvGQ76yq4D+AZ1lsMHjrrmt7U5
+         HZrdBN7XJ6PaYXvfxm1ujgZuFQSCXIyWVDOlsFCQ+KsxApYP/kbIKn6aXwHnSnnV9UK6
+         j6jk+l7+GN+S30k7mNQMWrfq0A5agqTl1ZTnCqrqI21S05w81dlbGmET2p+f9kRQBmLZ
+         VdgNj3YOJMGQmYjP3PpWeNVHkhZqWdJvEm+KMFvmXTGOM6F9gu0+kNn/gCJGe/NJ0hx5
+         RRsVWI6RE1upv4TAspSI9n1zq885YV+s2gnJmA93oCkFhrrOzfFmWMpI6z/DQS08nFRo
+         FhEg==
+X-Gm-Message-State: APjAAAVmJ0t+nqCjmqHqsL4bBQH4fGIM3g6IhoThYqsN9nq0SPeQkDC9
+        8jiLLrjbHA2Am7fG6qx5IaWqBwlA9Q9sCYCyZc320hA=
+X-Google-Smtp-Source: APXvYqz3z9deyqj84FSXsg+/2ryg7LbrmoOETqAHbU2dkepNZeuB6r+Ff9HGPQY2TdsoLFO2AyX5r0FI0UrTiwWGhNM=
+X-Received: by 2002:a2e:5354:: with SMTP id t20mr20223113ljd.227.1571089402725;
+ Mon, 14 Oct 2019 14:43:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <20191014071531.12790-1-hslester96@gmail.com>
+In-Reply-To: <20191014071531.12790-1-hslester96@gmail.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Mon, 14 Oct 2019 14:43:11 -0700
+Message-ID: <CAKywueQY-J3g0RBF4=opP8SbhpWh-BHoHWzNEeTruxmfacnhGw@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Fix missed free operations
+To:     Chuhong Yuan <hslester96@gmail.com>
+Cc:     Steve French <sfrench@samba.org>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+=D0=BF=D0=BD, 14 =D0=BE=D0=BA=D1=82. 2019 =D0=B3. =D0=B2 00:18, Chuhong Yua=
+n <hslester96@gmail.com>:
+>
+> cifs_setattr_nounix has two paths which miss free operations
+> for xid and fullpath.
+> Use goto cifs_setattr_exit like other paths to fix them.
+>
+> Fixes: aa081859b10c ("cifs: flush before set-info if we have writeable ha=
+ndles")
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+> ---
+>  fs/cifs/inode.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
+> index 5dcc95b38310..df9377828e2f 100644
+> --- a/fs/cifs/inode.c
+> +++ b/fs/cifs/inode.c
+> @@ -2475,9 +2475,9 @@ cifs_setattr_nounix(struct dentry *direntry, struct=
+ iattr *attrs)
+>                         rc =3D tcon->ses->server->ops->flush(xid, tcon, &=
+wfile->fid);
+>                         cifsFileInfo_put(wfile);
+>                         if (rc)
+> -                               return rc;
+> +                               goto cifs_setattr_exit;
+>                 } else if (rc !=3D -EBADF)
+> -                       return rc;
+> +                       goto cifs_setattr_exit;
+>                 else
+>                         rc =3D 0;
+>         }
+> --
+> 2.20.1
+>
 
-Note that I haven't tested the `quota` and `list-snapshots` sub-commands
-as I don't know how to set that up easily on my Windows Server vm (let
-me know how if you know, thx) so please give it a try, these are
-untested.
+Looks good, thanks.
 
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+
+The original patch was tagged for stable, so, it seems that this one
+should be tagged too.
+
+--
+Best regards,
+Pavel Shilovsky
