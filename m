@@ -2,38 +2,38 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F59DD28A
-	for <lists+linux-cifs@lfdr.de>; Sat, 19 Oct 2019 00:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA82BDD4AD
+	for <lists+linux-cifs@lfdr.de>; Sat, 19 Oct 2019 00:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391441AbfJRWMN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Oct 2019 18:12:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43270 "EHLO mail.kernel.org"
+        id S2391976AbfJRW0V (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Oct 2019 18:26:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390028AbfJRWKX (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:10:23 -0400
+        id S1727967AbfJRWES (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:04:18 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14AC422474;
-        Fri, 18 Oct 2019 22:10:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7208222C5;
+        Fri, 18 Oct 2019 22:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436622;
-        bh=uhc6qrmgYf8tNuiZPGZcsbbrTbtSfMBBHflqUUXRHqw=;
+        s=default; t=1571436258;
+        bh=pvimibEjAyXqsfHKR7k5YuuvTWdfplcgN9pW/WPSVwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ywZx1UowLZyFlsNBfznaDlsNQSg63PVxi/RTXUUO7EaRaLVNrUlf8xPgl5k6EiR/J
-         m8jFTFnXbDsFXPy471x219Z1Dph1VErxP3I0KSbHKmzeRk6PNn1PPchg2dqoCvyOrf
-         EhZljQGnIxbvGnxvsHNTYqz3weGLYUlDmd0wC2/0=
+        b=veNGxJ3ON8zF6PobeBkqV38GQXhYTZ+JyMeZzFJCbqQBz5h/HifjIOwu791f3B8TU
+         rT9Y/ln+uZ9EWdV2XuIzU3dMJ8DMQBaOmQRh6sLm5qGAxkDa3D4oJIIIYBcC3dAVx8
+         KmX8ywpqOkVJ6WQ4un5dEDdmbVmQdBok2msca1pU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Austin Kim <austindh.kim@gmail.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 10/21] fs: cifs: mute -Wunused-const-variable message
-Date:   Fri, 18 Oct 2019 18:09:56 -0400
-Message-Id: <20191018221007.10851-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 41/89] fs: cifs: mute -Wunused-const-variable message
+Date:   Fri, 18 Oct 2019 18:02:36 -0400
+Message-Id: <20191018220324.8165-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018221007.10851-1-sashal@kernel.org>
-References: <20191018221007.10851-1-sashal@kernel.org>
+In-Reply-To: <20191018220324.8165-1-sashal@kernel.org>
+References: <20191018220324.8165-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 deletions(-)
 
 diff --git a/fs/cifs/netmisc.c b/fs/cifs/netmisc.c
-index cc88f4f0325ef..bed9733302279 100644
+index ed92958e842d3..657f409d4de06 100644
 --- a/fs/cifs/netmisc.c
 +++ b/fs/cifs/netmisc.c
-@@ -130,10 +130,6 @@ static const struct smb_to_posix_error mapping_table_ERRSRV[] = {
+@@ -117,10 +117,6 @@ static const struct smb_to_posix_error mapping_table_ERRSRV[] = {
  	{0, 0}
  };
  
