@@ -2,38 +2,38 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C2DDD2EC
-	for <lists+linux-cifs@lfdr.de>; Sat, 19 Oct 2019 00:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F91CDD2BA
+	for <lists+linux-cifs@lfdr.de>; Sat, 19 Oct 2019 00:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388217AbfJRWIt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Oct 2019 18:08:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41386 "EHLO mail.kernel.org"
+        id S2388387AbfJRWNk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Oct 2019 18:13:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388208AbfJRWIt (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:08:49 -0400
+        id S2389253AbfJRWJr (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:09:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61C972245A;
-        Fri, 18 Oct 2019 22:08:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E38A022477;
+        Fri, 18 Oct 2019 22:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436529;
+        s=default; t=1571436586;
         bh=uhc6qrmgYf8tNuiZPGZcsbbrTbtSfMBBHflqUUXRHqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2X/470m/6TusE+wLAqzmAHy6nb/aABT8ySe6KIzuSe9YwcDrH1H7BitWwSwOT/XQ
-         oPyrs9DyViPbLABHMrnHbnMSVSKVQCwYpP7+RqW1x6pNG3PObYGyf19LMKykAp0zeb
-         B5CYmJT/L4pUIiYOAilxSyIRNSYkdcOL8ygbMGS8=
+        b=mjkyIWz/ilKep35HrCmdQsbMF0rAF6h2UZoGuGlVlCxPeVsawLViZyAKu9yXEwpKU
+         iq8l6uLXlYE5bVdDcSqQzSZpgIOBznc/n34GX9h1hSQuJ/5cxlcJqKikD8Dh6jMExC
+         QZuuhKffBU5ZvQbCo8tTC0XKeEPiGlDJbIxNegP8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Austin Kim <austindh.kim@gmail.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 35/56] fs: cifs: mute -Wunused-const-variable message
-Date:   Fri, 18 Oct 2019 18:07:32 -0400
-Message-Id: <20191018220753.10002-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 15/29] fs: cifs: mute -Wunused-const-variable message
+Date:   Fri, 18 Oct 2019 18:09:06 -0400
+Message-Id: <20191018220920.10545-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220753.10002-1-sashal@kernel.org>
-References: <20191018220753.10002-1-sashal@kernel.org>
+In-Reply-To: <20191018220920.10545-1-sashal@kernel.org>
+References: <20191018220920.10545-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
