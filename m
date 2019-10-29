@@ -2,529 +2,841 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E846EE7ECB
-	for <lists+linux-cifs@lfdr.de>; Tue, 29 Oct 2019 04:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE19E864B
+	for <lists+linux-cifs@lfdr.de>; Tue, 29 Oct 2019 12:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbfJ2DOD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 28 Oct 2019 23:14:03 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32737 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727936AbfJ2DOD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 28 Oct 2019 23:14:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572318841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bHA7AtRugY/z+SkJiLGHLkPSCRLz22Q6urkpaTHsSV0=;
-        b=UelYpK+zn6y9khwQJ2aLJQQwF7xIhTyWLOdB1z3TwBjXQz476pTyZCrewvOOWffpDNerr6
-        QxX33Pix7Gs7tyADyvK2Ugciemi7aXy5cqiOS3eBiD5ciQLWpTN+kfK/+U/GVXdCUjezDg
-        RdM1Xufq0MK9sdHu48JBcJU487rO+3Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189-GaIN1YEXPbONKac8N-EGBA-1; Mon, 28 Oct 2019 23:13:59 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D4FC1005509
-        for <linux-cifs@vger.kernel.org>; Tue, 29 Oct 2019 03:13:59 +0000 (UTC)
-Received: from test1135.test.redhat.com (vpn2-54-48.bne.redhat.com [10.64.54.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E88C35D9C8;
-        Tue, 29 Oct 2019 03:13:57 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] cifs: move cifsFileInfo_put logic into a work-queue
-Date:   Tue, 29 Oct 2019 13:13:48 +1000
-Message-Id: <20191029031348.13357-2-lsahlber@redhat.com>
-In-Reply-To: <20191029031348.13357-1-lsahlber@redhat.com>
-References: <20191029031348.13357-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-MC-Unique: GaIN1YEXPbONKac8N-EGBA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        id S1728111AbfJ2LHk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 29 Oct 2019 07:07:40 -0400
+Received: from mail.prodrive-technologies.com ([212.61.153.67]:52025 "EHLO
+        mail.prodrive-technologies.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727406AbfJ2LHk (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 29 Oct 2019 07:07:40 -0400
+Received: from mail.prodrive-technologies.com (localhost.localdomain [127.0.0.1])
+        by localhost (Email Security Appliance) with SMTP id 5B54B32F57_DB81D79B;
+        Tue, 29 Oct 2019 11:07:37 +0000 (GMT)
+Received: from mail.prodrive-technologies.com (exc04.bk.prodrive.nl [10.1.1.213])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.prodrive-technologies.com", Issuer "Prodrive Technologies B.V. OV SSL Issuing CA" (verified OK))
+        by mail.prodrive-technologies.com (Sophos Email Appliance) with ESMTPS id A2DBB30D96_DB81D78F;
+        Tue, 29 Oct 2019 11:07:36 +0000 (GMT)
+Received: from [10.10.240.93] (10.1.249.1) by EXC04.bk.prodrive.nl
+ (10.1.1.213) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1779.2; Tue, 29
+ Oct 2019 12:07:36 +0100
+Subject: Re: Kernel hangs in cifs_reconnect
+From:   Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+To:     Paulo Alcantara <pc@cjr.nz>,
+        =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>,
+        <linux-cifs@vger.kernel.org>
+References: <56d13db4-62ed-99c0-90b8-bb332143cece@prodrive-technologies.com>
+ <871rveaurv.fsf@suse.com> <87a7a2ynxg.fsf@cjr.nz>
+ <68a58b8e-3cab-093b-3098-6ee4a6dd3117@prodrive-technologies.com>
+Organization: Prodrive Technologies
+Message-ID: <9c5eeb76-7895-5938-355f-f5d43c5affe5@prodrive-technologies.com>
+Date:   Tue, 29 Oct 2019 12:07:35 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
+MIME-Version: 1.0
+In-Reply-To: <68a58b8e-3cab-093b-3098-6ee4a6dd3117@prodrive-technologies.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EXC03.bk.prodrive.nl (10.1.1.212) To EXC04.bk.prodrive.nl
+ (10.1.1.213)
+X-SASI-RCODE: 200
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This patch moves the final part of the cifsFileInfo_put() logic where we
-need a write lock on lock_sem to be processed in a separate thread that
-holds no other locks.
-This is to prevent deadlocks like the one below:
+Hi,
 
-> there are 6 processes looping to while trying to down_write
-> cinode->lock_sem, 5 of them from _cifsFileInfo_put, and one from
-> cifs_new_fileinfo
->
-> and there are 5 other processes which are blocked, several of them
-> waiting on either PG_writeback or PG_locked (which are both set), all
-> for the same page of the file
->
-> 2 inode_lock() (inode->i_rwsem) for the file
-> 1 wait_on_page_writeback() for the page
-> 1 down_read(inode->i_rwsem) for the inode of the directory
-> 1 inode_lock()(inode->i_rwsem) for the inode of the directory
-> 1 __lock_page
->
->
-> so processes are blocked waiting on:
->   page flags PG_locked and PG_writeback for one specific page
->   inode->i_rwsem for the directory
->   inode->i_rwsem for the file
->   cifsInodeInflock_sem
->
->
->
-> here are the more gory details (let me know if I need to provide
-> anything more/better):
->
-> [0 00:48:22.765] [UN]  PID: 8863   TASK: ffff8c691547c5c0  CPU: 3
-> COMMAND: "reopen_file"
->  #0 [ffff9965007e3ba8] __schedule at ffffffff9b6e6095
->  #1 [ffff9965007e3c38] schedule at ffffffff9b6e64df
->  #2 [ffff9965007e3c48] rwsem_down_write_slowpath at ffffffff9af283d7
->  #3 [ffff9965007e3cb8] legitimize_path at ffffffff9b0f975d
->  #4 [ffff9965007e3d08] path_openat at ffffffff9b0fe55d
->  #5 [ffff9965007e3dd8] do_filp_open at ffffffff9b100a33
->  #6 [ffff9965007e3ee0] do_sys_open at ffffffff9b0eb2d6
->  #7 [ffff9965007e3f38] do_syscall_64 at ffffffff9ae04315
-> * (I think legitimize_path is bogus)
->
-> in path_openat
->         } else {
->                 const char *s =3D path_init(nd, flags);
->                 while (!(error =3D link_path_walk(s, nd)) &&
->                         (error =3D do_last(nd, file, op)) > 0) {  <<<<
->
-> do_last:
->         if (open_flag & O_CREAT)
->                 inode_lock(dir->d_inode);  <<<<
->         else
-> so it's trying to take inode->i_rwsem for the directory
->
->      DENTRY           INODE           SUPERBLK     TYPE PATH
-> ffff8c68bb8e79c0 ffff8c691158ef20 ffff8c6915bf9000 DIR  /mnt/vm1_smb/
-> inode.i_rwsem is ffff8c691158efc0
->
-> <struct rw_semaphore 0xffff8c691158efc0>:
->         owner: <struct task_struct 0xffff8c6914275d00> (UN -   8856 -
-> reopen_file), counter: 0x0000000000000003
->         waitlist: 2
->         0xffff9965007e3c90     8863   reopen_file      UN 0  1:29:22.926
->   RWSEM_WAITING_FOR_WRITE
->         0xffff996500393e00     9802   ls               UN 0  1:17:26.700
->   RWSEM_WAITING_FOR_READ
->
->
-> the owner of the inode.i_rwsem of the directory is:
->
-> [0 00:00:00.109] [UN]  PID: 8856   TASK: ffff8c6914275d00  CPU: 3
-> COMMAND: "reopen_file"
->  #0 [ffff99650065b828] __schedule at ffffffff9b6e6095
->  #1 [ffff99650065b8b8] schedule at ffffffff9b6e64df
->  #2 [ffff99650065b8c8] schedule_timeout at ffffffff9b6e9f89
->  #3 [ffff99650065b940] msleep at ffffffff9af573a9
->  #4 [ffff99650065b948] _cifsFileInfo_put.cold.63 at ffffffffc0a42dd6 [cif=
-s]
->  #5 [ffff99650065ba38] cifs_writepage_locked at ffffffffc0a0b8f3 [cifs]
->  #6 [ffff99650065bab0] cifs_launder_page at ffffffffc0a0bb72 [cifs]
->  #7 [ffff99650065bb30] invalidate_inode_pages2_range at ffffffff9b04d4bd
->  #8 [ffff99650065bcb8] cifs_invalidate_mapping at ffffffffc0a11339 [cifs]
->  #9 [ffff99650065bcd0] cifs_revalidate_mapping at ffffffffc0a1139a [cifs]
-> #10 [ffff99650065bcf0] cifs_d_revalidate at ffffffffc0a014f6 [cifs]
-> #11 [ffff99650065bd08] path_openat at ffffffff9b0fe7f7
-> #12 [ffff99650065bdd8] do_filp_open at ffffffff9b100a33
-> #13 [ffff99650065bee0] do_sys_open at ffffffff9b0eb2d6
-> #14 [ffff99650065bf38] do_syscall_64 at ffffffff9ae04315
->
-> cifs_launder_page is for page 0xffffd1e2c07d2480
->
-> crash> page.index,mapping,flags 0xffffd1e2c07d2480
->       index =3D 0x8
->       mapping =3D 0xffff8c68f3cd0db0
->   flags =3D 0xfffffc0008095
->
->   PAGE-FLAG       BIT  VALUE
->   PG_locked         0  0000001
->   PG_uptodate       2  0000004
->   PG_lru            4  0000010
->   PG_waiters        7  0000080
->   PG_writeback     15  0008000
->
->
-> inode is ffff8c68f3cd0c40
-> inode.i_rwsem is ffff8c68f3cd0ce0
->      DENTRY           INODE           SUPERBLK     TYPE PATH
-> ffff8c68a1f1b480 ffff8c68f3cd0c40 ffff8c6915bf9000 REG
-> /mnt/vm1_smb/testfile.8853
->
->
-> this process holds the inode->i_rwsem for the parent directory, is
-> laundering a page attached to the inode of the file it's opening, and in
-> _cifsFileInfo_put is trying to down_write the cifsInodeInflock_sem
-> for the file itself.
->
->
-> <struct rw_semaphore 0xffff8c68f3cd0ce0>:
->         owner: <struct task_struct 0xffff8c6914272e80> (UN -   8854 -
-> reopen_file), counter: 0x0000000000000003
->         waitlist: 1
->         0xffff9965005dfd80     8855   reopen_file      UN 0  1:29:22.912
->   RWSEM_WAITING_FOR_WRITE
->
-> this is the inode.i_rwsem for the file
->
-> the owner:
->
-> [0 00:48:22.739] [UN]  PID: 8854   TASK: ffff8c6914272e80  CPU: 2
-> COMMAND: "reopen_file"
->  #0 [ffff99650054fb38] __schedule at ffffffff9b6e6095
->  #1 [ffff99650054fbc8] schedule at ffffffff9b6e64df
->  #2 [ffff99650054fbd8] io_schedule at ffffffff9b6e68e2
->  #3 [ffff99650054fbe8] __lock_page at ffffffff9b03c56f
->  #4 [ffff99650054fc80] pagecache_get_page at ffffffff9b03dcdf
->  #5 [ffff99650054fcc0] grab_cache_page_write_begin at ffffffff9b03ef4c
->  #6 [ffff99650054fcd0] cifs_write_begin at ffffffffc0a064ec [cifs]
->  #7 [ffff99650054fd30] generic_perform_write at ffffffff9b03bba4
->  #8 [ffff99650054fda8] __generic_file_write_iter at ffffffff9b04060a
->  #9 [ffff99650054fdf0] cifs_strict_writev.cold.70 at ffffffffc0a4469b [ci=
-fs]
-> #10 [ffff99650054fe48] new_sync_write at ffffffff9b0ec1dd
-> #11 [ffff99650054fed0] vfs_write at ffffffff9b0eed35
-> #12 [ffff99650054ff00] ksys_write at ffffffff9b0eefd9
-> #13 [ffff99650054ff38] do_syscall_64 at ffffffff9ae04315
->
-> the process holds the inode->i_rwsem for the file to which it's writing,
-> and is trying to __lock_page for the same page as in the other processes
->
->
-> the other tasks:
-> [0 00:00:00.028] [UN]  PID: 8859   TASK: ffff8c6915479740  CPU: 2
-> COMMAND: "reopen_file"
->  #0 [ffff9965007b39d8] __schedule at ffffffff9b6e6095
->  #1 [ffff9965007b3a68] schedule at ffffffff9b6e64df
->  #2 [ffff9965007b3a78] schedule_timeout at ffffffff9b6e9f89
->  #3 [ffff9965007b3af0] msleep at ffffffff9af573a9
->  #4 [ffff9965007b3af8] cifs_new_fileinfo.cold.61 at ffffffffc0a42a07 [cif=
-s]
->  #5 [ffff9965007b3b78] cifs_open at ffffffffc0a0709d [cifs]
->  #6 [ffff9965007b3cd8] do_dentry_open at ffffffff9b0e9b7a
->  #7 [ffff9965007b3d08] path_openat at ffffffff9b0fe34f
->  #8 [ffff9965007b3dd8] do_filp_open at ffffffff9b100a33
->  #9 [ffff9965007b3ee0] do_sys_open at ffffffff9b0eb2d6
-> #10 [ffff9965007b3f38] do_syscall_64 at ffffffff9ae04315
->
-> this is opening the file, and is trying to down_write cinode->lock_sem
->
->
-> [0 00:00:00.041] [UN]  PID: 8860   TASK: ffff8c691547ae80  CPU: 2
-> COMMAND: "reopen_file"
-> [0 00:00:00.057] [UN]  PID: 8861   TASK: ffff8c6915478000  CPU: 3
-> COMMAND: "reopen_file"
-> [0 00:00:00.059] [UN]  PID: 8858   TASK: ffff8c6914271740  CPU: 2
-> COMMAND: "reopen_file"
-> [0 00:00:00.109] [UN]  PID: 8862   TASK: ffff8c691547dd00  CPU: 6
-> COMMAND: "reopen_file"
->  #0 [ffff9965007c3c78] __schedule at ffffffff9b6e6095
->  #1 [ffff9965007c3d08] schedule at ffffffff9b6e64df
->  #2 [ffff9965007c3d18] schedule_timeout at ffffffff9b6e9f89
->  #3 [ffff9965007c3d90] msleep at ffffffff9af573a9
->  #4 [ffff9965007c3d98] _cifsFileInfo_put.cold.63 at ffffffffc0a42dd6 [cif=
-s]
->  #5 [ffff9965007c3e88] cifs_close at ffffffffc0a07aaf [cifs]
->  #6 [ffff9965007c3ea0] __fput at ffffffff9b0efa6e
->  #7 [ffff9965007c3ee8] task_work_run at ffffffff9aef1614
->  #8 [ffff9965007c3f20] exit_to_usermode_loop at ffffffff9ae03d6f
->  #9 [ffff9965007c3f38] do_syscall_64 at ffffffff9ae0444c
->
-> closing the file, and trying to down_write cifsi->lock_sem
->
->
-> [0 00:48:22.839] [UN]  PID: 8857   TASK: ffff8c6914270000  CPU: 7
-> COMMAND: "reopen_file"
->  #0 [ffff9965006a7cc8] __schedule at ffffffff9b6e6095
->  #1 [ffff9965006a7d58] schedule at ffffffff9b6e64df
->  #2 [ffff9965006a7d68] io_schedule at ffffffff9b6e68e2
->  #3 [ffff9965006a7d78] wait_on_page_bit at ffffffff9b03cac6
->  #4 [ffff9965006a7e10] __filemap_fdatawait_range at ffffffff9b03b028
->  #5 [ffff9965006a7ed8] filemap_write_and_wait at ffffffff9b040165
->  #6 [ffff9965006a7ef0] cifs_flush at ffffffffc0a0c2fa [cifs]
->  #7 [ffff9965006a7f10] filp_close at ffffffff9b0e93f1
->  #8 [ffff9965006a7f30] __x64_sys_close at ffffffff9b0e9a0e
->  #9 [ffff9965006a7f38] do_syscall_64 at ffffffff9ae04315
->
-> in __filemap_fdatawait_range
->                         wait_on_page_writeback(page);
-> for the same page of the file
->
->
->
-> [0 00:48:22.718] [UN]  PID: 8855   TASK: ffff8c69142745c0  CPU: 7
-> COMMAND: "reopen_file"
->  #0 [ffff9965005dfc98] __schedule at ffffffff9b6e6095
->  #1 [ffff9965005dfd28] schedule at ffffffff9b6e64df
->  #2 [ffff9965005dfd38] rwsem_down_write_slowpath at ffffffff9af283d7
->  #3 [ffff9965005dfdf0] cifs_strict_writev at ffffffffc0a0c40a [cifs]
->  #4 [ffff9965005dfe48] new_sync_write at ffffffff9b0ec1dd
->  #5 [ffff9965005dfed0] vfs_write at ffffffff9b0eed35
->  #6 [ffff9965005dff00] ksys_write at ffffffff9b0eefd9
->  #7 [ffff9965005dff38] do_syscall_64 at ffffffff9ae04315
->
->         inode_lock(inode);
->
->
-> and one 'ls' later on, to see whether the rest of the mount is available
-> (the test file is in the root, so we get blocked up on the directory
-> ->i_rwsem), so the entire mount is unavailable
->
-> [0 00:36:26.473] [UN]  PID: 9802   TASK: ffff8c691436ae80  CPU: 4
-> COMMAND: "ls"
->  #0 [ffff996500393d28] __schedule at ffffffff9b6e6095
->  #1 [ffff996500393db8] schedule at ffffffff9b6e64df
->  #2 [ffff996500393dc8] rwsem_down_read_slowpath at ffffffff9b6e9421
->  #3 [ffff996500393e78] down_read_killable at ffffffff9b6e95e2
->  #4 [ffff996500393e88] iterate_dir at ffffffff9b103c56
->  #5 [ffff996500393ec8] ksys_getdents64 at ffffffff9b104b0c
->  #6 [ffff996500393f30] __x64_sys_getdents64 at ffffffff9b104bb6
->  #7 [ffff996500393f38] do_syscall_64 at ffffffff9ae04315
->
-> in iterate_dir:
->         if (shared)
->                 res =3D down_read_killable(&inode->i_rwsem);  <<<<
->         else
->                 res =3D down_write_killable(&inode->i_rwsem);
->
+Anybody any idea on what goes wrong here?
+Is any of the recently posted patches related to my issue, because I'm 
+more that willing to test out patches if needed.
 
-Reported-by: Frank Sorenson <sorenson@redhat.com>:
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/cifsfs.c   | 13 +++++++++-
- fs/cifs/cifsglob.h |  5 +++-
- fs/cifs/file.c     | 72 +++++++++++++++++++++++++++++++++++---------------=
-----
- 3 files changed, 63 insertions(+), 27 deletions(-)
+Regards, Martijn
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index e4e3b573d20c..f8e201c45ccb 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -119,6 +119,7 @@ extern mempool_t *cifs_mid_poolp;
-=20
- struct workqueue_struct=09*cifsiod_wq;
- struct workqueue_struct=09*decrypt_wq;
-+struct workqueue_struct=09*fileinfo_put_wq;
- struct workqueue_struct=09*cifsoplockd_wq;
- __u32 cifs_lock_secret;
-=20
-@@ -1557,11 +1558,18 @@ init_cifs(void)
- =09=09goto out_destroy_cifsiod_wq;
- =09}
-=20
-+=09fileinfo_put_wq =3D alloc_workqueue("cifsfileinfoput",
-+=09=09=09=09     WQ_UNBOUND|WQ_FREEZABLE|WQ_MEM_RECLAIM, 0);
-+=09if (!fileinfo_put_wq) {
-+=09=09rc =3D -ENOMEM;
-+=09=09goto out_destroy_decrypt_wq;
-+=09}
-+
- =09cifsoplockd_wq =3D alloc_workqueue("cifsoplockd",
- =09=09=09=09=09 WQ_FREEZABLE|WQ_MEM_RECLAIM, 0);
- =09if (!cifsoplockd_wq) {
- =09=09rc =3D -ENOMEM;
--=09=09goto out_destroy_decrypt_wq;
-+=09=09goto out_destroy_fileinfo_put_wq;
- =09}
-=20
- =09rc =3D cifs_fscache_register();
-@@ -1627,6 +1635,8 @@ init_cifs(void)
- =09cifs_fscache_unregister();
- out_destroy_cifsoplockd_wq:
- =09destroy_workqueue(cifsoplockd_wq);
-+out_destroy_fileinfo_put_wq:
-+=09destroy_workqueue(fileinfo_put_wq);
- out_destroy_decrypt_wq:
- =09destroy_workqueue(decrypt_wq);
- out_destroy_cifsiod_wq:
-@@ -1656,6 +1666,7 @@ exit_cifs(void)
- =09cifs_fscache_unregister();
- =09destroy_workqueue(cifsoplockd_wq);
- =09destroy_workqueue(decrypt_wq);
-+=09destroy_workqueue(fileinfo_put_wq);
- =09destroy_workqueue(cifsiod_wq);
- =09cifs_proc_clean();
- }
-diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index d78bfcc19156..e0a7dc3f62b2 100644
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -1265,6 +1265,7 @@ struct cifsFileInfo {
- =09struct mutex fh_mutex; /* prevents reopen race after dead ses*/
- =09struct cifs_search_info srch_inf;
- =09struct work_struct oplock_break; /* work for oplock breaks */
-+=09struct work_struct put; /* work for the final part of _put */
- };
-=20
- struct cifs_io_parms {
-@@ -1370,7 +1371,8 @@ cifsFileInfo_get_locked(struct cifsFileInfo *cifs_fil=
-e)
- }
-=20
- struct cifsFileInfo *cifsFileInfo_get(struct cifsFileInfo *cifs_file);
--void _cifsFileInfo_put(struct cifsFileInfo *cifs_file, bool wait_oplock_hd=
-lr);
-+void _cifsFileInfo_put(struct cifsFileInfo *cifs_file, bool wait_oplock_hd=
-lr,
-+=09=09       bool offload);
- void cifsFileInfo_put(struct cifsFileInfo *cifs_file);
-=20
- #define CIFS_CACHE_READ_FLG=091
-@@ -1907,6 +1909,7 @@ void cifs_queue_oplock_break(struct cifsFileInfo *cfi=
-le);
- extern const struct slow_work_ops cifs_oplock_break_ops;
- extern struct workqueue_struct *cifsiod_wq;
- extern struct workqueue_struct *decrypt_wq;
-+extern struct workqueue_struct *fileinfo_put_wq;
- extern struct workqueue_struct *cifsoplockd_wq;
- extern __u32 cifs_lock_secret;
-=20
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 67e7d0ffe385..309d6948d2f4 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -375,6 +375,41 @@ cifsFileInfo_get(struct cifsFileInfo *cifs_file)
- =09return cifs_file;
- }
-=20
-+static void cifsFileInfo_put_final(struct cifsFileInfo *cifs_file)
-+{
-+=09struct inode *inode =3D d_inode(cifs_file->dentry);
-+=09struct cifsInodeInfo *cifsi =3D CIFS_I(inode);
-+=09struct cifsLockInfo *li, *tmp;
-+=09struct super_block *sb =3D inode->i_sb;
-+
-+=09/*
-+=09 * Delete any outstanding lock records. We'll lose them when the file
-+=09 * is closed anyway.
-+=09 */
-+=09cifs_down_write(&cifsi->lock_sem);
-+=09list_for_each_entry_safe(li, tmp, &cifs_file->llist->locks, llist) {
-+=09=09list_del(&li->llist);
-+=09=09cifs_del_lock_waiters(li);
-+=09=09kfree(li);
-+=09}
-+=09list_del(&cifs_file->llist->llist);
-+=09kfree(cifs_file->llist);
-+=09up_write(&cifsi->lock_sem);
-+
-+=09cifs_put_tlink(cifs_file->tlink);
-+=09dput(cifs_file->dentry);
-+=09cifs_sb_deactive(sb);
-+=09kfree(cifs_file);
-+}
-+
-+static void cifsFileInfo_put_work(struct work_struct *work)
-+{
-+=09struct cifsFileInfo *cifs_file =3D container_of(work,
-+=09=09=09struct cifsFileInfo, put);
-+
-+=09cifsFileInfo_put_final(cifs_file);
-+}
-+
- /**
-  * cifsFileInfo_put - release a reference of file priv data
-  *
-@@ -382,15 +417,15 @@ cifsFileInfo_get(struct cifsFileInfo *cifs_file)
-  */
- void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
- {
--=09_cifsFileInfo_put(cifs_file, true);
-+  _cifsFileInfo_put(cifs_file, true, true);
- }
-=20
- /**
-  * _cifsFileInfo_put - release a reference of file priv data
-  *
-  * This may involve closing the filehandle @cifs_file out on the
-- * server. Must be called without holding tcon->open_file_lock and
-- * cifs_file->file_info_lock.
-+ * server. Must be called without holding tcon->open_file_lock,
-+ * cinode->open_file_lock and cifs_file->file_info_lock.
-  *
-  * If @wait_for_oplock_handler is true and we are releasing the last
-  * reference, wait for any running oplock break handler of the file
-@@ -398,7 +433,8 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
-  * oplock break handler, you need to pass false.
-  *
-  */
--void _cifsFileInfo_put(struct cifsFileInfo *cifs_file, bool wait_oplock_ha=
-ndler)
-+void _cifsFileInfo_put(struct cifsFileInfo *cifs_file,
-+=09=09       bool wait_oplock_handler, bool offload)
- {
- =09struct inode *inode =3D d_inode(cifs_file->dentry);
- =09struct cifs_tcon *tcon =3D tlink_tcon(cifs_file->tlink);
-@@ -406,7 +442,6 @@ void _cifsFileInfo_put(struct cifsFileInfo *cifs_file, =
-bool wait_oplock_handler)
- =09struct cifsInodeInfo *cifsi =3D CIFS_I(inode);
- =09struct super_block *sb =3D inode->i_sb;
- =09struct cifs_sb_info *cifs_sb =3D CIFS_SB(sb);
--=09struct cifsLockInfo *li, *tmp;
- =09struct cifs_fid fid;
- =09struct cifs_pending_open open;
- =09bool oplock_break_cancelled;
-@@ -467,24 +502,11 @@ void _cifsFileInfo_put(struct cifsFileInfo *cifs_file=
-, bool wait_oplock_handler)
-=20
- =09cifs_del_pending_open(&open);
-=20
--=09/*
--=09 * Delete any outstanding lock records. We'll lose them when the file
--=09 * is closed anyway.
--=09 */
--=09cifs_down_write(&cifsi->lock_sem);
--=09list_for_each_entry_safe(li, tmp, &cifs_file->llist->locks, llist) {
--=09=09list_del(&li->llist);
--=09=09cifs_del_lock_waiters(li);
--=09=09kfree(li);
--=09}
--=09list_del(&cifs_file->llist->llist);
--=09kfree(cifs_file->llist);
--=09up_write(&cifsi->lock_sem);
--
--=09cifs_put_tlink(cifs_file->tlink);
--=09dput(cifs_file->dentry);
--=09cifs_sb_deactive(sb);
--=09kfree(cifs_file);
-+=09if (offload) {
-+=09=09INIT_WORK(&cifs_file->put, cifsFileInfo_put_work);
-+=09=09queue_work(fileinfo_put_wq, &cifs_file->put);
-+=09} else
-+=09=09cifsFileInfo_put_final(cifs_file);
- }
-=20
- int cifs_open(struct inode *inode, struct file *file)
-@@ -808,7 +830,7 @@ cifs_reopen_file(struct cifsFileInfo *cfile, bool can_f=
-lush)
- int cifs_close(struct inode *inode, struct file *file)
- {
- =09if (file->private_data !=3D NULL) {
--=09=09cifsFileInfo_put(file->private_data);
-+=09=09_cifsFileInfo_put(file->private_data, true, false);
- =09=09file->private_data =3D NULL;
- =09}
-=20
-@@ -4742,7 +4764,7 @@ void cifs_oplock_break(struct work_struct *work)
- =09=09=09=09=09=09=09     cinode);
- =09=09cifs_dbg(FYI, "Oplock release rc =3D %d\n", rc);
- =09}
--=09_cifsFileInfo_put(cfile, false /* do not wait for ourself */);
-+=09_cifsFileInfo_put(cfile, false /* do not wait for ourself */, false);
- =09cifs_done_oplock_break(cinode);
- }
-=20
---=20
-2.13.6
+On 20-10-2019 10:13, Martijn de Gouw wrote:
+> Hi Paulo,
+> 
+> On 15-10-2019 18:27, Paulo Alcantara wrote:
+>> Aurélien Aptel <aaptel@suse.com> writes:
+>>
+>>> Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com> writes:
+>>>> Our Linux VMs reports call traces about processes being stuck.
+>>>> I've attached the full dmesg of one of the call traces below.
+>>>>
+>>>> The machine is running kernel 5.3.1 SMP. All mounts are mounted via the
+>>>> dfs shares on our domain controller and have the following options in fstab:
+>>>> nohandlecache,multiuser,sec=krb5,noperm,user=xxxx,file_mode=0600,dir_mode=0700,vers=3.0
+>>>
+>>> It looks like its DFS related. The DFS cache code takes the reconnect
+>>> mutex and crashes with no chance to give back the mutex, making all
+>>> other process hang while waiting for it.
+>>
+>> Yeah, makes sense.
+>>
+>> Martijn,
+>>
+>> Could you please provide us with some debug logs with the following:
+>>
+>> 	# echo 'module cifs +p' > /sys/kernel/debug/dynamic_debug/control
+>> 	# echo 'file fs/cifs/* +p' > /sys/kernel/debug/dynamic_debug/control
+>> 	# echo 1 > /proc/fs/cifs/cifsFYI
+>> 	# echo 1 > /sys/module/dns_resolver/parameters/debug
+>>
+>> Besides, if you could also enable KASAN, that would be great.
+> 
+> I recompiled the same kernel with KASAN enabled and have it run again for several days.
+> See below for the stackdump, I've added some of the messages before and after the event,
+> but if you need more information, please let me know.
+> 
+> [373004.186807] fs/cifs/cifsfs.c: CIFS VFS: in cifs_statfs as Xid: 73254 with uid: 999
+> [373004.186883] fs/cifs/transport.c: Sending smb: smb_len=348
+> [373004.187349] fs/cifs/connect.c: RFC1002 header 0x1b8
+> [373004.187358] fs/cifs/smb2misc.c: SMB2 data length 56 offset 152
+> [373004.187359] fs/cifs/smb2misc.c: SMB2 len 208
+> [373004.187370] fs/cifs/smb2misc.c: SMB2 data length 32 offset 72
+> [373004.187371] fs/cifs/smb2misc.c: SMB2 len 104
+> [373004.187381] fs/cifs/smb2misc.c: SMB2 len 124
+> [373004.187383] fs/cifs/smb2misc.c: Calculated size 124 length 128 mismatch mid 759
+> [373004.187386] fs/cifs/smb2ops.c: add 30 credits total=7026
+> [373004.187401] fs/cifs/transport.c: cifs_sync_mid_result: cmd=5 mid=757 state=4
+> [373004.187404] fs/cifs/transport.c: cifs_sync_mid_result: cmd=16 mid=758 state=4
+> [373004.187405] fs/cifs/transport.c: cifs_sync_mid_result: cmd=6 mid=759 state=4
+> [373004.187407] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373004.187414] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373004.187418] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373004.187451] fs/cifs/cifsfs.c: CIFS VFS: leaving cifs_statfs (xid = 73254) rc = 0
+> [373031.153835] fs/cifs/smb2pdu.c: In echo request
+> [373031.153853] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373031.153869] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373064.180943] fs/cifs/cifsfs.c: CIFS VFS: in cifs_statfs as Xid: 73255 with uid: 999
+> [373064.181026] fs/cifs/transport.c: Sending smb: smb_len=348
+> [373064.181572] fs/cifs/connect.c: Received no data or error: -104
+> [373092.592054] fs/cifs/smb2pdu.c: In echo request
+> [373092.592067] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373092.592073] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373096.683689] INFO: task cifsd:789 blocked for more than 120 seconds.
+> [373096.684890]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373096.685859] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373096.686809] cifsd           D    0   789      2 0x80004000
+> [373096.686824] Call Trace:
+> [373096.686838]  ? __schedule+0x540/0xac0
+> [373096.686841]  ? firmware_map_remove+0xe9/0xe9
+> [373096.686850]  ? string_nocheck+0xb0/0xd0
+> [373096.686857]  ? _raw_spin_lock+0x7a/0xd0
+> [373096.686858]  schedule+0x5e/0x100
+> [373096.686861]  schedule_preempt_disabled+0xa/0x10
+> [373096.686863]  __mutex_lock.isra.4+0x484/0x820
+> [373096.686866]  ? mutex_trylock+0x90/0x90
+> [373096.686873]  ? irq_work_claim+0x2e/0x50
+> [373096.686875]  ? irq_work_queue+0x9/0x20
+> [373096.686878]  ? mutex_lock+0xce/0xe0
+> [373096.686879]  mutex_lock+0xce/0xe0
+> [373096.686881]  ? __mutex_lock_slowpath+0x10/0x10
+> [373096.686934]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373096.686975]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373096.687019]  ? smb2_calc_size+0x15c/0x250 [cifs]
+> [373096.687058]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373096.687060]  ? _raw_spin_trylock+0x91/0xe0
+> [373096.687062]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373096.687064]  ? ___ratelimit+0x106/0x190
+> [373096.687104]  cifs_handle_standard+0x252/0x270 [cifs]
+> [373096.687144]  cifs_demultiplex_thread+0x124a/0x13e0 [cifs]
+> [373096.687184]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373096.687186]  ? __switch_to_asm+0x40/0x70
+> [373096.687188]  ? __switch_to_asm+0x34/0x70
+> [373096.687189]  ? __switch_to_asm+0x40/0x70
+> [373096.687191]  ? __switch_to_asm+0x34/0x70
+> [373096.687192]  ? __switch_to_asm+0x40/0x70
+> [373096.687194]  ? __switch_to_asm+0x34/0x70
+> [373096.687196]  ? __switch_to_asm+0x40/0x70
+> [373096.687197]  ? __switch_to_asm+0x34/0x70
+> [373096.687199]  ? __switch_to_asm+0x40/0x70
+> [373096.687200]  ? __switch_to_asm+0x34/0x70
+> [373096.687202]  ? __switch_to_asm+0x40/0x70
+> [373096.687203]  ? __switch_to_asm+0x34/0x70
+> [373096.687205]  ? __switch_to_asm+0x40/0x70
+> [373096.687206]  ? __switch_to_asm+0x34/0x70
+> [373096.687208]  ? __switch_to_asm+0x40/0x70
+> [373096.687209]  ? __switch_to_asm+0x34/0x70
+> [373096.687211]  ? __switch_to_asm+0x40/0x70
+> [373096.687212]  ? __switch_to_asm+0x34/0x70
+> [373096.687214]  ? __switch_to_asm+0x40/0x70
+> [373096.687215]  ? __switch_to_asm+0x34/0x70
+> [373096.687217]  ? __switch_to_asm+0x40/0x70
+> [373096.687218]  ? __switch_to_asm+0x34/0x70
+> [373096.687220]  ? __switch_to_asm+0x40/0x70
+> [373096.687221]  ? __switch_to_asm+0x34/0x70
+> [373096.687223]  ? __switch_to_asm+0x40/0x70
+> [373096.687224]  ? __switch_to_asm+0x34/0x70
+> [373096.687226]  ? __switch_to_asm+0x40/0x70
+> [373096.687232]  ? finish_task_switch+0x91/0x370
+> [373096.687234]  ? __switch_to+0x2ec/0x5e0
+> [373096.687237]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373096.687239]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373096.687277]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373096.687280]  kthread+0x192/0x1e0
+> [373096.687282]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373096.687284]  ret_from_fork+0x35/0x40
+> [373096.687326] fs/cifs/smb2pdu.c: In echo request
+> [373096.687354] CIFS VFS: Error -32 sending data on socket to server
+> [373096.688357] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373096.688369] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373096.688375] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373149.926651] fs/cifs/connect.c: Existing tcp session with server found
+> [373149.926658] fs/cifs/dfs_cache.c: CIFS VFS: in do_refresh_tcon as Xid: 73256 with uid: 0
+> [373154.022274] fs/cifs/smb2pdu.c: In echo request
+> [373154.022290] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373154.022298] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373158.121876] fs/cifs/smb2pdu.c: In echo request
+> [373158.121904] CIFS VFS: Error -32 sending data on socket to server
+> [373158.123065] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373158.123079] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373158.123089] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373161.358480] fs/cifs/inode.c: CIFS VFS: in cifs_revalidate_dentry_attr as Xid: 73257 with uid: 11025
+> [373161.358496] fs/cifs/dir.c: name: \KAES6309
+> [373161.358500] fs/cifs/inode.c: Update attributes: \KAES6309 inode 0x00000000ae3f689c count 1 dentry: 0x00000000661f7ca9 d_time 4379115881 jiffies 4388191018
+> [373161.358503] fs/cifs/inode.c: Getting info on \KAES6309
+> [373161.358682] fs/cifs/transport.c: Sending smb: smb_len=388
+> [373215.456445] fs/cifs/smb2pdu.c: In echo request
+> [373215.456461] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373215.456467] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373217.504315] INFO: task cifsd:789 blocked for more than 241 seconds.
+> [373217.505647]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373217.506642] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373217.507653] cifsd           D    0   789      2 0x80004000
+> [373217.507657] Call Trace:
+> [373217.507664]  ? __schedule+0x540/0xac0
+> [373217.507667]  ? firmware_map_remove+0xe9/0xe9
+> [373217.507670]  ? string_nocheck+0xb0/0xd0
+> [373217.507676]  ? _raw_spin_lock+0x7a/0xd0
+> [373217.507677]  schedule+0x5e/0x100
+> [373217.507680]  schedule_preempt_disabled+0xa/0x10
+> [373217.507682]  __mutex_lock.isra.4+0x484/0x820
+> [373217.507685]  ? mutex_trylock+0x90/0x90
+> [373217.507688]  ? irq_work_claim+0x2e/0x50
+> [373217.507690]  ? irq_work_queue+0x9/0x20
+> [373217.507693]  ? mutex_lock+0xce/0xe0
+> [373217.507694]  mutex_lock+0xce/0xe0
+> [373217.507696]  ? __mutex_lock_slowpath+0x10/0x10
+> [373217.507750]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373217.507791]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373217.507834]  ? smb2_calc_size+0x15c/0x250 [cifs]
+> [373217.507873]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373217.507875]  ? _raw_spin_trylock+0x91/0xe0
+> [373217.507877]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373217.507879]  ? ___ratelimit+0x106/0x190
+> [373217.507919]  cifs_handle_standard+0x252/0x270 [cifs]
+> [373217.507959]  cifs_demultiplex_thread+0x124a/0x13e0 [cifs]
+> [373217.507999]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373217.508001]  ? __switch_to_asm+0x40/0x70
+> [373217.508003]  ? __switch_to_asm+0x34/0x70
+> [373217.508004]  ? __switch_to_asm+0x40/0x70
+> [373217.508006]  ? __switch_to_asm+0x34/0x70
+> [373217.508008]  ? __switch_to_asm+0x40/0x70
+> [373217.508009]  ? __switch_to_asm+0x34/0x70
+> [373217.508011]  ? __switch_to_asm+0x40/0x70
+> [373217.508012]  ? __switch_to_asm+0x34/0x70
+> [373217.508014]  ? __switch_to_asm+0x40/0x70
+> [373217.508015]  ? __switch_to_asm+0x34/0x70
+> [373217.508017]  ? __switch_to_asm+0x40/0x70
+> [373217.508018]  ? __switch_to_asm+0x34/0x70
+> [373217.508020]  ? __switch_to_asm+0x40/0x70
+> [373217.508021]  ? __switch_to_asm+0x34/0x70
+> [373217.508023]  ? __switch_to_asm+0x40/0x70
+> [373217.508024]  ? __switch_to_asm+0x34/0x70
+> [373217.508026]  ? __switch_to_asm+0x40/0x70
+> [373217.508028]  ? __switch_to_asm+0x34/0x70
+> [373217.508029]  ? __switch_to_asm+0x40/0x70
+> [373217.508031]  ? __switch_to_asm+0x34/0x70
+> [373217.508032]  ? __switch_to_asm+0x40/0x70
+> [373217.508034]  ? __switch_to_asm+0x34/0x70
+> [373217.508035]  ? __switch_to_asm+0x40/0x70
+> [373217.508037]  ? __switch_to_asm+0x34/0x70
+> [373217.508038]  ? __switch_to_asm+0x40/0x70
+> [373217.508040]  ? __switch_to_asm+0x34/0x70
+> [373217.508041]  ? __switch_to_asm+0x40/0x70
+> [373217.508044]  ? finish_task_switch+0x91/0x370
+> [373217.508046]  ? __switch_to+0x2ec/0x5e0
+> [373217.508049]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373217.508050]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373217.508090]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373217.508092]  kthread+0x192/0x1e0
+> [373217.508094]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373217.508096]  ret_from_fork+0x35/0x40
+> [373217.508118] INFO: task cifsd:16935 blocked for more than 120 seconds.
+> [373217.509148]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373217.510152] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373217.511174] cifsd           D    0 16935      2 0x80004000
+> [373217.511177] Call Trace:
+> [373217.511181]  ? __schedule+0x540/0xac0
+> [373217.511184]  ? firmware_map_remove+0xe9/0xe9
+> [373217.511187]  ? vsnprintf+0x870/0x870
+> [373217.511189]  ? _raw_spin_lock+0x7a/0xd0
+> [373217.511191]  schedule+0x5e/0x100
+> [373217.511193]  schedule_preempt_disabled+0xa/0x10
+> [373217.511194]  __mutex_lock.isra.4+0x484/0x820
+> [373217.511197]  ? mutex_trylock+0x90/0x90
+> [373217.511226]  ? up+0x32/0x70
+> [373217.511229]  ? irq_work_claim+0x2e/0x50
+> [373217.511231]  ? irq_work_queue+0x9/0x20
+> [373217.511234]  ? vprintk_emit+0x11d/0x2e0
+> [373217.511236]  ? mutex_lock+0xce/0xe0
+> [373217.511238]  mutex_lock+0xce/0xe0
+> [373217.511240]  ? __mutex_lock_slowpath+0x10/0x10
+> [373217.511290]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373217.511330]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373217.511371]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373217.511374]  ? _raw_spin_trylock+0x91/0xe0
+> [373217.511376]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373217.511379]  ? aa_sk_perm+0xe4/0x1f0
+> [373217.511382]  ? inet_release+0xc0/0xc0
+> [373217.511384]  ? ___ratelimit+0x106/0x190
+> [373217.511423]  cifs_readv_from_socket+0x319/0x390 [cifs]
+> [373217.511463]  cifs_read_from_socket+0x9d/0xe0 [cifs]
+> [373217.511503]  ? cifs_readv_from_socket+0x390/0x390 [cifs]
+> [373217.511507]  ? refcount_sub_and_test_checked+0xae/0x140
+> [373217.511548]  ? cifs_small_buf_get+0x37/0x50 [cifs]
+> [373217.511588]  ? allocate_buffers+0x10a/0x170 [cifs]
+> [373217.511627]  cifs_demultiplex_thread+0x241/0x13e0 [cifs]
+> [373217.511667]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373217.511671]  ? sched_clock+0x5/0x10
+> [373217.511673]  ? __switch_to_asm+0x40/0x70
+> [373217.511675]  ? __switch_to_asm+0x34/0x70
+> [373217.511677]  ? __switch_to_asm+0x40/0x70
+> [373217.511678]  ? __switch_to_asm+0x34/0x70
+> [373217.511681]  ? __switch_to_asm+0x40/0x70
+> [373217.511683]  ? __switch_to_asm+0x34/0x70
+> [373217.511684]  ? __switch_to_asm+0x40/0x70
+> [373217.511686]  ? __switch_to_asm+0x34/0x70
+> [373217.511687]  ? __switch_to_asm+0x40/0x70
+> [373217.511689]  ? __switch_to_asm+0x34/0x70
+> [373217.511690]  ? __switch_to_asm+0x40/0x70
+> [373217.511692]  ? __switch_to_asm+0x34/0x70
+> [373217.511693]  ? __switch_to_asm+0x40/0x70
+> [373217.511695]  ? __switch_to_asm+0x34/0x70
+> [373217.511696]  ? __switch_to_asm+0x40/0x70
+> [373217.511698]  ? __switch_to_asm+0x34/0x70
+> [373217.511700]  ? __switch_to_asm+0x40/0x70
+> [373217.511701]  ? __switch_to_asm+0x34/0x70
+> [373217.511703]  ? __switch_to_asm+0x40/0x70
+> [373217.511704]  ? __switch_to_asm+0x34/0x70
+> [373217.511706]  ? __switch_to_asm+0x40/0x70
+> [373217.511707]  ? __switch_to_asm+0x34/0x70
+> [373217.511709]  ? __switch_to_asm+0x40/0x70
+> [373217.511710]  ? __switch_to_asm+0x34/0x70
+> [373217.511712]  ? __switch_to_asm+0x40/0x70
+> [373217.511713]  ? __switch_to_asm+0x34/0x70
+> [373217.511716]  ? finish_task_switch+0xf6/0x370
+> [373217.511717]  ? __switch_to+0x2ec/0x5e0
+> [373217.511720]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373217.511722]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373217.511761]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373217.511763]  kthread+0x192/0x1e0
+> [373217.511766]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373217.511768]  ret_from_fork+0x35/0x40
+> [373219.552028] fs/cifs/smb2pdu.c: In echo request
+> [373219.552061] CIFS VFS: Error -32 sending data on socket to server
+> [373219.553244] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373219.553254] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373219.553261] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373276.894645] fs/cifs/smb2pdu.c: In echo request
+> [373276.894669] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373276.894675] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373280.986191] fs/cifs/smb2pdu.c: In echo request
+> [373280.986219] CIFS VFS: Error -32 sending data on socket to server
+> [373280.987409] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373280.987420] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373280.987426] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373338.324793] fs/cifs/smb2pdu.c: In echo request
+> [373338.324832] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373338.324838] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373338.324918] INFO: task cifsd:789 blocked for more than 362 seconds.
+> [373338.326236]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373338.327346] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373338.328455] cifsd           D    0   789      2 0x80004000
+> [373338.328458] Call Trace:
+> [373338.328465]  ? __schedule+0x540/0xac0
+> [373338.328468]  ? firmware_map_remove+0xe9/0xe9
+> [373338.328471]  ? string_nocheck+0xb0/0xd0
+> [373338.328475]  ? _raw_spin_lock+0x7a/0xd0
+> [373338.328477]  schedule+0x5e/0x100
+> [373338.328479]  schedule_preempt_disabled+0xa/0x10
+> [373338.328481]  __mutex_lock.isra.4+0x484/0x820
+> [373338.328484]  ? mutex_trylock+0x90/0x90
+> [373338.328488]  ? irq_work_claim+0x2e/0x50
+> [373338.328490]  ? irq_work_queue+0x9/0x20
+> [373338.328492]  ? mutex_lock+0xce/0xe0
+> [373338.328494]  mutex_lock+0xce/0xe0
+> [373338.328496]  ? __mutex_lock_slowpath+0x10/0x10
+> [373338.328547]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373338.328588]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373338.328631]  ? smb2_calc_size+0x15c/0x250 [cifs]
+> [373338.328670]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373338.328672]  ? _raw_spin_trylock+0x91/0xe0
+> [373338.328674]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373338.328676]  ? ___ratelimit+0x106/0x190
+> [373338.328716]  cifs_handle_standard+0x252/0x270 [cifs]
+> [373338.328758]  cifs_demultiplex_thread+0x124a/0x13e0 [cifs]
+> [373338.328813]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373338.328818]  ? __switch_to_asm+0x40/0x70
+> [373338.328824]  ? __switch_to_asm+0x34/0x70
+> [373338.328828]  ? __switch_to_asm+0x40/0x70
+> [373338.328834]  ? __switch_to_asm+0x34/0x70
+> [373338.328840]  ? __switch_to_asm+0x40/0x70
+> [373338.328843]  ? __switch_to_asm+0x34/0x70
+> [373338.328849]  ? __switch_to_asm+0x40/0x70
+> [373338.328853]  ? __switch_to_asm+0x34/0x70
+> [373338.328859]  ? __switch_to_asm+0x40/0x70
+> [373338.328871]  ? __switch_to_asm+0x34/0x70
+> [373338.328873]  ? __switch_to_asm+0x40/0x70
+> [373338.328874]  ? __switch_to_asm+0x34/0x70
+> [373338.328876]  ? __switch_to_asm+0x40/0x70
+> [373338.328877]  ? __switch_to_asm+0x34/0x70
+> [373338.328879]  ? __switch_to_asm+0x40/0x70
+> [373338.328880]  ? __switch_to_asm+0x34/0x70
+> [373338.328882]  ? __switch_to_asm+0x40/0x70
+> [373338.328883]  ? __switch_to_asm+0x34/0x70
+> [373338.328885]  ? __switch_to_asm+0x40/0x70
+> [373338.328886]  ? __switch_to_asm+0x34/0x70
+> [373338.328888]  ? __switch_to_asm+0x40/0x70
+> [373338.328889]  ? __switch_to_asm+0x34/0x70
+> [373338.328891]  ? __switch_to_asm+0x40/0x70
+> [373338.328893]  ? __switch_to_asm+0x34/0x70
+> [373338.328894]  ? __switch_to_asm+0x40/0x70
+> [373338.328896]  ? __switch_to_asm+0x34/0x70
+> [373338.328897]  ? __switch_to_asm+0x40/0x70
+> [373338.328900]  ? finish_task_switch+0x91/0x370
+> [373338.328903]  ? __switch_to+0x2ec/0x5e0
+> [373338.328905]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373338.328907]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373338.328947]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373338.328949]  kthread+0x192/0x1e0
+> [373338.328952]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373338.328954]  ret_from_fork+0x35/0x40
+> [373338.328975] INFO: task cifsd:16935 blocked for more than 241 seconds.
+> [373338.330061]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373338.331156] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373338.332283] cifsd           D    0 16935      2 0x80004000
+> [373338.332286] Call Trace:
+> [373338.332296]  ? __schedule+0x540/0xac0
+> [373338.332298]  ? firmware_map_remove+0xe9/0xe9
+> [373338.332301]  ? vsnprintf+0x870/0x870
+> [373338.332304]  ? _raw_spin_lock+0x7a/0xd0
+> [373338.332306]  schedule+0x5e/0x100
+> [373338.332308]  schedule_preempt_disabled+0xa/0x10
+> [373338.332310]  __mutex_lock.isra.4+0x484/0x820
+> [373338.332312]  ? mutex_trylock+0x90/0x90
+> [373338.332315]  ? up+0x32/0x70
+> [373338.332319]  ? irq_work_claim+0x2e/0x50
+> [373338.332320]  ? irq_work_queue+0x9/0x20
+> [373338.332323]  ? vprintk_emit+0x11d/0x2e0
+> [373338.332325]  ? mutex_lock+0xce/0xe0
+> [373338.332326]  mutex_lock+0xce/0xe0
+> [373338.332328]  ? __mutex_lock_slowpath+0x10/0x10
+> [373338.332381]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373338.332421]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373338.332461]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373338.332463]  ? _raw_spin_trylock+0x91/0xe0
+> [373338.332465]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373338.332467]  ? aa_sk_perm+0xe4/0x1f0
+> [373338.332470]  ? inet_release+0xc0/0xc0
+> [373338.332472]  ? ___ratelimit+0x106/0x190
+> [373338.332511]  cifs_readv_from_socket+0x319/0x390 [cifs]
+> [373338.332551]  cifs_read_from_socket+0x9d/0xe0 [cifs]
+> [373338.332590]  ? cifs_readv_from_socket+0x390/0x390 [cifs]
+> [373338.332594]  ? refcount_sub_and_test_checked+0xae/0x140
+> [373338.332635]  ? cifs_small_buf_get+0x37/0x50 [cifs]
+> [373338.332674]  ? allocate_buffers+0x10a/0x170 [cifs]
+> [373338.332713]  cifs_demultiplex_thread+0x241/0x13e0 [cifs]
+> [373338.332755]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373338.332774]  ? sched_clock+0x5/0x10
+> [373338.332776]  ? __switch_to_asm+0x40/0x70
+> [373338.332778]  ? __switch_to_asm+0x34/0x70
+> [373338.332779]  ? __switch_to_asm+0x40/0x70
+> [373338.332781]  ? __switch_to_asm+0x34/0x70
+> [373338.332782]  ? __switch_to_asm+0x40/0x70
+> [373338.332784]  ? __switch_to_asm+0x34/0x70
+> [373338.332786]  ? __switch_to_asm+0x40/0x70
+> [373338.332787]  ? __switch_to_asm+0x34/0x70
+> [373338.332791]  ? __switch_to_asm+0x40/0x70
+> [373338.332798]  ? __switch_to_asm+0x34/0x70
+> [373338.332802]  ? __switch_to_asm+0x40/0x70
+> [373338.332808]  ? __switch_to_asm+0x34/0x70
+> [373338.332810]  ? __switch_to_asm+0x40/0x70
+> [373338.332813]  ? __switch_to_asm+0x34/0x70
+> [373338.332822]  ? __switch_to_asm+0x40/0x70
+> [373338.332828]  ? __switch_to_asm+0x34/0x70
+> [373338.332830]  ? __switch_to_asm+0x40/0x70
+> [373338.332834]  ? __switch_to_asm+0x34/0x70
+> [373338.332840]  ? __switch_to_asm+0x40/0x70
+> [373338.332856]  ? __switch_to_asm+0x34/0x70
+> [373338.332858]  ? __switch_to_asm+0x40/0x70
+> [373338.332859]  ? __switch_to_asm+0x34/0x70
+> [373338.332861]  ? __switch_to_asm+0x40/0x70
+> [373338.332862]  ? __switch_to_asm+0x34/0x70
+> [373338.332864]  ? __switch_to_asm+0x40/0x70
+> [373338.332865]  ? __switch_to_asm+0x34/0x70
+> [373338.332868]  ? finish_task_switch+0xf6/0x370
+> [373338.332870]  ? __switch_to+0x2ec/0x5e0
+> [373338.332872]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373338.332874]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373338.332913]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373338.332923]  kthread+0x192/0x1e0
+> [373338.332927]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373338.332930]  ret_from_fork+0x35/0x40
+> [373338.332958] INFO: task kworker/2:1:31242 blocked for more than 120 seconds.
+> [373338.334112]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373338.335285] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373338.336617] kworker/2:1     D    0 31242      2 0x80004000
+> [373338.336700] Workqueue: cifsiod refresh_cache_worker [cifs]
+> [373338.336702] Call Trace:
+> [373338.336709]  ? __schedule+0x540/0xac0
+> [373338.336714]  ? firmware_map_remove+0xe9/0xe9
+> [373338.336717]  ? _raw_read_lock_irq+0x40/0x40
+> [373338.336721]  schedule+0x5e/0x100
+> [373338.336725]  schedule_preempt_disabled+0xa/0x10
+> [373338.336728]  __mutex_lock.isra.4+0x484/0x820
+> [373338.336733]  ? mutex_trylock+0x90/0x90
+> [373338.336737]  ? dynamic_emit_prefix+0x29/0x220
+> [373338.336740]  ? __dynamic_pr_debug+0xf8/0x140
+> [373338.336744]  ? dynamic_emit_prefix+0x220/0x220
+> [373338.336770]  ? mutex_lock+0xce/0xe0
+> [373338.336773]  mutex_lock+0xce/0xe0
+> [373338.336777]  ? __mutex_lock_slowpath+0x10/0x10
+> [373338.336856]  refresh_cache_worker+0x48f/0x14a0 [cifs]
+> [373338.336864]  ? __switch_to_asm+0x40/0x70
+> [373338.336875]  ? __switch_to_asm+0x40/0x70
+> [373338.336883]  ? __switch_to_asm+0x34/0x70
+> [373338.336885]  ? __switch_to_asm+0x40/0x70
+> [373338.336888]  ? __switch_to_asm+0x34/0x70
+> [373338.336891]  ? __switch_to_asm+0x40/0x70
+> [373338.336964]  ? find_root_ses.isra.9+0x320/0x320 [cifs]
+> [373338.336968]  ? __switch_to_asm+0x40/0x70
+> [373338.336976]  ? __switch_to_asm+0x40/0x70
+> [373338.336979]  ? __switch_to_asm+0x34/0x70
+> [373338.336981]  ? __switch_to_asm+0x40/0x70
+> [373338.336984]  ? __switch_to_asm+0x34/0x70
+> [373338.336991]  ? __switch_to_asm+0x40/0x70
+> [373338.336994]  ? __switch_to_asm+0x34/0x70
+> [373338.336998]  ? __switch_to_asm+0x40/0x70
+> [373338.337004]  ? __switch_to_asm+0x40/0x70
+> [373338.337007]  ? __switch_to_asm+0x34/0x70
+> [373338.337010]  ? finish_task_switch+0xf6/0x370
+> [373338.337016]  ? __switch_to+0x2ec/0x5e0
+> [373338.337019]  ? __schedule+0x562/0xac0
+> [373338.337023]  ? read_word_at_a_time+0xe/0x20
+> [373338.337028]  ? strscpy+0xca/0x1d0
+> [373338.337034]  process_one_work+0x373/0x6e0
+> [373338.337040]  worker_thread+0x78/0x5b0
+> [373338.337047]  ? rescuer_thread+0x5e0/0x5e0
+> [373338.337050]  kthread+0x192/0x1e0
+> [373338.337054]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373338.337058]  ret_from_fork+0x35/0x40
+> [373342.420422] fs/cifs/smb2pdu.c: In echo request
+> [373342.420455] CIFS VFS: Error -32 sending data on socket to server
+> [373342.421797] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373342.421809] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373342.421816] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373399.758993] fs/cifs/smb2pdu.c: In echo request
+> [373399.759010] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373399.759017] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373403.854642] fs/cifs/smb2pdu.c: In echo request
+> [373403.854666] CIFS VFS: Error -32 sending data on socket to server
+> [373403.856180] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373403.856195] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373403.856202] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373459.145452] INFO: task cifsd:789 blocked for more than 483 seconds.
+> [373459.147021]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373459.148332] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373459.149648] cifsd           D    0   789      2 0x80004000
+> [373459.149657] Call Trace:
+> [373459.149682]  ? __schedule+0x540/0xac0
+> [373459.149687]  ? firmware_map_remove+0xe9/0xe9
+> [373459.149690]  ? string_nocheck+0xb0/0xd0
+> [373459.149694]  ? _raw_spin_lock+0x7a/0xd0
+> [373459.149698]  schedule+0x5e/0x100
+> [373459.149700]  schedule_preempt_disabled+0xa/0x10
+> [373459.149703]  __mutex_lock.isra.4+0x484/0x820
+> [373459.149706]  ? mutex_trylock+0x90/0x90
+> [373459.149714]  ? irq_work_claim+0x2e/0x50
+> [373459.149716]  ? irq_work_queue+0x9/0x20
+> [373459.149719]  ? mutex_lock+0xce/0xe0
+> [373459.149720]  mutex_lock+0xce/0xe0
+> [373459.149722]  ? __mutex_lock_slowpath+0x10/0x10
+> [373459.149775]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373459.149818]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373459.149870]  ? smb2_calc_size+0x15c/0x250 [cifs]
+> [373459.149909]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373459.149911]  ? _raw_spin_trylock+0x91/0xe0
+> [373459.149913]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373459.149915]  ? ___ratelimit+0x106/0x190
+> [373459.149960]  cifs_handle_standard+0x252/0x270 [cifs]
+> [373459.150001]  cifs_demultiplex_thread+0x124a/0x13e0 [cifs]
+> [373459.150041]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373459.150043]  ? __switch_to_asm+0x40/0x70
+> [373459.150045]  ? __switch_to_asm+0x34/0x70
+> [373459.150047]  ? __switch_to_asm+0x40/0x70
+> [373459.150050]  ? __switch_to_asm+0x34/0x70
+> [373459.150051]  ? __switch_to_asm+0x40/0x70
+> [373459.150053]  ? __switch_to_asm+0x34/0x70
+> [373459.150055]  ? __switch_to_asm+0x40/0x70
+> [373459.150058]  ? __switch_to_asm+0x34/0x70
+> [373459.150061]  ? __switch_to_asm+0x40/0x70
+> [373459.150063]  ? __switch_to_asm+0x34/0x70
+> [373459.150066]  ? __switch_to_asm+0x40/0x70
+> [373459.150068]  ? __switch_to_asm+0x34/0x70
+> [373459.150070]  ? __switch_to_asm+0x40/0x70
+> [373459.150072]  ? __switch_to_asm+0x34/0x70
+> [373459.150074]  ? __switch_to_asm+0x40/0x70
+> [373459.150077]  ? __switch_to_asm+0x34/0x70
+> [373459.150078]  ? __switch_to_asm+0x40/0x70
+> [373459.150080]  ? __switch_to_asm+0x34/0x70
+> [373459.150081]  ? __switch_to_asm+0x40/0x70
+> [373459.150083]  ? __switch_to_asm+0x34/0x70
+> [373459.150084]  ? __switch_to_asm+0x40/0x70
+> [373459.150086]  ? __switch_to_asm+0x34/0x70
+> [373459.150087]  ? __switch_to_asm+0x40/0x70
+> [373459.150089]  ? __switch_to_asm+0x34/0x70
+> [373459.150090]  ? __switch_to_asm+0x40/0x70
+> [373459.150092]  ? __switch_to_asm+0x34/0x70
+> [373459.150093]  ? __switch_to_asm+0x40/0x70
+> [373459.150102]  ? finish_task_switch+0x91/0x370
+> [373459.150104]  ? __switch_to+0x2ec/0x5e0
+> [373459.150106]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373459.150108]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373459.150149]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373459.150152]  kthread+0x192/0x1e0
+> [373459.150154]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373459.150156]  ret_from_fork+0x35/0x40
+> [373459.150175] INFO: task cifsd:16935 blocked for more than 362 seconds.
+> [373459.151549]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373459.152979] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373459.154378] cifsd           D    0 16935      2 0x80004000
+> [373459.154381] Call Trace:
+> [373459.154387]  ? __schedule+0x540/0xac0
+> [373459.154483]  ? firmware_map_remove+0xe9/0xe9
+> [373459.154487]  ? vsnprintf+0x870/0x870
+> [373459.154491]  ? _raw_spin_lock+0x7a/0xd0
+> [373459.154494]  schedule+0x5e/0x100
+> [373459.154497]  schedule_preempt_disabled+0xa/0x10
+> [373459.154499]  __mutex_lock.isra.4+0x484/0x820
+> [373459.154502]  ? mutex_trylock+0x90/0x90
+> [373459.154511]  ? up+0x32/0x70
+> [373459.154514]  ? irq_work_claim+0x2e/0x50
+> [373459.154515]  ? irq_work_queue+0x9/0x20
+> [373459.154518]  ? vprintk_emit+0x11d/0x2e0
+> [373459.154520]  ? mutex_lock+0xce/0xe0
+> [373459.154521]  mutex_lock+0xce/0xe0
+> [373459.154524]  ? __mutex_lock_slowpath+0x10/0x10
+> [373459.154576]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373459.154616]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373459.154658]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373459.154661]  ? _raw_spin_trylock+0x91/0xe0
+> [373459.154663]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373459.154671]  ? aa_sk_perm+0xe4/0x1f0
+> [373459.154677]  ? inet_release+0xc0/0xc0
+> [373459.154679]  ? ___ratelimit+0x106/0x190
+> [373459.154717]  cifs_readv_from_socket+0x319/0x390 [cifs]
+> [373459.154757]  cifs_read_from_socket+0x9d/0xe0 [cifs]
+> [373459.154796]  ? cifs_readv_from_socket+0x390/0x390 [cifs]
+> [373459.154799]  ? refcount_sub_and_test_checked+0xae/0x140
+> [373459.154840]  ? cifs_small_buf_get+0x37/0x50 [cifs]
+> [373459.154881]  ? allocate_buffers+0x10a/0x170 [cifs]
+> [373459.154920]  cifs_demultiplex_thread+0x241/0x13e0 [cifs]
+> [373459.154960]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373459.154963]  ? sched_clock+0x5/0x10
+> [373459.154965]  ? __switch_to_asm+0x40/0x70
+> [373459.154966]  ? __switch_to_asm+0x34/0x70
+> [373459.154969]  ? __switch_to_asm+0x40/0x70
+> [373459.154971]  ? __switch_to_asm+0x34/0x70
+> [373459.154972]  ? __switch_to_asm+0x40/0x70
+> [373459.154974]  ? __switch_to_asm+0x34/0x70
+> [373459.154975]  ? __switch_to_asm+0x40/0x70
+> [373459.154977]  ? __switch_to_asm+0x34/0x70
+> [373459.154978]  ? __switch_to_asm+0x40/0x70
+> [373459.154980]  ? __switch_to_asm+0x34/0x70
+> [373459.154981]  ? __switch_to_asm+0x40/0x70
+> [373459.154983]  ? __switch_to_asm+0x34/0x70
+> [373459.154984]  ? __switch_to_asm+0x40/0x70
+> [373459.154986]  ? __switch_to_asm+0x34/0x70
+> [373459.154988]  ? __switch_to_asm+0x40/0x70
+> [373459.154989]  ? __switch_to_asm+0x34/0x70
+> [373459.154991]  ? __switch_to_asm+0x40/0x70
+> [373459.154992]  ? __switch_to_asm+0x34/0x70
+> [373459.154994]  ? __switch_to_asm+0x40/0x70
+> [373459.154995]  ? __switch_to_asm+0x34/0x70
+> [373459.154997]  ? __switch_to_asm+0x40/0x70
+> [373459.154998]  ? __switch_to_asm+0x34/0x70
+> [373459.155000]  ? __switch_to_asm+0x40/0x70
+> [373459.155001]  ? __switch_to_asm+0x34/0x70
+> [373459.155003]  ? __switch_to_asm+0x40/0x70
+> [373459.155005]  ? __switch_to_asm+0x34/0x70
+> [373459.155007]  ? finish_task_switch+0xf6/0x370
+> [373459.155010]  ? __switch_to+0x2ec/0x5e0
+> [373459.155013]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373459.155014]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373459.155054]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373459.155056]  kthread+0x192/0x1e0
+> [373459.155059]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373459.155061]  ret_from_fork+0x35/0x40
+> [373459.155082] INFO: task kworker/2:1:31242 blocked for more than 241 seconds.
+> [373459.156633]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373459.158106] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373459.159698] kworker/2:1     D    0 31242      2 0x80004000
+> [373459.159755] Workqueue: cifsiod refresh_cache_worker [cifs]
+> [373459.159757] Call Trace:
+> [373459.159763]  ? __schedule+0x540/0xac0
+> [373459.159765]  ? firmware_map_remove+0xe9/0xe9
+> [373459.159768]  ? _raw_read_lock_irq+0x40/0x40
+> [373459.159770]  schedule+0x5e/0x100
+> [373459.159772]  schedule_preempt_disabled+0xa/0x10
+> [373459.159774]  __mutex_lock.isra.4+0x484/0x820
+> [373459.159777]  ? mutex_trylock+0x90/0x90
+> [373459.159780]  ? dynamic_emit_prefix+0x29/0x220
+> [373459.159782]  ? __dynamic_pr_debug+0xf8/0x140
+> [373459.159783]  ? dynamic_emit_prefix+0x220/0x220
+> [373459.159786]  ? mutex_lock+0xce/0xe0
+> [373459.159787]  mutex_lock+0xce/0xe0
+> [373459.159790]  ? __mutex_lock_slowpath+0x10/0x10
+> [373459.159833]  refresh_cache_worker+0x48f/0x14a0 [cifs]
+> [373459.159836]  ? __switch_to_asm+0x40/0x70
+> [373459.159838]  ? __switch_to_asm+0x40/0x70
+> [373459.159840]  ? __switch_to_asm+0x34/0x70
+> [373459.159842]  ? __switch_to_asm+0x40/0x70
+> [373459.159844]  ? __switch_to_asm+0x34/0x70
+> [373459.159846]  ? __switch_to_asm+0x40/0x70
+> [373459.159888]  ? find_root_ses.isra.9+0x320/0x320 [cifs]
+> [373459.159890]  ? __switch_to_asm+0x40/0x70
+> [373459.159891]  ? __switch_to_asm+0x40/0x70
+> [373459.159893]  ? __switch_to_asm+0x34/0x70
+> [373459.159895]  ? __switch_to_asm+0x40/0x70
+> [373459.159896]  ? __switch_to_asm+0x34/0x70
+> [373459.159898]  ? __switch_to_asm+0x40/0x70
+> [373459.159899]  ? __switch_to_asm+0x34/0x70
+> [373459.159901]  ? __switch_to_asm+0x40/0x70
+> [373459.159902]  ? __switch_to_asm+0x40/0x70
+> [373459.159904]  ? __switch_to_asm+0x34/0x70
+> [373459.159907]  ? finish_task_switch+0xf6/0x370
+> [373459.159909]  ? __switch_to+0x2ec/0x5e0
+> [373459.159911]  ? __schedule+0x562/0xac0
+> [373459.159915]  ? read_word_at_a_time+0xe/0x20
+> [373459.159916]  ? strscpy+0xca/0x1d0
+> [373459.159921]  process_one_work+0x373/0x6e0
+> [373459.159924]  worker_thread+0x78/0x5b0
+> [373459.159927]  ? rescuer_thread+0x5e0/0x5e0
+> [373459.159929]  kthread+0x192/0x1e0
+> [373459.159931]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373459.159933]  ret_from_fork+0x35/0x40
+> [373460.878890] fs/cifs/inode.c: CIFS VFS: in cifs_revalidate_dentry_attr as Xid: 73258 with uid: 11025
+> [373460.878909] fs/cifs/dir.c: name: \KAES6309
+> [373460.878913] fs/cifs/inode.c: Update attributes: \KAES6309 inode 0x00000000ae3f689c count 1 dentry: 0x00000000661f7ca9 d_time 4379115881 jiffies 4388265905
+> [373460.878916] fs/cifs/inode.c: Getting info on \KAES6309
+> [373460.879081] fs/cifs/transport.c: Sending smb: smb_len=388
+> [373461.193169] fs/cifs/smb2pdu.c: In echo request
+> [373461.193186] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373461.193192] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373465.288778] fs/cifs/smb2pdu.c: In echo request
+> [373465.288811] CIFS VFS: Error -32 sending data on socket to server
+> [373465.290238] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373465.290249] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373465.290256] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373522.627361] fs/cifs/smb2pdu.c: In echo request
+> [373522.627379] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373522.627386] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373526.722979] fs/cifs/smb2pdu.c: In echo request
+> [373526.723013] CIFS VFS: Error -32 sending data on socket to server
+> [373526.724550] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373526.724562] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373526.724568] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373579.965997] INFO: task cifsd:789 blocked for more than 604 seconds.
+> [373579.967521]       Tainted: G            E     5.3.1-pd-5.3.y #20191015
+> [373579.968896] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [373579.970287] cifsd           D    0   789      2 0x80004000
+> [373579.970291] Call Trace:
+> [373579.970321]  ? __schedule+0x540/0xac0
+> [373579.970324]  ? firmware_map_remove+0xe9/0xe9
+> [373579.970327]  ? string_nocheck+0xb0/0xd0
+> [373579.970334]  ? _raw_spin_lock+0x7a/0xd0
+> [373579.970336]  schedule+0x5e/0x100
+> [373579.970338]  schedule_preempt_disabled+0xa/0x10
+> [373579.970340]  __mutex_lock.isra.4+0x484/0x820
+> [373579.970343]  ? mutex_trylock+0x90/0x90
+> [373579.970357]  ? irq_work_claim+0x2e/0x50
+> [373579.970359]  ? irq_work_queue+0x9/0x20
+> [373579.970362]  ? mutex_lock+0xce/0xe0
+> [373579.970363]  mutex_lock+0xce/0xe0
+> [373579.970365]  ? __mutex_lock_slowpath+0x10/0x10
+> [373579.970418]  dfs_cache_noreq_find+0xa7/0x190 [cifs]
+> [373579.970459]  cifs_reconnect+0x16c/0x1360 [cifs]
+> [373579.970503]  ? smb2_calc_size+0x15c/0x250 [cifs]
+> [373579.970542]  ? extract_hostname+0xa0/0xa0 [cifs]
+> [373579.970544]  ? _raw_spin_trylock+0x91/0xe0
+> [373579.970546]  ? _raw_spin_trylock_bh+0x100/0x100
+> [373579.970548]  ? ___ratelimit+0x106/0x190
+> [373579.970588]  cifs_handle_standard+0x252/0x270 [cifs]
+> [373579.970628]  cifs_demultiplex_thread+0x124a/0x13e0 [cifs]
+> [373579.970672]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373579.970674]  ? __switch_to_asm+0x40/0x70
+> [373579.970675]  ? __switch_to_asm+0x34/0x70
+> [373579.970677]  ? __switch_to_asm+0x40/0x70
+> [373579.970678]  ? __switch_to_asm+0x34/0x70
+> [373579.970680]  ? __switch_to_asm+0x40/0x70
+> [373579.970681]  ? __switch_to_asm+0x34/0x70
+> [373579.970683]  ? __switch_to_asm+0x40/0x70
+> [373579.970684]  ? __switch_to_asm+0x34/0x70
+> [373579.970686]  ? __switch_to_asm+0x40/0x70
+> [373579.970687]  ? __switch_to_asm+0x34/0x70
+> [373579.970689]  ? __switch_to_asm+0x40/0x70
+> [373579.970690]  ? __switch_to_asm+0x34/0x70
+> [373579.970692]  ? __switch_to_asm+0x40/0x70
+> [373579.970693]  ? __switch_to_asm+0x34/0x70
+> [373579.970695]  ? __switch_to_asm+0x40/0x70
+> [373579.970697]  ? __switch_to_asm+0x34/0x70
+> [373579.970698]  ? __switch_to_asm+0x40/0x70
+> [373579.970700]  ? __switch_to_asm+0x34/0x70
+> [373579.970701]  ? __switch_to_asm+0x40/0x70
+> [373579.970703]  ? __switch_to_asm+0x34/0x70
+> [373579.970704]  ? __switch_to_asm+0x40/0x70
+> [373579.970706]  ? __switch_to_asm+0x34/0x70
+> [373579.970707]  ? __switch_to_asm+0x40/0x70
+> [373579.970709]  ? __switch_to_asm+0x34/0x70
+> [373579.970710]  ? __switch_to_asm+0x40/0x70
+> [373579.970712]  ? __switch_to_asm+0x34/0x70
+> [373579.970713]  ? __switch_to_asm+0x40/0x70
+> [373579.970724]  ? finish_task_switch+0x91/0x370
+> [373579.970732]  ? __switch_to+0x2ec/0x5e0
+> [373579.970735]  ? _raw_spin_lock_irqsave+0x8d/0xf0
+> [373579.970736]  ? _raw_write_lock_bh+0xe0/0xe0
+> [373579.970775]  ? cifs_handle_standard+0x270/0x270 [cifs]
+> [373579.970780]  kthread+0x192/0x1e0
+> [373579.970782]  ? kthread_create_worker_on_cpu+0xc0/0xc0
+> [373579.970786]  ret_from_fork+0x35/0x40
+> [373584.061557] fs/cifs/smb2pdu.c: In echo request
+> [373584.061573] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373584.061578] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373588.157191] fs/cifs/smb2pdu.c: In echo request
+> [373588.157233] CIFS VFS: Error -32 sending data on socket to server
+> [373588.158699] fs/cifs/misc.c: Null buffer passed to cifs_small_buf_release
+> [373588.158710] fs/cifs/smb2pdu.c: Echo request failed: -32
+> [373588.158718] fs/cifs/connect.c: Unable to send echo request to server: stor02.bk.prodrive.nl
+> [373645.495852] fs/cifs/smb2pdu.c: In echo request
+> [373645.495870] fs/cifs/smb2pdu.c: Echo request failed: -11
+> [373645.495876] fs/cifs/connect.c: Unable to send echo request to server: DC02
+> [373649.591382] fs/cifs/smb2pdu.c: In echo request
+>   
+> The last part repeated over and over again in the log.
+> 
+> Gr, Martijn de Gouw
+> 
 
+-- 
+Martijn de Gouw
+Designer
+Prodrive Technologies
+Mobile: +31 63 17 76 161
+Phone:  +31 40 26 76 200
