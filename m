@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 907ABEA0A7
-	for <lists+linux-cifs@lfdr.de>; Wed, 30 Oct 2019 16:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BC6EA0E9
+	for <lists+linux-cifs@lfdr.de>; Wed, 30 Oct 2019 17:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729312AbfJ3P62 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 30 Oct 2019 11:58:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60324 "EHLO mail.kernel.org"
+        id S1728664AbfJ3Pzr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 30 Oct 2019 11:55:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729307AbfJ3P62 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:58:28 -0400
+        id S1728645AbfJ3Pzq (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:46 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 915AC21D7D;
-        Wed, 30 Oct 2019 15:58:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 243B4217F9;
+        Wed, 30 Oct 2019 15:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572451107;
-        bh=WffkOkUgb2tXkK1mhFEfKH95x/HnOK6MpL+NvjdoMYM=;
+        s=default; t=1572450945;
+        bh=b5E4t656muwHmdXlT7k0hXbv0wJVVOwBCGzDoTObq+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vw+UaOYky4INXnYyvxGL+WK7fW3k/RSXhcyzwRNRYusrH1URVovJcrGfS6uTeQJ5o
-         KAA0T0G3DA2Pw1zTvrnQ5El44+XgeiQRfu22Rhlf68Q5J/rsnNhxI42B8Mvj4iwRIM
-         I03tie1lu56SubAEunIBQ0vjN1ynwqLvIHuK6o6o=
+        b=dH6UkL05UTi5gWL66sdAPbeYhMSqtF+jc3H3s5iT9WcaXRJ06wkmQDIwNZm7KFNi1
+         u9iEvR8xF1ZuYpZbmBzgXyXTUn5PAiTSaRIDZQqk1ep0NQ4mB414PCgDWPBCd2MBvh
+         fVEWPzQdAf8MmFhc0YqzMQbAlL1vn7WtYw5z6uRY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dave Wysochanski <dwysocha@redhat.com>,
         Ronnie Sahlberg <lsahlber@redhat.com>,
         Pavel Shilovsky <pshilov@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 13/13] cifs: Fix cifsInodeInfo lock_sem deadlock when reconnect occurs
-Date:   Wed, 30 Oct 2019 11:57:51 -0400
-Message-Id: <20191030155751.10960-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 35/38] cifs: Fix cifsInodeInfo lock_sem deadlock when reconnect occurs
+Date:   Wed, 30 Oct 2019 11:54:03 -0400
+Message-Id: <20191030155406.10109-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155751.10960-1-sashal@kernel.org>
-References: <20191030155751.10960-1-sashal@kernel.org>
+In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
+References: <20191030155406.10109-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  4 files changed, 22 insertions(+), 9 deletions(-)
 
 diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index 8225de3c97431..6b61d4ad30b52 100644
+index 4dbae6e268d6a..71c2dd0c7f038 100644
 --- a/fs/cifs/cifsglob.h
 +++ b/fs/cifs/cifsglob.h
-@@ -1152,6 +1152,11 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file);
+@@ -1286,6 +1286,11 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file);
  struct cifsInodeInfo {
  	bool can_cache_brlcks;
  	struct list_head llist;	/* locks helb by this inode */
@@ -102,10 +102,10 @@ index 8225de3c97431..6b61d4ad30b52 100644
  	/* BB add in lists for dirty pages i.e. write caching info for oplock */
  	struct list_head openFileList;
 diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-index 54590fd33df12..257c06c6a6c2a 100644
+index 20adda4de83be..d7ac75ea881c7 100644
 --- a/fs/cifs/cifsproto.h
 +++ b/fs/cifs/cifsproto.h
-@@ -138,6 +138,7 @@ extern int cifs_unlock_range(struct cifsFileInfo *cfile,
+@@ -159,6 +159,7 @@ extern int cifs_unlock_range(struct cifsFileInfo *cfile,
  			     struct file_lock *flock, const unsigned int xid);
  extern int cifs_push_mandatory_locks(struct cifsFileInfo *cfile);
  
@@ -114,7 +114,7 @@ index 54590fd33df12..257c06c6a6c2a 100644
  					      struct file *file,
  					      struct tcon_link *tlink,
 diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 737cff7bc08ac..c6bd820f94093 100644
+index b4e33ef2ff315..a8e2bc47dcf27 100644
 --- a/fs/cifs/file.c
 +++ b/fs/cifs/file.c
 @@ -280,6 +280,13 @@ cifs_has_mand_locks(struct cifsInodeInfo *cinode)
@@ -140,7 +140,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  	list_add(&fdlocks->llist, &cinode->llist);
  	up_write(&cinode->lock_sem);
  
-@@ -438,7 +445,7 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
+@@ -461,7 +468,7 @@ void _cifsFileInfo_put(struct cifsFileInfo *cifs_file, bool wait_oplock_handler)
  	 * Delete any outstanding lock records. We'll lose them when the file
  	 * is closed anyway.
  	 */
@@ -149,7 +149,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  	list_for_each_entry_safe(li, tmp, &cifs_file->llist->locks, llist) {
  		list_del(&li->llist);
  		cifs_del_lock_waiters(li);
-@@ -947,7 +954,7 @@ static void
+@@ -1016,7 +1023,7 @@ static void
  cifs_lock_add(struct cifsFileInfo *cfile, struct cifsLockInfo *lock)
  {
  	struct cifsInodeInfo *cinode = CIFS_I(d_inode(cfile->dentry));
@@ -158,7 +158,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  	list_add_tail(&lock->llist, &cfile->llist->locks);
  	up_write(&cinode->lock_sem);
  }
-@@ -969,7 +976,7 @@ cifs_lock_add_if(struct cifsFileInfo *cfile, struct cifsLockInfo *lock,
+@@ -1038,7 +1045,7 @@ cifs_lock_add_if(struct cifsFileInfo *cfile, struct cifsLockInfo *lock,
  
  try_again:
  	exist = false;
@@ -167,7 +167,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  
  	exist = cifs_find_lock_conflict(cfile, lock->offset, lock->length,
  					lock->type, &conf_lock, CIFS_LOCK_OP);
-@@ -991,7 +998,7 @@ cifs_lock_add_if(struct cifsFileInfo *cfile, struct cifsLockInfo *lock,
+@@ -1060,7 +1067,7 @@ cifs_lock_add_if(struct cifsFileInfo *cfile, struct cifsLockInfo *lock,
  					(lock->blist.next == &lock->blist));
  		if (!rc)
  			goto try_again;
@@ -176,7 +176,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  		list_del_init(&lock->blist);
  	}
  
-@@ -1044,7 +1051,7 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
+@@ -1113,7 +1120,7 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
  		return rc;
  
  try_again:
@@ -185,7 +185,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  	if (!cinode->can_cache_brlcks) {
  		up_write(&cinode->lock_sem);
  		return rc;
-@@ -1242,7 +1249,7 @@ cifs_push_locks(struct cifsFileInfo *cfile)
+@@ -1319,7 +1326,7 @@ cifs_push_locks(struct cifsFileInfo *cfile)
  	int rc = 0;
  
  	/* we are going to update can_cache_brlcks here - need a write access */
@@ -194,7 +194,7 @@ index 737cff7bc08ac..c6bd820f94093 100644
  	if (!cinode->can_cache_brlcks) {
  		up_write(&cinode->lock_sem);
  		return rc;
-@@ -1430,7 +1437,7 @@ cifs_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
+@@ -1510,7 +1517,7 @@ cifs_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
  	if (!buf)
  		return -ENOMEM;
  
@@ -204,10 +204,10 @@ index 737cff7bc08ac..c6bd820f94093 100644
  		cur = buf;
  		num = 0;
 diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
-index dee5250701deb..41f1a5dd33a53 100644
+index b204e84b87fb5..9168b2266e4fa 100644
 --- a/fs/cifs/smb2file.c
 +++ b/fs/cifs/smb2file.c
-@@ -138,7 +138,7 @@ smb2_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
+@@ -137,7 +137,7 @@ smb2_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
  
  	cur = buf;
  
