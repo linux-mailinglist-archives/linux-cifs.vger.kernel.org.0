@@ -2,62 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EA5EAC79
-	for <lists+linux-cifs@lfdr.de>; Thu, 31 Oct 2019 10:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F98EB851
+	for <lists+linux-cifs@lfdr.de>; Thu, 31 Oct 2019 21:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfJaJUc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 31 Oct 2019 05:20:32 -0400
-Received: from rigel.uberspace.de ([95.143.172.238]:49982 "EHLO
-        rigel.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbfJaJUc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 31 Oct 2019 05:20:32 -0400
-Received: (qmail 9749 invoked from network); 31 Oct 2019 09:20:30 -0000
-Received: from localhost (HELO webmail.rigel.uberspace.de) (127.0.0.1)
-  by ::1 with SMTP; 31 Oct 2019 09:20:30 -0000
+        id S1728183AbfJaUTB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 31 Oct 2019 16:19:01 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:44135 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726741AbfJaUTB (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 31 Oct 2019 16:19:01 -0400
+Received: by mail-io1-f48.google.com with SMTP id w12so8237549iol.11
+        for <linux-cifs@vger.kernel.org>; Thu, 31 Oct 2019 13:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Th2+CibBWexidRT75tQ34FfITBJLmrgNSofa0TQFmhA=;
+        b=UzDLfZwp2JuQOZd6UPghG8YH+SboYgriitIjDfg3sgmDZAunGEw4wkELmKE+7n46ux
+         Qw+ldj3ULIj2mmfab1Lvy+/Zqm5tkwCH3NPvpBcUYogWDn/l7jIXQ4dfwoXnPWu/n3zt
+         1ij6qN/8ObPlOCp+Ijxmz3nMuRNmGyR7LcaAz7kQiAstGiIKUQClvrSHdSS5OSf1L/fi
+         OYnvKLUOqS1CTF9KZGj5fLlGSuCa4M20WtuhgHHjv+5o7t8z6531PHtsQSBa4v4L8F31
+         M787q3lNq4cQeNKchg+qkYZWeQ2muWCd0xQ0Kqgt5X2K6yp8XhAe7LI5jx4MNzsJpii/
+         qE5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Th2+CibBWexidRT75tQ34FfITBJLmrgNSofa0TQFmhA=;
+        b=Bbx1wBpWQKA3oD8c520CpmicPjP4MTuws8FHzPC/KvfsTwQdgiQ3n9kbJWlKGDH0/h
+         buQE+UxbJtNapETOFY3iKisXkNCU6laVCWyoO/cWVQFK1A6j+dizRlwlQbxOKN7Z5zVN
+         4lh6bWS/iOYZGcUFUfZLsUFlFlZ78RyyNIMmJ0uF2bgCnwaewJgRmAlI/iuLrmbAFgkt
+         DUfOSEP0ZRdVq1AsoDJptiuB24d6AdeaTdsU0nX5RvWlRoiUA8xWvWhd9m064QOvzRzx
+         ZABroSDJmaVvmPdeTgxrJR0y1hcX34dFDPqpt9xL1PWEC/Q87wTzhP5ounFcr44l9Vwd
+         K8cg==
+X-Gm-Message-State: APjAAAWlo7DxMlqBoZE5T/lqE6yoJV6/rZIo7QmoAMTaIly+6B63Ea59
+        zdKn5lwAtSYGOuj176Tkll6K+0Jc+cWC0ZLa38pdjcCv
+X-Google-Smtp-Source: APXvYqwa2qY1Dnpxv/8Zp8nM/oyPWiIHtbEoyAeYbK4oxhtEHPgEAiX1qPU1pCOoljyeQQkrVvjXeABZVfqPnjEK5xA=
+X-Received: by 2002:a6b:6c14:: with SMTP id a20mr6526200ioh.5.1572553138634;
+ Thu, 31 Oct 2019 13:18:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 31 Oct 2019 10:20:28 +0100
-From:   Moritz M <mailinglist@moritzmueller.ee>
-To:     Pavel Shilovsky <piastryyy@gmail.com>
-Cc:     linux-cifs <linux-cifs@vger.kernel.org>
-Subject: Re: Possible timeout problem when opening a file twice on a SMB mount
-In-Reply-To: <CAKywueSWxDA5veCWjf+vGM96TSKrJbiddt93dv=arXyizJCbmw@mail.gmail.com>
-References: <61d3d6774247fe6159456b249dbc3c63@moritzmueller.ee>
- <CAKywueT=hWCTM=Crsafrj-8P=1mD93DY73oK=Ub8JeWc5X85fQ@mail.gmail.com>
- <4a017b583eb0f5fab477ecbe0e43b3a1@moritzmueller.ee>
- <CAN05THR5FE80VsnbKfpBzvt+g5jPu3rtiOqWkzU5yKoKUkhkiA@mail.gmail.com>
- <CAKywueTOjoP-Jh7WWCi5XJhfzgK+KZs3kvHKuVG_HW0fnYYY7A@mail.gmail.com>
- <CAKywueQUuwRK7hbbJhdquVVPre2+8GBCvnrG76L-KodoMm9m6g@mail.gmail.com>
- <b7b7a790feac88d59fe00c9ca2f5960d@moritzmueller.ee>
- <CAKywueQ7g9VYe=d7WU4AzL2Hv+pPznUgQBD7-RVi0ygBkhtGRw@mail.gmail.com>
- <bdf21b8770373c9ea4c37c27a12344d8@moritzmueller.ee>
- <CAKywueQ8woeupNRqspAuOqL8rG1hNpWN_hwLCjFUpkk4mXeCvQ@mail.gmail.com>
- <6492326ef9d8d1a9401fac243160646f@moritzmueller.ee>
- <CAKywueSWxDA5veCWjf+vGM96TSKrJbiddt93dv=arXyizJCbmw@mail.gmail.com>
-Message-ID: <6a49aa3e2cf17975efc5259f94c01ce7@moritzmueller.ee>
-X-Sender: mailinglist@moritzmueller.ee
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 31 Oct 2019 15:18:47 -0500
+Message-ID: <CAH2r5muCW3ow-9UkdtBK9sxRrgK92MjVQZfe6W+DS0XKYVRF9Q@mail.gmail.com>
+Subject: SMB3 Buildbot regression tests added
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     samba-technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Pavel,
+Added xfstests 091 and 109 to the (SMB3 Linux kernel client) Azure target bucket
 
-Am 2019-10-30 22:51, schrieb Pavel Shilovsky:
-> I think there is a difference in your setup between v5.2.21 and v5.3.7
-> kernels. I found the issue in oplock break processing that can happen
-> if you have several shares from the same server mounted on the client.
+-- 
+Thanks,
 
-I think you are right. Usually I mount multiple shares from one server.
-It could had happened that I tested it with just one share mounted when 
-using the
-v5.2 Kernel.
-
-
-> Could you test the patch to see if it works for your environment?
-
-I did and it worked ;)
-
-Thanks.
+Steve
