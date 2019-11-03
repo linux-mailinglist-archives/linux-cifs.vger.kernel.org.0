@@ -2,54 +2,223 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9F4ED0AC
-	for <lists+linux-cifs@lfdr.de>; Sat,  2 Nov 2019 22:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06CA8ED151
+	for <lists+linux-cifs@lfdr.de>; Sun,  3 Nov 2019 02:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfKBVkF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 2 Nov 2019 17:40:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726687AbfKBVkF (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 2 Nov 2019 17:40:05 -0400
-Subject: Re: [GIT PULL] SMB3 fix
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572730804;
-        bh=hJnnOEeR8LuBmz4p+oJZg9WeyhFNhSgNbSW/IosW+Yg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ghb5DgrkcMzCi+3JOBDMCwg1likqydXqAeWULYspk7ptte2CZzXqRmvxaRxKb1foe
-         Q7TvgghT1c5liIwuSSKP9pLqu7l6JHn44Sy67dSMxG55LSjcJvwHiGSzXVANDDuZm1
-         kQG2St6b1N8cVUZcYhdD6l1lfwcAx1jM+PDFbrR0=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mt+UYbU6=K4f_5FQLuDH2fJHwWhGKVGW3wzX-UYDcLMww@mail.gmail.com>
-References: <CAH2r5mt+UYbU6=K4f_5FQLuDH2fJHwWhGKVGW3wzX-UYDcLMww@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mt+UYbU6=K4f_5FQLuDH2fJHwWhGKVGW3wzX-UYDcLMww@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git
- tags/5.4-rc6-smb3-fix
-X-PR-Tracked-Commit-Id: a08d897bc04f23c608dadde5c31ef194911e78bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 56cfd2507d3e720f4b1dbf9513e00680516a0826
-Message-Id: <157273080442.25617.456837500894323042.pr-tracker-bot@kernel.org>
-Date:   Sat, 02 Nov 2019 21:40:04 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        id S1727364AbfKCBV0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 2 Nov 2019 21:21:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57514 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727335AbfKCBV0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 2 Nov 2019 21:21:26 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 96C17ADB5;
+        Sun,  3 Nov 2019 01:21:23 +0000 (UTC)
+From:   Aurelien Aptel <aaptel@suse.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, Aurelien Aptel <aaptel@suse.com>
+Subject: [PATCH v4 0/6] add multichannel support
+Date:   Sun,  3 Nov 2019 02:21:06 +0100
+Message-Id: <20191103012112.12212-1-aaptel@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Sat, 2 Nov 2019 14:36:25 -0500:
+Hello,
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.4-rc6-smb3-fix
+I have very little time to work on this during the work week due to
+annoying^W lovely customers, company stuff and backporting work but
+during this long weekend of festivities I somehow mustered the courage
+to dig in again...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/56cfd2507d3e720f4b1dbf9513e00680516a0826
+So without further ado, here is another iteration of the multichannel
+patchset.
 
-Thank you!
+Couple of changes since last time:
+* do round-robin on the channels (cycle over them on requests)
+* reuse master client guid for new channel (fixes binding against samba)
+* simplification of crypto key lookup and potential race condition fix
+* properly discard channels on session closing
+* better display of channels info in DebugData
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Usage
+=====
+
+Make sure your server exposes multiple interfaces and mount with:
+
+    -o multichannel,max_channels=2
+
+To have a total of 2 connections. One master and one extra channel.
+* Each call to ...send_recv() will alternate between the 2 channels.
+* You can check /proc/fs/cifs/DebugData for channel infos
+
+Overview
+========
+
+Multichannel is part of SMB3 and above. It lets the client "share" the
+same SMB session over multiple TCP (or RDMA) connections.
+
+* First, a regular connection is made.
+
+client                                                       server
+  |							       |
+  | ----------- negprot req (unsigned, guid=0xABC)--------->   |
+  |							       |
+  | <---------- negprot res (unsigned)	-------------------    |
+  |							       |
+  | ----------  sesssetup req (sesid=0x000, unsigned) ------>  |
+  |							       |
+  | <---------  sesssetup res (sesid=0x123, signed) ---------  |
+  |                                                            |
+  |  (client now has signing/encryption/decryption keys)       |
+  |                                                            |
+  |							       |
+  | ----------- ... (signed) ------------------------------->  |
+  | <-------------------------------------------------------   |
+  |							       |
+
+* The client then queries the network interface available on the
+  server via an FSCTL (this already implemented in cifs.ko)
+
+* For each new channel, the client opens another connection, but
+  reuses the client guid, and at session setup it sets a binding flag
+  to say "this is a new channel, please make this session an alias to
+  sess id 0x123"
+
+* Since the session is an alias, you can use TreeCons, files, etc
+  interchangeably between channels as if it was the same transport.
+
+* Channels use the same encryption/decryption keys from the session
+  BUT each channel has its own signing key.
+
+* When you see "signed" in lowercase, it's signed using the session/master key.
+  When you see "SIGNED" in uppercase, it's signed with the CHANNEL key.
+
+Here is the traffic for opening and using new channels:
+                                                              |
+  | ---------  negprot req (unsigned, guid=0xABC) ----------> |  o
+  |                                                           |  o
+  | <--------  negprog res (unsigned) ----------------------  |  o BINDING
+  |                                                           |  o  PART
+  | ---------  sesssetup req (sesid=0x123, binding, signed)-> |  o
+  |                                                           |  o
+  | <--------  sesssetup res (sesid=0x123, SIGNED) ---------  |  o
+  |                                                           |
+  | (from then on, client needs to use CHANNEL key            |
+  |  for signing)                                             |
+  |                                                           |
+  | ---------  ... (SIGNED) --------------------------------> |
+  | <-------------------------------------------------------- |
+  |                                                           |
+
+This signing key business is tricky to get right. As usual refer to
+MS-SMB2 for more boring details.
+
+cifs.ko implementation
+======================
+
+Data structure
+--------------
+
+We add an array of struct cifs_chan to cifs_ses. A channel has a
+server pointer and a signing key.
+
+struct cifs_ses {
+    struct TCP_Server_Info *server; <-- master con
+    u8 smb3signingkey[...];         <-- master sign key
+    u8 smb3encryptionkey[...];      <-- extra channels & master
+    u8 smb3decryptionkey[...];      <-- extra channels & master
+    bool binding;                   <--- true during BINDING PART
+    ...
+    struct cifs_chan {
+           struct TCP_Server_Info *server; <-- channel con
+           u8 signkey[SMB3_SIGN_KEY_SIZE]; <-- channel sign key
+    } chans[16];
+};
+
+New channel connections (TCP_Server_Info) end up in the usual global
+cifs_tcp_ses_list linked list but also in the ses channel array.
+
+ ,-------------> global cifs_tcp_ses_list <-------------------------.
+ |                                                                  |
+ '- TCP_Server_Info  <-->  TCP_Server_Info  <-->  TCP_Server_Info <-'
+       (master con)           (chan#1 con)         (chan#2 con)
+       |      ^                    ^                    ^
+       v      '--------------------|--------------------'
+    cifs_ses                       |
+    - chan_count = 3               |
+    - chans[].server --------------'
+
+Some important details:
+
+* ses->server still points to the master con.
+* ses->server == chans[0].server
+* chan#1 and chan#2 have an empty server->smb_ses_list
+
+Channel/session establishment
+-----------------------------
+
+* When opening channels we check ses->binding to know that we are in the
+  BINDING PART. In which case we don't create a new session object but
+  merely reuse the existing one.
+
+* chan_count only keeps track of fully established channels. During
+  the BINDING PART there is actually chan_count+1 channels, the last
+  one being the channel in the process of being created.
+
+NOTE: we could add a state field to cifs_chan and make cifs_count
+      always accurate. Not sure if it's better.
+
+Channel dispatch
+----------------
+
+On syscalls, as we get lower and lower in the bowels of cifs.ko we
+eventually reach the transport layer. There we often pass a ses
+pointer to code that assumes the transport can be reached via
+ses->server.
+
+* A big change was to decouple ses from server in those codepaths. So
+  that we can select a channel and make the code use that one instead
+  of the master.
+* That often means passing ses AND server and replacing ses->server by
+  server.
+
+Signing and encryption
+----------------------
+
+* When generating the keys we make sure to not overwrite enc/dec keys
+  for new channels and store the sign key in cifs_chan.
+
+* When sending and receiving a message we have to search for the right
+  keys by searching the whole cifs_tcp_ses_list instead of just
+  looking at the master con sessions.
+
+
+Aurelien Aptel (6):
+  cifs: sort interface list by speed
+  cifs: add multichannel mount options and data structs
+  cifs: add server param
+  cifs: switch servers depending on binding state
+  cifs: try opening channels after mounting
+  cifs: dump channel info in DebugData
+
+ fs/cifs/cifs_debug.c    |  35 +++++++-
+ fs/cifs/cifs_spnego.c   |   2 +-
+ fs/cifs/cifsfs.c        |   4 +
+ fs/cifs/cifsglob.h      |  45 +++++++++-
+ fs/cifs/cifsproto.h     |   8 ++
+ fs/cifs/connect.c       |  92 ++++++++++++++++----
+ fs/cifs/sess.c          | 218 +++++++++++++++++++++++++++++++++++++++++++++++-
+ fs/cifs/smb2misc.c      |  37 +++++---
+ fs/cifs/smb2ops.c       |  31 +++++--
+ fs/cifs/smb2pdu.c       | 109 ++++++++++++++----------
+ fs/cifs/smb2proto.h     |   3 +-
+ fs/cifs/smb2transport.c | 165 +++++++++++++++++++++++++++---------
+ fs/cifs/transport.c     |  18 +++-
+ 13 files changed, 636 insertions(+), 131 deletions(-)
+
+--
+2.16.4
