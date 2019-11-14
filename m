@@ -2,46 +2,59 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E01FC01F
-	for <lists+linux-cifs@lfdr.de>; Thu, 14 Nov 2019 07:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416D9FC7FD
+	for <lists+linux-cifs@lfdr.de>; Thu, 14 Nov 2019 14:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbfKNGQ7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 14 Nov 2019 01:16:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23567 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725601AbfKNGQ7 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 14 Nov 2019 01:16:59 -0500
+        id S1727128AbfKNNkx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 14 Nov 2019 08:40:53 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20990 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726567AbfKNNkw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 14 Nov 2019 08:40:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573712218;
+        s=mimecast20190719; t=1573738851;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dRm5vJVeG6xuzO6X2C1D7bCmSL5NkYafWYfuCH/HrKI=;
-        b=NBn1RMv9LRzQEzxlHQ2RRRJI83e8cc11v2FootNk4wyuOfXcjgTxV6p3TagGn4e63sFsBt
-        5qYTbMOSyKUhlNoVTqeVY7jTN9fT+92u5xPZY3yInBLbRx3arpFiptlqHTZC05l+geyTGi
-        FUrzOEKWuAYacqrEtMGoIe4cmlOXKII=
+        bh=M2J7Gf6SuzKWX47g7qh2y1AT+N7TUFXmW/HwIIlq/BU=;
+        b=aXMZEQifHO/KlUv2Xj7nCo7CYLxtHzb0vEC+E2w5cnTAJA+FUW7A0KriGg7e8XIJgdA/S3
+        qubLDvmR8tkumBlWQ/MmskQA3k1hVYFwMEWt8s9Fs7ygukXA/7qXMn0pluzBQ5bI4897ib
+        dbWlgWILRNcj35c9vYaG//kXs2+fDCE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-141-En-7x3m-OqaGkCuRO0QUew-1; Thu, 14 Nov 2019 01:16:56 -0500
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-282-uy07ckELPtiy0UFAGms6Ow-1; Thu, 14 Nov 2019 08:40:46 -0500
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CF5CE1802CE1
-        for <linux-cifs@vger.kernel.org>; Thu, 14 Nov 2019 06:16:55 +0000 (UTC)
-Received: from test1135.test.redhat.com (vpn2-54-39.bne.redhat.com [10.64.54.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 65ADF5458E;
-        Thu, 14 Nov 2019 06:16:55 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] cifs: fix race between compound_send_recv() and the demultiplex thread
-Date:   Thu, 14 Nov 2019 16:16:46 +1000
-Message-Id: <20191114061646.22122-2-lsahlber@redhat.com>
-In-Reply-To: <20191114061646.22122-1-lsahlber@redhat.com>
-References: <20191114061646.22122-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-MC-Unique: En-7x3m-OqaGkCuRO0QUew-1
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BA83D800C77;
+        Thu, 14 Nov 2019 13:40:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3751A60BD7;
+        Thu, 14 Nov 2019 13:40:39 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <24942.1573667720@warthog.procyon.org.uk>
+References: <24942.1573667720@warthog.procyon.org.uk>
+To:     Christoph Hellwig <hch@lst.de>, Dave Chinner <dchinner@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Cc:     dhowells@redhat.com, Alexander Viro <viro@zeniv.linux.org.uk>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        linux-cachefs@redhat.com, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: How to avoid using bmap in cachefiles -- FS-Cache/CacheFiles rewrite
+MIME-Version: 1.0
+Content-ID: <30126.1573738838.1@warthog.procyon.org.uk>
+Date:   Thu, 14 Nov 2019 13:40:38 +0000
+Message-ID: <30127.1573738838@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-MC-Unique: uy07ckELPtiy0UFAGms6Ow-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
@@ -50,44 +63,42 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-There is a race where the open() may be interrupted between when we receive=
- the reply
-but before we have invoked the callback in which case we never end up calli=
-ng
-handle_cancelled_mid() and thus leak an open handle on the server.
+Hi Christoph,
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/connect.c   | 1 -
- fs/cifs/transport.c | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+I've been rewriting cachefiles in the kernel and it now uses kiocbs to do
+async direct I/O to/from the cache files - which seems to make a 40-48% spe=
+ed
+improvement.
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index ccaa8bad336f..802604a7e692 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -1223,7 +1223,6 @@ cifs_demultiplex_thread(void *p)
- =09=09=09if (mids[i] !=3D NULL) {
- =09=09=09=09mids[i]->resp_buf_size =3D server->pdu_size;
- =09=09=09=09if ((mids[i]->mid_flags & MID_WAIT_CANCELLED) &&
--=09=09=09=09    mids[i]->mid_state =3D=3D MID_RESPONSE_RECEIVED &&
- =09=09=09=09    server->ops->handle_cancelled_mid)
- =09=09=09=09=09server->ops->handle_cancelled_mid(
- =09=09=09=09=09=09=09mids[i]->resp_buf,
-diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index ca3de62688d6..0f219f7653f3 100644
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -1119,7 +1119,7 @@ compound_send_recv(const unsigned int xid, struct cif=
-s_ses *ses,
- =09=09=09=09 midQ[i]->mid, le16_to_cpu(midQ[i]->command));
- =09=09=09send_cancel(server, &rqst[i], midQ[i]);
- =09=09=09spin_lock(&GlobalMid_Lock);
--=09=09=09if (midQ[i]->mid_state =3D=3D MID_REQUEST_SUBMITTED) {
-+=09=09=09if (is_interrupt_error(rc)) {
- =09=09=09=09midQ[i]->mid_flags |=3D MID_WAIT_CANCELLED;
- =09=09=09=09midQ[i]->callback =3D cifs_cancelled_callback;
- =09=09=09=09cancelled_mid[i] =3D true;
---=20
-2.13.6
+However, I've replaced the use of bmap internally to detect whether data is
+present or not - which is dodgy for a number of reasons, not least that
+extent-based filesystems might insert or remove blocks of zeros to shape th=
+e
+extents better, thereby rendering the metadata information useless for
+cachefiles.
+
+But using a separate map has a couple of problems:
+
+ (1) The map is metadata kept outside of the filesystem journal, so coheren=
+cy
+     management is necessary
+
+ (2) The map gets hard to manage for very large files (I'm using 256KiB
+     granules, so 1 bit per granule means a 512-byte map block can span 1Gi=
+B)
+     and xattrs can be of limited capacity.
+
+I seem to remember you said something along the lines of it being possible =
+to
+tell the filesystem not to do discarding and insertion of blocks of zeros. =
+ Is
+there a generic way to do that?
+
+Also, is it possible to make it so that I can tell an O_DIRECT read to fail
+partially or, better, completely if there's no data to be had in part of th=
+e
+range?  I can see DIO_SKIP_HOLES, but that only seems to affect writes
+
+Thanks,
+David
 
