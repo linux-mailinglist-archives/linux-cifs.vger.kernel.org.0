@@ -2,86 +2,120 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAC5FE1F2
-	for <lists+linux-cifs@lfdr.de>; Fri, 15 Nov 2019 16:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6B3FE492
+	for <lists+linux-cifs@lfdr.de>; Fri, 15 Nov 2019 19:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbfKOPtn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 15 Nov 2019 10:49:43 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:37815 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbfKOPtm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 15 Nov 2019 10:49:42 -0500
-Received: by mail-io1-f65.google.com with SMTP id 1so10935477iou.4
-        for <linux-cifs@vger.kernel.org>; Fri, 15 Nov 2019 07:49:42 -0800 (PST)
+        id S1726196AbfKOSHT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 15 Nov 2019 13:07:19 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36526 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbfKOSHT (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 15 Nov 2019 13:07:19 -0500
+Received: by mail-lj1-f194.google.com with SMTP id k15so11642253lja.3
+        for <linux-cifs@vger.kernel.org>; Fri, 15 Nov 2019 10:07:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=X5NAAOrJ3bS32ihsXavVCESX6DNfXdWEE7aVqtLVIHM=;
-        b=T96mBsWswYjsm0w7ecYkWpV509ib/ulk9bHbI0Xwo0rzkePegh7rSfOcmzGbyf8vTc
-         lns/HOXyf4/6jOYDVIgZ/CZyIfN2m2y88qVdmXSABhNsP0MXDIRsHGSOOd7wWkwuGiQx
-         ehcoBpFXp6INIFq3jwmveina1L3fsWjpzHRhMvlhwo8OJ8Dy4xuFXwCrYZiL/Ja/dmiU
-         sEvBblBcC09ww5H/W1Li3rJXBc1TYjMn46kjeboNwYGUiqFeNnjz46iJxarBlBzUTpau
-         7EU4w1MkRxjhgPFrJ2/ipVqnuE4IawmENFYcW1JVUg9OFLrEKZvfb77T8+3XayPV4Zd+
-         KrHA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=P0a/7pinETVU2y7rcC2a1yzcR8w4kpPt0k2ABAMgF+c=;
+        b=UTyAc5icDn4yEM7zQbgF+RwIJEf+58ZA2iFnyi4h/aSjTbRSrSvjeknxRCh0YGJbDd
+         4tic1yxg+BMKywO5cEf2Q+Cp5NZmY7Wf+iHO3epaW4I92z37lPZnFf7OBBqA+OCg2KG0
+         J02k70yK2aRxm4RR7T4//G6lmlw4EEJYVB+xjVnRfMLjM7oBptsKir2/oXgXI82yyO9r
+         5YlLk7CPLEbZATPK87nJtmbQxGdNeJyKs6tmUD8E+Dhu91Nr46BodDc3XiCBs2XcAjge
+         8QMDypr2NLuxLsGwCuEQvJcAo15C3RVvnsmt38h6bU0KIQbeGOj3SRMNjKr5pfiFCoO8
+         IQdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=X5NAAOrJ3bS32ihsXavVCESX6DNfXdWEE7aVqtLVIHM=;
-        b=Csc8cfeVtLAMuQNNRKYc8BNmU8pvJ/brNH74XpY77iB0iuPDascVAbFuD06lxMOF9C
-         PMj4zDRJHjhy7cqmZkos3qogQhrp/wZ6EiJCuIjt9iMDvCFzXo3qgPknLE7gUUuZuPL6
-         Q8jEsIVoqVGPH7M6IsHuclWVmdcAyiftCiI3gpEW/7Tg9IIaca/9Qdv6MJI7vuBX96kL
-         SsIC80ogFa3Ketxqa8gxAEfOsm+8RT23klV+BQQCi99V+8bXb0gVkB59fdnlFAxe/TCY
-         gvhC7FkLJyHBHePA46c5CBf8LQqOHAb/66oQIQAX3NBeYJC3C9NYB2ILYDWDEP814I7F
-         6WSQ==
-X-Gm-Message-State: APjAAAUIJcwSgtlkePXLnpbnugQvlgLCjvcfdUyTxOmQ9/IBzwv/RxG3
-        BocezCZawzMJQTK1ard0O/1kJAQfeI6n4Uj7tg==
-X-Google-Smtp-Source: APXvYqxEj1beLI6zhjihT/lmX2Dk324PGcIr8veC5c+0F/PFQKT7AeNYgljOGh72OwNqCMMZvqGkvMbSAqCkDjgGkjg=
-X-Received: by 2002:a5e:8e02:: with SMTP id a2mr1343031ion.269.1573832982053;
- Fri, 15 Nov 2019 07:49:42 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=P0a/7pinETVU2y7rcC2a1yzcR8w4kpPt0k2ABAMgF+c=;
+        b=pdRn1uFQrxV8MLTxZ3EoZbobMEWlrD+FahgWlfqjQ5RJ+gAj0tEG77w1dVAIn6U15C
+         Y/fTiaSiXZ1hNgkkgB4QbB+x2GQT9DMzzknqFei4aebsCzaPJ4n/Gzm2dG4OSVryC1pZ
+         7HQoNMT2jViRHL8Lu1dYv9R8qUG4JWh3gBxhIK6jqR3b8HOdv9ZZkNSrbNPY0L6BG32C
+         27PMB0XjsTbyQWDify5kWYcFJMIaSiVYcmNIIJO5mt0XFxeNUQ0hk7pJ6r5oM98ZB+GP
+         FdkcCcZ2wr2xm78hd5o0if3+qKnQijvxh5gF53qOBJ9mJ7SBgLVimSNV9AG7cXUafCtQ
+         u4fw==
+X-Gm-Message-State: APjAAAVkckAFHCjTeczC7MoXeoKIBFxT3yNwC4SLM2RAaiklmfv7jmBx
+        ojydUMd9ERj+CQXwSuY73o2fpNsQuaSNoGz99g==
+X-Google-Smtp-Source: APXvYqwlHwIdNAllJTOAdZ2QpM8zjoq2zQgzuCk9DsZFLXFOCFQNBD0GVubvxGAzjhFkHtZUUE427rpX0ilajXcT+9E=
+X-Received: by 2002:a2e:898a:: with SMTP id c10mr11995921lji.177.1573841236700;
+ Fri, 15 Nov 2019 10:07:16 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 15 Nov 2019 07:49:41
- -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Ms.Mary Coster" <info.zennitbankplcnigerian@gmail.com>
-Date:   Fri, 15 Nov 2019 16:49:41 +0100
-Message-ID: <CABHzvrkUQbbmg0Gr7foD3OjAJiY7Fd37=SW3mU=fnOPOcOyNdQ@mail.gmail.com>
-Subject: Goodnews, I have deposited your transfer total amount US$4.8million
- Dollars with Money Gram this morning. we agreed you will be receiving it
- $5000.00 daily.
-To:     undisclosed-recipients:;
+References: <20191114061646.22122-1-lsahlber@redhat.com> <20191114061646.22122-2-lsahlber@redhat.com>
+In-Reply-To: <20191114061646.22122-2-lsahlber@redhat.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Fri, 15 Nov 2019 10:07:05 -0800
+Message-ID: <CAKywueRUUfLcRMze1P5pgF8KPcizYdhFH_TBbBAZGr0fZa1ikw@mail.gmail.com>
+Subject: Re: [PATCH] cifs: fix race between compound_send_recv() and the
+ demultiplex thread
+To:     Ronnie Sahlberg <lsahlber@redhat.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Attn, Dear
-Goodnews, I have deposited your transfer total amount US$4.8million
-Dollars with Money Gram this morning. we agreed you will be receiving
-it $5000.00 daily.
-Contact Mr. John Dave Director, Money Gram to pick up your first Money
-Gram payment $5000.00 today.
-Contact Person; Mr. John Dave Director, Money Gram,International
-Remittance-Benin
-Email; moneygram.1820@outlook.fr
-Telephone; +229 62619517
-Please re-confirm your address to him once again such as listed below.
-1.Your Full Name..............................
-2.Address.........................
-3.Country....................
-4.Sex.........................................
-5.Your telephone numbers..........................
-6. Copy of your ID...........................
-This is to avoid sending your funds to wrong person, He is waiting to
-hear from you urgent today.
-Let me know once you pick up your transfer $5000.00 today.
-Finally, Note I have paid for the service fees, but only money will
-send to him is $90.00 transfer fee before you can pick up the transfer
-today.
-Ask, Mr. John Dave Director, Money Gram to give you direction where to
-send your transfer fee $90.00 only to Him Immediately so that you can
-pick up $5000.00 us dollars today.
-Thanks for undrstanding.
-Mary Coster
-m.coster@aol.com
+=D1=81=D1=80, 13 =D0=BD=D0=BE=D1=8F=D0=B1. 2019 =D0=B3. =D0=B2 22:17, Ronni=
+e Sahlberg <lsahlber@redhat.com>:
+>
+> There is a race where the open() may be interrupted between when we recei=
+ve the reply
+> but before we have invoked the callback in which case we never end up cal=
+ling
+> handle_cancelled_mid() and thus leak an open handle on the server.
+>
+> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> ---
+>  fs/cifs/connect.c   | 1 -
+>  fs/cifs/transport.c | 2 +-
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+> index ccaa8bad336f..802604a7e692 100644
+> --- a/fs/cifs/connect.c
+> +++ b/fs/cifs/connect.c
+> @@ -1223,7 +1223,6 @@ cifs_demultiplex_thread(void *p)
+>                         if (mids[i] !=3D NULL) {
+>                                 mids[i]->resp_buf_size =3D server->pdu_si=
+ze;
+>                                 if ((mids[i]->mid_flags & MID_WAIT_CANCEL=
+LED) &&
+> -                                   mids[i]->mid_state =3D=3D MID_RESPONS=
+E_RECEIVED &&
+>                                     server->ops->handle_cancelled_mid)
+>                                         server->ops->handle_cancelled_mid=
+(
+>                                                         mids[i]->resp_buf=
+,
+> diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> index ca3de62688d6..0f219f7653f3 100644
+> --- a/fs/cifs/transport.c
+> +++ b/fs/cifs/transport.c
+> @@ -1119,7 +1119,7 @@ compound_send_recv(const unsigned int xid, struct c=
+ifs_ses *ses,
+>                                  midQ[i]->mid, le16_to_cpu(midQ[i]->comma=
+nd));
+>                         send_cancel(server, &rqst[i], midQ[i]);
+>                         spin_lock(&GlobalMid_Lock);
+> -                       if (midQ[i]->mid_state =3D=3D MID_REQUEST_SUBMITT=
+ED) {
+> +                       if (is_interrupt_error(rc)) {
+>                                 midQ[i]->mid_flags |=3D MID_WAIT_CANCELLE=
+D;
+>                                 midQ[i]->callback =3D cifs_cancelled_call=
+back;
+>                                 cancelled_mid[i] =3D true;
+> --
+> 2.13.6
+>
+
+It doesn't seem that RC may be anything other than -ERESTARTSYS but
+is_interrupt_error() should work.
+
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+
+--
+Best regards,
+Pavel Shilovsky
