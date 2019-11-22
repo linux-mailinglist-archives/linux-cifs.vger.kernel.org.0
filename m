@@ -2,72 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 594661074E6
-	for <lists+linux-cifs@lfdr.de>; Fri, 22 Nov 2019 16:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406941075BE
+	for <lists+linux-cifs@lfdr.de>; Fri, 22 Nov 2019 17:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbfKVPbx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 22 Nov 2019 10:31:53 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:28522 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726046AbfKVPbx (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 22 Nov 2019 10:31:53 -0500
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id EBAC580A50;
-        Fri, 22 Nov 2019 15:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1574436712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2PGlxYkqE/MbgGFMcas1SfBopHv7+wAxidRk7fDhow=;
-        b=BHBSw4fFmaICbEMGilxqUfFEfP2/vV/ckqNpKBLh2V65jhfx1ACS+4dowlcrCrgxtAHRdL
-        ldre1v+aYZr6W7Fo254a/PJQvgLWtOI4QVkE3gzy2yjS5YYuy6FVYpUjlbkexVg9fL1lN7
-        UkNyg1Z2fQRPX0kgvnpHucVe8P/8KUyFfgnHxMjePPN/EPeMjHcTPqIm8g243xNRauD8GB
-        molZX6m0EU0Kcr3VzGke9O51bvhFdlLerJXIhuoru/NpQYmCozMH/ZIl8glXCchqmUV+5L
-        tpfSGdKDEmGoSyCamvIkuBNtQ4VKibnkKkYYDvWm4x7z2tVuTolx7+ytTGFUVg==
-From:   "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-To:     smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-Subject: [PATCH 7/7] cifs: Always update signing key of first channel
-Date:   Fri, 22 Nov 2019 12:30:57 -0300
-Message-Id: <20191122153057.6608-8-pc@cjr.nz>
-In-Reply-To: <20191122153057.6608-1-pc@cjr.nz>
-References: <20191122153057.6608-1-pc@cjr.nz>
+        id S1727088AbfKVQ0m (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 22 Nov 2019 11:26:42 -0500
+Received: from zeniv.linux.org.uk ([195.92.253.2]:46700 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbfKVQ0m (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 22 Nov 2019 11:26:42 -0500
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iYBlO-00009b-M1; Fri, 22 Nov 2019 16:26:30 +0000
+Date:   Fri, 22 Nov 2019 16:26:30 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>, sfrench@samba.org,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] cifs: Don't use iov_iter::type directly
+Message-ID: <20191122162630.GD26530@ZenIV.linux.org.uk>
+References: <20191121081923.GA19366@infradead.org>
+ <157432403818.17624.9300948341879954830.stgit@warthog.procyon.org.uk>
+ <30992.1574327471@warthog.procyon.org.uk>
+ <20191121160725.GA19291@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191121160725.GA19291@infradead.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Update signing key of first channel whenever generating the master
-sigining/encryption/decryption keys rather than only in cifs_mount().
+On Thu, Nov 21, 2019 at 08:07:25AM -0800, Christoph Hellwig wrote:
 
-This also fixes reconnect when re-establishing smb sessions to other
-servers.
+> > However, all the code that is doing direct accesses using '&' has to change to
+> > make that work - so I've converted it all to using accessors so that I only
+> > have to change the header file, except that the patch to do that crossed with
+> > a cifs patch that added more direct accesses, IIRC.
+> 
+> But I still don't really see the point of the wrappers.  Maybe they are
+> ok as a migration strategy, but in that case this patch mostly makes
+> sense as part of the series only.
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/smb2transport.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/fs/cifs/smb2transport.c b/fs/cifs/smb2transport.c
-index 86501239cef5..387c88704c52 100644
---- a/fs/cifs/smb2transport.c
-+++ b/fs/cifs/smb2transport.c
-@@ -407,6 +407,10 @@ generate_smb3signingkey(struct cifs_ses *ses,
- 				  SMB3_SIGN_KEY_SIZE);
- 		if (rc)
- 			return rc;
-+
-+		memcpy(ses->chans[0].signkey, ses->smb3signingkey,
-+		       SMB3_SIGN_KEY_SIZE);
-+
- 		rc = generate_key(ses, ptriplet->encryption.label,
- 				  ptriplet->encryption.context,
- 				  ses->smb3encryptionkey,
--- 
-2.24.0
-
+Wrappers have one benefit, though - they are greppable.  'type' really isn't.
+_IF_ we go for "use that field directly", let's rename the damn field.
