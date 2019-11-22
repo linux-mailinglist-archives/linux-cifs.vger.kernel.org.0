@@ -2,37 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0FB1074E3
-	for <lists+linux-cifs@lfdr.de>; Fri, 22 Nov 2019 16:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7115E1074E5
+	for <lists+linux-cifs@lfdr.de>; Fri, 22 Nov 2019 16:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfKVPbu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 22 Nov 2019 10:31:50 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:28476 "EHLO mx.cjr.nz"
+        id S1726739AbfKVPbw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 22 Nov 2019 10:31:52 -0500
+Received: from mx.cjr.nz ([51.158.111.142]:28500 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726655AbfKVPbt (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 22 Nov 2019 10:31:49 -0500
+        id S1726046AbfKVPbw (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 22 Nov 2019 10:31:52 -0500
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 1D0B580A51;
-        Fri, 22 Nov 2019 15:31:45 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 0636C80A52;
+        Fri, 22 Nov 2019 15:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1574436707;
+        t=1574436710;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NmCdYtHTRFtTbKwICBxuny47W3tQAxRiRVHAX01WFq8=;
-        b=Z3LN6aUqKJYcnCGOhPTuZouNKfMSdufsOlNUfCi+ybz9/+f7kIMt1OIMhosZZ9RGHTzGN8
-        a3iBMQQP3KnO35D8F5SRZn6VOi28OZHUAdgLIgojFC7C6G74Afjb6F0oauUyjhh95IaVAu
-        i0Dly6xDy4kAKe17AU+oXeyiGZd+fwsPlH5v6q4FgNDqpnBBdeUKVqw42QPDTtRhrdywAo
-        lnR1NjsgRKzA0gCY1+lytb9LBwsd6cjPQqxwjcWVoWL0KwICM9KHRgHGgvJHmcJ+g/NtlE
-        09ihkkFNZL7WG9BmLKEuFA135i1F6x/AT7oQd1xH/V99U7MIMVHB+j8HQYLcVA==
+        bh=GAH2d6eEHWMxkJtDZKc8DF4ep+TO4uklYfQT19YFnvg=;
+        b=fXP3+r777NuELiLo/gBW8B5DPFBdlQ6fS06eRAMQ7bZATIsdGuUGadWDtJ76TYFWpvVIiw
+        /aE0pAsKxouaaPB5n5MbsSYkxq2HnEiZ1X43FVJ0DykeFcpCO0qqMwTQQ5DwbMpcL7OtDC
+        p7/xP9JihC/0cNG7TaCrXgkBbqQBN5qO8SzLri6IZrg68wD9wLfDhhDPBcczvnhOhsc+pP
+        wFpZ5ynwSnDDvLcYDMjMgHw+8x6mvBxqcgHuH4x+UsUAjQRaO5wLCZ7WXYn5Ap2gAi9XUO
+        mlo/v208v0TUwcyFdiSW8TDrZ+SbBbpxQCPHxD8JKNciU9Fa8keTlKVTAv9jnQ==
 From:   "Paulo Alcantara (SUSE)" <pc@cjr.nz>
 To:     smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-Subject: [PATCH 5/7] cifs: Fix potential deadlock when updating vol in cifs_reconnect()
-Date:   Fri, 22 Nov 2019 12:30:55 -0300
-Message-Id: <20191122153057.6608-6-pc@cjr.nz>
+Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        stable@vger.kernel.org,
+        Matthew Ruffell <matthew.ruffell@canonical.com>
+Subject: [PATCH 6/7] cifs: Fix retrieval of DFS referrals in cifs_mount()
+Date:   Fri, 22 Nov 2019 12:30:56 -0300
+Message-Id: <20191122153057.6608-7-pc@cjr.nz>
 In-Reply-To: <20191122153057.6608-1-pc@cjr.nz>
 References: <20191122153057.6608-1-pc@cjr.nz>
 MIME-Version: 1.0
@@ -42,131 +44,76 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-We can't hold the vol_lock spinlock while refreshing the DFS cache
-because cifs_reconnect() may call dfs_cache_update_vol() while we are
-walking through the volume list.
-
-Create a temp list with all volumes eligible for refreshing and then
-use it without any locks held.
+Make sure that DFS referrals are sent to newly resolved root targets
+as in a multi tier DFS setup.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Link: https://lkml.kernel.org/r/05aa2995-e85e-0ff4-d003-5bb08bd17a22@canonical.com
+Cc: stable@vger.kernel.org
+Tested-by: Matthew Ruffell <matthew.ruffell@canonical.com>
 ---
- fs/cifs/dfs_cache.c | 45 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 33 insertions(+), 12 deletions(-)
+ fs/cifs/connect.c | 32 ++++++++++++++++++++++----------
+ 1 file changed, 22 insertions(+), 10 deletions(-)
 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index b082603c793a..5b9d7281dd67 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -49,6 +49,8 @@ struct vol_info {
- 	struct smb_vol smb_vol;
- 	char *mntdata;
- 	struct list_head list;
-+	struct list_head rlist;
-+	int vol_count;
- };
- 
- static struct kmem_cache *cache_slab __read_mostly;
-@@ -516,13 +518,15 @@ static struct cache_entry *lookup_cache_entry(const char *path,
- 	return ce;
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 668d477cc9c7..86d98d73749d 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -4776,6 +4776,17 @@ static int is_path_remote(struct cifs_sb_info *cifs_sb, struct smb_vol *vol,
  }
  
--static inline void free_vol(struct vol_info *vi)
-+static void put_vol(struct vol_info *vi)
- {
--	list_del(&vi->list);
--	kfree(vi->fullpath);
--	kfree(vi->mntdata);
--	cifs_cleanup_volume_info_contents(&vi->smb_vol);
--	kfree(vi);
-+	if (!--vi->vol_count) {
-+		list_del_init(&vi->list);
-+		kfree(vi->fullpath);
-+		kfree(vi->mntdata);
-+		cifs_cleanup_volume_info_contents(&vi->smb_vol);
-+		kfree(vi);
-+	}
- }
- 
- static inline void free_vol_list(void)
-@@ -530,7 +534,7 @@ static inline void free_vol_list(void)
- 	struct vol_info *vi, *nvi;
- 
- 	list_for_each_entry_safe(vi, nvi, &vol_list, list)
--		free_vol(vi);
-+		put_vol(vi);
- }
- 
- /**
-@@ -1140,6 +1144,7 @@ int dfs_cache_add_vol(char *mntdata, struct smb_vol *vol, const char *fullpath)
- 		goto err_free_fullpath;
- 
- 	vi->mntdata = mntdata;
-+	vi->vol_count++;
- 
- 	spin_lock(&vol_lock);
- 	list_add_tail(&vi->list, &vol_list);
-@@ -1219,11 +1224,9 @@ void dfs_cache_del_vol(const char *fullpath)
- 	cifs_dbg(FYI, "%s: fullpath: %s\n", __func__, fullpath);
- 
- 	spin_lock(&vol_lock);
--
- 	vi = find_vol(fullpath);
- 	if (!IS_ERR(vi))
--		free_vol(vi);
--
-+		put_vol(vi);
- 	spin_unlock(&vol_lock);
- }
- 
-@@ -1446,18 +1449,31 @@ static int refresh_tcon(struct vol_info *vi, struct cifs_tcon *tcon)
-  */
- static void refresh_cache_worker(struct work_struct *work)
- {
--	struct vol_info *vi;
-+	struct vol_info *vi, *nvi;
- 	struct TCP_Server_Info *server;
-+	LIST_HEAD(vols);
- 	LIST_HEAD(tcons);
- 	struct cifs_tcon *tcon, *ntcon;
- 	int rc;
- 
-+	/* Get SMB volumes that are eligible (CifsGood) for refreshing */
- 	spin_lock(&vol_lock);
- 	list_for_each_entry(vi, &vol_list, list) {
- 		server = get_tcp_server(&vi->smb_vol);
- 		if (!server)
- 			continue;
- 
-+		vi->vol_count++;
-+		list_add_tail(&vi->rlist, &vols);
-+		put_tcp_server(server);
-+	}
-+	spin_unlock(&vol_lock);
+ #ifdef CONFIG_CIFS_DFS_UPCALL
++static inline void set_root_tcon(struct cifs_sb_info *cifs_sb,
++				 struct cifs_tcon *tcon,
++				 struct cifs_tcon **root)
++{
++	spin_lock(&cifs_tcp_ses_lock);
++	tcon->tc_count++;
++	tcon->remap = cifs_remap(cifs_sb);
++	spin_unlock(&cifs_tcp_ses_lock);
++	*root = tcon;
++}
 +
-+	list_for_each_entry_safe(vi, nvi, &vols, rlist) {
-+		server = get_tcp_server(&vi->smb_vol);
-+		if (!server)
-+			goto next_vol;
-+
- 		get_tcons(server, &tcons);
- 		rc = 0;
+ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
+ {
+ 	int rc = 0;
+@@ -4877,18 +4888,10 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
+ 	/* Cache out resolved root server */
+ 	(void)dfs_cache_find(xid, ses, cifs_sb->local_nls, cifs_remap(cifs_sb),
+ 			     root_path + 1, NULL, NULL);
+-	/*
+-	 * Save root tcon for additional DFS requests to update or create a new
+-	 * DFS cache entry, or even perform DFS failover.
+-	 */
+-	spin_lock(&cifs_tcp_ses_lock);
+-	tcon->tc_count++;
+-	tcon->dfs_path = root_path;
++	kfree(root_path);
+ 	root_path = NULL;
+-	tcon->remap = cifs_remap(cifs_sb);
+-	spin_unlock(&cifs_tcp_ses_lock);
  
-@@ -1474,8 +1490,13 @@ static void refresh_cache_worker(struct work_struct *work)
+-	root_tcon = tcon;
++	set_root_tcon(cifs_sb, tcon, &root_tcon);
+ 
+ 	for (count = 1; ;) {
+ 		if (!rc && tcon) {
+@@ -4925,6 +4928,15 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
+ 			mount_put_conns(cifs_sb, xid, server, ses, tcon);
+ 			rc = mount_get_conns(vol, cifs_sb, &xid, &server, &ses,
+ 					     &tcon);
++			/*
++			 * Ensure that DFS referrals go through new root server.
++			 */
++			if (!rc && tcon &&
++			    (tcon->share_flags & (SHI1005_FLAGS_DFS |
++						  SHI1005_FLAGS_DFS_ROOT))) {
++				cifs_put_tcon(root_tcon);
++				set_root_tcon(cifs_sb, tcon, &root_tcon);
++			}
  		}
- 
- 		put_tcp_server(server);
-+
-+next_vol:
-+		list_del_init(&vi->rlist);
-+		spin_lock(&vol_lock);
-+		put_vol(vi);
-+		spin_unlock(&vol_lock);
- 	}
--	spin_unlock(&vol_lock);
- 
- 	queue_delayed_work(dfscache_wq, &refresh_task,
- 			   atomic_read(&cache_ttl) * HZ);
+ 		if (rc) {
+ 			if (rc == -EACCES || rc == -EOPNOTSUPP)
 -- 
 2.24.0
 
