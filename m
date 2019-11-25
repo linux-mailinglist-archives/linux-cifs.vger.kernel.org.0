@@ -2,78 +2,115 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD6A10837D
-	for <lists+linux-cifs@lfdr.de>; Sun, 24 Nov 2019 14:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0CB108933
+	for <lists+linux-cifs@lfdr.de>; Mon, 25 Nov 2019 08:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbfKXNdq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 24 Nov 2019 08:33:46 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:41970 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726813AbfKXNdq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 24 Nov 2019 08:33:46 -0500
-Received: by mail-il1-f196.google.com with SMTP id q15so11667757ils.8
-        for <linux-cifs@vger.kernel.org>; Sun, 24 Nov 2019 05:33:44 -0800 (PST)
+        id S1726876AbfKYHdr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 25 Nov 2019 02:33:47 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36774 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbfKYHdr (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 25 Nov 2019 02:33:47 -0500
+Received: by mail-io1-f67.google.com with SMTP id s3so15099105ioe.3
+        for <linux-cifs@vger.kernel.org>; Sun, 24 Nov 2019 23:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
-        b=hRMpMrm8x8KCh9St5squYg0deY3B2PzAcI/pksltCrBT11VKqxXe1zyVWeEoYSWJgm
-         zBVYLPfpc0JYTqD4t4Ss8dmRHywqGfC4vqughMJyZTWQF7+EXDxiN87ruijP/uuJOSYp
-         W6ecGuKVbRp/Oy19mSol6zIsMlGndOePQIiQXCbxaNaFLN3j/cPiF/aMKlKwdiNn9kmL
-         G43SIAK7PNIkUwP+FljE0yQMKuHGgUuou0SPKFjCDofe4J2TWVlfnNAxzHzqz4m2oK8L
-         NUNURIR84LYyIBbCVw0Nwxtvd9MNVmMjyl9Tfyf1wtF7XX+DXvTFHJM0eXDS8jNxrhPG
-         Ccxw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XZlFw4d0PFZwVyioRky5TjFNrVnNuhesSjtG4ltQyAc=;
+        b=UfCErSQnzTYS4Lw/IjnSm10EDAH1lowEgCrhZVA3KdyxmYAnFK4Zb8fVgOnb2low97
+         X9PKZMpqmcQevd4VuL3foPQWDuCSUaa6XhITNjBtARfApdynzkwbldqaU20oLjXw2IoC
+         +A44QD9QOypoODHW2bdWu5oBu4bRTuOMbRE69qMHueKfzmD4bEDXJBjp01xNfuRGucXE
+         8UnM7Z0q/WzwW0/QIqkh1cc8Viei0FgEsP0JeEahZWJ7PJGcnNYZksNkSGtzhxAUP7zR
+         yIYJE7yw23ptXPTEGFTvuz28IBn28auhsMbCVD5w0HQaP9M9dbgyV0GFILFlU1Jc31Cx
+         AQUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
-        b=CPkX+Pr2wMnghy/ZTTVUuaBOzNunMpgcAcldPtgspeOa+qupii1icoJuBFnh2ji05s
-         n+m9UUsOTs/fmE4qhs8tmVnIAZ0yDvA12EOqOyqTVDXIuhNHyuNLH5UBlcZLzea9cOQ9
-         0YzGh48tIYsFrPCE/21TF3csTtNA0LNRGZqknsPg5kp8GRUNlyJO/gre7Gev5dEpnXZr
-         X3FwthtVdKU6p5HLFHBdaGB/ulrM5+kr5Ha8SSto1XG5GOwgEP/EbJ4pcxtcBYBHeFh4
-         K2+EPVFoRMvT7r0xBmmSMTcKW08HxJLlF3OnlG+0MUcG3xq13dJl73U/4g7W/a22mKIh
-         1oAQ==
-X-Gm-Message-State: APjAAAXi9kMUgfp14+J54/mUu+D1z99nuoycQ2hcmuvJKBw0qtkzTyod
-        ruE5Tbpo9cyiT+L6T1k5wnQMlPWWtdDL+CbahEI=
-X-Google-Smtp-Source: APXvYqw6ByKBY1X+cAJn9uriEleqmhukfC0mlNYFhBkSY0FvV23ENMebtGjnUzJK0KeZ6yqEwD28s8h3DkAZD6rJg4U=
-X-Received: by 2002:a92:7786:: with SMTP id s128mr28785508ilc.204.1574602424492;
- Sun, 24 Nov 2019 05:33:44 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XZlFw4d0PFZwVyioRky5TjFNrVnNuhesSjtG4ltQyAc=;
+        b=ipwHLfo2I0aV9g8jn/4cBRGSyKW/tKVN0sMne+VDy8+F+JKxIj5cXNa/FGcyutObjE
+         HlorHy0y1vHuN1ug3+NJe5E5idtjcAGD2Ovy35GNZLVfni93Ntx95SULCLJgPrRC96Ve
+         YMm1deGDlcmsOiZOZiD7FVjIUHPx93/VyDgGnbRJ6ED9V+Y/NkWybF88RnouDB0T/LTy
+         PTWcdvO/D7OJrbiSy3STMx29rIg1/HBTbZ+WRjIiUnqoMryrB4cs4456fRoO5+n+zKsU
+         7rPHjqCVpt84C62JSt4wE0G8qxEfxlGVS5Z8mBKPB5u4x71fsT51GLjcrbdB9ceI8yrz
+         LMfQ==
+X-Gm-Message-State: APjAAAURS2RvY5zHVrVa1trGQ8nfD61+mbEvHSei22XxKQMjGMD+kyCy
+        buR7t4nC6KPb31MxphWdNeF3Cj39TcMHCY/4sn1b2A==
+X-Google-Smtp-Source: APXvYqyb0eCgMYXgd/b2Cnmrj9FraWeS22+L4fnWQScs1I59JdTXvfOx/PF+0o63cACy4Rhb6rTujtAHOL3ZEbs3TDk=
+X-Received: by 2002:a5d:848c:: with SMTP id t12mr23621868iom.5.1574667226125;
+ Sun, 24 Nov 2019 23:33:46 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4f:4fd0:0:0:0:0:0 with HTTP; Sun, 24 Nov 2019 05:33:43
- -0800 (PST)
-Reply-To: afginvestmentbrokers@al-faisaliah.org
-From:   "Mr. Joon-Kyu Lin" <johnpfox60@gmail.com>
-Date:   Sun, 24 Nov 2019 05:33:43 -0800
-Message-ID: <CAHLmmYPjy7TD-XmqBABQbtWkLFNK_Y=npKWiPhJtCGeK6vZNfw@mail.gmail.com>
-Subject: Venture Capital & Private Investors
-To:     undisclosed-recipients:;
+References: <20191122153057.6608-1-pc@cjr.nz> <20191122153057.6608-3-pc@cjr.nz>
+In-Reply-To: <20191122153057.6608-3-pc@cjr.nz>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 25 Nov 2019 01:33:35 -0600
+Message-ID: <CAH2r5muh8wfP331W6wVmegfrd-da-rcRe_YeJOyF=+5yy-pDjA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] cifs: Fix lookup of root ses in DFS referral cache
+To:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Attention:
+merged into cifs-2.6.git for-next
 
-I am an investor that can provide funding for any viable business idea or
-venture.
+On Fri, Nov 22, 2019 at 9:31 AM Paulo Alcantara (SUSE) <pc@cjr.nz> wrote:
+>
+> We don't care about module aliasing validation in
+> cifs_compose_mount_options(..., is_smb3) when finding the root SMB
+> session of an DFS namespace in order to refresh DFS referral cache.
+>
+> The following issue has been observed when mounting with '-t smb3' and
+> then specifying 'vers=2.0':
+>
+> ...
+> Nov 08 15:27:08 tw kernel: address conversion returned 0 for FS0.WIN.LOCAL
+> Nov 08 15:27:08 tw kernel: [kworke] ==> dns_query((null),FS0.WIN.LOCAL,13,(null))
+> Nov 08 15:27:08 tw kernel: [kworke] call request_key(,FS0.WIN.LOCAL,)
+> Nov 08 15:27:08 tw kernel: [kworke] ==> dns_resolver_cmp(FS0.WIN.LOCAL,FS0.WIN.LOCAL)
+> Nov 08 15:27:08 tw kernel: [kworke] <== dns_resolver_cmp() = 1
+> Nov 08 15:27:08 tw kernel: [kworke] <== dns_query() = 13
+> Nov 08 15:27:08 tw kernel: fs/cifs/dns_resolve.c: dns_resolve_server_name_to_ip: resolved: FS0.WIN.LOCAL to 192.168.30.26
+> ===> Nov 08 15:27:08 tw kernel: CIFS VFS: vers=2.0 not permitted when mounting with smb3
+> Nov 08 15:27:08 tw kernel: fs/cifs/dfs_cache.c: CIFS VFS: leaving refresh_tcon (xid = 26) rc = -22
+> ...
+>
+> Fixes: 5072010ccf05 ("cifs: Fix DFS cache refresher for DFS links")
+> Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> ---
+>  fs/cifs/dfs_cache.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
+> index 1692c0c6c23a..2faa05860a48 100644
+> --- a/fs/cifs/dfs_cache.c
+> +++ b/fs/cifs/dfs_cache.c
+> @@ -1317,7 +1317,6 @@ static struct cifs_ses *find_root_ses(struct dfs_cache_vol_info *vi,
+>         int rc;
+>         struct dfs_info3_param ref = {0};
+>         char *mdata = NULL, *devname = NULL;
+> -       bool is_smb3 = tcon->ses->server->vals->header_preamble_size == 0;
+>         struct TCP_Server_Info *server;
+>         struct cifs_ses *ses;
+>         struct smb_vol vol;
+> @@ -1344,7 +1343,7 @@ static struct cifs_ses *find_root_ses(struct dfs_cache_vol_info *vi,
+>                 goto out;
+>         }
+>
+> -       rc = cifs_setup_volume_info(&vol, mdata, devname, is_smb3);
+> +       rc = cifs_setup_volume_info(&vol, mdata, devname, false);
+>         kfree(devname);
+>
+>         if (rc) {
+> --
+> 2.24.0
+>
 
-Please do let me know if you have fund management abilities, credible
-projects in need of funding or advanced stage projects requiring Bank
-Guarantees, Loans or Partnership, Joint Venture, Equity, we would be
-delighted to work with you.
 
+-- 
+Thanks,
 
-Best Regards,
-Mr. Joon-Kyu Lim
-Al Faisaliah Group (AFG)
-Venture Capital & Private Investors
-
---
-*This email and any attachments are intended for the named recipients only
-and contain confidential materials. Any unauthorized copying, reviewing,
-dissemination or other use by anyone other than the named recipients of
-this communication is strictly prohibited. If you received this email in
-error and/or are not a named recipient, please notify the sender (Al
-Faisaliah Group) and delete all copies of this email. Thank you.
+Steve
