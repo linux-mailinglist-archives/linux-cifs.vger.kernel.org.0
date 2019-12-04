@@ -2,38 +2,38 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE725113696
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2019 21:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA6C113697
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2019 21:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbfLDUi1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 4 Dec 2019 15:38:27 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:1750 "EHLO mx.cjr.nz"
+        id S1728011AbfLDUi3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 4 Dec 2019 15:38:29 -0500
+Received: from mx.cjr.nz ([51.158.111.142]:1800 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728238AbfLDUi0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 4 Dec 2019 15:38:26 -0500
+        id S1728053AbfLDUi2 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 4 Dec 2019 15:38:28 -0500
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 892F581327;
-        Wed,  4 Dec 2019 20:38:23 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id C9C2481328;
+        Wed,  4 Dec 2019 20:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1575491905;
+        t=1575491907;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sJOu23349s3cNDvalBkVHN6/TkIgwGjb627a6Km8eMM=;
-        b=SWhJn8R/Y73aX1h34hRmC803KIxvQ3k6wkecL2sEYLvhM/CkrlcVkiGBl556wb+PzlZZk5
-        pC7PpvEzoqNW0FwqH+QjT+7AL9bt8Y3tgtoYeD5YxUTgdDHFJXa39Fpt7luQvPe9RziUhQ
-        OwkojamE7K95ARatYLQ75s+9JBUffV4QNvTQc3+tmwyoCwKx3liQtcAOFbajYJndNUICe9
-        qXCaNhd23B3/oLRiQaM27FU9myLHCVCKBYmiwTL2g82I9KEOyFsPNSnWq8ijWzcLf8amfY
-        70LtIVSS9jz10Dx3UATEGu4z7L2iF2d9DDHZSN4k/Ec443zp1jgA3hRhUEkH5g==
+        bh=Ns1fzQkMiw9nWogtIFH+AaylpcXFL2f+QX/Be6hDYjk=;
+        b=i4RaPqgNUpVfdbzmMoA55CVWpn5/wJ8MXqY8qXXyC4eLFlZEAaxsqLPVxxhYQP9P2hs/zg
+        KMZUu2DEE+Zoac/BGn2GHAsGkYjFNmI0de77oI7pHvcPbWF5t8PO1G48I1kFQIxhZN1FTv
+        g8cEFhDo5zkIZFFKo9SAJ836GP92Xn1Q6bmGxFabYm4QtDCJE52GkgTgI6e/pNECnAvue5
+        uDn9lDllnF+6f45pVVCZLeno1wOIfRJMsZ+DW3NrdtAs7301SFRMUwK2bJWB8iVlI1STaF
+        y5EuEP83molp3495kVyn4Yod2cPiXNVLz5LgLj0nZDgDmo1DPjl50bPIBFBlIw==
 From:   "Paulo Alcantara (SUSE)" <pc@cjr.nz>
 To:     smfrench@gmail.com
 Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
         Aurelien Aptel <aaptel@suse.com>
-Subject: [PATCH v4 3/6] cifs: Introduce helpers for finding TCP connection
-Date:   Wed,  4 Dec 2019 17:38:00 -0300
-Message-Id: <20191204203803.2316-4-pc@cjr.nz>
+Subject: [PATCH v4 4/6] cifs: Merge is_path_valid() into get_normalized_path()
+Date:   Wed,  4 Dec 2019 17:38:01 -0300
+Message-Id: <20191204203803.2316-5-pc@cjr.nz>
 In-Reply-To: <20191204203803.2316-1-pc@cjr.nz>
 References: <20191204203803.2316-1-pc@cjr.nz>
 MIME-Version: 1.0
@@ -43,91 +43,83 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Add helpers for finding TCP connections that are good candidates for
-being used by DFS refresh worker.
+Just do the trivial path validation in get_normalized_path().
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 ---
- fs/cifs/dfs_cache.c | 44 +++++++++++++++++++++++++++++++-------------
- 1 file changed, 31 insertions(+), 13 deletions(-)
+ fs/cifs/dfs_cache.c | 21 ++++-----------------
+ 1 file changed, 4 insertions(+), 17 deletions(-)
 
 diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 49c5f045270f..e889608e5e13 100644
+index e889608e5e13..1d1f7c03931b 100644
 --- a/fs/cifs/dfs_cache.c
 +++ b/fs/cifs/dfs_cache.c
-@@ -1305,6 +1305,30 @@ static char *get_dfs_root(const char *path)
- 	return npath;
- }
+@@ -75,13 +75,11 @@ static void refresh_cache_worker(struct work_struct *work);
  
-+static inline void put_tcp_server(struct TCP_Server_Info *server)
-+{
-+	cifs_put_tcp_session(server, 0);
-+}
-+
-+static struct TCP_Server_Info *get_tcp_server(struct smb_vol *vol)
-+{
-+	struct TCP_Server_Info *server;
-+
-+	server = cifs_find_tcp_session(vol);
-+	if (IS_ERR_OR_NULL(server))
-+		return NULL;
-+
-+	spin_lock(&GlobalMid_Lock);
-+	if (server->tcpStatus != CifsGood) {
-+		spin_unlock(&GlobalMid_Lock);
-+		put_tcp_server(server);
-+		return NULL;
-+	}
-+	spin_unlock(&GlobalMid_Lock);
-+
-+	return server;
-+}
-+
- /* Find root SMB session out of a DFS link path */
- static struct cifs_ses *find_root_ses(struct vol_info *vi,
- 				      struct cifs_tcon *tcon,
-@@ -1347,13 +1371,8 @@ static struct cifs_ses *find_root_ses(struct vol_info *vi,
- 		goto out;
- 	}
+ static DECLARE_DELAYED_WORK(refresh_task, refresh_cache_worker);
  
--	server = cifs_find_tcp_session(&vol);
--	if (IS_ERR_OR_NULL(server)) {
--		ses = ERR_PTR(-EHOSTDOWN);
--		goto out;
--	}
--	if (server->tcpStatus != CifsGood) {
--		cifs_put_tcp_session(server, 0);
-+	server = get_tcp_server(&vol);
-+	if (!server) {
- 		ses = ERR_PTR(-EHOSTDOWN);
- 		goto out;
- 	}
-@@ -1451,19 +1470,18 @@ static void refresh_cache_worker(struct work_struct *work)
- 	mutex_lock(&vol_lock);
+-static inline bool is_path_valid(const char *path)
++static int get_normalized_path(const char *path, char **npath)
+ {
+-	return path && (strchr(path + 1, '\\') || strchr(path + 1, '/'));
+-}
++	if (!path || strlen(path) < 3 || (*path != '\\' && *path != '/'))
++		return -EINVAL;
  
- 	list_for_each_entry(vi, &vol_list, list) {
--		server = cifs_find_tcp_session(&vi->smb_vol);
--		if (IS_ERR_OR_NULL(server))
-+		server = get_tcp_server(&vi->smb_vol);
-+		if (!server)
- 			continue;
--		if (server->tcpStatus != CifsGood)
--			goto next;
-+
- 		get_tcons(server, &list);
- 		list_for_each_entry_safe(tcon, ntcon, &list, ulist) {
- 			refresh_tcon(vi, tcon);
- 			list_del_init(&tcon->ulist);
- 			cifs_put_tcon(tcon);
- 		}
--next:
--		cifs_put_tcp_session(server, 0);
-+
-+		put_tcp_server(server);
- 	}
- 	queue_delayed_work(dfscache_wq, &refresh_task, cache_ttl * HZ);
- 	mutex_unlock(&vol_lock);
+-static inline int get_normalized_path(const char *path, char **npath)
+-{
+ 	if (*path == '\\') {
+ 		*npath = (char *)path;
+ 	} else {
+@@ -828,9 +826,6 @@ int dfs_cache_find(const unsigned int xid, struct cifs_ses *ses,
+ 	char *npath;
+ 	struct cache_entry *ce;
+ 
+-	if (unlikely(!is_path_valid(path)))
+-		return -EINVAL;
+-
+ 	rc = get_normalized_path(path, &npath);
+ 	if (rc)
+ 		return rc;
+@@ -875,9 +870,6 @@ int dfs_cache_noreq_find(const char *path, struct dfs_info3_param *ref,
+ 	char *npath;
+ 	struct cache_entry *ce;
+ 
+-	if (unlikely(!is_path_valid(path)))
+-		return -EINVAL;
+-
+ 	rc = get_normalized_path(path, &npath);
+ 	if (rc)
+ 		return rc;
+@@ -929,9 +921,6 @@ int dfs_cache_update_tgthint(const unsigned int xid, struct cifs_ses *ses,
+ 	struct cache_entry *ce;
+ 	struct cache_dfs_tgt *t;
+ 
+-	if (unlikely(!is_path_valid(path)))
+-		return -EINVAL;
+-
+ 	rc = get_normalized_path(path, &npath);
+ 	if (rc)
+ 		return rc;
+@@ -989,7 +978,7 @@ int dfs_cache_noreq_update_tgthint(const char *path,
+ 	struct cache_entry *ce;
+ 	struct cache_dfs_tgt *t;
+ 
+-	if (unlikely(!is_path_valid(path)) || !it)
++	if (!it)
+ 		return -EINVAL;
+ 
+ 	rc = get_normalized_path(path, &npath);
+@@ -1049,8 +1038,6 @@ int dfs_cache_get_tgt_referral(const char *path,
+ 
+ 	if (!it || !ref)
+ 		return -EINVAL;
+-	if (unlikely(!is_path_valid(path)))
+-		return -EINVAL;
+ 
+ 	rc = get_normalized_path(path, &npath);
+ 	if (rc)
 -- 
 2.24.0
 
