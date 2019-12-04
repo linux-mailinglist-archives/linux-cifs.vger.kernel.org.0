@@ -2,110 +2,113 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6F0112BB8
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2019 13:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C96B112CC1
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2019 14:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727832AbfLDMm6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 4 Dec 2019 07:42:58 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:44550 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727798AbfLDMm6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 4 Dec 2019 07:42:58 -0500
-Received: by mail-qt1-f194.google.com with SMTP id b5so2375616qtt.11
-        for <linux-cifs@vger.kernel.org>; Wed, 04 Dec 2019 04:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=AkbuvF8WWOeGkFuNbpEiUPeHs0D9XYCrvYJnn3sJBPk0l/N+bAJ+lU7by52a8c0/XL
-         X5y/+uJVi5SRPzgKpD7LZp2RSO63H/dWhNB+Sgv8CnTmnW6HnNvEkrD3pvFKiHue+ji0
-         Cyct4Vs7hozR5hYKDh8cJJMkT72K9aPHj93bK1Ew++bIIM698i5hGwNXpwVN8RyOlTlg
-         ekVZP06isuUhwZwFxkLwU0Sye3HMnEDkq9yUmWZzxA1JTm8RzibEufZxYTJilauyHwzc
-         pKJFDkaXtzzvkeOyU7ajhljX9QykaA8Ur2FHYJunK1Sxosbxld4ODKAYs9j7AB06Aipc
-         jW5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=rBhQwIRLGtDs0NCVGTNgfWNgX1dJUVHydJdEE+0l4CZ4dqFIrqUNiUI7DBGKoQzMGJ
-         vdMJAeah6+DHftpHrz7VzAj0zREFEGJtLRthD8hJgaEn/wypQERUkGaH0LaQHn6SLuzx
-         8tiMNDOjak1GD7H+p0O0OXEMULteJQmeMiMpyM0AY0PMRxbkmy4o8GIdxIxq8fcM/Ues
-         DkzbE40twToZI1Wj9iXKvjBdelSOxUa8sbDYk9gZ2iIcKI+F5SW0cimwxtq2G55sOfan
-         vk1MKXmGVRvB4M0BmIz3o46dZq5Rw8zAzE5mydmXbI2aBCLnab94N8OE8eyyY8pZRhaY
-         cDUQ==
-X-Gm-Message-State: APjAAAXgWCe0FqhOfnDRdofO9wIjo8TLOXtk7g3WBVOjaDILNBovgj/c
-        xNjtJjGAGqHlBoWpqDpCmrvDQkReuCENrmcriw0=
-X-Google-Smtp-Source: APXvYqzw3gCG5cnmI6368TWfhjS/+LLSHd6b95oZCOsPTpsAjIN23auDStB1pQ1PTnMah1qk6gl8uYsnTPaZ7k01uH0=
-X-Received: by 2002:ac8:4a81:: with SMTP id l1mr2434940qtq.357.1575463377714;
- Wed, 04 Dec 2019 04:42:57 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac8:2f0c:0:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:42:57 -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Wed, 4 Dec 2019 13:42:57 +0100
-Message-ID: <CAP=nHBJXiPmPL21x=_0BHWRk_3N3Yax+tTxcFi=t=AhN7g==1Q@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1727703AbfLDNif (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 4 Dec 2019 08:38:35 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39016 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727530AbfLDNif (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 4 Dec 2019 08:38:35 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B1675B38D;
+        Wed,  4 Dec 2019 13:38:33 +0000 (UTC)
+From:   Aurelien Aptel <aaptel@suse.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, Aurelien Aptel <aaptel@suse.com>
+Subject: [PATCH] cifs: fix possible uninitialized access and race on iface_list
+Date:   Wed,  4 Dec 2019 14:38:06 +0100
+Message-Id: <20191204133806.27431-1-aaptel@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Attn, dear Beneficiary.
+iface[0] was accessed regardless of the count value and without
+locking.
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+* check count before accessing any ifaces
+* make copy of iface list (it's a simple POD array) and use it without
+  locking.
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+Signed-off-by: Aurelien Aptel <aaptel@suse.com>
+---
+ fs/cifs/sess.c | 30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
+diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
+index fb3bdc44775c..6a58f8a477a2 100644
+--- a/fs/cifs/sess.c
++++ b/fs/cifs/sess.c
+@@ -77,6 +77,8 @@ int cifs_try_adding_channels(struct cifs_ses *ses)
+ 	int i = 0;
+ 	int rc = 0;
+ 	int tries = 0;
++	struct cifs_server_iface *ifaces = NULL;
++	size_t iface_count;
+ 
+ 	if (left <= 0) {
+ 		cifs_dbg(FYI,
+@@ -90,6 +92,27 @@ int cifs_try_adding_channels(struct cifs_ses *ses)
+ 		return 0;
+ 	}
+ 
++	/*
++	 * Make a copy of the iface list at the time and use that
++	 * instead so as to not hold the iface spinlock for opening
++	 * channels
++	 */
++	spin_lock(&ses->iface_lock);
++	iface_count = ses->iface_count;
++	if (iface_count <= 0) {
++		spin_unlock(&ses->iface_lock);
++		cifs_dbg(FYI, "no iface list available to open channels\n");
++		return 0;
++	}
++	ifaces = kmemdup(ses->iface_list, iface_count*sizeof(*ifaces),
++			 GFP_ATOMIC);
++	if (!ifaces) {
++		spin_unlock(&ses->iface_lock);
++		kfree(ifaces);
++		return 0;
++	}
++	spin_unlock(&ses->iface_lock);
++
+ 	/*
+ 	 * Keep connecting to same, fastest, iface for all channels as
+ 	 * long as its RSS. Try next fastest one if not RSS or channel
+@@ -105,9 +128,9 @@ int cifs_try_adding_channels(struct cifs_ses *ses)
+ 			break;
+ 		}
+ 
+-		iface = &ses->iface_list[i];
++		iface = &ifaces[i];
+ 		if (is_ses_using_iface(ses, iface) && !iface->rss_capable) {
+-			i = (i+1) % ses->iface_count;
++			i = (i+1) % iface_count;
+ 			continue;
+ 		}
+ 
+@@ -115,7 +138,7 @@ int cifs_try_adding_channels(struct cifs_ses *ses)
+ 		if (rc) {
+ 			cifs_dbg(FYI, "failed to open extra channel on iface#%d rc=%d\n",
+ 				 i, rc);
+-			i = (i+1) % ses->iface_count;
++			i = (i+1) % iface_count;
+ 			continue;
+ 		}
+ 
+@@ -124,6 +147,7 @@ int cifs_try_adding_channels(struct cifs_ses *ses)
+ 		left--;
+ 	}
+ 
++	kfree(ifaces);
+ 	return ses->chan_count - old_chan_count;
+ }
+ 
+-- 
+2.16.4
 
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
-
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
-
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
