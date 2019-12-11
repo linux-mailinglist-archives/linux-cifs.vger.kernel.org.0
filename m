@@ -2,199 +2,275 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58240119111
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Dec 2019 20:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E570811B642
+	for <lists+linux-cifs@lfdr.de>; Wed, 11 Dec 2019 17:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfLJTxm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 10 Dec 2019 14:53:42 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:38470 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726018AbfLJTxm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 10 Dec 2019 14:53:42 -0500
-Received: by mail-lj1-f194.google.com with SMTP id k8so21243082ljh.5
-        for <linux-cifs@vger.kernel.org>; Tue, 10 Dec 2019 11:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IDHfg7O5F4emNloWuqCOyeEF22vlm/bu86T9QAjIh18=;
-        b=EPT0JEIE06S/Ozg0wsQHLDdfnUDv/edjqKpty3OWPGYGMdNtEAYOrlYpxV+40pQg9I
-         rv6gOTfSP7W8ZpoSiATQjUBeeRnUq6q3mOTmCXhI6xdIxdzWGtU+Dp0IPxT8zLzCOrDp
-         SW9Vv07qjvyKlIi8/PbqpsiuGRSb3dBmZ3xU2x9GpT0LoCqDf6HstlMdC8xHumbj78hf
-         UAXjelPWSyrqnaJ6KhjHCvsxLIWtrMpNhZpWuEoW/KKSMRAhopRJA/pyh7iIwYT35jjk
-         Vfna8lZrWwK2uEHYvdSyawyGT6u8jQbnqNTybOk2y4NV18Evx16CFkgYlvGW0szxb89l
-         FtCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IDHfg7O5F4emNloWuqCOyeEF22vlm/bu86T9QAjIh18=;
-        b=kd+lCrwsxckeip9VUjQJFRzlIczkN+k77V7n6WS+SspSLnQnE8/G0hwgjXUhX6BOdH
-         /0l5xzvxDDuoweSmcDclPCPQnf8zG41rmCjYdRH3M0ioxTIXYAWe5uxyU46/jrBaTHfc
-         fgCVvSmzer0pwW4BHK13f2jhsNSV2oXM16JKLwiERs+r3gHEWb/P7x6V5f17XPkOBnNi
-         /55rYJlBFlKW++m5j7VL+Lt4Oa2zlMody/CT0k+f7/1uM7E0vAj21lFZbX0xeWxgrDAN
-         oRr/31rqIH3aus7f8qevwOjz+dC/QrDTpVjOYetudVqK6HC2RhHU43dMe0GNIEfyKfOs
-         yuZQ==
-X-Gm-Message-State: APjAAAWBpOJTWNIU0KBNb/C4Q4ps0oJCu3NMykk1pKa3kKiSPw3jrlZt
-        vXvM5VqzQ0kXKLbpryTWrtOVnYmHPsr+1uju/g==
-X-Google-Smtp-Source: APXvYqzAaBjHcmB0ZJ+f2XRd3849j8GVMevLxM1KZY/PB+VtjhPktUhxTU69MP4D35jIIswHhdXbrnA8Vkrj8iUJQoA=
-X-Received: by 2002:a2e:9e4c:: with SMTP id g12mr21344425ljk.15.1576007619233;
- Tue, 10 Dec 2019 11:53:39 -0800 (PST)
+        id S1731532AbfLKPN5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 11 Dec 2019 10:13:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38218 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731524AbfLKPN4 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:13:56 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1EAF424681;
+        Wed, 11 Dec 2019 15:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576077234;
+        bh=T2ak9Jiibb0uzXEBWffIWdRs2ALQSArJoWVAoJ5rDSA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mvTlC7rC7kksx6/dheTl6BzZNG2WlbQG66t8iO8SZptHGu8xGtoNiI0YVoLUizxXM
+         Lgx7K3nGej3DBR9VFDSjfqWUI+tsUxR2P3Nv585x2ZwH4AP79EXznQdKaJ+WehEI/j
+         jLHdwlsyDUtuiHJgqJDGeA6dGY9NXfsONdNrx+RU=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Aurelien Aptel <aaptel@suse.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 5.4 113/134] cifs: Fix use-after-free bug in cifs_reconnect()
+Date:   Wed, 11 Dec 2019 10:11:29 -0500
+Message-Id: <20191211151150.19073-113-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
+References: <20191211151150.19073-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <CAH2r5muJSARbGJ4cOZoGy32mCtUTG9wyEyw8aF06zexshAmqfQ@mail.gmail.com>
-In-Reply-To: <CAH2r5muJSARbGJ4cOZoGy32mCtUTG9wyEyw8aF06zexshAmqfQ@mail.gmail.com>
-From:   Pavel Shilovsky <piastryyy@gmail.com>
-Date:   Tue, 10 Dec 2019 11:53:27 -0800
-Message-ID: <CAKywueQSgGgPB+tQz28_VCe1LiyxpY7tU9tByypkTJALdHOOWg@mail.gmail.com>
-Subject: Re: [PATCH] smb3: fix refcount underflow warning on unmount when no
- directory leases
-To:     Steve French <smfrench@gmail.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000004f5a4405995edee2"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---0000000000004f5a4405995edee2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Paulo Alcantara (SUSE)" <pc@cjr.nz>
 
-=D0=BF=D0=BD, 9 =D0=B4=D0=B5=D0=BA. 2019 =D0=B3. =D0=B2 20:48, Steve French=
- <smfrench@gmail.com>:
->
-> Fix refcount underflow warning when unmounting to servers which didn't gr=
-ant
-> directory leases.
->
-> [  301.680095] refcount_t: underflow; use-after-free.
-> [  301.680192] WARNING: CPU: 1 PID: 3569 at lib/refcount.c:28
-> refcount_warn_saturate+0xb4/0xf3
-> ...
-> [  301.682139] Call Trace:
-> [  301.682240]  close_shroot+0x97/0xda [cifs]
-> [  301.682351]  SMB2_tdis+0x7c/0x176 [cifs]
-> [  301.682456]  ? _get_xid+0x58/0x91 [cifs]
-> [  301.682563]  cifs_put_tcon.part.0+0x99/0x202 [cifs]
-> [  301.682637]  ? ida_free+0x99/0x10a
-> [  301.682727]  ? cifs_umount+0x3d/0x9d [cifs]
-> [  301.682829]  cifs_put_tlink+0x3a/0x50 [cifs]
-> [  301.682929]  cifs_umount+0x44/0x9d [cifs]
->
-> Fixes: 72e73c78c446 ("cifs: close the shared root handle on tree disconne=
-ct")
->
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> Acked-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-> Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
-> Reported-and-tested-by: Arthur Marsh <arthur.marsh@internode.on.net>
->
-> --
-> Thanks,
->
-> Steve
+[ Upstream commit 8354d88efdab72b4da32fc4f032448fcef22dab4 ]
 
-Looking at this more, I think that the fact that the handle is valid
-doesn't mean that it has a directory lease. So, I think we need to
-track that fact separately. I coded a quick follow-on fix (untested)
-to describe my idea - see the attached patch.
+Ensure we grab an active reference in cifs superblock while doing
+failover to prevent automounts (DFS links) of expiring and then
+destroying the superblock pointer.
 
-Thoughts?
+This patch fixes the following KASAN report:
 
---
-Best regards,
-Pavel Shilovsky
+[  464.301462] BUG: KASAN: use-after-free in
+cifs_reconnect+0x6ab/0x1350
+[  464.303052] Read of size 8 at addr ffff888155e580d0 by task
+cifsd/1107
 
---0000000000004f5a4405995edee2
-Content-Type: application/octet-stream; 
-	name="0001-CIFS-Close-cached-root-handle-only-if-it-has-a-lease.patch"
-Content-Disposition: attachment; 
-	filename="0001-CIFS-Close-cached-root-handle-only-if-it-has-a-lease.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k40a7hby0>
-X-Attachment-Id: f_k40a7hby0
+[  464.304682] CPU: 3 PID: 1107 Comm: cifsd Not tainted 5.4.0-rc4+ #13
+[  464.305552] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS rel-1.12.1-0-ga5cab58-rebuilt.opensuse.org 04/01/2014
+[  464.307146] Call Trace:
+[  464.307875]  dump_stack+0x5b/0x90
+[  464.308631]  print_address_description.constprop.0+0x16/0x200
+[  464.309478]  ? cifs_reconnect+0x6ab/0x1350
+[  464.310253]  ? cifs_reconnect+0x6ab/0x1350
+[  464.311040]  __kasan_report.cold+0x1a/0x41
+[  464.311811]  ? cifs_reconnect+0x6ab/0x1350
+[  464.312563]  kasan_report+0xe/0x20
+[  464.313300]  cifs_reconnect+0x6ab/0x1350
+[  464.314062]  ? extract_hostname.part.0+0x90/0x90
+[  464.314829]  ? printk+0xad/0xde
+[  464.315525]  ? _raw_spin_lock+0x7c/0xd0
+[  464.316252]  ? _raw_read_lock_irq+0x40/0x40
+[  464.316961]  ? ___ratelimit+0xed/0x182
+[  464.317655]  cifs_readv_from_socket+0x289/0x3b0
+[  464.318386]  cifs_read_from_socket+0x98/0xd0
+[  464.319078]  ? cifs_readv_from_socket+0x3b0/0x3b0
+[  464.319782]  ? try_to_wake_up+0x43c/0xa90
+[  464.320463]  ? cifs_small_buf_get+0x4b/0x60
+[  464.321173]  ? allocate_buffers+0x98/0x1a0
+[  464.321856]  cifs_demultiplex_thread+0x218/0x14a0
+[  464.322558]  ? cifs_handle_standard+0x270/0x270
+[  464.323237]  ? __switch_to_asm+0x40/0x70
+[  464.323893]  ? __switch_to_asm+0x34/0x70
+[  464.324554]  ? __switch_to_asm+0x40/0x70
+[  464.325226]  ? __switch_to_asm+0x40/0x70
+[  464.325863]  ? __switch_to_asm+0x34/0x70
+[  464.326505]  ? __switch_to_asm+0x40/0x70
+[  464.327161]  ? __switch_to_asm+0x34/0x70
+[  464.327784]  ? finish_task_switch+0xa1/0x330
+[  464.328414]  ? __switch_to+0x363/0x640
+[  464.329044]  ? __schedule+0x575/0xaf0
+[  464.329655]  ? _raw_spin_lock_irqsave+0x82/0xe0
+[  464.330301]  kthread+0x1a3/0x1f0
+[  464.330884]  ? cifs_handle_standard+0x270/0x270
+[  464.331624]  ? kthread_create_on_node+0xd0/0xd0
+[  464.332347]  ret_from_fork+0x35/0x40
 
-RnJvbSA5ZTU3NmZmMzU2ZTc4ZGViYWMyMDdjY2M5NDc3MjVlYmYxODAxYzRmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQYXZlbCBTaGlsb3Zza3kgPHBzaGlsb3ZAbWljcm9zb2Z0LmNv
-bT4KRGF0ZTogVHVlLCAxMCBEZWMgMjAxOSAxMTo0NDo1MiAtMDgwMApTdWJqZWN0OiBbUEFUQ0hd
-IENJRlM6IENsb3NlIGNhY2hlZCByb290IGhhbmRsZSBvbmx5IGlmIGl0IGhhcyBhIGxlYXNlCgpT
-TUIyX3RkaXMoKSBjaGVja3MgaWYgYSByb290IGhhbmRsZSBpcyB2YWxpZCBpbiBvcmRlciB0byBk
-ZWNpZGUKd2hldGhlciBpdCBuZWVkcyB0byBjbG9zZSB0aGUgaGFuZGxlIG9yIG5vdC4gSG93ZXZl
-ciBpZiBhbm90aGVyCnRocmVhZCBoYXMgcmVmZXJlbmNlIGZvciB0aGUgaGFuZGxlLCBpdCBtYXkg
-ZW5kIHVwIHdpdGggcHV0dGluZwp0aGUgcmVmZXJlbmNlIHR3aWNlLiBUaGUgZXh0cmEgcmVmZXJl
-bmNlIHRoYXQgd2Ugd2FudCB0byBwdXQKZHVyaW5nIHRoZSB0cmVlIGRpc2Nvbm5lY3QgaXMgdGhl
-IHJlZmVyZW5jZSB0aGF0IGhhcyBhIGRpcmVjdG9yeQpsZWFzZS4gU28sIHRyYWNrIHRoZSBmYWN0
-IHRoYXQgd2UgaGF2ZSBhIGRpcmVjdG9yeSBsZWFzZSBhbmQKY2xvc2UgdGhlIGhhbmRsZSBvbmx5
-IGluIHRoYXQgY2FzZS4KClNpZ25lZC1vZmYtYnk6IFBhdmVsIFNoaWxvdnNreSA8cHNoaWxvdkBt
-aWNyb3NvZnQuY29tPgotLS0KIGZzL2NpZnMvY2lmc2dsb2IuaCAgfCAgMiArLQogZnMvY2lmcy9j
-aWZzc21iLmMgICB8ICAzICsrKwogZnMvY2lmcy9zbWIyb3BzLmMgICB8IDE5ICsrKysrKysrKysr
-KysrKysrKy0KIGZzL2NpZnMvc21iMnBkdS5jICAgfCAgMyArLS0KIGZzL2NpZnMvc21iMnByb3Rv
-LmggfCAgMiArKwogNSBmaWxlcyBjaGFuZ2VkLCAyNSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9u
-cygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NpZnMvY2lmc2dsb2IuaCBiL2ZzL2NpZnMvY2lmc2dsb2Iu
-aAppbmRleCAzOWNhMTk5MGViMWQuLmI0ODcwMmI5ZjA1ZSAxMDA2NDQKLS0tIGEvZnMvY2lmcy9j
-aWZzZ2xvYi5oCisrKyBiL2ZzL2NpZnMvY2lmc2dsb2IuaApAQCAtMTAwMyw3ICsxMDAzLDcgQEAg
-Y2FwX3VuaXgoc3RydWN0IGNpZnNfc2VzICpzZXMpCiBzdHJ1Y3QgY2FjaGVkX2ZpZCB7CiAJYm9v
-bCBpc192YWxpZDoxOwkvKiBEbyB3ZSBoYXZlIGEgdXNlYWJsZSByb290IGZpZCAqLwogCWJvb2wg
-ZmlsZV9hbGxfaW5mb19pc192YWxpZDoxOwotCisJYm9vbCBoYXNfbGVhc2U6MTsKIAlzdHJ1Y3Qg
-a3JlZiByZWZjb3VudDsKIAlzdHJ1Y3QgY2lmc19maWQgKmZpZDsKIAlzdHJ1Y3QgbXV0ZXggZmlk
-X211dGV4OwpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9jaWZzc21iLmMgYi9mcy9jaWZzL2NpZnNzbWIu
-YwppbmRleCAzOTA3NjUzZTYzYzcuLmE1MzVjNmE5ZDIwYyAxMDA2NDQKLS0tIGEvZnMvY2lmcy9j
-aWZzc21iLmMKKysrIGIvZnMvY2lmcy9jaWZzc21iLmMKQEAgLTQyLDYgKzQyLDcgQEAKICNpbmNs
-dWRlICJjaWZzcHJvdG8uaCIKICNpbmNsdWRlICJjaWZzX3VuaWNvZGUuaCIKICNpbmNsdWRlICJj
-aWZzX2RlYnVnLmgiCisjaW5jbHVkZSAic21iMnByb3RvLmgiCiAjaW5jbHVkZSAiZnNjYWNoZS5o
-IgogI2luY2x1ZGUgInNtYmRpcmVjdC5oIgogI2lmZGVmIENPTkZJR19DSUZTX0RGU19VUENBTEwK
-QEAgLTExMiw2ICsxMTMsOCBAQCBjaWZzX21hcmtfb3Blbl9maWxlc19pbnZhbGlkKHN0cnVjdCBj
-aWZzX3Rjb24gKnRjb24pCiAKIAltdXRleF9sb2NrKCZ0Y29uLT5jcmZpZC5maWRfbXV0ZXgpOwog
-CXRjb24tPmNyZmlkLmlzX3ZhbGlkID0gZmFsc2U7CisJLyogY2FjaGVkIGhhbmRsZSBpcyBub3Qg
-dmFsaWQsIHNvIFNNQjJfQ0xPU0Ugd29uJ3QgYmUgc2VudCBiZWxvdyAqLworCWNsb3NlX3Nocm9v
-dF9sZWFzZV9sb2NrZWQoJnRjb24tPmNyZmlkKTsKIAltZW1zZXQodGNvbi0+Y3JmaWQuZmlkLCAw
-LCBzaXplb2Yoc3RydWN0IGNpZnNfZmlkKSk7CiAJbXV0ZXhfdW5sb2NrKCZ0Y29uLT5jcmZpZC5m
-aWRfbXV0ZXgpOwogCmRpZmYgLS1naXQgYS9mcy9jaWZzL3NtYjJvcHMuYyBiL2ZzL2NpZnMvc21i
-Mm9wcy5jCmluZGV4IDVhMTM2ODdiZjU0Ny4uMmRiZjZhYWQxMWRmIDEwMDY0NAotLS0gYS9mcy9j
-aWZzL3NtYjJvcHMuYworKysgYi9mcy9jaWZzL3NtYjJvcHMuYwpAQCAtNjAzLDYgKzYwMyw3IEBA
-IHNtYjJfY2xvc2VfY2FjaGVkX2ZpZChzdHJ1Y3Qga3JlZiAqcmVmKQogCQkJICAgY2ZpZC0+Zmlk
-LT52b2xhdGlsZV9maWQpOwogCQljZmlkLT5pc192YWxpZCA9IGZhbHNlOwogCQljZmlkLT5maWxl
-X2FsbF9pbmZvX2lzX3ZhbGlkID0gZmFsc2U7CisJCWNmaWQtPmhhc19sZWFzZSA9IGZhbHNlOwog
-CX0KIH0KIApAQCAtNjEzLDEzICs2MTQsMjggQEAgdm9pZCBjbG9zZV9zaHJvb3Qoc3RydWN0IGNh
-Y2hlZF9maWQgKmNmaWQpCiAJbXV0ZXhfdW5sb2NrKCZjZmlkLT5maWRfbXV0ZXgpOwogfQogCit2
-b2lkIGNsb3NlX3Nocm9vdF9sZWFzZV9sb2NrZWQoc3RydWN0IGNhY2hlZF9maWQgKmNmaWQpCit7
-CisJaWYgKGNmaWQtPmhhc19sZWFzZSkgeworCQljZmlkLT5oYXNfbGVhc2UgPSBmYWxzZTsKKwkJ
-a3JlZl9wdXQoJmNmaWQtPnJlZmNvdW50LCBzbWIyX2Nsb3NlX2NhY2hlZF9maWQpOworCX0KK30K
-Kwordm9pZCBjbG9zZV9zaHJvb3RfbGVhc2Uoc3RydWN0IGNhY2hlZF9maWQgKmNmaWQpCit7CisJ
-bXV0ZXhfbG9jaygmY2ZpZC0+ZmlkX211dGV4KTsKKwljbG9zZV9zaHJvb3RfbGVhc2VfbG9ja2Vk
-KGNmaWQpOworCW11dGV4X3VubG9jaygmY2ZpZC0+ZmlkX211dGV4KTsKK30KKwogdm9pZAogc21i
-Ml9jYWNoZWRfbGVhc2VfYnJlYWsoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQogewogCXN0cnVj
-dCBjYWNoZWRfZmlkICpjZmlkID0gY29udGFpbmVyX29mKHdvcmssCiAJCQkJc3RydWN0IGNhY2hl
-ZF9maWQsIGxlYXNlX2JyZWFrKTsKIAotCWNsb3NlX3Nocm9vdChjZmlkKTsKKwljbG9zZV9zaHJv
-b3RfbGVhc2UoY2ZpZCk7CiB9CiAKIC8qCkBAIC03NTQsNiArNzcwLDcgQEAgaW50IG9wZW5fc2hy
-b290KHVuc2lnbmVkIGludCB4aWQsIHN0cnVjdCBjaWZzX3Rjb24gKnRjb24sIHN0cnVjdCBjaWZz
-X2ZpZCAqcGZpZCkKIAkvKiBCQiBUQkQgY2hlY2sgdG8gc2VlIGlmIG9wbG9jayBsZXZlbCBjaGVj
-ayBjYW4gYmUgcmVtb3ZlZCBiZWxvdyAqLwogCWlmIChvX3JzcC0+T3Bsb2NrTGV2ZWwgPT0gU01C
-Ml9PUExPQ0tfTEVWRUxfTEVBU0UpIHsKIAkJa3JlZl9nZXQoJnRjb24tPmNyZmlkLnJlZmNvdW50
-KTsKKwkJdGNvbi0+Y3JmaWQuaGFzX2xlYXNlID0gdHJ1ZTsKIAkJc21iMl9wYXJzZV9jb250ZXh0
-cyhzZXJ2ZXIsIG9fcnNwLAogCQkJCSZvcGFybXMuZmlkLT5lcG9jaCwKIAkJCQlvcGFybXMuZmlk
-LT5sZWFzZV9rZXksICZvcGxvY2ssIE5VTEwpOwpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9zbWIycGR1
-LmMgYi9mcy9jaWZzL3NtYjJwZHUuYwppbmRleCBmNGEwZjYzNDUzODYuLjYwZjk4YzJhM2YyMiAx
-MDA2NDQKLS0tIGEvZnMvY2lmcy9zbWIycGR1LmMKKysrIGIvZnMvY2lmcy9zbWIycGR1LmMKQEAg
-LTE4MDQsOCArMTgwNCw3IEBAIFNNQjJfdGRpcyhjb25zdCB1bnNpZ25lZCBpbnQgeGlkLCBzdHJ1
-Y3QgY2lmc190Y29uICp0Y29uKQogCWlmICgodGNvbi0+bmVlZF9yZWNvbm5lY3QpIHx8ICh0Y29u
-LT5zZXMtPm5lZWRfcmVjb25uZWN0KSkKIAkJcmV0dXJuIDA7CiAKLQlpZiAodGNvbi0+Y3JmaWQu
-aXNfdmFsaWQpCi0JCWNsb3NlX3Nocm9vdCgmdGNvbi0+Y3JmaWQpOworCWNsb3NlX3Nocm9vdF9s
-ZWFzZSgmdGNvbi0+Y3JmaWQpOwogCiAJcmMgPSBzbWIyX3BsYWluX3JlcV9pbml0KFNNQjJfVFJF
-RV9ESVNDT05ORUNULCB0Y29uLCAodm9pZCAqKikgJnJlcSwKIAkJCSAgICAgJnRvdGFsX2xlbik7
-CmRpZmYgLS1naXQgYS9mcy9jaWZzL3NtYjJwcm90by5oIGIvZnMvY2lmcy9zbWIycHJvdG8uaApp
-bmRleCBlMjM5Zjk4MDkzYTkuLjgyZjhkYWE4YzU5MCAxMDA2NDQKLS0tIGEvZnMvY2lmcy9zbWIy
-cHJvdG8uaAorKysgYi9mcy9jaWZzL3NtYjJwcm90by5oCkBAIC02OSw2ICs2OSw4IEBAIGV4dGVy
-biBpbnQgc21iM19oYW5kbGVfcmVhZF9kYXRhKHN0cnVjdCBUQ1BfU2VydmVyX0luZm8gKnNlcnZl
-ciwKIGV4dGVybiBpbnQgb3Blbl9zaHJvb3QodW5zaWduZWQgaW50IHhpZCwgc3RydWN0IGNpZnNf
-dGNvbiAqdGNvbiwKIAkJCXN0cnVjdCBjaWZzX2ZpZCAqcGZpZCk7CiBleHRlcm4gdm9pZCBjbG9z
-ZV9zaHJvb3Qoc3RydWN0IGNhY2hlZF9maWQgKmNmaWQpOworZXh0ZXJuIHZvaWQgY2xvc2Vfc2hy
-b290X2xlYXNlKHN0cnVjdCBjYWNoZWRfZmlkICpjZmlkKTsKK2V4dGVybiB2b2lkIGNsb3NlX3No
-cm9vdF9sZWFzZV9sb2NrZWQoc3RydWN0IGNhY2hlZF9maWQgKmNmaWQpOwogZXh0ZXJuIHZvaWQg
-bW92ZV9zbWIyX2luZm9fdG9fY2lmcyhGSUxFX0FMTF9JTkZPICpkc3QsCiAJCQkJICAgc3RydWN0
-IHNtYjJfZmlsZV9hbGxfaW5mbyAqc3JjKTsKIGV4dGVybiBpbnQgc21iMl9xdWVyeV9wYXRoX2lu
-Zm8oY29uc3QgdW5zaWduZWQgaW50IHhpZCwgc3RydWN0IGNpZnNfdGNvbiAqdGNvbiwKLS0gCjIu
-MTcuMQoK
---0000000000004f5a4405995edee2--
+[  464.333577] Allocated by task 1110:
+[  464.334381]  save_stack+0x1b/0x80
+[  464.335123]  __kasan_kmalloc.constprop.0+0xc2/0xd0
+[  464.335848]  cifs_smb3_do_mount+0xd4/0xb00
+[  464.336619]  legacy_get_tree+0x6b/0xa0
+[  464.337235]  vfs_get_tree+0x41/0x110
+[  464.337975]  fc_mount+0xa/0x40
+[  464.338557]  vfs_kern_mount.part.0+0x6c/0x80
+[  464.339227]  cifs_dfs_d_automount+0x336/0xd29
+[  464.339846]  follow_managed+0x1b1/0x450
+[  464.340449]  lookup_fast+0x231/0x4a0
+[  464.341039]  path_openat+0x240/0x1fd0
+[  464.341634]  do_filp_open+0x126/0x1c0
+[  464.342277]  do_sys_open+0x1eb/0x2c0
+[  464.342957]  do_syscall_64+0x5e/0x190
+[  464.343555]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+[  464.344772] Freed by task 0:
+[  464.345347]  save_stack+0x1b/0x80
+[  464.345966]  __kasan_slab_free+0x12c/0x170
+[  464.346576]  kfree+0xa6/0x270
+[  464.347211]  rcu_core+0x39c/0xc80
+[  464.347800]  __do_softirq+0x10d/0x3da
+
+[  464.348919] The buggy address belongs to the object at
+ffff888155e58000
+                which belongs to the cache kmalloc-256 of size 256
+[  464.350222] The buggy address is located 208 bytes inside of
+                256-byte region [ffff888155e58000, ffff888155e58100)
+[  464.351575] The buggy address belongs to the page:
+[  464.352333] page:ffffea0005579600 refcount:1 mapcount:0
+mapping:ffff88815a803400 index:0x0 compound_mapcount: 0
+[  464.353583] flags: 0x200000000010200(slab|head)
+[  464.354209] raw: 0200000000010200 ffffea0005576200 0000000400000004
+ffff88815a803400
+[  464.355353] raw: 0000000000000000 0000000080100010 00000001ffffffff
+0000000000000000
+[  464.356458] page dumped because: kasan: bad access detected
+
+[  464.367005] Memory state around the buggy address:
+[  464.367787]  ffff888155e57f80: fc fc fc fc fc fc fc fc fc fc fc fc
+fc fc fc fc
+[  464.368877]  ffff888155e58000: fb fb fb fb fb fb fb fb fb fb fb fb
+fb fb fb fb
+[  464.369967] >ffff888155e58080: fb fb fb fb fb fb fb fb fb fb fb fb
+fb fb fb fb
+[  464.371111]                                                  ^
+[  464.371775]  ffff888155e58100: fc fc fc fc fc fc fc fc fc fc fc fc
+fc fc fc fc
+[  464.372893]  ffff888155e58180: fc fc fc fc fc fc fc fc fc fc fc fc
+fc fc fc fc
+[  464.373983] ==================================================================
+
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/connect.c | 46 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 35 insertions(+), 11 deletions(-)
+
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index ccaa8bad336f9..a4ae4d944a3ab 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -387,7 +387,7 @@ static inline int reconn_set_ipaddr(struct TCP_Server_Info *server)
+ #ifdef CONFIG_CIFS_DFS_UPCALL
+ struct super_cb_data {
+ 	struct TCP_Server_Info *server;
+-	struct cifs_sb_info *cifs_sb;
++	struct super_block *sb;
+ };
+ 
+ /* These functions must be called with server->srv_mutex held */
+@@ -398,25 +398,39 @@ static void super_cb(struct super_block *sb, void *arg)
+ 	struct cifs_sb_info *cifs_sb;
+ 	struct cifs_tcon *tcon;
+ 
+-	if (d->cifs_sb)
++	if (d->sb)
+ 		return;
+ 
+ 	cifs_sb = CIFS_SB(sb);
+ 	tcon = cifs_sb_master_tcon(cifs_sb);
+ 	if (tcon->ses->server == d->server)
+-		d->cifs_sb = cifs_sb;
++		d->sb = sb;
+ }
+ 
+-static inline struct cifs_sb_info *
+-find_super_by_tcp(struct TCP_Server_Info *server)
++static struct super_block *get_tcp_super(struct TCP_Server_Info *server)
+ {
+ 	struct super_cb_data d = {
+ 		.server = server,
+-		.cifs_sb = NULL,
++		.sb = NULL,
+ 	};
+ 
+ 	iterate_supers_type(&cifs_fs_type, super_cb, &d);
+-	return d.cifs_sb ? d.cifs_sb : ERR_PTR(-ENOENT);
++
++	if (unlikely(!d.sb))
++		return ERR_PTR(-ENOENT);
++	/*
++	 * Grab an active reference in order to prevent automounts (DFS links)
++	 * of expiring and then freeing up our cifs superblock pointer while
++	 * we're doing failover.
++	 */
++	cifs_sb_active(d.sb);
++	return d.sb;
++}
++
++static inline void put_tcp_super(struct super_block *sb)
++{
++	if (!IS_ERR_OR_NULL(sb))
++		cifs_sb_deactive(sb);
+ }
+ 
+ static void reconn_inval_dfs_target(struct TCP_Server_Info *server,
+@@ -480,6 +494,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 	struct mid_q_entry *mid_entry;
+ 	struct list_head retry_list;
+ #ifdef CONFIG_CIFS_DFS_UPCALL
++	struct super_block *sb = NULL;
+ 	struct cifs_sb_info *cifs_sb = NULL;
+ 	struct dfs_cache_tgt_list tgt_list = {0};
+ 	struct dfs_cache_tgt_iterator *tgt_it = NULL;
+@@ -489,13 +504,15 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 	server->nr_targets = 1;
+ #ifdef CONFIG_CIFS_DFS_UPCALL
+ 	spin_unlock(&GlobalMid_Lock);
+-	cifs_sb = find_super_by_tcp(server);
+-	if (IS_ERR(cifs_sb)) {
+-		rc = PTR_ERR(cifs_sb);
++	sb = get_tcp_super(server);
++	if (IS_ERR(sb)) {
++		rc = PTR_ERR(sb);
+ 		cifs_dbg(FYI, "%s: will not do DFS failover: rc = %d\n",
+ 			 __func__, rc);
+-		cifs_sb = NULL;
++		sb = NULL;
+ 	} else {
++		cifs_sb = CIFS_SB(sb);
++
+ 		rc = reconn_setup_dfs_targets(cifs_sb, &tgt_list, &tgt_it);
+ 		if (rc && (rc != -EOPNOTSUPP)) {
+ 			cifs_server_dbg(VFS, "%s: no target servers for DFS failover\n",
+@@ -512,6 +529,10 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 		/* the demux thread will exit normally
+ 		next time through the loop */
+ 		spin_unlock(&GlobalMid_Lock);
++#ifdef CONFIG_CIFS_DFS_UPCALL
++		dfs_cache_free_tgts(&tgt_list);
++		put_tcp_super(sb);
++#endif
+ 		return rc;
+ 	} else
+ 		server->tcpStatus = CifsNeedReconnect;
+@@ -638,7 +659,10 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 				 __func__, rc);
+ 		}
+ 		dfs_cache_free_tgts(&tgt_list);
++
+ 	}
++
++	put_tcp_super(sb);
+ #endif
+ 	if (server->tcpStatus == CifsNeedNegotiate)
+ 		mod_delayed_work(cifsiod_wq, &server->echo, 0);
+-- 
+2.20.1
+
