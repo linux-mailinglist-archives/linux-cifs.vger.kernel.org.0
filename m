@@ -2,73 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B9F12729E
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 Dec 2019 01:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE801272EC
+	for <lists+linux-cifs@lfdr.de>; Fri, 20 Dec 2019 02:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbfLTA7F (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 19 Dec 2019 19:59:05 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48041 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726998AbfLTA7F (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 19 Dec 2019 19:59:05 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-185-Cho6Wm_RMju_IBW3U_YTNw-1; Thu, 19 Dec 2019 19:59:02 -0500
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8A44A800D48
-        for <linux-cifs@vger.kernel.org>; Fri, 20 Dec 2019 00:59:01 +0000 (UTC)
-Received: from test1135.test.redhat.com (vpn2-54-93.bne.redhat.com [10.64.54.93])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E0A97A5EF;
-        Fri, 20 Dec 2019 00:59:00 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] smbinfo: remove invalid arguments to ioctl method
-Date:   Fri, 20 Dec 2019 10:58:48 +1000
-Message-Id: <20191220005848.22327-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-MC-Unique: Cho6Wm_RMju_IBW3U_YTNw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        id S1727006AbfLTBmf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 19 Dec 2019 20:42:35 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:35640 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727020AbfLTBmf (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 19 Dec 2019 20:42:35 -0500
+Received: by mail-il1-f195.google.com with SMTP id g12so6588321ild.2;
+        Thu, 19 Dec 2019 17:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sfr0DkASOT0MoT13/9e3piyeEKgEAbIuAROVb11tB/8=;
+        b=hDmKdmCEoRGDXnjj93XNfw6FoH8rtTZnKOYluWiw5na7UgC74B6XdOt5X1HcRAZnun
+         odMTXStKNxHolBzNSxflFXZPttY+WPy9NuB7kXkL7OP1k/ur6X6NpKB/iKDkiptIEdRS
+         B3pnFp6TsBm89uV38uszZHKpaaGpRnoIf1L685FfOY/qaHRt13u7hKgbWQ6mQ5cz8gRs
+         0M5S7JWjgFvHlPSo1Y0gpvuxkzFLPwBOzs/bm3M+mrbCvk1+QB6786aHyt+b7f8gEJPh
+         EDWgjplRuJyYyf5oXtJ/se+QjE0zNlc4rDEb6iBCEVweQKlA1pEgVjeCj4jya3lq5jJD
+         SMRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sfr0DkASOT0MoT13/9e3piyeEKgEAbIuAROVb11tB/8=;
+        b=XObANOzUVpSaiYEBBsfxBQiDN/kUHpJc5XVUhRzoRJNDEHhEOWkTy7vv4L+xkcCh1o
+         pyQvZq3lW7DHxlFbJ/r7fhJCr4IUzdlFSVK3MVXlwWUduKGwq6WJmGr2iF/M6SPk8DGH
+         2bqg2zbP2rUznfViy64vL5aHJ2xSF3MDKIHfHAuPt2nWwo2PYppXoprNDuBxP1G8/2bK
+         u3jDHH0GjF4TkJuR9tEQC5esIVJy78rL6IAwpp6SkXrRnUTOMs3fd3bO4Gdd7xwWhEN4
+         XHVzWBtDIUY07fwZF8beSxHAhFzKdViIofQ00OFEJtqP+2ZfP28s1CchaaNTLbM8HQrh
+         D9YQ==
+X-Gm-Message-State: APjAAAUKgCkHf1qQjaQkCrksy26EcroHXBS25Lvc5VzLcE8uTvoZcpC5
+        oBK4CdrT7CMk4ec1s/X6Hu9zNwetuYYgALJUPWID9A==
+X-Google-Smtp-Source: APXvYqwW12fGRUInSbhFGQiF8M5rMUYdDDkl/mkcbRhVNYfiGDJz2k/OjCft5BgxUUEN5KqBimqQgZwbaY/hrYQzo6Y=
+X-Received: by 2002:a92:4883:: with SMTP id j3mr9930949ilg.272.1576806154739;
+ Thu, 19 Dec 2019 17:42:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20191218030451.40994-1-natechancellor@gmail.com>
+In-Reply-To: <20191218030451.40994-1-natechancellor@gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 19 Dec 2019 19:42:23 -0600
+Message-ID: <CAH2r5mtr=d-LYD_EQ_OQVX5s8QziHvAYNmRnwMpVjeb4JiHMYw@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Adjust indentation in smb2_open_file
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- smbinfo | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+merged into cifs-2.6.git for-next
 
-diff --git a/smbinfo b/smbinfo
-index 1be82c7..ee774d3 100755
---- a/smbinfo
-+++ b/smbinfo
-@@ -443,7 +443,7 @@ def cmd_filefsfullsizeinfo(args):
-     qi =3D QueryInfoStruct(info_type=3D0x2, file_info_class=3D7, input_buf=
-fer_length=3D32)
-     try:
-         fd =3D os.open(args.file, os.O_RDONLY)
--        total, caller_avail, actual_avail, sec_per_unit, byte_per_sec =3D =
-qi.ioctl(fd, CIFS_QUERY_INFO, '<QQQII')
-+        total, caller_avail, actual_avail, sec_per_unit, byte_per_sec =3D =
-qi.ioctl(fd, '<QQQII')
-     except Exception as e:
-         print("syscall failed: %s"%e)
-         return False
-@@ -540,7 +540,7 @@ def cmd_getcompression(args):
-     qi =3D QueryInfoStruct(info_type=3D0x9003c, flags=3DPASSTHRU_FSCTL, in=
-put_buffer_length=3D2)
-     try:
-         fd =3D os.open(args.file, os.O_RDONLY)
--        ctype =3D qi.ioctl(fd, CIFS_QUERY_INFO, '<H')[0]
-+        ctype =3D qi.ioctl(fd, '<H')[0]
-     except Exception as e:
-         print("syscall failed: %s"%e)
-         return False
---=20
-2.13.6
+On Tue, Dec 17, 2019 at 9:04 PM Nathan Chancellor
+<natechancellor@gmail.com> wrote:
+>
+> Clang warns:
+>
+> ../fs/cifs/smb2file.c:70:3: warning: misleading indentation; statement
+> is not part of the previous 'if' [-Wmisleading-indentation]
+>          if (oparms->tcon->use_resilient) {
+>          ^
+> ../fs/cifs/smb2file.c:66:2: note: previous statement is here
+>         if (rc)
+>         ^
+> 1 warning generated.
+>
+> This warning occurs because there is a space after the tab on this line.
+> Remove it so that the indentation is consistent with the Linux kernel
+> coding style and clang no longer warns.
+>
+> Fixes: 592fafe644bf ("Add resilienthandles mount parm")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/826
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> ---
+>  fs/cifs/smb2file.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
+> index 8b0b512c5792..afe1f03aabe3 100644
+> --- a/fs/cifs/smb2file.c
+> +++ b/fs/cifs/smb2file.c
+> @@ -67,7 +67,7 @@ smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms,
+>                 goto out;
+>
+>
+> -        if (oparms->tcon->use_resilient) {
+> +       if (oparms->tcon->use_resilient) {
+>                 /* default timeout is 0, servers pick default (120 seconds) */
+>                 nr_ioctl_req.Timeout =
+>                         cpu_to_le32(oparms->tcon->handle_timeout);
+> --
+> 2.24.1
+>
 
+
+-- 
+Thanks,
+
+Steve
