@@ -2,63 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F9F1274B4
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 Dec 2019 05:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D24CA1279C3
+	for <lists+linux-cifs@lfdr.de>; Fri, 20 Dec 2019 12:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727465AbfLTEdx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 19 Dec 2019 23:33:53 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:33378 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727128AbfLTEdx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 19 Dec 2019 23:33:53 -0500
-Received: by mail-wr1-f67.google.com with SMTP id b6so8124950wrq.0
-        for <linux-cifs@vger.kernel.org>; Thu, 19 Dec 2019 20:33:51 -0800 (PST)
+        id S1727184AbfLTLHJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 20 Dec 2019 06:07:09 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40200 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbfLTLHI (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 Dec 2019 06:07:08 -0500
+Received: by mail-io1-f68.google.com with SMTP id x1so8971073iop.7
+        for <linux-cifs@vger.kernel.org>; Fri, 20 Dec 2019 03:07:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QRBukMNDPMMB0lG96kyaqaEalCs3+vNed+Anplmweqw=;
-        b=UvlkCr6fYL20YtGCcQubmrPLj/G4mpGrGQnclfFRfapBtFDEFHRBgoj77j3zw8P7xR
-         z/m0rT0hw6I5vFaIDRuyAGX/vgixm35P/nARztkkTXIyx4pepTvfKT1hV3/qRhZMk5PL
-         4/3ZVYoetJXfMdGv8nW9pekibkewEFbHGFy5cW/3Xlf7divifFfrJImKlTzedAOAkEvI
-         ft7ggx7PyTfW3yzp9lCN0QjIBct1HmtxH4kb8GYVLUplhCMbfqDY/tmpUSM5JhVR8onV
-         S/QnhKw+raCJfQGfJZUTW/9e9SQxprYV71wiluegu06YsQCuq2Afw8O9M1WE3gorKs9Q
-         XRYg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=caZHEETAKMstGFK2FP8M+oVhxbx01uuGNn3bGrODfEk=;
+        b=KHXNEF+lNY7O/1MNYge/psuyVIrawhehL1qCbBQVWnnEMk3e9Xx2Yd18NrztiB3JKK
+         I3XIgqHNpqThWfS/qRlSAVnu/VRyj7AUd0Zxf4gO/2lgGk0LT1A5+7RLeVfS1oBNxoRJ
+         +9laef8gam/Umidk7Q0u+mLgQY2RIyzS3EIlG5OuUervW3P9l2WWsfnPmVJzHDcip7C7
+         nHt9ZyP3Le5ARaHMpflF5uw1CdTA9ZiGI1eWK1BG3zBRNn4VUZn37Vi8d6H5I7QWn8IP
+         5A8sOZTcMN5hE17rXG7zGSa9gdvy4PWfKRiWYgYY0y1X/PmAjoOwLR8dvUKUcDsBcF4x
+         uReg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QRBukMNDPMMB0lG96kyaqaEalCs3+vNed+Anplmweqw=;
-        b=r460c0o+dOqnHaxBx6qpfR3E+kFxEYFEF+BxnjzlBxCSLgm4HJjV+b/1Dpt00qoeDL
-         qW28DQqRxXuKGXVFWcK4yDPjBuw5Xzzub88/2dGloOin7B3BZc6QCc9MkR41ZVnlAyku
-         WVj8Y+727PhGMOnulxnybtVaxVymbGdysMb7UrJZi8Cvlg5AxnvBmZBEhOX3YO4nIGOe
-         po3XUPpsZatPJCvX97nyIPOHLyj3ZpvG6C3j+HLBB+JRH8rDeNrd4/7rYAQ6m9C33lfs
-         Ss3gL7ZISZZLBsuAV6RwBSXLFjPbNwIPuPZqLkf1O+Jmv3iPnsupN/HWOGOmGETg9eNL
-         sYGg==
-X-Gm-Message-State: APjAAAVyG6PObvX0l2V/fPMnXEml0LVxftGVe0JLekI7opWCrBLjZd6Q
-        oXm2rO2s29+99Wmy9PiCC4KZeiu3oEP9tZm8i79J2U2qGbk=
-X-Google-Smtp-Source: APXvYqyD5H/9qZRxybrTqq5JaEI3HVC9tTh3lriLlRTcB7alS9QnE/l/3JXv1Z8MVfWpjKa5mItDNMQEQHOL3yQxVGY=
-X-Received: by 2002:a5d:4749:: with SMTP id o9mr12476634wrs.242.1576816431176;
- Thu, 19 Dec 2019 20:33:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=caZHEETAKMstGFK2FP8M+oVhxbx01uuGNn3bGrODfEk=;
+        b=b1Q23iIR/RJebHkfx4EMciNbgk89TL09u6qP7ZqO3eDfGeKqDlXVO681y6pdiuQ+nu
+         wsO53R/9mya1sARrywzjzMhpybPLdfXvv2vXf3tUUUwUAhtwJ7JuNy1NqCElSN+mVH+l
+         qrrBnbrg+lGPU3T36SmVDwLKrW9xBCPgcGISIxmfGS8mS5DWCw69deYcuu2IWlV7HYmD
+         Y5uw22qmDwso8LHoTlHCTOiN0vb6U0DuG1Y0JVqarTp6w7STMahXPDx9f+am97/POZFz
+         Q3BUQO2ZiBLzqFPdfxSATXhQfktrnsN7W0sJdAowK9U+YRhwyrhaSoP0b+bg/LTJ2Eqo
+         DYEA==
+X-Gm-Message-State: APjAAAX86HgMmuK7h+bEaR19HibDUiH4JTSq55LbJ72C0tP+fSSrXyWJ
+        /5wIJmqmvyUsxlZ9DgGFmp22/paOUR+7M+twpzg=
+X-Google-Smtp-Source: APXvYqx1liCwS4eg0V2w6r15o4oVks6ZrFF1eWoWj8Pqtv8SJP7HRaLrgPoq2bPldTXTxFgsD3lteVvaBrrK8bbsMyg=
+X-Received: by 2002:a05:6638:2b7:: with SMTP id d23mr11320727jaq.108.1576840027309;
+ Fri, 20 Dec 2019 03:07:07 -0800 (PST)
 MIME-Version: 1.0
-References: <1327532317.1529923.1576509501382.JavaMail.zimbra@redhat.com>
- <180194560.1531945.1576510209913.JavaMail.zimbra@redhat.com>
- <MN2PR21MB143962C9B65975E1DAD7A81BA0510@MN2PR21MB1439.namprd21.prod.outlook.com>
- <798763602.1820950.1576637331025.JavaMail.zimbra@redhat.com>
- <CAN05THShz43rw51JP-1X7JFjbuPCLAH2jcv+8x=d65UtMT+2hQ@mail.gmail.com>
- <2122939021.2041834.1576722876658.JavaMail.zimbra@redhat.com>
- <CANFS6bY6b23MznmrGuugcVUEW3UuRbzAxBd4p35K3qdkz4DCAA@mail.gmail.com> <1047490239.2348842.1576810790780.JavaMail.zimbra@redhat.com>
-In-Reply-To: <1047490239.2348842.1576810790780.JavaMail.zimbra@redhat.com>
-From:   Hyunchul Lee <hyc.lee@gmail.com>
-Date:   Fri, 20 Dec 2019 13:33:39 +0900
-Message-ID: <CANFS6bZ8A_OHtGK1+qKfWFJi15-e9t44Wm63++RZ9W9VZwJ8ng@mail.gmail.com>
-Subject: Re: How to use SMB Direct
-To:     Xiaoli Feng <xifeng@redhat.com>
-Cc:     metze@samba.org, ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Tom Talpey <ttalpey@microsoft.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        linux-cifsd-devel@lists.sourceforge.net,
-        Steve French <smfrench@gmail.com>
+Received: by 2002:a05:6622:d9:0:0:0:0 with HTTP; Fri, 20 Dec 2019 03:07:06
+ -0800 (PST)
+Reply-To: kantesulaman@gmail.com
+From:   sulaman Kante <justinalaboso79@gmail.com>
+Date:   Fri, 20 Dec 2019 03:07:06 -0800
+Message-ID: <CAKEENoKrdkmia068ZHSO7tdhoB4r7_PjgGR-A8OzemTNq4NgLw@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
@@ -66,239 +56,74 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello Xiaoli,
+Greetings My Dear Friend,
 
-2019=EB=85=84 12=EC=9B=94 20=EC=9D=BC (=EA=B8=88) =EC=98=A4=ED=9B=84 12:00,=
- Xiaoli Feng <xifeng@redhat.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hello Hyeoncheol,
->
-> When use the cifsd you provide, are there any required for Samba server?
-> Now I have two machines that have Mellanox ConnectX-3. And install 5.5.0-=
-rc1+.
-> If one machine install the cifsd. Then I can use the SMB Direct without t=
-he
-> concern of Samba server. Is it right?
->
-Yes, you can use the SMB Direct without Samba server.
+Before I introduce myself, I wish to inform you that this letter is
+not a hoax mail and I urge you to treat it serious.This letter must
+come to you as a big surprise, but I believe it is only a day that
+people meet and become great friends and business partners. Please I
+want you to read this letter very carefully and I must apologize for
+barging this message into your mail box without any formal
+introduction due to the urgency and confidentiality of this business
+and I know that this message will come to you as a surprise. Please
+this is not a joke and I will not like you to joke with it ok,With due
+respect to your person and much sincerity of purpose, I make this
+contact with you as I believe that you can be of great assistance to
+me. My name is Mr.sulaman Kante, from Burkina Faso, West Africa. I
+work with BIB BANK (BIB BANK) as telex manager, please see this as a
+confidential message and do not reveal it to another person and let me
+know whether you can be of assistance regarding my proposal below
+because it is top secret.
 
-Following are instructions for cifsd setup.
-And cifsd utils and a detailed description can be found in
-https://github.com/cifsd-team/cifsd-tools
+I am about to retire from active Banking service to start a new life
+but I am skeptical to reveal this particular secret to a stranger. You
+must assure me that everything will be handled confidentially because
+we are not going to suffer again in life. It has been 10 years now
+that most of the greedy African Politicians used our bank to launder
+money overseas through the help of their Political advisers. Most of
+the funds which they transferred out of the shores of Africa were gold
+and oil money that was supposed to have been used to develop the
+continent. Their Political advisers always inflated the amounts before
+transferring to foreign accounts, so I also used the opportunity to
+divert part of the funds hence I am aware that there is no official
+trace of how much was transferred as all the accounts used for such
+transfers were being closed after transfer. I acted as the Bank
+Officer to most of the politicians and when I discovered that they
+were using me to succeed in their greedy act; I also cleaned some of
+their banking records from the Bank files and no one cared to ask me
+because the money was too much for them to control. They laundered
+over $5billion Dollars during the process.
 
--  Build and install cifsd kernel driver
-modprobe cifsd
+Before I send this message to you, I have already diverted
+($10.6million Dollars) to an escrow account belonging to no one in the
+bank. The bank is anxious now to know who the beneficiary to the funds
+is because they have made a lot of profits with the funds. It is more
+than Eight years now and most of the politicians are no longer using
+our bank to transfer funds overseas. The ($10.6million Dollars) has
+been laying waste in our bank and I don=E2=80=99t want to retire from the b=
+ank
+without transferring the funds to a foreign account to enable me share
+the proceeds with the receiver (a foreigner). The money will be shared
+60% for me and 40% for you. There is no one coming to ask you about
+the funds because I secured everything. I only want you to assist me
+by providing a reliable bank account where the funds can be
+transferred.
 
-- Create user/password for SMB share
-cifsuseradd -a <Enter USERNAME for SMB share access>
-Enter password for SMB share access
-
-- Create /etc/cifs/smb.conf file, add SMB share in smb.conf file
-Refer smb.conf.example
-
-- Start cifsd user space daemon
-cifsd
-
-- Access share from Windows or Linux using CIFS
-
-Thank you.
-
-> As I know, seems there are two projects for SMB Direct(kernel part). One =
-is
-> the cifsd. The others is Metze's repo. Which one is planning to go into l=
-inux
-> tree or both are?
->
-> https://github.com/cifsd-team/cifsd.git
-> https://git.samba.org/?p=3Dmetze/linux/smbdirect.git;a=3Dshortlog;h=3Dref=
-s/heads/smbdirect-work-in-progress
->
-> Thanks.
->
-> ----- Original Message -----
-> > From: "Hyeoncheol Lee" <hyc.lee@gmail.com>
-> > To: "Xiaoli Feng" <xifeng@redhat.com>
-> > Cc: "ronnie sahlberg" <ronniesahlberg@gmail.com>, "Tom Talpey" <ttalpey=
-@microsoft.com>, "linux-cifs"
-> > <linux-cifs@vger.kernel.org>, linux-cifsd-devel@lists.sourceforge.net
-> > Sent: Thursday, December 19, 2019 2:47:40 PM
-> > Subject: Re: How to use SMB Direct
-> >
-> > Hello Xiaoli,
-> >
-> > cifsd is an in-kernel SMB server which supports SMB Direct.
-> > If you want to test SMB Direct with cifs, you can use cifsd.
-> >
-> > Currently we have tested SMB Direct between two old fashioned
-> > Mellanox ConnectX devices which are connected directly,
-> > and between two soft RoCE devices in kernel.
-> >
-> > You can get cifsd's code from the following url, and
-> > If you have any questions, we will help you.
-> >
-> > https://github.com/cifsd-team/cifsd.git
-> >
-> > Thank you.
-> >
-> >
-> > 2019=EB=85=84 12=EC=9B=94 19=EC=9D=BC (=EB=AA=A9) =EC=98=A4=EC=A0=84 11=
-:35, Xiaoli Feng <xifeng@redhat.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> > >
-> > > Thanks Ronnie for the information. Last question: Is it supported tha=
-t
-> > > mount the windows file
-> > > server(has rdma hardware) with SMB Direct in linux client(has rdma
-> > > hardware)?
-> > >
-> > > ----- Original Message -----
-> > > > From: "ronnie sahlberg" <ronniesahlberg@gmail.com>
-> > > > To: "Xiaoli Feng" <xifeng@redhat.com>
-> > > > Cc: "Tom Talpey" <ttalpey@microsoft.com>, "linux-cifs"
-> > > > <linux-cifs@vger.kernel.org>
-> > > > Sent: Wednesday, December 18, 2019 4:12:32 PM
-> > > > Subject: Re: How to use SMB Direct
-> > > >
-> > > > I don't think samba supports SMB Direct.
-> > > > Metze used to have a private repo with some experimental patches bu=
-t I
-> > > > don't think it
-> > > > has landed in official samba yet.
-> > > >
-> > > > For a linux server, there is an experimental kernel based server
-> > > > called cifsd which should support SMBDirect
-> > > > but is incomplete in other areas. It is not part of linus tree yet
-> > > > (but soon I hope).
-> > > >
-> > > > Windows servers support SMBDirect but I am not aware of any soft-rd=
-ma
-> > > > support so you might be
-> > > > limited to just using real hw for any tests.
-> > > >
-> > > > Linux serverside SMBD support is not ready afaik.
-> > > >
-> > > > On Wed, Dec 18, 2019 at 12:49 PM Xiaoli Feng <xifeng@redhat.com> wr=
-ote:
-> > > > >
-> > > > > Hello Tom,
-> > > > >
-> > > > > Then I try to use IP to mount, it show this error:
-> > > > > [79912.177783] CIFS VFS: _smbd_get_connection:1740 rdma_connect f=
-ailed
-> > > > > port=3D5445
-> > > > > [79912.220723] CIFS VFS: _smbd_get_connection:1740 rdma_connect f=
-ailed
-> > > > > port=3D445
-> > > > >
-> > > > > Client:
-> > > > > $ mount //172.31.0.250/cifs cifs -o user=3Droot,password=3Dredhat=
-,rdma
-> > > > > mount error(2): No such file or directory
-> > > > > Refer to the mount.cifs(8) manual page (e.g. man mount.cifs)
-> > > > >
-> > > > > Server:
-> > > > > $ ib addr |grep 172.31.0.250/
-> > > > > mlx4_ib0:               Link UP, Interface UP   172.31.0.250/24
-> > > > >
-> > > > > Samba version is 4.11.2. And firewalld is stopped.
-> > > > >
-> > > > > ----- Original Message -----
-> > > > > > From: "Tom Talpey" <ttalpey@microsoft.com>
-> > > > > > To: "Xiaoli Feng" <xifeng@redhat.com>, linux-cifs@vger.kernel.o=
-rg
-> > > > > > Sent: Tuesday, December 17, 2019 1:11:24 AM
-> > > > > > Subject: RE: How to use SMB Direct
-> > > > > >
-> > > > > > > -----Original Message-----
-> > > > > > > From: linux-cifs-owner@vger.kernel.org
-> > > > > > > <linux-cifs-owner@vger.kernel.org>
-> > > > > > > On
-> > > > > > > Behalf Of Xiaoli Feng
-> > > > > > > Sent: Monday, December 16, 2019 10:30 AM
-> > > > > > > To: linux-cifs@vger.kernel.org
-> > > > > > > Subject: [EXTERNAL] How to use SMB Direct
-> > > > > > >
-> > > > > > > Hello guys,
-> > > > > > >
-> > > > > > > I'd like to test SMB Direct. But it's failed. I'm not sure if=
- it
-> > > > > > > works
-> > > > > > > in
-> > > > > > > upstream.
-> > > > > > > I setup samba server on one rdma machine with 5.5.0-rc1+ kern=
-el.
-> > > > > > > The
-> > > > > > > smb.conf is:
-> > > > > > > [cifs]
-> > > > > > > path=3D/mnt/cifs
-> > > > > > > writeable=3Dyes
-> > > > > > >
-> > > > > > > Then I try to mount the share on another rdma machine with
-> > > > > > > 5.5.0-rc1+
-> > > > > > > kernel.
-> > > > > > >    mount //$RDMA/cifs cifs -o user=3Droot,password=3D$passwor=
-d,rdma
-> > > > > > >
-> > > > > > > It's failed because of "CIFS VFS: smbd_create_id:614
-> > > > > > > rdma_resolve_addr()
-> > > > > > > completed -113"
-> > > > > >
-> > > > > > Errno 113 is "no route to host". Sounds like a network or addre=
-ss
-> > > > > > issue.
-> > > > > >
-> > > > > > Tom.
-> > > > > >
-> > > > > > > Does SMB Direct work fine in upstream?
-> > > > > > >
-> > > > > > > Thanks.
-> > > > > > >
-> > > > > > > $ cat /boot/config-5.5.0-rc1+ |grep SMB_DIRECT
-> > > > > > > CONFIG_CIFS_SMB_DIRECT=3Dy
-> > > > > > > $ ibstat
-> > > > > > > CA 'mlx4_0'
-> > > > > > >     CA type: MT4099
-> > > > > > >     Number of ports: 2
-> > > > > > >     Firmware version: 2.42.5000
-> > > > > > >     Hardware version: 1
-> > > > > > >     Node GUID: 0xf4521403007be0e0
-> > > > > > >     System image GUID: 0xf4521403007be0e3
-> > > > > > >     Port 1:
-> > > > > > >             State: Active
-> > > > > > >             Physical state: LinkUp
-> > > > > > >             Rate: 56
-> > > > > > >             Base lid: 29
-> > > > > > >             LMC: 0
-> > > > > > >             SM lid: 1
-> > > > > > >             Capability mask: 0x0259486a
-> > > > > > >             Port GUID: 0xf4521403007be0e1
-> > > > > > >             Link layer: InfiniBand
-> > > > > > >     Port 2:
-> > > > > > >             State: Active
-> > > > > > >             Physical state: LinkUp
-> > > > > > >             Rate: 40
-> > > > > > >             Base lid: 44
-> > > > > > >             LMC: 1
-> > > > > > >             SM lid: 36
-> > > > > > >             Capability mask: 0x02594868
-> > > > > > >             Port GUID: 0xf4521403007be0e2
-> > > > > > >             Link layer: InfiniBand
-> > > > > > >
-> > > > > > >
-> > > > > > > --
-> > > > > > > Best regards!
-> > > > > > > XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
-> > > > > > >
-> > > > > > > Red Hat Software (Beijing) Co.,Ltd
-> > > > > > > filesystem-qe Team
-> > > > > > > IRC:xifeng=EF=BC=8C#channel: fs-qe
-> > > > > > > Tel:+86-10-8388112
-> > > > > > > 9/F, Raycom
-> > > > > >
-> > > > > >
-> > > > >
-> > > >
-> > > >
-> > >
-> >
-> >
->
+You are not to face any difficulties or legal implications as I am
+going to handle the transfer personally. If you are capable of
+receiving the funds, do let me know immediately to enable me give you
+a detailed information on what to do. For me, I have not stolen the
+money from anyone because the other people that took the whole money
+did not face any problems. This is my chance to grab my own life
+opportunity but you must keep the details of the funds secret to avoid
+any leakages as no one in the bank knows about my plans.Please get
+back to me if you are interested and capable to handle this project, I
+shall intimate you on what to do when I hear from your confirmation
+and acceptance.If you are capable of being my trusted associate, do
+declare your consent to me I am looking forward to hear from you
+immediately for further information
+Thanks with my best regards.
+Mr.sulaman Kante,
+Telex Manager
+(BIB BANK)
+Burkina Faso.
