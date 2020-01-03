@@ -2,73 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D712F12FD73
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2020 21:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3F712FD9C
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2020 21:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727221AbgACUPG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 3 Jan 2020 15:15:06 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:26992 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726050AbgACUPG (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 3 Jan 2020 15:15:06 -0500
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 5B471808BF;
-        Fri,  3 Jan 2020 20:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1578082502;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MTrmozS1XlNh03xz8nSVFM0VPXg4j9R25i/QkMW/Lvg=;
-        b=zK1KPVtt015ck7RrOs02z6tFp2ZcZn1UqcN7oPWGxV1YSC2bA4s/DchhoZbCG0SPxDunsx
-        k0dGiW+GCxi33jqRUDOgs3X0ucyvRKAvsSrJJw+1jrhJcoYzOo2LAWKk5vlxfjYQWqaxZ/
-        HardvUK579Vbl/1vQl0exgvvR3BDMNFRtXCraF9i621R0TbpmzsW5J5jHry+suTbib4Itj
-        HwrlSJWcoFCbOl/CApaCKbT6gddwxfDs2R/S/lWr+Pk/wBKoQSUOth6tMqkIdYW/hoTC9n
-        bwK5noXM+ZMyWQ7h4fT2R0HD51uiZAJbXmGDtXP+QPxYxctzAXvCoC1k7ZywNQ==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Subject: Re: cifs.upcall requests ticket for wrong host when using dfs
-In-Reply-To: <5260c45c-0a31-168d-f9db-83bb6bd4a2cf@prodrive-technologies.com>
-References: <39643d7d-2abb-14d3-ced6-c394fab9a777@prodrive-technologies.com>
- <87png0boej.fsf@cjr.nz>
- <5260c45c-0a31-168d-f9db-83bb6bd4a2cf@prodrive-technologies.com>
-Date:   Fri, 03 Jan 2020 17:14:48 -0300
-Message-ID: <878smoqouf.fsf@cjr.nz>
+        id S1728693AbgACUTr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 3 Jan 2020 15:19:47 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:33788 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728645AbgACUTq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Jan 2020 15:19:46 -0500
+Received: by mail-qv1-f66.google.com with SMTP id z3so16703013qvn.0
+        for <linux-cifs@vger.kernel.org>; Fri, 03 Jan 2020 12:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
+         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
+         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
+         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
+         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
+         nOKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=Iz7KFbpPr37zrO3oIsRhz35HmmI61vK+Neb9iNxkUf4bFuqoWxb/wcQXHJgA5eNc0c
+         PCdtEXmuAPkRfNCbbwhLTiuJMNKICXVTDIOMdJHbV6kujEvCEyXXfPov6VAL6/faRr2P
+         A3cn/j3X8D4dQOTMw/kXWoDTI/hP0sr1uqXjo30GKysaPfErOZQNF0dLRUdXveWJnTj3
+         zV+7oEQkQbLV0O8+EtJnZJifkKc1p3PCE0TxiNpusOn+He7TBdFmUVBmeliHPEISEpmk
+         nKqQ9PrkUhAjgYJqNsNg2D+JMUuQiQEf9G1+eJKNO6TZj6p0DZHpDFvCCLz0Dio7+Sq7
+         stJw==
+X-Gm-Message-State: APjAAAV092bg8uMtnK2LdRGRTJDTrayxZLub0dsS/OxlpKDZqHcycsQx
+        so04VLQie/Bsz7a0RcQu7b0XQMgWt7DMxRhFFK0=
+X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
+X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
+ Fri, 03 Jan 2020 12:19:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:19:45 +0100
+Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com> writes:
+Dear Friend
 
-> I tried kernel 5.4.6, including this fix, but still no luck:
-> [   25.825075] CIFS: Attempting to mount //domain.com/common
-> [   27.127925] CIFS VFS:  BAD_NETWORK_NAME: \\domain.com\common
-> [   31.406697] CIFS: Attempting to mount //DC01.domain.com/common/Pd_Std
-> [   31.414527] srv rsp padded more than expected. Length 98 not 73 for cmd:1 mid:1
-> [   31.414533] Status code returned 0xc000006d STATUS_LOGON_FAILURE
-> [   31.414537] CIFS VFS: \\DC01.domain.com Send error in SessSetup = -13
-> [   31.414544] CIFS VFS: cifs_mount failed w/return code = -13
-> [   31.414590] CIFS: Attempting to mount //DC01.domain.com/common/Pd_Std
-> [   31.422410] Status code returned 0xc000006d STATUS_LOGON_FAILURE
-> [   31.422416] CIFS VFS: \\DC01.domain.com Send error in SessSetup = -13
-> [   31.422423] CIFS VFS: cifs_mount failed w/return code = -13
->
-> Where 4.19 prints:
-> [  132.012498] CIFS: Attempting to mount //domain.com/common
-> [  132.183038] CIFS VFS: error -2 on ioctl to get interface list
-> [  132.344343] CIFS: Attempting to mount //nas01/common$/pd_std
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
 
-Thanks for testing it.
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
 
-Could you post dmesg output of both versions with debugging enabled as per
-instructions in [1]?
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
 
-Thanks,
-Paulo
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
 
-[1] https://wiki.samba.org/index.php/LinuxCIFS_troubleshooting
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
+
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
+
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
+Best regards,
+Rev.Dr, George Adadar
