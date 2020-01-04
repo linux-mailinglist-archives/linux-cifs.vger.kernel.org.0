@@ -2,100 +2,89 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3F712FD9C
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2020 21:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619A1130090
+	for <lists+linux-cifs@lfdr.de>; Sat,  4 Jan 2020 04:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbgACUTr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 3 Jan 2020 15:19:47 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:33788 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728645AbgACUTq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Jan 2020 15:19:46 -0500
-Received: by mail-qv1-f66.google.com with SMTP id z3so16703013qvn.0
-        for <linux-cifs@vger.kernel.org>; Fri, 03 Jan 2020 12:19:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
-         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
-         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
-         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
-         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
-         nOKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=Iz7KFbpPr37zrO3oIsRhz35HmmI61vK+Neb9iNxkUf4bFuqoWxb/wcQXHJgA5eNc0c
-         PCdtEXmuAPkRfNCbbwhLTiuJMNKICXVTDIOMdJHbV6kujEvCEyXXfPov6VAL6/faRr2P
-         A3cn/j3X8D4dQOTMw/kXWoDTI/hP0sr1uqXjo30GKysaPfErOZQNF0dLRUdXveWJnTj3
-         zV+7oEQkQbLV0O8+EtJnZJifkKc1p3PCE0TxiNpusOn+He7TBdFmUVBmeliHPEISEpmk
-         nKqQ9PrkUhAjgYJqNsNg2D+JMUuQiQEf9G1+eJKNO6TZj6p0DZHpDFvCCLz0Dio7+Sq7
-         stJw==
-X-Gm-Message-State: APjAAAV092bg8uMtnK2LdRGRTJDTrayxZLub0dsS/OxlpKDZqHcycsQx
-        so04VLQie/Bsz7a0RcQu7b0XQMgWt7DMxRhFFK0=
-X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
-X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
- Fri, 03 Jan 2020 12:19:45 -0800 (PST)
+        id S1727502AbgADDga (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 3 Jan 2020 22:36:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727481AbgADDga (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:36:30 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B45E221D7D;
+        Sat,  4 Jan 2020 03:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578108989;
+        bh=Iqlz+iKxY3zlUcIPQj4U95OV05qdZTm+7hovQRC5Z/4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bftARHLSRgkNOleN01R+iVEizRwLEWEMwdrXG8mBPijBb+9Rj2Z3Su7t0ZDlJqwS0
+         vwqoSzDXgTd/W+rEbHTq1TdiWMI6E+5Y3rZlxRLDXkWuyDdiJ+R0+TEiR0ZZYRN2Mp
+         XJR6jYfqWWn0aqTgJEN51rdifhZ6dW/4yWDXKY4g=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.4 07/10] cifs: Adjust indentation in smb2_open_file
+Date:   Fri,  3 Jan 2020 22:36:16 -0500
+Message-Id: <20200104033620.10977-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200104033620.10977-1-sashal@kernel.org>
+References: <20200104033620.10977-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:19:45 +0100
-Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Friend
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
+[ Upstream commit 7935799e041ae10d380d04ea23868240f082bd11 ]
 
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
+Clang warns:
 
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
+../fs/cifs/smb2file.c:70:3: warning: misleading indentation; statement
+is not part of the previous 'if' [-Wmisleading-indentation]
+         if (oparms->tcon->use_resilient) {
+         ^
+../fs/cifs/smb2file.c:66:2: note: previous statement is here
+        if (rc)
+        ^
+1 warning generated.
 
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
+This warning occurs because there is a space after the tab on this line.
+Remove it so that the indentation is consistent with the Linux kernel
+coding style and clang no longer warns.
 
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
+Fixes: 592fafe644bf ("Add resilienthandles mount parm")
+Link: https://github.com/ClangBuiltLinux/linux/issues/826
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/smb2file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
+diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
+index 8b0b512c5792..afe1f03aabe3 100644
+--- a/fs/cifs/smb2file.c
++++ b/fs/cifs/smb2file.c
+@@ -67,7 +67,7 @@ smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms,
+ 		goto out;
+ 
+ 
+-	 if (oparms->tcon->use_resilient) {
++	if (oparms->tcon->use_resilient) {
+ 		/* default timeout is 0, servers pick default (120 seconds) */
+ 		nr_ioctl_req.Timeout =
+ 			cpu_to_le32(oparms->tcon->handle_timeout);
+-- 
+2.20.1
 
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
