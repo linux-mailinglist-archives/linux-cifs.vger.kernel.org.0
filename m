@@ -2,76 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2C01333B4
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Jan 2020 22:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8AF133966
+	for <lists+linux-cifs@lfdr.de>; Wed,  8 Jan 2020 04:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728743AbgAGVDz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 7 Jan 2020 16:03:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728043AbgAGVDy (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:03:54 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726210AbgAHDI0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 7 Jan 2020 22:08:26 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:29029 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726199AbgAHDI0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Jan 2020 22:08:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1578452905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc; bh=Al4q+tVXhcJVfxsTO3YT/LYAqVwPsTcFxR6rRpj7414=;
+        b=YaQ8y8Rm86nEo6k4R+urNBXWk3KQaGr9Xw23oHO7VrqxJkhZwNgbHqGUMZzzMnRbQy5QRx
+        0AfpWbImzVLtW1x/zMfYkq+mzJl0w48I+ZDGnffcD/VNc7bOHyJLLzEJ+s3FJJjTEPPwU8
+        cIejmot1vewnWGzz+vx5GPhpddUlVxo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-322-eZ_64AQkMZ6ZcIHfSot0Yg-1; Tue, 07 Jan 2020 22:08:24 -0500
+X-MC-Unique: eZ_64AQkMZ6ZcIHfSot0Yg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E7B7E2081E;
-        Tue,  7 Jan 2020 21:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578431034;
-        bh=qQqkLG6E4zlxNyW71ejH7Xg6ZNSF3zn+NcXKNezev8k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RiIr8yTyknmDAemZk5w80NFsfxsIcumO2e5cFw5mi8kurtfVb2Byb1TllYNA4dmdu
-         FZF634h8InI+9byBlAZ8pWtIpWHgUgbnytCUaLTmJt++swdxufgR1cJcOFts4yfppA
-         HMprsuvWtqvAXEfw8Lryus4dHzD4M6a8L+XllpWo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Deepa Dinamani <deepa.kernel@gmail.com>,
-        stfrench@microsoft.com, linux-cifs@vger.kernel.org
-Subject: [PATCH 5.4 171/191] fs: cifs: Fix atime update check vs mtime
-Date:   Tue,  7 Jan 2020 21:54:51 +0100
-Message-Id: <20200107205342.153253181@linuxfoundation.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200107205332.984228665@linuxfoundation.org>
-References: <20200107205332.984228665@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 69B221800D4E
+        for <linux-cifs@vger.kernel.org>; Wed,  8 Jan 2020 03:08:23 +0000 (UTC)
+Received: from test1135.test.redhat.com (vpn2-54-61.bne.redhat.com [10.64.54.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 00FBB77676
+        for <linux-cifs@vger.kernel.org>; Wed,  8 Jan 2020 03:08:22 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Subject: [PATCH 0/4] cifs: optimize opendir and save one roundtrip
+Date:   Wed,  8 Jan 2020 13:08:03 +1000
+Message-Id: <20200108030807.2460-1-lsahlber@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Deepa Dinamani <deepa.kernel@gmail.com>
+Pavel, Steve
 
-commit 69738cfdfa7032f45d9e7462d24490e61cf163dd upstream.
-
-According to the comment in the code and commit log, some apps
-expect atime >= mtime; but the introduced code results in
-atime==mtime.  Fix the comparison to guard against atime<mtime.
-
-Fixes: 9b9c5bea0b96 ("cifs: do not return atime less than mtime")
-Signed-off-by: Deepa Dinamani <deepa.kernel@gmail.com>
-Cc: stfrench@microsoft.com
-Cc: linux-cifs@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- fs/cifs/inode.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -163,7 +163,7 @@ cifs_fattr_to_inode(struct inode *inode,
- 
- 	spin_lock(&inode->i_lock);
- 	/* we do not want atime to be less than mtime, it broke some apps */
--	if (timespec64_compare(&fattr->cf_atime, &fattr->cf_mtime))
-+	if (timespec64_compare(&fattr->cf_atime, &fattr->cf_mtime) < 0)
- 		inode->i_atime = fattr->cf_mtime;
- 	else
- 		inode->i_atime = fattr->cf_atime;
-
+Please find an updated version of these patches.
+It addresses Pavels concerns and adds an extra patch to set maxbufsize
+correctly for two other functions that were found during review.
 
