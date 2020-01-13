@@ -2,93 +2,132 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2889A139AF1
-	for <lists+linux-cifs@lfdr.de>; Mon, 13 Jan 2020 21:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A918139B09
+	for <lists+linux-cifs@lfdr.de>; Mon, 13 Jan 2020 21:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbgAMUrK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 13 Jan 2020 15:47:10 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:32316 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726778AbgAMUrK (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 13 Jan 2020 15:47:10 -0500
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 76C30808CA;
-        Mon, 13 Jan 2020 20:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1578948428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nBCkQC1Co6EA8my316IDvPxNc3sIYRQZLFnLaaaH2Ls=;
-        b=zJ/uzOHS8TaJGUlznrzRL6e+RYggqmJZpqksJLxy8k0mGaezIrzdM57hrNEVPm7iIGcZGm
-        qohtX7ifQ/Z5DLII0p3AXE+9KH2ZB0I/6MZWZPAmf2QX5ALRGexAJGh8ykyN1kGSfLt5aU
-        hg9v6x0olFqfGZl1UbW+lweLFWNN2CVJ3WdiCwEqZxLeqW1gx7xnlTf1lBWGfWhVCh+yvg
-        4umvZNQHc2UrA5PNcJJXrfUegKYN0BQAsv7nq8Dd/XUPux8v98vg/bDBJK4DbI3o/jxGup
-        9wbkvCmaO+AxmPPyKnwop9nRcSzu1gcIopEnAYaIFxnx380sCLxRPdCSSK/CLg==
-From:   "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-To:     smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>
-Subject: [PATCH] cifs: Fix memory allocation in __smb2_handle_cancelled_cmd()
-Date:   Mon, 13 Jan 2020 17:46:59 -0300
-Message-Id: <20200113204659.4867-1-pc@cjr.nz>
+        id S1726488AbgAMU6h (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 13 Jan 2020 15:58:37 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45092 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726086AbgAMU6h (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 13 Jan 2020 15:58:37 -0500
+Received: by mail-lj1-f193.google.com with SMTP id j26so11704720ljc.12
+        for <linux-cifs@vger.kernel.org>; Mon, 13 Jan 2020 12:58:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mwekb1LgC988L3q1vOiyS22U7syJGiJavBGDl6qnnxw=;
+        b=TdIuIK9Ej0NBaSSE4UpFh6W4GDGDSF+82GKgLfQH7R4UJY708A4AxxAjcvnUJqmABK
+         YAudYA5C0piqxUMsFxC+lLYTQUj6JkIHl2GQUrpb/pWAKn4OW+3Q4sOEIdQZoXFGCGSq
+         Od8Ga5o/tWOeXsKc1ucB1xzpcnT7UzU5929tZpSlP9/uy7Aw14SL6UFs/y3FCrIujazc
+         hUjjUFz/oU/2t2zAMbTW4SBLAFqyhEX1vrQfH2ChE3qbWnqOlC/yvUR1G8sgKpR5VgoZ
+         jzTQeyOA+uC316VS4ORegSAa3jOhPFoujaiMKkqNolJYiSRVA6ScV6Yj+aVa6NpK3BEh
+         DElw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mwekb1LgC988L3q1vOiyS22U7syJGiJavBGDl6qnnxw=;
+        b=AAUPBDKGq7Ky5cG9w6TdGHa1waeHH9ajddYX8gkYxL4Mizka+eqYR5ol/y/l0GaDgd
+         X0kHAZNIadegfodOmvLXvVfDpfrtyppOuASWfCduNTH4e49lvbIYtoJ2c7CtMXg5EnEh
+         g+67HrVIhI7aZ4qCFYO6CZu/ubVA7BDi/DY395FEoElGWX5Yp6PtG2NGOE6YnC0Cjam3
+         29NrfBxtG75fjZaqziuy1CMjMDU0bB7ILAAGsdw8Vy6Oifq3rTd+9+th7Xo4crnCS2GQ
+         dQ0IyEOrfnQwUgPxCtOMF7pce0t6iYOZhKvyEzXwZQUKom6P7a/N3F/D3Hy91CnpVCEI
+         bmRQ==
+X-Gm-Message-State: APjAAAU/chNNzRdF0RJaOZl3/fmvdPfbfuIv0ytXvnv6uZgcgqgoAONm
+        72hrd52qnwM5uya1DYPThv/nnJC+Cw0yuTzkQg==
+X-Google-Smtp-Source: APXvYqwffOuOoRn60D6HWJBNWM3XFRD4oM00Hg39fzvMw/YY5D5dyfEUzKzpmHsBjGc3s410gRn2+Gt/fiMjHxv8jUQ=
+X-Received: by 2002:a2e:854b:: with SMTP id u11mr12262239ljj.90.1578949115247;
+ Mon, 13 Jan 2020 12:58:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200113204659.4867-1-pc@cjr.nz>
+In-Reply-To: <20200113204659.4867-1-pc@cjr.nz>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Mon, 13 Jan 2020 12:58:23 -0800
+Message-ID: <CAKywueSnatSmp-=w1J7Jf=9dab70SjV8JgfFoys37-sgGqOD_Q@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Fix memory allocation in __smb2_handle_cancelled_cmd()
+To:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>
+Cc:     Steve French <smfrench@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-__smb2_handle_cancelled_cmd() is called under a spin lock held in
-cifs_mid_q_entry_release(), so make its memory allocation GFP_ATOMIC.
+=D0=BF=D0=BD, 13 =D1=8F=D0=BD=D0=B2. 2020 =D0=B3. =D0=B2 12:47, Paulo Alcan=
+tara (SUSE) <pc@cjr.nz>:
+>
+> __smb2_handle_cancelled_cmd() is called under a spin lock held in
+> cifs_mid_q_entry_release(), so make its memory allocation GFP_ATOMIC.
+>
+> This issue was observed when running xfstests generic/028:
+>
+> [ 1722.589204] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72064 cm=
+d: 5
+> [ 1722.590687] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72065 cm=
+d: 17
+> [ 1722.593529] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72066 cm=
+d: 6
+> [ 1723.039014] BUG: sleeping function called from invalid context at mm/s=
+lab.h:565
+> [ 1723.040710] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 308=
+77, name: cifsd
+> [ 1723.045098] CPU: 3 PID: 30877 Comm: cifsd Not tainted 5.5.0-rc4+ #313
+> [ 1723.046256] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS r=
+el-1.12.0-59-gc9ba527-rebuilt.opensuse.org 04/01/2014
+> [ 1723.048221] Call Trace:
+> [ 1723.048689]  dump_stack+0x97/0xe0
+> [ 1723.049268]  ___might_sleep.cold+0xd1/0xe1
+> [ 1723.050069]  kmem_cache_alloc_trace+0x204/0x2b0
+> [ 1723.051051]  __smb2_handle_cancelled_cmd+0x40/0x140 [cifs]
+> [ 1723.052137]  smb2_handle_cancelled_mid+0xf6/0x120 [cifs]
+> [ 1723.053247]  cifs_mid_q_entry_release+0x44d/0x630 [cifs]
+> [ 1723.054351]  ? cifs_reconnect+0x26a/0x1620 [cifs]
+> [ 1723.055325]  cifs_demultiplex_thread+0xad4/0x14a0 [cifs]
+> [ 1723.056458]  ? cifs_handle_standard+0x2c0/0x2c0 [cifs]
+> [ 1723.057365]  ? kvm_sched_clock_read+0x14/0x30
+> [ 1723.058197]  ? sched_clock+0x5/0x10
+> [ 1723.058838]  ? sched_clock_cpu+0x18/0x110
+> [ 1723.059629]  ? lockdep_hardirqs_on+0x17d/0x250
+> [ 1723.060456]  kthread+0x1ab/0x200
+> [ 1723.061149]  ? cifs_handle_standard+0x2c0/0x2c0 [cifs]
+> [ 1723.062078]  ? kthread_create_on_node+0xd0/0xd0
+> [ 1723.062897]  ret_from_fork+0x3a/0x50
+>
+> Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> Fixes: 9150c3adbf24 ("CIFS: Close open handle after interrupted close")
+> ---
+>  fs/cifs/smb2misc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+> index 0516fc482d43..0511aaf451d4 100644
+> --- a/fs/cifs/smb2misc.c
+> +++ b/fs/cifs/smb2misc.c
+> @@ -743,7 +743,7 @@ __smb2_handle_cancelled_cmd(struct cifs_tcon *tcon, _=
+_u16 cmd, __u64 mid,
+>  {
+>         struct close_cancelled_open *cancelled;
+>
+> -       cancelled =3D kzalloc(sizeof(*cancelled), GFP_KERNEL);
+> +       cancelled =3D kzalloc(sizeof(*cancelled), GFP_ATOMIC);
+>         if (!cancelled)
+>                 return -ENOMEM;
+>
+> --
+> 2.24.1
+>
 
-This issue was observed when running xfstests generic/028:
+Good catch!
 
-[ 1722.589204] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72064 cmd: 5
-[ 1722.590687] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72065 cmd: 17
-[ 1722.593529] CIFS VFS: \\192.168.30.26 Cancelling wait for mid 72066 cmd: 6
-[ 1723.039014] BUG: sleeping function called from invalid context at mm/slab.h:565
-[ 1723.040710] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 30877, name: cifsd
-[ 1723.045098] CPU: 3 PID: 30877 Comm: cifsd Not tainted 5.5.0-rc4+ #313
-[ 1723.046256] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba527-rebuilt.opensuse.org 04/01/2014
-[ 1723.048221] Call Trace:
-[ 1723.048689]  dump_stack+0x97/0xe0
-[ 1723.049268]  ___might_sleep.cold+0xd1/0xe1
-[ 1723.050069]  kmem_cache_alloc_trace+0x204/0x2b0
-[ 1723.051051]  __smb2_handle_cancelled_cmd+0x40/0x140 [cifs]
-[ 1723.052137]  smb2_handle_cancelled_mid+0xf6/0x120 [cifs]
-[ 1723.053247]  cifs_mid_q_entry_release+0x44d/0x630 [cifs]
-[ 1723.054351]  ? cifs_reconnect+0x26a/0x1620 [cifs]
-[ 1723.055325]  cifs_demultiplex_thread+0xad4/0x14a0 [cifs]
-[ 1723.056458]  ? cifs_handle_standard+0x2c0/0x2c0 [cifs]
-[ 1723.057365]  ? kvm_sched_clock_read+0x14/0x30
-[ 1723.058197]  ? sched_clock+0x5/0x10
-[ 1723.058838]  ? sched_clock_cpu+0x18/0x110
-[ 1723.059629]  ? lockdep_hardirqs_on+0x17d/0x250
-[ 1723.060456]  kthread+0x1ab/0x200
-[ 1723.061149]  ? cifs_handle_standard+0x2c0/0x2c0 [cifs]
-[ 1723.062078]  ? kthread_create_on_node+0xd0/0xd0
-[ 1723.062897]  ret_from_fork+0x3a/0x50
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Fixes: 9150c3adbf24 ("CIFS: Close open handle after interrupted close")
----
- fs/cifs/smb2misc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch 9150c3adbf24 was marked for stable, so, this one should be marked=
+ too.
 
-diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
-index 0516fc482d43..0511aaf451d4 100644
---- a/fs/cifs/smb2misc.c
-+++ b/fs/cifs/smb2misc.c
-@@ -743,7 +743,7 @@ __smb2_handle_cancelled_cmd(struct cifs_tcon *tcon, __u16 cmd, __u64 mid,
- {
- 	struct close_cancelled_open *cancelled;
- 
--	cancelled = kzalloc(sizeof(*cancelled), GFP_KERNEL);
-+	cancelled = kzalloc(sizeof(*cancelled), GFP_ATOMIC);
- 	if (!cancelled)
- 		return -ENOMEM;
- 
--- 
-2.24.1
-
+--
+Best regards,
+Pavel Shilovsky
