@@ -2,180 +2,198 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9419F13F3C3
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jan 2020 19:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED3113F73B
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jan 2020 20:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389999AbgAPSpN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Jan 2020 13:45:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389969AbgAPRKm (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:10:42 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2A66B205F4;
-        Thu, 16 Jan 2020 17:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194641;
-        bh=YeRSP3EbOPRZ5iyblWmSyn2ehFkAia8ySxmCMSLnTC4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2F3SnfGTs8+AcMGtwmXUibWaVzqKnp0f6jZDrr1ZMW4KwWzNrrV2gUdN4JG4tlABK
-         1lYwhy8q13A31ExVZePpCWtMsVdjO/KP4pWgbhD1YUXy7Nh+cqctHIB23VAvqMlEL3
-         pg/C/oZg3vaG3MaaKVcieRavijdoSVgsESqmEZAc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Steve French <smfrench@gmail.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Sasha Levin <sashal@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, linux-cifs@vger.kernel.org,
+        id S2388093AbgAPTKM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jan 2020 14:10:12 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:48777 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726973AbgAPTKL (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jan 2020 14:10:11 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1isAWt-0006N4-Si; Thu, 16 Jan 2020 19:10:07 +0000
+From:   Colin Ian King <colin.king@canonical.com>
+Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
+ 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
+To:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.19 498/671] signal: Allow cifs and drbd to receive their terminating signals
-Date:   Thu, 16 Jan 2020 12:02:16 -0500
-Message-Id: <20200116170509.12787-235-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
-References: <20200116170509.12787-1-sashal@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: re: cifs: Avoid doing network I/O while holding cache lock
+Message-ID: <26f61914-3c0d-4911-7f21-23967839554c@canonical.com>
+Date:   Thu, 16 Jan 2020 19:10:07 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: "Eric W. Biederman" <ebiederm@xmission.com>
+Hi,
 
-[ Upstream commit 33da8e7c814f77310250bb54a9db36a44c5de784 ]
+static analysis with Coverity has detected an issue with the following
+commit:
 
-My recent to change to only use force_sig for a synchronous events
-wound up breaking signal reception cifs and drbd.  I had overlooked
-the fact that by default kthreads start out with all signals set to
-SIG_IGN.  So a change I thought was safe turned out to have made it
-impossible for those kernel thread to catch their signals.
+commit 03535b72873ba74e80e6938b5f772cf5b07ca76b
+Author: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Date:   Wed Dec 4 17:38:03 2019 -0300
 
-Reverting the work on force_sig is a bad idea because what the code
-was doing was very much a misuse of force_sig.  As the way force_sig
-ultimately allowed the signal to happen was to change the signal
-handler to SIG_DFL.  Which after the first signal will allow userspace
-to send signals to these kernel threads.  At least for
-wake_ack_receiver in drbd that does not appear actively wrong.
+    cifs: Avoid doing network I/O while holding cache lock
 
-So correct this problem by adding allow_kernel_signal that will allow
-signals whose siginfo reports they were sent by the kernel through,
-but will not allow userspace generated signals, and update cifs and
-drbd to call allow_kernel_signal in an appropriate place so that their
-thread can receive this signal.
 
-Fixing things this way ensures that userspace won't be able to send
-signals and cause problems, that it is clear which signals the
-threads are expecting to receive, and it guarantees that nothing
-else in the system will be affected.
 
-This change was partly inspired by similar cifs and drbd patches that
-added allow_signal.
+This commit removed a memset on the vol object, causing the issue as
+reported below by Coverity:
 
-Reported-by: ronnie sahlberg <ronniesahlberg@gmail.com>
-Reported-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Tested-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Cc: Steve French <smfrench@gmail.com>
-Cc: Philipp Reisner <philipp.reisner@linbit.com>
-Cc: David Laight <David.Laight@ACULAB.COM>
-Fixes: 247bc9470b1e ("cifs: fix rmmod regression in cifs.ko caused by force_sig changes")
-Fixes: 72abe3bcf091 ("signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of force_sig")
-Fixes: fee109901f39 ("signal/drbd: Use send_sig not force_sig")
-Fixes: 3cf5d076fb4d ("signal: Remove task parameter from force_sig")
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/block/drbd/drbd_main.c |  2 ++
- fs/cifs/connect.c              |  2 +-
- include/linux/signal.h         | 15 ++++++++++++++-
- kernel/signal.c                |  5 +++++
- 4 files changed, 22 insertions(+), 2 deletions(-)
+1342static struct cifs_ses *find_root_ses(struct vol_info *vi,
+1343                                      struct cifs_tcon *tcon,
+1344                                      const char *path)
+1345{
+1346        char *rpath;
+1347        int rc;
+1348        struct cache_entry *ce;
+1349        struct dfs_info3_param ref = {0};
+1350        char *mdata = NULL, *devname = NULL;
+1351        struct TCP_Server_Info *server;
+1352        struct cifs_ses *ses;
 
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index a49a8d91a599..5e3885f5729b 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -334,6 +334,8 @@ static int drbd_thread_setup(void *arg)
- 		 thi->name[0],
- 		 resource->name);
- 
-+	allow_kernel_signal(DRBD_SIGKILL);
-+	allow_kernel_signal(SIGXCPU);
- restart:
- 	retval = thi->function(thi);
- 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index a8790bf04e95..576cf71576da 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -970,7 +970,7 @@ cifs_demultiplex_thread(void *p)
- 		mempool_resize(cifs_req_poolp, length + cifs_min_rcv);
- 
- 	set_freezable();
--	allow_signal(SIGKILL);
-+	allow_kernel_signal(SIGKILL);
- 	while (server->tcpStatus != CifsExiting) {
- 		if (try_to_freeze())
- 			continue;
-diff --git a/include/linux/signal.h b/include/linux/signal.h
-index e4d01469ed60..0be5ce2375cb 100644
---- a/include/linux/signal.h
-+++ b/include/linux/signal.h
-@@ -272,6 +272,9 @@ extern void signal_setup_done(int failed, struct ksignal *ksig, int stepping);
- extern void exit_signals(struct task_struct *tsk);
- extern void kernel_sigaction(int, __sighandler_t);
- 
-+#define SIG_KTHREAD ((__force __sighandler_t)2)
-+#define SIG_KTHREAD_KERNEL ((__force __sighandler_t)3)
-+
- static inline void allow_signal(int sig)
- {
- 	/*
-@@ -279,7 +282,17 @@ static inline void allow_signal(int sig)
- 	 * know it'll be handled, so that they don't get converted to
- 	 * SIGKILL or just silently dropped.
- 	 */
--	kernel_sigaction(sig, (__force __sighandler_t)2);
-+	kernel_sigaction(sig, SIG_KTHREAD);
-+}
-+
-+static inline void allow_kernel_signal(int sig)
-+{
-+	/*
-+	 * Kernel threads handle their own signals. Let the signal code
-+	 * know signals sent by the kernel will be handled, so that they
-+	 * don't get silently dropped.
-+	 */
-+	kernel_sigaction(sig, SIG_KTHREAD_KERNEL);
- }
- 
- static inline void disallow_signal(int sig)
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 7278302e3485..08911bb6fe9a 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -86,6 +86,11 @@ static bool sig_task_ignored(struct task_struct *t, int sig, bool force)
- 	    handler == SIG_DFL && !(force && sig_kernel_only(sig)))
- 		return true;
- 
-+	/* Only allow kernel generated signals to this kthread */
-+	if (unlikely((t->flags & PF_KTHREAD) &&
-+		     (handler == SIG_KTHREAD_KERNEL) && !force))
-+		return true;
-+
- 	return sig_handler_ignored(handler, sig);
- }
- 
--- 
-2.20.1
+    1. var_decl: Declaring variable vol without initializer.
+1353        struct smb_vol vol;
+1354
+1355        rpath = get_dfs_root(path);
 
+    2. Condition IS_ERR(rpath), taking false branch.
+1356        if (IS_ERR(rpath))
+1357                return ERR_CAST(rpath);
+1358
+1359        down_read(&htable_rw_lock);
+1360
+1361        ce = lookup_cache_entry(rpath, NULL);
+
+    3. Condition IS_ERR(ce), taking true branch.
+1362        if (IS_ERR(ce)) {
+1363                up_read(&htable_rw_lock);
+1364                ses = ERR_CAST(ce);
+
+    4. Jumping to label out.
+1365                goto out;
+1366        }
+1367
+1368        rc = setup_referral(path, ce, &ref, get_tgt_name(ce));
+1369        if (rc) {
+1370                up_read(&htable_rw_lock);
+1371                ses = ERR_PTR(rc);
+1372                goto out;
+1373        }
+1374
+1375        up_read(&htable_rw_lock);
+1376
+1377        mdata = cifs_compose_mount_options(vi->mntdata, rpath, &ref,
+1378                                           &devname);
+1379        free_dfs_info_param(&ref);
+1380
+1381        if (IS_ERR(mdata)) {
+1382                ses = ERR_CAST(mdata);
+1383                mdata = NULL;
+1384                goto out;
+1385        }
+1386
+1387        rc = cifs_setup_volume_info(&vol, mdata, devname, false);
+1388        kfree(devname);
+1389
+1390        if (rc) {
+1391                ses = ERR_PTR(rc);
+1392                goto out;
+1393        }
+1394
+1395        server = get_tcp_server(&vol);
+1396        if (!server) {
+1397                ses = ERR_PTR(-EHOSTDOWN);
+1398                goto out;
+1399        }
+1400
+1401        ses = cifs_get_smb_ses(server, &vol);
+1402
+1403out:
+
+    5. uninit_use_in_call: Using uninitialized value vol.username when
+calling cifs_cleanup_volume_info_contents.
+
+    6. uninit_use_in_call: Using uninitialized value vol.password when
+calling cifs_cleanup_volume_info_contents.
+
+    7. uninit_use_in_call: Using uninitialized value vol.domainname when
+calling cifs_cleanup_volume_info_contents.
+
+    8. uninit_use_in_call: Using uninitialized value vol.UNC when
+calling cifs_cleanup_volume_info_contents.
+
+    9. uninit_use_in_call: Using uninitialized value vol.iocharset when
+calling cifs_cleanup_volume_info_contents.
+
+ Uninitialized pointer read
+   10. uninit_use_in_call: Using uninitialized value vol.prepath when
+calling cifs_cleanup_volume_info_contents.
+
+1404        cifs_cleanup_volume_info_contents(&vol);
+1405        kfree(mdata);
+1406        kfree(rpath);
+
+The vol object is memset as a result of calling cifs_setup_volume_info()
+but this is too late for the earlier jumps to the error cleanup path at
+label out.  I did think about putting this back but it adds an
+unnecessary memset, a better fix may be return immediately or to exit
+via the kfree(mdata) at the end of the function.
+
+Not sure what is best, so I'm flagging this up as an issue that needs
+fixing.
+
+Colin
