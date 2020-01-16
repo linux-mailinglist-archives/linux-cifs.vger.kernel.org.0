@@ -2,64 +2,95 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB63213EC6B
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jan 2020 18:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E0113F07D
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jan 2020 19:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393835AbgAPR4l (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Jan 2020 12:56:41 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:50137 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2393358AbgAPR4l (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:56:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579197400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=QerJc6/aQDr6ruuG/hTCamhKdXY+mbDPy/lC3Mc4C2s=;
-        b=PLP9XLqthjVfPQXkuGeUtpieTHgrwIDqCtIH6inH/rswuwo1kr/XYHxsZ+QF08dYIC5P6a
-        1p1UXJvn64gTLfKy3pwIyKcDOwSX+XU8MJDahJmUC1XKudfm95k8KNMANuXxI141KsvsI+
-        sDnNMciOYJSu6AbkAnzO/9/FBmKWX1M=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-61-IL7kZJmlOs2PSlpHq5-lvA-1; Thu, 16 Jan 2020 12:56:39 -0500
-X-MC-Unique: IL7kZJmlOs2PSlpHq5-lvA-1
-Received: by mail-pj1-f71.google.com with SMTP id s6so2577241pjn.7
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Jan 2020 09:56:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=QerJc6/aQDr6ruuG/hTCamhKdXY+mbDPy/lC3Mc4C2s=;
-        b=cFBpkTQuS4X0lHGQUOVKoe695Z65vjI/NQph59Psj5BFBDstEJQT5zGOLX4C8qYK+S
-         EAn4a55/mJPfBz71wtVCoiAFdU1WWPeTcX0luv9NcAlsdmj4jFnggOAxXgWTTQaz1Kpc
-         ebwcBWDgvSa8JlVWW4MvFpdwAEdyCtlYP6MlfE+mfROUS4DluRlejmZolmeEhGH2Nq3v
-         b7eQw23Dms13DU3bdyxsdZkMnu2oacNwh4ng2kbIsnSbtMJeWqXP8lbThesHFYw432m9
-         v+tUy43UFRiOdH8p6PTSqDBozTQ4asiHdBhpH65s2W/R7Ccv01sdW6+YNWecYn1QmVzU
-         WwUA==
-X-Gm-Message-State: APjAAAX6MJRRUS4lJRW6JKiY3fZ7+BKz9VJgVTfk1pOo41e4cRPe0+Pa
-        czi5Tbao/G66CprvIv05E5w3goXaBAj4FRCdkBPIEsD5VnnAR5sQ349LsXqDV1Rb3gBkP7gpfm9
-        uXgUrhfu9X+URsqvLoZ0O2IKuT9ZCOJjNtogP6g==
-X-Received: by 2002:a17:902:788b:: with SMTP id q11mr33433821pll.21.1579197398000;
-        Thu, 16 Jan 2020 09:56:38 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwh0rey7uHJ1paMRZsB5QrWwroJaR7B/pscxAWYW/vb57H4yzS7rZwglmSrXLqlYntkaHLYiQylwMcNBxfyKZA=
-X-Received: by 2002:a17:902:788b:: with SMTP id q11mr33433802pll.21.1579197397744;
- Thu, 16 Jan 2020 09:56:37 -0800 (PST)
+        id S2404111AbgAPSWG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jan 2020 13:22:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392485AbgAPR1j (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:27:39 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F220246C9;
+        Thu, 16 Jan 2020 17:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579195659;
+        bh=hhbWhpvF5ZdlE2pCnvgPQ4xz2p9KSvhc5E7USna33YI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=2ZIEmDGhtzTAJ7ffvybQKGi0zKT0Py5KIsdKWSIEOYKepvAvydMRiln5LYr1v1VPW
+         8/UpAwjJvHxZ9+VgoId9bE63eNbvIuuNR/2Kg81+yZjZD3UvlPQuJcYJPXNKQFbBXq
+         fWP/auHeSAMuZTiEFzVHqdvAKpcsMmXwhZL/UegM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Namjae Jeon <namjae.jeon@samsung.com>,
+        Jeff Layton <jlayton@primarydata.com>,
+        Steve French <smfrench@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 4.14 219/371] signal/cifs: Fix cifs_put_tcp_session to call send_sig instead of force_sig
+Date:   Thu, 16 Jan 2020 12:21:31 -0500
+Message-Id: <20200116172403.18149-162-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
 MIME-Version: 1.0
-From:   Jacob Shivers <jshivers@redhat.com>
-Date:   Thu, 16 Jan 2020 12:56:01 -0500
-Message-ID: <CALe0_75KJMBOMMAtSWNH=GkHv-vzvYQxOVuj8Eht6jfVfoYCcA@mail.gmail.com>
-Subject: cruid+multiuser mount options
-To:     CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-When mounting a Kerberized SMB share with both cruid and multiuser,
-the multiuser mount option is negated. This is not documented as
-explicit behavior. The question is whether this intended behavior or
-if it is unexpected.
+From: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Does anyone have any existing thoughts on this?
+[ Upstream commit 72abe3bcf0911d69b46c1e8bdb5612675e0ac42c ]
+
+The locking in force_sig_info is not prepared to deal with a task that
+exits or execs (as sighand may change).  The is not a locking problem
+in force_sig as force_sig is only built to handle synchronous
+exceptions.
+
+Further the function force_sig_info changes the signal state if the
+signal is ignored, or blocked or if SIGNAL_UNKILLABLE will prevent the
+delivery of the signal.  The signal SIGKILL can not be ignored and can
+not be blocked and SIGNAL_UNKILLABLE won't prevent it from being
+delivered.
+
+So using force_sig rather than send_sig for SIGKILL is confusing
+and pointless.
+
+Because it won't impact the sending of the signal and and because
+using force_sig is wrong, replace force_sig with send_sig.
+
+Cc: Namjae Jeon <namjae.jeon@samsung.com>
+Cc: Jeff Layton <jlayton@primarydata.com>
+Cc: Steve French <smfrench@gmail.com>
+Fixes: a5c3e1c725af ("Revert "cifs: No need to send SIGKILL to demux_thread during umount"")
+Fixes: e7ddee9037e7 ("cifs: disable sharing session and tcon and add new TCP sharing code")
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/connect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index f523a9ca9574..51bbb1c0b71a 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -2320,7 +2320,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
+ 
+ 	task = xchg(&server->tsk, NULL);
+ 	if (task)
+-		force_sig(SIGKILL, task);
++		send_sig(SIGKILL, task, 1);
+ }
+ 
+ static struct TCP_Server_Info *
+-- 
+2.20.1
 
