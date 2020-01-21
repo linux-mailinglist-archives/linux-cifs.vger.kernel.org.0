@@ -2,94 +2,95 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF5E143238
-	for <lists+linux-cifs@lfdr.de>; Mon, 20 Jan 2020 20:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A122143616
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jan 2020 04:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727573AbgATTcB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 20 Jan 2020 14:32:01 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34700 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727130AbgATTcA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Jan 2020 14:32:00 -0500
-Received: by mail-ed1-f66.google.com with SMTP id l8so630719edw.1
-        for <linux-cifs@vger.kernel.org>; Mon, 20 Jan 2020 11:31:59 -0800 (PST)
+        id S1727144AbgAUDzS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 20 Jan 2020 22:55:18 -0500
+Received: from mail-io1-f48.google.com ([209.85.166.48]:44153 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727009AbgAUDzS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Jan 2020 22:55:18 -0500
+Received: by mail-io1-f48.google.com with SMTP id b10so1314036iof.11;
+        Mon, 20 Jan 2020 19:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=kLfnsSTIjE2YEe6HI6GtqXd6cMnhTRLMcstoRngEtLrpsW8Des52P9cJGak3H8TgGi
-         7pI7x0ReUsZVA5020Qw65cEVulbgAqf7PV7Yj5z98jIQHYXuhdjNseji1wTJmoRk9owd
-         jH0nw85bxKb6JNDbbMZz77rTtrhB/lrp1T9+1Yzp1e0fAmiYnPF2y/wqE3N2vxlEpqDg
-         Q62+v45VGQo8fprIjkXGYdl8n0+0lt4RTeTWLmEirmHeh05e1zsbOQ1RyEmjVmqN0eJc
-         PRg9w7tG3wGqyiL8Rgrtjody799fKx6nbHvtMQHhCmcCncWFfzoetJS1edNfQP320vCH
-         Vilg==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=A4tDUIGRmfMPIKlyexLTrGsvOihJxfhsquzCv2ViF0c=;
+        b=va2tkpi6L71ioWs27G3qEUMLYaraNLXkvXwkhtxBc/JRduz6BMOq6Loo0yRPvdoi7c
+         jqzsG2PGCrYlgh7lvNCf9tq2yVP9aT37U5AaZCcXIq0nNief8Hy8QP9xeV40YyZdc8Ah
+         O1WpvYwIXbYCtwCqwogr74LsvZgUqJYwluCvTgVIfFf+0MXbFZaJ+3JC+LhEzR4dWENr
+         WJU+TRv/w2pRPqIiwzMqKwpkPQzXxWZ1ZTovR0dZXWycpSKoksZHTOQ3HQB6DkRN86rb
+         cU35jHGRR+t28c73gKD2jxDhKrYOQDN3Y/KKhlAwH58il2cXOGjklOZyPedeM+BV9yxH
+         Ly0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=hvhBgKCR4uPlDpD5p3X35oG0YI/dX4vbwW+kmuOeYHz3C3YwKABePBOZCTHoO2Dv4u
-         1NiGWd4zBEuZeE5hyYWJqy5F1D5jkq/hD3gE0QshAxmnpwaaHoOSh2NpjIylZIVCtZ0b
-         j3W5K8gLJTW4+MR/eLiMTFx3GLiyXzQApL9jxsMVQ5WcX7TP4jTuJB27Av/hJpRsXw3x
-         cDccXwbF19Z0XJacuJT8O32fyz+trqOsUDlaz5G9wbhzTvro8LRmEs9St8YE+gJyTXZf
-         TTLAWRdiU9USUXhlq8b1734BsJqFoGunhNtcR98C6omyU+t5LiKy8eXbQ0GbgH97WJ9N
-         W4PQ==
-X-Gm-Message-State: APjAAAXVc+T/fXOp0bIKOpyIOP8jQQ5CLEyzzWg6d/k7rluarn5syLAn
-        E+WIMrfoLE/M2B38wfXiL7VtsXm7WKP6P+X5WvU=
-X-Google-Smtp-Source: APXvYqwPh6D8ihOXjaVWGs/0GLulEekGPU0xOOyxhr7PagnLX+E8xWeQy/UQ09ZNp2jZFCCt0xVGiodDu+D5No4niKg=
-X-Received: by 2002:a05:6402:505:: with SMTP id m5mr609398edv.15.1579548719077;
- Mon, 20 Jan 2020 11:31:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=A4tDUIGRmfMPIKlyexLTrGsvOihJxfhsquzCv2ViF0c=;
+        b=saqdJv8AHl3tlCqLStvnlu7amxgtF8ghg0kBvWEp8OqdhcUYg3L6d42YxvQd8RZyhT
+         UF5fXfzLta96GFBFfAkMpSKgAYuuhHj5SFMwQ8jjpGaQDe14RPSW75YvkdHXVGixRTi/
+         B6fGANHyuPSALhjZCQNF6D4BxjxpZKl2MiLRQ9mEIYSgp6bw8BypY3gNvUhDXkf3K5h4
+         hS1boknonSqDstnxRmwUmPIf7Z5ssWu6CqMYmBGYpylG7ghSIlOQF3Hs73phouwXhde9
+         WhfzP4duXTimNTh9xmxXCKBnotsBgyTT0w9X8SjbDzXmpggtAxwlK3qA4if0BeMdTM92
+         zJQQ==
+X-Gm-Message-State: APjAAAUCRdVXCX6sG04sYqVGhcGzWTZipzikFFreGbV62FW0okP7KPK5
+        iiNYls5me7fkUIlON87s1/0gyJ7AgqT0YBsRLhvti/J+1VA=
+X-Google-Smtp-Source: APXvYqxcIn8DniNQJStIEFSLLJoSkZuZDAanME5mwJ0UM/0eRf98+lLJwHIXq8ODvZ36D2Yhj1f06vViWDC2c3KEn/s=
+X-Received: by 2002:a02:2446:: with SMTP id q6mr1779382jae.78.1579578917548;
+ Mon, 20 Jan 2020 19:55:17 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:31:57
- -0800 (PST)
-Reply-To: mcclainejohn.13@gmail.com
-From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
-Date:   Mon, 20 Jan 2020 20:31:57 +0100
-Message-ID: <CAOE+jAB9Cv76tHqc-hO92yWjVshCsALoX=zT1ruNmX+0-Bjyxw@mail.gmail.com>
-Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
- valued the sum of $12.8Million United States Dollars
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 20 Jan 2020 21:55:06 -0600
+Message-ID: <CAH2r5mvUmZca8TRVsyZvrB_Loeeo4Kd8T7rHw5s6iaN=yC+O_Q@mail.gmail.com>
+Subject: [LFS/MM TOPIC] Enabling file and directory change notification for
+ network and cluster file systems
+To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Attn: Dear Beneficiary,
+Currently the inotify interface in the kernel can only be used for
+local file systems (unlike the previous change notify API used years
+ago, and the change notify interface in Windows and other OS which is
+primarily of interest for network file systems).
 
-I wish to inform you that the diplomatic agent conveying your ATM CARD
-valued the sum of $12.8Million United States Dollars has misplaced
-your address and he is currently stranded at (George Bush
-International Airport) Houston Texas USA now
-We required you to reconfirm the following information's below to him
-so that he can deliver your Payment CARD to you today or tomorrow
-morning as information provided with open communications via email and
-telephone for security reasons.
-HERE IS THE DETAILS  HE NEED FROM YOU URGENT
-YOUR FULL NAME:========
-ADDRESS:========
-MOBILE NO:========
-NAME OF YOUR NEAREST AIRPORT:========
-A COPY OF YOUR IDENTIFICATION :========
+I wanted to discuss the VFS changes needed to allow inotify requests
+to be passed into file systems so network and cluster file systems (as
+an example in the SMB3 case this simply means sending a
+SMB3_CHANGE_NOTIFY request to the server, whether Samba or Cloud
+(Azure) or Mac or Windows or Network Appliance - all support the API
+on the server side, the problem is that the network or cluster fs
+client isn't told about the request to wait on the inotify event).
+Although user space tools can use file system specific ioctls to wait
+on events, it is obviously preferable to allow network and cluster
+file systems to wait on events using the calls which current Linux
+GUIs use.
 
-Note; do contact the diplomatic agent immediately through the
-information's listed below
-Contact Person: Diplomatic Agent, Mr. Mcclaine John
-EMAIL: mcclainejohn.13@gmail.com
-Tel:(223) 777-7518
+This would allow gnome file manager GUI for example to be
+automatically updated when a file is added to an open directory window
+from another remote client.
 
-Contact the diplomatic agent immediately
-because he is waiting to hear from you today with the needed information's.
+It would also fix the embarrassing problem noted in the inotify man page:
 
-NOTE: The Diplomatic agent does not know that the content of the
-consignment box is $12.800,000,00 Million United States Dollars and on
-no circumstances should you let him know the content. The consignment
-was moved from here as family treasures, so never allow him to open
-the box. Please I have paid delivery fees for you but the only money
-you must send to Mcclaine John is your ATM CARD delivery fee $25.00
-only. text Him as you contact Him Immediately
+"Inotify  reports  only events that a user-space program triggers
+through the filesystem
+       API.  As a result, it does not catch remote events that occur
+on  network  filesystems."
 
+but that is precisely the types of notifications that are most useful
+... users often are aware of updates to local directories from the
+same system, but ... automatic notifications that allow GUIs to be
+updated on changes from **other** clients is of more value (and this
+is exactly what the equivalent API allows on other OS).
+
+The changes to the Linux VFS are small.
+
+
+-- 
 Thanks,
-with Regards.
-Prof, William Roberts
-Director DHL COURIER SERVICES-Benin
+
+Steve
