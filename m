@@ -2,62 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 883EF149E19
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Jan 2020 02:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F4914AAC0
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Jan 2020 20:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgA0BaC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 26 Jan 2020 20:30:02 -0500
-Received: from mail-il1-f181.google.com ([209.85.166.181]:46755 "EHLO
-        mail-il1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgA0BaC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 26 Jan 2020 20:30:02 -0500
-Received: by mail-il1-f181.google.com with SMTP id t17so6157470ilm.13
-        for <linux-cifs@vger.kernel.org>; Sun, 26 Jan 2020 17:30:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=IIkhiuZuJ2MlF79IjMR6PwO6Xbf2gO4kE0QNWykV0Ag=;
-        b=QDUYAtwME+TcGbchIvdDgrf8AMobq/0jh+WuumV1R1n804QzhinB61zcXsWf2lRBia
-         wEOExDQ2lfThTQblayaSvPZkQVNUQlmxDni0Agad6Rt6AQMjwX0LKWq2sIZgk6EEfRYh
-         yMemTCw4kr64KnM7/90op1aOkhVWfnjYC/Eo5CQ4QTi5SkKVTCcqWUMBRVYKBPwdyVwc
-         JZyF9U8cvAAKce7wfajl05N/oz3G4mfZhg9ReqVwZNLDnmI5j4o8hq4zbmMkfFE+qDJI
-         Re7/wWt7oqEsgHqNBDgD7kRB/toiZSfap9CBbQtQSSCDNjrdbgJHUg7EQfnKSyBTfwOf
-         ojgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=IIkhiuZuJ2MlF79IjMR6PwO6Xbf2gO4kE0QNWykV0Ag=;
-        b=F5hvhSajPGYxRrRAd0uv7h8S1IkfHvLpP/v6sZhiMP8r8rcdRzDZfxZpVBF8wys5Oz
-         pVCAFtswVgr9wNCM/qf2iTmeATtE8eb3SQLep7OCQdU85G60H3nvF9xlIVGAQxlZD1zi
-         v3E7bUaCobJYZthA+8CtPyqXRaYicikHg3TPSW6nuvr+yRyugqY8j9Z2U0Ag4yX9LcRR
-         hXGANGQGMDxMOdFaX/qlqaJ3AoB2wAAu3bBht/rttE5SIHEKSpDI8uq9KKU9C4uJ6qGk
-         68jq+AZm83NCSFiBwus9mry1Yf2Yh2Mxd5QWah3CWvFOdtWgciJtec56OZ9CZ8VGVemg
-         DOkA==
-X-Gm-Message-State: APjAAAV/x7evagmss8yD1yRmtCanzxhFodSkPehx54UENwd6bQxU+sUz
-        lkTHeJvLU+dj+75nJKDjcM6tmlULFzPQo6wVVC3tqFJ0
-X-Google-Smtp-Source: APXvYqyqSlqEZHM4i0gqT/vXkJXxhPDXzkwqyjjSZrHbnwaKdizXv0NVuzirUYnQRzDxWE5NDb7QlvopyowRZC9mcuk=
-X-Received: by 2002:a05:6e02:c71:: with SMTP id f17mr681048ilj.272.1580088601487;
- Sun, 26 Jan 2020 17:30:01 -0800 (PST)
+        id S1726296AbgA0T5y (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 27 Jan 2020 14:57:54 -0500
+Received: from ozlabs.org ([203.11.71.1]:48273 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725944AbgA0T5y (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 27 Jan 2020 14:57:54 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4860sX1FkTz9sNF;
+        Tue, 28 Jan 2020 06:57:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580155072;
+        bh=kMXhVkPXN/dGN5IWbiO3bPA2KIN51Po0G/kn1Ph4VjI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jtPFWPoNGACulFqHZn5ULwoPUeebppE75yD7IIeDgnphnqVb2KHJN3mnnBGTRNmAT
+         NeiPi/6z1BBcRBToVNRu6vQWCRDDYayWB9w4njbZF54FM2krhkCRaKEnk66TDpvgDR
+         JRqobYGvHyxD1wwmw/Ms/coHJ1eJLIo01Kq3qd8rKML+DDeS9OeZu6qcA/Mc/lnUwp
+         11cEK1PBXHeqJX/ygFnXh34uNucmd7UD5gex5AMA1pm3qNSFjRYN7T3wCkN15YoVhU
+         ruFhedNQkGt98jZUV7VmIMAzBdy3Ylt0fDyOove4im03ranq8lwv1YzyYiU0jCUI9n
+         xeSwkJ7YGDcHQ==
+Date:   Tue, 28 Jan 2020 06:57:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20200128065742.397cd3d2@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 26 Jan 2020 19:29:50 -0600
-Message-ID: <CAH2r5muvULmk3eRAg+tWbqxNXbU6d5dHTg+2akJxsqZiJNGibQ@mail.gmail.com>
-Subject: Linux kernel 5.5 released - prep for 5.6-rc
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     samba-technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/DZWONxN=.h7HF2CgKZaE/k/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Now that 5.5 kernel is released (60+ cifs/smb3 patches) and
-cifs-2.6.git for-next (and the github tree used by the smb3 buildbot
-(automated testing), let me know if you see any patches missing for
-cifs.ko that should be in for-next but aren't (currently 25 patches
-queued).
+--Sig_/DZWONxN=.h7HF2CgKZaE/k/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Thanks,
+Hi all,
 
-Steve
+Commit
+
+  503e9ac76c90 ("cifs: update internal module version number")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DZWONxN=.h7HF2CgKZaE/k/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4vQLYACgkQAVBC80lX
+0Gz1uAgAlqejX7/gXhbKqN9bygvbGEkXkKdEWb0wdyL/KBHrVtMlu+uS9d/ab1qg
+5BuYhxt2Knagn5XzMvWFm6PhZlofXfeNHWEp6L/qZ2EsEaEDwt6osnoO0e23AMI7
+7x3wbUexsJZ9OSunKsLSVb0g5GqI2q4vVXpXF/IRV8ZyJQh3b9PgOqolrT6kSQye
+IG2M4GSTMm5x1/MzpN7AEf0/SL3wUoMhj0JoF5EnNPXIsAfoL9h1gxjkjt+pKuJi
+Ba091YsiZFkcI3hCCtQ100ZNBZfn1hPUQEQzgzhWaMdB/+sEbD5wLuuer89aOB8G
+i0auhbA19rVPWLFp729ElP/J97WmQQ==
+=JHIv
+-----END PGP SIGNATURE-----
+
+--Sig_/DZWONxN=.h7HF2CgKZaE/k/--
