@@ -2,147 +2,71 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A209155389
-	for <lists+linux-cifs@lfdr.de>; Fri,  7 Feb 2020 09:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEA3155FC1
+	for <lists+linux-cifs@lfdr.de>; Fri,  7 Feb 2020 21:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbgBGIMh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 7 Feb 2020 03:12:37 -0500
-Received: from baptiste.telenet-ops.be ([195.130.132.51]:58988 "EHLO
-        baptiste.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgBGIMh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 7 Feb 2020 03:12:37 -0500
-Received: from ramsan ([84.195.182.253])
-        by baptiste.telenet-ops.be with bizsmtp
-        id zkCb2100B5USYZQ01kCbur; Fri, 07 Feb 2020 09:12:35 +0100
-Received: from geert (helo=localhost)
-        by ramsan with local-esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1izykd-0006Uw-5k; Fri, 07 Feb 2020 09:12:35 +0100
-Date:   Fri, 7 Feb 2020 09:12:35 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     Steve French <smfrench@gmail.com>
-cc:     ronnie sahlberg <ronniesahlberg@gmail.com>,
-        kbuild test robot <lkp@intel.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        =?ISO-8859-15?Q?Aur=E9lien_Aptel?= <aaptel@suse.com>,
-        samba-technical <samba-technical@lists.samba.org>,
-        Pavel Shilovsky <piastryyy@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [cifs:for-next 10/11] fs/cifs/smb2pdu.c:1985:38: error: macro
- "memcmp" passed 18 arguments, but takes just 3
-In-Reply-To: <CAH2r5mvtYcc+=bKApMsb=Cg2VgiwPoEfV92cncfhFswjBmkKFw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2002070904270.23274@ramsan.of.borg>
-References: <202002070617.AbeYy9qc%lkp@intel.com> <CAH2r5mtHY6OGMpMdpLcxZ_xyjzZHANhqr_NoeGERiFiQyfc-PQ@mail.gmail.com> <CAN05THQ8ajLM58-dyQA0teD56Hkt7wmJMRtHB8DW1Yh5qKBrjg@mail.gmail.com> <CAH2r5mvtYcc+=bKApMsb=Cg2VgiwPoEfV92cncfhFswjBmkKFw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1727496AbgBGUkY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 7 Feb 2020 15:40:24 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36806 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbgBGUkV (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 7 Feb 2020 15:40:21 -0500
+Received: by mail-oi1-f195.google.com with SMTP id c16so3317592oic.3
+        for <linux-cifs@vger.kernel.org>; Fri, 07 Feb 2020 12:40:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=G3vURSQOvSfym6GqL5qCR0Eef9YA9bo0RtU0UNSHZ0P154liq6nj0pP6gcjlFqJJPA
+         pKRQnkScBgv932UZHHNblcbuEqzuQEzPM4yp7Nm998F2nvPItHJ3Ww86OtAhmrCQq+nI
+         pKIm6N7lKoBlralx8ETPINJ1E+AnXPlOwJdNOgmWsgIaWAQBcgIsfne+6cMtPhGZTouS
+         KhX63qJv3f3PpVpkavcRkfRhDEkZgWtVbogMANo4KNIi2bptCtgkKE6QGBA7TGY3eShL
+         Az3jTVCoxKK0zJncfJ0H2PBVgz1Pz/iWQoEx1CaAejuBuCcK+rZ/kN/STxyjt5y3quR3
+         S7Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=L9SxQbK2LgHbxiapJ/XBlGBgmqlJhLJmsS47j50KJ7vzdn4tUzSoc53jm/13YZe6Jc
+         ogDlKb+vVRPHrUU/Zks/IkP8JOa39dnUil9ivtD7kuOzaLjzVR3VdgMEiWv+l+PbLEpO
+         UswfcJSyQq8WC6CzLIfNNnQJFBbwP4hgkVuYexkueDZ6P10ddPxKbRGRCRIXiJaQp4wK
+         n31cUs/oWKKbLfWgWojGoi3Id5BjL3CzlXUWXDEOMdR6MHOXVY2ODULbDxUoNjL6+Uz/
+         00FJRxHNVv/53hfkDmqxIZ0Dd3tqPl3zXKUjCP3mbGDBuDieOzHoPORctev82WkNZtlH
+         jYPQ==
+X-Gm-Message-State: APjAAAVZ2BIisdVzuLyvVTHHtontauvVj0BTCsvWpEKqU6asOxmZqwSy
+        RxHW5Tuw8Xdl8NT9babqU8XuqmQtCa6aKR4YfCk=
+X-Google-Smtp-Source: APXvYqzN7ajbuLnyLYQwurekLKD61VAgl70puXn2VR1xZnNL2UAjutIg/nsSAZ38o1qV0L9IzzdWg9SxMg/UJXSMP94=
+X-Received: by 2002:aca:c691:: with SMTP id w139mr3358062oif.17.1581108021108;
+ Fri, 07 Feb 2020 12:40:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:40:20 -0800 (PST)
+Reply-To: auch197722@gmail.com
+From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
+Date:   Fri, 7 Feb 2020 15:40:20 -0500
+Message-ID: <CAPNvSTib=Bg9sRNNHErSAmBj=QFzRMn8DZQEN5XBwkcVkSHcMw@mail.gmail.com>
+Subject: LETTER OF INQUIRY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
- 	Hi Steve,
+Good Day,
 
-On Thu, 6 Feb 2020, Steve French wrote:
-> ok - changed as suggested. Tested out ok
+I work as a clerk in a Bank here in Nigeria, I have a very
+confidential Business Proposition for you. There is a said amount of
+money floating in the bank unclaimed, belonging to the bank Foreign
+customer who die with his family in the Ethiopian Airline crash of
+March 11, 2019.
 
-> From ab3459d8f0ef52c38119ed58c4c29139efc7022c Mon Sep 17 00:00:00 2001
-> From: Steve French <stfrench@microsoft.com>
-> Date: Thu, 6 Feb 2020 17:31:56 -0600
-> Subject: [PATCH 1/2]  smb3: print warning once if posix context returned on
->  open
-> 
-> SMB3.1.1 POSIX Context processing is not complete yet - so print warning
-> (once) if server returns it on open.
-> 
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-> ---
->  fs/cifs/smb2pdu.c | 22 ++++++++++++++++++++++
->  fs/cifs/smb2pdu.h |  8 ++++++++
->  2 files changed, 30 insertions(+)
-> 
-> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> index 47cce0bd1afe..1234f9ccab03 100644
-> --- a/fs/cifs/smb2pdu.c
-> +++ b/fs/cifs/smb2pdu.c
-> @@ -1950,6 +1960,9 @@ smb2_parse_contexts(struct TCP_Server_Info *server,
->  	unsigned int next;
->  	unsigned int remaining;
->  	char *name;
-> +	const char smb3_create_tag_posix[] = {0x93, 0xAD, 0x25, 0x50, 0x9C,
-> +					0xB4, 0x11, 0xE7, 0xB4, 0x23, 0x83,
-> +					0xDE, 0x96, 0x8B, 0xCD, 0x7C};
+I seek your good collaboration to move the fund for our benefit. we
+have agreed that 40% be yours once you help claim.
 
-Given this data is used in 2 other places, you may want to make it
-global, and use it in build_posix_ctxt() and create_posix_buf(), too.
+Do get back to with 1) Your Full Name: (2) Residential Address: (3)
+Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
+funds.
 
-> On Thu, Feb 6, 2020 at 5:16 PM ronnie sahlberg <ronniesahlberg@gmail.com> wrote:
->>
->> It is probably that m68k lage quite behind in GCC versions and
->> probably that compiler can not handle this construct:
->>> 1983                          if (memcmp(name, (char []) {0x93, 0xAD, 0x25, 0x50,
->>   1984                                  0x9C, 0xB4, 0x11, 0xE7, 0xB4,
->> 0x23, 0x83,
->>> 1985                                  0xDE, 0x96, 0x8B, 0xCD, 0x7C}, 16) == 0)
->> and you would probably need something like this:
->>      const char foo[] = {0x93, 0xAD, 0x25, 0x50, 0x9C, 0xB4, 0x11,
->> 0xE7, 0xB4, 0x23, 0x83, 0xDE, 0x96, 0x8B, 0xCD, 0x7C};
->>      if (memcmp(name, foo, sizeof(foo)) == 0)
->> ...
-
-This is not related to compiler version (I can trigger it with a small
-test program on gcc-7 and gcc-8 on amd64), but due to the use of a
-macro in arch/m68k/include/asm/string.h for providing memset():
-
-     #define memset(d, c, n) __builtin_memset(d, c, n)
-
-As several other architectures do to the same (even x86, depending on
-config options and other parameters), I guess it can be triggered there
-as well.
-
->> On Fri, Feb 7, 2020 at 8:48 AM Steve French <smfrench@gmail.com> wrote:
->>>
->>> It compiled and tested ok.  Is this warning a limitation of the kbuild robot?
->>>
->>> On Thu, Feb 6, 2020 at 4:26 PM kbuild test robot <lkp@intel.com> wrote:
->>>>
->>>> tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
->>>> head:   58b322cfd219fd570d4fcc2e2eb8b5d945389d46
->>>> commit: 3d9d8c48232a668ada5f680f70c8b3d366629ab6 [10/11] smb3: print warning once if posix context returned on open
->>>> config: m68k-multi_defconfig (attached as .config)
->>>> compiler: m68k-linux-gcc (GCC) 7.5.0
->>>> reproduce:
->>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>         chmod +x ~/bin/make.cross
->>>>         git checkout 3d9d8c48232a668ada5f680f70c8b3d366629ab6
->>>>         # save the attached .config to linux build tree
->>>>         GCC_VERSION=7.5.0 make.cross ARCH=m68k
->>>>
->>>> If you fix the issue, kindly add following tag
->>>> Reported-by: kbuild test robot <lkp@intel.com>
->>>>
->>>> All errors (new ones prefixed by >>):
->>>>
->>>>    fs/cifs/smb2pdu.c: In function 'smb2_parse_contexts':
->>>>>> fs/cifs/smb2pdu.c:1985:38: error: macro "memcmp" passed 18 arguments, but takes just 3
->>>>         0xDE, 0x96, 0x8B, 0xCD, 0x7C}, 16) == 0)
->>>>                                          ^
->>>>>> fs/cifs/smb2pdu.c:1983:8: error: 'memcmp' undeclared (first use in this function); did you mean 'memchr'?
->>>>        if (memcmp(name, (char []) {0x93, 0xAD, 0x25, 0x50,
->>>>            ^~~~~~
->>>>            memchr
->>>>    fs/cifs/smb2pdu.c:1983:8: note: each undeclared identifier is reported only once for each function it appears in
-
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Regards
+Theophilus Odadudu
