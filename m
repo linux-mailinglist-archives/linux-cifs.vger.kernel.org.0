@@ -2,113 +2,84 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3672515D974
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 15:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 335C115DDCC
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 17:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729345AbgBNO2p (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 14 Feb 2020 09:28:45 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:39467 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727822AbgBNO2o (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 14 Feb 2020 09:28:44 -0500
-Received: by mail-pj1-f66.google.com with SMTP id e9so4003328pjr.4
-        for <linux-cifs@vger.kernel.org>; Fri, 14 Feb 2020 06:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/0eY8YEJ0CYiYNhGHStK7nhZtrxxUv+KLpI+Qku4XnQ=;
-        b=aZtbjZb4d2aV9/b2mWOrjni43fkfrWCknXOaUl+lQrgN+Tnh3i5tNqihdKUgnpIitg
-         sb6gMsFovfvVISSBAEEvfUGo31X4ktEZLtY2tAgIWl3tDk2tHscFY3XlOQhGCr5avpF2
-         hQ53M6UaxQKuusXx8K2PC405oCF+fD6QpN01Libhnb6bjRgEeCUrtjAynlvGMKD9l5f9
-         9rx6wi5/OuKAfBirRT9u8h9ZBCIV8HUVsQ7ZW5dyla0WL6StK+aBfRQ68LqPPqdnzhPt
-         qRUmlp+MLFzY1BclK6IPYWc6ctPfMviogJz+A3ZwIHfRiHZsI/AnVGXIAra+iDXgbFkP
-         E7Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/0eY8YEJ0CYiYNhGHStK7nhZtrxxUv+KLpI+Qku4XnQ=;
-        b=ckXYw2G7CO16LVqIMexwCbVs1YFJuqQiXd2e9Vi6yOZrZL7mgNaV9z0woZyRXR+MdN
-         /m3eYbJJs4FQv/dwO/8qfOmQgAF/NDXTgl8r1ofVfKkQEcofpC2aSc/QvwzInuB4rNrq
-         bfqtUT40zJA2T9s6ZEiW4uGnQyBdg5CP6/BQNxgXwmHUqexYGaX2tiSLhH4vixLPjacG
-         oXvpV0TPwf9LYmbjnivHQSFXDR6QnEbem01wNIv569tBJMk50b9V7OJjDmt7I6riVHhH
-         atsw/sSicFmRoi+vZao93xm10vwqUcck2EHgFL7746PO4L/mENR5T/cHgBcMUZPSRuQK
-         hJbA==
-X-Gm-Message-State: APjAAAVuMaKKWKNvlFk0Qji9IjnaG5WK/r/Xk92YvdpGa0Ek+Q9Zz3F9
-        6sqB0wh01i4glYdydWW9Bg/8w/Er
-X-Google-Smtp-Source: APXvYqxHiLOGS96LHjJnE2o4eZ2PmeGsXU0brnajRocJk2jTFT9d/SsA4zNvFzWJocNm8oUjlfXSTg==
-X-Received: by 2002:a17:902:b944:: with SMTP id h4mr3563743pls.92.1581690524116;
-        Fri, 14 Feb 2020 06:28:44 -0800 (PST)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h26sm7676717pfr.9.2020.02.14.06.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2020 06:28:43 -0800 (PST)
-Date:   Fri, 14 Feb 2020 22:28:36 +0800
-From:   Murphy Zhou <jencce.kernel@gmail.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Murphy Zhou <jencce.kernel@gmail.com>, linux-cifs@vger.kernel.org,
-        Steve French <smfrench@gmail.com>
-Subject: Re: [PATCH] CIFS: unlock file across process
-Message-ID: <20200214142836.2rhitx3jfa5nxada@xzhoux.usersys.redhat.com>
-References: <20200214043513.uh2jtb62qf54nmud@xzhoux.usersys.redhat.com>
- <370134c148a5f4d12df31a3a9020b66ef316a004.camel@kernel.org>
+        id S2389134AbgBNQAY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 14 Feb 2020 11:00:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45798 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389130AbgBNQAW (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:00:22 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6284624686;
+        Fri, 14 Feb 2020 16:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581696022;
+        bh=z0rNwAgT4RhdH7E/PP6WgAWT6eALymRlsnU1oUbYAkw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QX5uYjo14RoUo0mKmIA63bF/X7mYTDH9F6r7wXcbaOWZMvv9s7YW8vK1J8ZEPlXk8
+         ALv1s+9r6qDVwOZ0E7hCtGCfICyUGc275clpX88nyKBGqlnZ0QprSKlNhAYLHlpJps
+         1AJOMGQT1h6TwWuPXtKvv5hJSqiE+dZK8aPURcSw=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Steve French <stfrench@microsoft.com>,
+        Oleg Kravtsov <oleg@tuxera.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Pavel Shilovsky <pshilov@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 5.5 537/542] cifs: log warning message (once) if out of disk space
+Date:   Fri, 14 Feb 2020 10:48:49 -0500
+Message-Id: <20200214154854.6746-537-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <370134c148a5f4d12df31a3a9020b66ef316a004.camel@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 07:26:46AM -0500, Jeff Layton wrote:
-> On Fri, 2020-02-14 at 12:35 +0800, Murphy Zhou wrote:
-> > Now child can't unlock the same file that has been locked by
-> > parent. Fix this by not skipping unlock if requesting from
-> > different process.
-> > 
-> > Patch tested by LTP and xfstests using samba server.
-> > 
-> > Signed-off-by: Murphy Zhou <jencce.kernel@gmail.com>
-> > ---
-> >  fs/cifs/smb2file.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> > 
-> > diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
-> > index afe1f03aabe3..b5bca0e13d51 100644
-> > --- a/fs/cifs/smb2file.c
-> > +++ b/fs/cifs/smb2file.c
-> > @@ -151,8 +151,6 @@ smb2_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
-> >  		    (flock->fl_start + length) <
-> >  		    (li->offset + li->length))
-> >  			continue;
-> > -		if (current->tgid != li->pid)
-> > -			continue;
-> >  		if (cinode->can_cache_brlcks) {
-> >  			/*
-> >  			 * We can cache brlock requests - simply remove a lock
-> 
-> I'm not as familiar with this code as I once was, but...
-> 
-> From fork(2) manpage:
-> 
->        *  The  child does not inherit process-associated record locks from its
->           parent (fcntl(2)).  (On the other hand,  it  does  inherit  fcntl(2)
->           open file description locks and flock(2) locks from its parent.)
-> 
-> It looks like cifs_setlk calls mand_unlock_range, and that gets called
-> from both fcntl and flock codepaths.
-> 
-> So, I'm not sure about just removing this. It seems like the pid check
-> is probably correct for traditional posix locks, but probably not for
-> OFD and flock locks? What ensures that completely unrelated tasks can't
-> unlock your locks?
+From: Steve French <stfrench@microsoft.com>
 
-You are right Jeff. Just removing this is not right. We need to handle
-at least 3 types of locks: posix, OFD and flock.
+[ Upstream commit d6fd41905ec577851734623fb905b1763801f5ef ]
 
-Thanks very much for reviewing! I'll try to sort this out.
-> -- 
-> Jeff Layton <jlayton@kernel.org>
-> 
+We ran into a confusing problem where an application wasn't checking
+return code on close and so user didn't realize that the application
+ran out of disk space.  log a warning message (once) in these
+cases. For example:
+
+  [ 8407.391909] Out of space writing to \\oleg-server\small-share
+
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Reported-by: Oleg Kravtsov <oleg@tuxera.com>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/smb2pdu.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 0a3b37abc5e12..6c9497c18f0b8 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -4029,6 +4029,9 @@ smb2_writev_callback(struct mid_q_entry *mid)
+ 				     wdata->cfile->fid.persistent_fid,
+ 				     tcon->tid, tcon->ses->Suid, wdata->offset,
+ 				     wdata->bytes, wdata->result);
++		if (wdata->result == -ENOSPC)
++			printk_once(KERN_WARNING "Out of space writing to %s\n",
++				    tcon->treeName);
+ 	} else
+ 		trace_smb3_write_done(0 /* no xid */,
+ 				      wdata->cfile->fid.persistent_fid,
+-- 
+2.20.1
+
