@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B64B15E685
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 17:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F0815E4B7
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 17:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391473AbgBNQsA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 14 Feb 2020 11:48:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54780 "EHLO mail.kernel.org"
+        id S1727742AbgBNQhR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 14 Feb 2020 11:37:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392891AbgBNQUs (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:20:48 -0500
+        id S2405758AbgBNQX6 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:23:58 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8FC5324739;
-        Fri, 14 Feb 2020 16:20:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 68D9424787;
+        Fri, 14 Feb 2020 16:23:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697247;
-        bh=R2pN4Djw7Hf+vxMaEYlVNvZnSL03bd+Tff0IkCl14nU=;
+        s=default; t=1581697437;
+        bh=wdqrxYPyjy0I0lxc+ygjYYNq7crfOp6Bd9hVxhogQZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uACVJCWGfyFvf8j+X3o1GGyisDuXRemf3qRqFAokWfb1BAdYaQhSpakJPacsxshSA
-         RgNYZxNAV7KeMxFsKoS0JQi2AwQ+XUH2Q0Uts9nO8p9D77Qg6UkiYtVUomAzZFhOog
-         A2Yt9TvY7c1EBC2BR0VTZXose4FPWu+bz1PuKuKQ=
+        b=Zx6olH03uxUb2VpWuUPa1+aPNKD+fLB7ndU9WnDrn7KJ7tV2oz5+MMNUqo8pI/Y5T
+         x1iI4D53PD/lTFCQrtdrfzHmR9FdY9cbaZC7PxWrkre1Oc12kegT0SmS2SksZJtLbV
+         tYptqHtYhdo/+iY9fnfUcLYfVLa+EPE+VsR6xSgE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.14 165/186] cifs: fix NULL dereference in match_prepath
-Date:   Fri, 14 Feb 2020 11:16:54 -0500
-Message-Id: <20200214161715.18113-165-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 123/141] cifs: fix NULL dereference in match_prepath
+Date:   Fri, 14 Feb 2020 11:21:03 -0500
+Message-Id: <20200214162122.19794-123-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index f0b1279a7de66..6e5ecf70996a0 100644
+index 751bdde6515d5..961fcb40183a4 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -3047,8 +3047,10 @@ match_prepath(struct super_block *sb, struct cifs_mnt_data *mnt_data)
+@@ -2927,8 +2927,10 @@ match_prepath(struct super_block *sb, struct cifs_mnt_data *mnt_data)
  {
  	struct cifs_sb_info *old = CIFS_SB(sb);
  	struct cifs_sb_info *new = mnt_data->cifs_sb;
