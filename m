@@ -2,41 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FC015E841
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 17:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B64B15E685
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Feb 2020 17:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404366AbgBNQRE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 14 Feb 2020 11:17:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48168 "EHLO mail.kernel.org"
+        id S2391473AbgBNQsA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 14 Feb 2020 11:48:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404360AbgBNQRD (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:17:03 -0500
+        id S2392891AbgBNQUs (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:20:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E6AA24654;
-        Fri, 14 Feb 2020 16:17:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FC5324739;
+        Fri, 14 Feb 2020 16:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697022;
-        bh=Dsh/Qd043VlBj8iAhdts5UbxfZgcXm4Hu4M2aPNVJ/o=;
+        s=default; t=1581697247;
+        bh=R2pN4Djw7Hf+vxMaEYlVNvZnSL03bd+Tff0IkCl14nU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bew7xpU4DllMb3+tMLiJzOBNh54s9RqAWOSDrnU2kGA37jcJJQlANaGMSQz6Yi6Sn
-         n3EzqqqFnMtppyKHz7/+t7rV8a5hd7YXwKwBQCoNi7CsxjEjDz1uL4mbOiZoXj2ueT
-         ClUb+6zswnKUIvaaFEmHFDLphhU6SYXuhmBG5qdI=
+        b=uACVJCWGfyFvf8j+X3o1GGyisDuXRemf3qRqFAokWfb1BAdYaQhSpakJPacsxshSA
+         RgNYZxNAV7KeMxFsKoS0JQi2AwQ+XUH2Q0Uts9nO8p9D77Qg6UkiYtVUomAzZFhOog
+         A2Yt9TvY7c1EBC2BR0VTZXose4FPWu+bz1PuKuKQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve French <stfrench@microsoft.com>,
-        Oleg Kravtsov <oleg@tuxera.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Pavel Shilovsky <pshilov@microsoft.com>,
+Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.19 250/252] cifs: log warning message (once) if out of disk space
-Date:   Fri, 14 Feb 2020 11:11:45 -0500
-Message-Id: <20200214161147.15842-250-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 165/186] cifs: fix NULL dereference in match_prepath
+Date:   Fri, 14 Feb 2020 11:16:54 -0500
+Message-Id: <20200214161715.18113-165-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
-References: <20200214161147.15842-1-sashal@kernel.org>
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,40 +44,41 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit d6fd41905ec577851734623fb905b1763801f5ef ]
+[ Upstream commit fe1292686333d1dadaf84091f585ee903b9ddb84 ]
 
-We ran into a confusing problem where an application wasn't checking
-return code on close and so user didn't realize that the application
-ran out of disk space.  log a warning message (once) in these
-cases. For example:
+RHBZ: 1760879
 
-  [ 8407.391909] Out of space writing to \\oleg-server\small-share
+Fix an oops in match_prepath() by making sure that the prepath string is not
+NULL before we pass it into strcmp().
 
+This is similar to other checks we make for example in cifs_root_iget()
+
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
-Reported-by: Oleg Kravtsov <oleg@tuxera.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/cifs/connect.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 0d4e4d97e6cf5..e2d2b749c8f38 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -3425,6 +3425,9 @@ smb2_writev_callback(struct mid_q_entry *mid)
- 				     wdata->cfile->fid.persistent_fid,
- 				     tcon->tid, tcon->ses->Suid, wdata->offset,
- 				     wdata->bytes, wdata->result);
-+		if (wdata->result == -ENOSPC)
-+			printk_once(KERN_WARNING "Out of space writing to %s\n",
-+				    tcon->treeName);
- 	} else
- 		trace_smb3_write_done(0 /* no xid */,
- 				      wdata->cfile->fid.persistent_fid,
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index f0b1279a7de66..6e5ecf70996a0 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3047,8 +3047,10 @@ match_prepath(struct super_block *sb, struct cifs_mnt_data *mnt_data)
+ {
+ 	struct cifs_sb_info *old = CIFS_SB(sb);
+ 	struct cifs_sb_info *new = mnt_data->cifs_sb;
+-	bool old_set = old->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH;
+-	bool new_set = new->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH;
++	bool old_set = (old->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH) &&
++		old->prepath;
++	bool new_set = (new->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH) &&
++		new->prepath;
+ 
+ 	if (old_set && new_set && !strcmp(new->prepath, old->prepath))
+ 		return 1;
 -- 
 2.20.1
 
