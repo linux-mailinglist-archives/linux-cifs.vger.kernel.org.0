@@ -2,48 +2,82 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C84C51625BD
-	for <lists+linux-cifs@lfdr.de>; Tue, 18 Feb 2020 12:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF70163263
+	for <lists+linux-cifs@lfdr.de>; Tue, 18 Feb 2020 21:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbgBRLr1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 18 Feb 2020 06:47:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60542 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbgBRLr0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 18 Feb 2020 06:47:26 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6BDBFAD08;
-        Tue, 18 Feb 2020 11:47:25 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: Re: [PATCH] cifs: don't leak -EAGAIN for stat() during reconnect
-In-Reply-To: <20200218044829.15629-1-lsahlber@redhat.com>
-References: <20200218044829.15629-1-lsahlber@redhat.com>
-Date:   Tue, 18 Feb 2020 12:47:24 +0100
-Message-ID: <878sl0azhv.fsf@suse.com>
+        id S1727716AbgBRT6h (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 18 Feb 2020 14:58:37 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:33377 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726632AbgBRT6g (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 18 Feb 2020 14:58:36 -0500
+Received: by mail-il1-f196.google.com with SMTP id s18so18424787iln.0
+        for <linux-cifs@vger.kernel.org>; Tue, 18 Feb 2020 11:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KGsOjnXv3o0tdV1+AcGvevzH8L/uKqwDm6QGqd8qfWY=;
+        b=Gyk9Tru2yCfPBmN5xwtZXqIMOwdgWdhKX/SfABLw6Borh0hyzcjY6mhkJonAbSFgdq
+         Bon1sdqah5Fl4FsFrhzQBMTTxPGPKVeEyDIrVQm4YLJ9+HO+ITr91a8OaXdTbB5KNjwX
+         XIDmOq8KRcLi1Ob8dlAWfK455K/GcUZGj0FZbBsUPl40XpL/gu5217af3Dbw8UVd1ZoX
+         wePneo7Fim7diVBR4uDkcPagmtgX+eKFANrjB2DA8V3X3yhqg8k1Bq0QVPoile2VY8oI
+         yOvb6Hl3ovEli+wyuu0VlvhQOUmV57L5rG4IgOOD/OIo/1gTvS3qrF+JUcJKrLAeQMw+
+         NEYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KGsOjnXv3o0tdV1+AcGvevzH8L/uKqwDm6QGqd8qfWY=;
+        b=LjCf5PvpgM4PUyWgQMz6X0DaWW8JjQ5Z6btLNpPu5dLxXgtlYJmaXESJNYRpnkuOfH
+         OMFPBBG/XJT5pJZt+Xvfy4j9EAZZ/9cMCIhFWuCmEAd//HiMlhSf2xevjzcirspnngN/
+         y3eskxmVjC7iUreb6J+clccPBr44KNN7a2YjF69EEQeKalAYErQ82CXqJcmfks554p3R
+         SojBFqF4G9usd0Fpjq9yh07vHcrp3LF8mQgvN34pp6Cj4brz2QXLGcsabwj2Dg5jB743
+         IT7TLSTq7fCpO/n2EfYJHH+9qrsh/mqeNkeYIcky2ZJDknMiwicrTG95zkr2108YfpJc
+         MSDw==
+X-Gm-Message-State: APjAAAXS+gYAO7Z6ZouTLuyq9IaD02RKU0clMckJ/yEQVhig6fMkfWpi
+        /BXnn2qzLtD+dfnWh6jfig32ab11hlKVBDuu+X4=
+X-Google-Smtp-Source: APXvYqwFji+aE4czPWXMaxKW93O1H/eVyqIwnz+csVng2FtY/3iKmtq3PFxCYfa0FT8gVXSR+YaBeffbaRcvKEAVOuI=
+X-Received: by 2002:a92:c886:: with SMTP id w6mr19910493ilo.219.1582055913890;
+ Tue, 18 Feb 2020 11:58:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <20200218044829.15629-1-lsahlber@redhat.com> <878sl0azhv.fsf@suse.com>
+In-Reply-To: <878sl0azhv.fsf@suse.com>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Wed, 19 Feb 2020 05:58:23 +1000
+Message-ID: <CAN05THQq3GW81ugfiXXEsobwyv0zW5Jk0gQx75-8m_n0EW5sFQ@mail.gmail.com>
+Subject: Re: [PATCH] cifs: don't leak -EAGAIN for stat() during reconnect
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Ronnie,
+On Tue, Feb 18, 2020 at 9:47 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
+:
+>
+> Hi Ronnie,
+>
+> Ronnie Sahlberg <lsahlber@redhat.com> writes:
+> > Fix this by re-trying the operation from within cifs_revalidate_dentry_=
+attr()
+> > if cifs_get_inode_info*() returns -EAGAIN.
+>
+> Would it make sense to use is_retryable_error() instead of checking for
+> just EAGAIN? It also checks for interruption errors.
 
-Ronnie Sahlberg <lsahlber@redhat.com> writes:
-> Fix this by re-trying the operation from within cifs_revalidate_dentry_attr()
-> if cifs_get_inode_info*() returns -EAGAIN.
+Makes sense. Thanks.
 
-Would it make sense to use is_retryable_error() instead of checking for
-just EAGAIN? It also checks for interruption errors.
-
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+>
+> Cheers,
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
+ DE
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
+=BCnchen)
