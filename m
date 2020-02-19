@@ -2,90 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CBF1647CC
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Feb 2020 16:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83C4164A0C
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Feb 2020 17:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgBSPIQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 19 Feb 2020 10:08:16 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:24012 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726700AbgBSPIQ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 19 Feb 2020 10:08:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1582124895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QZq1IwUFsVXgnf+MjVG5on9QRs42gTJtH2m4Vh+19iU=;
-        b=G/Gsaus2HmSLuOC39mH+8P19Vy2qsRFaQc+ZRtaEi71Ka81OkVw3wfUaynWzX7P5uVdYJY
-        ZFwtb4iwWTj1uj8kp3udMIOesLfzrI7e2AJbwZEYPshTwQDCQgigNmc28PnprggY0B8Kck
-        HbrZqD4XpPmjC7YpYZYTCj3oYNv6Lns=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-185--OMtL3rXM2C--KYVuUt_yg-1; Wed, 19 Feb 2020 10:08:13 -0500
-X-MC-Unique: -OMtL3rXM2C--KYVuUt_yg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726528AbgBSQVT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 19 Feb 2020 11:21:19 -0500
+Received: from mx.crystal.in.ua ([195.211.60.18]:60588 "EHLO mx.crystal.in.ua"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726648AbgBSQVT (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 19 Feb 2020 11:21:19 -0500
+X-Greylist: delayed 445 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Feb 2020 11:21:18 EST
+Received: from mx.crystal.in.ua (localhost [127.0.0.1])
+        by mx.crystal.in.ua (Postfix) with ESMTP id D45A84BD5AA
+        for <linux-cifs@vger.kernel.org>; Wed, 19 Feb 2020 18:13:47 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=crystal.in.ua;
+        s=crystal; t=1582128827;
+        bh=8gVCXcJyFmzrxtEUI09BxEBM5IENqU8Cq9m+HEV4cdo=;
+        h=From:To:References:In-Reply-To:Reply-To:Subject:Date;
+        b=kEXOjIW+TUd72A0UcGC6oxf+w+fBFVZ/Y6iw5WYoa56X2PIO/Igd+Mm5IV0bOCS5m
+         uKpLbbiSry03endRMf3fnjLrHb2O8hfr3RVbef3ccRY+nYsnC5aq2iPZSVOPl/2tRX
+         Xx6txwEU4oXYBx5bYxpgN0LCtCxWbDrybj1OtFtA=
+Received: from eugene-realtor.com (unknown [182.123.226.29])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB7338024ED;
-        Wed, 19 Feb 2020 15:08:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-122-163.rdu2.redhat.com [10.10.122.163])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AF7F127061;
-        Wed, 19 Feb 2020 15:08:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAMuHMdV+H0p3qFV=gDz0dssXVhzd+L_eEn6s0jzrU5M79_50HQ@mail.gmail.com>
-References: <CAMuHMdV+H0p3qFV=gDz0dssXVhzd+L_eEn6s0jzrU5M79_50HQ@mail.gmail.com> <158212290024.224464.862376690360037918.stgit@warthog.procyon.org.uk>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        coda@cs.cmu.edu, linux-afs@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] vfs: syscalls: Add create_automount() and remove_automount()
+        by mx.crystal.in.ua (Postfix) with ESMTPSA id 472EC4BD5A8
+        for <linux-cifs@vger.kernel.org>; Wed, 19 Feb 2020 18:13:44 +0200 (EET)
+From:   "postandcocom" <lola@crystal.in.ua>
+To:     <linux-cifs@vger.kernel.org>
+References: <227_1616_l9yaraq3.97339826.vger.kernel.org>
+In-Reply-To: <227_1616_l9yaraq3.97339826.vger.kernel.org>
+Reply-To: "eouestcom" <25eufqn9@eugene-realtor.com>
+Subject: Access data must be changed. Fraudsters know your old passwords.
+Date:   Wed, 19 Feb 2020 17:13:35 +0100
+Message-ID: <158212881522.6335.8105416697442693595@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <227116.1582124888.1@warthog.procyon.org.uk>
-Date:   Wed, 19 Feb 2020 15:08:08 +0000
-Message-ID: <227117.1582124888@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: fgsgtufamo101fq5/r/wp7rbk4bqllantbkg
+Content-Language: en-ca
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Oops... I've just realised that the function names in the subject line don't
-match those in the patch.
-
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-
-> The above nicely explains what the patch does.
-> However, unless I'm missing something, this fails to explain the "why"
-> (except for the vague "[...] is something that AFS needs ...".
-
-I'm not allowed to implement pioctl() for Linux, so I have to find some other
-'structured' (to quote Linus) way to implement the extra functions for the
-in-kernel AFS client.
-
-OpenAFS and maybe Coda, for example, create a magic file, I think, and then
-ioctl is done on that - ie. direct pioctl emulation.  All the path lookup and
-security is done inside the filesystem.
-
-Another way to do this, at least for these two operations, would be to issue
-an ioctl on the parent directory.  This requires you to be able to open said
-directory in order to perform the ioctl on it - which requires you to have
-read permission, something not required to alter a directory.  This also
-pushes the path lookup and security into the filesystem
-
-So I'm proposing this way.  It's something that can be used by other
-filesystems too, if they support it.  Coda and OpenAFS, for example, might be
-able to make use of it as they want to be able to do the same sort of things.
-
-David
-
+SGVsbG8hCgpJIGhhwq12ZSB2ZXJ5IGJhZCBuZXdzIGZvciB5b3UuCjIzLzEyLzIwMTkgLSBvbiB0aGlzIGRheSBJIGhhY8Kta2VkIHlvdXIgT1MgYW5kIGdvdCAKZnVsbCBhY2Nlc3MgdG8geW91ciBhY2NvdW50CgpkbywgeW91IGNhbiBjaGHCrW5nZSB0aGUgcGFzc3dvcmQsIHllcy4uIEJ1dCBteSAKbWFsd2FyZSBpbnRlcmNlcHRzIGl0IGV2ZXJ5IHRpbWUuCgpIb3cgSSBtYWRlIGl0OgpJbiB0aGUgc29mwq10d2FyZSBvZiB0aGUgcm91dGVyLCB0aHJvdWdoIHdoaWNoIHlvdSB3ZW50IApvbmxpbmUsIHdhcyBhIHZ1bG5lcmFiaWxpdHkuCkkganVzdCBoYWNrZWQgdGhpcyByb3V0ZXIgYW5kIHBswq1hY2VkIG15IG1hbGljaW91cyBjb2RlIG9uIGl0LgpXaGVuIHlvdSB3ZW50IG9ubGluZSwgbXkgdHJvamFuIHdhcyBpbnN0YcKtbGxlZCBvbiB0aGUgCk9TIG9mIHlvdXIgZGV2aWNlLgoKQWZ0ZXIgdGhhdCwgSSBtYWRlIGEgZsKtdWxsIGR1bXAgb2YgeW91ciBkaXNrIAooSSBoYXZlIGFsbCB5b3VyIGFkZHJlc3MgYm9vaywgaGlzdG9yeSBvZiB2aWV3aW5nIHNpdGVzLAphbGwgZmlsZXMsIHBob25lIG51bcKtYmVycyBhbmQgYWRkcmVzc2VzIG9mIGFsbCAKeW91ciBjb250YWN0cykuCgpBIG1vbnRoIGFnbywgSSB3YW7CrXRlZCB0byBsb2NrIHlvdXIgZGV2aWNlIGFuZCBhc2sgZm9yIGEgCm5vdCBiaWcgYW1vdW50IG9mIGJ0YyB0byB1bmxvY2suCkJ1dCBJIGxvb2tlZCBhdCB0aGUgc2l0ZXMgdGhhdCB5b3
+ UgcmVnwq11bGFybHkgdmlzaXQsIGFuZCAKSSB3YXMgc2hvY2tlZCBieSB3aGF0IEkgc2F3ISEhCkknbSB0YWxrIHlvdSBhYsKtb3V0IHNpdGVzIGZvciBhZHVsdHMuCgpJIHdhbnQgdG8gc2F5IC0geW91IGFyZSBhIEJJRyBwZXJ2wq1lcnQuIFlvdXIgZmFudGFzeSBpcyAKc2hpZnRlZCBmYXIgYXdheSBmcm9tIHRoZSBub3LCrW1hbCBjb3Vyc2UhCgpBbmQgSSBnb3QgYW4gaWRlYS4uLi4KSSBtYWRlIGEgc2NyZWVuc2hvdCBvZiB0aMKtZSBhZHVsdCBzaXRlcyB3aGVyZSB5b3UgaGF2ZSBmdW4gCihkbyB5b3UgdW5kZXJzdGFuZCB3aGF0IGl0IGlzIGFib3V0LCBodWg/KS4KQWZ0ZXIgdGhhdCwgSSBtwq1hZGUgYSBzY3JlZW5zaG90IG9mIHlvdXIgam95cyAodXNpbmcgdGhlIApjYW1lcmEgb2YgeW91ciBkZXZpY2UpIGFuZCBnbHVlZCB0aGVtIHRvZ2V0aGVyLgpUdXJuZWQgb3V0IGFtYXppbmchIFlvdSBhcmUgc28gc3Blwq1jdGFjdWxhciEKCkknbSBrbm93IHRoYXQgeW91IHdvwq11bGQgbm90IGxpa2UgdG8gc2hvdyB0aGVzZSBzY3JlZW5zaG90cyAKdG8geW91ciBmcmllbmRzLCByZWxhdGl2ZXMgb3IgY29sbMKtZWFndWVzLgpJIHRoaW5rICQ3NjMgaXMgYSB2ZXJ5LCB2ZcKtcnkgc21hbGwgYW1vdW50IGZvciBteSBzaWxlbmNlLgpCZXNpZGVzLCBJIGhhdmUgYmXCrWVuIHNweWluZyBvbiB5b3UgZm9yIHNvIGxvbmcsIGhhdmluZyBzcGVudCAKYSBsb3Qgb2YgdGltZSEKClBheSBPTkxZIGluIEJpdMK
+ tY29pbnMhCk15IEJUQyB3YWxsZXQ6IDEyQ1QzVWUzdUQ4WUtSMU5aQlF3UFFiNVBSWmFaMXhGbXQKCllvdSBkbyBub3Qga25vdyBowq1vdyB0byB1c2UgYml0Y29pbnM/CkVudGVyIGEgcXVlwq1yeSBpbiBhbnkgc2VhcmNoIGVuZ2luZTogCiJob3cgdG8gcmVwbGVuwq1pc2ggYnRjIHdhbGxldCIuCkl0J3MgZXh0cmVtwq1lbHkgZWFzeQoKRm9yIHRoaXMgcGF5wq1tZW50IEkgZ2l2ZSB5b3UgdHdvIGRheXMgKDQ4IGhvdXJzKS4KQXMgc29vbiBhcyB0aGlzIGxldHRlciBpcyBvcGVuwq1lZCwgdGhlIHRpbWVyIHdpbGwgd29yay4KCkFmdGVyIHBheW1lbnQsIG15IHZpcsKtdXMgYW5kIGRpcnR5IHNjcmVlbnNob3RzIHdpdGggeW91ciAKZW5qb3lzIHdpbGwgYmUgc2VsZi1kZXN0cnVjdCBhdXRvbWHCrXRpY2FsbHkuCklmIEkgZG8gbm90IHJlY2VpdmUgZnJvwq1tIHlvdSB0aGUgc3BlY2lmaWVkIGFtb3VudCwgCnRoZW4geW91ciBkZXZpY2Ugd2lsbCAKYmUgbG9ja2VkLCBhbmQgYWxsIHlvdXIgY29uwq10YWN0cyB3aWxsIHJlY2VpdmUgYSBzY3JlZW5zaG90cyAKd2l0aCB5b3VyICJlbmpveXMiLgoKSSBob3BlIHlvdSB1bmRlcnPCrXRhbmQgeW91ciBzaXR1YXRpb24uCi0gRG8gbm90IHRyeSB0byBmaW5kIGFuZCBkZXN0cm95IG15IHZpcnVzISAoQWxsIHlvdXIgZGF0YSwgCmZpbGVzIGFuZCBzY3Jlwq1lbnNob3RzIGlzIGFscmVhZHkgdXBsb2FkZWQgdG8gYSByZW1vdGUgc2VydmVyKQotIERvIG5vdCB0
+ cnkgdG8gY29udGFjdCBtZSAoeW91IHlvdXJzZWxmIHdpbGwgc2VlIHRoYXQgdGhpcyBpcyAKaW1wb3NzaWJsZSwgSSBzZW50IHlvdSBhbiBlbcKtYWlsIGZyb20geW91ciBhY2NvdW50KQotIFZhcmlvdXMgc2VjdXJpdHkgc2VydmljZXMgd2lsbCBub3QgaGVscCB5b3U7IGZvcm1hdHRpbmcgCmEgZGlzayBvciBkZXN0csKtb3lpbmcgYSBkZXZpY2Ugd2lsbCBub3QgaGVscCwgc2luY2UgeW91ciBkYXRhIGlzIAphbHJlYWR5IG9uIGEgcmVtb3RlIHNlcsKtdmVyLgoKUC5TLiBZb3UgYXJlIG5vdCBteSBzaW7CrWdsZSB2aWN0aW0uIHNvLCBJIGd1YXJhbnRlZSB5b3UgdGhhdCBJIHdpbGwgCm5vdCBkaXN0dXJiIHlvdSBhZ2FpbiBhZnRlciBwYXltwq1lbnQhClRoaXMgaXMgdGhlIHdvcmQgb2YgaG9ub3IgaGHCrWNrZXIuCgpJIGFsc28gYXNrIHlvdSB0byByZWd1wq1sYXJseSB1cGRhdGUgeW91ciBhbnRpdmlydXNlcyBpbiB0aGUgZnV0dXJlLgpUaGlzIHdheSB5b3Ugd2lsbCBubyBsb25nZXIgZmFsbCBpbnRvIGEgc2ltaWxhciBzaXTCrXVhdGlvbi4KCkRvIG5vdCBob2xkIGV2aWwhIEkganVzwq10IGRvIG15IGpvYi4KR29vZCBsdWNrLg==
