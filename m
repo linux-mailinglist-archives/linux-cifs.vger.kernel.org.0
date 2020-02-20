@@ -2,90 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E435165746
-	for <lists+linux-cifs@lfdr.de>; Thu, 20 Feb 2020 07:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E10165AEE
+	for <lists+linux-cifs@lfdr.de>; Thu, 20 Feb 2020 11:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgBTGCe (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 20 Feb 2020 01:02:34 -0500
-Received: from mail-il1-f169.google.com ([209.85.166.169]:41239 "EHLO
-        mail-il1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbgBTGCe (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 20 Feb 2020 01:02:34 -0500
-Received: by mail-il1-f169.google.com with SMTP id f10so22695733ils.8
-        for <linux-cifs@vger.kernel.org>; Wed, 19 Feb 2020 22:02:34 -0800 (PST)
+        id S1727370AbgBTKAg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 20 Feb 2020 05:00:36 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38520 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728063AbgBTKAf (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 20 Feb 2020 05:00:35 -0500
+Received: by mail-pf1-f194.google.com with SMTP id x185so1678258pfc.5
+        for <linux-cifs@vger.kernel.org>; Thu, 20 Feb 2020 02:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=KxsmKEiTS88kyWKQdpasQktV17phbtF1I5mwS48S9uA=;
-        b=YVQbzqV7NvDXfk0E8OaJLuCqwVpOMtjM0013ide3ZLnXH4spXbNrbhpGIvfbldo33E
-         AaE8KIYdQ+inH85hEUMLUK6HwnrqNTiykt/X8MngTTqcG+vguur1JrdOF3I0JTeajyfZ
-         LWGzq94lGC9FtMPny0pHD6HfoA0uqh8VqCHGXgmNSchGgncbEFplzoa2/XoYzUqNwiJq
-         mf4yCetqtsL4xA2E1ikRYel7OSc7QPh8RPqK35fpOuCWUZe+SPhpZjBvFzYTWufURVa8
-         ZreyTphhagwWrREQlxyRNbJHdwxzmA8F7YCKJER+m27VdVVKgZXnARuMfOkwkL6zbO8y
-         aK/Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=F/MnmxD93pSSg6Dku9aHRKv8//Ub0JpYkeVDzUO9u9QwdW9OCQZGCIPjQcVRXIQOFc
+         xWcpZz5XqfIiijeHWKtTC8m74ehEgQSHaTtzxMVccY9inVqOc2IAZRwtiYyjEXhTZHLn
+         tFOsBd4uxha413CLeE4/M+4/GkVahbBREVYULPpzmzjNtuEj1SVvaiWSOEcIcw86UbBS
+         a+kV7Oe+dvKmGZjc7hwLYsxBigx1+LXaIRVAgPbD/WjRvHw49fJ2xpeJJVR+aZ5cacCt
+         FYMyuf71PmCMtn6XZgZ4/aWUab1Ne/LzQq3XV4P/7JgBw3L/wD9lMuWewMLtzR93pmAT
+         jaMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=KxsmKEiTS88kyWKQdpasQktV17phbtF1I5mwS48S9uA=;
-        b=olVH1WceGN9qiT2z+uPOlAZMp/stk15aTjEa3HqtJLmxPOnbSIu6ilftWBiFWw58Lo
-         97yiMaxzOOv6yKrJP7ROtit7cnZNSbONjA0hKm3/hcI+Xny1DSjRVK0NI4phqfc3A4Im
-         aG2RrpUJbZaAot4jYvp6KIHxWGF8yfLcyQjOu4HK51XhNmJo9ePZh+d5rOyKKBHmfGiO
-         O5YiITq9x1wXqG5vEjizUg4BW/HhWRBi05FLcNh0Z2h/MZVLeNIuTUUyZykdFUp6U2+f
-         Soy/MiyZlRp8ejfWDlNKP2JXNXzS59TyRpEPbV+VHPTacACSiNj59vsCgtYz3Jimztx+
-         Ap4g==
-X-Gm-Message-State: APjAAAXSWrjjA7Zm8gprgjR7YtKrGdc7WTx8x456r1ztI1B4YQe7xh5t
-        AXdwvKNSn977ygtlrCcDin5VlyAv3XGscvzQphLZs31/
-X-Google-Smtp-Source: APXvYqxIYXqihUcgBsuPLM5WXdiE2J8/+68JiTS8z51LVtaMYsgOMIE/0kW8bpt9ymwuTkgp8YQCY1aZD5Pk0yj2nKA=
-X-Received: by 2002:a92:9a90:: with SMTP id c16mr27302812ill.3.1582178553683;
- Wed, 19 Feb 2020 22:02:33 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=CG2GOjKNIe4oVX/VGnL/78EoUwF34tMkldjFTnhvyfnWVpVKwkWUGYJ9W9yeF+2UK0
+         EXTpIV9u+Bw+7Ekumrs6U6arejRUow4OZ7Mrg5uX0+ONlnvwmW7fH2O8+xp7n8PCa/+3
+         Qqb1WmdU6DXS+p65K3YhcEvUHOqu6LfbM9RRazl+32fzMI04Aq2Re/kkUqEx3lFDkCZ9
+         wzyjXL1kQ1wPUn3vZxBxz1IDECVYjwSYp21bu2fM6MLOYCjuO2patME08NNyk0Smct9P
+         s/spkh76nkeo7h8FYO/H7w8bL6PoKUaTQ6jC7nUc5T3RWTDDOh/Dp2hgb1Jgn3s5Q0YG
+         J2sA==
+X-Gm-Message-State: APjAAAUqf+M4CPft3fLmrWvJydaA97Kz8UhS9dyLCqr1ACajT0Q75dz5
+        fu6tj7uK9cMmUljhW4I8OhUP5+hePWz+D2Q4xZk=
+X-Google-Smtp-Source: APXvYqzrh13RKSfwC8NZR1lvd885a0p4aEwnxKMRX3dDnx7rXMKwtGbiMGDVo+4WkGq3k/YJidyM1fzb8xYEqVF62hY=
+X-Received: by 2002:aa7:85d9:: with SMTP id z25mr32071995pfn.223.1582192834200;
+ Thu, 20 Feb 2020 02:00:34 -0800 (PST)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 20 Feb 2020 00:02:22 -0600
-Message-ID: <CAH2r5msy+zQCWdBARfdw5TTk1va3vXU9f3JcWmd_xgHASJj9jQ@mail.gmail.com>
-Subject: [PATCH] [CIFS] Add missing mount option 'signloosely' to what is
- displayed in /proc/mounts
-To:     CIFS <linux-cifs@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000ab5df3059efba6f0"
+Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 02:00:33
+ -0800 (PST)
+Reply-To: cagesusan199@gmail.com
+From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
+Date:   Thu, 20 Feb 2020 02:00:33 -0800
+Message-ID: <CALjo5=-55c1d_2T9n6nW4qTOCZ1Vrm8nATuhPj9T=5h9JwYgBw@mail.gmail.com>
+Subject: Attention:Beneficiary
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---000000000000ab5df3059efba6f0
-Content-Type: text/plain; charset="UTF-8"
-
-    We were not displaying the mount option "signloosely" in /proc/mounts
-    for cifs mounts which some users found confusing recently
-
-
 -- 
-Thanks,
+Dearest Friend,
 
-Steve
+Sorry for invading your privacy, my name is Susan S. Cage I am 81
+years, citizen of United States and presently in hospital undergoing
+chromatography for bronchogenic carcinomas (Lung cancer) which
+affected both Lungs. The doctors said I have few days to live because
+the cancer has now affected my brain.
 
---000000000000ab5df3059efba6f0
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cifs-add-missing-mount-option-to-proc-mounts.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-add-missing-mount-option-to-proc-mounts.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k6uc8rho0>
-X-Attachment-Id: f_k6uc8rho0
+My late husband left Fifteen Million, Five Hundred British Pounds
+Sterling in my account, I want to transfer the money to you and I want
+you to use it as a donate for charitable and help the needy,
+motherless, less privileged and widows within your location.
 
-RnJvbSA0NWJmNjg1ODRjZTkzNzkzNmZlMDdkMjJhNzJiMjFiYTQ3ODZmMTc0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IFdlZCwgMTkgRmViIDIwMjAgMjM6NTk6MzIgLTA2MDAKU3ViamVjdDogW1BBVENIXSBj
-aWZzOiBhZGQgbWlzc2luZyBtb3VudCBvcHRpb24gdG8gL3Byb2MvbW91bnRzCgpXZSB3ZXJlIG5v
-dCBkaXNwbGF5aW5nIHRoZSBtb3VudCBvcHRpb24gInNpZ25sb29zZWx5IiBpbiAvcHJvYy9tb3Vu
-dHMKZm9yIGNpZnMgbW91bnRzIHdoaWNoIHNvbWUgdXNlcnMgZm91bmQgY29uZnVzaW5nIHJlY2Vu
-dGx5CgpTaWduZWQtb2ZmLWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-Ci0tLQogZnMvY2lmcy9jaWZzZnMuYyB8IDIgKysKIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlv
-bnMoKykKCmRpZmYgLS1naXQgYS9mcy9jaWZzL2NpZnNmcy5jIGIvZnMvY2lmcy9jaWZzZnMuYwpp
-bmRleCA0NmViYWYzZjA4MjQuLmZhNzdmZTUyNThiMCAxMDA2NDQKLS0tIGEvZnMvY2lmcy9jaWZz
-ZnMuYworKysgYi9mcy9jaWZzL2NpZnNmcy5jCkBAIC01MzAsNiArNTMwLDggQEAgY2lmc19zaG93
-X29wdGlvbnMoc3RydWN0IHNlcV9maWxlICpzLCBzdHJ1Y3QgZGVudHJ5ICpyb290KQogCiAJaWYg
-KHRjb24tPnNlYWwpCiAJCXNlcV9wdXRzKHMsICIsc2VhbCIpOworCWVsc2UgaWYgKHRjb24tPnNl
-cy0+c2VydmVyLT5pZ25vcmVfc2lnbmF0dXJlKQorCQlzZXFfcHV0cyhzLCAiLHNpZ25sb29zZWx5
-Iik7CiAJaWYgKHRjb24tPm5vY2FzZSkKIAkJc2VxX3B1dHMocywgIixub2Nhc2UiKTsKIAlpZiAo
-dGNvbi0+bG9jYWxfbGVhc2UpCi0tIAoyLjIwLjEKCg==
---000000000000ab5df3059efba6f0--
+I need your assurance that you will use the fund for charity, once I a
+favorable reply from you, will inform my Bank through my lawyer to
+transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
+I receive your response, I will inform my bank in writing through my
+lawyer.
+
+
+
+Thank you and God bless you.
+
+Mrs. Susan S. Cage
