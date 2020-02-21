@@ -2,113 +2,37 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A07167FA2
-	for <lists+linux-cifs@lfdr.de>; Fri, 21 Feb 2020 15:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5191690EF
+	for <lists+linux-cifs@lfdr.de>; Sat, 22 Feb 2020 18:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgBUOIH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 21 Feb 2020 09:08:07 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:17530 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728392AbgBUOIH (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 21 Feb 2020 09:08:07 -0500
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 414CC80877;
-        Fri, 21 Feb 2020 14:08:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1582294085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GaPPealyMlupKFIiYvvWkGnvaV1vAqe2AzcDFX9dgEo=;
-        b=DT3S/9ZtOopJxgdJnyVE+HfVGKvHq/RowsNb8uK7ezKaNFUhb0u7ZnPKteCY0jiVon99rn
-        Nv8FeexFSz7IWNeDWm2kqyramAAjYh7/akqCn+F5fCoI4tjiYzcKDXTMYCyY1bysJPD8q6
-        8VgDKc5radwyWSV+kZy0nJ69/DBXmBKIw9nL6u3o+Ri2wZbTdTnnkTX1jnDGrwlybLDada
-        HNRN6AJJFBGsWWc2ZAd0J6RV9rXz9wwpwLpp0uwEZTKI4dDbrqE3hSrL0EO09L7s34HWvO
-        7ByH+KfVNB//RZ3Q/K8pyaKeBuR6VP6xZ9mS46zcOMRVOPAj75xZrKOXSSqVaw==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Aurelien Aptel <aaptel@suse.com>, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, Aurelien Aptel <aaptel@suse.com>
-Subject: Re: [PATCH] cifs: fix rename() by ensuring source handle opened
- with DELETE bit
-In-Reply-To: <20200221101906.24023-1-aaptel@suse.com>
-References: <20200221101906.24023-1-aaptel@suse.com>
-Date:   Fri, 21 Feb 2020 11:08:01 -0300
-Message-ID: <874kvk6njy.fsf@cjr.nz>
+        id S1726811AbgBVRtj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 22 Feb 2020 12:49:39 -0500
+Received: from [167.172.150.84] ([167.172.150.84]:36150 "EHLO
+        centos-s-1vcpu-2gb-nyc1-01.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726707AbgBVRti (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 22 Feb 2020 12:49:38 -0500
+Received: from localhost (centos-s-1vcpu-2gb-nyc1-01 [127.0.0.1])
+        by centos-s-1vcpu-2gb-nyc1-01.localdomain (Postfix) with SMTP id 81F0017732;
+        Fri, 21 Feb 2020 16:50:47 +0000 (UTC)
+Received: from [51.7.194.114] by localhost with ESMTP id 61145412 for <linda_278@centurytel.net>; Fri, 21 Feb 2020 21:47:38 +0500
+Message-ID: <qo$48v09x4c2--5-$f9@r5u1c0kgq>
+From:   "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+Reply-To: "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+To:     linda_278@centurytel.net
+Subject: RECEIVE MONEY IN BANK ACCOUNT REPLY TO fta447447@gmail.com
+Date:   Fri, 21 Feb 20 21:47:38 GMT
+X-Mailer: AOL 7.0 for Windows US sub 118
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/alternative;
+        boundary="A..C8.._3321CEA_"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Aurelien Aptel <aaptel@suse.com> writes:
 
-> To rename a file in SMB2 we open it with the DELETE access and do a
-> special SetInfo on it. If the handle is missing the DELETE bit the
-> server will fail the SetInfo with STATUS_ACCESS_DENIED.
->
-> We currently try to reuse any existing opened handle we have with
-> cifs_get_writable_path(). That function looks for handles with WRITE
-> access but doesn't check for DELETE, making rename() fail if it finds
-> a handle to reuse. Simple reproducer below.
->
-> To select handles with the DELETE bit, this patch adds a flag argument
-> to cifs_get_writable_path() and find_writable_file() and the existing
-> 'bool fsuid_only' argument is converted to a flag.
->
-> The cifsFileInfo struct only stores the UNIX open mode but not the
-> original SMB access flags. Since the DELETE bit is not mapped in that
-> mode, this patch stores the access mask in cifs_fid on file open,
-> which is accessible from cifsFileInfo.
->
-> Simple reproducer:
->
-> 	#include <stdio.h>
-> 	#include <stdlib.h>
-> 	#include <sys/types.h>
-> 	#include <sys/stat.h>
-> 	#include <fcntl.h>
-> 	#include <unistd.h>
-> 	#define E(s) perror(s), exit(1)
->
-> 	int main(int argc, char *argv[])
-> 	{
-> 		int fd, ret;
-> 		if (argc != 3) {
-> 			fprintf(stderr, "Usage: %s A B\n"
-> 			"create&open A in write mode, "
-> 			"rename A to B, close A\n", argv[0]);
-> 			return 0;
-> 		}
->
-> 		fd = openat(AT_FDCWD, argv[1], O_WRONLY|O_CREAT|O_SYNC, 0666);
-> 		if (fd == -1) E("openat()");
->
-> 		ret = rename(argv[1], argv[2]);
-> 		if (ret) E("rename()");
->
-> 		ret = close(fd);
-> 		if (ret) E("close()");
->
-> 		return ret;
-> 	}
->
-> $ gcc -o bugrename bugrename.c
-> $ ./bugrename /mnt/a /mnt/b
-> rename(): Permission denied
->
-> Signed-off-by: Aurelien Aptel <aaptel@suse.com>
-> ---
->  fs/cifs/cifsglob.h  |  7 +++++++
->  fs/cifs/cifsproto.h |  5 +++--
->  fs/cifs/cifssmb.c   |  3 ++-
->  fs/cifs/file.c      | 19 ++++++++++++-------
->  fs/cifs/inode.c     |  6 +++---
->  fs/cifs/smb1ops.c   |  2 +-
->  fs/cifs/smb2inode.c |  4 ++--
->  fs/cifs/smb2ops.c   |  3 ++-
->  fs/cifs/smb2pdu.c   |  1 +
->  9 files changed, 33 insertions(+), 17 deletions(-)
+--A..C8.._3321CEA_--
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
