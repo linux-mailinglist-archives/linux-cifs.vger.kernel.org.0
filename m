@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CD91693D5
-	for <lists+linux-cifs@lfdr.de>; Sun, 23 Feb 2020 03:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8041693BF
+	for <lists+linux-cifs@lfdr.de>; Sun, 23 Feb 2020 03:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729517AbgBWCY6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 22 Feb 2020 21:24:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55404 "EHLO mail.kernel.org"
+        id S1728056AbgBWCZI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 22 Feb 2020 21:25:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729509AbgBWCY5 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 22 Feb 2020 21:24:57 -0500
+        id S1729615AbgBWCZH (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 22 Feb 2020 21:25:07 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90AC520707;
-        Sun, 23 Feb 2020 02:24:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E2F421D56;
+        Sun, 23 Feb 2020 02:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582424697;
-        bh=vfmy+weLbNEomCaaCB24R0eMwT33ANh47ZPdbjLS7vU=;
+        s=default; t=1582424706;
+        bh=v+LS8lTv33twM/8R1u/V5jF9GnZzvDvZPfP5JaMQFQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oAwMvfXdhJ+HXOagPZJcQfgt419MuttCbmgIOuAS8UJjZGc8VH8NQ/gPtPxlFoWvW
-         pVxEJ4sFhLHsowIRc0aHf3lufDpVhs+XCV+1T3O9iVtGwy3qA/XC+5H+gkQijEg4kx
-         rhWwtDYNZjXBUOFBGWp99jZtiEqXIGaYste0hkRo=
+        b=Hy84ecl9gLHetXtQnG8v81VLgGHRA9QVz1QMJT1xfWnlqq5ZXyoRHqHZMS3tB5q/w
+         TrQsZuvmxz0HXvUAwk8bGzUx2YmZvYBQi3/WF4ojxRRbBj3cqNGgzqst6SvOC4oKMS
+         6SOUcRfBxzEDi14wmF2Pt1IozUC3OiTVdcIByMqs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Frank Sorenson <sorenson@redhat.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.9 15/16] cifs: Fix mode output in debugging statements
-Date:   Sat, 22 Feb 2020 21:24:37 -0500
-Message-Id: <20200223022438.2398-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 6/7] cifs: Fix mode output in debugging statements
+Date:   Sat, 22 Feb 2020 21:24:58 -0500
+Message-Id: <20200223022459.2594-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200223022438.2398-1-sashal@kernel.org>
-References: <20200223022438.2398-1-sashal@kernel.org>
+In-Reply-To: <20200223022459.2594-1-sashal@kernel.org>
+References: <20200223022459.2594-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-index 15bac390dff94..10aedc2a4c2dc 100644
+index 3f93125916bf0..f5b87a8f75c47 100644
 --- a/fs/cifs/cifsacl.c
 +++ b/fs/cifs/cifsacl.c
-@@ -603,7 +603,7 @@ static void access_flags_to_mode(__le32 ace_flags, int type, umode_t *pmode,
+@@ -480,7 +480,7 @@ static void access_flags_to_mode(__le32 ace_flags, int type, umode_t *pmode,
  			((flags & FILE_EXEC_RIGHTS) == FILE_EXEC_RIGHTS))
  		*pmode |= (S_IXUGO & (*pbits_to_set));
  
@@ -73,7 +73,7 @@ index 15bac390dff94..10aedc2a4c2dc 100644
  	return;
  }
  
-@@ -632,7 +632,7 @@ static void mode_to_access_flags(umode_t mode, umode_t bits_to_use,
+@@ -509,7 +509,7 @@ static void mode_to_access_flags(umode_t mode, umode_t bits_to_use,
  	if (mode & S_IXUGO)
  		*pace_flags |= SET_FILE_EXEC_RIGHTS;
  
@@ -83,10 +83,10 @@ index 15bac390dff94..10aedc2a4c2dc 100644
  	return;
  }
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 751bdde6515d5..5909027a18d01 100644
+index 4bde8acca455c..cf104bbe30a14 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -3399,7 +3399,7 @@ int cifs_setup_cifs_sb(struct smb_vol *pvolume_info,
+@@ -3402,7 +3402,7 @@ void cifs_setup_cifs_sb(struct smb_vol *pvolume_info,
  	cifs_sb->mnt_gid = pvolume_info->linux_gid;
  	cifs_sb->mnt_file_mode = pvolume_info->file_mode;
  	cifs_sb->mnt_dir_mode = pvolume_info->dir_mode;
@@ -96,10 +96,10 @@ index 751bdde6515d5..5909027a18d01 100644
  
  	cifs_sb->actimeo = pvolume_info->actimeo;
 diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index b1c0961e6b3f2..7dda3f137c7aa 100644
+index 0a219545940d9..8827de2ba7bef 100644
 --- a/fs/cifs/inode.c
 +++ b/fs/cifs/inode.c
-@@ -1573,7 +1573,7 @@ int cifs_mkdir(struct inode *inode, struct dentry *direntry, umode_t mode)
+@@ -1540,7 +1540,7 @@ int cifs_mkdir(struct inode *inode, struct dentry *direntry, umode_t mode)
  	struct TCP_Server_Info *server;
  	char *full_path;
  
