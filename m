@@ -2,35 +2,35 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F8016A718
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2020 14:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D21D16A738
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2020 14:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbgBXNQF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 24 Feb 2020 08:16:05 -0500
-Received: from hr2.samba.org ([144.76.82.148]:41990 "EHLO hr2.samba.org"
+        id S1726597AbgBXNXC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 24 Feb 2020 08:23:02 -0500
+Received: from hr2.samba.org ([144.76.82.148]:44888 "EHLO hr2.samba.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727299AbgBXNQF (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 24 Feb 2020 08:16:05 -0500
+        id S1725535AbgBXNXC (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:23:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
          s=42; h=Message-Id:Date:Cc:To:From;
-        bh=VYe+rzlWoOOw5XsvZ6CP2Josx4UQBK4rzfry/xCXkLU=; b=UM2C2b+8NF4t+GhWyDx+8einKN
-        DF9jSdtUkq422qEqtanaPKaOJHDKfiOxsl8W0XbVn4pvux6ilOA5imQyHYEQXAik4USWBbDKxYm54
-        JFljI3rb1BYnu4jVK4hAhWrRsum5kv+MGBIvHw7u0N5nTDkcKceuDUM8Y0hNPKnank19uLxEPdBDi
-        0Hdlw/YCpMndkVX1lCxd/A70pAHFeTEK22nRE3jBpRcoR+FMFjNYE3SdVFrSQ2oMEgjZx0TNZz7Dz
-        gsKr1PZFdnhzd6FOdAYpdYHlM9cvd9ASS4+SGtpZTsH3r4R8ldOLpSkzti8U7XowJ4H6bBcLWfZjU
-        xHjZPSPQbSHNNwG69HCaOYn86HZF+3Wl1dhSU+rCjQjiQT5hgkprexgAB+danDYnjNje0tarBf4R2
-        +GlW6Ws26Y2JpY2m+mEbeQUfT0SpwjuHMh2ysKXNEb638dg8MSjYv5s0dALaZAbnDocnj6PuYhJRs
-        gHmEYJ6dPDiv9cvgOFMbc8l/;
+        bh=dJXI5KukWPoMTB5fT+i9a1gcxSiL4Z+HO9MB6N1qPHc=; b=JlYwT3ruVFT4NXxF0WzeFS+7R7
+        XTsfY485E7Zj74fmb7CK0GZRP2K+BeC/4zYqmkeyEQfJgEwA0v+hxvaNHm90KFbuKYpZzy/2bS+w2
+        NuRJo3Y9aBRzzBPnuwJ8C5L3imxorogRWmd+8XLgDVafX6V6VnY1CG/o38wxVQxZQnVl3/BkDMKYi
+        98We87Dwn6C0LW8gNScyATCF1574/Ax/x7y6z3rnl+YdPvzEvxh6BEBFRxK7OGWMg3gwvFviUWFME
+        yLduQwSAOZtWB/USsh13CSoTdX6g8tCo8aKAVE2fUtz97+i0M6RTTyWWfY7yeasqLsioPEUWmx57H
+        377pSqJfVtMY2gq6GHYqNQLIc5wrqiq8G4zAnxo6r0CpXrokADqLaJ5MkAqXB6LYUNorEfOkAwa4b
+        bOrOnjpNL+c8DQ0+2H6+ah/hKErmXwKfG/dRAMTM9WacJ8P3MUjDgSP6Nt+J0LXdw/daf1tpm9cUk
+        B/qBVL2vYEFQadQy32+itpQS;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
         (Exim)
-        id 1j6DaR-00061e-Rq; Mon, 24 Feb 2020 13:15:51 +0000
+        id 1j6DaS-00061e-7G; Mon, 24 Feb 2020 13:15:52 +0000
 From:   Stefan Metzmacher <metze@samba.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     Stefan Metzmacher <metze@samba.org>
-Subject: [PATCH v1 09/13] cifs: turn smb2_reconnect_server() into a generic cifs_reconnect_server()
-Date:   Mon, 24 Feb 2020 14:15:06 +0100
-Message-Id: <20200224131510.20608-10-metze@samba.org>
+Subject: [PATCH v1 10/13] cifs: move cifs_reconnect_tcons() to fs/cifs/connect.c and make it static
+Date:   Mon, 24 Feb 2020 14:15:07 +0100
+Message-Id: <20200224131510.20608-11-metze@samba.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200224131510.20608-1-metze@samba.org>
 References: <20200224131510.20608-1-metze@samba.org>
@@ -41,92 +41,186 @@ X-Mailing-List: linux-cifs@vger.kernel.org
 
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/cifs/connect.c   |  2 +-
- fs/cifs/smb2pdu.c   | 12 ++++++------
- fs/cifs/smb2pdu.h   |  2 --
- fs/cifs/smb2proto.h |  2 +-
- 4 files changed, 8 insertions(+), 10 deletions(-)
+ fs/cifs/connect.c   | 72 +++++++++++++++++++++++++++++++++++++++++++++
+ fs/cifs/smb2pdu.c   | 72 ---------------------------------------------
+ fs/cifs/smb2proto.h |  1 -
+ 3 files changed, 72 insertions(+), 73 deletions(-)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index fc430ba99571..6eca37924d9e 100644
+index 6eca37924d9e..7f4be85b7cc9 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -2823,7 +2823,7 @@ cifs_get_tcp_session(struct smb_vol *volume_info)
- 	INIT_LIST_HEAD(&tcp_ses->tcp_ses_list);
- 	INIT_LIST_HEAD(&tcp_ses->smb_ses_list);
- 	INIT_DELAYED_WORK(&tcp_ses->echo, cifs_echo_request);
--	INIT_DELAYED_WORK(&tcp_ses->reconnect, smb2_reconnect_server);
-+	INIT_DELAYED_WORK(&tcp_ses->reconnect, cifs_reconnect_tcons);
- 	mutex_init(&tcp_ses->reconnect_mutex);
- 	memcpy(&tcp_ses->srcaddr, &volume_info->srcaddr,
- 	       sizeof(tcp_ses->srcaddr));
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 162fe3381f4c..6f3c5eb62d51 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -159,7 +159,7 @@ static int
- smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
- {
- 	struct cifs_tcon_reconnect_params params = {
--		.skip_reconnect = false,
-+		.start_timer = true,
- 	};
- 
- 	switch (smb2_command) {
-@@ -197,9 +197,6 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
- 		break;
- 	}
- 
--	if (smb2_command != SMB2_INTERNAL_CMD)
--		params.start_timer = true;
--
- 	/*
- 	 * Check if handle based operation so we know whether we can continue
- 	 * or not without returning to caller to reset file handle.
-@@ -3293,7 +3290,7 @@ smb2_echo_callback(struct mid_q_entry *mid)
- 	add_credits(server, &credits, CIFS_ECHO_OP);
+@@ -714,6 +714,78 @@ cifs_echo_request(struct work_struct *work)
+ 	queue_delayed_work(cifsiod_wq, &server->echo, server->echo_interval);
  }
  
--void smb2_reconnect_server(struct work_struct *work)
-+void cifs_reconnect_tcons(struct work_struct *work)
- {
- 	struct TCP_Server_Info *server = container_of(work,
- 					struct TCP_Server_Info, reconnect.work);
-@@ -3340,7 +3337,10 @@ void smb2_reconnect_server(struct work_struct *work)
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
- 	list_for_each_entry_safe(tcon, tcon2, &tmp_list, rlist) {
--		rc = smb2_reconnect(SMB2_INTERNAL_CMD, tcon);
++static void cifs_reconnect_tcons(struct work_struct *work)
++{
++	struct TCP_Server_Info *server = container_of(work,
++					struct TCP_Server_Info, reconnect.work);
++	struct cifs_ses *ses;
++	struct cifs_tcon *tcon, *tcon2;
++	struct list_head tmp_list;
++	int tcon_exist = false;
++	int rc;
++	int resched = false;
++
++
++	/* Prevent simultaneous reconnects that can corrupt tcon->rlist list */
++	mutex_lock(&server->reconnect_mutex);
++
++	INIT_LIST_HEAD(&tmp_list);
++	cifs_dbg(FYI, "Need negotiate, reconnecting tcons\n");
++
++	spin_lock(&cifs_tcp_ses_lock);
++	list_for_each_entry(ses, &server->smb_ses_list, smb_ses_list) {
++		list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
++			if (tcon->need_reconnect || tcon->need_reopen_files) {
++				tcon->tc_count++;
++				list_add_tail(&tcon->rlist, &tmp_list);
++				tcon_exist = true;
++			}
++		}
++		/*
++		 * IPC has the same lifetime as its session and uses its
++		 * refcount.
++		 */
++		if (ses->tcon_ipc && ses->tcon_ipc->need_reconnect) {
++			list_add_tail(&ses->tcon_ipc->rlist, &tmp_list);
++			tcon_exist = true;
++			ses->ses_count++;
++		}
++	}
++	/*
++	 * Get the reference to server struct to be sure that the last call of
++	 * cifs_put_tcon() in the loop below won't release the server pointer.
++	 */
++	if (tcon_exist)
++		server->srv_count++;
++
++	spin_unlock(&cifs_tcp_ses_lock);
++
++	list_for_each_entry_safe(tcon, tcon2, &tmp_list, rlist) {
 +		struct cifs_tcon_reconnect_params params = {
 +			.start_timer = false,
 +		};
 +		rc = cifs_tcon_reconnect(tcon, &params);
- 		if (!rc)
- 			cifs_reopen_persistent_handles(tcon);
- 		else
-diff --git a/fs/cifs/smb2pdu.h b/fs/cifs/smb2pdu.h
-index fa03df130f1a..330748bd3736 100644
---- a/fs/cifs/smb2pdu.h
-+++ b/fs/cifs/smb2pdu.h
-@@ -81,8 +81,6 @@
- #define SMB2_SET_INFO		cpu_to_le16(SMB2_SET_INFO_HE)
- #define SMB2_OPLOCK_BREAK	cpu_to_le16(SMB2_OPLOCK_BREAK_HE)
++		if (!rc)
++			cifs_reopen_persistent_handles(tcon);
++		else
++			resched = true;
++		list_del_init(&tcon->rlist);
++		if (tcon->ipc)
++			cifs_put_smb_ses(tcon->ses);
++		else
++			cifs_put_tcon(tcon);
++	}
++
++	cifs_dbg(FYI, "Reconnecting tcons finished\n");
++	if (resched)
++		queue_delayed_work(cifsiod_wq, &server->reconnect, 2 * HZ);
++	mutex_unlock(&server->reconnect_mutex);
++
++	/* now we can safely release srv struct */
++	if (tcon_exist)
++		cifs_put_tcp_session(server, 1);
++}
++
+ static bool
+ allocate_buffers(struct TCP_Server_Info *server)
+ {
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 6f3c5eb62d51..b4446ecf4e97 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3290,78 +3290,6 @@ smb2_echo_callback(struct mid_q_entry *mid)
+ 	add_credits(server, &credits, CIFS_ECHO_OP);
+ }
  
--#define SMB2_INTERNAL_CMD	cpu_to_le16(0xFFFF)
+-void cifs_reconnect_tcons(struct work_struct *work)
+-{
+-	struct TCP_Server_Info *server = container_of(work,
+-					struct TCP_Server_Info, reconnect.work);
+-	struct cifs_ses *ses;
+-	struct cifs_tcon *tcon, *tcon2;
+-	struct list_head tmp_list;
+-	int tcon_exist = false;
+-	int rc;
+-	int resched = false;
 -
- #define NUMBER_OF_SMB2_COMMANDS	0x0013
- 
- /* 52 transform hdr + 64 hdr + 88 create rsp */
+-
+-	/* Prevent simultaneous reconnects that can corrupt tcon->rlist list */
+-	mutex_lock(&server->reconnect_mutex);
+-
+-	INIT_LIST_HEAD(&tmp_list);
+-	cifs_dbg(FYI, "Need negotiate, reconnecting tcons\n");
+-
+-	spin_lock(&cifs_tcp_ses_lock);
+-	list_for_each_entry(ses, &server->smb_ses_list, smb_ses_list) {
+-		list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
+-			if (tcon->need_reconnect || tcon->need_reopen_files) {
+-				tcon->tc_count++;
+-				list_add_tail(&tcon->rlist, &tmp_list);
+-				tcon_exist = true;
+-			}
+-		}
+-		/*
+-		 * IPC has the same lifetime as its session and uses its
+-		 * refcount.
+-		 */
+-		if (ses->tcon_ipc && ses->tcon_ipc->need_reconnect) {
+-			list_add_tail(&ses->tcon_ipc->rlist, &tmp_list);
+-			tcon_exist = true;
+-			ses->ses_count++;
+-		}
+-	}
+-	/*
+-	 * Get the reference to server struct to be sure that the last call of
+-	 * cifs_put_tcon() in the loop below won't release the server pointer.
+-	 */
+-	if (tcon_exist)
+-		server->srv_count++;
+-
+-	spin_unlock(&cifs_tcp_ses_lock);
+-
+-	list_for_each_entry_safe(tcon, tcon2, &tmp_list, rlist) {
+-		struct cifs_tcon_reconnect_params params = {
+-			.start_timer = false,
+-		};
+-		rc = cifs_tcon_reconnect(tcon, &params);
+-		if (!rc)
+-			cifs_reopen_persistent_handles(tcon);
+-		else
+-			resched = true;
+-		list_del_init(&tcon->rlist);
+-		if (tcon->ipc)
+-			cifs_put_smb_ses(tcon->ses);
+-		else
+-			cifs_put_tcon(tcon);
+-	}
+-
+-	cifs_dbg(FYI, "Reconnecting tcons finished\n");
+-	if (resched)
+-		queue_delayed_work(cifsiod_wq, &server->reconnect, 2 * HZ);
+-	mutex_unlock(&server->reconnect_mutex);
+-
+-	/* now we can safely release srv struct */
+-	if (tcon_exist)
+-		cifs_put_tcp_session(server, 1);
+-}
+-
+ int
+ SMB2_echo(struct TCP_Server_Info *server)
+ {
 diff --git a/fs/cifs/smb2proto.h b/fs/cifs/smb2proto.h
-index de6388ef344f..c52be13a374a 100644
+index c52be13a374a..fbceb62d355d 100644
 --- a/fs/cifs/smb2proto.h
 +++ b/fs/cifs/smb2proto.h
-@@ -116,7 +116,7 @@ extern int smb2_open_file(const unsigned int xid,
+@@ -116,7 +116,6 @@ extern int smb2_open_file(const unsigned int xid,
  extern int smb2_unlock_range(struct cifsFileInfo *cfile,
  			     struct file_lock *flock, const unsigned int xid);
  extern int smb2_push_mandatory_locks(struct cifsFileInfo *cfile);
--extern void smb2_reconnect_server(struct work_struct *work);
-+extern void cifs_reconnect_tcons(struct work_struct *work);
+-extern void cifs_reconnect_tcons(struct work_struct *work);
  extern int smb3_crypto_aead_allocate(struct TCP_Server_Info *server);
  extern unsigned long smb_rqst_len(struct TCP_Server_Info *server,
  				  struct smb_rqst *rqst);
