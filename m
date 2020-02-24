@@ -2,35 +2,35 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A1B16A712
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2020 14:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3A216A716
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2020 14:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgBXNPv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 24 Feb 2020 08:15:51 -0500
+        id S1727515AbgBXNQA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 24 Feb 2020 08:16:00 -0500
 Received: from hr2.samba.org ([144.76.82.148]:41900 "EHLO hr2.samba.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727299AbgBXNPv (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 24 Feb 2020 08:15:51 -0500
+        id S1727299AbgBXNP7 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:15:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
          s=42; h=Message-Id:Date:Cc:To:From;
-        bh=XnecTLNXjN6OYPF/A7fcS45I3hzAOlXTKVwQEuIMlTs=; b=HHSwluTExFq/lV2NbX4KY7fyIs
-        DCgmzcxO4X9RAN0Q7NUXfTsvh7X+JfwZiCjiHOEU4W2VLBA87wnZVGpTjnFFHEM8K1gGaV9xvhYeV
-        8O4G5ubQBqQLHVaaXTVJ7J//S7CuOej4oDXSOesZLN/x373ihA0put2Rk3X2MleOUESdpRltxqGOV
-        jjQ6GqJkVqRY9utIiGdpOnWPiPd55/KHMEBNZ+iqBmaTAsLHeyw4NTVFGnQ0gv+CYX5ODQfaGRE17
-        aQNI9NT8f1z2+5g33t7QvPH2NTmuZjIN5nylF9Flh5ryt2ko1Y+VqkpZrvifkxnv11i65b5B4NM50
-        VcUg0p0N/IyxrHiGR5dzwcfpCkGvVakm1kK2MTbVffu4eQITpCaMer6vXt1xA21C3flZz8trKZzP8
-        6wmSv00Tf7XDohmoi4XDZmz5yaaCfiHzt/ALgXajLSr46VGh+vpIbEddbpGlmUqTxfkts8R68fTUi
-        2qkuQOGUgp7zeCAddQlAD6DN;
+        bh=Lnzk87gzlPDD2Ke8eoX8So/Qf8ffZufw/NezDqjHb7Y=; b=evV/kRFAi7dm0GyIe9s2WxTWNV
+        MDzupPqXFxiuAKfGybrdZ9gMEzZAl6Xjh/azNY386ZXPQwTLv98CvyhM0XiarVBRgZDq8vN4D1nAD
+        THj5//nSQqHVKti9JhJzhIHqMELVdil43fWlhD+jCdLBvzbxlKrMWjA19D9O4iVh3wbKggNvH+OaX
+        oCikVRdH7IRJaXENkYovIkWzDHpsha6N4siBNsEl8yn/fyw7HgPjUwQHMoWMEKh2W4aOhZ9nWiWCs
+        dKRVYHLRFyicfTs9fZ/wtOB0p3WZLQh0H68N2Zbpu8rQjQNdV6m0k/xLeJ3SoT54x5ny6cxoP1xml
+        BbIRBlQwaJwUpWA7pV79fez0zEPOlSCQNd9rI+1vcZ4deSjMc5S6O9p03iZwX6ENXCZhIBKFhVnF4
+        FOE0kQcu32j/azkYFQo4xsdkCri2gmcXrDTrVW4xcpDghZyEb1Aqp7CP9WDSlpqm9E9X8DEf828vG
+        j1ts967OKA3DMSPMy1YjZxTy;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
         (Exim)
-        id 1j6DaP-00061e-Gx; Mon, 24 Feb 2020 13:15:49 +0000
+        id 1j6DaP-00061e-Ov; Mon, 24 Feb 2020 13:15:49 +0000
 From:   Stefan Metzmacher <metze@samba.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     Stefan Metzmacher <metze@samba.org>
-Subject: [PATCH v1 01/13] cifs: call wake_up(&server->response_q) inside of cifs_reconnect()
-Date:   Mon, 24 Feb 2020 14:14:58 +0100
-Message-Id: <20200224131510.20608-2-metze@samba.org>
+Subject: [PATCH v1 02/13] cifs: use mod_delayed_work() for &server->reconnect if already queued
+Date:   Mon, 24 Feb 2020 14:14:59 +0100
+Message-Id: <20200224131510.20608-3-metze@samba.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200224131510.20608-1-metze@samba.org>
 References: <20200224131510.20608-1-metze@samba.org>
@@ -39,113 +39,34 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This means it's consistently called and the callers don't need to
-care about it.
+mod_delayed_work() is safer than queue_delayed_work() if there's a
+chance that the work is already in the queue.
 
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/cifs/cifssmb.c | 1 -
- fs/cifs/connect.c | 7 ++-----
- fs/cifs/smb2ops.c | 3 ---
- 3 files changed, 2 insertions(+), 9 deletions(-)
+ fs/cifs/smb2pdu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
-index 3c89569e7210..01206e12975a 100644
---- a/fs/cifs/cifssmb.c
-+++ b/fs/cifs/cifssmb.c
-@@ -1590,7 +1590,6 @@ cifs_readv_receive(struct TCP_Server_Info *server, struct mid_q_entry *mid)
- 	if (server->ops->is_session_expired &&
- 	    server->ops->is_session_expired(buf)) {
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -1;
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 1234f9ccab03..2495c3021772 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -378,7 +378,7 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
  	}
  
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 4804d1df8c1c..25df928b3ca0 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -537,6 +537,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
- 		dfs_cache_free_tgts(&tgt_list);
- 		put_tcp_super(sb);
- #endif
-+		wake_up(&server->response_q);
+ 	if (smb2_command != SMB2_INTERNAL_CMD)
+-		queue_delayed_work(cifsiod_wq, &server->reconnect, 0);
++		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
+ 
+ 	atomic_inc(&tconInfoReconnectCount);
+ out:
+@@ -3558,7 +3558,7 @@ SMB2_echo(struct TCP_Server_Info *server)
+ 
+ 	if (server->tcpStatus == CifsNeedNegotiate) {
+ 		/* No need to send echo on newly established connections */
+-		queue_delayed_work(cifsiod_wq, &server->reconnect, 0);
++		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
  		return rc;
- 	} else
- 		server->tcpStatus = CifsNeedReconnect;
-@@ -671,6 +672,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
- 	if (server->tcpStatus == CifsNeedNegotiate)
- 		mod_delayed_work(cifsiod_wq, &server->echo, 0);
- 
-+	wake_up(&server->response_q);
- 	return rc;
- }
- 
-@@ -765,7 +767,6 @@ server_unresponsive(struct TCP_Server_Info *server)
- 		cifs_server_dbg(VFS, "has not responded in %lu seconds. Reconnecting...\n",
- 			 (3 * server->echo_interval) / HZ);
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return true;
- 	}
- 
-@@ -898,7 +899,6 @@ is_smb_response(struct TCP_Server_Info *server, unsigned char type)
- 		 */
- 		cifs_set_port((struct sockaddr *)&server->dstaddr, CIFS_PORT);
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		break;
- 	default:
- 		cifs_server_dbg(VFS, "RFC 1002 unknown response type 0x%x\n", type);
-@@ -1070,7 +1070,6 @@ standard_receive3(struct TCP_Server_Info *server, struct mid_q_entry *mid)
- 		server->vals->header_preamble_size) {
- 		cifs_server_dbg(VFS, "SMB response too long (%u bytes)\n", pdu_length);
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -ECONNABORTED;
- 	}
- 
-@@ -1118,7 +1117,6 @@ cifs_handle_standard(struct TCP_Server_Info *server, struct mid_q_entry *mid)
- 	if (server->ops->is_session_expired &&
- 	    server->ops->is_session_expired(buf)) {
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -1;
- 	}
- 
-@@ -1212,7 +1210,6 @@ cifs_demultiplex_thread(void *p)
- 			cifs_server_dbg(VFS, "SMB response too short (%u bytes)\n",
- 				 server->pdu_size);
- 			cifs_reconnect(server);
--			wake_up(&server->response_q);
- 			continue;
- 		}
- 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index e47190cae163..bb2227561f5d 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -4148,7 +4148,6 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
- 	if (server->ops->is_session_expired &&
- 	    server->ops->is_session_expired(buf)) {
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -1;
- 	}
- 
-@@ -4512,14 +4511,12 @@ smb3_receive_transform(struct TCP_Server_Info *server,
- 		cifs_server_dbg(VFS, "Transform message is too small (%u)\n",
- 			 pdu_length);
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -ECONNABORTED;
- 	}
- 
- 	if (pdu_length < orig_len + sizeof(struct smb2_transform_hdr)) {
- 		cifs_server_dbg(VFS, "Transform message is broken\n");
- 		cifs_reconnect(server);
--		wake_up(&server->response_q);
- 		return -ECONNABORTED;
  	}
  
 -- 
