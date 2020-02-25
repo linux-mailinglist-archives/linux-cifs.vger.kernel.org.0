@@ -2,41 +2,111 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A22216EBBB
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Feb 2020 17:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AB316EEE4
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Feb 2020 20:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730898AbgBYQul convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 25 Feb 2020 11:50:41 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45290 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730895AbgBYQul (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 25 Feb 2020 11:50:41 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1EDE4B1EC;
-        Tue, 25 Feb 2020 16:50:39 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     "Paulo Alcantara \(SUSE\)" <pc@cjr.nz>, smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, "Paulo Alcantara \(SUSE\)" <pc@cjr.nz>
-Subject: Re: [PATCH 1/2] cifs: handle prefix paths in reconnect
-In-Reply-To: <20200220224935.12541-1-pc@cjr.nz>
-References: <20200220224935.12541-1-pc@cjr.nz>
-Date:   Tue, 25 Feb 2020 17:50:33 +0100
-Message-ID: <87h7ze4nmu.fsf@suse.com>
+        id S1731218AbgBYTVu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 Feb 2020 14:21:50 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33528 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731090AbgBYTVu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 Feb 2020 14:21:50 -0500
+Received: by mail-lj1-f195.google.com with SMTP id y6so195036lji.0
+        for <linux-cifs@vger.kernel.org>; Tue, 25 Feb 2020 11:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BjwYlHmuGAdeikF/2XEu23FikIQIHQ0h05ocXqEZmU8=;
+        b=Sj3J4Tg3a7jHWn1UN3QTLQ4tHjd4ZwtnogvppoampuWUOl4IxtJCOhGhWHpymmS/LL
+         CAqqbT/MN4g+BDrta/uPd/VLtqJ8sXCuUGlCaPPAue1533LFScYi3gKOxp2iCi1MevuT
+         5IajPA5Nn6T5XueVWTMzlL9o8tB6mzAX7tOde0BnLcpe1HIAbBqkqcZO/CYlo1BwLOqN
+         +R5kryO+C/NzsHeFjKXTVce7io2MqZuyZ/Yzky/eT2NrVwQ782zi4pYBXYN+niWzTdOi
+         aLLSVmlJbqAehTwL3qGDWuFyBsUFK44OkvLqw52vK54dPTnaVj5wUSiL2B2DjTCn152o
+         ozcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BjwYlHmuGAdeikF/2XEu23FikIQIHQ0h05ocXqEZmU8=;
+        b=Ure/sfdwvIG4YzSsXUqXXgduUwL56mmyzWuKm2REVyyYu+A1CKt8F+0uKxNOu1rk+B
+         Wt2+ZIYFT/IS6hYVYqbDgkn1Lnp2CWvjBzTdAe0jM+RS4F2BF7e5q0T51Rc6XLc1P9g6
+         KafDl2BS1liAPPaY1eGNe+L88dUgLbsmtbs8J1zfO0ZvMS1jE+cRO7U++gb8617louT1
+         M8Ei4PqhYAgvebvlz4YXBFqvtZZ7PU4RLVK/ymWxqrgUoLHGXYopK6gGHt7QepPD/m4S
+         geRW7HuPMVNexmyg88U6yk2ZcfCukuiGVyMHBEWkU84GoXOHGY/VuRf6fU37X2EonL7S
+         miJw==
+X-Gm-Message-State: ANhLgQ1U7ogdA4Z+0CMC8BNhjipM/zYh95d/3D7ZNpJYHh/ndqpXQ0Qk
+        8D4iughJOHx1Cyf8EWG+TjbYlO6ix2mQScXg8w==
+X-Google-Smtp-Source: APXvYqxeW4UQ/zk0pm30UkccRUZ3VM3DdFFKBYJnGpmAn9BSFZeG6fEediJMVLF6olVRu+qYHATi8UbXZ+9uBpU+78s=
+X-Received: by 2002:a2e:7315:: with SMTP id o21mr345323ljc.276.1582658508301;
+ Tue, 25 Feb 2020 11:21:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <20200214043513.uh2jtb62qf54nmud@xzhoux.usersys.redhat.com>
+ <370134c148a5f4d12df31a3a9020b66ef316a004.camel@kernel.org>
+ <20200214142836.2rhitx3jfa5nxada@xzhoux.usersys.redhat.com>
+ <CAKywueRV8+8qVP6e5nsvbpMQtwDU5mQGw5h51w=5rOsCN+Oj0w@mail.gmail.com>
+ <20200219021039.3mpkrmvipd6z3wes@xzhoux.usersys.redhat.com>
+ <CAKywueRvfABoVrdipic6x5_V31K0sOqs8T5y9VzJuyB4Q40bUQ@mail.gmail.com> <20200225051551.erpp36onb2kxmxjn@xzhoux.usersys.redhat.com>
+In-Reply-To: <20200225051551.erpp36onb2kxmxjn@xzhoux.usersys.redhat.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Tue, 25 Feb 2020 11:21:37 -0800
+Message-ID: <CAKywueRBLp84nrSVBYoLs-uk2OjJpcME-OW4q0UDSTNjQoggJw@mail.gmail.com>
+Subject: Re: [PATCH] CIFS: unlock file across process
+To:     Murphy Zhou <jencce.kernel@gmail.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        Steve French <smfrench@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-for both patch
+=D0=BF=D0=BD, 24 =D1=84=D0=B5=D0=B2=D1=80. 2020 =D0=B3. =D0=B2 21:16, Murph=
+y Zhou <jencce.kernel@gmail.com>:
+>
+> On Mon, Feb 24, 2020 at 11:39:27AM -0800, Pavel Shilovsky wrote:
+> > =D0=B2=D1=82, 18 =D1=84=D0=B5=D0=B2=D1=80. 2020 =D0=B3. =D0=B2 18:10, M=
+urphy Zhou <jencce.kernel@gmail.com>:
+> > >
+> > > On Fri, Feb 14, 2020 at 11:03:00AM -0800, Pavel Shilovsky wrote:
+> > > > Also, please make sure that resulting patch works against Windows f=
+ile
+> > > > share since the locking semantics may be different there.
+> > >
+> > > OK.
+> > >
+> > > >
+> > > > Depending on a kind of lease we have on a file, locks may be cached=
+ or
+> > > > not. We probably don't want to have different behavior for cached a=
+nd
+> > > > non-cached locks. Especially given the fact that a lease may be bro=
+ken
+> > > > in the middle of app execution and the different behavior will be
+> > > > applied immediately.
+> > >
+> > > Testing new patch with and without cache=3Dnone option, both samba
+> > > and Win2019 server.
+> > >
+> > > Thanks very much for reviewing!
+> > >
+> >
+> > cache=3Dnone only affects IO and doesn't change the client behavior
+> > regarding locks. "nolease" mount option can be used to turn off leases
+> > and make all locks go to the server.
+>
+> Great to know! I can't find it in any man page. Doing more tests.
+>
 
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+Good catch, it is missing in the man pages.
+
+Now added: https://github.com/piastry/cifs-utils/commit/4b8b2e2680e7e4aa9cc=
+8bd4278d04e5fe07d885e
+
+Thanks!
+
+--
+Best regards,
+Pavel Shilovsky
