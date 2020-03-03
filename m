@@ -2,53 +2,95 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E01178665
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Mar 2020 00:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E913178685
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Mar 2020 00:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728430AbgCCXfH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 3 Mar 2020 18:35:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58070 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728397AbgCCXfG (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 3 Mar 2020 18:35:06 -0500
-Subject: Re: [GIT PULL] CIFS/SMB3 fixes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583278506;
-        bh=ZlBKWC3CUezAAxbExyTg5tGLv2MO1gZ5mK5qFbekgqI=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=yWJW7nNd+Qz+23ai6WAaueun8nhZLw2+pGspTcjxraRYbCb5GY87rzjrglCxRV0sx
-         RyCp7NfrkfunF1MB84vsN9PnO80u7iVZ0QUJGDg8eGuBboz4B/m7ytEWzrwm4f3C8W
-         bkAhb+CE/vPrhd/yZFyqlBTboblc6XsImmDUklrM=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5muzDocCzjYJ_ahYXz3G2e=UA4jmfowbHBMt4iWsu6+yVg@mail.gmail.com>
-References: <CAH2r5muzDocCzjYJ_ahYXz3G2e=UA4jmfowbHBMt4iWsu6+yVg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5muzDocCzjYJ_ahYXz3G2e=UA4jmfowbHBMt4iWsu6+yVg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git
- tags/5.6-rc4-smb3-fixes
-X-PR-Tracked-Commit-Id: fb4b5f13464c468a9c10ae1ab8ba9aa352d0256a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8b614cb8f1dcac8ca77cf4dd85f46ef3055f8238
-Message-Id: <158327850616.6555.3784579214335282200.pr-tracker-bot@kernel.org>
-Date:   Tue, 03 Mar 2020 23:35:06 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        id S1728386AbgCCXju (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 Mar 2020 18:39:50 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37637 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728366AbgCCXju (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 Mar 2020 18:39:50 -0500
+Received: by mail-pl1-f194.google.com with SMTP id b8so136039plx.4;
+        Tue, 03 Mar 2020 15:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=MlgGONKkRLK3NcvigeAJc91a/0y8Apuj7MwQf/mg+U0=;
+        b=D9W5ElJ2zxSPQm4mNWtoIMwwurVR9+YB+QwzGyMNY+2dod40+OQtgHk1q3WL8pPRYi
+         btF0N+R5jBEgLjFYe+UritcA0LB7O2LpRC4TF6WnkYIUYHQs2oGEIJ1hopgAuDvLOrbR
+         99Qf4VTvjXvqXXGOSr71qqkt90axZRtZIeQPSx8NvO1TBgPdE6OLFDWyWyF8FnFv1zVK
+         Yz+DCu48XhqgPtdAbDal/QSFSEcakC1n7h8nk1PThpkRVStI262AVvSFq3ySlUCtivXo
+         XQlWw9ME8wwoKH0ZSOnwzO5dDtOWIsubW9wOPAxXlpbo0OnNiijNI6XopU+6aksokKYA
+         gQqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MlgGONKkRLK3NcvigeAJc91a/0y8Apuj7MwQf/mg+U0=;
+        b=EotNq3q6mQ9zpSwPJfZUn/XQstN44AQVF4eNIqYAkTHFf6K72YT552pwBtUpQToW7J
+         1gQrq+UP8jKBErruAdePjC6d0Avj7Xm50lOG/CjZZ1BGScd7APKPbKzLP/eO8+wOOmuK
+         1iv0GjB+YsOS0rTHbRFWI6nV00xQMKL8m+7kG0X3GTCx9DMg/JDI1y/OaKlmOKDgiQlt
+         41lIyuViECOc+QOz4kB/3H30St8KYomXp/ykizOm0A6IMylhvYSzkhjX+n3hWu164GhD
+         Mfvg80V6RZSfuu/ZSRUgsXBY0DAv62fZXMx//OU6I3etuhmDW4uhVS2iqTydOMe4LEDz
+         Xi9Q==
+X-Gm-Message-State: ANhLgQ0tAE/Tf9jh1+/y40AF7+qoBli8GNRzE6Es8kbrsuJnjJwb66TM
+        IZtTZ6qCKllZdreHUFlQicM=
+X-Google-Smtp-Source: ADFU+vtQ/e7DsvLk4ksjt5EmjwpakcglqQtUHEch5z+psuTO23FwIqq98Hw/eHUDA5CdkXvxchABqA==
+X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr399pjt.131.1583278788877;
+        Tue, 03 Mar 2020 15:39:48 -0800 (PST)
+Received: from VM_0_35_centos.localdomain ([150.109.62.251])
+        by smtp.gmail.com with ESMTPSA id d1sm25569029pgi.63.2020.03.03.15.39.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Mar 2020 15:39:48 -0800 (PST)
+From:   Qiujun Huang <hqjagain@gmail.com>
+To:     sfrench@samba.org
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, smfrench@gmail.com,
+        Qiujun Huang <hqjagain@gmail.com>
+Subject: [PATCH] fs/cifs/cifsacl: remove set but not used variable 'rc'
+Date:   Wed,  4 Mar 2020 07:39:43 +0800
+Message-Id: <1583278783-11584-1-git-send-email-hqjagain@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Tue, 3 Mar 2020 14:22:30 -0600:
+ It is set but not used, So can be removed.
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.6-rc4-smb3-fixes
+Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
+---
+ fs/cifs/cifsacl.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8b614cb8f1dcac8ca77cf4dd85f46ef3055f8238
-
-Thank you!
-
+diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
+index 716574a..1cf3916 100644
+--- a/fs/cifs/cifsacl.c
++++ b/fs/cifs/cifsacl.c
+@@ -342,7 +342,6 @@
+ sid_to_id(struct cifs_sb_info *cifs_sb, struct cifs_sid *psid,
+ 		struct cifs_fattr *fattr, uint sidtype)
+ {
+-	int rc;
+ 	struct key *sidkey;
+ 	char *sidstr;
+ 	const struct cred *saved_cred;
+@@ -403,7 +402,6 @@
+ 	saved_cred = override_creds(root_cred);
+ 	sidkey = request_key(&cifs_idmap_key_type, sidstr, "");
+ 	if (IS_ERR(sidkey)) {
+-		rc = -EINVAL;
+ 		cifs_dbg(FYI, "%s: Can't map SID %s to a %cid\n",
+ 			 __func__, sidstr, sidtype == SIDOWNER ? 'u' : 'g');
+ 		goto out_revert_creds;
+@@ -416,7 +414,6 @@
+ 	 */
+ 	BUILD_BUG_ON(sizeof(uid_t) != sizeof(gid_t));
+ 	if (sidkey->datalen != sizeof(uid_t)) {
+-		rc = -EIO;
+ 		cifs_dbg(FYI, "%s: Downcall contained malformed key (datalen=%hu)\n",
+ 			 __func__, sidkey->datalen);
+ 		key_invalidate(sidkey);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+1.8.3.1
+
