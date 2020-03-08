@@ -2,37 +2,37 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F98317D163
-	for <lists+linux-cifs@lfdr.de>; Sun,  8 Mar 2020 05:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A9017D209
+	for <lists+linux-cifs@lfdr.de>; Sun,  8 Mar 2020 07:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgCHEgx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 7 Mar 2020 23:36:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42908 "EHLO mail.kernel.org"
+        id S1726001AbgCHGRZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 8 Mar 2020 01:17:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbgCHEgx (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 7 Mar 2020 23:36:53 -0500
+        id S1725306AbgCHGRZ (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sun, 8 Mar 2020 01:17:25 -0500
 Received: from sol.hsd1.ca.comcast.net (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BCED3206D5;
-        Sun,  8 Mar 2020 04:36:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3264E206D5;
+        Sun,  8 Mar 2020 06:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583642212;
-        bh=+ov2E0CAUG0jm8hkNuA2ANELpXN4Z3WZr/tFb6gI+LA=;
+        s=default; t=1583648244;
+        bh=9ame7aB+gFjGXSnQ7vpAtpsVY6w+4/FfqozW1g4Cd+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hqzTyJ6UuCdKk3EKIYyrl8OiuYuIwD3/QO38Jlo8WewLwBZk4O53pHeRvUZitr944
-         pRZ75BVtV1RerwDe7KNMqmO8yBSItypQm6gmfNcmJXJX72eT+5nJ0iI8y4b3SI8upL
-         C/mys+rI9Cd3IMcpSXutmLFivJmxzOirWCmzGQIs=
+        b=jpf30BGdmS+h5tKyDyU5YYG0AeLi7uZRjya69QEId/i/FFgx8lds/q+qxLi/uCXyU
+         cG6Hv4YpgVGuLvvhwSsygu893iLaDzZxS7+LfbEk2J4IxDWAjKg0+xfgGaVN7RXIWr
+         42DmzulKd0SkHRMWLYrtz4e+HPBv46g6MNMStg3Y=
 From:   Eric Biggers <ebiggers@kernel.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     linux-ext4@vger.kernel.org, syzkaller-bugs@googlegroups.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: clear PF_MEMALLOC before exiting demultiplex thread
-Date:   Sat,  7 Mar 2020 20:36:45 -0800
-Message-Id: <20200308043645.1034870-1-ebiggers@kernel.org>
+Subject: [PATCH v2] cifs: clear PF_MEMALLOC before exiting demultiplex thread
+Date:   Sat,  7 Mar 2020 22:16:11 -0800
+Message-Id: <20200308061611.1185481-1-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <0000000000000e7156059f751d7b@google.com>
-References: <0000000000000e7156059f751d7b@google.com>
+In-Reply-To: <20200308043645.1034870-1-ebiggers@kernel.org>
+References: <20200308043645.1034870-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
@@ -57,14 +57,26 @@ save and restore PF_MEMALLOC.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- fs/cifs/connect.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+
+v2: added missing include of <linux/sched/mm.h>
+    (I missed that I didn't actually have CONFIG_CIFS set...)
+
+ fs/cifs/connect.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 4804d1df8c1c..beab1dc2dc01 100644
+index 4804d1df8c1c..97b8eb585cf9 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -1164,8 +1164,9 @@ cifs_demultiplex_thread(void *p)
+@@ -21,6 +21,7 @@
+ #include <linux/fs.h>
+ #include <linux/net.h>
+ #include <linux/string.h>
++#include <linux/sched/mm.h>
+ #include <linux/sched/signal.h>
+ #include <linux/list.h>
+ #include <linux/wait.h>
+@@ -1164,8 +1165,9 @@ cifs_demultiplex_thread(void *p)
  	struct task_struct *task_to_wake = NULL;
  	struct mid_q_entry *mids[MAX_COMPOUND];
  	char *bufs[MAX_COMPOUND];
@@ -75,7 +87,7 @@ index 4804d1df8c1c..beab1dc2dc01 100644
  	cifs_dbg(FYI, "Demultiplex PID: %d\n", task_pid_nr(current));
  
  	length = atomic_inc_return(&tcpSesAllocCount);
-@@ -1320,6 +1321,7 @@ cifs_demultiplex_thread(void *p)
+@@ -1320,6 +1322,7 @@ cifs_demultiplex_thread(void *p)
  		set_current_state(TASK_RUNNING);
  	}
  
