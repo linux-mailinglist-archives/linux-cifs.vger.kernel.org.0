@@ -2,51 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A3E18EE8C
-	for <lists+linux-cifs@lfdr.de>; Mon, 23 Mar 2020 04:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EF818EE9C
+	for <lists+linux-cifs@lfdr.de>; Mon, 23 Mar 2020 04:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgCWDhA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 22 Mar 2020 23:37:00 -0400
-Received: from mail-yb1-f194.google.com ([209.85.219.194]:37918 "EHLO
+        id S1727067AbgCWDvr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 22 Mar 2020 23:51:47 -0400
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:38751 "EHLO
         mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726983AbgCWDg7 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 22 Mar 2020 23:36:59 -0400
-Received: by mail-yb1-f194.google.com with SMTP id j138so6310608ybg.5
-        for <linux-cifs@vger.kernel.org>; Sun, 22 Mar 2020 20:36:57 -0700 (PDT)
+        with ESMTP id S1726983AbgCWDvr (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 22 Mar 2020 23:51:47 -0400
+Received: by mail-yb1-f194.google.com with SMTP id j138so6323299ybg.5
+        for <linux-cifs@vger.kernel.org>; Sun, 22 Mar 2020 20:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jHK24BN+AuBbJZHdcRcPM+QuLcdvcjj7dGqoUBOB60g=;
-        b=WR9RAwQ1BL9bm9ryCj7AgvnGPfxOnfiL19BgFIck1zFxaBIX0AM5CfZxk3MiBsnO3K
-         uLfUfkN1cJI/YJd3Peo/0IBjWyHIcZPvIZNWqklQay2OzkT9F0ooNqmyl6v1VnDdBpjf
-         HYmdHL6u1o94u0VZmMYXllcdw1ILHqtzv/hx3sp+IthnWMu/iKZOM7n4ZRrdMWqVSbeE
-         2izX2lZpoY6J+bQE1lbv0/MApMq7OTGkr6nNML6iyDyfu7qGFArRoIsXfXglAmbkU38b
-         LOJn60zQP8M01WveoMa1/KMFj7fauM63v9nOyCQ6Nnd8b4U36092YdIe+lRoGO2uAtsi
-         ZKaA==
+        bh=7O0NrVfHEmxTAaSlbIVGjlFoHJzKEuBizWFXG9ZF0Eo=;
+        b=HxpyOmNKZaI7IHHvC9PaX1xD2cIiJ8zJGdSv05vvL7TN7Sy6Z0iaSgB5PJQfyFOBmT
+         mvHwZhEbgZBpgJjqDQTdJeACyJvQMtV2rbGdtzFkF63nHTorsn1D/a+U9gpf0TRCGyUu
+         msRf06kCd8Ph72EDavdJAzgAH1lWbUpLOqEx6hf/2qy3sNC9DsPmUKqur0flke3LjKY6
+         UHY9iPUgA6Xcbeq0dMvaGd+pj7t4IkUlxa8IqXihCtIyXPQEIb6c+dTUiJq1xnI9PGPl
+         rsjSkcZ4/tet79mFPec6POh4XeVh/qQq5IQJYIJ9aI1DR/yaGw0bQtMDITWTHxD30Rfo
+         b1iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jHK24BN+AuBbJZHdcRcPM+QuLcdvcjj7dGqoUBOB60g=;
-        b=KmtNiXSz2ueLIP/TNU0qkZawHRs5Q13aF4xJwYboyli0wSBjtJKeHyvlRvEi+uOG4N
-         afd2/gNOZ96BSUik5/MWb3QuThF9Md/91FqzrIAs5YcvZRZ6J1/PGlNWOnTmtZzrF923
-         JqHmDa064N+kJC8BsDQsMuG0dfHY6/GWxzU7r6kG3j6oVvQjFYhOp5e1/8mqlzJyXwR6
-         Vmt2iQF5RwJJqq37u3zch2WA1GqKxXuS/wR76wAqB6ar+dnZnBN83RayDiT5xGf8t6Yo
-         Uue37lEveUXkfvMcFefsS87HyzaMXQMdmCQk+6X/Y0vUqqseXGre1yQSHLVJI8PrnmHD
-         i1eQ==
-X-Gm-Message-State: ANhLgQ03BXn7f0xBCwPQ/IUcYHwpBnwc8+aiKrJxFgsC0aU61CyR+3rJ
-        a+WnzPibSk+myuH75idDWND08vDBrD9ZBG27MBScCVkcV60=
-X-Google-Smtp-Source: ADFU+vtObF22eRoF215nc5cKVIDdUe30ASeh8QM+6SmyjIzwphGXUtNZPd7hnJj1S5x1mmL7RQA1PqPVTYgZd4q5nqM=
-X-Received: by 2002:a25:f20f:: with SMTP id i15mr22052262ybe.364.1584934616882;
- Sun, 22 Mar 2020 20:36:56 -0700 (PDT)
+        bh=7O0NrVfHEmxTAaSlbIVGjlFoHJzKEuBizWFXG9ZF0Eo=;
+        b=FeqYHq+lp4F4fx9CxQMEvZhIy9Wd73korUwb3AWpv1S84Gy77Wvq7DeopsB7mdcH9P
+         uxHPSg29WdON099rzQuf5qjRSl+dgpiGyYOoKIkQUjc4TTmCyPz+3jXm/I9ICLIMzNUn
+         QBwtIDIqjST09c4sG313uSPgGMhmVZR7tzX+W0V9XGb0XD8P7g+57Ytijr6N7GHgormN
+         CpXvhofT3/J8Gx1nL4AosA680aQOApeoZxesTPPkXPKT14jsMFVS1Yvyhor9/mJupcW8
+         cUDph2Oe2sAWzA3PDSR3HP6Qnw5gZoK8sdwAOdbcpNvPftX5F1KbtXClk7azr2LBJs+y
+         u6/g==
+X-Gm-Message-State: ANhLgQ39e1JVmYgoOHK+j5eIOm/3BNyTav6idxAclJ2yoyJx2IVN4Qup
+        /Ng3ckFzUzWjOSgWia8h/YdeW9qxlPN8i0ZgsAE=
+X-Google-Smtp-Source: ADFU+vtihEbdNL4gBoBX30E4Or279EzXPQMhZL3buXJPeTWTwQUeHe4bBzxA8v/7PuewwID612P+O2g/kN8Txv6xRw4=
+X-Received: by 2002:a25:cf85:: with SMTP id f127mr29622359ybg.167.1584935504803;
+ Sun, 22 Mar 2020 20:51:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200318124659.cbxngqb4kbt2vhza@xzhoux.usersys.redhat.com>
  <CAH2r5muTx3DmGZ+ZedrNmPK8ZHq10XZ3RXxVD0H6RmEcBvnVPQ@mail.gmail.com> <20200323002428.ih7nchj5tnbuppeb@xzhoux.usersys.redhat.com>
 In-Reply-To: <20200323002428.ih7nchj5tnbuppeb@xzhoux.usersys.redhat.com>
 From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 22 Mar 2020 22:36:46 -0500
-Message-ID: <CAH2r5msZBvN9+dBLeqpZff2yu21j+TN=B8X72Xs8j-V9Rmqcig@mail.gmail.com>
+Date:   Sun, 22 Mar 2020 22:51:34 -0500
+Message-ID: <CAH2r5muXYLMjojCJ0nGBpTmAhGznhvkEG3KE6YE0PvaMuYqbLQ@mail.gmail.com>
 Subject: Re: [PATCH v3] CIFS: check new file size when extending file by fallocate
 To:     Murphy Zhou <jencce.kernel@gmail.com>
 Cc:     CIFS <linux-cifs@vger.kernel.org>,
@@ -58,17 +58,16 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Isn't this it: https://git.samba.org/?p=sfrench/cifs-2.6.git;a=commit;h=4f6257b7d092b84ba8a62769ad6c6fb6ebe89d70
+I also see (in cifs-2.6.git for-next)
 
-It has been in there 4 days (although I will be updating the branch soon)
+commit 0667059d0b4ad231e7258aa571f28574b313f34f
+Author: Murphy Zhou <jencce.kernel@gmail.com>
+Date:   Fri Feb 21 10:30:01 2020 +0800
 
-CIFS: check new file size when extending file by fallocate
-authorMurphy Zhou <jencce.kernel@gmail.com>
-Wed, 18 Mar 2020 07:43:38 -0500 (20:43 +0800)
-committerSteve French <stfrench@microsoft.com>
-Wed, 18 Mar 2020 16:28:10 -0500 (16:28 -0500)
-commit4f6257b7d092b84ba8a62769ad6c6fb6ebe89d70
-tree7faad4e1799cf4bbb3287c8cb93c9fe6cf8ffabf
+    cifs: allow unlock flock and OFD lock across fork
+
+    Since commit d0677992d2af ("cifs: add support for flock") added
+    support for flock, LTP/flock03[1] testcase started to fail.
 
 On Sun, Mar 22, 2020 at 7:24 PM Murphy Zhou <jencce.kernel@gmail.com> wrote:
 >
