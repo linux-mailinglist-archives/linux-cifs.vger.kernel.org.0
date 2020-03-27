@@ -2,89 +2,435 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06F195835
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Mar 2020 14:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EB5195CD2
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Mar 2020 18:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727247AbgC0Nl1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 27 Mar 2020 09:41:27 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:43938 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727185AbgC0Nl1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 27 Mar 2020 09:41:27 -0400
-Received: by mail-il1-f196.google.com with SMTP id g15so8732431ilj.10
-        for <linux-cifs@vger.kernel.org>; Fri, 27 Mar 2020 06:41:27 -0700 (PDT)
+        id S1727822AbgC0Rbx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 27 Mar 2020 13:31:53 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:33393 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727806AbgC0Rbu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 27 Mar 2020 13:31:50 -0400
+Received: by mail-yb1-f196.google.com with SMTP id p196so5004353ybc.0
+        for <linux-cifs@vger.kernel.org>; Fri, 27 Mar 2020 10:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
-        b=nT2oJ9SVB/FoY5io1Mbg2fBJli9XXC/B954/cmbBwc4HwRv3RZOSiDWNTItleGNZtn
-         sKCJjmCQHAsEBy0Jyy3vmd4mYqBS27VFZYCOeTnTF9yStqRrpVxlnEFW5x+3yAEqvz+n
-         8OjDOpPaRR/K+rpr/mnAd034OzzScPUMeHEDcoYKDABzIoDiOtNsqHcqUpJVA8PTKgCZ
-         Cxg6hkv5Q+lq4WUYYfyJbYjU1lYBCk3yHyXopYDpua6tbadqOqc/ZkGRZdXin8RQr/iD
-         e1pbO65XjiP3l3YbwHaUF/XdTei+otHLpXJvdjjMr/w3JwR1gMSEx/kDP+kLIRNj89fp
-         I+KQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BAkqlyjg15QQw5wfSaPpnFoZ9FaFDdlcd/EjyfFAgH4=;
+        b=ISwrDOOe2rjIIXLZRI216TWUwDDoXXBNZgHFzshOUHixWVMufLFRvScEiZ+nilrXsR
+         63zqfTnKQpn8ukVpvUA4oowjfCNKD2OZzVPDYT5QsAISLFu8pXnWaWNum/32riV1zHHG
+         obmGqs4FNhstdSMZKbGgmHaC3fA3hToqFQU6E7hjSl5bXLLG/45Kpnyqm/TxCXmBYlPv
+         wHvu/TzKYXpqFhQhVp6kq9Yt4ZOLRxHMUEM5K8Jrqxpr8STiMqsG+HOpMj6+sjMcahzS
+         AcZ90DUU8OXOGmPB/zLRIuNGx9EDCQ+EQwVxX44c6q5ArEfwihKTONtYiZ+Yxyae8AUQ
+         Uzqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
-        b=HB17AThhBs1ZyGP9O14YMB9cEY61lKNsS/Ze9Rf1bDkSVgYM3r/gquG/o6e0qPAfq5
-         GN5yY2Ut2ms8iDzMOoM7Tm9td4GSAM6/LAUNcFbhpIU5LDXeRlpfvMm6UEUr1/6U7wwI
-         bRX7Q5drCy/jE7mP2CDw30pzXOIkuCQmusxMUfN6gKzbsZ6xQY4LxU5TrWP0nDgXrLEi
-         znVbZp5x7c4oth2g8R31khhdDx3Xct/0C+iOdzmDSKYCGO/mUS+i+qH4LedRL6iWMhqg
-         CmCvfzFk97raSZGIzisxGsr/CJKDjqmQ0FURUwhFhIgqchqLJWCCx0zXeszTlOV1WQaG
-         V6xQ==
-X-Gm-Message-State: ANhLgQ01AYwYer559Ly88wxq+WDuwe05LRtWtYenwS7ZbeUdCNrZpHA4
-        vEzcOnAjipsqSYs5QqLr+bZS+eBdZJ+EtxRmbwsRaTmq
-X-Google-Smtp-Source: ADFU+vuYylKn/s4Wcm8ahydLNHBnrgD+D9YvohynQpoBYEn2cTa6afgSUvXtNKfHheyias7P0ENvSGMvudbNA5XnEGs=
-X-Received: by 2002:a92:7b10:: with SMTP id w16mr13509604ilc.93.1585316486541;
- Fri, 27 Mar 2020 06:41:26 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BAkqlyjg15QQw5wfSaPpnFoZ9FaFDdlcd/EjyfFAgH4=;
+        b=Ydp3rwvHPR+6Q293umpT1IA6NDrcSVZpPzOstT5vy065OKHqZwbvvn5u3lM96SJpMB
+         15Bl0TBLXo/ttelvMUVCSSLXtqtbraigW5Z5340JYcXeAoKTlZtC+vKim0pMiJ22hbmV
+         7viyWA6jNCBP/EwWQqtQan6S4LbPTPPjy6KBrFuOPVyWVEGxgY1/UlhoxLDW/G7qAFdj
+         6LlhVZmYCkEIQMHV+HTntzki6UDfnnhZBidbroo6+L4sTZiA39pYwZFi3JXgJCEMTESB
+         sdkuKAa+njSYpBy54cRleN533m14tFKoFvgo/qPH9/prRpYfv9OFHtWu+Xus1jJAngVy
+         xXFg==
+X-Gm-Message-State: ANhLgQ0rh+Yf1IBvD9aL99zCyrkHexp0lyOAObz8gNwKrkpnChvxc4xc
+        xk/fn2/Eb0JJTrftDssrXMn+jIXvLwLq2+uYutRIEvYN
+X-Google-Smtp-Source: ADFU+vtTXmyRhScj8VBIuNGEZ/Gih1TqIP6f/WYsQqyftIw681Ye8CdInjgty3HueiLi2v4+QLguI/jLkG++YOaDdSA=
+X-Received: by 2002:a25:f20f:: with SMTP id i15mr6592615ybe.364.1585330309104;
+ Fri, 27 Mar 2020 10:31:49 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a5e:8817:0:0:0:0:0 with HTTP; Fri, 27 Mar 2020 06:41:26
- -0700 (PDT)
-Reply-To: officework_progress@yahoo.com
-From:   Andrew Ede <consumingfirechurch4@gmail.com>
-Date:   Fri, 27 Mar 2020 15:41:26 +0200
-Message-ID: <CAK6CGFeTAgG3XwVRcnAcWenHei8Ed-kYt2ZyHgV0iwdOSwwO2Q@mail.gmail.com>
-Subject: HOW ARE YOU?
-To:     undisclosed-recipients:;
+References: <20200224131510.20608-1-metze@samba.org> <20200224131510.20608-7-metze@samba.org>
+In-Reply-To: <20200224131510.20608-7-metze@samba.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 27 Mar 2020 12:31:38 -0500
+Message-ID: <CAH2r5mtM-5KLcqTvaKgCqDvvLNU5HLUijSuOiZ6KnW2mRmnPhg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/13] cifs: abstract cifs_tcon_reconnect() out of smb2_reconnect()
+To:     Stefan Metzmacher <metze@samba.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Good day.
+Any updates on this (rebase) on the remaining 10?
 
-My reason of contacting you is that I and my colleagues working in our
-country=E2=80=99s National Petroleum Corporation want to buy any existing
-modern crude oil refinery in any part of the world.
+On Mon, Feb 24, 2020 at 7:16 AM Stefan Metzmacher <metze@samba.org> wrote:
+>
+> cifs_tcon_reconnect() will also be used in cifs_reconnect_tcon()
+> with the next commit.
+>
+> Signed-off-by: Stefan Metzmacher <metze@samba.org>
+> ---
+>  fs/cifs/cifsglob.h  |   8 +++
+>  fs/cifs/cifsproto.h |   3 +
+>  fs/cifs/connect.c   | 125 ++++++++++++++++++++++++++++++++++++
+>  fs/cifs/smb2pdu.c   | 151 +++++++++-----------------------------------
+>  4 files changed, 166 insertions(+), 121 deletions(-)
+>
+> diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+> index de82cfa44b1a..8393ed7ebf96 100644
+> --- a/fs/cifs/cifsglob.h
+> +++ b/fs/cifs/cifsglob.h
+> @@ -1074,6 +1074,14 @@ struct cached_fid {
+>         struct smb2_file_all_info file_all_info;
+>  };
+>
+> +struct cifs_tcon_reconnect_params {
+> +       bool skip_reconnect;
+> +       bool exit_nodev;
+> +       bool early_eagain;
+> +       bool late_eagain;
+> +       bool start_timer;
+> +};
+> +
+>  /*
+>   * there is one of these for each connection to a resource on a particular
+>   * session
+> diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
+> index 4c93007e44c0..64f13affdb15 100644
+> --- a/fs/cifs/cifsproto.h
+> +++ b/fs/cifs/cifsproto.h
+> @@ -270,6 +270,9 @@ extern int cifs_connect_session_locked(const unsigned int xid,
+>                                        struct cifs_ses *ses,
+>                                        struct nls_table *nls_info,
+>                                        bool retry);
+> +extern int cifs_tcon_reconnect(struct cifs_tcon *tcon,
+> +                              const struct cifs_tcon_reconnect_params *params);
+> +
+>  extern int cifs_enable_signing(struct TCP_Server_Info *server, bool mnt_sign_required);
+>  extern int CIFSSMBNegotiate(const unsigned int xid, struct cifs_ses *ses);
+>
+> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+> index c243c9a1b3d4..67d2ad330f33 100644
+> --- a/fs/cifs/connect.c
+> +++ b/fs/cifs/connect.c
+> @@ -5398,6 +5398,131 @@ cifs_connect_session_locked(const unsigned int xid,
+>         return rc;
+>  }
+>
+> +int
+> +cifs_tcon_reconnect(struct cifs_tcon *tcon,
+> +                   const struct cifs_tcon_reconnect_params *params)
+> +{
+> +       int rc;
+> +       struct nls_table *nls_codepage;
+> +       struct cifs_ses *ses;
+> +       struct TCP_Server_Info *server;
+> +       int retries;
+> +
+> +       /*
+> +        * SMB2s NegProt, SessSetup, Logoff do not have tcon yet so
+> +        * check for tcp and smb session status done differently
+> +        * for those three - in the calling routine.
+> +        */
+> +       if (tcon == NULL)
+> +               return 0;
+> +
+> +       ses = tcon->ses;
+> +       server = ses->server;
+> +
+> +       if (params->skip_reconnect)
+> +               return 0;
+> +
+> +       if (tcon->tidStatus == CifsExiting) {
+> +               if (params->exit_nodev) {
+> +                       cifs_dbg(FYI, "return ENODEV while umounting\n");
+> +                       return -ENODEV;
+> +               }
+> +       }
+> +       if ((!ses) || (ses->status == CifsExiting) || (!server))
+> +               return -EIO;
+> +
+> +       retries = server->nr_targets;
+> +
+> +       /*
+> +        * Give demultiplex thread up to 10 seconds to each target available for
+> +        * reconnect -- should be greater than cifs socket timeout which is 7
+> +        * seconds.
+> +        */
+> +       while (server->tcpStatus == CifsNeedReconnect) {
+> +               if (params->early_eagain) {
+> +                       return -EAGAIN;
+> +               }
+> +
+> +               rc = wait_event_interruptible_timeout(server->response_q,
+> +                                                     (server->tcpStatus != CifsNeedReconnect),
+> +                                                     10 * HZ);
+> +               if (rc < 0) {
+> +                       cifs_dbg(FYI, "%s: aborting reconnect due to a received"
+> +                                " signal by the process\n", __func__);
+> +                       return -ERESTARTSYS;
+> +               }
+> +
+> +               /* are we still trying to reconnect? */
+> +               if (server->tcpStatus != CifsNeedReconnect)
+> +                       break;
+> +
+> +               if (retries && --retries)
+> +                       continue;
+> +
+> +               /*
+> +                * on "soft" mounts we wait once. Hard mounts keep
+> +                * retrying until process is killed or server comes
+> +                * back on-line
+> +                */
+> +               if (!tcon->retry) {
+> +                       cifs_dbg(FYI, "gave up waiting on reconnect in smb_init\n");
+> +                       return -EHOSTDOWN;
+> +               }
+> +               retries = server->nr_targets;
+> +       }
+> +
+> +       if (!ses->need_reconnect && !tcon->need_reconnect)
+> +               return 0;
+> +
+> +       nls_codepage = load_nls_default();
+> +
+> +       /*
+> +        * need to prevent multiple threads trying to simultaneously reconnect
+> +        * the same SMB session
+> +        */
+> +       mutex_lock(&ses->session_mutex);
+> +
+> +       /*
+> +        * Recheck after acquire mutex. If another thread is negotiating
+> +        * and the server never sends an answer the socket will be closed
+> +        * and tcpStatus set to reconnect.
+> +        */
+> +       rc = cifs_connect_session_locked(0, ses,
+> +                                        nls_codepage,
+> +                                        tcon->retry);
+> +       /* do we need to reconnect tcon? */
+> +       if (rc || !tcon->need_reconnect) {
+> +               mutex_unlock(&ses->session_mutex);
+> +               goto out;
+> +       }
+> +
+> +       cifs_mark_open_files_invalid(tcon);
+> +       if (tcon->use_persistent)
+> +               tcon->need_reopen_files = true;
+> +
+> +       rc = cifs_tree_connect(0, tcon, nls_codepage);
+> +       mutex_unlock(&ses->session_mutex);
+> +
+> +       cifs_dbg(FYI, "reconnect tcon rc = %d\n", rc);
+> +       if (rc) {
+> +               /* If sess reconnected but tcon didn't, something strange ... */
+> +               printk_once(KERN_WARNING "reconnect tcon failed rc = %d\n", rc);
+> +               goto out;
+> +       }
+> +
+> +       if (params->start_timer)
+> +               mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
+> +
+> +       atomic_inc(&tconInfoReconnectCount);
+> +out:
+> +       if (params->late_eagain) {
+> +               rc = -EAGAIN;
+> +       }
+> +
+> +       unload_nls(nls_codepage);
+> +       return rc;
+> +}
+> +
+>  static int
+>  cifs_set_vol_auth(struct smb_vol *vol, struct cifs_ses *ses)
+>  {
+> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> index 715a50ffb234..162fe3381f4c 100644
+> --- a/fs/cifs/smb2pdu.c
+> +++ b/fs/cifs/smb2pdu.c
+> @@ -158,139 +158,48 @@ smb2_hdr_assemble(struct smb2_sync_hdr *shdr, __le16 smb2_cmd,
+>  static int
+>  smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
+>  {
+> -       int rc;
+> -       struct nls_table *nls_codepage;
+> -       struct cifs_ses *ses;
+> -       struct TCP_Server_Info *server;
+> -       int retries;
+> -
+> -       /*
+> -        * SMB2s NegProt, SessSetup, Logoff do not have tcon yet so
+> -        * check for tcp and smb session status done differently
+> -        * for those three - in the calling routine.
+> -        */
+> -       if (tcon == NULL)
+> -               return 0;
+> +       struct cifs_tcon_reconnect_params params = {
+> +               .skip_reconnect = false,
+> +       };
+>
+> -       if (smb2_command == SMB2_TREE_CONNECT)
+> -               return 0;
+> -
+> -       if (tcon->tidStatus == CifsExiting) {
+> -               /*
+> -                * only tree disconnect, open, and write,
+> -                * (and ulogoff which does not have tcon)
+> -                * are allowed as we start force umount.
+> -                */
+> -               if ((smb2_command != SMB2_WRITE) &&
+> -                  (smb2_command != SMB2_CREATE) &&
+> -                  (smb2_command != SMB2_TREE_DISCONNECT)) {
+> -                       cifs_dbg(FYI, "can not send cmd %d while umounting\n",
+> -                                smb2_command);
+> -                       return -ENODEV;
+> -               }
+> +       switch (smb2_command) {
+> +       case SMB2_TREE_CONNECT:
+> +               params.skip_reconnect = true;
+> +               break;
+>         }
+> -       if ((!tcon->ses) || (tcon->ses->status == CifsExiting) ||
+> -           (!tcon->ses->server))
+> -               return -EIO;
+> -
+> -       ses = tcon->ses;
+> -       server = ses->server;
+> -
+> -       retries = server->nr_targets;
+>
+>         /*
+> -        * Give demultiplex thread up to 10 seconds to each target available for
+> -        * reconnect -- should be greater than cifs socket timeout which is 7
+> -        * seconds.
+> +        * only tree disconnect, open, and write,
+> +        * (and ulogoff which does not have tcon)
+> +        * are allowed as we start force umount.
+>          */
+> -       while (server->tcpStatus == CifsNeedReconnect) {
+> -               /*
+> -                * Return to caller for TREE_DISCONNECT and LOGOFF and CLOSE
+> -                * here since they are implicitly done when session drops.
+> -                */
+> -               switch (smb2_command) {
+> -               /*
+> -                * BB Should we keep oplock break and add flush to exceptions?
+> -                */
+> -               case SMB2_TREE_DISCONNECT:
+> -               case SMB2_CANCEL:
+> -               case SMB2_CLOSE:
+> -               case SMB2_OPLOCK_BREAK:
+> -                       return -EAGAIN;
+> -               }
+> -
+> -               rc = wait_event_interruptible_timeout(server->response_q,
+> -                                                     (server->tcpStatus != CifsNeedReconnect),
+> -                                                     10 * HZ);
+> -               if (rc < 0) {
+> -                       cifs_dbg(FYI, "%s: aborting reconnect due to a received"
+> -                                " signal by the process\n", __func__);
+> -                       return -ERESTARTSYS;
+> -               }
+> -
+> -               /* are we still trying to reconnect? */
+> -               if (server->tcpStatus != CifsNeedReconnect)
+> -                       break;
+> -
+> -               if (retries && --retries)
+> -                       continue;
+> -
+> -               /*
+> -                * on "soft" mounts we wait once. Hard mounts keep
+> -                * retrying until process is killed or server comes
+> -                * back on-line
+> -                */
+> -               if (!tcon->retry) {
+> -                       cifs_dbg(FYI, "gave up waiting on reconnect in smb_init\n");
+> -                       return -EHOSTDOWN;
+> -               }
+> -               retries = server->nr_targets;
+> +       switch (smb2_command) {
+> +       case SMB2_WRITE:
+> +       case SMB2_CREATE:
+> +       case SMB2_TREE_DISCONNECT:
+> +               params.exit_nodev = true;
+> +               break;
+>         }
+>
+> -       if (!tcon->ses->need_reconnect && !tcon->need_reconnect)
+> -               return 0;
+> -
+> -       nls_codepage = load_nls_default();
+> -
+>         /*
+> -        * need to prevent multiple threads trying to simultaneously reconnect
+> -        * the same SMB session
+> +        * Return to caller for TREE_DISCONNECT and LOGOFF and CLOSE
+> +        * here since they are implicitly done when session drops.
+>          */
+> -       mutex_lock(&tcon->ses->session_mutex);
+> -
+> +       switch (smb2_command) {
+>         /*
+> -        * Recheck after acquire mutex. If another thread is negotiating
+> -        * and the server never sends an answer the socket will be closed
+> -        * and tcpStatus set to reconnect.
+> +        * BB Should we keep oplock break and add flush to exceptions?
+>          */
+> -       rc = cifs_connect_session_locked(0, tcon->ses,
+> -                                        nls_codepage,
+> -                                        tcon->retry);
+> -       /* do we need to reconnect tcon? */
+> -       if (rc || !tcon->need_reconnect) {
+> -               mutex_unlock(&tcon->ses->session_mutex);
+> -               goto out;
+> -       }
+> -
+> -       cifs_mark_open_files_invalid(tcon);
+> -       if (tcon->use_persistent)
+> -               tcon->need_reopen_files = true;
+> -
+> -       rc = cifs_tree_connect(0, tcon, nls_codepage);
+> -       mutex_unlock(&tcon->ses->session_mutex);
+> -
+> -       cifs_dbg(FYI, "reconnect tcon rc = %d\n", rc);
+> -       if (rc) {
+> -               /* If sess reconnected but tcon didn't, something strange ... */
+> -               printk_once(KERN_WARNING "reconnect tcon failed rc = %d\n", rc);
+> -               goto out;
+> +       case SMB2_TREE_DISCONNECT:
+> +       case SMB2_CANCEL:
+> +       case SMB2_CLOSE:
+> +       case SMB2_OPLOCK_BREAK:
+> +               params.early_eagain = true;
+> +               break;
+>         }
+>
+>         if (smb2_command != SMB2_INTERNAL_CMD)
+> -               mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
+> +               params.start_timer = true;
+>
+> -       atomic_inc(&tconInfoReconnectCount);
+> -out:
+>         /*
+>          * Check if handle based operation so we know whether we can continue
+>          * or not without returning to caller to reset file handle.
+> @@ -309,11 +218,11 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
+>         case SMB2_CHANGE_NOTIFY:
+>         case SMB2_QUERY_INFO:
+>         case SMB2_SET_INFO:
+> -               rc = -EAGAIN;
+> +               params.late_eagain = true;
+> +               break;
+>         }
+>
+> -       unload_nls(nls_codepage);
+> -       return rc;
+> +       return cifs_tcon_reconnect(tcon, &params);
+>  }
+>
+>  static void
+> --
+> 2.17.1
+>
 
-We are ready to buy any available land to build the Refinery or buy
-the existing one anywhere outside Africa. We will make you our foreign
-partner abroad with some percentage shareholding if you will be
-interested to work with us on this project.
 
-We have the sum of ($600 Million Dollars) Six Hundred Million Dollars
-for this project.
+--
+Thanks,
 
-Meanwhile, this amount of ($600 Million Dollars) will be accessible
-through Foreign Contract Purchase Fund. We are going to clarify what
-we meant by Foreign Contract Purchase Fund as soon as we hear from you
-for better understanding and the way forward.
-
-However, in case you are not capable to handle this project with us,
-please kindly connect us to any capable person or company that would
-handle the project with us in order to enable us proceed at once.
-
-We hope to hear you in no distance time through this e-mail address
-at: officework_progress@yahoo.com, for immediate communication and
-more facts on how to go on.
-
-With respect
-
-Best Regards
-
-Andrew Ede and Co,,
+Steve
