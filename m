@@ -2,79 +2,67 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E881970A9
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 Mar 2020 00:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AB51979BC
+	for <lists+linux-cifs@lfdr.de>; Mon, 30 Mar 2020 12:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728857AbgC2WBE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 29 Mar 2020 18:01:04 -0400
-Received: from mail-yb1-f172.google.com ([209.85.219.172]:39742 "EHLO
-        mail-yb1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728823AbgC2WBD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 29 Mar 2020 18:01:03 -0400
-Received: by mail-yb1-f172.google.com with SMTP id h205so7963559ybg.6;
-        Sun, 29 Mar 2020 15:01:03 -0700 (PDT)
+        id S1729392AbgC3Kwe (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:34 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:35574 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729379AbgC3Kw0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Mar 2020 06:52:26 -0400
+Received: by mail-vk1-f194.google.com with SMTP id f17so4317268vkk.2
+        for <linux-cifs@vger.kernel.org>; Mon, 30 Mar 2020 03:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kAA7/YzGXhcKB7pmnLDjhGtQei6hSiehda0pcnmqcxs=;
-        b=hcdht7gX/aAluLAcaUADD2aqp8ZKzKIFjkVyXd94dF0qE/edx1HS8GuGeAWWOeIfLo
-         8WVBDqF9Oy7vA0OpD1zDT1LlxrVmhAGNFVN1CwfKgQI+stjW4fhWbKiPFLYLnkHlIbTu
-         nwLTvEENn3CDe5dHKuIruzmTZNLTZ06cHckHBtkHncUD3UE5ejNi7qOQ/gcKjesw3wi1
-         9wxNeK3lQQ1MKXYJyUCXQYmRTtqgpSjCzGZznP6Lhk3R/Gs+a8MiuiGn8k7AmrbulE3L
-         cYtJJyTkQQM6kmCupI7Xp13YQIUiwjRcmon0mdJfSckS90o3q5png4ZJ1hQFgKZo8P2p
-         gKLg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=W/pqz5d7jRz2XhuR0NPXi/HrPrA1EYS2PHHQ1FpsLUolfOVyK7H009Wnc0lrOJx6Hi
+         8vUUF/pk3PeclHcAYXDWVsOIJGvMQpXmWA9vT3q5H+Fq3bPr7slBRNCq5ggPLqTXWSUN
+         WeDqQdBB3Fj9UYma7K77X5d+kEKTp6fOD5VReaWt0mRVZHR6HEobypypOg452dQIxRuj
+         xU65Ut9jAR+y63swe5g9KvSFt96uljniqy4kiAqd2Y/ynJzIziUhlZ91pwoD0sDfF2kV
+         2p+fbv2x6QZq8+EhnWOm9VRs7gRyumQNwl/HLY+Ct1f3AZKCEqIBhRL3NUkC6PiM1Er/
+         am5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kAA7/YzGXhcKB7pmnLDjhGtQei6hSiehda0pcnmqcxs=;
-        b=W3nvP+SzGEkQPMr3Ctq4ZIVPLx+8jTwYPTvuUJ4RjARg/FynV94VHbgeGUaEDbN4T9
-         bSDFKregWN+DwUKlTjd0zI6Ixd+qLFZEKc+bh14kt2sOmAIK2gRV9QcmnjFWe/kIicD0
-         fAYimoK6+f57DwMVDg7mv6D9IuVhU5L1RQ/Ah1JyowUbLnLU3Qhi72uG4WZBVhZnv0Ku
-         xKO4ivE3Hgo9MipWxmLzhHHNfIyEBf84rA6gX3kt2WTcs3WJEqL3O6cMkZooXdi5lUGo
-         IViEtS3hkZyvBI83J7mKMyAZbsmEpCpXfwsVGPM2Z8m8oyFSmTfrWWC6cLhFlNDCRlVk
-         8ItA==
-X-Gm-Message-State: ANhLgQ1jwWKztBdMuphS9N7awJETeeBD9oGSvKzcNMaAvdEKjXAJHWq/
-        /WBemJFlpg6sidOAlsnSz29vK+hE5Tpadu2LnWgDSPZc
-X-Google-Smtp-Source: ADFU+vsUE4odt8ZrG8rT7+n/iARZ44nDnTbOYlD8uPNBIvBlzkdgRjKnout8R4kZAhGYFLeRl0SoeUrxykAMT3/EXa0=
-X-Received: by 2002:a25:cf12:: with SMTP id f18mr9868965ybg.167.1585519262570;
- Sun, 29 Mar 2020 15:01:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=VpJLCl4/0Z66ol+0qhgAAqVOh8GsmfGYtMDMOcG2z1d9HP70BBeV4afD7PCnDCr1eq
+         VOrZMSioW9DUiZPzoUIKfX1rlXK9yzUZ/DcLoqTTt5HIvaYlhWFhtn1GiqDmGU5QZIup
+         PXDcJQ8arRDsgUSHiL4BxuzDHPx8gO7h4FFzwNdi0kyRhjCIz+RwJjxAPxwza5Vr6oiD
+         oy/AupiZZelvm20G5LA2TIyOb+LSqY7woL52HT05aydETRNs4OhGu+cVMykeKKgTxucU
+         sT9cMG4vEEbzlKt7C3arD3Mwm7txpuatpURauxfVq1/g7uYHyfudcmzMf7CcLo/6CVJJ
+         nheg==
+X-Gm-Message-State: AGi0PuabUsE0/bQhD/fU1N/zGu6aI462agRQwUGZpAmi1DRGGt8iFlgz
+        5rqhjZDX9ExW4xhT6YMqhtYjywcCI8bF4o2CGo8=
+X-Google-Smtp-Source: APiQypKDRP4A2GOOhX29xPbS6X6J2bOe+cEnGPGhkRlrf/LV9QYV7GSVV1iViigrqjvUPzJfpKV+0f/QlvWFf/q+m5k=
+X-Received: by 2002:a1f:2c4b:: with SMTP id s72mr7433998vks.93.1585565545391;
+ Mon, 30 Mar 2020 03:52:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200330085747.082749d4@canb.auug.org.au>
-In-Reply-To: <20200330085747.082749d4@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 29 Mar 2020 17:00:51 -0500
-Message-ID: <CAH2r5mvAU3TBD-T-d_=-kQwbGoNpRGyCiL4BWiUEJOZfpJjkjA@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:24
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:24 -0200
+Message-ID: <CAKwdjspKQpXNN-muj712Ym+s=yC75k8CUdb6ULnvzKHxbYXvwA@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-fixed
-
-On Sun, Mar 29, 2020 at 4:57 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> ommit
->
->   cfc825ccc046 ("cifs: update internal module version number")
->
-> is missing a Signed-off-by from its author and committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
-
-
-
 -- 
-Thanks,
+My dear,
 
-Steve
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
+
+Remain blessed,
+Mrs. Maryalice Williams.
