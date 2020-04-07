@@ -2,80 +2,119 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7741A0649
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Apr 2020 07:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000601A0A6D
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Apr 2020 11:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbgDGFMy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 7 Apr 2020 01:12:54 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:42217 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbgDGFMm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Apr 2020 01:12:42 -0400
-Received: by mail-ua1-f65.google.com with SMTP id m18so833774uap.9
-        for <linux-cifs@vger.kernel.org>; Mon, 06 Apr 2020 22:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=m9m/DCsFRus/zRmIuphflM5sHyenmkMN/TOEnECOGthbLJHVg8u2+iqtFZpNbyb2/k
-         2tLF//qwyXGtNVJKRleGUy+KbEtVjN+06Aw6FbGL98d5M/QEqB9c9SHaIsBPFlQYoUCh
-         Lj+P9EPUGdvyQRip4KeH3oSvDVhqDTV0IJcbcI66BzYP/b9Y/1y4LF++1q0teLhPl3GM
-         v15gBTxOBB8qvH4CNaCnwdm2sugBL+St8qIlm7SqBWweWj6hdsos1F0mjeWO8qJt64R9
-         xl3tya8AfljNAFdSOkZ4tC7INitomO8JQPFHHcp+JAODUsaup01At9KIYDntXEoTQZb0
-         DmdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=VsOZgcGnNcqKxFKisf5po77qJ1qK3Vnoso8rE2Vv6MuTmE4AQN8ZIY8kFBjVpU/1/Z
-         VgJc/cBBqz4brOGe3I8Hp6kSTtpzClrMzWCHy/+LGQ8zSjrmLXb/vkVMtkm7tM/n1W6g
-         aP14UzLJsqgrx+PKW4PLcW7Qll261Xgn/FdvvvM4wv5XcPT6cCWEB3xpgEyNInZ2pIw7
-         ZWm0ww0X+zOemUe8G7btKa35QQpSh3HeP4sGQd/ODZCR4t97yhhYxPCpI8hDUNYnVxwp
-         o7SZdsfiHaSSMZvXX+Qu/TyPXBx/B+mno1JUcCxFlD8AUe5NFGFLzEs45IEYLiV/nYit
-         MRuw==
-X-Gm-Message-State: AGi0PuZ4tqhqLYM2fXIiKTDM7CUZQWq7I8Dxb/NHK78M2PmZeh5o/pa6
-        TSn38EDrbhHlW3qFPBNgR/MJVNAFidJGB+VjhSs=
-X-Google-Smtp-Source: APiQypIYXniGQUHEpASwiGNjKth4Cu9ElCz4yjrJ2uXbYBYunhfz0887D/TRydUbTstl7MwaeVftG8QxF1P80ST3qos=
-X-Received: by 2002:ab0:a9:: with SMTP id 38mr504317uaj.61.1586236361040; Mon,
- 06 Apr 2020 22:12:41 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab0:4929:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:12:40 -0700 (PDT)
-From:   SANDRA DEWI <dewisandra154@gmail.com>
-Date:   Tue, 7 Apr 2020 05:12:40 +0000
-Message-ID: <CABRVPWys0xe4CWBkaU0ZXQW+4d=tjDOjyo8cKohc5-VFkWPkcA@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726399AbgDGJuB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 7 Apr 2020 05:50:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59566 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725883AbgDGJuA (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 7 Apr 2020 05:50:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id DBF6DAC44;
+        Tue,  7 Apr 2020 09:49:58 +0000 (UTC)
+From:   Aurelien Aptel <aaptel@suse.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, Aurelien Aptel <aaptel@suse.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH v4] cifs: ignore cached share root handle closing errors
+Date:   Tue,  7 Apr 2020 11:49:55 +0200
+Message-Id: <20200407094955.12956-1-aaptel@suse.com>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <CAKywueQ=N70sRytDR5PeeHiL1rRH9SfKOV23SdNchs4eWDmzmg@mail.gmail.com>
+References: <CAKywueQ=N70sRytDR5PeeHiL1rRH9SfKOV23SdNchs4eWDmzmg@mail.gmail.com>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear ,Pastor
+Fix tcon use-after-free and NULL ptr deref.
 
+Customer system crashes with the following kernel log:
 
+[462233.169868] CIFS VFS: Cancelling wait for mid 4894753 cmd: 14       => a QUERY DIR
+[462233.228045] CIFS VFS: cifs_put_smb_ses: Session Logoff failure rc=-4
+[462233.305922] CIFS VFS: cifs_put_smb_ses: Session Logoff failure rc=-4
+[462233.306205] CIFS VFS: cifs_put_smb_ses: Session Logoff failure rc=-4
+[462233.347060] CIFS VFS: cifs_put_smb_ses: Session Logoff failure rc=-4
+[462233.347107] CIFS VFS: Close unmatched open
+[462233.347113] BUG: unable to handle kernel NULL pointer dereference at 0000000000000038
+...
+    [exception RIP: cifs_put_tcon+0xa0] (this is doing tcon->ses->server)
+ #6 [...] smb2_cancelled_close_fid at ... [cifs]
+ #7 [...] process_one_work at ...
+ #8 [...] worker_thread at ...
+ #9 [...] kthread at ...
 
-I have a client who is an oil business man and he made a fixed deposit
-of $26 million USD in my bank, where I am the director of the branch,
-My client died with his entire family in Jordanian
+The most likely explanation we have is:
 
-50% of the fund will be for the church  for the work of God,the
-balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
-50% for me
+* When we put the last reference of a tcon (refcount=0), we close the
+  cached share root handle.
+* If closing a handle is interrupted, SMB2_close() will
+  queue a SMB2_close() in a work thread.
+* The queued object keeps a tcon ref so we bump the tcon
+  refcount, jumping from 0 to 1.
+* We reach the end of cifs_put_tcon(), we free the tcon object despite
+  it now having a refcount of 1.
+* The queued work now runs, but the tcon, ses & server was freed in
+  the meantime resulting in a crash.
 
-intervention in the Syrian Civil War 2014 leaving behind no next of
-kin. I Propose to present you as next of kin to claim the funds, if
-interested reply me for full details and how we are to
+THREAD 1
+========
+cifs_put_tcon                 => tcon refcount reach 0
+  SMB2_tdis
+   close_shroot_lease
+    close_shroot_lease_locked => if cached root has lease && refcount = 0
+     smb2_close_cached_fid    => if cached root valid
+      SMB2_close              => retry close in a thread if interrupted
+       smb2_handle_cancelled_close
+        __smb2_handle_cancelled_close    => !! tcon refcount bump 0 => 1 !!
+         INIT_WORK(&cancelled->work, smb2_cancelled_close_fid);
+         queue_work(cifsiod_wq, &cancelled->work) => queue work
+ tconInfoFree(tcon);    ==> freed!
+ cifs_put_smb_ses(ses); ==> freed!
 
+THREAD 2 (workqueue)
+========
+smb2_cancelled_close_fid
+  SMB2_close(0, cancelled->tcon, ...); => use-after-free of tcon
+  cifs_put_tcon(cancelled->tcon);      => tcon refcount reach 0 second time
+  *CRASH*
 
+Fixes: d9191319358d ("CIFS: Close cached root handle only if it has a lease")
+Signed-off-by: Aurelien Aptel <aaptel@suse.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+---
+ fs/cifs/smb2misc.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-proceed to close this deal.
+diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+index 0511aaf451d4..497afb0b9960 100644
+--- a/fs/cifs/smb2misc.c
++++ b/fs/cifs/smb2misc.c
+@@ -766,6 +766,20 @@ smb2_handle_cancelled_close(struct cifs_tcon *tcon, __u64 persistent_fid,
+ 
+ 	cifs_dbg(FYI, "%s: tc_count=%d\n", __func__, tcon->tc_count);
+ 	spin_lock(&cifs_tcp_ses_lock);
++	if (tcon->tc_count <= 0) {
++		struct TCP_Server_Info *server = NULL;
++
++		WARN_ONCE(tcon->tc_count < 0, "tcon refcount is negative");
++		spin_unlock(&cifs_tcp_ses_lock);
++
++		if (tcon->ses)
++			server = tcon->ses->server;
++
++		cifs_server_dbg(FYI, "tid=%u: tcon is closing, skipping async close retry of fid %llu %llu\n",
++				tcon->tid, persistent_fid, volatile_fid);
++
++		return 0;
++	}
+ 	tcon->tc_count++;
+ 	spin_unlock(&cifs_tcp_ses_lock);
+ 
+-- 
+2.16.4
 
-
-
-
-Mrs. Sandra Dewi
-
-
-
-Email  mrsdewi@gmx.com
