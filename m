@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBE21AA062
-	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 14:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE051A9F1D
+	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 14:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S369260AbgDOM02 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 15 Apr 2020 08:26:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39046 "EHLO mail.kernel.org"
+        id S2409325AbgDOLqp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 15 Apr 2020 07:46:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41572 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409172AbgDOLp0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:45:26 -0400
+        id S2409314AbgDOLqm (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:46:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A51BE21582;
-        Wed, 15 Apr 2020 11:45:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 307E121734;
+        Wed, 15 Apr 2020 11:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951125;
-        bh=5/HU+5mPMZDHSKhelDvZphwM7oa683qtuQ+sg6gNB/g=;
+        s=default; t=1586951201;
+        bh=k8xYy+LMBvtR9vGrgEP7ljRQZTei9c9KafyXYKHGOAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J4BhK/EbQiscI/mqA6nt75eIlsi39IBKf3RCzD8Ba6GirNESsAuiErcGwbhKqsoWa
-         GBf+U2DRjDrQ6DgnECUMItzDULkrN71Hrh35DUbMJs3ETPUCnM+MLDxXZW094MrbLE
-         81n4iNowRb/P7IADrOkEuAGo9geR8PptvPjXDJYQ=
+        b=wvd12+5pB72wixG2pSVhp0vumfO7LtxpG/vzGrdKPTUq0TmEWS9Liw5/rtpC/JXFs
+         uSSPIFDE7I8NF5NKJDtBd9pDNISrIzoUEE2OPQBBrQvE60YwJfFIBg/AeBDNnjhsW3
+         Mroi8fr8EgHz4DQ/k9HYoOLuAr0nAgJrh74R70K0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Long Li <longli@microsoft.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.4 38/84] cifs: Allocate encryption header through kmalloc
-Date:   Wed, 15 Apr 2020 07:43:55 -0400
-Message-Id: <20200415114442.14166-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 16/40] cifs: Allocate encryption header through kmalloc
+Date:   Wed, 15 Apr 2020 07:45:59 -0400
+Message-Id: <20200415114623.14972-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114442.14166-1-sashal@kernel.org>
-References: <20200415114442.14166-1-sashal@kernel.org>
+In-Reply-To: <20200415114623.14972-1-sashal@kernel.org>
+References: <20200415114623.14972-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 17 insertions(+), 11 deletions(-)
 
 diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index e67a43fd037c9..fe1552cc8a0a7 100644
+index 0c4df56c825ab..70412944b267d 100644
 --- a/fs/cifs/transport.c
 +++ b/fs/cifs/transport.c
-@@ -466,7 +466,7 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+@@ -392,7 +392,7 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
  	      struct smb_rqst *rqst, int flags)
  {
  	struct kvec iov;
@@ -74,7 +74,7 @@ index e67a43fd037c9..fe1552cc8a0a7 100644
  	struct smb_rqst cur_rqst[MAX_COMPOUND];
  	int rc;
  
-@@ -476,28 +476,34 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+@@ -402,28 +402,34 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
  	if (num_rqst > MAX_COMPOUND - 1)
  		return -ENOMEM;
  
@@ -88,8 +88,8 @@ index e67a43fd037c9..fe1552cc8a0a7 100644
 -	cur_rqst[0].rq_nvec = 1;
 -
  	if (!server->ops->init_transform_rq) {
- 		cifs_server_dbg(VFS, "Encryption requested but transform "
- 				"callback is missing\n");
+ 		cifs_dbg(VFS, "Encryption requested but transform callback "
+ 			 "is missing\n");
  		return -EIO;
  	}
  
