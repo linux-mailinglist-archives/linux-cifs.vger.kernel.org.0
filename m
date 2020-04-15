@@ -2,101 +2,123 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 160081A992A
-	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 11:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB791AA34B
+	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 15:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895754AbgDOJom (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 15 Apr 2020 05:44:42 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45066 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2895742AbgDOJok (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 15 Apr 2020 05:44:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586943876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bKa8snlnDryG0vgt7Fg/rdv6w9fg6r4FpdXiLIxnEdE=;
-        b=cEwnuLfIVICCCloM/nkjOx2cvpv9pItx8yQEk7qZGIS06k5uJfkbfcZwO4rKtfWn+cyxCh
-        RLsrR9A65ny3Zd16rY+ew4aQXa6iXmQ4DP7XEzZf/Vc5zwjWXG1wWwr2NM+905Nqixle4i
-        LB75cl6uqWjw4LIcdUMRcYBGHGqamnk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-508-olUJzS60OsClk0RUhQWf4A-1; Wed, 15 Apr 2020 05:44:34 -0400
-X-MC-Unique: olUJzS60OsClk0RUhQWf4A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2506015AbgDONG5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 15 Apr 2020 09:06:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2897093AbgDOLf4 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:35:56 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 216EB800D5C;
-        Wed, 15 Apr 2020 09:44:33 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-114-61.ams2.redhat.com [10.36.114.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0E8D72B479;
-        Wed, 15 Apr 2020 09:44:30 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        keyrings@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: What's a good default TTL for DNS keys in the kernel
-References: <3865908.1586874010@warthog.procyon.org.uk>
-Date:   Wed, 15 Apr 2020 11:44:29 +0200
-In-Reply-To: <3865908.1586874010@warthog.procyon.org.uk> (David Howells's
-        message of "Tue, 14 Apr 2020 15:20:10 +0100")
-Message-ID: <874ktl2ide.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22CDF20775;
+        Wed, 15 Apr 2020 11:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586950555;
+        bh=SFHvZtCLZ6EPWmNWrCEP+2BJ94BANmVoF5rF+9ZXu9Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zOU7y4kv7ANEYymwAl5i2SqMLeDYkUx7xBhAsn+gzyRHcqKzUeNkZxO5zOptQ8jRv
+         03Ard5zVPtm234eNCdjzyUXv7wM0rGqQW/oZrIbTy0Zgenh3Jh3E04oeGdmewcmEUG
+         RNKAG4zmYOLQ0w2/xOx7wBmqWp1mEXz/YW6d27gM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Long Li <longli@microsoft.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 5.6 061/129] cifs: Allocate encryption header through kmalloc
+Date:   Wed, 15 Apr 2020 07:33:36 -0400
+Message-Id: <20200415113445.11881-61-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
+References: <20200415113445.11881-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-* David Howells:
+From: Long Li <longli@microsoft.com>
 
-> Since key.dns_resolver isn't given a TTL for the address information obta=
-ined
-> for getaddrinfo(), no expiry is set on dns_resolver keys in the kernel for
-> NFS, CIFS or Ceph.  AFS gets one if it looks up a cell SRV or AFSDB record
-> because that is looked up in the DNS directly, but it doesn't look up A or
-> AAAA records, so doesn't get an expiry for the addresses themselves.
->
-> I've previously asked the libc folks if there's a way to get this informa=
-tion
-> exposed in struct addrinfo, but I don't think that ended up going anywher=
-e -
-> and, in any case, would take a few years to work through the system.
->
-> For the moment, I think I should put a default on any dns_resolver keys a=
-nd
-> have it applied either by the kernel (configurable with a /proc/sys/ sett=
-ing)
-> or by the key.dnf_resolver program (configurable with an /etc file).
->
-> Any suggestion as to the preferred default TTL?  10 minutes?
+[ Upstream commit 3946d0d04bb360acca72db5efe9ae8440012d9dc ]
 
-You can get the real TTL if you do a DNS resolution on the name and
-match the addresses against what you get out of the NSS functions.  If
-they match, you can use the TTL from DNS.  Hackish, but it does give you
-*some* TTL value.
+When encryption is used, smb2_transform_hdr is defined on the stack and is
+passed to the transport. This doesn't work with RDMA as the buffer needs to
+be DMA'ed.
 
-The question remains what the expected impact of TTL expiry is.  Will
-the kernel just perform a new DNS query if it needs one?  Or would you
-expect that (say) the NFS client rechecks the addresses after TTL expiry
-and if they change, reconnect to a new NFS server?
+Fix it by using kmalloc.
 
-If a TTL expiration does not trigger anything, than it seems purely an
-optimization to avoid kernel =E2=86=92 userspace callbacks.  I think you ca=
-n do
-with a very short TTL in this case, on the order of seconds (or no
-caching at all).
+Signed-off-by: Long Li <longli@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/transport.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-Negative caching is also worthy of consideration and can be considerably
-more tricky.
-
-Thanks,
-Florian
+diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+index cb3ee916f5275..c97570eb2c180 100644
+--- a/fs/cifs/transport.c
++++ b/fs/cifs/transport.c
+@@ -466,7 +466,7 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	      struct smb_rqst *rqst, int flags)
+ {
+ 	struct kvec iov;
+-	struct smb2_transform_hdr tr_hdr;
++	struct smb2_transform_hdr *tr_hdr;
+ 	struct smb_rqst cur_rqst[MAX_COMPOUND];
+ 	int rc;
+ 
+@@ -476,28 +476,34 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	if (num_rqst > MAX_COMPOUND - 1)
+ 		return -ENOMEM;
+ 
+-	memset(&cur_rqst[0], 0, sizeof(cur_rqst));
+-	memset(&iov, 0, sizeof(iov));
+-	memset(&tr_hdr, 0, sizeof(tr_hdr));
+-
+-	iov.iov_base = &tr_hdr;
+-	iov.iov_len = sizeof(tr_hdr);
+-	cur_rqst[0].rq_iov = &iov;
+-	cur_rqst[0].rq_nvec = 1;
+-
+ 	if (!server->ops->init_transform_rq) {
+ 		cifs_server_dbg(VFS, "Encryption requested but transform "
+ 				"callback is missing\n");
+ 		return -EIO;
+ 	}
+ 
++	tr_hdr = kmalloc(sizeof(*tr_hdr), GFP_NOFS);
++	if (!tr_hdr)
++		return -ENOMEM;
++
++	memset(&cur_rqst[0], 0, sizeof(cur_rqst));
++	memset(&iov, 0, sizeof(iov));
++	memset(tr_hdr, 0, sizeof(*tr_hdr));
++
++	iov.iov_base = tr_hdr;
++	iov.iov_len = sizeof(*tr_hdr);
++	cur_rqst[0].rq_iov = &iov;
++	cur_rqst[0].rq_nvec = 1;
++
+ 	rc = server->ops->init_transform_rq(server, num_rqst + 1,
+ 					    &cur_rqst[0], rqst);
+ 	if (rc)
+-		return rc;
++		goto out;
+ 
+ 	rc = __smb_send_rqst(server, num_rqst + 1, &cur_rqst[0]);
+ 	smb3_free_compound_rqst(num_rqst, &cur_rqst[1]);
++out:
++	kfree(tr_hdr);
+ 	return rc;
+ }
+ 
+-- 
+2.20.1
 
