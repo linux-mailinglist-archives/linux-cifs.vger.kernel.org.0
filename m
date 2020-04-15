@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2201AA19E
-	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBE21AA062
+	for <lists+linux-cifs@lfdr.de>; Wed, 15 Apr 2020 14:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370019AbgDOMoB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 15 Apr 2020 08:44:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35444 "EHLO mail.kernel.org"
+        id S369260AbgDOM02 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 15 Apr 2020 08:26:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39046 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897515AbgDOLn2 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:43:28 -0400
+        id S2409172AbgDOLp0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:45:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 161832173E;
-        Wed, 15 Apr 2020 11:43:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A51BE21582;
+        Wed, 15 Apr 2020 11:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951007;
-        bh=SFHvZtCLZ6EPWmNWrCEP+2BJ94BANmVoF5rF+9ZXu9Q=;
+        s=default; t=1586951125;
+        bh=5/HU+5mPMZDHSKhelDvZphwM7oa683qtuQ+sg6gNB/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PxJKXtamoTt0K0pGqmhfFAR1gYGAh2lXgTHdFGOgHGZ8hb2KUkTZJ2pgHIIbM7H0
-         R2+6dxMBNPNx6PzegL35huYkN1rR1M8XHmylb/SrQM3fQa8IKYMEFuCGA7laPkLBQl
-         BICose1KHGVan8r7n/GaM+0QDXGNgBQEgYtq5+4g=
+        b=J4BhK/EbQiscI/mqA6nt75eIlsi39IBKf3RCzD8Ba6GirNESsAuiErcGwbhKqsoWa
+         GBf+U2DRjDrQ6DgnECUMItzDULkrN71Hrh35DUbMJs3ETPUCnM+MLDxXZW094MrbLE
+         81n4iNowRb/P7IADrOkEuAGo9geR8PptvPjXDJYQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Long Li <longli@microsoft.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.5 052/106] cifs: Allocate encryption header through kmalloc
-Date:   Wed, 15 Apr 2020 07:41:32 -0400
-Message-Id: <20200415114226.13103-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 38/84] cifs: Allocate encryption header through kmalloc
+Date:   Wed, 15 Apr 2020 07:43:55 -0400
+Message-Id: <20200415114442.14166-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
-References: <20200415114226.13103-1-sashal@kernel.org>
+In-Reply-To: <20200415114442.14166-1-sashal@kernel.org>
+References: <20200415114442.14166-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,7 +62,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 17 insertions(+), 11 deletions(-)
 
 diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index cb3ee916f5275..c97570eb2c180 100644
+index e67a43fd037c9..fe1552cc8a0a7 100644
 --- a/fs/cifs/transport.c
 +++ b/fs/cifs/transport.c
 @@ -466,7 +466,7 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
