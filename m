@@ -2,91 +2,72 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6C31B63AB
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 Apr 2020 20:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE2B1BDB77
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Apr 2020 14:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730285AbgDWS1l (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730284AbgDWS0w (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Apr 2020 14:26:52 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59511C09B04F
-        for <linux-cifs@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id u11so7546043iow.4
-        for <linux-cifs@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=g40sBMuaO0eKdotmx6qgQBl63DKBmrekz5bvyEQHA4wVZtcqrxc+aFVgh/QD84O9VQ
-         7GeGJGwCstc5CQBYUut5JFB/SR9hiHRBoNucBdQ5+M/xcZE7LYnQNVriX94nlJDQQ53M
-         WWNnGuPMmJMtuCxOc6M3BOG48McWyi9pwkfv1qCbwmDhh95byI3UmcGK9ZJ59xQm/kqA
-         giNgZwxUHu+XTIAoqn/uu1orK63Ur+6hMBQW2TB101zb0oJ5HpVThkCq6id/TjpQtg27
-         HPMb1DcYsj7bM6wQaeV1UkPK6mgUhECRFNV10F5zDhvx1RXP4ikb8uuEIGMKOSNWVb51
-         vLew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=I4KhwENShhGGEq5uGptquMS6UizHbrY83rsnOkjY5GWXDjNLvAVPGwDDDhJ+6k8jyU
-         ORaeZNYfkmrMhhRPdjgVtIEcdoskZ/hbDms6ioRz3G8H8o2ExWJnHROOM4wlFOlOuxOD
-         LjUCImNu7cyTWkqsaVF3yIdYiqNVYBeNl+VxaY2EuFqUMbLAHsHwcvFiZmiPFgQdz4AT
-         RNrX0bKfEI33Rd+mhC7EK0B3T72bsx2UREeOgsouEqJO4oaHvDORwLfTMCZBb1LNWFQ4
-         3k0W1Y493JLEJzgOkd+xgmfzx1C6whbg/mFPMpgAR2dIXi1IufvkoqTWKO9KjXnjcVLy
-         yY1g==
-X-Gm-Message-State: AGi0PuZZTHAM8+E9g/BPL4nAxmH/2cfT4lqA0cZhk9UHkna6MYRUe4p8
-        9GaczTTWBUT+a7woZJzM6g1vIu9wq/kn6Lmjbg==
-X-Google-Smtp-Source: APiQypKZ88CB7WlyCjo0k9+cU4PX0VcggKkKtzSKgRJHkcPGizF0yZXAjzEMBgo6XH4xzBXv0KAOMjPM9p1sgpp6/70=
-X-Received: by 2002:a5e:9416:: with SMTP id q22mr2547966ioj.93.1587666410194;
- Thu, 23 Apr 2020 11:26:50 -0700 (PDT)
+        id S1726617AbgD2MLg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 29 Apr 2020 08:11:36 -0400
+Received: from [116.62.10.213] ([116.62.10.213]:47608 "EHLO mail.qdztrk.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726847AbgD2MLg (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 29 Apr 2020 08:11:36 -0400
+X-Greylist: delayed 36296 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Apr 2020 08:11:34 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.qdztrk.com (Postfix) with ESMTP id 702F4246168
+        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 08:21:34 +0800 (CST)
+Received: from mail.qdztrk.com ([127.0.0.1])
+        by localhost (mail.qdztrk.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9V3scJvaaW3I for <linux-cifs@vger.kernel.org>;
+        Sat, 25 Apr 2020 08:21:33 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.qdztrk.com (Postfix) with ESMTP id 4F3B61EA8FA
+        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 08:03:33 +0800 (CST)
+X-Virus-Scanned: amavisd-new at mail.qdztrk.com
+Received: from mail.qdztrk.com ([127.0.0.1])
+        by localhost (mail.qdztrk.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id iREICbrZdoEa for <linux-cifs@vger.kernel.org>;
+        Sat, 25 Apr 2020 08:03:33 +0800 (CST)
+Received: from coris.com (unknown [103.207.36.17])
+        by mail.qdztrk.com (Postfix) with ESMTP id 22EA612A3AD
+        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 07:46:12 +0800 (CST)
+Reply-To: kentpace@sina.com
+From:   Kent Pace <kentpace@coris.com>
+To:     linux-cifs@vger.kernel.org
+Subject: URGENT!! PLEASE READ
+Date:   24 Apr 2020 16:46:09 -0700
+Message-ID: <20200424164609.DE60385EF3C5BD4E@coris.com>
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:26:49
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:26:49 +0200
-Message-ID: <CABHzvr=N78snvtMHePMOa+RLFdcZEjXLPkuhkojt4VoZGNzBsQ@mail.gmail.com>
-Subject: Contact Bank of Africa-Benin to receive your payment funds transfer
- amount of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+Dear Friend,
+
+
+There is something very important I need to discuss with you.  I 
+am writing  this letter in tears and fear. In tears because I 
+will soon depart and in fear because I don't really know if you 
+will do this faithfully.
+
+I am COVID-19  patient and the doctor has already confirmed I may 
+not last for the next 7 days.
+
+I have substantial amount of money deposited in a security vault 
+around your country. It is in trunk boxes and once  I receive 
+your response and see your readiness to claim the money 
+immediately, I will forward the needed documents and the contact 
+of the security vault where the consignment is deposited,
+I am not asking you to give me anything but I want you to help 
+people that has been infected with this deadly virus with 60% of 
+the money and 40% should be for you and your family.
+
+I will disclose exact amount in the boxes as soon as I 
+receive your response.
+
+
+Regards.
+
