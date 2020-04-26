@@ -2,72 +2,99 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE2B1BDB77
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Apr 2020 14:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C371B90D4
+	for <lists+linux-cifs@lfdr.de>; Sun, 26 Apr 2020 16:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgD2MLg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 29 Apr 2020 08:11:36 -0400
-Received: from [116.62.10.213] ([116.62.10.213]:47608 "EHLO mail.qdztrk.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726847AbgD2MLg (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 29 Apr 2020 08:11:36 -0400
-X-Greylist: delayed 36296 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Apr 2020 08:11:34 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.qdztrk.com (Postfix) with ESMTP id 702F4246168
-        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 08:21:34 +0800 (CST)
-Received: from mail.qdztrk.com ([127.0.0.1])
-        by localhost (mail.qdztrk.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 9V3scJvaaW3I for <linux-cifs@vger.kernel.org>;
-        Sat, 25 Apr 2020 08:21:33 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.qdztrk.com (Postfix) with ESMTP id 4F3B61EA8FA
-        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 08:03:33 +0800 (CST)
-X-Virus-Scanned: amavisd-new at mail.qdztrk.com
-Received: from mail.qdztrk.com ([127.0.0.1])
-        by localhost (mail.qdztrk.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id iREICbrZdoEa for <linux-cifs@vger.kernel.org>;
-        Sat, 25 Apr 2020 08:03:33 +0800 (CST)
-Received: from coris.com (unknown [103.207.36.17])
-        by mail.qdztrk.com (Postfix) with ESMTP id 22EA612A3AD
-        for <linux-cifs@vger.kernel.org>; Sat, 25 Apr 2020 07:46:12 +0800 (CST)
-Reply-To: kentpace@sina.com
-From:   Kent Pace <kentpace@coris.com>
-To:     linux-cifs@vger.kernel.org
-Subject: URGENT!! PLEASE READ
-Date:   24 Apr 2020 16:46:09 -0700
-Message-ID: <20200424164609.DE60385EF3C5BD4E@coris.com>
+        id S1726144AbgDZOYE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 26 Apr 2020 10:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbgDZOYE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 26 Apr 2020 10:24:04 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB88C061A0F;
+        Sun, 26 Apr 2020 07:24:04 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id a7so2345442ybs.4;
+        Sun, 26 Apr 2020 07:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=v+nxHzSn6RRIKSvsGs/i9HYR2TbbasmboUuFVsF8RDE=;
+        b=g1gufUtjqrUv8RN0imWn4ul6dAdUrZNtnpfy348wGsFbP5NuuOUUXYZs8F8WpIkKkF
+         N1u8amih9R1V69ve6xvKcHEYwdS2QP2UCrZ5SQ5e9qGVT5spl/VYLWQRSEz6M/Z/T1yQ
+         tNDIch9u4u/33y2xA4MKtGcefFwDsJjDxHAG9Pu/LN54MLyEQh0sh/K46P41jQi2/Xg2
+         fR6W6n7SvS3oCxo66YOkRCRrxtCdABlp+wmUwVJxKBsN+vFhXECkna9eb8jA3v17cc3p
+         p6Gwyah8Eth2U+FFZ39Hto5Q5kM8GeP95TzThNbWitgeYo75EfP0WpTaWpp6krvthHuo
+         Y5xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=v+nxHzSn6RRIKSvsGs/i9HYR2TbbasmboUuFVsF8RDE=;
+        b=L7hAbBKgttt9dyKnzNxg7I+FjjlBx9hPPKRaZlLblftuYD6PcwW/0lEtEAtjSoBlYn
+         8f/aInWun2+ZQv5nA9nNpmQj/jBy7C2fUREjb5rvirljlf5mgyypX8D/NbmPw7etJ0Pi
+         kg89jW35boHaFVaCIfztjnnGFHPvQShVwAVw6eq5vnWNQuId6L8qrIPWWad3NI+A1AQ/
+         9Slbok/xac5vvNE9r/jX1kXZg5nXRZpBmyYUhTpR9lMT891WvRSiwjtm61jPe3xZl791
+         ew/kJEaJc5pY9tRvApONyaOMafmS7BbOu7nvWSp+jcJaoolQ7l8K5r60sh39TjZnfQX5
+         uwaA==
+X-Gm-Message-State: AGi0PuYltcgyj9Sr9S/rw6721RKIsxr9pFVA06t9vBOK4RMQV2xryEYw
+        K0UpcKdUoQRG52WygxrqJgCKbVawcMPq3TRSVolv0z6V8EY=
+X-Google-Smtp-Source: APiQypLK2KTB6MPtOleHAa1EMpJ+w5SuWl4SNiDvfAbY54FmKOQRss+iSpRN7+rnibiLd9DlSkP8N9CJIffDOfSBBhM=
+X-Received: by 2002:a25:42ce:: with SMTP id p197mr27532907yba.167.1587911042158;
+ Sun, 26 Apr 2020 07:24:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 26 Apr 2020 09:23:51 -0500
+Message-ID: <CAH2r5mvFb--OkoyHwPeML_CoRH=UfbFLRhUcoGBSKbLgok2VXg@mail.gmail.com>
+Subject: [GIT PULL] CIFS/SMB3 Fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Friend,
+Please pull the following changes since commit
+ae83d0b416db002fe95601e7f97f64b59514d936:
+
+  Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.7-rc2-smb3-fixes
+
+for you to fetch changes up to 0fe0781f29dd8ab618999e6bda33c782ebbdb109:
+
+  cifs: fix uninitialised lease_key in open_shroot() (2020-04-22 20:29:11 -0500)
+
+----------------------------------------------------------------
+Five cifs/smb3 fixes: two for DFS reconnect failover,  one lease fix
+for stable and the others to
+fix a missing spinlock during reconnect
+
+Regression test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/345
+----------------------------------------------------------------
+Paulo Alcantara (3):
+      cifs: do not share tcons with DFS
+      cifs: ensure correct super block for DFS reconnect
+      cifs: fix uninitialised lease_key in open_shroot()
+
+Ronnie Sahlberg (1):
+      cifs: protect updating server->dstaddr with a spinlock
+
+Steve French (1):
+      cifs: minor update to comments around the cifs_tcp_ses_lock mutex
+
+ fs/cifs/cifsglob.h |  3 +-
+ fs/cifs/connect.c  |  6 ++++
+ fs/cifs/misc.c     | 82 +++++++++++++++++++++++++++++++++++++++++++-----------
+ fs/cifs/smb2ops.c  |  5 ++++
+ 4 files changed, 78 insertions(+), 18 deletions(-)
 
 
-There is something very important I need to discuss with you.  I 
-am writing  this letter in tears and fear. In tears because I 
-will soon depart and in fear because I don't really know if you 
-will do this faithfully.
+-- 
+Thanks,
 
-I am COVID-19  patient and the doctor has already confirmed I may 
-not last for the next 7 days.
-
-I have substantial amount of money deposited in a security vault 
-around your country. It is in trunk boxes and once  I receive 
-your response and see your readiness to claim the money 
-immediately, I will forward the needed documents and the contact 
-of the security vault where the consignment is deposited,
-I am not asking you to give me anything but I want you to help 
-people that has been infected with this deadly virus with 60% of 
-the money and 40% should be for you and your family.
-
-I will disclose exact amount in the boxes as soon as I 
-receive your response.
-
-
-Regards.
-
+Steve
