@@ -2,97 +2,62 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA731B952C
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Apr 2020 04:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304691BA2B8
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Apr 2020 13:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgD0Ctv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 26 Apr 2020 22:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725911AbgD0Ctv (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Sun, 26 Apr 2020 22:49:51 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A92DC061A10
-        for <linux-cifs@vger.kernel.org>; Sun, 26 Apr 2020 19:49:51 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id b1so9505598qtt.1
-        for <linux-cifs@vger.kernel.org>; Sun, 26 Apr 2020 19:49:50 -0700 (PDT)
+        id S1727060AbgD0Llf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 27 Apr 2020 07:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727010AbgD0Lle (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 27 Apr 2020 07:41:34 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CD8C0610D5
+        for <linux-cifs@vger.kernel.org>; Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id k23so3159886ios.5
+        for <linux-cifs@vger.kernel.org>; Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=qnap.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6areO0hRZKPHCG/vIEUys65Eg1IGVoIsPcw+jm2s1Eo=;
-        b=C3QNF5GRtCMBC9Mlzcyc0ZPVn65I5g4rtLpBV+Fw5bTSS99nrnEakAyvu9IHv4v3SB
-         agUXhz9plbouXJ1p25TCAhkKfrSc2Yf+WTXtE8juiZuYDzyUOfY/VrvFf6gouGusuGJq
-         OkG4fNCI+X1sqND0HAfLNDTwZtOGYSOJvvchU=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
+        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
+         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
+         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
+         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
+         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
+         JAeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6areO0hRZKPHCG/vIEUys65Eg1IGVoIsPcw+jm2s1Eo=;
-        b=qALQVl7NEfIAJtvwLa6MF5LzREWm53ib50JmvjvG6o0FK9SP4MSaVWPgzyftPcit1D
-         ektamimDa/1yocPuO0zDejwPaYdBQl4JOlRC0SiYT6/6EZGsc9gz1QvaTPgUfDn2YPk1
-         wH06OlQp+B43BdWxqzrIqtoTdgWs84oeBHxmUV5T9aIHnmnpYhM0rYH1NHnycciM2bsA
-         fw4Ed3WrtnXPIKGNESxnO1JHOM4SilqQiy0R7a1UGOA9XRk5hnr1V1QzYyzo1iLjlyhP
-         EIkzbX6zRMa7/j3jVqOuanwqbZk8xeL9E7v4dbDHGwDB//LT4Dl1v4pReG+XwOX8I/ao
-         uFkw==
-X-Gm-Message-State: AGi0PuYy2h2tVpsU0e2rOqLlafGMeE9O9PTYpVV+qXSX0hws7Tqj41i5
-        g0Rqghk94efrbrGW4xn/aHdI4d9glAEjHgx8FjkG7AYivTvbNA==
-X-Google-Smtp-Source: APiQypL+Ou0nwruybxOTadtizGm5FwrO38szTf0UC8p0JC54KyEZSynuB0IuOFUBzsoAhdUxu31+0nxRlsmmPLBcgXo=
-X-Received: by 2002:ac8:4650:: with SMTP id f16mr20992760qto.168.1587955789812;
- Sun, 26 Apr 2020 19:49:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
+        b=A4Lbeo4hl/autsmCq0nhze+hV2TSAJubxezW4Z514iGefzyRk7+MTm+fnQwAHVOR2R
+         cRbZjl9+amDpyFbev5Km6xjj4lDh4wijptvUGHL9i3+PHyfCQOrKstuByxjDb8txKBoH
+         tfqyD/aYFjgulPru3MmQBmrrjbxiOWl4bsXHWGtz4Nb9CxgtDOQiGe6GM+MGD/bsg+Ne
+         FWwVPWFtptxuDp6JQj+1jd65JCN2FfQT3Capi6ZWIlmn58XFIRQ40a7V9pBtd8rzLVT5
+         z/nYuT6t4M7jj+ata5FhpP1/Yx3/9nlMWIAdKFlqPBVVAz2Dn37nmw++Gj4IG4PAU8wo
+         myDg==
+X-Gm-Message-State: AGi0PuYe+AYuTLA5qEf/3wZpokGe+eiqwToR68UEJUjQLeX7yhT2vGeu
+        LVk5Kqa3kldhJGbTIA64tFz0t7ZePTbqlvyObfU=
+X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
+X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
+ Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAEUGjKiLPQP9wp0AgLUvHgKBOe9We2a-RQaZ7cd7CvhnarwWiw@mail.gmail.com>
- <CAKywueT0Q9WkANNsg8cEDwGZSMaaE5c4LHuEeMhVDzJAzycroQ@mail.gmail.com>
- <CAEUGjKhSBNQboKOMFMgos9OQfxcLQZsXp8aBrUSFcaSe1saH2Q@mail.gmail.com>
- <CAH2r5mt1k5t8rSH1KizeSrcLaN1Fn3GWeMvDPwT2Kfq43UAWaQ@mail.gmail.com> <CAEUGjKhpgmhj9RzcGQXPuFUyoqsUnk2d3oCpOYBdR=EwCO21YQ@mail.gmail.com>
-In-Reply-To: <CAEUGjKhpgmhj9RzcGQXPuFUyoqsUnk2d3oCpOYBdR=EwCO21YQ@mail.gmail.com>
-From:   Jones Syue <jonessyue@qnap.com>
-Date:   Mon, 27 Apr 2020 10:49:37 +0800
-Message-ID: <CAEUGjKh--8qs_pn1OjuQk3DmtVuqLo9m5ecL-Lwb08Hk2oZTUg@mail.gmail.com>
-Subject: Re: [PATCH] cifs: improve read performance for page size 64KB &
- cache=strict & vers=2.1+
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Pavel Shilovsky <piastryyy@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        Samba Technical <samba-technical@lists.samba.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
+ -0700 (PDT)
+Reply-To: convy0090@gmail.com
+From:   Ruben CONVY <andrewboccc@gmail.com>
+Date:   Mon, 27 Apr 2020 12:41:33 +0100
+Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
+Subject: Why continued silence 2
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-> > And if anyone figures out how to configure an x86_64 Linux to use
-> > PAGE_SIZE of 64K or larger let me know...
-> I am using physical platform with arm cpu and aarch64 toolchain,
-> perhaps try qemu-system-aarch64 later.
-
-For reference using qemu-system-aarch64 + linux-5.6.4 + 64KB page to test
-cifs read, this patch can improve cifs read performance:
-with patch: read throughput 39 MB/s, SMB read IO size 4MB
-/ # dd if=3D/mnt/cifs/1G.img of=3D/dev/null bs=3D4M count=3D256
-256+0 records in
-256+0 records out
-1073741824 bytes (1.0GB) copied, 25.982352 seconds, 39.4MB/s
-[~] # strace -p 23934
-sendfile(38, 32, [297795584] =3D> [301989888], 4194304) =3D 4194304
-
-without patch: read throughput 18 MB/s, SMB read IO size 16KB
-/ # dd if=3D/mnt/cifs/1G.img of=3D/dev/null bs=3D4M count=3D256G
-256+0 records in
-256+0 records out
-1073741824 bytes (1.0GB) copied, 54.367686 seconds, 18.8MB/s
-[~] <0> strace -p 15786
-sendfile(38, 32, [452984832] =3D> [453001216], 16384) =3D 16384
-
-This link is a easy way to compile aarch64 linux kernel with page size 64KB
-, a simple rootfs with busybox, and run it on qemu-system-aarch64:
-https://docs.google.com/document/d/1NSVd-dib_asugCZHmZgohLZXHxV25ftzYtUDSpp=
-Y3hA/edit?usp=3Dsharing
-
---
-Regards,
-Jones Syue | =E8=96=9B=E6=87=B7=E5=AE=97
-QNAP Systems, Inc.
+Did you receive my previous email regarding your family inheritance?
+Reply strictly through: convy0090@gmail.com
+Best Regards,
+Ruben CONVY
