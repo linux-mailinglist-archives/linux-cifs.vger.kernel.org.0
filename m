@@ -2,27 +2,27 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DC81BFB77
-	for <lists+linux-cifs@lfdr.de>; Thu, 30 Apr 2020 16:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D9F1BFB2F
+	for <lists+linux-cifs@lfdr.de>; Thu, 30 Apr 2020 15:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbgD3OAL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 30 Apr 2020 10:00:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36702 "EHLO mail.kernel.org"
+        id S1728705AbgD3N6L (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 30 Apr 2020 09:58:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37362 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728953AbgD3NyU (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:54:20 -0400
+        id S1729035AbgD3Nyn (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:54:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7FF920870;
-        Thu, 30 Apr 2020 13:54:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A110208D5;
+        Thu, 30 Apr 2020 13:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588254860;
-        bh=0x3kQkUa8Zh85K1c8F16CnNNrJ+HlYowwG8mn5Ij7sw=;
+        s=default; t=1588254883;
+        bh=44MdXW0/tQSc7zi1YMwilVS4B9vWAuvAITdw+uxpS34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Od148ftRp1ZKyr4+NlSylbFc2C8FxuE+t27JTV0ebIKX/gXNMV5dUDMf3ZlcFZ4Br
-         R2pXPx/vFGnUaSzvkunphldzi+Ra6xJPCjjaeWsODOIWPK7scGnI9nkoVWo0g41p54
-         e/hKUqX7CyiP6lKCCMKu3xJsMY8C/Lb235hlpVYA=
+        b=LM/V/Duq42TmFIVpr9RtYZl2QQj8vsMP8z6x3YqigSFLfkcbib05QlI+4feUJWkuu
+         VPPnL/74M0jFSnzI+4uCUCm0diDcNIemYxrHN1L0Fo1YuTd3hMnfTQLJ+i1YA0uZiE
+         GBx7I4h8MCcMTBww5oY64quizp7uASJqONT7iV0Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
@@ -30,12 +30,12 @@ Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.14 16/27] cifs: protect updating server->dstaddr with a spinlock
-Date:   Thu, 30 Apr 2020 09:53:51 -0400
-Message-Id: <20200430135402.20994-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 08/17] cifs: protect updating server->dstaddr with a spinlock
+Date:   Thu, 30 Apr 2020 09:54:24 -0400
+Message-Id: <20200430135433.21204-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200430135402.20994-1-sashal@kernel.org>
-References: <20200430135402.20994-1-sashal@kernel.org>
+In-Reply-To: <20200430135433.21204-1-sashal@kernel.org>
+References: <20200430135433.21204-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 697edc92dff27..58e7288e5151c 100644
+index f2707ff795d45..c018d161735c4 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -348,8 +348,10 @@ static int reconn_set_ipaddr(struct TCP_Server_Info *server)
+@@ -341,8 +341,10 @@ static int reconn_set_ipaddr(struct TCP_Server_Info *server)
  		return rc;
  	}
  
