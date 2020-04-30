@@ -2,80 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F33B1BFB0C
-	for <lists+linux-cifs@lfdr.de>; Thu, 30 Apr 2020 15:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94CD1C1043
+	for <lists+linux-cifs@lfdr.de>; Fri,  1 May 2020 11:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729108AbgD3NzB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 30 Apr 2020 09:55:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727121AbgD3NzA (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:55:00 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 298C72137B;
-        Thu, 30 Apr 2020 13:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588254900;
-        bh=B0THgzLB98z6nynqqw9dkSLS0zUCJgWl0JwEXxMV4wY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FA44ig/uLEEH1luvErhGj0VPfOPWhXLQCXIbmxposSeoP9IxVXwkM2qNRGKtSElC6
-         L7QHk1o+0cR9w79L4hjgWugfwqMcIsHPGTbx6DCVDodIjS91sAD4+tfZp7aM/nFxBe
-         MBoU2ws1TG4Qgl4fCtorqkwVqyOdZzQFX1uu3mEU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.4 05/11] cifs: protect updating server->dstaddr with a spinlock
-Date:   Thu, 30 Apr 2020 09:54:47 -0400
-Message-Id: <20200430135453.21353-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200430135453.21353-1-sashal@kernel.org>
-References: <20200430135453.21353-1-sashal@kernel.org>
+        id S1728445AbgEAJU6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 1 May 2020 05:20:58 -0400
+Received: from [104.248.214.7] ([104.248.214.7]:54220 "EHLO narrain.in"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728325AbgEAJU5 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 1 May 2020 05:20:57 -0400
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by narrain.in (Postfix) with SMTP id 54FCB5C3447;
+        Thu, 30 Apr 2020 22:00:51 +0000 (UTC)
+Received: from [79.101.166.143] by 127.0.0.1 with ESMTP id 049AF3FDBD4; Thu, 30 Apr 2020 19:54:00 -0300
+Message-ID: <25w9za$14af7@xbj.ofgv.p4zd0>
+From:   "JEAN MARIE" <fkinneyofd@tampabay.rr.com>
+Reply-To: "JEAN MARIE" <fkinneyofd@tampabay.rr.com>
+To:     lintheartist@yahoo.com
+Subject: Please Kindly Acknowledge Receipt
+Date:   Thu, 30 Apr 20 19:54:00 GMT
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+        boundary="4CF92E5_32._B.E_53"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit fada37f6f62995cc449b36ebba1220594bfe55fe ]
+--4CF92E5_32._B.E_53
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-We use a spinlock while we are reading and accessing the destination address for a server.
-We need to also use this spinlock to protect when we are modifying this address from
-reconn_set_ipaddr().
+I 'm a Financial Consultant.  under my network as a financial consultant, =
+there are few private investors offering capital injection as project fund=
+ing or business expansion in critical areas of Investment placements such =
+as Real Estate, Healthcare, Transportation and Agriculture. 
+Get back to me for more details as you express your interest areas of spec=
+ialization.
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/cifs/connect.c | 2 ++
- 1 file changed, 2 insertions(+)
+Regards.
+Mr. J. Marie
+fkinneyofd Consulting
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index cf104bbe30a14..c9793ce0d3368 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -338,8 +338,10 @@ static int reconn_set_ipaddr(struct TCP_Server_Info *server)
- 		return rc;
- 	}
- 
-+	spin_lock(&cifs_tcp_ses_lock);
- 	rc = cifs_convert_address((struct sockaddr *)&server->dstaddr, ipaddr,
- 				  strlen(ipaddr));
-+	spin_unlock(&cifs_tcp_ses_lock);
- 	kfree(ipaddr);
- 
- 	return !rc ? -1 : 0;
--- 
-2.20.1
+--4CF92E5_32._B.E_53--
 
