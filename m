@@ -2,77 +2,64 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D98B1DEA16
-	for <lists+linux-cifs@lfdr.de>; Fri, 22 May 2020 16:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526811DF584
+	for <lists+linux-cifs@lfdr.de>; Sat, 23 May 2020 09:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731224AbgEVOwO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 22 May 2020 10:52:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54782 "EHLO mail.kernel.org"
+        id S2387627AbgEWHXV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 23 May 2020 03:23:21 -0400
+Received: from verein.lst.de ([213.95.11.211]:34128 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730312AbgEVOwN (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 22 May 2020 10:52:13 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7625320756;
-        Fri, 22 May 2020 14:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590159133;
-        bh=GXXj6hQz+sGwSms1JwSKF7z36WZ+ep/aZfuObAE5nbM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SB/+8pWGLGFHhc+UrPdIZbJDz1T41O88voLp8zwpNnNBrfseS5Mfc5Umg7xiDTjJG
-         xCb8KTbMn8RA2EiYyB/XdEDRaf75vcXRHX46f+2AgbSo3LAqGjuDmgW4XtJUb41ZB9
-         EU68TOXtLnKyOtmbIZqFmVRe0fYDxK8KpD/Qa8Fk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve French <stfrench@microsoft.com>,
-        Coverity <scan-admin@coverity.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.4 5/5] cifs: Fix null pointer check in cifs_read
-Date:   Fri, 22 May 2020 10:52:07 -0400
-Message-Id: <20200522145207.435314-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200522145207.435314-1-sashal@kernel.org>
-References: <20200522145207.435314-1-sashal@kernel.org>
+        id S2387622AbgEWHXV (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 23 May 2020 03:23:21 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id EB36D68BEB; Sat, 23 May 2020 09:23:16 +0200 (CEST)
+Date:   Sat, 23 May 2020 09:23:16 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
+        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
+Subject: Re: remove kernel_setsockopt and kernel_getsockopt v2
+Message-ID: <20200523072316.GA10575@lst.de>
+References: <20200520195509.2215098-1-hch@lst.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200520195509.2215098-1-hch@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+On Wed, May 20, 2020 at 09:54:36PM +0200, Christoph Hellwig wrote:
+> Hi Dave,
+> 
+> this series removes the kernel_setsockopt and kernel_getsockopt
+> functions, and instead switches their users to small functions that
+> implement setting (or in one case getting) a sockopt directly using
+> a normal kernel function call with type safety and all the other
+> benefits of not having a function call.
+> 
+> In some cases these functions seem pretty heavy handed as they do
+> a lock_sock even for just setting a single variable, but this mirrors
+> the real setsockopt implementation unlike a few drivers that just set
+> set the fields directly.
 
-[ Upstream commit 9bd21d4b1a767c3abebec203342f3820dcb84662 ]
+Hi Dave and other maintainers,
 
-Coverity scan noted a redundant null check
-
-Coverity-id: 728517
-Reported-by: Coverity <scan-admin@coverity.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Reviewed-by: Shyam Prasad N <nspmangalore@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/cifs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 2ffdaedca7e9..b5a05092f862 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -3230,7 +3230,7 @@ cifs_read(struct file *file, char *read_data, size_t read_size, loff_t *offset)
- 			 * than it negotiated since it will refuse the read
- 			 * then.
- 			 */
--			if ((tcon->ses) && !(tcon->ses->capabilities &
-+			if (!(tcon->ses->capabilities &
- 				tcon->ses->server->vals->cap_large_files)) {
- 				current_read_size = min_t(uint,
- 					current_read_size, CIFSMaxBufSize);
--- 
-2.25.1
-
+can you take a look at and potentially merge patches 1-30 while we
+discuss the sctp refactoring?  It would get a nice headstart by removing
+kernel_getsockopt and most kernel_setsockopt users, and for the next
+follow on I wouldn't need to spam lots of lists with 30+ patches again.
