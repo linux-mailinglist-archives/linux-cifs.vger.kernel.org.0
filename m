@@ -2,64 +2,65 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526811DF584
-	for <lists+linux-cifs@lfdr.de>; Sat, 23 May 2020 09:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8811DF9D6
+	for <lists+linux-cifs@lfdr.de>; Sat, 23 May 2020 20:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387627AbgEWHXV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 23 May 2020 03:23:21 -0400
-Received: from verein.lst.de ([213.95.11.211]:34128 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387622AbgEWHXV (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 23 May 2020 03:23:21 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EB36D68BEB; Sat, 23 May 2020 09:23:16 +0200 (CEST)
-Date:   Sat, 23 May 2020 09:23:16 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
-        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
-Subject: Re: remove kernel_setsockopt and kernel_getsockopt v2
-Message-ID: <20200523072316.GA10575@lst.de>
-References: <20200520195509.2215098-1-hch@lst.de>
+        id S2388252AbgEWSAX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 23 May 2020 14:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387946AbgEWSAV (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 23 May 2020 14:00:21 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3114C08C5C4
+        for <linux-cifs@vger.kernel.org>; Sat, 23 May 2020 11:00:19 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id p4so6251919qvr.10
+        for <linux-cifs@vger.kernel.org>; Sat, 23 May 2020 11:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=DLUdlLdqK1bsV3DbEuTTyBWxouo7TOwyxri4APWQD3NqiMSIjirU+KuWgkxjC+SPXd
+         U5bKcUrFxXkujPWjXtLFF/k/nfilKzP5EjBajrS/8510fneO07cpMqdcHCxwrpi40/q7
+         /O0e1HoJlTbh5NB1junI0CHT5u7OlL96wLc3EVtoU1jy6h6mu/94Ij3+HmmWjDrdLWVh
+         jTwO4Rc/jE6wel14tPJDJsn6k0/UDkI9Or/XCFS691xyvyogoxyI2h7yK06Suh6ePv/U
+         +lZz7VywgsFgSxYL/B5mLPOXcZ0fktkIkUnyPxHg9tbmvqat4Bb8GZAodniIxvBVB3XB
+         mJxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=RKaWNPC9wQ+JobNgb7DBba2fgfNu8HadEOC4sNRYYfcNFvbwNko2i2swqHITHUm5HG
+         B4wTUvc5UiYgJkDbQ8TtOVGoRn53vLrc6o2MRJOCISEimeXSGQHJawwV80F9Ocn3dgq7
+         oTR1WDNVRRaKnKlgWyS70c+udJiFyLD3EK1QRNTnqUmPtcjw8K/ZFKMhdh2r4uQ7T7Gc
+         rCqfYtRgJuYwrROZjTGenbVG2MPJIWM4+cxee4CoTwULthFKYKt9F6aRt0the1Yv+/g9
+         lKfRLNXeKxL6bGf/XeKq8JustG0YtegxU1mgiDGF95iixrD8MsY8l436YIqYSnbzxuCt
+         6XkA==
+X-Gm-Message-State: AOAM533lf4h2eSBAD0cEW3HsLzON6vTvHRLx4FgyuLdFXORBkG8WuGhg
+        t6czhJHzd8PHZPDAO48F/YPJiWjR+0ApgQaQm14=
+X-Google-Smtp-Source: ABdhPJxI0GNvtYFRzubiNKehFnBmeNa8IdxO7hQ3TxAldsg7mTxyy0v9X6v2Fayhxp/lnxt7tCbB9QFJVJ60H98MgEQ=
+X-Received: by 2002:a0c:ed4b:: with SMTP id v11mr9120627qvq.179.1590256818769;
+ Sat, 23 May 2020 11:00:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520195509.2215098-1-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Received: by 2002:aed:3ac5:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:18
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantaltwo@gmail.com>
+Date:   Sat, 23 May 2020 18:00:18 +0000
+Message-ID: <CAGVwK0UnqGdMqCxvjeR06i5Ca=SScOHB3E1kfQEUa4_tgZN-cQ@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, May 20, 2020 at 09:54:36PM +0200, Christoph Hellwig wrote:
-> Hi Dave,
-> 
-> this series removes the kernel_setsockopt and kernel_getsockopt
-> functions, and instead switches their users to small functions that
-> implement setting (or in one case getting) a sockopt directly using
-> a normal kernel function call with type safety and all the other
-> benefits of not having a function call.
-> 
-> In some cases these functions seem pretty heavy handed as they do
-> a lock_sock even for just setting a single variable, but this mirrors
-> the real setsockopt implementation unlike a few drivers that just set
-> set the fields directly.
-
-Hi Dave and other maintainers,
-
-can you take a look at and potentially merge patches 1-30 while we
-discuss the sctp refactoring?  It would get a nice headstart by removing
-kernel_getsockopt and most kernel_setsockopt users, and for the next
-follow on I wouldn't need to spam lots of lists with 30+ patches again.
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
