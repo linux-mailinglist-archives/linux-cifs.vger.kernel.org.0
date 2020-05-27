@@ -2,61 +2,54 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBC61E42AA
-	for <lists+linux-cifs@lfdr.de>; Wed, 27 May 2020 14:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D541E1E434B
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 May 2020 15:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730098AbgE0Mud (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 27 May 2020 08:50:33 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60069 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730085AbgE0Mud (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 May 2020 08:50:33 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jdvVv-00007C-9i; Wed, 27 May 2020 12:50:31 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: remove redundant initialization of variable rc
-Date:   Wed, 27 May 2020 13:50:31 +0100
-Message-Id: <20200527125031.173987-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S1730243AbgE0NRE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 27 May 2020 09:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730065AbgE0NRE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 May 2020 09:17:04 -0400
+X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 May 2020 06:17:04 PDT
+Received: from msa13.plala.or.jp (msa13.plala.or.jp [IPv6:2400:7800:0:502e::13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A45FC08C5C1
+        for <linux-cifs@vger.kernel.org>; Wed, 27 May 2020 06:17:03 -0700 (PDT)
+Received: from mwebp13 ([172.23.13.133]) by msa13.plala.or.jp with ESMTP
+          id <20200527131031.YCSO25516.msa13.plala.or.jp@mwebp13>;
+          Wed, 27 May 2020 22:10:31 +0900
+Date:   Wed, 27 May 2020 22:10:31 +0900
+From:   "Mrs.Judith Rice" <hamurafujimi@tmail.plala.or.jp>
+Reply-To: jonesevansje@gmail.com
+Message-ID: <20200527221031.GY3NW.811.root@mwebp13>
+Subject: Spende
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+Sensitivity: Normal
+X-VirusScan: Outbound; mvir-ac13; Wed, 27 May 2020 22:10:31 +0900
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Attn:
 
-The variable rc is being initialized with a value that is never read
-and it is being updated later with a new value.  The initialization is
-redundant and can be removed.
+Es tut uns leid, dass wir Sie aufgrund eines Mismanagent of Beneficaries-Fonds von unseren ernannten Zonal Managern versp&#228;tet kontaktiert haben. Bitte beachten Sie, dass Sie qualifiziert sind, die Zahlung von 900.000,00 USD an der ATM-Karte mit neunhunderttausend Dollar zu erhalten.
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- fs/cifs/cifssmb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Als Entsch&#228;digung von WORLD BANK / IWF (Internationaler W&#228;hrungsfonds) f&#252;r die automatisch &#252;ber einen E-Mail-Wahlautomaten gezogenen, die in der Vergangenheit noch nicht abgeschlossene Transaktionen hatten.
 
-diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
-index 5014a82391ff..d62f9175c546 100644
---- a/fs/cifs/cifssmb.c
-+++ b/fs/cifs/cifssmb.c
-@@ -2375,7 +2375,7 @@ int
- CIFSSMBWrite2(const unsigned int xid, struct cifs_io_parms *io_parms,
- 	      unsigned int *nbytes, struct kvec *iov, int n_vec)
- {
--	int rc = -EACCES;
-+	int rc;
- 	WRITE_REQ *pSMB = NULL;
- 	int wct;
- 	int smb_hdr_len;
--- 
-2.25.1
+F&#252;r weitere Informationen kontaktieren Sie bitte Rev.EVANS JONES ( jonesevansje@gmail.com )
+
+Bitte senden Sie ihm Ihre pers&#246;nlichen Daten wie:
+
+Vollst&#228;ndiger Name:
+Wohnanschrift:
+Telefonnummer:
+Herkunftsland:
+
+Gr&#252;&#223;e,
+Mrs. Judith Rice
 
