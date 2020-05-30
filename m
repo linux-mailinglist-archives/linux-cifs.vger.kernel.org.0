@@ -2,85 +2,55 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0306F1E8908
-	for <lists+linux-cifs@lfdr.de>; Fri, 29 May 2020 22:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE64C1E91C4
+	for <lists+linux-cifs@lfdr.de>; Sat, 30 May 2020 15:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728086AbgE2Ulc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 29 May 2020 16:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S1728802AbgE3NiV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 30 May 2020 09:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726975AbgE2Ulc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 29 May 2020 16:41:32 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85BAC03E969
-        for <linux-cifs@vger.kernel.org>; Fri, 29 May 2020 13:41:31 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id j8so1760744ybj.12
-        for <linux-cifs@vger.kernel.org>; Fri, 29 May 2020 13:41:31 -0700 (PDT)
+        with ESMTP id S1728797AbgE3NiU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 30 May 2020 09:38:20 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D56C03E969
+        for <linux-cifs@vger.kernel.org>; Sat, 30 May 2020 06:38:20 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id u23so4176319otq.10
+        for <linux-cifs@vger.kernel.org>; Sat, 30 May 2020 06:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zaNIRcKoHF/ewb38bzfAIG4Oft+WdTJOuRkmpdiOwVg=;
-        b=nJEw28LdziUhWnzvLqt0BKP53IysKBrbO1EJcFe9I27vwjrmjuIOCga4BS8RoEfRD3
-         27SCCwU69ss9flVggtwhQV8wAKYE6X6u7qj/nrWJVQv4MOc5uvFNkZxDbmXPGh+aVoTi
-         NePv6VVEp+fHihrQvBuiffxDMibmHbKWnH1kZsRULKWTbT3jG3Da77Qdm7kbYX1ZGr5g
-         4zZE4iFei/9CwO9YsDp7IwqoBzbCwzeGTuXbwW+K8vrM0sBXSwKqIQlP0LpkxrRMlpPF
-         hijoQLTAvLpjO+VGpuxiazRaEhNe/7iJCysEwlZRMeMg9xBhEsp2H2RwMNZrMlFcAGkH
-         cA5g==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=bDUUTxPkBJMvAjdz7jhxo6WKrfE2gACIVEtBlGY7vyw=;
+        b=a6iLMxlRxlxyX4rMcbgXsDPLxZWGxVqwjb9+DmabA+gWXS0P5azoWKQ9/Ec88QyHLz
+         F7TvHAEkePFm603MSl7rCnAVWkATVxKqlexJe9yWXY0nd6ygHd1xtcxTXEI7co4D8EBj
+         iXKIPnsskD6ruzGIXYVnOt6RdRhVtHai/AG/ai7I6cbWyQH09qLJ39lo7SDYYW7X+Vcd
+         vagPyI+e0VJaEVezSLB7uaqMJJkAUmyRajRx7wL3bAEx/0/FtPvUfbb96kaPkAlWLCY0
+         mi8wN3P/B84PqG9bJXuwe6Y/uPvFxlspGOwFglGKuLTJUInxb97V5L9lkbFFfRDkJdF/
+         FTyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zaNIRcKoHF/ewb38bzfAIG4Oft+WdTJOuRkmpdiOwVg=;
-        b=ZNPBYGdXEHzeX4ws1q9PAG2rjyw8xAYxZnkvP+ZGT6b8YibrVtxFBVtGOMZ+NgbRa3
-         jSJvITmtM0TafKYR/lcjx403hEv6bag8BTZzrTUFI1s2D0TtH3YNfiiWTVI1lb4Fiah4
-         y4AoUmVrfAVQzRraEi/3Im1ysJrdJfDkRv4bnEpkdhAuz53L8IzTTDtYtJDKHvcReWCq
-         yCKlWAx0fSKZZ10I9+Lqf3eUyZwrKZqxJ4zgKVFqtM3FM4614IxN//7oAcjiV5DQdvdL
-         CaE8AgCBgdURxtEB96+lvJuy9UIwK6PBEJZJNBHDiFTqNNa3Xdvh/FJ4APy3bBxcD9/+
-         +6vQ==
-X-Gm-Message-State: AOAM531z1Xpl1YIfYZXY3VVc+zI6119+96LYJlNp50Y+nLyYE63kYJpV
-        urt99bRcHk2HLAm4L55PkIgmdiwAK33UU3IP/QA=
-X-Google-Smtp-Source: ABdhPJwkbMe4WxT4AmZKqAJ2qBs1OnMwHuFQ+niOA1eBtTmgHO0MAUeH8SIfyhNDo8geaFlo7tbD7XIDMYkOi3DrQDA=
-X-Received: by 2002:a25:4487:: with SMTP id r129mr2782394yba.14.1590784891007;
- Fri, 29 May 2020 13:41:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=bDUUTxPkBJMvAjdz7jhxo6WKrfE2gACIVEtBlGY7vyw=;
+        b=JCJ/+89h/KwwMkUcOZv5j1JVa8fvljm56U4RAl1Yx+dqQmZT7WPhHe2wXnOpBgEXji
+         v4iElK1D4kfae4jLm2S9h7gyE8m9xvQOrUV2l1+1SR9UfHedxVLJ8DaHvQSZOq5Hmh7r
+         4QmoTvJvq3TjRV+apniY1ccHFDauQ8Gk9fmnhxCCQvAAJujwGnaFg+gJDbyCFxu8/fc1
+         pSqqP5O3nfEdwPOdPb2JEV4iTS2W7uiFWNyAHFj8gA6rhdFp8AOmJzlEL4ywXeWWc1G+
+         gvXbNWoNK/zaIjFL5YeqtC+TGyJeXjP9GexEExFCxaiDxf7kT7wV8JzXmIrPHHorreZC
+         Ivpw==
+X-Gm-Message-State: AOAM533R7AXnctScZZYgx/5nQmt3q/s+S6sn8T3RRaxDXJqUfASO21ju
+        jNNRH7/pUG20JFuoP/4rvlUsM/220mXotpORx/fRcMBiwiHNGA==
+X-Google-Smtp-Source: ABdhPJzTVOaW/4j55Sq1qERj2WyFXS7UGJ308W2VGe2LCJRG6BerKxekDFK+QXsnegVXYcPrwPu6hC3YKO+mqnywGOA=
+X-Received: by 2002:a9d:6245:: with SMTP id i5mr5441912otk.111.1590845899907;
+ Sat, 30 May 2020 06:38:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200519183829.5512-1-pc@cjr.nz> <20200519183829.5512-2-pc@cjr.nz>
- <87r1v4jcwb.fsf@suse.com>
-In-Reply-To: <87r1v4jcwb.fsf@suse.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 29 May 2020 15:41:19 -0500
-Message-ID: <CAH2r5mutMnvBSvuwuMM1MW2jB1waZ8vmOSSHnn3wg3oYshdnfA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] cifs: handle hostnames that resolve to same ip in failover
-To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
-Cc:     Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>
+From:   Cong Zhang <congzhangzh@gmail.com>
+Date:   Sat, 30 May 2020 21:38:07 +0800
+Message-ID: <CAOXDmPpr1AWdeW9h1qwcmE93jwhZKoZmvr4ReG52Lrocisz-eQ@mail.gmail.com>
+Subject: 
+To:     linux-cifs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged all 3 into cifs-2.6.git for-next
-
-thx
-
-On Thu, May 28, 2020 at 10:29 AM Aur=C3=A9lien Aptel <aaptel@suse.com> wrot=
-e:
->
->
-> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
->
-> --
-> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
- DE
-> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
-=BCnchen)
-
-
-
---=20
-Thanks,
-
-Steve
+unsubscribe linux-cifs
