@@ -2,52 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468601EF000
-	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jun 2020 05:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5B51EFC58
+	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jun 2020 17:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728605AbgFEDhj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 4 Jun 2020 23:37:39 -0400
-Received: from unassigned-102-a.cspirefiber.net ([173.235.82.102]:51394 "EHLO
-        clearos.ia.lan" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728599AbgFEDhi (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 4 Jun 2020 23:37:38 -0400
-X-Greylist: delayed 113191 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Jun 2020 23:37:38 EDT
-Received: from Shop01 (localhost [127.0.0.1])
-        by clearos.ia.lan (Postfix) with SMTP id 1D0B34C8E62;
-        Wed,  3 Jun 2020 05:19:03 -0500 (CDT)
-Received: from [44.149.211.241] by Shop01 with ESMTP id EFC08F43A0B; Wed, 03 Jun 2020 14:17:24 +0300
-Message-ID: <0eli19x796$-52$--$4-t$hl0x-3-$0@2jj0v6g7>
-From:   "SUHIL ABDULZAHRA" <tbryant6@woh.rr.com>
-Reply-To: "SUHIL ABDULZAHRA" <tbryant6@woh.rr.com>
-To:     linsulsum@yahoo.com.au
-Subject: I NEED YOUR ATTENTION
-Date:   Wed, 03 Jun 20 14:17:24 GMT
-X-Mailer: Microsoft Outlook Express 5.50.4133.2400
+        id S1726893AbgFEPR6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 5 Jun 2020 11:17:58 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:23757 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726675AbgFEPR6 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 5 Jun 2020 11:17:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591370276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=b6oaoc9BFGC0KbruyF/VyfbgSlVPGz9/S7qC1xpplAs=;
+        b=bniJkoK93JxzrIh0aYP+9XfegxYN1tJJqggd8NPpWHSg/JRlxnln3o9SZGhRS74o2xs5Et
+        XQdEIcv8E+b3uvTo/qAp/p8aI7vSQ1BUfNRBKFuVdQXHkCQAlTl8/eZPHgENBWzfbJe8F/
+        63saROl+0PYVG9Yls+02NyHruqXjCZc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-182-Nea1pxbjMEO7BDzAsfnrHA-1; Fri, 05 Jun 2020 11:17:55 -0400
+X-MC-Unique: Nea1pxbjMEO7BDzAsfnrHA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28212107ACCA;
+        Fri,  5 Jun 2020 15:17:54 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.74.9.212])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF31D5C6DE;
+        Fri,  5 Jun 2020 15:17:50 +0000 (UTC)
+From:   Kenneth D'souza <kdsouza@redhat.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, kdsouza@redhat.com, rbergant@redhat.com
+Subject: [PATCH v3] cifs: dump Security Type info in DebugData
+Date:   Fri,  5 Jun 2020 20:47:46 +0530
+Message-Id: <20200605151746.18743-1-kdsouza@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary=".5_7E8.F92_1EA5BFA___C.1"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Currently the end user is unaware with what sec type the
+cifs share is mounted if no sec=<type> option is parsed.
+With this patch one can easily check from DebugData.
 
---.5_7E8.F92_1EA5BFA___C.1
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Example:
+1) Name: x.x.x.x Uses: 1 Capability: 0x8001f3fc Session Status: 1 Security type: RawNTLMSSP
 
-My name is Mr. SUHIL ABDULZAHRA BADR AL-ASADI from IRAQ Ministry of Oil (M=
-oO).  
-Please, I desire to have a confidentially funds transaction with you value=
-d at $66 million dollars for safe keeping and investment? 
-Please forward your response to my private email: abdulzahrasuhil@gmail.co=
-m for further details.
+Signed-off-by: Kenneth D'souza <kdsouza@redhat.com>
+Signed-off-by: Roberto Bergantinos Corpas <rbergant@redhat.com>
+---
+ fs/cifs/cifs_debug.c |  4 ++++
+ fs/cifs/cifsglob.h   | 18 ++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-Thank you
-Mr. SUHIL ABDULZAHRA
-https://oil.gov.iq
-
---.5_7E8.F92_1EA5BFA___C.1--
+diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
+index 916567d770f5..9caca784376b 100644
+--- a/fs/cifs/cifs_debug.c
++++ b/fs/cifs/cifs_debug.c
+@@ -375,6 +375,10 @@ static int cifs_debug_data_proc_show(struct seq_file *m, void *v)
+ 				ses->ses_count, ses->serverOS, ses->serverNOS,
+ 				ses->capabilities, ses->status);
+ 			}
++
++			seq_printf(m,"Security type: %s\n",
++					get_security_type_str(server->ops->select_sectype(server, ses->sectype)));
++
+ 			if (server->rdma)
+ 				seq_printf(m, "RDMA\n\t");
+ 			seq_printf(m, "TCP status: %d Instance: %d\n\tLocal Users To "
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 39b708d9d86d..d8ef01039e71 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -1994,6 +1994,24 @@ extern struct smb_version_values smb302_values;
+ extern struct smb_version_operations smb311_operations;
+ extern struct smb_version_values smb311_values;
+ 
++static inline char *get_security_type_str(enum securityEnum sectype)
++{
++       switch (sectype) {
++       case RawNTLMSSP:
++               return "RawNTLMSSP";
++       case Kerberos:
++               return "Kerberos";
++       case NTLMv2:
++               return "NTLMv2";
++       case NTLM:
++               return "NTLM";
++       case LANMAN:
++               return "LANMAN";
++       default:
++               return "Unknown";
++       }
++}
++
+ static inline bool is_smb1_server(struct TCP_Server_Info *server)
+ {
+ 	return strcmp(server->vals->version_string, SMB1_VERSION_STRING) == 0;
+-- 
+2.21.1
 
