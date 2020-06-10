@@ -2,48 +2,98 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4EB1F4F6D
-	for <lists+linux-cifs@lfdr.de>; Wed, 10 Jun 2020 09:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD281F5A4C
+	for <lists+linux-cifs@lfdr.de>; Wed, 10 Jun 2020 19:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726507AbgFJHph convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 10 Jun 2020 03:45:37 -0400
-Received: from mailsip.srv.meduniwien.ac.at ([149.148.51.14]:42786 "EHLO
-        smtpi.meduniwien.ac.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726656AbgFJHpb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 10 Jun 2020 03:45:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtpi.meduniwien.ac.at (Postfix) with ESMTP id 5D0ED60011
-        for <linux-cifs@vger.kernel.org>; Wed, 10 Jun 2020 09:45:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at meduniwien.ac.at
-Received: from smtpi.meduniwien.ac.at ([127.0.0.1])
-        by localhost (mailsip.meduniwien.ac.at [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0GY4wlKJ5fvw for <linux-cifs@vger.kernel.org>;
-        Wed, 10 Jun 2020 09:45:28 +0200 (CEST)
-Received: from [149.148.52.63] (itsc063.cc.meduniwien.ac.at [149.148.52.63])
-        by smtpi.meduniwien.ac.at (Postfix) with ESMTPS id 6384E6000E
-        for <linux-cifs@vger.kernel.org>; Wed, 10 Jun 2020 09:45:28 +0200 (CEST)
-To:     CIFS <linux-cifs@vger.kernel.org>
-From:   Matthias Leopold <matthias.leopold@meduniwien.ac.at>
-Message-ID: <fb0c4e53-c835-77f7-177b-51179a65b5fb@meduniwien.ac.at>
-Date:   Wed, 10 Jun 2020 09:45:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726307AbgFJR2b (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 10 Jun 2020 13:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726322AbgFJR2a (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 10 Jun 2020 13:28:30 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74680C03E96B
+        for <linux-cifs@vger.kernel.org>; Wed, 10 Jun 2020 10:28:30 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id y13so1553302ybj.10
+        for <linux-cifs@vger.kernel.org>; Wed, 10 Jun 2020 10:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ck9JiIjjUN+vYI7kEd1vy4Kf+gkVWNHYz7bn9/Rg9FY=;
+        b=F3Y0ghWFGuHkfCW/p9cyiVLnE/UqQjkAxMuDSMZ8XaQHsrItfzwp/2miINIdQIqOMw
+         tGVXQRSuOq6hAl/Qz7wagn/I89IRzdE/YET8bVPOlOmycluqRFnJgCokyOdJqCz0Xz8b
+         Wfgo7RiuMWbYkDd1RcjCs7VxIauYjme4JdPMoHzbrss99nuPitArIiV+s0/qRm83SIyO
+         mWvPBcqswdm/5ecqzHwhUvXEmILiHYFf00qCcGnwfQOtLOx/wUtTeKL6n8hNa/EuWZh6
+         MlUSc811Nbxwev/nK+cN+b4tnMGUVy+TnexSWmvrCDHVVdyKWYqvKx4J0qBVDMiQp0AD
+         O/hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ck9JiIjjUN+vYI7kEd1vy4Kf+gkVWNHYz7bn9/Rg9FY=;
+        b=b/ZuOB4fLVYUXzRLxv+WexuTPYNJb0XHMkKoQindnN5yl5B/enmSHmfMLy5ocN3vbw
+         KLcROVFg/lyaHIGk2odJB0P5TM8Qmr+fxLZ53dP2xD7+1gxjNSvpUfpfQZdvbuaTFxbU
+         mAybF9BNxOFY/XItmUkZEIGjWVNegenZyChqWcCV4FzXnSSBDeXXgx39wgADeRv5xr0S
+         jytzM3lnaNVIRHrD2FiIVEnuQWWp4jQdEpPWQNs1QL/VhPFlr/PM6gXIi5ehPsbB7FbM
+         By/isteYf1yruOAAuMiy9Kaq9JDrUPh/2HXPoc9zLBiN7FhdbdSg1xoUUFfLOoHhPJhA
+         83Fw==
+X-Gm-Message-State: AOAM533ZjQQqbRjOIizMwRsKIESlhSKqJnzrm1+QnEybZKaqt/o+ZjIa
+        mwmFErQffvk68WjYj99tscT36gCqLsds703E4qjW/Y3JMiM=
+X-Google-Smtp-Source: ABdhPJxFwP3bck31YOHjt1zZGRurReciGH4AQGaBCX37ymZewBPIsV83K+WOJk3i0wFoAmDdSp8M+rsDc7U5FU+/bzc=
+X-Received: by 2002:a25:73c3:: with SMTP id o186mr6596238ybc.230.1591810109126;
+ Wed, 10 Jun 2020 10:28:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-AT
-Content-Transfer-Encoding: 8BIT
+References: <CAH2r5mv-BZbqsDaTu+PX7Q+zxcosn=N5mM28Thr0LGyAKi9MRQ@mail.gmail.com>
+In-Reply-To: <CAH2r5mv-BZbqsDaTu+PX7Q+zxcosn=N5mM28Thr0LGyAKi9MRQ@mail.gmail.com>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Wed, 10 Jun 2020 22:58:18 +0530
+Message-ID: <CANT5p=r1gmrU3R6=TrmDMd8=wWp3n9WwG27=+VSgtD2ZQGyc4A@mail.gmail.com>
+Subject: Re: [PATCH] smb3: fix typo in mount options displayed in /proc/mounts
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-unsubscribe linux-cifs
+Looks good to me.
+
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+
+
+On Wed, Jun 10, 2020 at 6:25 AM Steve French <smfrench@gmail.com> wrote:
+>
+> Missing the final 's' in "max_channels" mount option when displayed in
+> /proc/mounts (or by mount command)
+>
+> CC: Stable <stable@vger.kernel.org>
+> Signed-off-by: Steve French <stfrench@microsoft.com>
+> ---
+>  fs/cifs/cifsfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index 889f9c71049b..0fb99d25e8a8 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -623,7 +623,7 @@ cifs_show_options(struct seq_file *s, struct dentry *root)
+>   seq_printf(s, ",actimeo=%lu", cifs_sb->actimeo / HZ);
+>
+>   if (tcon->ses->chan_max > 1)
+> - seq_printf(s, ",multichannel,max_channel=%zu",
+> + seq_printf(s, ",multichannel,max_channels=%zu",
+>      tcon->ses->chan_max);
+>
+>   return 0;
+>
+> --
+> Thanks,
+>
+> Steve
+
+
 
 -- 
-Matthias Leopold
-IT Systems & Communications
-Medizinische Universität Wien
-Spitalgasse 23 / BT 88 /Ebene 00
-A-1090 Wien
-Tel: +43 1 40160-21241
-Fax: +43 1 40160-921200
+-Shyam
