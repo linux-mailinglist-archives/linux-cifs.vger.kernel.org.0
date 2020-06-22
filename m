@@ -2,59 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EEC203C00
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Jun 2020 18:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E21D203E43
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Jun 2020 19:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729689AbgFVQC5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 22 Jun 2020 12:02:57 -0400
-Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:38306
-        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729603AbgFVQCW (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 22 Jun 2020 12:02:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
-X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
- 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
- 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
- 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
- OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
- TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
- 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
- .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
- pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
- gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
- yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
- 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
- hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
- VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
- 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
- v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
- y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
- IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
-Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Reply-To: kzakari04@gmail.com
-Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
-Subject: URGENT REPLY.
+        id S1730097AbgFVRqd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 22 Jun 2020 13:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729605AbgFVRqc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 22 Jun 2020 13:46:32 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06779C061573
+        for <linux-cifs@vger.kernel.org>; Mon, 22 Jun 2020 10:46:32 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id dr13so18867513ejc.3
+        for <linux-cifs@vger.kernel.org>; Mon, 22 Jun 2020 10:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qtVrBo9zCm9WHKS+1UqbrkmxlJgEwTlf3D0xpFuHfTg=;
+        b=Jngs8FdxtsELlqIPLhjsN4rsqQmYRHKs9CwwOTyqM4k/U7SrkP2pCbtJSYgBjlZ9Fr
+         9goTLZ7HtFFIOvm/1KkZ9Bp7UqtPNewMhWJzwSHibEd6Vt0rgyxnoWph2HX910PBXG+p
+         R0mEV7gN5uKYxXuhNFbXCPERN5dq742MJxBe9JIAj21Kqovwcor++ytCR/mD2jMdrSG7
+         Xw5oomaPgqijdeBDRXe9R4CmE7nvFQBXhtNXuLCYXX6tSSoBox3eNyBFvbQmsqa0edcr
+         kjJi4NauBLdFmBgQGwH7vj0ymIhyWj0svhr5pTaadajcrLhyhcrzeXzA5x4aC4wlx0fc
+         LUXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qtVrBo9zCm9WHKS+1UqbrkmxlJgEwTlf3D0xpFuHfTg=;
+        b=jE3w2kHPkyuNlPZk0ZmqEk7ogtbswP2YDx4dpA7E9M7IiLMy1Qk10FIxNaNRtTgXBO
+         2FBe5nn45VSz+N2A19XHRpsv6wfSgRmS4m5B0r540YiOZQ7Eodp4DBEjQhD1y0SFVefH
+         WmhBBksE0zei8NyNMCsqez37QMfF5Rmvs5AZHu879shOzN91iYAIIzOF1syOK2PJdZBl
+         rZRy+yUGYT9TpuI/KH4IN9kYwAU1kz4syNiZUVqPdMBQxDz0QRC9olMnVUFBsVTiehPn
+         qg8YoDA89nagh+rphd5JbygiJRmjzDhxtLdVbW5Yqz1+a8mBKnsmXlk2xid9EjkL+Ixc
+         ngnw==
+X-Gm-Message-State: AOAM532ff+/IxZE5r6DguhrGkUH+uBmywRwSXlOCgH6f8//JbE5CeMbQ
+        U7OLAUQXnU7RvQVTHhcMWDL1OJTCmg9AXlElOQ==
+X-Google-Smtp-Source: ABdhPJzjNTTW/txt6qijBg4LwFKBAt9v9qwg7uLYVef1/LerVEws6433kX3BRsqFhAW0UUcvdTdoSBwtTW6/yq6lDy0=
+X-Received: by 2002:a17:906:6a1b:: with SMTP id o27mr17307614ejr.271.1592847990718;
+ Mon, 22 Jun 2020 10:46:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200620025033.4180077-1-zhangxiaoxu5@huawei.com>
+In-Reply-To: <20200620025033.4180077-1-zhangxiaoxu5@huawei.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Mon, 22 Jun 2020 10:46:19 -0700
+Message-ID: <CAKywueQD0aM3uJYmC0GbAj_F5RwcKNX1PS1_q+3dn6gyUR_+Xw@mail.gmail.com>
+Subject: Re: [PATCH] cifs/smb3: Fix data inconsistent when zero file range
+To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+Cc:     Steve French <sfrench@samba.org>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+=D0=BF=D1=82, 19 =D0=B8=D1=8E=D0=BD. 2020 =D0=B3. =D0=B2 22:04, Zhang Xiaox=
+u <zhangxiaoxu5@huawei.com>:
+>
+> CIFS implements the fallocate(FALLOC_FL_ZERO_RANGE) with send SMB
+> ioctl(FSCTL_SET_ZERO_DATA) to server. It just set the range of the
+> remote file to zero, but local page cache not update, then the data
+> inconsistent with server, which leads the xfstest generic/008 failed.
+>
+> So we need to remove the local page caches before send SMB
+> ioctl(FSCTL_SET_ZERO_DATA) to server. After next read, it will
+> re-cache it.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+> ---
+>  fs/cifs/smb2ops.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index 736d86b8a910..250b51aca514 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -3187,6 +3187,11 @@ static long smb3_zero_range(struct file *file, str=
+uct cifs_tcon *tcon,
+>         trace_smb3_zero_enter(xid, cfile->fid.persistent_fid, tcon->tid,
+>                               ses->Suid, offset, len);
+>
+> +       /*
+> +        * We zero the range through ioctl, so we need remove the page ca=
+ches
+> +        * first, otherwise the data may be inconsistent with the server.
+> +        */
+> +       truncate_pagecache_range(inode, offset, offset + len - 1);
+>
+>         /* if file not oplocked can't be sure whether asking to extend si=
+ze */
+>         if (!CIFS_CACHE_READ(cifsi))
+> --
+> 2.25.4
+>
 
+Looks good!
 
-Good-Day Friend,
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
 
- Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
+Don't we need to do the same for smb3_punch_hole()?
 
-Waiting for your response for more details, As you are willing to execute this business opportunity with me.
-
-Sincerely Yours,
-Mr. Karim Zakari.
+--
+Best regards,
+Pavel Shilovsky
