@@ -2,192 +2,104 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5CD20482B
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Jun 2020 05:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CD720501A
+	for <lists+linux-cifs@lfdr.de>; Tue, 23 Jun 2020 13:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731721AbgFWD6p (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 22 Jun 2020 23:58:45 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:6309 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730515AbgFWD6o (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 22 Jun 2020 23:58:44 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4F2302B1B1AE7A666F49;
-        Tue, 23 Jun 2020 11:58:40 +0800 (CST)
-Received: from [127.0.0.1] (10.166.215.161) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Tue, 23 Jun 2020
- 11:58:38 +0800
-Subject: Re: [PATCH] cifs: Fix double add page to memcg when cifs_readpages
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>
-CC:     Steve French <sfrench@samba.org>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>
-References: <20200622093019.1535800-1-zhangxiaoxu5@huawei.com>
- <CAN05THSHJWZbHbR2PYLTmN8-LGVQf3ONrKK2UDZX9U_o0DNLzg@mail.gmail.com>
-From:   "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>
-Message-ID: <2d0e590e-9ad0-dfb3-2260-a0c8082a028e@huawei.com>
-Date:   Tue, 23 Jun 2020 11:58:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1732278AbgFWLMb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 23 Jun 2020 07:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732375AbgFWLMb (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Jun 2020 07:12:31 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C291DC061755
+        for <linux-cifs@vger.kernel.org>; Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id l9so4106433ilq.12
+        for <linux-cifs@vger.kernel.org>; Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=QFjnxldosZwdOxuRddiKmWmurIoWoI+90W3tRvD3XFTmd/+qUAMEaYLQh/ayA5EgQ5
+         g4E/Sp3QA4n0t12HCMah8qL34bSK8ZVRyiRN3typizIOXit+Z67k13MdZOH02SIXRpVK
+         xOP8ImbhSV0kgZaASeanfIofWA3+9A/qQFBbg/sFWdbL8DhfnGssnWkfe0kCTHMwg14U
+         d8DQAmREJ9TgO5A2oaQtIl0JUXZpbM3IikgLD/PVbv1VEQ/2JTC22PS6mAUKLRWO8j2K
+         k7I1K+Zm1XNDWDdPfb/qcXPWrTt9Z29rSsyGGxYUHT2MEqSvFG6OpOT0h6jzq6c8vnBE
+         5xOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=jshNanGki7hdgiHAucSqjBamvk9ahLyF6TTkF/LHLX/CXL232yuiRcI/y87nqJ0Q1Q
+         798a/ANqsTIzf3FbR4HOGd9afV4ZdCuSMdxRXLt8JTmFdtex1bUcLyAlnmqth2VQ51gp
+         7wqVVf82pAvBi6xcoXs9H3C/upacQGdDEFQrdnalCNy021uUTszngLEim0z3ngrQLnIl
+         9AEHKqVIgxeGmH/UZrvadLH8UFV6+fXI6i47pngTJqvU6aZEmyzPcK/GIaW9WuuZxD8c
+         RIHZ5VL0nmjWs1ksOO3/uTB1qdXT7tMc1KxPjVTgP4NBJQb+Tc6bBSldjhjYhBTXA9R7
+         INQw==
+X-Gm-Message-State: AOAM533vS3UDXUsyFqZ3EPQoF+kmsfV4kRDZ79hkaziIGMgJqjLG+al7
+        yip5Dqn8UmDzes0kLdke73aAcHYq6QCP7vQk6jY=
+X-Google-Smtp-Source: ABdhPJzTa6avNGNCxmLVMyJ9KWfO+9rBztyQ7QWItc36ZXlDnWejir5TtF20Rq3a99SEoBrEEqdFuOk8L+VlWYRz6QA=
+X-Received: by 2002:a05:6e02:13ee:: with SMTP id w14mr20596863ilj.190.1592910749137;
+ Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAN05THSHJWZbHbR2PYLTmN8-LGVQf3ONrKK2UDZX9U_o0DNLzg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.166.215.161]
-X-CFilter-Loop: Reflected
+Received: by 2002:a05:6638:14d3:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:12:28
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <elnana194@gmail.com>
+Date:   Tue, 23 Jun 2020 12:12:28 +0100
+Message-ID: <CA+NUCuTm1O8Fhb2+Rm0JgqCMzUzFcv=D7+t3um0a8T=+LDetWQ@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Greetings From Mrs. Sarah Koffi
 
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-在 2020/6/23 10:54, ronnie sahlberg 写道:
-> Acked-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> 
-> Nice find!
-> So the small change in semantics in 3fea5a499d57 was that intended or
-> could this also affect other filesystems that would need a similar fix
-> as cifs ?
-The afs_readpages also has the same problem.
-http://lists.infradead.org/pipermail/linux-afs/2020-June/002359.html
-> 
-> On Mon, Jun 22, 2020 at 7:29 PM Zhang Xiaoxu <zhangxiaoxu5@huawei.com> wrote:
->>
->> When xfstests generic/451, there is an BUG at mm/memcontrol.c:
->>    page:ffffea000560f2c0 refcount:2 mapcount:0 mapping:000000008544e0ea
->>         index:0xf
->>    mapping->aops:cifs_addr_ops dentry name:"tst-aio-dio-cycle-write.451"
->>    flags: 0x2fffff80000001(locked)
->>    raw: 002fffff80000001 ffffc90002023c50 ffffea0005280088 ffff88815cda0210
->>    raw: 000000000000000f 0000000000000000 00000002ffffffff ffff88817287d000
->>    page dumped because: VM_BUG_ON_PAGE(page->mem_cgroup)
->>    page->mem_cgroup:ffff88817287d000
->>    ------------[ cut here ]------------
->>    kernel BUG at mm/memcontrol.c:2659!
->>    invalid opcode: 0000 [#1] SMP
->>    CPU: 2 PID: 2038 Comm: xfs_io Not tainted 5.8.0-rc1 #44
->>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_
->>      073836-buildvm-ppc64le-16.ppc.4
->>    RIP: 0010:commit_charge+0x35/0x50
->>    Code: 0d 48 83 05 54 b2 02 05 01 48 89 77 38 c3 48 c7
->>          c6 78 4a ea ba 48 83 05 38 b2 02 05 01 e8 63 0d9
->>    RSP: 0018:ffffc90002023a50 EFLAGS: 00010202
->>    RAX: 0000000000000000 RBX: ffff88817287d000 RCX: 0000000000000000
->>    RDX: 0000000000000000 RSI: ffff88817ac97ea0 RDI: ffff88817ac97ea0
->>    RBP: ffffea000560f2c0 R08: 0000000000000203 R09: 0000000000000005
->>    R10: 0000000000000030 R11: ffffc900020237a8 R12: 0000000000000000
->>    R13: 0000000000000001 R14: 0000000000000001 R15: ffff88815a1272c0
->>    FS:  00007f5071ab0800(0000) GS:ffff88817ac80000(0000) knlGS:0000000000000000
->>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>    CR2: 000055efcd5ca000 CR3: 000000015d312000 CR4: 00000000000006e0
->>    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>    Call Trace:
->>     mem_cgroup_charge+0x166/0x4f0
->>     __add_to_page_cache_locked+0x4a9/0x710
->>     add_to_page_cache_locked+0x15/0x20
->>     cifs_readpages+0x217/0x1270
->>     read_pages+0x29a/0x670
->>     page_cache_readahead_unbounded+0x24f/0x390
->>     __do_page_cache_readahead+0x3f/0x60
->>     ondemand_readahead+0x1f1/0x470
->>     page_cache_async_readahead+0x14c/0x170
->>     generic_file_buffered_read+0x5df/0x1100
->>     generic_file_read_iter+0x10c/0x1d0
->>     cifs_strict_readv+0x139/0x170
->>     new_sync_read+0x164/0x250
->>     __vfs_read+0x39/0x60
->>     vfs_read+0xb5/0x1e0
->>     ksys_pread64+0x85/0xf0
->>     __x64_sys_pread64+0x22/0x30
->>     do_syscall_64+0x69/0x150
->>     entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>    RIP: 0033:0x7f5071fcb1af
->>    Code: Bad RIP value.
->>    RSP: 002b:00007ffde2cdb8e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000011
->>    RAX: ffffffffffffffda RBX: 00007ffde2cdb990 RCX: 00007f5071fcb1af
->>    RDX: 0000000000001000 RSI: 000055efcd5ca000 RDI: 0000000000000003
->>    RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
->>    R10: 0000000000001000 R11: 0000000000000293 R12: 0000000000000001
->>    R13: 000000000009f000 R14: 0000000000000000 R15: 0000000000001000
->>    Modules linked in:
->>    ---[ end trace 725fa14a3e1af65c ]---
->>
->> Since commit 3fea5a499d57 ("mm: memcontrol: convert page cache to a new
->> mem_cgroup_charge() API") not cancel the page charge, the pages maybe
->> double add to pagecache:
->> thread1                       | thread2
->> cifs_readpages
->> readpages_get_pages
->>   add_to_page_cache_locked(head,index=n)=0
->>                                | readpages_get_pages
->>                                | add_to_page_cache_locked(head,index=n+1)=0
->>   add_to_page_cache_locked(head, index=n+1)=-EEXIST
->>   then, will next loop with list head page's
->>   index=n+1 and the page->mapping not NULL
->> readpages_get_pages
->> add_to_page_cache_locked(head, index=n+1)
->>   commit_charge
->>    VM_BUG_ON_PAGE
->>
->> So, we should not do the next loop when any page add to page cache
->> failed.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
->> ---
->>   fs/cifs/file.c | 11 +++++++----
->>   1 file changed, 7 insertions(+), 4 deletions(-)
->>
->> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
->> index 4fe757cfc360..9b0f8f33f832 100644
->> --- a/fs/cifs/file.c
->> +++ b/fs/cifs/file.c
->> @@ -4336,7 +4336,8 @@ readpages_get_pages(struct address_space *mapping, struct list_head *page_list,
->>                          break;
->>
->>                  __SetPageLocked(page);
->> -               if (add_to_page_cache_locked(page, mapping, page->index, gfp)) {
->> +               rc = add_to_page_cache_locked(page, mapping, page->index, gfp);
->> +               if (rc) {
->>                          __ClearPageLocked(page);
->>                          break;
->>                  }
->> @@ -4352,6 +4353,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
->>          struct list_head *page_list, unsigned num_pages)
->>   {
->>          int rc;
->> +       int err = 0;
->>          struct list_head tmplist;
->>          struct cifsFileInfo *open_file = file->private_data;
->>          struct cifs_sb_info *cifs_sb = CIFS_FILE_SB(file);
->> @@ -4396,7 +4398,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
->>           * the order of declining indexes. When we put the pages in
->>           * the rdata->pages, then we want them in increasing order.
->>           */
->> -       while (!list_empty(page_list)) {
->> +       while (!list_empty(page_list) && !err) {
->>                  unsigned int i, nr_pages, bytes, rsize;
->>                  loff_t offset;
->>                  struct page *page, *tpage;
->> @@ -4429,9 +4431,10 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
->>                          return 0;
->>                  }
->>
->> -               rc = readpages_get_pages(mapping, page_list, rsize, &tmplist,
->> +               nr_pages = 0;
->> +               err = readpages_get_pages(mapping, page_list, rsize, &tmplist,
->>                                           &nr_pages, &offset, &bytes);
->> -               if (rc) {
->> +               if (!nr_pages) {
->>                          add_credits_and_wake_if(server, credits, 0);
->>                          break;
->>                  }
->> --
->> 2.25.4
->>
-> 
-> .
-> 
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
