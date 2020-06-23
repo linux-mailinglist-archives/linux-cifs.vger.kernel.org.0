@@ -2,104 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CD720501A
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Jun 2020 13:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125852050B0
+	for <lists+linux-cifs@lfdr.de>; Tue, 23 Jun 2020 13:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732278AbgFWLMb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 23 Jun 2020 07:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732375AbgFWLMb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Jun 2020 07:12:31 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C291DC061755
-        for <linux-cifs@vger.kernel.org>; Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id l9so4106433ilq.12
-        for <linux-cifs@vger.kernel.org>; Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=QFjnxldosZwdOxuRddiKmWmurIoWoI+90W3tRvD3XFTmd/+qUAMEaYLQh/ayA5EgQ5
-         g4E/Sp3QA4n0t12HCMah8qL34bSK8ZVRyiRN3typizIOXit+Z67k13MdZOH02SIXRpVK
-         xOP8ImbhSV0kgZaASeanfIofWA3+9A/qQFBbg/sFWdbL8DhfnGssnWkfe0kCTHMwg14U
-         d8DQAmREJ9TgO5A2oaQtIl0JUXZpbM3IikgLD/PVbv1VEQ/2JTC22PS6mAUKLRWO8j2K
-         k7I1K+Zm1XNDWDdPfb/qcXPWrTt9Z29rSsyGGxYUHT2MEqSvFG6OpOT0h6jzq6c8vnBE
-         5xOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=jshNanGki7hdgiHAucSqjBamvk9ahLyF6TTkF/LHLX/CXL232yuiRcI/y87nqJ0Q1Q
-         798a/ANqsTIzf3FbR4HOGd9afV4ZdCuSMdxRXLt8JTmFdtex1bUcLyAlnmqth2VQ51gp
-         7wqVVf82pAvBi6xcoXs9H3C/upacQGdDEFQrdnalCNy021uUTszngLEim0z3ngrQLnIl
-         9AEHKqVIgxeGmH/UZrvadLH8UFV6+fXI6i47pngTJqvU6aZEmyzPcK/GIaW9WuuZxD8c
-         RIHZ5VL0nmjWs1ksOO3/uTB1qdXT7tMc1KxPjVTgP4NBJQb+Tc6bBSldjhjYhBTXA9R7
-         INQw==
-X-Gm-Message-State: AOAM533vS3UDXUsyFqZ3EPQoF+kmsfV4kRDZ79hkaziIGMgJqjLG+al7
-        yip5Dqn8UmDzes0kLdke73aAcHYq6QCP7vQk6jY=
-X-Google-Smtp-Source: ABdhPJzTa6avNGNCxmLVMyJ9KWfO+9rBztyQ7QWItc36ZXlDnWejir5TtF20Rq3a99SEoBrEEqdFuOk8L+VlWYRz6QA=
-X-Received: by 2002:a05:6e02:13ee:: with SMTP id w14mr20596863ilj.190.1592910749137;
- Tue, 23 Jun 2020 04:12:29 -0700 (PDT)
+        id S1732335AbgFWLae (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 23 Jun 2020 07:30:34 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:51878 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732191AbgFWLac (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 23 Jun 2020 07:30:32 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id A4D437A0799BEB6908D4;
+        Tue, 23 Jun 2020 19:30:30 +0800 (CST)
+Received: from localhost.localdomain (10.175.101.6) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 23 Jun 2020 19:30:24 +0800
+From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+To:     <zhangxiaoxu5@huawei.com>, <sfrench@samba.org>,
+        <piastryyy@gmail.com>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>
+Subject: [PATCH v2 0/2] cifs: Fix data insonsistent when fallocate
+Date:   Tue, 23 Jun 2020 07:31:52 -0400
+Message-ID: <20200623113154.2629513-1-zhangxiaoxu5@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Received: by 2002:a05:6638:14d3:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:12:28
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <elnana194@gmail.com>
-Date:   Tue, 23 Jun 2020 12:12:28 +0100
-Message-ID: <CA+NUCuTm1O8Fhb2+Rm0JgqCMzUzFcv=D7+t3um0a8T=+LDetWQ@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+*** BLURB HERE ***
+v1->v2: 
+  1. add fixes and cc:stable
+  2. punch hole fix address xfstests generic/316 failed
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+Zhang Xiaoxu (2):
+  cifs/smb3: Fix data inconsistent when punch hole
+  cifs/smb3: Fix data inconsistent when zero file range
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+ fs/cifs/smb2ops.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+-- 
+2.25.4
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
-
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
