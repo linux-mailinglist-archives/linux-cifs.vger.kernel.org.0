@@ -2,42 +2,41 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF5F20B9EB
-	for <lists+linux-cifs@lfdr.de>; Fri, 26 Jun 2020 22:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AAE20B9C0
+	for <lists+linux-cifs@lfdr.de>; Fri, 26 Jun 2020 22:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbgFZUG2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 26 Jun 2020 16:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S1725852AbgFZUCy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 26 Jun 2020 16:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbgFZUG1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 26 Jun 2020 16:06:27 -0400
+        with ESMTP id S1725823AbgFZUCy (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 26 Jun 2020 16:02:54 -0400
+X-Greylist: delayed 256 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 Jun 2020 13:02:54 PDT
 Received: from mail.darkrain42.org (o-chul.darkrain42.org [IPv6:2600:3c01::f03c:91ff:fe96:292c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086D2C08C5DB
-        for <linux-cifs@vger.kernel.org>; Fri, 26 Jun 2020 13:06:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A269C03E979
+        for <linux-cifs@vger.kernel.org>; Fri, 26 Jun 2020 13:02:54 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by o-chul.darkrain42.org (Postfix) with ESMTPSA id 6405A820D;
-        Fri, 26 Jun 2020 12:58:39 -0700 (PDT)
+        by o-chul.darkrain42.org (Postfix) with ESMTPSA id BCE38820E;
+        Fri, 26 Jun 2020 13:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=darkrain42.org; s=a;
-        t=1593201519; bh=U1/e4618DWBEvKVi0ZtS1tXPmfaFu/pDnqhn/OQxHzE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FwLLl7p5uSgweY4K4z7gYhif3DkyJZXnpT2koY+djZnKhnenAzZmRfRlswdZs7Ouy
-         vH6mEgq4dEjLr3pqql7wOC6Lh5iAg3luP4uTwa3h521ph8GFZ2ntoD9Liq8dgluG65
-         2+zCjhPXRp7da6ooWMTY6N3A4V2VTKFXjfwzm0ZoKGslVO+WQOjy+MaN6QA784f5IZ
-         IUUflWwy5rsefRC/9F0J0eGyx+I/JUBe4b4fZLoypZrHJYCRgOir19i+LsGFX/GC1i
-         6lGx8oP27O8sBUXmV/xAe+EHgektzRs+v+8ne8jmkpJf+z8lH0vboB8LoBsAN1f6kY
-         s3/5+1m/2PMqA==
+        t=1593201773; bh=SXaWRjA9S4aTRWLr5O+bEuLpkZLXs5TnqnU/uZO+nJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gGm9cfbJZTR18Tf6/883XgzrSloxNwBRP8hii1jNodgofAl2HoSJODo/5Il99kwb2
+         BDsYEhLvLcdOw0OIZRu/RWEVUj6mMcEVPp+Ba1Rp/AzWoys6hQ/Yz5BElgexEOj8mr
+         MTTZp/dWqnEGgX1Sp5owuEfnBQJzPHkQkJjnmK+ifr0lBnSHErL3LK1WH/oI4YiIIo
+         tGqDoz2EQcVEj3lYoh/Dn4DIPD2YgEOhSESRVjMDplinal3wLK3oEVYCH3iYF+296O
+         hO9yg4UD6CytSXphODnTbSpm+euZdaiUPHNpISVLwOklYe+LToh8DrsZqWthdk9VxZ
+         5Avl52AzZqyhA==
 From:   Paul Aurich <paul@darkrain42.org>
 To:     linux-cifs@vger.kernel.org, sfrench@samba.org
-Cc:     paul@darkrain42.org
-Subject: [PATCH 6/6] SMB3: Honor 'posix' flag for multiuser mounts
-Date:   Fri, 26 Jun 2020 12:58:09 -0700
-Message-Id: <20200626195809.429507-7-paul@darkrain42.org>
+Cc:     paul@darkrain42.org, Ronnie Sahlberg <lsahlber@redhat.com>
+Subject: [PATCH] cifs: Fix leak when handling lease break for cached root fid
+Date:   Fri, 26 Jun 2020 13:02:48 -0700
+Message-Id: <20200626200248.431426-1-paul@darkrain42.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200626195809.429507-1-paul@darkrain42.org>
-References: <20200626195809.429507-1-paul@darkrain42.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
@@ -45,42 +44,38 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The flag from the primary tcon needs to be copied into the volume info
-so that cifs_get_tcon will try to enable extensions on the per-user
-tcon. At that point, since posix extensions must have already been
-enabled on the superblock, don't try to needlessly adjust the mount
-flags.
+As observed with kmemleak:
 
-Fixes: ce558b0e17f8 ("smb3: Add posix create context for smb3.11 posix mounts")
-Fixes: b326614ea215 ("smb3: allow "posix" mount option to enable new SMB311 protocol extensions")
+    unreferenced object 0xffff98383a5af480 (size 128):
+      comm "cifsd", pid 684, jiffies 4294936606 (age 534.868s)
+      hex dump (first 32 bytes):
+        c0 ff ff ff 1f 00 00 00 88 f4 5a 3a 38 98 ff ff  ..........Z:8...
+        88 f4 5a 3a 38 98 ff ff 80 88 d6 8a ff ff ff ff  ..Z:8...........
+      backtrace:
+        [<0000000068957336>] smb2_is_valid_oplock_break+0x1fa/0x8c0
+        [<0000000073b70b9e>] cifs_demultiplex_thread+0x73d/0xcc0
+        [<00000000905fa372>] kthread+0x11c/0x150
+        [<0000000079378e4e>] ret_from_fork+0x22/0x30
+
+Fixes: a93864d93977 ("cifs: add lease tracking to the cached root fid")
 Signed-off-by: Paul Aurich <paul@darkrain42.org>
+CC: Stable <stable@vger.kernel.org> # v4.18+
 ---
- fs/cifs/connect.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ fs/cifs/smb2misc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index dada6d51e034..a61abde09ffe 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -5311,6 +5311,7 @@ cifs_construct_tcon(struct cifs_sb_info *cifs_sb, kuid_t fsuid)
- 	vol_info->persistent = master_tcon->use_persistent;
- 	vol_info->handle_timeout = master_tcon->handle_timeout;
- 	vol_info->no_linux_ext = !master_tcon->unix_ext;
-+	vol_info->linux_ext = master_tcon->posix_extensions;
- 	vol_info->sectype = master_tcon->ses->sectype;
- 	vol_info->sign = master_tcon->ses->sign;
- 	vol_info->seal = master_tcon->seal;
-@@ -5339,10 +5340,6 @@ cifs_construct_tcon(struct cifs_sb_info *cifs_sb, kuid_t fsuid)
- 		goto out;
- 	}
- 
--	/* if new SMB3.11 POSIX extensions are supported do not remap / and \ */
--	if (tcon->posix_extensions)
--		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_POSIX_PATHS;
--
- 	if (cap_unix(ses))
- 		reset_cifs_unix_caps(0, tcon, NULL, vol_info);
- 
+diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+index 6a39451973f8..17684b25eb21 100644
+--- a/fs/cifs/smb2misc.c
++++ b/fs/cifs/smb2misc.c
+@@ -619,6 +619,7 @@ smb2_is_valid_lease_break(char *buffer)
+ 					queue_work(cifsiod_wq,
+ 						   &tcon->crfid.lease_break);
+ 					spin_unlock(&cifs_tcp_ses_lock);
++					kfree(lw);
+ 					return true;
+ 				}
+ 			}
 -- 
 2.27.0
 
