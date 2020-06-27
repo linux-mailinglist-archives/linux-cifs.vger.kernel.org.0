@@ -2,99 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9235C20C401
-	for <lists+linux-cifs@lfdr.de>; Sat, 27 Jun 2020 22:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC7F20C471
+	for <lists+linux-cifs@lfdr.de>; Sat, 27 Jun 2020 23:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgF0ULO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 27 Jun 2020 16:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S1726101AbgF0V5v (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 27 Jun 2020 17:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725975AbgF0ULO (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 27 Jun 2020 16:11:14 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5701EC061794;
-        Sat, 27 Jun 2020 13:11:14 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id k18so6249993ybm.13;
-        Sat, 27 Jun 2020 13:11:14 -0700 (PDT)
+        with ESMTP id S1725907AbgF0V5u (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 27 Jun 2020 17:57:50 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DAAC061794
+        for <linux-cifs@vger.kernel.org>; Sat, 27 Jun 2020 14:57:50 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id k4so11220542oik.2
+        for <linux-cifs@vger.kernel.org>; Sat, 27 Jun 2020 14:57:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=u6NosTHu2/5ysLr4vMvB6bDd6QZWpGij0f8MuuSmU5Q=;
-        b=mZhvRa4ZVwifZ6UvV+5LIpz5STIWUpGV8OAmL7410umETP63mUuvQX0LsAYe4jvdQ2
-         YVOXg6IC6s0fiQycMIZeGUkTCgNdLGEEDhNMitVK3BlDp99xpWubw1nM89tb+YzqudpM
-         NKGEwmBr7kpcrQg2O7J3mg1WK87YmEJmnZp7FVpTo1VmjKWe3oZ0YTbYsabfbjq9T9rk
-         96AFuLEPPWZNe3szkIreuJmT4NlZcPvLC4pszbvnlf4Q0UJWt7DzSMwMmfiUD0XbBjJf
-         OW9E3LLEnMqB6KPuf7Ri5r6tvJG6sMFkomHCcUSCfAtEyp4Cc+V2klZqEX49Pk9d1tf/
-         k+qw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=gZEEKeF25WB3FEGIMO9NYN2kqSU0uHnC77hiZFKmx40qwL5+qOMrLfZsVxXJ3weHR+
+         gswsZRZIc8AKyfzoHJ4DT8qtMlqA4FlSsDbQu64DRlnABYuuSxlFMoPrGuZKB9NfFmfq
+         VGJTgT+A8go8/gxOwGwzEAZ7lL4WeIW/E6+eo/v9w/T/nW0E2+UiLVYmL6UFFcmE5ctd
+         PdAjdkW2MjHygnVjS2xbgFFTurnxl6j4st9s5oiTW8adEbhpPGXrRXeDvN82pEikC9cZ
+         yOVHPOKmENB6jBFEbFO8QsHKxU60Wzxm5hoBtxtMS1fO50nR/zTwD//5uWdiYZkIu8/r
+         zQzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=u6NosTHu2/5ysLr4vMvB6bDd6QZWpGij0f8MuuSmU5Q=;
-        b=SvSukpn1eQ7jAbnRgfM2D8hVZ99jn+li78p6E4nzUr2nDFUOwKI7U/FQ41lms8vRbm
-         AG+zlHsp/vRD9lEq77leIhUMFJHqWE+v4PJWkdQUQ3qPYiCbdMc6O1PjAnPJSKYuIAdL
-         7fFub8MN6DHnl0ubvEyFDNDqBReRhsNtv5zNHunSxNEoHlp9GpkculV6ti/rvb4WGXsR
-         8Gcums5ouk0EiyuRPCA6Rm7owXzqY2oLm/ztQGnz2F1CRr3esQYNLjQZmalXHcU5Px3y
-         5VZ/38cx+Rcth3jYXD/MBvvr+Nn/Vczto56f3dq07iz2R3eOT0uBQQkAYNlIruXbrijl
-         KOfQ==
-X-Gm-Message-State: AOAM532RHf9JkGyJao9gjHbUkEBlMjxqRSS7rBBrf7tCNGj1moa1Jw5F
-        hFEp17LIV200oBLYhMPOhOvvLaLXSK1gXuyMmIbG1caO
-X-Google-Smtp-Source: ABdhPJwq+4PQ9Bouf02cflVm6duDxDCZdak3SDy+S7iznVm132VXtFHypRquARAz7uu+s6EMfqlNbD7bbUqmMAWGRro=
-X-Received: by 2002:a25:3bd8:: with SMTP id i207mr14483571yba.167.1593288673051;
- Sat, 27 Jun 2020 13:11:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=AtkjcghZ68z5cIDgMoWOL1w7gmSL0J361zix3I8Mkt5fgGqKXXDq4oJIKVjW35Q4pk
+         pBI3jx/Qm5H7OeFKo7By8T3h9CF2VjoUhqEvEGqDhzAzjbzQHCexhvx8ye3zPq8Z6uQK
+         XhZZ83yLVSEQW6o8njoFcMa2kGXaOW5DPesUXjGoHiXcucJzRH5kMKaAdwOYHMcTpGfE
+         1KY70GnI7x8NvyFjak6YeBkZLoyklp7/lJ1U0RQEoBsGoEsTCk8WpGTvJ04S1DtyB2sh
+         +vBWZtKJZ6+wcNIzyj9JGSEfkshvHIxWU8X98UU4EqPaTxP+oPCzN2zfCC4GFkHDLxDG
+         cUMw==
+X-Gm-Message-State: AOAM533TLJIGoEuQSCddPN+zM5w+nsre4/JXREeb5ABrM+fMB5pWilaV
+        6aP3hY24zu18JaBA8ODMBmt285Wg22AhTGyYtVIq7DHr//U=
+X-Google-Smtp-Source: ABdhPJxmZ0gQz7CTeiFrI3fFzMgTbUNbRuQkmss82qCdwBfNFt0MLo2IvcWx3lGUmIbpluUbgoamBByUVfVXgM//ZIg=
+X-Received: by 2002:a05:6808:1c9:: with SMTP id x9mr7432079oic.16.1593294721972;
+ Sat, 27 Jun 2020 14:52:01 -0700 (PDT)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 27 Jun 2020 15:11:00 -0500
-Message-ID: <CAH2r5mseacQ-UN7HB8U3KWcJFO5yciGMFPBYLw2GwqhWRD43Xg@mail.gmail.com>
-Subject: [GIT PULL] SMB3 Fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a4a:c7:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:52:01 -0700 (PDT)
+Reply-To: un.org@i.ua
+From:   helen <courtfederalhigh@gmail.com>
+Date:   Sat, 27 Jun 2020 22:52:01 +0100
+Message-ID: <CACEnAPy7s5RzhbSki+FAT+bazdh+aAgcgAies9_XSam9h+jx3w@mail.gmail.com>
+Subject: 
+To:     ebkrumme@hotmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Please pull the following changes since commit
-48778464bb7d346b47157d21ffde2af6b2d39110:
+MONEY-GRAM TRANSFERRED PAYMENT INFO:
 
-  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.8-rc2-smb3-fixes
-
-for you to fetch changes up to bf1028a41eaf0ce39518cbdda34cdb717f16364a:
-
-  cifs: misc: Use array_size() in if-statement controlling expression
-(2020-06-23 19:06:27 -0500)
-
-----------------------------------------------------------------
-6 cifs/smb3 fixes, 3 for stable.  Fixes xfstests 451, 313 and 316
-
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/360
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      cifs: misc: Use array_size() in if-statement controlling expression
-
-Xiyu Yang (1):
-      cifs: Fix cached_fid refcnt leak in open_shroot
-
-Zhang Xiaoxu (4):
-      cifs: Fix double add page to memcg when cifs_readpages
-      cifs/smb3: Fix data inconsistent when zero file range
-      cifs/smb3: Fix data inconsistent when punch hole
-      cifs: update ctime and mtime during truncate
-
- fs/cifs/file.c    | 11 +++++++----
- fs/cifs/inode.c   |  9 +++++++++
- fs/cifs/misc.c    | 16 +++++++---------
- fs/cifs/smb2ops.c | 12 ++++++++++++
- 4 files changed, 35 insertions(+), 13 deletions(-)
+Below is the sender=E2=80=99s information
 
 
---
-Thanks,
 
-Steve
+1. MG. REFERENCE NO#: 36360857
+
+2. SENDER'S NAME: Johnson Williams
+
+3. AMOUNT TO PICKUP: US$10,000
+
+
+
+Go to any Money Gram office near you and pick up the payment Track the
+
+Reference Number by visiting and click the link below
+
+(https://secure.moneygram.com/embed/track) and enter the Reference
+
+Number: 36360857 and the Last Name: Williams, you will find the payment
+
+available for pickup instantly.
+
+Yours Sincerely,
+
+Mrs. Helen Marvis
+United Nations Liaison Office
+Directorate for International Payments
