@@ -2,72 +2,54 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE6720D53F
-	for <lists+linux-cifs@lfdr.de>; Mon, 29 Jun 2020 21:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650B420E448
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 00:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731905AbgF2TQF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 29 Jun 2020 15:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731877AbgF2TQC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 29 Jun 2020 15:16:02 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D4FC08C5E2
-        for <linux-cifs@vger.kernel.org>; Mon, 29 Jun 2020 12:16:01 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id v6so4700192iob.4
-        for <linux-cifs@vger.kernel.org>; Mon, 29 Jun 2020 12:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
-         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
-         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
-         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
-         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
-         3NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=d8+WXhi0lM8h9JwQCZW492xrrxYepM9popfmmoytaqTRYC4l0xIutb/E6WWiNQ8r80
-         VXaWaVpyGhNcAgjw4LD5f97wsmJPgKmtqh1/F7+1+zqOjGs5nIh6znoIo9edAXiJyghP
-         xUUegDHJ6uIyg/q/pI17KblMSu0CFF2uosb0sU8AMcUtSb0np6q+wLNM6YmFTEzRM1mx
-         XpwFbTLFYJG8GvjWqOPUIXW3cDj4cHe4gSYVCHTzvXZL8S9VLPbad3qgrXBSqOghM4yQ
-         QTfe1Fl3QgmupKIs6UXnyuU2/WVorzzjqXR9NV/5DiQImuCE+hokCldJdnE75bagUFaf
-         aVCw==
-X-Gm-Message-State: AOAM532jnywD2wKIljxaaqE0EBeeeSDb2dFb3JzObqpMbJWNB9hO4Jje
-        LUYFVmmahxycpZ6FQA3hRrty+8lAYoIszdrgxqI=
-X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
-X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
- Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+        id S1730771AbgF2VXV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 29 Jun 2020 17:23:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44618 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729592AbgF2SvY (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:51:24 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A5372AC40;
+        Mon, 29 Jun 2020 09:39:03 +0000 (UTC)
+From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
+To:     Steve French <smfrench@gmail.com>,
+        Paul Aurich <paul@darkrain42.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [PATCH 0/6] Various fixes for multiuser SMB mounts
+In-Reply-To: <CAH2r5mtLgvE=0R_d3oUPTvcB_O0e-j3WX91O8QrvMTGSN+bmFQ@mail.gmail.com>
+References: <20200626195809.429507-1-paul@darkrain42.org>
+ <CAH2r5mtLgvE=0R_d3oUPTvcB_O0e-j3WX91O8QrvMTGSN+bmFQ@mail.gmail.com>
+Date:   Mon, 29 Jun 2020 11:39:02 +0200
+Message-ID: <87zh8mgqix.fsf@suse.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
-Date:   Mon, 29 Jun 2020 12:15:58 -0700
-Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear friend,
+Thanks Paul!
 
+All changes looks good to me and I think could be squashed into 1
+commit: they are all adjusting the volume info used to mount from the master
+tcon, all in the same func.
 
-I have a business container transaction what that some of( $13million dollars)
+Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 
- I would like to discuss with you. If you are interested, please
-contact my email
+Steve French <smfrench@gmail.com> writes:
+> these and the two others (one from one) recently posted tentatively
+> merged into cifs-2.6.git for-next pending review and testing
 
-address (mrs.victoria.alexander2@gmail.com)
+I don't think we have any multiuser tests, sadly :(
 
-My WhatsApp number but only message (+19293737780)
-
-Please do not reply if you are not ready
-Thanks
+Cheers,
+-- 
+Aurélien Aptel / SUSE Labs Samba Team
+GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
