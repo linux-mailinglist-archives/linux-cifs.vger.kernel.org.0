@@ -2,54 +2,84 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 226FC20C4BD
-	for <lists+linux-cifs@lfdr.de>; Sun, 28 Jun 2020 00:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BD820CB5A
+	for <lists+linux-cifs@lfdr.de>; Mon, 29 Jun 2020 03:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgF0WpO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 27 Jun 2020 18:45:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43170 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726789AbgF0WpN (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 27 Jun 2020 18:45:13 -0400
-Subject: Re: [GIT PULL] SMB3 Fixes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593297913;
-        bh=O/YiF5uN7AprGzsXhnqP7AWeZIx0x4rNY/xL3gq71U0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=l1zUStkJP1ApIJPZ5oI5sCbJCmo+urQP4p9lHkPzHdKLHMsGxHyNB5zVVg5+p6GCp
-         iQ23KhBbpsp+cYMDEjG4rA3KZ/3f+h4h7+K0fzwfBXN5CdB0IJXPWFHxt7qzyQKvCm
-         Xy7NUjtdqx8IIuHJmMqRn7kpDpv50aGZwUgOsMy4=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mseacQ-UN7HB8U3KWcJFO5yciGMFPBYLw2GwqhWRD43Xg@mail.gmail.com>
-References: <CAH2r5mseacQ-UN7HB8U3KWcJFO5yciGMFPBYLw2GwqhWRD43Xg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mseacQ-UN7HB8U3KWcJFO5yciGMFPBYLw2GwqhWRD43Xg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git
- tags/5.8-rc2-smb3-fixes
-X-PR-Tracked-Commit-Id: bf1028a41eaf0ce39518cbdda34cdb717f16364a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 916a3b0fc1206f7e7ae8d00a21a3114b1dc67794
-Message-Id: <159329791342.3578.17783629478391524621.pr-tracker-bot@kernel.org>
-Date:   Sat, 27 Jun 2020 22:45:13 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        id S1726465AbgF2BF1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 28 Jun 2020 21:05:27 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6847 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726395AbgF2BF1 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sun, 28 Jun 2020 21:05:27 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 666C64504AA81878707F;
+        Mon, 29 Jun 2020 09:05:25 +0800 (CST)
+Received: from localhost.localdomain (10.175.101.6) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 29 Jun 2020 09:05:16 +0800
+From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+To:     <zhangxiaoxu5@huawei.com>, <sfrench@samba.org>,
+        <piastryyy@gmail.com>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>
+Subject: [PATCH] cifs: Fix the target file was deleted when rename failed.
+Date:   Sun, 28 Jun 2020 21:06:38 -0400
+Message-ID: <20200629010638.3418176-1-zhangxiaoxu5@huawei.com>
+X-Mailer: git-send-email 2.25.4
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Sat, 27 Jun 2020 15:11:00 -0500:
+When xfstest generic/035, we found the target file was deleted
+if the rename return -EACESS.
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.8-rc2-smb3-fixes
+In cifs_rename2, we unlink the positive target dentry if rename
+failed with EACESS or EEXIST, even if the target dentry is positived
+before rename. Then the existing file was deleted.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/916a3b0fc1206f7e7ae8d00a21a3114b1dc67794
+We should just delete the target file which created during the
+rename.
 
-Thank you!
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+Cc: stable@vger.kernel.org
+---
+ fs/cifs/inode.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
+index ce95801e9b66..49c3ea8aa845 100644
+--- a/fs/cifs/inode.c
++++ b/fs/cifs/inode.c
+@@ -2044,6 +2044,7 @@ cifs_rename2(struct inode *source_dir, struct dentry *source_dentry,
+ 	FILE_UNIX_BASIC_INFO *info_buf_target;
+ 	unsigned int xid;
+ 	int rc, tmprc;
++	bool new_target = d_really_is_negative(target_dentry);
+ 
+ 	if (flags & ~RENAME_NOREPLACE)
+ 		return -EINVAL;
+@@ -2120,8 +2121,13 @@ cifs_rename2(struct inode *source_dir, struct dentry *source_dentry,
+ 	 */
+ 
+ unlink_target:
+-	/* Try unlinking the target dentry if it's not negative */
+-	if (d_really_is_positive(target_dentry) && (rc == -EACCES || rc == -EEXIST)) {
++	/*
++	 * If the target dentry was created during the rename, try
++	 * unlinking it if it's not negative
++	 */
++	if (new_target &&
++	    d_really_is_positive(target_dentry) &&
++	    (rc == -EACCES || rc == -EEXIST)) {
+ 		if (d_is_dir(target_dentry))
+ 			tmprc = cifs_rmdir(target_dir, target_dentry);
+ 		else
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.25.4
+
