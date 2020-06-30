@@ -2,81 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A3420F489
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 14:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6963320F837
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 17:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387421AbgF3MY3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 30 Jun 2020 08:24:29 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:37386 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731651AbgF3MY2 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 30 Jun 2020 08:24:28 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id C0D66490216AAB71B2EA;
-        Tue, 30 Jun 2020 20:24:14 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.106) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 30 Jun 2020
- 20:24:12 +0800
-Subject: Re: [PATCH] cifs: remove the retry in cifs_poxis_lock_set
-From:   yangerkun <yangerkun@huawei.com>
-To:     <sfrench@samba.org>, <jlayton@kernel.org>, <neilb@suse.de>,
-        <neilb@suse.com>
-CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20200624071053.993784-1-yangerkun@huawei.com>
-Message-ID: <62b291ab-291c-339f-e8e8-ba7b0c4f6670@huawei.com>
-Date:   Tue, 30 Jun 2020 20:24:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S2389418AbgF3P0C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 30 Jun 2020 11:26:02 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:43822 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2389312AbgF3P0C (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 Jun 2020 11:26:02 -0400
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id CCEA936C6E99;
+        Tue, 30 Jun 2020 11:07:47 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id teAnXdhPBgM0; Tue, 30 Jun 2020 11:07:47 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 907DD36C6D66;
+        Tue, 30 Jun 2020 11:07:47 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id luCiqowhmZ4I; Tue, 30 Jun 2020 11:07:47 -0400 (-04)
+Received: from [10.77.68.73] (unknown [105.8.0.64])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 0E7EA36C6256;
+        Tue, 30 Jun 2020 11:07:37 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20200624071053.993784-1-yangerkun@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.106]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuel@info.com>
+From:   "manuel franco" <manuel@info.com>
+Date:   Tue, 30 Jun 2020 17:07:31 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200630150738.0E7EA36C6256@correo.bnv.gob.ve>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Ping...
+Sie haben eine Spende von 2.000.000,00 Euro.
 
-ÔÚ 2020/6/24 15:10, yangerkun Ð´µÀ:
-> The caller of cifs_posix_lock_set will do retry(like
-> fcntl_setlk64->do_lock_file_wait) if we will wait for any file_lock.
-> So the retry in cifs_poxis_lock_set seems duplicated, remove it to
-> make a cleanup.
-> 
-> Signed-off-by: yangerkun <yangerkun@huawei.com>
-> ---
->   fs/cifs/file.c | 8 --------
->   1 file changed, 8 deletions(-)
-> 
-> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-> index 9b0f8f33f832..2c9c24b1805d 100644
-> --- a/fs/cifs/file.c
-> +++ b/fs/cifs/file.c
-> @@ -1162,7 +1162,6 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
->   	if ((flock->fl_flags & FL_POSIX) == 0)
->   		return rc;
->   
-> -try_again:
->   	cifs_down_write(&cinode->lock_sem);
->   	if (!cinode->can_cache_brlcks) {
->   		up_write(&cinode->lock_sem);
-> @@ -1171,13 +1170,6 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
->   
->   	rc = posix_lock_file(file, flock, NULL);
->   	up_write(&cinode->lock_sem);
-> -	if (rc == FILE_LOCK_DEFERRED) {
-> -		rc = wait_event_interruptible(flock->fl_wait,
-> -					list_empty(&flock->fl_blocked_member));
-> -		if (!rc)
-> -			goto try_again;
-> -		locks_delete_block(flock);
-> -	}
->   	return rc;
->   }
->   
-> 
+Mein Name ist Manuel Franco aus den USA.
 
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit
