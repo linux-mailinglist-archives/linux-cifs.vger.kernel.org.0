@@ -2,88 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBB920EC09
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 05:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EEA20F313
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 12:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729082AbgF3Dex (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 29 Jun 2020 23:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728949AbgF3Dex (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 29 Jun 2020 23:34:53 -0400
-Received: from mail.darkrain42.org (o-chul.darkrain42.org [IPv6:2600:3c01::f03c:91ff:fe96:292c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA09C061755
-        for <linux-cifs@vger.kernel.org>; Mon, 29 Jun 2020 20:34:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature ED25519)
-        (Client CN "otters", Issuer "otters" (not verified))
-        by o-chul.darkrain42.org (Postfix) with ESMTPS id 575318106
-        for <linux-cifs@vger.kernel.org>; Mon, 29 Jun 2020 20:34:53 -0700 (PDT)
-Received: by haley.home.arpa (Postfix, from userid 1000)
-        id ECA5E35AFA; Mon, 29 Jun 2020 20:34:52 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 20:34:52 -0700
-From:   Paul Aurich <paul@darkrain42.org>
-To:     CIFS <linux-cifs@vger.kernel.org>
-Subject: memory leak of auth_key.response in multichannel establishment
-Message-ID: <20200630033452.GA1859435@haley.home.arpa>
-Mail-Followup-To: CIFS <linux-cifs@vger.kernel.org>
+        id S1732581AbgF3Ktf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 30 Jun 2020 06:49:35 -0400
+Received: from smtp3.sd73.bc.ca ([142.24.50.246]:51662 "EHLO smtp3.sd73.bc.ca"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732560AbgF3Ktf (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 30 Jun 2020 06:49:35 -0400
+X-Greylist: delayed 8834 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Jun 2020 06:49:35 EDT
+Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
+        by smtp3.sd73.bc.ca (Postfix) with ESMTP id 94B6465F30;
+        Tue, 30 Jun 2020 00:56:47 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
+        by smtp.sd73.bc.ca (Postfix) with ESMTP id F107CE043F;
+        Tue, 30 Jun 2020 00:56:52 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id ED9EE5C052C833;
+        Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id A8A395C0D3D026;
+        Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
+        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id W6TkJTV1riDR; Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 71F2C5C0D3D003;
+        Tue, 30 Jun 2020 00:50:01 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 00:50:01 -0700 (PDT)
+From:   charles jackson <lisa.petel@sd73.bc.ca>
+Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
+Message-ID: <661204825.67035383.1593503401310.JavaMail.zimbra@zimbra.sd73.bc.ca>
+Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.10.10.90]
+X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
+Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
+Thread-Index: KoV8J/hKS9Da5whNS8RrW81Eiw2vSw==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Mounting an SMB share with multichannel enabled appears to leak all but one
-allocations of ses->auth_key.response, at least with ntlmssp auth. This was on
-(roughly) bf1028a41ea:
 
-unreferenced object 0xffff88802cefc500 (size 256):
-   comm "mount.cifs", pid 680, jiffies 4294907522 (age 381.360s)
-   hex dump (first 32 bytes):
-     19 68 bf 70 7b a3 b8 00 43 63 8c fa e1 00 90 fb  .h.p{...Cc......
-     1d d8 39 3c 25 d1 d3 f0 a2 4e e4 99 4f 35 9b 2e  ..9<%....N..O5..
-   backtrace:
-     [<000000006c8d6e81>] setup_ntlmv2_rsp+0x2f4/0x2190
-     [<000000006cf0d77f>] build_ntlmssp_auth_blob+0x2b/0x10d0
-     [<00000000300414f8>] SMB2_sess_auth_rawntlmssp_authenticate+0x316/0x7c0
-     [<000000002ee76096>] SMB2_sess_setup+0x377/0x7b0
-     [<0000000076fded43>] cifs_setup_session+0x359/0x770
-     [<00000000f6a70b79>] cifs_get_smb_ses+0xfe1/0x2ae0
-     [<0000000030763a8d>] mount_get_conns+0x20d/0xec0
-     [<000000003deb8295>] cifs_mount+0xbe/0x1d00
-     [<00000000d18bac6c>] cifs_smb3_do_mount+0x26e/0x1330
-     [<000000000952c786>] legacy_get_tree+0x101/0x1f0
-     [<00000000f07e0c29>] vfs_get_tree+0x8a/0x2d0
-     [<00000000edbc514a>] do_mount+0xed7/0x16f0
-     [<00000000ee452092>] __x64_sys_mount+0x12c/0x1a0
-     [<00000000a6ccd160>] do_syscall_64+0x56/0xa0
-     [<000000003143088f>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-unreferenced object 0xffff88802a33e500 (size 256):
-   comm "mount.cifs", pid 680, jiffies 4294907547 (age 381.260s)
-   hex dump (first 32 bytes):
-     5f ff 39 9f c0 e9 1e 3b 0a f1 06 9d c7 53 c2 74  _.9....;.....S.t
-     03 7e 5f 2f 27 f7 a8 84 70 e8 58 e3 91 f6 76 d6  .~_/'...p.X...v.
-   backtrace:
-     [<000000006c8d6e81>] setup_ntlmv2_rsp+0x2f4/0x2190
-     [<000000006cf0d77f>] build_ntlmssp_auth_blob+0x2b/0x10d0
-     [<00000000300414f8>] SMB2_sess_auth_rawntlmssp_authenticate+0x316/0x7c0
-     [<000000002ee76096>] SMB2_sess_setup+0x377/0x7b0
-     [<0000000076fded43>] cifs_setup_session+0x359/0x770
-     [<000000006bb9ce4c>] cifs_ses_add_channel+0x9bc/0x10a0
-     [<000000004034ab3b>] cifs_try_adding_channels+0x1f0/0x580
-     [<000000009ac39b0b>] cifs_mount+0xed1/0x1d00
-     [<00000000d18bac6c>] cifs_smb3_do_mount+0x26e/0x1330
-     [<000000000952c786>] legacy_get_tree+0x101/0x1f0
-     [<00000000f07e0c29>] vfs_get_tree+0x8a/0x2d0
-     [<00000000edbc514a>] do_mount+0xed7/0x16f0
-     [<00000000ee452092>] __x64_sys_mount+0x12c/0x1a0
-     [<00000000a6ccd160>] do_syscall_64+0x56/0xa0
-     [<000000003143088f>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Regards,
-~Paul
-
+-- 
+Hallo
+ 
+ Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
+ 
+ Dies ist Ihr Spendencode: [CJ530342019]
+ 
+ www.youtube.com/watch?v=BSr8myiLPMQ
+ 
+ Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
+ 
+ charlesjacksonjr001@gmail.com
+ 
+ Ich hoffe, dass Sie und Ihre Familie dies durchkommen
+ 
+ 
+ Herr Charles Jackson
