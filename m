@@ -2,68 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EEA20F313
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 12:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A3420F489
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Jun 2020 14:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732581AbgF3Ktf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 30 Jun 2020 06:49:35 -0400
-Received: from smtp3.sd73.bc.ca ([142.24.50.246]:51662 "EHLO smtp3.sd73.bc.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732560AbgF3Ktf (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 30 Jun 2020 06:49:35 -0400
-X-Greylist: delayed 8834 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Jun 2020 06:49:35 EDT
-Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
-        by smtp3.sd73.bc.ca (Postfix) with ESMTP id 94B6465F30;
-        Tue, 30 Jun 2020 00:56:47 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
-        by smtp.sd73.bc.ca (Postfix) with ESMTP id F107CE043F;
-        Tue, 30 Jun 2020 00:56:52 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id ED9EE5C052C833;
-        Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id A8A395C0D3D026;
-        Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
-        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id W6TkJTV1riDR; Tue, 30 Jun 2020 00:50:02 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 71F2C5C0D3D003;
-        Tue, 30 Jun 2020 00:50:01 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 00:50:01 -0700 (PDT)
-From:   charles jackson <lisa.petel@sd73.bc.ca>
-Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
-Message-ID: <661204825.67035383.1593503401310.JavaMail.zimbra@zimbra.sd73.bc.ca>
-Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
+        id S2387421AbgF3MY3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 30 Jun 2020 08:24:29 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:37386 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731651AbgF3MY2 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 30 Jun 2020 08:24:28 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id C0D66490216AAB71B2EA;
+        Tue, 30 Jun 2020 20:24:14 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.106) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 30 Jun 2020
+ 20:24:12 +0800
+Subject: Re: [PATCH] cifs: remove the retry in cifs_poxis_lock_set
+From:   yangerkun <yangerkun@huawei.com>
+To:     <sfrench@samba.org>, <jlayton@kernel.org>, <neilb@suse.de>,
+        <neilb@suse.com>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20200624071053.993784-1-yangerkun@huawei.com>
+Message-ID: <62b291ab-291c-339f-e8e8-ba7b0c4f6670@huawei.com>
+Date:   Tue, 30 Jun 2020 20:24:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.10.10.90]
-X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
-Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
-Thread-Index: KoV8J/hKS9Da5whNS8RrW81Eiw2vSw==
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20200624071053.993784-1-yangerkun@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.106]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Ping...
 
+ÔÚ 2020/6/24 15:10, yangerkun Ð´µÀ:
+> The caller of cifs_posix_lock_set will do retry(like
+> fcntl_setlk64->do_lock_file_wait) if we will wait for any file_lock.
+> So the retry in cifs_poxis_lock_set seems duplicated, remove it to
+> make a cleanup.
+> 
+> Signed-off-by: yangerkun <yangerkun@huawei.com>
+> ---
+>   fs/cifs/file.c | 8 --------
+>   1 file changed, 8 deletions(-)
+> 
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index 9b0f8f33f832..2c9c24b1805d 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -1162,7 +1162,6 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
+>   	if ((flock->fl_flags & FL_POSIX) == 0)
+>   		return rc;
+>   
+> -try_again:
+>   	cifs_down_write(&cinode->lock_sem);
+>   	if (!cinode->can_cache_brlcks) {
+>   		up_write(&cinode->lock_sem);
+> @@ -1171,13 +1170,6 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
+>   
+>   	rc = posix_lock_file(file, flock, NULL);
+>   	up_write(&cinode->lock_sem);
+> -	if (rc == FILE_LOCK_DEFERRED) {
+> -		rc = wait_event_interruptible(flock->fl_wait,
+> -					list_empty(&flock->fl_blocked_member));
+> -		if (!rc)
+> -			goto try_again;
+> -		locks_delete_block(flock);
+> -	}
+>   	return rc;
+>   }
+>   
+> 
 
--- 
-Hallo
- 
- Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
- 
- Dies ist Ihr Spendencode: [CJ530342019]
- 
- www.youtube.com/watch?v=BSr8myiLPMQ
- 
- Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
- 
- charlesjacksonjr001@gmail.com
- 
- Ich hoffe, dass Sie und Ihre Familie dies durchkommen
- 
- 
- Herr Charles Jackson
