@@ -2,90 +2,105 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A42118F2
-	for <lists+linux-cifs@lfdr.de>; Thu,  2 Jul 2020 03:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D796211CA6
+	for <lists+linux-cifs@lfdr.de>; Thu,  2 Jul 2020 09:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728686AbgGBBaC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 1 Jul 2020 21:30:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729152AbgGBB1F (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:27:05 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99CF82083E;
-        Thu,  2 Jul 2020 01:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653225;
-        bh=eFhRPRS1FL4uJ/mBvvcoF15MxKSfnVCWh/qsVZ7Z2Pc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rhVk1JZzds7dg1ZxjA0eCeHZ8ZUqQJiruRPKK4FntgighBs/aL500Pr2XF6ONFTx5
-         D1FVOJ7yZ24WQpLPf2bdA+WPyTMrbU6jGiYJP7ti2lWL6gMULDEmzoNEumkFxy2bpd
-         lHHKedz3Hoy0bYJV7dtw+mi+V2kzyG5RhBqAsSRQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.14 12/17] cifs: update ctime and mtime during truncate
-Date:   Wed,  1 Jul 2020 21:26:44 -0400
-Message-Id: <20200702012649.2701799-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012649.2701799-1-sashal@kernel.org>
-References: <20200702012649.2701799-1-sashal@kernel.org>
+        id S1728062AbgGBHYo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 2 Jul 2020 03:24:44 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:6798 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727938AbgGBHYo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 2 Jul 2020 03:24:44 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id CA90E34D9277EB53D136;
+        Thu,  2 Jul 2020 15:24:39 +0800 (CST)
+Received: from code-website.localdomain (10.175.127.227) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 2 Jul 2020 15:24:34 +0800
+From:   yangerkun <yangerkun@huawei.com>
+To:     <sfrench@samba.org>, <jlayton@kernel.org>, <neilb@suse.de>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
+        <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH v2] cifs: remove the retry in cifs_poxis_lock_set
+Date:   Thu, 2 Jul 2020 15:25:26 +0800
+Message-ID: <20200702072526.1442138-1-yangerkun@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+The caller of cifs_posix_lock_set will do retry(like
+fcntl_setlk64->do_lock_file_wait) if we will wait for any file_lock.
+So the retry in cifs_poxis_lock_set seems duplicated, remove it to
+make a cleanup.
 
-[ Upstream commit 5618303d8516f8ac5ecfe53ee8e8bc9a40eaf066 ]
-
-As the man description of the truncate, if the size changed,
-then the st_ctime and st_mtime fields should be updated. But
-in cifs, we doesn't do it.
-
-It lead the xfstests generic/313 failed.
-
-So, add the ATTR_MTIME|ATTR_CTIME flags on attrs when change
-the file size
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: yangerkun <yangerkun@huawei.com>
 ---
- fs/cifs/inode.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/cifs/file.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index bdce714e94489..b76e733952997 100644
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -2210,6 +2210,15 @@ cifs_set_file_size(struct inode *inode, struct iattr *attrs,
- 	if (rc == 0) {
- 		cifsInode->server_eof = attrs->ia_size;
- 		cifs_setsize(inode, attrs->ia_size);
-+
-+		/*
-+		 * The man page of truncate says if the size changed,
-+		 * then the st_ctime and st_mtime fields for the file
-+		 * are updated.
-+		 */
-+		attrs->ia_ctime = attrs->ia_mtime = current_time(inode);
-+		attrs->ia_valid |= ATTR_CTIME | ATTR_MTIME;
-+
- 		cifs_truncate_page(inode->i_mapping, inode->i_size);
- 	}
+v1->v2:
+check FILE_LOCK_DEFERRED in cifs_setlk
+
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 9b0f8f33f832..be46fab4c96d 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -1149,20 +1149,20 @@ cifs_posix_lock_test(struct file *file, struct file_lock *flock)
  
+ /*
+  * Set the byte-range lock (posix style). Returns:
+- * 1) 0, if we set the lock and don't need to request to the server;
+- * 2) 1, if we need to request to the server;
+- * 3) <0, if the error occurs while setting the lock.
++ * 1) <0, if the error occurs while setting the lock;
++ * 2) 0, if we set the lock and don't need to request to the server;
++ * 3) FILE_LOCK_DEFERRED, if we will wait for some other file_lock;
++ * 4) FILE_LOCK_DEFERRED + 1, if we need to request to the server.
+  */
+ static int
+ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
+ {
+ 	struct cifsInodeInfo *cinode = CIFS_I(file_inode(file));
+-	int rc = 1;
++	int rc = FILE_LOCK_DEFERRED + 1;
+ 
+ 	if ((flock->fl_flags & FL_POSIX) == 0)
+ 		return rc;
+ 
+-try_again:
+ 	cifs_down_write(&cinode->lock_sem);
+ 	if (!cinode->can_cache_brlcks) {
+ 		up_write(&cinode->lock_sem);
+@@ -1171,13 +1171,6 @@ cifs_posix_lock_set(struct file *file, struct file_lock *flock)
+ 
+ 	rc = posix_lock_file(file, flock, NULL);
+ 	up_write(&cinode->lock_sem);
+-	if (rc == FILE_LOCK_DEFERRED) {
+-		rc = wait_event_interruptible(flock->fl_wait,
+-					list_empty(&flock->fl_blocked_member));
+-		if (!rc)
+-			goto try_again;
+-		locks_delete_block(flock);
+-	}
+ 	return rc;
+ }
+ 
+@@ -1652,7 +1645,7 @@ cifs_setlk(struct file *file, struct file_lock *flock, __u32 type,
+ 		int posix_lock_type;
+ 
+ 		rc = cifs_posix_lock_set(file, flock);
+-		if (!rc || rc < 0)
++		if (rc <= FILE_LOCK_DEFERRED)
+ 			return rc;
+ 
+ 		if (type & server->vals->shared_lock_type)
 -- 
-2.25.1
+2.25.4
 
