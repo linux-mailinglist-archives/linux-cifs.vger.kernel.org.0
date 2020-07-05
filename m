@@ -2,54 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C23E921446D
-	for <lists+linux-cifs@lfdr.de>; Sat,  4 Jul 2020 09:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A408E214F43
+	for <lists+linux-cifs@lfdr.de>; Sun,  5 Jul 2020 22:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgGDHAG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 4 Jul 2020 03:00:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725911AbgGDHAF (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 4 Jul 2020 03:00:05 -0400
-Subject: Re: [GIT PULL] CIFS/SMB3 Fixes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593846004;
-        bh=JU6oMLsD4thV78kG8vdHo6EkLdJMAgd2zBvlSnSWlB4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=giGAaj02aooTPwzwwAmUFVRiH3F08zII6ZOSCZHV/8FgXFIlQLcrYuhZdKk4cZZbA
-         Pb7MXwIpkQ4uOZmYtk7+RBl4mIMt0TXdYpS/yNNRjAVbkDngQTuv0LQcVvjRozorWo
-         w0dHBtr3IoFhJsmyUQB7xTE0MN4G1KMtIU24yO4k=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5msVSYHHt5y9eCrXJCBiNJEmpkVEF+iHuqTfsM9vQxw+5Q@mail.gmail.com>
-References: <CAH2r5msVSYHHt5y9eCrXJCBiNJEmpkVEF+iHuqTfsM9vQxw+5Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5msVSYHHt5y9eCrXJCBiNJEmpkVEF+iHuqTfsM9vQxw+5Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git
- tags/5.8-rc3-smb3-fixes
-X-PR-Tracked-Commit-Id: 19e888678bac8c82206eb915eaf72741b2a2615c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b8e516b36748fd87943e54596a8a6f04ec05f1a5
-Message-Id: <159384600472.10337.14762338179794796167.pr-tracker-bot@kernel.org>
-Date:   Sat, 04 Jul 2020 07:00:04 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        id S1728264AbgGEUZH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 5 Jul 2020 16:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728262AbgGEUZH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 5 Jul 2020 16:25:07 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F3AC061794;
+        Sun,  5 Jul 2020 13:25:07 -0700 (PDT)
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 309A42E4;
+        Sun,  5 Jul 2020 20:25:07 +0000 (UTC)
+Date:   Sun, 5 Jul 2020 14:25:06 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: CIFS
+Message-ID: <20200705142506.1f26a7e0@lwn.net>
+In-Reply-To: <20200627103125.71828-1-grandmaster@al2klimov.de>
+References: <20200627103125.71828-1-grandmaster@al2klimov.de>
+Organization: LWN.net
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Fri, 3 Jul 2020 22:44:08 -0500:
+On Sat, 27 Jun 2020 12:31:25 +0200
+"Alexander A. Klimov" <grandmaster@al2klimov.de> wrote:
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.8-rc3-smb3-fixes
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+>           If both the HTTP and HTTPS versions
+>           return 200 OK and serve the same content:
+>             Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b8e516b36748fd87943e54596a8a6f04ec05f1a5
+Applied but...
 
-Thank you!
+> ---
+>  If there are any URLs to be removed completely or at least not HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also https://lkml.org/lkml/2020/6/27/64
+> 
+>  If there are any valid, but yet not changed URLs:
+>  See https://lkml.org/lkml/2020/6/26/837
+> 
+>  Documentation/admin-guide/cifs/todo.rst            | 2 +-
+>  Documentation/admin-guide/cifs/usage.rst           | 6 +++---
+>  Documentation/admin-guide/cifs/winucase_convert.pl | 2 +-
+>  fs/cifs/cifsacl.c                                  | 4 ++--
+>  fs/cifs/cifsglob.h                                 | 2 +-
+>  fs/cifs/winucase.c                                 | 2 +-
+>  6 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/cifs/todo.rst b/Documentation/admin-guide/cifs/todo.rst
+> index 084c25f92dcb..25f11576e7b9 100644
+> --- a/Documentation/admin-guide/cifs/todo.rst
+> +++ b/Documentation/admin-guide/cifs/todo.rst
+> @@ -98,7 +98,7 @@ x) Finish support for SMB3.1.1 compression
+>  Known Bugs
+>  ==========
+>  
+> -See http://bugzilla.samba.org - search on product "CifsVFS" for
+> +See https://bugzilla.samba.org - search on product "CifsVFS" for
+>  current bug list.  Also check http://bugzilla.kernel.org (Product = File System, Component = CIFS)
+>  
+>  1) existing symbolic links (Windows reparse points) are recognized but
+> diff --git a/Documentation/admin-guide/cifs/usage.rst b/Documentation/admin-guide/cifs/usage.rst
+> index d3fb67b8a976..4abaea40dfd1 100644
+> --- a/Documentation/admin-guide/cifs/usage.rst
+> +++ b/Documentation/admin-guide/cifs/usage.rst
+> @@ -17,7 +17,7 @@ standard for interoperating between Macs and Windows and major NAS appliances.
+>  Please see
+>  MS-SMB2 (for detailed SMB2/SMB3/SMB3.1.1 protocol specification)
+>  http://protocolfreedom.org/ and
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+...it only took a cursory check to see that this is a spam site.  A patch
+that claims to improve security should surely take something like that
+out.  I guess I'll add a patch doing that now...
+
+jon
