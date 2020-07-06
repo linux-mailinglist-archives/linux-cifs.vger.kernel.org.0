@@ -2,40 +2,40 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF8C215ABE
-	for <lists+linux-cifs@lfdr.de>; Mon,  6 Jul 2020 17:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8559215AC2
+	for <lists+linux-cifs@lfdr.de>; Mon,  6 Jul 2020 17:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729358AbgGFPcD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 6 Jul 2020 11:32:03 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:53948 "EHLO mx.cjr.nz"
+        id S1729248AbgGFPcF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 6 Jul 2020 11:32:05 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:53966 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729321AbgGFPcD (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 6 Jul 2020 11:32:03 -0400
+        id S1729197AbgGFPcF (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 6 Jul 2020 11:32:05 -0400
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 5E70D804BE;
-        Mon,  6 Jul 2020 15:25:22 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 68B87804BF;
+        Mon,  6 Jul 2020 15:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1594049123;
+        t=1594049125;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=waqq5/ckPrWXM1SXWctkzMZsUpMVCr9UI4qSGCUm0F8=;
-        b=D/B8WsXu6vyv8E10EeNT1nu8Udc2R8YJcjzl3jfAuq0AqzPfLgxqb1XK7RG567/Fl3E/Zo
-        2u7/jmBs+fDquI5JEUqiNj+V0Z/eNBwWB6Yk38dOa91gCNvIyhIFGmPIZx+jPVLHfF2CPB
-        X6yjjyG02Rl6FZ8Xh4QQDtnVyOatl26edNXmpcUO1fFrw2eMK8xpZ87iooLOCua/jMJQmH
-        /6qJ6m+lUAQj1wPD9POJlUuol08N8k1+j+KuPh/rr5EeUdKQbTVsVQz+8LpGCdGFivx60q
-        UOKL7bAWjyJckQw262VoY4HBsJ3TQ9Viactoozg15di9BGHVa3RZrY7yCaW6Pg==
+        bh=e3D52vmquxgLRJCDQl8eEKkTpQPdfBg9ZA11l30YxvQ=;
+        b=qwUAQAtGMoDH8bw5TO5PdJk7pfalKd/JvBXoyUaTCF6QobiPawSbXb2e5yWTrWbdC4Pk42
+        K2MEu32JSNAVYPuYTAwiXvTIbuoPw7/tyM4ZaTs3RKmEnKG99hHRs4LmXpogtEvx9QE9J5
+        530b1saNgX3L3F+vI+QtfjYdAnxvsWN8OlrxopoRWAtYaM1DPdCL/M+tnF62KD+4btoeIu
+        Oedaq4Hvrgvq+Ox13iVKmKwk6AT6rgn+PgGxy8kbPBHOHNqUOuSBT4RnmbWSTPD55Nqjz3
+        H3qz+D31F+h3ZjiZe7YK9fxOfn4mqi/pX0tXHQE0IfHvjZZLH42lTo6aUIj9Hg==
 From:   Paulo Alcantara <pc@cjr.nz>
 To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
 Cc:     Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH 3/7] cifs: rename reconn_inval_dfs_target()
-Date:   Mon,  6 Jul 2020 12:23:58 -0300
-Message-Id: <20200706152402.5721-4-pc@cjr.nz>
+Subject: [PATCH 4/7] cifs: handle empty list of targets in cifs_reconnect()
+Date:   Mon,  6 Jul 2020 12:23:59 -0300
+Message-Id: <20200706152402.5721-5-pc@cjr.nz>
 In-Reply-To: <20200706152402.5721-1-pc@cjr.nz>
 References: <20200706152402.5721-1-pc@cjr.nz>
 MIME-Version: 1.0
@@ -45,51 +45,38 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This function has nothing to do with *invalidation* but setting up the
-next target server from a cached referral.
-
-Rename it to reconn_set_next_dfs_target().  While at it, get rid of
-some meaningless checks.
+In case there were no cached DFS referrals in
+reconn_setup_dfs_targets(), set cifs_sb to NULL prior to calling
+reconn_set_next_dfs_target() so it would not try to access an empty
+tgt_list.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 ---
- fs/cifs/connect.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ fs/cifs/connect.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 5c3c65265478..b90ee86c0523 100644
+index b90ee86c0523..721ef2a53f65 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -393,15 +393,14 @@ static inline int reconn_set_ipaddr(struct TCP_Server_Info *server)
- 
- #ifdef CONFIG_CIFS_DFS_UPCALL
- /* These functions must be called with server->srv_mutex held */
--static void reconn_inval_dfs_target(struct TCP_Server_Info *server,
--				    struct cifs_sb_info *cifs_sb,
--				    struct dfs_cache_tgt_list *tgt_list,
--				    struct dfs_cache_tgt_iterator **tgt_it)
-+static void reconn_set_next_dfs_target(struct TCP_Server_Info *server,
-+				       struct cifs_sb_info *cifs_sb,
-+				       struct dfs_cache_tgt_list *tgt_list,
-+				       struct dfs_cache_tgt_iterator **tgt_it)
- {
- 	const char *name;
- 
--	if (!cifs_sb || !cifs_sb->origin_fullpath || !tgt_list ||
--	    !server->nr_targets)
-+	if (!cifs_sb || !cifs_sb->origin_fullpath)
- 		return;
- 
- 	if (!*tgt_it) {
-@@ -578,7 +577,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
- 		 * feature is disabled, then we will retry last server we
- 		 * connected to before.
- 		 */
--		reconn_inval_dfs_target(server, cifs_sb, &tgt_list, &tgt_it);
-+		reconn_set_next_dfs_target(server, cifs_sb, &tgt_list, &tgt_it);
- #endif
- 		rc = reconn_set_ipaddr(server);
- 		if (rc) {
+@@ -470,11 +470,13 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 		sb = NULL;
+ 	} else {
+ 		cifs_sb = CIFS_SB(sb);
+-
+ 		rc = reconn_setup_dfs_targets(cifs_sb, &tgt_list);
+-		if (rc && (rc != -EOPNOTSUPP)) {
+-			cifs_server_dbg(VFS, "%s: no target servers for DFS failover\n",
+-				 __func__);
++		if (rc) {
++			cifs_sb = NULL;
++			if (rc != -EOPNOTSUPP) {
++				cifs_server_dbg(VFS, "%s: no target servers for DFS failover\n",
++						__func__);
++			}
+ 		} else {
+ 			server->nr_targets = dfs_cache_get_nr_tgts(&tgt_list);
+ 		}
 -- 
 2.27.0
 
