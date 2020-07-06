@@ -2,53 +2,72 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6242E215401
-	for <lists+linux-cifs@lfdr.de>; Mon,  6 Jul 2020 10:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF19215AC0
+	for <lists+linux-cifs@lfdr.de>; Mon,  6 Jul 2020 17:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727989AbgGFIaa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 6 Jul 2020 04:30:30 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37016 "EHLO mx2.suse.de"
+        id S1729293AbgGFPcF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 6 Jul 2020 11:32:05 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:53956 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726969AbgGFIaa (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 6 Jul 2020 04:30:30 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8E848AD79;
-        Mon,  6 Jul 2020 08:30:29 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Paul Aurich <paul@darkrain42.org>, linux-cifs@vger.kernel.org,
-        sfrench@samba.org
-Cc:     paul@darkrain42.org, Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: Re: [PATCH v3] cifs: Fix leak when handling lease break for cached
- root fid
-In-Reply-To: <20200702164411.108672-1-paul@darkrain42.org>
-References: <20200702164411.108672-1-paul@darkrain42.org>
-Date:   Mon, 06 Jul 2020 10:30:27 +0200
-Message-ID: <878sfx6o64.fsf@suse.com>
+        id S1729338AbgGFPcE (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 6 Jul 2020 11:32:04 -0400
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id E7F257FD17;
+        Mon,  6 Jul 2020 15:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1594049117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eYQUqfplavCO+pt7bDbBchbTrXNTFqMKgthQFMAyF5Q=;
+        b=DY8jhhfjzY4zpF7izWsTV8Dy/05wXUIBJQZrvhWugUgyyFz9/TnDWZHB5LBJ6Cyn0Bbdex
+        AEFOclpt9GWKr5yBo062VLrd7ylnI/frZvdOXjLsn4ATjEIF7c5V5Cj4yh+AsNC3mzFXUj
+        wGYLXH27TD7CpDPSzWj4r90dFsJWri1Lb4kEF9vhT+g5bd4kzfmGD6VK4YOadHRrD9qEX2
+        V5PfyvB5L2yuY9A7aHjuSmhz0SKoGLzVk27WEkFSoRGU3NxweIkX/hV4RNetIfzH8Qzosc
+        +iteDO3+oe5vAqK/gaqtAJzlP2wz5kVe4YFvPO7YGZJ5nc8L7TznshnJKG9YBA==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
+Cc:     Paulo Alcantara <pc@cjr.nz>
+Subject: [PATCH 0/7] DFS fixes
+Date:   Mon,  6 Jul 2020 12:23:55 -0300
+Message-Id: <20200706152402.5721-1-pc@cjr.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Paul Aurich <paul@darkrain42.org> writes:
-> Changes since v2:
->    - address sparse lock warnings by inlining smb2_tcon_has_lease and
->      hardcoding some return values (seems to help sparse's analysis)
+Hi Steve,
 
-Ah, I think the issue is not the inlining but rather you need to
-instruct sparse that smb2_tcon_hash_lease is expected to release the
-lock.
+Follow some fixes, cleanups and documentation for DFS.
 
-https://www.kernel.org/doc/html/v4.12/dev-tools/sparse.html#using-sparse-for-lock-checking
+All DFS failover tests passed with this series in our local buildbot.
 
-Probably with __releases somewhere in the func prototype.
+Paulo Alcantara (6):
+  cifs: reduce number of referral requests in DFS link lookups
+  cifs: rename reconn_inval_dfs_target()
+  cifs: handle empty list of targets in cifs_reconnect()
+  cifs: handle RESP_GET_DFS_REFERRAL.PathConsumed in reconnect
+  cifs: only update prefix path of DFS links in cifs_tree_connect()
+  cifs: document and cleanup dfs mount
 
-Cheers,
+Stefan Metzmacher (1):
+  cifs: merge __{cifs,smb2}_reconnect[_tcon]() into cifs_tree_connect()
+
+ fs/cifs/cifsproto.h |   6 +-
+ fs/cifs/cifssmb.c   | 112 +---------
+ fs/cifs/connect.c   | 504 ++++++++++++++++++++++++++------------------
+ fs/cifs/dfs_cache.c | 136 +++++++++---
+ fs/cifs/dfs_cache.h |   7 +-
+ fs/cifs/misc.c      |   7 +-
+ fs/cifs/smb2pdu.c   | 113 +---------
+ 7 files changed, 428 insertions(+), 457 deletions(-)
+
 -- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+2.27.0
+
