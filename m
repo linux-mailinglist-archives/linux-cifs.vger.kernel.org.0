@@ -2,86 +2,41 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF9E219E13
-	for <lists+linux-cifs@lfdr.de>; Thu,  9 Jul 2020 12:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0797A219F02
+	for <lists+linux-cifs@lfdr.de>; Thu,  9 Jul 2020 13:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbgGIKkB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 9 Jul 2020 06:40:01 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50863 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726315AbgGIKkB (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 9 Jul 2020 06:40:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594291200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=iEge0bD9npePtmFhMcLKrZH6hVoCxkvDiPfFNlXYDHc=;
-        b=LaHKFDlkSQ/y/svNks6OFQ+hg77Jho4Pj+nWlqN/VRaAIqCCiqVpkeFnu27JzfnunSNlD4
-        TRIpsIBJjc5d7daTaE7KfRLkEb0Qdd4iXKvkKmLYBS51IygkftwD/ebKkmOM8Fq1Kv1u2w
-        6KEnFrb+rTQxZpaMNDuU0YgOMnx5jzU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-146-w8vZH5NSNQCjMjZE_p4TXA-1; Thu, 09 Jul 2020 06:39:58 -0400
-X-MC-Unique: w8vZH5NSNQCjMjZE_p4TXA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2487788C7A3
-        for <linux-cifs@vger.kernel.org>; Thu,  9 Jul 2020 10:39:58 +0000 (UTC)
-Received: from test1103.test.redhat.com (vpn2-54-135.bne.redhat.com [10.64.54.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ACC0A1001925;
-        Thu,  9 Jul 2020 10:39:57 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
+        id S1726975AbgGILWL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 9 Jul 2020 07:22:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49822 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726315AbgGILWK (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 9 Jul 2020 07:22:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 4D7F6AE54;
+        Thu,  9 Jul 2020 11:22:09 +0000 (UTC)
+From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
+To:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] cifs: fix reference leak for tlink
-Date:   Thu,  9 Jul 2020 20:39:49 +1000
-Message-Id: <20200709103949.29944-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Subject: Re: [PATCH] cifs: fix reference leak for tlink
+In-Reply-To: <20200709103949.29944-1-lsahlber@redhat.com>
+References: <20200709103949.29944-1-lsahlber@redhat.com>
+Date:   Thu, 09 Jul 2020 13:22:06 +0200
+Message-ID: <87lfjt53xd.fsf@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Don't leak a reference to tlink during the NOTIFY ioctl
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/ioctl.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 
-diff --git a/fs/cifs/ioctl.c b/fs/cifs/ioctl.c
-index 4a73e63c4d43..dcde44ff6cf9 100644
---- a/fs/cifs/ioctl.c
-+++ b/fs/cifs/ioctl.c
-@@ -169,6 +169,7 @@ long cifs_ioctl(struct file *filep, unsigned int command, unsigned long arg)
- 	unsigned int xid;
- 	struct cifsFileInfo *pSMBFile = filep->private_data;
- 	struct cifs_tcon *tcon;
-+	struct tcon_link *tlink;
- 	struct cifs_sb_info *cifs_sb;
- 	__u64	ExtAttrBits = 0;
- 	__u64   caps;
-@@ -307,13 +308,19 @@ long cifs_ioctl(struct file *filep, unsigned int command, unsigned long arg)
- 				break;
- 			}
- 			cifs_sb = CIFS_SB(inode->i_sb);
--			tcon = tlink_tcon(cifs_sb_tlink(cifs_sb));
-+			tlink = cifs_sb_tlink(cifs_sb);
-+			if (IS_ERR(tlink)) {
-+				rc = PTR_ERR(tlink);
-+				break;
-+			}
-+			tcon = tlink_tcon(tlink);
- 			if (tcon && tcon->ses->server->ops->notify) {
- 				rc = tcon->ses->server->ops->notify(xid,
- 						filep, (void __user *)arg);
- 				cifs_dbg(FYI, "ioctl notify rc %d\n", rc);
- 			} else
- 				rc = -EOPNOTSUPP;
-+			cifs_put_tlink(tlink);
- 			break;
- 		default:
- 			cifs_dbg(FYI, "unsupported ioctl\n");
 -- 
-2.13.6
-
+Aurélien Aptel / SUSE Labs Samba Team
+GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
