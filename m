@@ -2,85 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76477221A52
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jul 2020 04:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1EF221C04
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jul 2020 07:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgGPCuf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 15 Jul 2020 22:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S1725921AbgGPFkn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jul 2020 01:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbgGPCuf (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 15 Jul 2020 22:50:35 -0400
-X-Greylist: delayed 2101 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jul 2020 19:50:35 PDT
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2394BC061755
-        for <linux-cifs@vger.kernel.org>; Wed, 15 Jul 2020 19:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=KU5gfwd1mOi+mYHsGZlB/3HXIY5DD454pDU+wM2bdwI=; b=Q/jYdPkyH61b8yi51BXVNLWgJg
-        Afcw6i3wNkEBeaXDkzYfmhYXQ/FXsLMwOAzReytZAiomp90uy5496jeNE9jJuRi8tES7yPFSS87Pz
-        azqL09zCJol4ti1MWU3lg86XbiGEomvybLiokvID93ZavHKP1sFceXrl6VlD7BKpoTM/hAH4rRG4f
-        lCq/sV1FekjL/pic27JAkoMM/k6uIKYKa2kF/n25j+HW/1Th1m06Dv0ftzQfrFqshhoJJ5lZL4+xT
-        0XQmH9J1NDTzGJ6egppVLPNTEjL2y1HBpqQ4ewP9oD8T+K881gnZ2SzHQJER8zC/TIxzHd1xWTg0I
-        lEraYdbfw/NTtGIk+9pMWfXcaidkdMQ4yMJptoOyluhX/PdFkaH1PZ17bE5gYbhzn7IACr6E1VPVY
-        8IP0mzLFJYFr6PzYWsEpKTgTqX7LS6smpph+Ws2c64z0JFB6QaCAk/6WKafkPw8IKP2cM2vnVomdX
-        GfWMBwz2u67CiMdDKU0xyNc7;
-Received: from [2a01:4f8:192:486::6:0] (port=40066 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1jvtQp-0002Sp-Nz
-        for cifs-qa@samba.org; Thu, 16 Jul 2020 02:15:32 +0000
-Received: from [::1] (port=26020 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1jvtQm-006NbL-Bs
-        for cifs-qa@samba.org; Thu, 16 Jul 2020 02:15:28 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 7699] Linux client slow against samba server compared to
- Windows 7
-Date:   Thu, 16 Jul 2020 02:15:27 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.6
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: jlayton@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-7699-10630-Kxh5vuBrHX@https.bugzilla.samba.org/>
-In-Reply-To: <bug-7699-10630@https.bugzilla.samba.org/>
-References: <bug-7699-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1725844AbgGPFkn (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jul 2020 01:40:43 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9BCC061755
+        for <linux-cifs@vger.kernel.org>; Wed, 15 Jul 2020 22:40:43 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y17so2261202ybm.12
+        for <linux-cifs@vger.kernel.org>; Wed, 15 Jul 2020 22:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=oTFmU6rH05c0yc/EFCCNRAx1y5jjOSqu8GlE/6Ao2Ew=;
+        b=YXof61MmqwSd7EINqsROPksbO5ZnsvPgn3EieoA2jADXI1hlk78b0gWcmx7A9r6M64
+         cDcatIgXSzWmPrhbmK9YbVfYKJ0EhkdoPscxiaK5+1l0oxOGjbmiUgFm93v6NyabeNLD
+         n0ApR62CR5OY65gaYO7CyraRCs7kwu+YKyqO7VWvL9IG5q9J/Y1qdgEFnWyPP/hqC9L1
+         AP+jBA3cnpLM+PKH3EGhU/4+em9kfJ6/m7zjYXH1n5ZrWV5lCxXShVBDAL96hlj1Xzpq
+         hWhh6/fLAm2XGXhbWxZ4Pm7qeAKwuE26SPZQPcLRskuwgXxwOFpn3iMGiHVlwvmA21/O
+         Z9gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=oTFmU6rH05c0yc/EFCCNRAx1y5jjOSqu8GlE/6Ao2Ew=;
+        b=A6g4IJE9qamczwhTE35vSbJrfhr2IUvngkmLMMCq5ha+o9AOPsDSqzDjilxIRG34vz
+         tvditTroCNhyAevhy9TlxMv9UQ4ElFF7I9S6Tt5MElS4iHoETzBjnAfA76JJo23Jr9ua
+         Lk1dL1X5TVSyBlgoWjzvJ2ojo0H3cd9BinZ3qEiEYOv7fb9WUH++zfoida5FFfUm1Vfg
+         tTx/4iJAhBOnvO/ZeYf656UoMK34X+7JwWfAZq2Ecp3wbaU6mkWs+2us+XU83lyA1jNa
+         cEJOv3e1ODyDBCyi7oR9385Hfp5HSm9H75ot9t1/slEr49B0DdR2E340QW1nhQpScyBI
+         39/Q==
+X-Gm-Message-State: AOAM532z2QtN/Lol9XzdXcxs17PldRITp1qCtArIhJSki8zi+HmiRdJ7
+        35yV/PJq7xhmr+61Ele7I1Wenvqu2uCA4OPuuulnrk+MKjI=
+X-Google-Smtp-Source: ABdhPJwbHlkTVA97LK55eN+rZq5zp69gOcgEs0q9mFWpfdl0UKe9tUFdJOJHz0Y/1iECjhEUpsKKws+qtnFUJlMOlmU=
+X-Received: by 2002:a5b:808:: with SMTP id x8mr3814737ybp.375.1594878042086;
+ Wed, 15 Jul 2020 22:40:42 -0700 (PDT)
 MIME-Version: 1.0
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 16 Jul 2020 00:40:31 -0500
+Message-ID: <CAH2r5mvKTwGa0W_LcfgNwNQ6QY=pXSBkURV7MtnDz-hfArPTcQ@mail.gmail.com>
+Subject: [PATCH][SMB3] warn on confusing error scenario with sec=krb5
+To:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D7699
+    When mounting with Kerberos, users have been confused about the
+    default error returned in scenarios in which either keyutils is
+    not installed or the user did not properly acquire a krb5 ticket.
+    Log a warning message in the case that "ENOKEY" is returned
+    from the get_spnego_key upcall so that users can better understand
+    why mount failed in those two cases.
 
-Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
+    CC: Stable <stable@vger.kernel.org>
+    Signed-off-by: Steve French <stfrench@microsoft.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 2f4cdd290c46..492688764004 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -1387,6 +1387,8 @@ SMB2_auth_kerberos(struct SMB2_sess_data *sess_data)
+        spnego_key = cifs_get_spnego_key(ses);
+        if (IS_ERR(spnego_key)) {
+                rc = PTR_ERR(spnego_key);
++               if (rc == -ENOKEY)
++                       cifs_dbg(VFS, "Verify user has a krb5 ticket
+and keyutils is installed\n");
+                spnego_key = NULL;
+                goto out;
+        }
 
---- Comment #13 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
-with recent kernels and smb3 the performance is much better
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+-- 
+Thanks,
+
+Steve
