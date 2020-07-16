@@ -2,85 +2,94 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1EF221C04
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jul 2020 07:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E2F222A6C
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jul 2020 19:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725921AbgGPFkn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Jul 2020 01:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S1728257AbgGPRuR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jul 2020 13:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbgGPFkn (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jul 2020 01:40:43 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9BCC061755
-        for <linux-cifs@vger.kernel.org>; Wed, 15 Jul 2020 22:40:43 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y17so2261202ybm.12
-        for <linux-cifs@vger.kernel.org>; Wed, 15 Jul 2020 22:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=oTFmU6rH05c0yc/EFCCNRAx1y5jjOSqu8GlE/6Ao2Ew=;
-        b=YXof61MmqwSd7EINqsROPksbO5ZnsvPgn3EieoA2jADXI1hlk78b0gWcmx7A9r6M64
-         cDcatIgXSzWmPrhbmK9YbVfYKJ0EhkdoPscxiaK5+1l0oxOGjbmiUgFm93v6NyabeNLD
-         n0ApR62CR5OY65gaYO7CyraRCs7kwu+YKyqO7VWvL9IG5q9J/Y1qdgEFnWyPP/hqC9L1
-         AP+jBA3cnpLM+PKH3EGhU/4+em9kfJ6/m7zjYXH1n5ZrWV5lCxXShVBDAL96hlj1Xzpq
-         hWhh6/fLAm2XGXhbWxZ4Pm7qeAKwuE26SPZQPcLRskuwgXxwOFpn3iMGiHVlwvmA21/O
-         Z9gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=oTFmU6rH05c0yc/EFCCNRAx1y5jjOSqu8GlE/6Ao2Ew=;
-        b=A6g4IJE9qamczwhTE35vSbJrfhr2IUvngkmLMMCq5ha+o9AOPsDSqzDjilxIRG34vz
-         tvditTroCNhyAevhy9TlxMv9UQ4ElFF7I9S6Tt5MElS4iHoETzBjnAfA76JJo23Jr9ua
-         Lk1dL1X5TVSyBlgoWjzvJ2ojo0H3cd9BinZ3qEiEYOv7fb9WUH++zfoida5FFfUm1Vfg
-         tTx/4iJAhBOnvO/ZeYf656UoMK34X+7JwWfAZq2Ecp3wbaU6mkWs+2us+XU83lyA1jNa
-         cEJOv3e1ODyDBCyi7oR9385Hfp5HSm9H75ot9t1/slEr49B0DdR2E340QW1nhQpScyBI
-         39/Q==
-X-Gm-Message-State: AOAM532z2QtN/Lol9XzdXcxs17PldRITp1qCtArIhJSki8zi+HmiRdJ7
-        35yV/PJq7xhmr+61Ele7I1Wenvqu2uCA4OPuuulnrk+MKjI=
-X-Google-Smtp-Source: ABdhPJwbHlkTVA97LK55eN+rZq5zp69gOcgEs0q9mFWpfdl0UKe9tUFdJOJHz0Y/1iECjhEUpsKKws+qtnFUJlMOlmU=
-X-Received: by 2002:a5b:808:: with SMTP id x8mr3814737ybp.375.1594878042086;
- Wed, 15 Jul 2020 22:40:42 -0700 (PDT)
-MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 16 Jul 2020 00:40:31 -0500
-Message-ID: <CAH2r5mvKTwGa0W_LcfgNwNQ6QY=pXSBkURV7MtnDz-hfArPTcQ@mail.gmail.com>
-Subject: [PATCH][SMB3] warn on confusing error scenario with sec=krb5
-To:     CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
+        with ESMTP id S1725867AbgGPRuQ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jul 2020 13:50:16 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0866BC061755
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Jul 2020 10:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=aUl/qN8mb4yuArHX+zrn35/3U1G+f0yMtutFKCr+k1w=; b=V4cGIBRwPB+FXOSefr9RwOAuxF
+        kG4W4YElg8ciHDTD/TDNpyQsKLeETTqXLGRbvIYGeQzk/MYtbUMk76bzXcediPgzlxLsQ4Ehe+unD
+        qGKs2VCa9sczCiY7dF6w0Ta085l2avbuVHFGHbTQwErB7wRnzXc5u+2IcC03ISAO/7vH0xU5HqVaW
+        4gF+2UcoEiNiCziugI1QIYFMFMu+rjhI+mTarFDB7lNs7tpnU+/gz+DD01KC1Xd3giyUKtcu//5G7
+        en8+tfvsUjzUtIdj3GtnK7Wy0DMUb1avv6pKAEgKvhy3tLuOtPBTfwREnWWzHKuBBT2zXcy6c8v/X
+        xIOXBeyAtNR6dDZD4O56ogb6MK68a13hq6dyK7HsWxsHm2+/FZaq7mKhgZ/fjMuNwww493mGaf0GM
+        QFEuqHZVaB1kGRC0qdmJv4ffv1SHBoiM/QFu4M0nTx+ps3/bw2di23DLw9eywNlEXlG3LRjuIBcVy
+        OgQX+JSjd+3IoHYK8liqs0FB;
+Received: from [2a01:4f8:192:486::6:0] (port=40324 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1jw81N-0002X7-7k
+        for cifs-qa@samba.org; Thu, 16 Jul 2020 17:50:13 +0000
+Received: from [::1] (port=26282 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1jw81M-006OYz-T7
+        for cifs-qa@samba.org; Thu, 16 Jul 2020 17:50:13 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14442] New: Shell command injection vulnerability in mount.cifs
+Date:   Thu, 16 Jul 2020 17:50:10 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.4
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: vadim@mbdsys.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone
+Message-ID: <bug-14442-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-    When mounting with Kerberos, users have been confused about the
-    default error returned in scenarios in which either keyutils is
-    not installed or the user did not properly acquire a krb5 ticket.
-    Log a warning message in the case that "ENOKEY" is returned
-    from the get_spnego_key upcall so that users can better understand
-    why mount failed in those two cases.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14442
 
-    CC: Stable <stable@vger.kernel.org>
-    Signed-off-by: Steve French <stfrench@microsoft.com>
+            Bug ID: 14442
+           Summary: Shell command injection vulnerability in mount.cifs
+           Product: CifsVFS
+           Version: 2.4
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: kernel fs
+          Assignee: sfrench@samba.org
+          Reporter: vadim@mbdsys.com
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 2f4cdd290c46..492688764004 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -1387,6 +1387,8 @@ SMB2_auth_kerberos(struct SMB2_sess_data *sess_data)
-        spnego_key = cifs_get_spnego_key(ses);
-        if (IS_ERR(spnego_key)) {
-                rc = PTR_ERR(spnego_key);
-+               if (rc == -ENOKEY)
-+                       cifs_dbg(VFS, "Verify user has a krb5 ticket
-and keyutils is installed\n");
-                spnego_key = NULL;
-                goto out;
-        }
+mount.cifs command is using "popen" library call in get_password=20
+which allows for shell command execution.=20
+Example:
 
+sudo /bin/mount -t cifs -o username=3D"test \$(id)" //1 /mnt
 
--- 
-Thanks,
-
-Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
