@@ -2,93 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028CF224BB2
-	for <lists+linux-cifs@lfdr.de>; Sat, 18 Jul 2020 16:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D554F224E87
+	for <lists+linux-cifs@lfdr.de>; Sun, 19 Jul 2020 03:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgGROOW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 18 Jul 2020 10:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S1726359AbgGSBpE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 18 Jul 2020 21:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbgGROOW (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 18 Jul 2020 10:14:22 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1512BC0619D2
-        for <linux-cifs@vger.kernel.org>; Sat, 18 Jul 2020 07:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=X2UI1roGY5hu3zGrDsEwfDoDliQP/p3MAYn8cS627Jo=; b=m+XkyU38E2VwX7mTbYHiPhwVyz
-        egYjKQd5n5JSOye7w4UPmEEYVVOJrXp/apfVw3vOC8h0LcCthEDYbfKrQWShVUESP7iQGKbSJHtWB
-        7BsGQqw3TZePUh8MKwZZCJm8t8G8bdWzpO/6btlUixu/uqTUt9FLV892iA/grER06Q0Asbh7mzgZH
-        qaDhqf0W9PHD89LAXTBKuCd80Ea2BHn/1hV8jnfGr1QAHgqbkglJrUFKh039PKzp2QSD4DDltxlla
-        a42I46sHF6P927a2wueA5p2eJJ6SK9vF74pdhdAZEXN4OZGKYBuH9w9jPz0nlbA5oAMLFwQo+EcQt
-        sDZxJebY1gGvsMo0jt3ZA2sIOHcDe9Howthh0Hh4B1VBWd5FqD5FXX+mqk2W5r8DJpij8/9Ob4KUG
-        UbVmMD9vSY6NRlASCdzxHMniiGd5FYuRahKOvWrYzjQX8OV8J3NDH9+Yh65X8oewn2wSqMIGfPDeQ
-        F/r9KUctt/Wz0VYksrvhfxKd;
-Received: from [2a01:4f8:192:486::6:0] (port=41128 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1jwnbX-0003Dk-4k
-        for cifs-qa@samba.org; Sat, 18 Jul 2020 14:14:19 +0000
-Received: from [::1] (port=27084 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1jwnbW-006Ywl-Pw
-        for cifs-qa@samba.org; Sat, 18 Jul 2020 14:14:18 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14442] Shell command injection vulnerability in mount.cifs
-Date:   Sat, 18 Jul 2020 14:14:18 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.4
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: vadim@mbdsys.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14442-10630-kdBBebwLE5@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14442-10630@https.bugzilla.samba.org/>
-References: <bug-14442-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1726256AbgGSBpE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 18 Jul 2020 21:45:04 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B80C0619D2;
+        Sat, 18 Jul 2020 18:45:04 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwyNY-00FOFG-MQ; Sun, 19 Jul 2020 01:44:36 +0000
+Date:   Sun, 19 Jul 2020 02:44:36 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@redhat.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/32] iov_iter: Add ITER_MAPPING
+Message-ID: <20200719014436.GG2786714@ZenIV.linux.org.uk>
+References: <159465784033.1376674.18106463693989811037.stgit@warthog.procyon.org.uk>
+ <159465785214.1376674.6062549291411362531.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159465785214.1376674.6062549291411362531.stgit@warthog.procyon.org.uk>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14442
+On Mon, Jul 13, 2020 at 05:30:52PM +0100, David Howells wrote:
+> Add an iterator, ITER_MAPPING, that walks through a set of pages attached
+> to an address_space, starting at a given page and offset and walking for
+> the specified amount of bytes.
+> 
+> The caller must guarantee that the pages are all present and they must be
+> locked using PG_locked, PG_writeback or PG_fscache to prevent them from
+> going away or being migrated whilst they're being accessed.
+> 
+> This is useful for copying data from socket buffers to inodes in network
+> filesystems and for transferring data between those inodes and the cache
+> using direct I/O.
+> 
+> Whilst it is true that ITER_BVEC could be used instead, that would require
+> a bio_vec array to be allocated to refer to all the pages - which should be
+> redundant if inode->i_pages also points to all these pages.
+> 
+> This could also be turned into an ITER_XARRAY, taking and xarray pointer
+> instead of a mapping pointer.  It would be mostly trivial, except for the
+> use of find_get_pages_contig() by iov_iter_get_pages*().
+> 
 
---- Comment #6 from Vadim Lebedev <vadim@mbdsys.com> ---
-(In reply to Lancelot Bogard from comment #3)
-I confirm, even if systemd-ask-password is shell script
-the arguments is not evaluated as command.
-Example:
-vadim@sys76:/tmp$ cat ./test.sh
-#!/bin/bash
+My main problem here is that your iterate_mapping() assumes that STEP is
+safe under rcu_read_lock(), with no visible mentioning of that fact.
+Note, BTW, that iov_iter_for_each_range() quietly calls user-supplied
+callback in such context.
 
-prompt=3D$1
-echo prompt is $prompt
+Incidentally, do you ever have different steps for bvec and mapping?
 
-vadim@sys76:/tmp$ set -x; ./test.sh  '$(id)'; set +x
-+ ./test.sh '$(id)'
-prompt is $(id)
-+ set +x
-vadim@sys76:/tmp$=20
+> +	if (unlikely(iov_iter_is_mapping(i))) {
+> +		/* We really don't want to fetch pages if we can avoid it */
+> +		i->iov_offset += size;
+> +		i->count -= size;
+> +		return;
 
-
-So it seems the patch fixes the problem definitively
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+That's... not nice.  At the very least you want to cap size by i->count here
+(and for discard case as well, while we are at it).
