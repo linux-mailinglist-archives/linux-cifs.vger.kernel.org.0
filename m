@@ -2,41 +2,40 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43801228014
+	by mail.lfdr.de (Postfix) with ESMTP id D3748228015
 	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 14:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbgGUMhi (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 21 Jul 2020 08:37:38 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:36708 "EHLO mx.cjr.nz"
+        id S1726636AbgGUMhk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 21 Jul 2020 08:37:40 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:36862 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726636AbgGUMhi (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 21 Jul 2020 08:37:38 -0400
+        id S1727106AbgGUMhj (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 21 Jul 2020 08:37:39 -0400
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 03EBF7FEA6;
-        Tue, 21 Jul 2020 12:37:32 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id E0B247FE99;
+        Tue, 21 Jul 2020 12:37:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1595335055;
+        t=1595335057;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J7Tfs9VgnAd6pZPADuVJR+ArAeInUrS2sl1ySsaODBw=;
-        b=XLPUbAYqbHr9XldABupTfxiZIVHX7lMyso3cgfuNQdRN2fzWHnadXOJMUVCrywi5ipUbpw
-        lCAg/95pmdDWfg5PmVhf472B7xHyIOGCcLXDZ8UU3JZ/DxLpi1alungQdEqo/nHuijGKZ+
-        tnbIArPtRmvfpdlLMVeJizyQ3GOLKbAzlx+7c0/9+bsNlZO1edptnV3DoHAhh4EKvq1wXd
-        II84TpUzfqdf7yeeB1yKYgceh4F6J86QrcFBb/gtskNv0u+0W2Sv87nyEBv0/0PPY6QQq0
-        jc4lnAYxwEPY7IBnYBXcF/nFjQPr3YD9cHIUjwAy8nimA9mX/xiEMcF7WVOmxw==
+        bh=4Uu+5bGJogc8NV29zEtGux9QTr+1vd/yKj9w41QFuXs=;
+        b=scRkIGPZ+D7jq5RqofhZM8HqAoL4HJrNtFHJ9M9Esf8q6Dxuvp+XuECPCaFlPN1IXgV/wz
+        xxzV6Cc6TQ7Uk4tiQyND006joF022RBrH+VnkqEuRPQKZTXeg9VNleUTYwkP1464enV44X
+        +CBCYjL5v0pIw9p4ifqR0esuPwXlyYbvs7+YMcanZ1pvQybPSJ2TlxLdIUXKxa3EvS6mrq
+        8h6wiYmjzbuMtlBBFZMOz5Lfn5+gFu8Dif+WkxPaPBzrR61gLAzNZUV82NNG2OlokmOQQ7
+        3n21e1w2uLz1/Z3n2uY0tCZ8bfWdW7SaYyVtub4l02JOcgrq2oo2UW5elyjkvw==
 From:   Paulo Alcantara <pc@cjr.nz>
 To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
-Cc:     Stefan Metzmacher <metze@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Aurelien Aptel <aaptel@suse.com>
-Subject: [PATCH v3 1/7] cifs: merge __{cifs,smb2}_reconnect[_tcon]() into cifs_tree_connect()
-Date:   Tue, 21 Jul 2020 09:36:38 -0300
-Message-Id: <20200721123644.14728-2-pc@cjr.nz>
+Cc:     Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>
+Subject: [PATCH v3 2/7] cifs: reduce number of referral requests in DFS link lookups
+Date:   Tue, 21 Jul 2020 09:36:39 -0300
+Message-Id: <20200721123644.14728-3-pc@cjr.nz>
 In-Reply-To: <20200721123644.14728-1-pc@cjr.nz>
 References: <20200721123644.14728-1-pc@cjr.nz>
 MIME-Version: 1.0
@@ -46,404 +45,117 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Stefan Metzmacher <metze@samba.org>
+When looking up the DFS cache with a referral path that has more than
+two path components, and is a complete prefix of an existing cache
+entry, do not request another referral and just return the matched
+entry as specified in MS-DFSC 3.2.5.5 Receiving a Root Referral
+Request or Link Referral Request.
 
-They were identical execpt to CIFSTCon() vs. SMB2_tcon().
-These are also available via ops->tree_connect().
-
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 ---
- fs/cifs/cifsproto.h |   3 ++
- fs/cifs/cifssmb.c   | 112 +------------------------------------------
- fs/cifs/connect.c   | 100 +++++++++++++++++++++++++++++++++++++++
- fs/cifs/smb2pdu.c   | 113 +-------------------------------------------
- 4 files changed, 105 insertions(+), 223 deletions(-)
+ fs/cifs/dfs_cache.c | 79 ++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 68 insertions(+), 11 deletions(-)
 
-diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-index 336feff99c93..c2ab937a7048 100644
---- a/fs/cifs/cifsproto.h
-+++ b/fs/cifs/cifsproto.h
-@@ -272,6 +272,9 @@ extern void cifs_move_llist(struct list_head *source, struct list_head *dest);
- extern void cifs_free_llist(struct list_head *llist);
- extern void cifs_del_lock_waiters(struct cifsLockInfo *lock);
- 
-+extern int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon,
-+			     const struct nls_table *nlsc);
-+
- extern int cifs_negotiate_protocol(const unsigned int xid,
- 				   struct cifs_ses *ses);
- extern int cifs_setup_session(const unsigned int xid, struct cifs_ses *ses,
-diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
-index dc62e2620cc8..0e763d2dcf16 100644
---- a/fs/cifs/cifssmb.c
-+++ b/fs/cifs/cifssmb.c
-@@ -124,116 +124,6 @@ cifs_mark_open_files_invalid(struct cifs_tcon *tcon)
- 	 */
+diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
+index df81c718d2fa..dae2f41e4f21 100644
+--- a/fs/cifs/dfs_cache.c
++++ b/fs/cifs/dfs_cache.c
+@@ -490,16 +490,7 @@ static int add_cache_entry(const char *path, unsigned int hash,
+ 	return 0;
  }
  
--#ifdef CONFIG_CIFS_DFS_UPCALL
--static int __cifs_reconnect_tcon(const struct nls_table *nlsc,
--				 struct cifs_tcon *tcon)
--{
--	int rc;
--	struct TCP_Server_Info *server = tcon->ses->server;
--	struct dfs_cache_tgt_list tl;
--	struct dfs_cache_tgt_iterator *it = NULL;
--	char *tree;
--	const char *tcp_host;
--	size_t tcp_host_len;
--	const char *dfs_host;
--	size_t dfs_host_len;
--
--	tree = kzalloc(MAX_TREE_SIZE, GFP_KERNEL);
--	if (!tree)
--		return -ENOMEM;
--
--	if (!tcon->dfs_path) {
--		if (tcon->ipc) {
--			scnprintf(tree, MAX_TREE_SIZE, "\\\\%s\\IPC$",
--				  server->hostname);
--			rc = CIFSTCon(0, tcon->ses, tree, tcon, nlsc);
--		} else {
--			rc = CIFSTCon(0, tcon->ses, tcon->treeName, tcon, nlsc);
--		}
--		goto out;
--	}
--
--	rc = dfs_cache_noreq_find(tcon->dfs_path + 1, NULL, &tl);
--	if (rc)
--		goto out;
--
--	extract_unc_hostname(server->hostname, &tcp_host, &tcp_host_len);
--
--	for (it = dfs_cache_get_tgt_iterator(&tl); it;
--	     it = dfs_cache_get_next_tgt(&tl, it)) {
--		const char *share, *prefix;
--		size_t share_len, prefix_len;
--		bool target_match;
--
--		rc = dfs_cache_get_tgt_share(it, &share, &share_len, &prefix,
--					     &prefix_len);
--		if (rc) {
--			cifs_dbg(VFS, "%s: failed to parse target share %d\n",
--				 __func__, rc);
--			continue;
--		}
--
--		extract_unc_hostname(share, &dfs_host, &dfs_host_len);
--
--		if (dfs_host_len != tcp_host_len
--		    || strncasecmp(dfs_host, tcp_host, dfs_host_len) != 0) {
--			cifs_dbg(FYI, "%s: %.*s doesn't match %.*s\n",
--				 __func__,
--				 (int)dfs_host_len, dfs_host,
--				 (int)tcp_host_len, tcp_host);
--
--			rc = match_target_ip(server, dfs_host, dfs_host_len,
--					     &target_match);
--			if (rc) {
--				cifs_dbg(VFS, "%s: failed to match target ip: %d\n",
--					 __func__, rc);
--				break;
--			}
--
--			if (!target_match) {
--				cifs_dbg(FYI, "%s: skipping target\n", __func__);
--				continue;
--			}
--		}
--
--		if (tcon->ipc) {
--			scnprintf(tree, MAX_TREE_SIZE, "\\\\%.*s\\IPC$",
--				  (int)share_len, share);
--			rc = CIFSTCon(0, tcon->ses, tree, tcon, nlsc);
--		} else {
--			scnprintf(tree, MAX_TREE_SIZE, "\\%.*s", (int)share_len,
--				  share);
--			rc = CIFSTCon(0, tcon->ses, tree, tcon, nlsc);
--			if (!rc) {
--				rc = update_super_prepath(tcon, prefix,
--							  prefix_len);
--				break;
--			}
--		}
--		if (rc == -EREMOTE)
--			break;
--	}
--
--	if (!rc) {
--		if (it)
--			rc = dfs_cache_noreq_update_tgthint(tcon->dfs_path + 1,
--							    it);
--		else
--			rc = -ENOENT;
--	}
--	dfs_cache_free_tgts(&tl);
--out:
--	kfree(tree);
--	return rc;
--}
--#else
--static inline int __cifs_reconnect_tcon(const struct nls_table *nlsc,
--					struct cifs_tcon *tcon)
--{
--	return CIFSTCon(0, tcon->ses, tcon->treeName, tcon, nlsc);
--}
--#endif
--
- /* reconnect the socket, tcon, and smb session if needed */
- static int
- cifs_reconnect_tcon(struct cifs_tcon *tcon, int smb_command)
-@@ -338,7 +228,7 @@ cifs_reconnect_tcon(struct cifs_tcon *tcon, int smb_command)
- 	}
+-/*
+- * Find a DFS cache entry in hash table and optionally check prefix path against
+- * @path.
+- * Use whole path components in the match.
+- * Must be called with htable_rw_lock held.
+- *
+- * Return ERR_PTR(-ENOENT) if the entry is not found.
+- */
+-static struct cache_entry *lookup_cache_entry(const char *path,
+-					      unsigned int *hash)
++static struct cache_entry *__lookup_cache_entry(const char *path)
+ {
+ 	struct cache_entry *ce;
+ 	unsigned int h;
+@@ -517,9 +508,75 @@ static struct cache_entry *lookup_cache_entry(const char *path,
  
- 	cifs_mark_open_files_invalid(tcon);
--	rc = __cifs_reconnect_tcon(nls_codepage, tcon);
-+	rc = cifs_tree_connect(0, tcon, nls_codepage);
- 	mutex_unlock(&ses->session_mutex);
- 	cifs_dbg(FYI, "reconnect tcon rc = %d\n", rc);
- 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index a61abde09ffe..632978db2dbd 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -5533,3 +5533,103 @@ cifs_prune_tlinks(struct work_struct *work)
- 	queue_delayed_work(cifsiod_wq, &cifs_sb->prune_tlinks,
- 				TLINK_IDLE_EXPIRE);
- }
+ 	if (!found)
+ 		ce = ERR_PTR(-ENOENT);
++	return ce;
++}
 +
-+#ifdef CONFIG_CIFS_DFS_UPCALL
-+int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon, const struct nls_table *nlsc)
++/*
++ * Find a DFS cache entry in hash table and optionally check prefix path against
++ * @path.
++ * Use whole path components in the match.
++ * Must be called with htable_rw_lock held.
++ *
++ * Return ERR_PTR(-ENOENT) if the entry is not found.
++ */
++static struct cache_entry *lookup_cache_entry(const char *path, unsigned int *hash)
 +{
-+	int rc;
-+	struct TCP_Server_Info *server = tcon->ses->server;
-+	const struct smb_version_operations *ops = server->ops;
-+	struct dfs_cache_tgt_list tl;
-+	struct dfs_cache_tgt_iterator *it = NULL;
-+	char *tree;
-+	const char *tcp_host;
-+	size_t tcp_host_len;
-+	const char *dfs_host;
-+	size_t dfs_host_len;
++	struct cache_entry *ce = ERR_PTR(-ENOENT);
++	unsigned int h;
++	int cnt = 0;
++	char *npath;
++	char *s, *e;
++	char sep;
 +
-+	tree = kzalloc(MAX_TREE_SIZE, GFP_KERNEL);
-+	if (!tree)
-+		return -ENOMEM;
++	npath = kstrndup(path, strlen(path), GFP_KERNEL);
++	if (!npath)
++		return ERR_PTR(-ENOMEM);
 +
-+	if (!tcon->dfs_path) {
-+		if (tcon->ipc) {
-+			scnprintf(tree, MAX_TREE_SIZE, "\\\\%s\\IPC$", server->hostname);
-+			rc = ops->tree_connect(xid, tcon->ses, tree, tcon, nlsc);
-+		} else {
-+			rc = ops->tree_connect(xid, tcon->ses, tcon->treeName, tcon, nlsc);
-+		}
++	s = npath;
++	sep = *npath;
++	while ((s = strchr(s, sep)) && ++cnt < 3)
++		s++;
++
++	if (cnt < 3) {
++		h = cache_entry_hash(path, strlen(path));
++		ce = __lookup_cache_entry(path);
 +		goto out;
 +	}
++	/*
++	 * Handle paths that have more than two path components and are a complete prefix of the DFS
++	 * referral request path (@path).
++	 *
++	 * See MS-DFSC 3.2.5.5 "Receiving a Root Referral Request or Link Referral Request".
++	 */
++	h = cache_entry_hash(npath, strlen(npath));
++	e = npath + strlen(npath) - 1;
++	while (e > s) {
++		char tmp;
 +
-+	rc = dfs_cache_noreq_find(tcon->dfs_path + 1, NULL, &tl);
-+	if (rc)
-+		goto out;
++		/* skip separators */
++		while (e > s && *e == sep)
++			e--;
++		if (e == s)
++			goto out;
 +
-+	extract_unc_hostname(server->hostname, &tcp_host, &tcp_host_len);
++		tmp = *(e+1);
++		*(e+1) = 0;
 +
-+	for (it = dfs_cache_get_tgt_iterator(&tl); it; it = dfs_cache_get_next_tgt(&tl, it)) {
-+		const char *share, *prefix;
-+		size_t share_len, prefix_len;
-+		bool target_match;
-+
-+		rc = dfs_cache_get_tgt_share(it, &share, &share_len, &prefix, &prefix_len);
-+		if (rc) {
-+			cifs_dbg(VFS, "%s: failed to parse target share %d\n",
-+				 __func__, rc);
-+			continue;
-+		}
-+
-+		extract_unc_hostname(share, &dfs_host, &dfs_host_len);
-+
-+		if (dfs_host_len != tcp_host_len
-+		    || strncasecmp(dfs_host, tcp_host, dfs_host_len) != 0) {
-+			cifs_dbg(FYI, "%s: %.*s doesn't match %.*s\n", __func__, (int)dfs_host_len,
-+				 dfs_host, (int)tcp_host_len, tcp_host);
-+
-+			rc = match_target_ip(server, dfs_host, dfs_host_len, &target_match);
-+			if (rc) {
-+				cifs_dbg(VFS, "%s: failed to match target ip: %d\n", __func__, rc);
-+				break;
-+			}
-+
-+			if (!target_match) {
-+				cifs_dbg(FYI, "%s: skipping target\n", __func__);
-+				continue;
-+			}
-+		}
-+
-+		if (tcon->ipc) {
-+			scnprintf(tree, MAX_TREE_SIZE, "\\\\%.*s\\IPC$", (int)share_len, share);
-+			rc = ops->tree_connect(xid, tcon->ses, tree, tcon, nlsc);
-+		} else {
-+			scnprintf(tree, MAX_TREE_SIZE, "\\%.*s", (int)share_len, share);
-+			rc = ops->tree_connect(xid, tcon->ses, tree, tcon, nlsc);
-+			if (!rc) {
-+				rc = update_super_prepath(tcon, prefix, prefix_len);
-+				break;
-+			}
-+		}
-+		if (rc == -EREMOTE)
++		ce = __lookup_cache_entry(npath);
++		if (!IS_ERR(ce)) {
++			h = cache_entry_hash(npath, strlen(npath));
 +			break;
-+	}
++		}
 +
-+	if (!rc) {
-+		if (it)
-+			rc = dfs_cache_noreq_update_tgthint(tcon->dfs_path + 1, it);
-+		else
-+			rc = -ENOENT;
++		*(e+1) = tmp;
++		/* backward until separator */
++		while (e > s && *e != sep)
++			e--;
 +	}
-+	dfs_cache_free_tgts(&tl);
 +out:
-+	kfree(tree);
-+	return rc;
-+}
-+#else
-+int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon, const struct nls_table *nlsc)
-+{
-+	const struct smb_version_operations *ops = tcon->ses->server->ops;
-+
-+	return ops->tree_connect(xid, tcon->ses, tcon->treeName, tcon, nlsc);
-+}
-+#endif
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 492688764004..24c2ac360591 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -152,117 +152,6 @@ smb2_hdr_assemble(struct smb2_sync_hdr *shdr, __le16 smb2_cmd,
- 	return;
+ 	if (hash)
+ 		*hash = h;
+-
++	kfree(npath);
+ 	return ce;
  }
  
--#ifdef CONFIG_CIFS_DFS_UPCALL
--static int __smb2_reconnect(const struct nls_table *nlsc,
--			    struct cifs_tcon *tcon)
--{
--	int rc;
--	struct TCP_Server_Info *server = tcon->ses->server;
--	struct dfs_cache_tgt_list tl;
--	struct dfs_cache_tgt_iterator *it = NULL;
--	char *tree;
--	const char *tcp_host;
--	size_t tcp_host_len;
--	const char *dfs_host;
--	size_t dfs_host_len;
--
--	tree = kzalloc(MAX_TREE_SIZE, GFP_KERNEL);
--	if (!tree)
--		return -ENOMEM;
--
--	if (!tcon->dfs_path) {
--		if (tcon->ipc) {
--			scnprintf(tree, MAX_TREE_SIZE, "\\\\%s\\IPC$",
--				  server->hostname);
--			rc = SMB2_tcon(0, tcon->ses, tree, tcon, nlsc);
--		} else {
--			rc = SMB2_tcon(0, tcon->ses, tcon->treeName, tcon,
--				       nlsc);
--		}
--		goto out;
--	}
--
--	rc = dfs_cache_noreq_find(tcon->dfs_path + 1, NULL, &tl);
--	if (rc)
--		goto out;
--
--	extract_unc_hostname(server->hostname, &tcp_host, &tcp_host_len);
--
--	for (it = dfs_cache_get_tgt_iterator(&tl); it;
--	     it = dfs_cache_get_next_tgt(&tl, it)) {
--		const char *share, *prefix;
--		size_t share_len, prefix_len;
--		bool target_match;
--
--		rc = dfs_cache_get_tgt_share(it, &share, &share_len, &prefix,
--					     &prefix_len);
--		if (rc) {
--			cifs_dbg(VFS, "%s: failed to parse target share %d\n",
--				 __func__, rc);
--			continue;
--		}
--
--		extract_unc_hostname(share, &dfs_host, &dfs_host_len);
--
--		if (dfs_host_len != tcp_host_len
--		    || strncasecmp(dfs_host, tcp_host, dfs_host_len) != 0) {
--			cifs_dbg(FYI, "%s: %.*s doesn't match %.*s\n",
--				 __func__,
--				 (int)dfs_host_len, dfs_host,
--				 (int)tcp_host_len, tcp_host);
--
--			rc = match_target_ip(server, dfs_host, dfs_host_len,
--					     &target_match);
--			if (rc) {
--				cifs_dbg(VFS, "%s: failed to match target ip: %d\n",
--					 __func__, rc);
--				break;
--			}
--
--			if (!target_match) {
--				cifs_dbg(FYI, "%s: skipping target\n", __func__);
--				continue;
--			}
--		}
--
--		if (tcon->ipc) {
--			scnprintf(tree, MAX_TREE_SIZE, "\\\\%.*s\\IPC$",
--				  (int)share_len, share);
--			rc = SMB2_tcon(0, tcon->ses, tree, tcon, nlsc);
--		} else {
--			scnprintf(tree, MAX_TREE_SIZE, "\\%.*s", (int)share_len,
--				  share);
--			rc = SMB2_tcon(0, tcon->ses, tree, tcon, nlsc);
--			if (!rc) {
--				rc = update_super_prepath(tcon, prefix,
--							  prefix_len);
--				break;
--			}
--		}
--		if (rc == -EREMOTE)
--			break;
--	}
--
--	if (!rc) {
--		if (it)
--			rc = dfs_cache_noreq_update_tgthint(tcon->dfs_path + 1,
--							    it);
--		else
--			rc = -ENOENT;
--	}
--	dfs_cache_free_tgts(&tl);
--out:
--	kfree(tree);
--	return rc;
--}
--#else
--static inline int __smb2_reconnect(const struct nls_table *nlsc,
--				   struct cifs_tcon *tcon)
--{
--	return SMB2_tcon(0, tcon->ses, tcon->treeName, tcon, nlsc);
--}
--#endif
--
- static int
- smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
- 	       struct TCP_Server_Info *server)
-@@ -409,7 +298,7 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
- 	if (tcon->use_persistent)
- 		tcon->need_reopen_files = true;
- 
--	rc = __smb2_reconnect(nls_codepage, tcon);
-+	rc = cifs_tree_connect(0, tcon, nls_codepage);
- 	mutex_unlock(&tcon->ses->session_mutex);
- 
- 	cifs_dbg(FYI, "reconnect tcon rc = %d\n", rc);
 -- 
 2.27.0
 
