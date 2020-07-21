@@ -2,54 +2,79 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF0A227522
-	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 04:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BDA228013
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 14:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728270AbgGUCA2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 20 Jul 2020 22:00:28 -0400
-Received: from [211.196.21.11] ([211.196.21.11]:53116 "EHLO
-        iscure03.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728153AbgGUCA0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 20 Jul 2020 22:00:26 -0400
-Received: from Shop01 (unknown [127.0.0.1])
-        by iscure03.localdomain (Postfix) with SMTP id 061772AE13B;
-        Mon, 20 Jul 2020 12:16:00 +0900 (KST)
-Received: from [229.141.241.102] by Shop01 id ud7dU1XDA1r0; Sun, 19 Jul 2020 12:13:41 -0400
-Message-ID: <p$j$$juj73lb2-kt@3ud.erf.a.16r>
-From:   "MOORE GATES LTD" <TEXT@TEXT.COM>
-Reply-To: "MOORE GATES LTD" <TEXT@TEXT.COM>
-To:     ling_1111@hotmail.com
-Subject: FROM MR. MOORE
-Date:   Sun, 19 Jul 20 12:13:41 GMT
-X-Mailer: eGroups Message Poster
+        id S1727940AbgGUMhe (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 21 Jul 2020 08:37:34 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:36604 "EHLO mx.cjr.nz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726636AbgGUMhd (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 21 Jul 2020 08:37:33 -0400
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id A4FEA7FE99;
+        Tue, 21 Jul 2020 12:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1595335052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+E+KZDff/UStJUrksZwrVoLVOzRSSklMEwrfGJTemWE=;
+        b=JxdCGuPawnfAbFjYw0Jd25M0DR6TzHAQBPRXEmFmSlnT22lsVQAatSECRvjb7ozjY+JuuT
+        cwraeibLGnq1HcdZPMToVpQmKacL5/Y+wImxKeGz7pULgXC9aZTlocIN56PvWJ98qQ+k7a
+        q3+CgkjlrdF3JWQ44+WeG8XxDpbmtOFQMoUnUal7OqFuwquCaXK8Q11beMKSe08s+Lz7L3
+        Xub3nmxebDJPphCT+sJctP1AV8fdEZOwzYkMLlNqLJakUSFSj0iMxUxG2oCgUxFXf3fQc0
+        pZHr38Aq0dWrdN9w21lIoDnm1CbTd6WQqNNtOs9JJWtCWgSHYiKKYBV4DEA8oQ==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
+Cc:     Paulo Alcantara <pc@cjr.nz>
+Subject: [PATCH v3 0/7] DFS fixes
+Date:   Tue, 21 Jul 2020 09:36:37 -0300
+Message-Id: <20200721123644.14728-1-pc@cjr.nz>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="D9F2D5A2__"
-X-Priority: 1
-X-MSMail-Priority: High
+Content-Transfer-Encoding: 8bit
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Hi Steve,
 
---D9F2D5A2__
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Follow some fixes, cleanups and documentation for DFS.
 
-Dear Beloved,
-Peace of the Lord be with you and family, I am Fitzpatrick Moore a
-United Kingdom Citizen, I have ($ 25M) Twenty five Million united
-states dollars with a finance House in United State. I will want you
-to help me collect this deposit and dispatch it to charity
-organizations. You will take out 30% of these funds for your
-assistance to help ME disburse this fund to charities. I will like you
-to acknowledge the receipt of this e-mail as soon as possible and
-treats with absolute confidentiality and sincerity. Please reply to my
-Email: (moorefitzpatrick@gmail.com)
-Yours Sincerely,
-Fitzpatrick Moore
+All DFS failover tests passed with this series in our local buildbot.
 
---D9F2D5A2__--
+v1 -> v2:
+  * fix bad rebase that removed usage of "share_len" in scnprintf()
+    (Metze)
+
+v2 -> v3:
+  * fix typo and bad comment style in patch 7/7 (Aurelien)
+
+Paulo Alcantara (6):
+  cifs: reduce number of referral requests in DFS link lookups
+  cifs: rename reconn_inval_dfs_target()
+  cifs: handle empty list of targets in cifs_reconnect()
+  cifs: handle RESP_GET_DFS_REFERRAL.PathConsumed in reconnect
+  cifs: only update prefix path of DFS links in cifs_tree_connect()
+  cifs: document and cleanup dfs mount
+
+Stefan Metzmacher (1):
+  cifs: merge __{cifs,smb2}_reconnect[_tcon]() into cifs_tree_connect()
+
+ fs/cifs/cifsproto.h |   6 +-
+ fs/cifs/cifssmb.c   | 112 +---------
+ fs/cifs/connect.c   | 505 ++++++++++++++++++++++++++------------------
+ fs/cifs/dfs_cache.c | 136 +++++++++---
+ fs/cifs/dfs_cache.h |   7 +-
+ fs/cifs/misc.c      |   7 +-
+ fs/cifs/smb2pdu.c   | 113 +---------
+ 7 files changed, 429 insertions(+), 457 deletions(-)
+
+-- 
+2.27.0
 
