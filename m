@@ -2,40 +2,40 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3748228015
-	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 14:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA7B228016
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgGUMhk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 21 Jul 2020 08:37:40 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:36862 "EHLO mx.cjr.nz"
+        id S1728037AbgGUMhl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 21 Jul 2020 08:37:41 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:36926 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727106AbgGUMhj (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 21 Jul 2020 08:37:39 -0400
+        id S1727106AbgGUMhl (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 21 Jul 2020 08:37:41 -0400
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id E0B247FE99;
-        Tue, 21 Jul 2020 12:37:35 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 2AB097FEAD;
+        Tue, 21 Jul 2020 12:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1595335057;
+        t=1595335059;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4Uu+5bGJogc8NV29zEtGux9QTr+1vd/yKj9w41QFuXs=;
-        b=scRkIGPZ+D7jq5RqofhZM8HqAoL4HJrNtFHJ9M9Esf8q6Dxuvp+XuECPCaFlPN1IXgV/wz
-        xxzV6Cc6TQ7Uk4tiQyND006joF022RBrH+VnkqEuRPQKZTXeg9VNleUTYwkP1464enV44X
-        +CBCYjL5v0pIw9p4ifqR0esuPwXlyYbvs7+YMcanZ1pvQybPSJ2TlxLdIUXKxa3EvS6mrq
-        8h6wiYmjzbuMtlBBFZMOz5Lfn5+gFu8Dif+WkxPaPBzrR61gLAzNZUV82NNG2OlokmOQQ7
-        3n21e1w2uLz1/Z3n2uY0tCZ8bfWdW7SaYyVtub4l02JOcgrq2oo2UW5elyjkvw==
+        bh=dM8DqT4Js/tBZGNhl2Q4XbeCyGaAX+FLSoXL3OejGqM=;
+        b=fgZygBl481hLqqiNoN0igO4NBQLy7oPXa/cqsKzbuKVfQ5SqmuLAYIvykxCfSpITOWVSAH
+        p6p+rEi9EeI+2hQLQyRfhE88n+42L+ctPh9QpTe+BlgfiVNf1h0RM7XdfMw4ta+NN57Nzn
+        MTgqWAin3NtEaAA8WztkwKaeFzmITztv9SOS8P48pPiaTKWpSq6Xn+S8mFTyEuqNllbj/i
+        BgPl2iO6I1WgYLK76NK52XP7iMAdKClq5lf9mlotiJmsh88Mk7bBSoJsdWQsNjXog0b9BQ
+        Zza68HhItEzp7x54lobzsTo81TnXyzSMN5NmnLG44RI+M9z7345KWuag0tdR5A==
 From:   Paulo Alcantara <pc@cjr.nz>
 To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
 Cc:     Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>
-Subject: [PATCH v3 2/7] cifs: reduce number of referral requests in DFS link lookups
-Date:   Tue, 21 Jul 2020 09:36:39 -0300
-Message-Id: <20200721123644.14728-3-pc@cjr.nz>
+Subject: [PATCH v3 3/7] cifs: rename reconn_inval_dfs_target()
+Date:   Tue, 21 Jul 2020 09:36:40 -0300
+Message-Id: <20200721123644.14728-4-pc@cjr.nz>
 In-Reply-To: <20200721123644.14728-1-pc@cjr.nz>
 References: <20200721123644.14728-1-pc@cjr.nz>
 MIME-Version: 1.0
@@ -45,117 +45,52 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-When looking up the DFS cache with a referral path that has more than
-two path components, and is a complete prefix of an existing cache
-entry, do not request another referral and just return the matched
-entry as specified in MS-DFSC 3.2.5.5 Receiving a Root Referral
-Request or Link Referral Request.
+This function has nothing to do with *invalidation* but setting up the
+next target server from a cached referral.
+
+Rename it to reconn_set_next_dfs_target().  While at it, get rid of
+some meaningless checks.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 Reviewed-by: Aurelien Aptel <aaptel@suse.com>
 ---
- fs/cifs/dfs_cache.c | 79 ++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 68 insertions(+), 11 deletions(-)
+ fs/cifs/connect.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index df81c718d2fa..dae2f41e4f21 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -490,16 +490,7 @@ static int add_cache_entry(const char *path, unsigned int hash,
- 	return 0;
- }
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 632978db2dbd..9582f63b8ebc 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -393,15 +393,14 @@ static inline int reconn_set_ipaddr(struct TCP_Server_Info *server)
  
--/*
-- * Find a DFS cache entry in hash table and optionally check prefix path against
-- * @path.
-- * Use whole path components in the match.
-- * Must be called with htable_rw_lock held.
-- *
-- * Return ERR_PTR(-ENOENT) if the entry is not found.
-- */
--static struct cache_entry *lookup_cache_entry(const char *path,
--					      unsigned int *hash)
-+static struct cache_entry *__lookup_cache_entry(const char *path)
+ #ifdef CONFIG_CIFS_DFS_UPCALL
+ /* These functions must be called with server->srv_mutex held */
+-static void reconn_inval_dfs_target(struct TCP_Server_Info *server,
+-				    struct cifs_sb_info *cifs_sb,
+-				    struct dfs_cache_tgt_list *tgt_list,
+-				    struct dfs_cache_tgt_iterator **tgt_it)
++static void reconn_set_next_dfs_target(struct TCP_Server_Info *server,
++				       struct cifs_sb_info *cifs_sb,
++				       struct dfs_cache_tgt_list *tgt_list,
++				       struct dfs_cache_tgt_iterator **tgt_it)
  {
- 	struct cache_entry *ce;
- 	unsigned int h;
-@@ -517,9 +508,75 @@ static struct cache_entry *lookup_cache_entry(const char *path,
+ 	const char *name;
  
- 	if (!found)
- 		ce = ERR_PTR(-ENOENT);
-+	return ce;
-+}
-+
-+/*
-+ * Find a DFS cache entry in hash table and optionally check prefix path against
-+ * @path.
-+ * Use whole path components in the match.
-+ * Must be called with htable_rw_lock held.
-+ *
-+ * Return ERR_PTR(-ENOENT) if the entry is not found.
-+ */
-+static struct cache_entry *lookup_cache_entry(const char *path, unsigned int *hash)
-+{
-+	struct cache_entry *ce = ERR_PTR(-ENOENT);
-+	unsigned int h;
-+	int cnt = 0;
-+	char *npath;
-+	char *s, *e;
-+	char sep;
-+
-+	npath = kstrndup(path, strlen(path), GFP_KERNEL);
-+	if (!npath)
-+		return ERR_PTR(-ENOMEM);
-+
-+	s = npath;
-+	sep = *npath;
-+	while ((s = strchr(s, sep)) && ++cnt < 3)
-+		s++;
-+
-+	if (cnt < 3) {
-+		h = cache_entry_hash(path, strlen(path));
-+		ce = __lookup_cache_entry(path);
-+		goto out;
-+	}
-+	/*
-+	 * Handle paths that have more than two path components and are a complete prefix of the DFS
-+	 * referral request path (@path).
-+	 *
-+	 * See MS-DFSC 3.2.5.5 "Receiving a Root Referral Request or Link Referral Request".
-+	 */
-+	h = cache_entry_hash(npath, strlen(npath));
-+	e = npath + strlen(npath) - 1;
-+	while (e > s) {
-+		char tmp;
-+
-+		/* skip separators */
-+		while (e > s && *e == sep)
-+			e--;
-+		if (e == s)
-+			goto out;
-+
-+		tmp = *(e+1);
-+		*(e+1) = 0;
-+
-+		ce = __lookup_cache_entry(npath);
-+		if (!IS_ERR(ce)) {
-+			h = cache_entry_hash(npath, strlen(npath));
-+			break;
-+		}
-+
-+		*(e+1) = tmp;
-+		/* backward until separator */
-+		while (e > s && *e != sep)
-+			e--;
-+	}
-+out:
- 	if (hash)
- 		*hash = h;
--
-+	kfree(npath);
- 	return ce;
- }
+-	if (!cifs_sb || !cifs_sb->origin_fullpath || !tgt_list ||
+-	    !server->nr_targets)
++	if (!cifs_sb || !cifs_sb->origin_fullpath)
+ 		return;
  
+ 	if (!*tgt_it) {
+@@ -578,7 +577,7 @@ cifs_reconnect(struct TCP_Server_Info *server)
+ 		 * feature is disabled, then we will retry last server we
+ 		 * connected to before.
+ 		 */
+-		reconn_inval_dfs_target(server, cifs_sb, &tgt_list, &tgt_it);
++		reconn_set_next_dfs_target(server, cifs_sb, &tgt_list, &tgt_it);
+ #endif
+ 		rc = reconn_set_ipaddr(server);
+ 		if (rc) {
 -- 
 2.27.0
 
