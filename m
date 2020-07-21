@@ -2,560 +2,146 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC3D22801A
-	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 14:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B259228158
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Jul 2020 15:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbgGUMhv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 21 Jul 2020 08:37:51 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:37042 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728108AbgGUMhu (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 21 Jul 2020 08:37:50 -0400
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 98FC67FEA6;
-        Tue, 21 Jul 2020 12:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1595335068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aWalCz9hiVzNxRVIotngMYquyt9WEXqllQn264kXYEA=;
-        b=hibWLsWwC9ebu+Z5WVG8N7cbyXHjGy63pdkSDXtW9kZ9osDEIAdz7tcnR/vfousZuxDyZ3
-        r7LXCDJH9PzH/gXTWft6sLv7HlVgQPCms6EjO6/lgqywl6fLyX4/Ympu4FG2SjP5xJg63E
-        Yp7Ryi7FyWS3xJUR+QX3QylqILI5rj2pjdHJD719p0U5rAbaCQwzVKOh/9av3bqZImL6Vy
-        VxU7rBqE2kEbR5/wh/eX8eJuDG3AH2BnrAj8yL+Bsnsn4FwlJHQdavsjPinibJju5CFo3A
-        kRfx8hgtfFxRPAmHKHHwPx8dTExcHAWTWA71TnKE6XYuDU9ZprQTnB0k0CyRaw==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
-Cc:     Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH v3 7/7] cifs: document and cleanup dfs mount
-Date:   Tue, 21 Jul 2020 09:36:44 -0300
-Message-Id: <20200721123644.14728-8-pc@cjr.nz>
-In-Reply-To: <20200721123644.14728-1-pc@cjr.nz>
-References: <20200721123644.14728-1-pc@cjr.nz>
+        id S1726120AbgGUNwV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 21 Jul 2020 09:52:21 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8347 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726109AbgGUNwU (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 21 Jul 2020 09:52:20 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E963B25F2E5159DE8592;
+        Tue, 21 Jul 2020 21:52:15 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.224) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Tue, 21 Jul 2020
+ 21:52:11 +0800
+Subject: Re: PROBLEM: mv command fails: "File exists" on cifs mount on
+ kernel>=5.7.8
+To:     Patrick Fernie <patrick.fernie@gmail.com>, <sfrench@samba.org>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>
+References: <CAD737DGhAiRUb6WZz_RQ6GwfXwH3CFB_5iOmzvnJwSPoncXdLg@mail.gmail.com>
+From:   "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>
+Message-ID: <d8dbaf42-0f81-f25e-ea47-28b29c44fcd1@huawei.com>
+Date:   Tue, 21 Jul 2020 21:52:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <CAD737DGhAiRUb6WZz_RQ6GwfXwH3CFB_5iOmzvnJwSPoncXdLg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.224]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-cifs_mount() for DFS mounts is for a long time way too complex to
-follow, mostly because it lacks some documentation, does a lot of
-operations like resolving DFS roots and links, checking for path
-components, perform failover, crap code, etc.
+Thanks for your report.
 
-Besides adding some documentation to it, do some cleanup and ensure
-that the following is implemented and supported:
+Since commit 9ffad9263b46 ("cifs: Fix the target file was deleted
+when rename failed.") want to fix the problem when rename(file1, file2)
+with file2 exist, the server return -EACESS, then cifs client will
+delete the file2 and rename it again, but 2nd rename on server also
+return -EACESS, then the file2 was deleted.
 
-    * non-DFS mounts
-    * DFS failover
-    * DFS root mounts
-        - tcon and cifs_sb must contain DFS path (NOT including prefix)
-        - if prefix path, then save it in cifs_sb and it must not be
-	  changed
-    * DFS link mounts
-      - tcon and cifs_sb must contain DFS path (including prefix)
-      - if prefix path, then save it in cifs_sb and it may be changed
-    * prevent recursion on broken link referrals (MAX_NESTED_LINKS)
-    * check every path component of the currently resolved
-      target (including prefix), and chase them accordingly
-    * make sure that DFS referrals go through newly resolved root
-      servers
+It can be reproduce by xfstests generic/035.
+When 't_rename_overwrite file1 file2':
+   open(file2)
+   rename(file1, file2)
+   fstat(file2).st_nlink should be 0.
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/connect.c | 372 +++++++++++++++++++++++-----------------------
- 1 file changed, 183 insertions(+), 189 deletions(-)
+The solution on commit 9ffad9263b46 ("cifs: Fix the target file was
+deleted when rename failed.") was wrong. we should revert it.
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index af0c19495626..f093ec027554 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -4423,11 +4423,11 @@ build_unc_path_to_root(const struct smb_vol *vol,
- static int
- expand_dfs_referral(const unsigned int xid, struct cifs_ses *ses,
- 		    struct smb_vol *volume_info, struct cifs_sb_info *cifs_sb,
--		    int check_prefix)
-+		    char *ref_path)
- {
- 	int rc;
- 	struct dfs_info3_param referral = {0};
--	char *full_path = NULL, *ref_path = NULL, *mdata = NULL;
-+	char *full_path = NULL, *mdata = NULL;
- 
- 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS)
- 		return -EREMOTE;
-@@ -4436,9 +4436,6 @@ expand_dfs_referral(const unsigned int xid, struct cifs_ses *ses,
- 	if (IS_ERR(full_path))
- 		return PTR_ERR(full_path);
- 
--	/* For DFS paths, skip the first '\' of the UNC */
--	ref_path = check_prefix ? full_path + 1 : volume_info->UNC + 1;
--
- 	rc = dfs_cache_find(xid, ses, cifs_sb->local_nls, cifs_remap(cifs_sb),
- 			    ref_path, &referral, NULL);
- 	if (!rc) {
-@@ -4501,13 +4498,10 @@ static int update_vol_info(const struct dfs_cache_tgt_iterator *tgt_it,
- 	return 0;
- }
- 
--static int setup_dfs_tgt_conn(const char *path,
-+static int setup_dfs_tgt_conn(const char *path, const char *full_path,
- 			      const struct dfs_cache_tgt_iterator *tgt_it,
--			      struct cifs_sb_info *cifs_sb,
--			      struct smb_vol *vol,
--			      unsigned int *xid,
--			      struct TCP_Server_Info **server,
--			      struct cifs_ses **ses,
-+			      struct cifs_sb_info *cifs_sb, struct smb_vol *vol, unsigned int *xid,
-+			      struct TCP_Server_Info **server, struct cifs_ses **ses,
- 			      struct cifs_tcon **tcon)
- {
- 	int rc;
-@@ -4521,8 +4515,7 @@ static int setup_dfs_tgt_conn(const char *path,
- 	if (rc)
- 		return rc;
- 
--	mdata = cifs_compose_mount_options(cifs_sb->mountdata, path, &ref,
--					   &fake_devname);
-+	mdata = cifs_compose_mount_options(cifs_sb->mountdata, full_path + 1, &ref, &fake_devname);
- 	free_dfs_info_param(&ref);
- 
- 	if (IS_ERR(mdata)) {
-@@ -4545,7 +4538,7 @@ static int setup_dfs_tgt_conn(const char *path,
- 		mount_put_conns(cifs_sb, *xid, *server, *ses, *tcon);
- 		rc = mount_get_conns(&fake_vol, cifs_sb, xid, server, ses,
- 				     tcon);
--		if (!rc) {
-+		if (!rc || (*server && *ses)) {
- 			/*
- 			 * We were able to connect to new target server.
- 			 * Update current volume info with new target server.
-@@ -4557,14 +4550,10 @@ static int setup_dfs_tgt_conn(const char *path,
- 	return rc;
- }
- 
--static int mount_do_dfs_failover(const char *path,
--				 struct cifs_sb_info *cifs_sb,
--				 struct smb_vol *vol,
--				 struct cifs_ses *root_ses,
--				 unsigned int *xid,
--				 struct TCP_Server_Info **server,
--				 struct cifs_ses **ses,
--				 struct cifs_tcon **tcon)
-+static int do_dfs_failover(const char *path, const char *full_path, struct cifs_sb_info *cifs_sb,
-+			   struct smb_vol *vol, struct cifs_ses *root_ses, unsigned int *xid,
-+			   struct TCP_Server_Info **server, struct cifs_ses **ses,
-+			   struct cifs_tcon **tcon)
- {
- 	int rc;
- 	struct dfs_cache_tgt_list tgt_list;
-@@ -4583,9 +4572,9 @@ static int mount_do_dfs_failover(const char *path,
- 		if (rc)
- 			break;
- 		/* Connect to next DFS target */
--		rc = setup_dfs_tgt_conn(path, tgt_it, cifs_sb, vol, xid, server,
--					ses, tcon);
--		if (!rc || rc == -EACCES || rc == -EOPNOTSUPP)
-+		rc = setup_dfs_tgt_conn(path, full_path, tgt_it, cifs_sb, vol, xid, server, ses,
-+					tcon);
-+		if (!rc || (*server && *ses))
- 			break;
- 	}
- 	if (!rc) {
-@@ -4755,207 +4744,210 @@ static int is_path_remote(struct cifs_sb_info *cifs_sb, struct smb_vol *vol,
- }
- 
- #ifdef CONFIG_CIFS_DFS_UPCALL
--static inline void set_root_tcon(struct cifs_sb_info *cifs_sb,
--				 struct cifs_tcon *tcon,
--				 struct cifs_tcon **root)
-+static void set_root_ses(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses,
-+			 struct cifs_ses **root_ses)
- {
--	spin_lock(&cifs_tcp_ses_lock);
--	tcon->tc_count++;
--	tcon->remap = cifs_remap(cifs_sb);
--	spin_unlock(&cifs_tcp_ses_lock);
--	*root = tcon;
-+	if (ses) {
-+		spin_lock(&cifs_tcp_ses_lock);
-+		ses->ses_count++;
-+		ses->tcon_ipc->remap = cifs_remap(cifs_sb);
-+		spin_unlock(&cifs_tcp_ses_lock);
-+	}
-+	*root_ses = ses;
-+}
-+
-+static void put_root_ses(struct cifs_ses *ses)
-+{
-+	if (ses)
-+		cifs_put_smb_ses(ses);
-+}
-+
-+/* Check if a path component is remote and then update @dfs_path accordingly */
-+static int check_dfs_prepath(struct cifs_sb_info *cifs_sb, struct smb_vol *vol,
-+			     const unsigned int xid, struct TCP_Server_Info *server,
-+			     struct cifs_tcon *tcon, char **dfs_path)
-+{
-+	char *path, *s;
-+	char sep = CIFS_DIR_SEP(cifs_sb), tmp;
-+	char *npath;
-+	int rc = 0;
-+	int added_treename = tcon->Flags & SMB_SHARE_IS_IN_DFS;
-+	int skip = added_treename;
-+
-+	path = cifs_build_path_to_root(vol, cifs_sb, tcon, added_treename);
-+	if (!path)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Walk through the path components in @path and check if they're accessible. In case any of
-+	 * the components is -EREMOTE, then update @dfs_path with the next DFS referral request path
-+	 * (NOT including the remaining components).
-+	 */
-+	s = path;
-+	do {
-+		/* skip separators */
-+		while (*s && *s == sep)
-+			s++;
-+		if (!*s)
-+			break;
-+		/* next separator */
-+		while (*s && *s != sep)
-+			s++;
-+		/*
-+		 * if the treename is added, we then have to skip the first
-+		 * part within the separators
-+		 */
-+		if (skip) {
-+			skip = 0;
-+			continue;
-+		}
-+		tmp = *s;
-+		*s = 0;
-+		rc = server->ops->is_path_accessible(xid, tcon, cifs_sb, path);
-+		if (rc && rc == -EREMOTE) {
-+			struct smb_vol v = {NULL};
-+			/* if @path contains a tree name, skip it in the prefix path */
-+			if (added_treename) {
-+				rc = cifs_parse_devname(path, &v);
-+				if (rc)
-+					break;
-+				rc = -EREMOTE;
-+				npath = build_unc_path_to_root(&v, cifs_sb, true);
-+				cifs_cleanup_volume_info_contents(&v);
-+			} else {
-+				v.UNC = vol->UNC;
-+				v.prepath = path + 1;
-+				npath = build_unc_path_to_root(&v, cifs_sb, true);
-+			}
-+			if (IS_ERR(npath)) {
-+				rc = PTR_ERR(npath);
-+				break;
-+			}
-+			kfree(*dfs_path);
-+			*dfs_path = npath;
-+		}
-+		*s = tmp;
-+	} while (rc == 0);
-+
-+	kfree(path);
-+	return rc;
- }
- 
- int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
- {
- 	int rc = 0;
- 	unsigned int xid;
--	struct cifs_ses *ses;
--	struct cifs_tcon *root_tcon = NULL;
-+	struct TCP_Server_Info *server = NULL;
-+	struct cifs_ses *ses = NULL, *root_ses = NULL;
- 	struct cifs_tcon *tcon = NULL;
--	struct TCP_Server_Info *server;
--	char *root_path = NULL, *full_path = NULL;
--	char *old_mountdata, *origin_mountdata = NULL;
--	int count;
-+	int count = 0;
-+	char *ref_path = NULL, *full_path = NULL;
-+	char *oldmnt = NULL;
-+	char *mntdata = NULL;
- 
- 	rc = mount_get_conns(vol, cifs_sb, &xid, &server, &ses, &tcon);
--	if (!rc && tcon) {
--		/* If not a standalone DFS root, then check if path is remote */
--		rc = dfs_cache_find(xid, ses, cifs_sb->local_nls,
--				    cifs_remap(cifs_sb), vol->UNC + 1, NULL,
--				    NULL);
--		if (rc) {
--			rc = is_path_remote(cifs_sb, vol, xid, server, tcon);
--			if (!rc)
--				goto out;
--			if (rc != -EREMOTE)
--				goto error;
--		}
--	}
- 	/*
--	 * If first DFS target server went offline and we failed to connect it,
--	 * server and ses pointers are NULL at this point, though we still have
--	 * chance to get a cached DFS referral in expand_dfs_referral() and
--	 * retry next target available in it.
-+	 * Unconditionally try to get an DFS referral (even cached) to determine whether it is an
-+	 * DFS mount.
- 	 *
--	 * If a NULL ses ptr is passed to dfs_cache_find(), a lookup will be
--	 * performed against DFS path and *no* requests will be sent to server
--	 * for any new DFS referrals. Hence it's safe to skip checking whether
--	 * server or ses ptr is NULL.
-+	 * Skip prefix path to provide support for DFS referrals from w2k8 servers which don't seem
-+	 * to respond with PATH_NOT_COVERED to requests that include the prefix.
- 	 */
--	if (rc == -EACCES || rc == -EOPNOTSUPP)
--		goto error;
--
--	root_path = build_unc_path_to_root(vol, cifs_sb, false);
--	if (IS_ERR(root_path)) {
--		rc = PTR_ERR(root_path);
--		root_path = NULL;
--		goto error;
--	}
--
--	full_path = build_unc_path_to_root(vol, cifs_sb, true);
--	if (IS_ERR(full_path)) {
--		rc = PTR_ERR(full_path);
--		full_path = NULL;
--		goto error;
--	}
--	/*
--	 * Perform an unconditional check for whether there are DFS
--	 * referrals for this path without prefix, to provide support
--	 * for DFS referrals from w2k8 servers which don't seem to respond
--	 * with PATH_NOT_COVERED to requests that include the prefix.
--	 * Chase the referral if found, otherwise continue normally.
--	 */
--	old_mountdata = cifs_sb->mountdata;
--	(void)expand_dfs_referral(xid, ses, vol, cifs_sb, false);
--
--	if (cifs_sb->mountdata == NULL) {
--		rc = -ENOENT;
--		goto error;
--	}
--
--	/* Save DFS root volume information for DFS refresh worker */
--	origin_mountdata = kstrndup(cifs_sb->mountdata,
--				    strlen(cifs_sb->mountdata), GFP_KERNEL);
--	if (!origin_mountdata) {
--		rc = -ENOMEM;
--		goto error;
--	}
--
--	if (cifs_sb->mountdata != old_mountdata) {
--		/* If we were redirected, reconnect to new target server */
--		mount_put_conns(cifs_sb, xid, server, ses, tcon);
--		rc = mount_get_conns(vol, cifs_sb, &xid, &server, &ses, &tcon);
--	}
--	if (rc) {
--		if (rc == -EACCES || rc == -EOPNOTSUPP)
--			goto error;
--		/* Perform DFS failover to any other DFS targets */
--		rc = mount_do_dfs_failover(root_path + 1, cifs_sb, vol, NULL,
--					   &xid, &server, &ses, &tcon);
-+	if (dfs_cache_find(xid, ses, cifs_sb->local_nls, cifs_remap(cifs_sb), vol->UNC + 1, NULL,
-+			   NULL)) {
-+		/* No DFS referral was returned.  Looks like a regular share. */
- 		if (rc)
- 			goto error;
-+		/* Check if it is fully accessible and then mount it */
-+		rc = is_path_remote(cifs_sb, vol, xid, server, tcon);
-+		if (!rc)
-+			goto out;
-+		if (rc != -EREMOTE)
-+			goto error;
- 	}
--
--	kfree(root_path);
--	root_path = build_unc_path_to_root(vol, cifs_sb, false);
--	if (IS_ERR(root_path)) {
--		rc = PTR_ERR(root_path);
--		root_path = NULL;
-+	/* Save mount options */
-+	mntdata = kstrndup(cifs_sb->mountdata, strlen(cifs_sb->mountdata), GFP_KERNEL);
-+	if (!mntdata) {
-+		rc = -ENOMEM;
-+		goto error;
-+	}
-+	/* Get path of DFS root */
-+	ref_path = build_unc_path_to_root(vol, cifs_sb, false);
-+	if (IS_ERR(ref_path)) {
-+		rc = PTR_ERR(ref_path);
-+		ref_path = NULL;
- 		goto error;
- 	}
--	/* Cache out resolved root server */
--	(void)dfs_cache_find(xid, ses, cifs_sb->local_nls, cifs_remap(cifs_sb),
--			     root_path + 1, NULL, NULL);
--	kfree(root_path);
--	root_path = NULL;
--
--	set_root_tcon(cifs_sb, tcon, &root_tcon);
--
--	for (count = 1; ;) {
--		if (!rc && tcon) {
--			rc = is_path_remote(cifs_sb, vol, xid, server, tcon);
--			if (!rc || rc != -EREMOTE)
--				break;
--		}
--		/*
--		 * BB: when we implement proper loop detection,
--		 *     we will remove this check. But now we need it
--		 *     to prevent an indefinite loop if 'DFS tree' is
--		 *     misconfigured (i.e. has loops).
--		 */
--		if (count++ > MAX_NESTED_LINKS) {
--			rc = -ELOOP;
--			break;
--		}
- 
-+	set_root_ses(cifs_sb, ses, &root_ses);
-+	do {
-+		/* Save full path of last DFS path we used to resolve final target server */
- 		kfree(full_path);
--		full_path = build_unc_path_to_root(vol, cifs_sb, true);
-+		full_path = build_unc_path_to_root(vol, cifs_sb, !!count);
- 		if (IS_ERR(full_path)) {
- 			rc = PTR_ERR(full_path);
--			full_path = NULL;
- 			break;
- 		}
--
--		old_mountdata = cifs_sb->mountdata;
--		rc = expand_dfs_referral(xid, root_tcon->ses, vol, cifs_sb,
--					 true);
-+		/* Chase referral */
-+		oldmnt = cifs_sb->mountdata;
-+		rc = expand_dfs_referral(xid, root_ses, vol, cifs_sb, ref_path + 1);
- 		if (rc)
- 			break;
--
--		if (cifs_sb->mountdata != old_mountdata) {
-+		/* Connect to new DFS target only if we were redirected */
-+		if (oldmnt != cifs_sb->mountdata) {
- 			mount_put_conns(cifs_sb, xid, server, ses, tcon);
--			rc = mount_get_conns(vol, cifs_sb, &xid, &server, &ses,
--					     &tcon);
--			/*
--			 * Ensure that DFS referrals go through new root server.
--			 */
--			if (!rc && tcon &&
--			    (tcon->share_flags & (SHI1005_FLAGS_DFS |
--						  SHI1005_FLAGS_DFS_ROOT))) {
--				cifs_put_tcon(root_tcon);
--				set_root_tcon(cifs_sb, tcon, &root_tcon);
--			}
-+			rc = mount_get_conns(vol, cifs_sb, &xid, &server, &ses, &tcon);
- 		}
--		if (rc) {
--			if (rc == -EACCES || rc == -EOPNOTSUPP)
--				break;
--			/* Perform DFS failover to any other DFS targets */
--			rc = mount_do_dfs_failover(full_path + 1, cifs_sb, vol,
--						   root_tcon->ses, &xid,
--						   &server, &ses, &tcon);
--			if (rc == -EACCES || rc == -EOPNOTSUPP || !server ||
--			    !ses)
--				goto error;
-+		if (rc && !server && !ses) {
-+			/* Failed to connect. Try to connect to other targets in the referral. */
-+			rc = do_dfs_failover(ref_path + 1, full_path, cifs_sb, vol, root_ses, &xid,
-+					     &server, &ses, &tcon);
- 		}
--	}
--	cifs_put_tcon(root_tcon);
-+		if (rc == -EACCES || rc == -EOPNOTSUPP || !server || !ses)
-+			break;
-+		if (!tcon)
-+			continue;
-+		/* Make sure that requests go through new root servers */
-+		if (tcon->share_flags & (SHI1005_FLAGS_DFS | SHI1005_FLAGS_DFS_ROOT)) {
-+			put_root_ses(root_ses);
-+			set_root_ses(cifs_sb, ses, &root_ses);
-+		}
-+		/* Check for remaining path components and then continue chasing them (-EREMOTE) */
-+		rc = check_dfs_prepath(cifs_sb, vol, xid, server, tcon, &ref_path);
-+		/* Prevent recursion on broken link referrals */
-+		if (rc == -EREMOTE && ++count > MAX_NESTED_LINKS)
-+			rc = -ELOOP;
-+	} while (rc == -EREMOTE);
- 
- 	if (rc)
- 		goto error;
--
--	spin_lock(&cifs_tcp_ses_lock);
--	if (!tcon->dfs_path) {
--		/* Save full path in new tcon to do failover when reconnecting tcons */
--		tcon->dfs_path = full_path;
--		full_path = NULL;
--		tcon->remap = cifs_remap(cifs_sb);
--	}
--	cifs_sb->origin_fullpath = kstrndup(tcon->dfs_path,
--					    strlen(tcon->dfs_path),
--					    GFP_ATOMIC);
-+	put_root_ses(root_ses);
-+	root_ses = NULL;
-+	kfree(ref_path);
-+	ref_path = NULL;
-+	/*
-+	 * Store DFS full path in both superblock and tree connect structures.
-+	 *
-+	 * For DFS root mounts, the prefix path (cifs_sb->prepath) is preserved during reconnect so
-+	 * only the root path is set in cifs_sb->origin_fullpath and tcon->dfs_path. And for DFS
-+	 * links, the prefix path is included in both and may be changed during reconnect.  See
-+	 * cifs_tree_connect().
-+	 */
-+	cifs_sb->origin_fullpath = kstrndup(full_path, strlen(full_path), GFP_KERNEL);
- 	if (!cifs_sb->origin_fullpath) {
--		spin_unlock(&cifs_tcp_ses_lock);
- 		rc = -ENOMEM;
- 		goto error;
- 	}
-+	spin_lock(&cifs_tcp_ses_lock);
-+	tcon->dfs_path = full_path;
-+	full_path = NULL;
-+	tcon->remap = cifs_remap(cifs_sb);
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
--	rc = dfs_cache_add_vol(origin_mountdata, vol, cifs_sb->origin_fullpath);
--	if (rc) {
--		kfree(cifs_sb->origin_fullpath);
-+	/* Add original volume information for DFS cache to be used when refreshing referrals */
-+	rc = dfs_cache_add_vol(mntdata, vol, cifs_sb->origin_fullpath);
-+	if (rc)
- 		goto error;
--	}
- 	/*
- 	 * After reconnecting to a different server, unique ids won't
- 	 * match anymore, so we disable serverino. This prevents
-@@ -4977,9 +4969,11 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
- 	return mount_setup_tlink(cifs_sb, ses, tcon);
- 
- error:
-+	kfree(ref_path);
- 	kfree(full_path);
--	kfree(root_path);
--	kfree(origin_mountdata);
-+	kfree(mntdata);
-+	kfree(cifs_sb->origin_fullpath);
-+	put_root_ses(root_ses);
- 	mount_put_conns(cifs_sb, xid, server, ses, tcon);
- 	return rc;
- }
--- 
-2.27.0
+The root cause of the file2 deleted maybe the file2 was opened
+when rename(file1, file2), I will re-debug it.
+
+在 2020/7/21 1:09, Patrick Fernie 写道:
+> # One line summary of the problem:
+> 
+> mv command fails: "File exists" on cifs mount on kernel>=5.7.8
+> 
+> # Full description of the problem/report:
+> 
+> Since v5.7.8 (v5.4.51 for -lts), there appears to be a regression with
+> cifs mounts; mv commands fail with a "File exists" when attempting to
+> overwrite a file. Similarly, rsync commands which create a temporary
+> file during transfer and then attempt to move it into place after
+> copying fail ("File Exists (17)"). I believe this is related to this
+> commit: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/fs/cifs/inode.c?id=9ffad9263b467efd8f8dc7ae1941a0a655a2bab2
+> 
+> The mount in question is from a Drobo FS NAS device, and is forced to
+> SMB1 (`vers=1.0` specified).
+> 
+> Running v5.7.7 or 5.4.50 does not exhibit this behavior, behavior was
+> confirmed on 5.7.8, 5.7.9, 5.4.51 and 5.4.52.
+> 
+> These users appear to be experiencing the same issue:
+> 1) https://serverfault.com/questions/1025734/cifs-automounts-suddenly-stopped-working
+> 2) https://unix.stackexchange.com/questions/599281/cifs-mount-is-returning-errors-when-operating-on-remote-files-file-exists-inte
+> 
+> # Most recent kernel version which did not have the bug:
+> 
+> 5.7.7 / 5.4.50
+> 
+> # A small shell script or example program which triggers the problem
+> (if possible):
+> 
+> [vagrant@archlinux ~]$ uname -a
+> Linux archlinux 5.7.9-arch1-1 #1 SMP PREEMPT Thu, 16 Jul 2020 19:34:49
+> +0000 x86_64 GNU/Linux
+> # Same behavior seen on Linux archlinux 5.4.52-1-lts #1 SMP Thu, 16
+> Jul 2020 19:35:06 +0000 x86_64 GNU/Linux
+> [vagrant@archlinux ~]$ cd /mnt/drobo/Share/cifs-test/
+> [vagrant@archlinux cifs-test]$ touch a b
+> [vagrant@archlinux cifs-test]$ mv a b
+> mv: cannot move 'a' to 'b': File exists
+> [vagrant@archlinux cifs-test]$ mkdir -p /tmp/sync_dir
+> [vagrant@archlinux cifs-test]$ touch /tmp/sync_dir/foo
+> [vagrant@archlinux cifs-test]$ rsync -rap /tmp/sync_dir .
+> [vagrant@archlinux cifs-test]$ touch /tmp/sync_dir/foo
+> [vagrant@archlinux cifs-test]$ rsync -rap /tmp/sync_dir .
+> rsync: [receiver] rename
+> "/mnt/drobo/Share/cifs-test/sync_dir/.foo.FQiit5" -> "sync_dir/foo":
+> File exists (17)
+> rsync error: some files/attrs were not transferred (see previous
+> errors) (code 23) at main.c(1287) [sender=3.2.2]
+> 
+> ## Behavior as expected on older kernel:
+> 
+> [vagrant@archlinux ~]$ uname -a
+> Linux archlinux 5.7.7-arch1-1 #1 SMP PREEMPT Wed, 01 Jul 2020 14:53:16
+> +0000 x86_64 GNU/Linux
+> # Same behavior seen on Linux archlinux 5.4.50-1-lts #1 SMP Wed, 01
+> Jul 2020 14:53:03 +0000 x86_64 GNU/Linux
+> [vagrant@archlinux ~]$ cd /mnt/drobo/Share/cifs-test/
+> [vagrant@archlinux cifs-test]$ touch a b
+> [vagrant@archlinux cifs-test]$ mv a b
+> [vagrant@archlinux cifs-test]$ mkdir -p /tmp/sync_dir
+> [vagrant@archlinux cifs-test]$ touch /tmp/sync_dir/foo
+> [vagrant@archlinux cifs-test]$ rsync -rap /tmp/sync_dir .
+> [vagrant@archlinux cifs-test]$ touch /tmp/sync_dir/foo
+> [vagrant@archlinux cifs-test]$ rsync -rap /tmp/sync_dir .
+> [vagrant@archlinux cifs-test]$
+> 
+> # Environment:
+> 
+> Arch Linux
+> 
+> CIFS mount (vers=1.0) from Drobo FS NAS device
+> 
+> CIFS share mount information:
+> 
+> systemd-1 on /mnt/drobo/Share type autofs
+> (rw,relatime,fd=44,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=12139)
+> //10.76.9.11/Share on /mnt/drobo/Share type cifs
+> (rw,relatime,vers=1.0,cache=strict,username=XXXXXXX,uid=0,noforceuid,gid=0,noforcegid,addr=10.76.9.11,file_mode=0775,dir_mode=0775,nocase,soft,nounix,serverino,mapposix,nobrl,noperm,rsize=61440,wsize=65536,bsize=1048576,echo_interval=60,actimeo=1,x-systemd.automount)
+> 
+> Regards,
+> Patrick Fernie
+> 
+> .
+> 
 
