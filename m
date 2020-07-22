@@ -2,75 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83F9228F84
-	for <lists+linux-cifs@lfdr.de>; Wed, 22 Jul 2020 07:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBBE228FD6
+	for <lists+linux-cifs@lfdr.de>; Wed, 22 Jul 2020 07:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbgGVFIA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 22 Jul 2020 01:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgGVFIA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Jul 2020 01:08:00 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA409C061794
-        for <linux-cifs@vger.kernel.org>; Tue, 21 Jul 2020 22:07:59 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id d14so822583qke.13
-        for <linux-cifs@vger.kernel.org>; Tue, 21 Jul 2020 22:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=70yCi0FEAOU3112o2JYk+gRGnM2935HzsnfIsc/CW2g=;
-        b=VEMpVKuF+PUHyBSnTnBwmOnqeB4PdcJAfKaqMd4vephBU8n7/iKcpn7Pm99LWByLoo
-         XxMS7Tgu6YAQFecaIItsID+lVkuC2B/qyrgD5o3lTegWkSqNdfe+6qUvB0r0C/hibHUz
-         tTq8GMl/jz53Isyee4nx85iZ9g99EOF81H/WCUlgL+bjJtgtFpI2sT/ZyEbLQFN8w5TI
-         F0BNo16pWxKzptEiHqSlnZMIOrEJfZU9FKd2XseW+o9lKDOzhCC0JsJAJCvT8/I0CXPx
-         DrVG7zL1+okY4DgyZs+7mpAf6Lw9IwUNC/nNY8yTSNwtTDL8YeP0VOC3XPDawkDgF+9R
-         CHJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=70yCi0FEAOU3112o2JYk+gRGnM2935HzsnfIsc/CW2g=;
-        b=W598QWcJFI54xGw5ch607uPPwJuLK/zguH+ev8wFhdMfOZ3uom9DRsr4238YwjnPBC
-         S6GD67vkYOgNTPLGvJIhfT98lqRue4Rii7drbSAX2/0q/a0pZ+bKg2mxVqAaaXq7jbMn
-         SW3jkbpGM+Uje0J8enHCBK4K8mYYkV1k0OBjRaomt/40QmV+ygVCRAskyd6xIFhOq8ND
-         rTT82SoPh6EjESNTQb0pVKdgsw7paaPwllyQgzhmJulgnnCF5MdicixIyPSwDGVLqKpX
-         c1MDUey2OhtNXi0ZtJdEyL8Xv9fdqHu667aELpESAfh4VQGKG5c0U+QlsuyelnDCAcUL
-         qEsw==
-X-Gm-Message-State: AOAM532wg4Zo8y5lZqwlBsVF29oxB1kJDyWSs7It/jKs/v2xdvxrMG50
-        H2b4HzIxKSZ/wvEqcSdDsYUnxw8xVXKiIGwERaNUmBNP5aY=
-X-Google-Smtp-Source: ABdhPJzMLTpHBB4E7yPvmVdYX7CNwpb/ef29ix+UdNlIXxTdw59iQviYgpfD7phZRf9/hbTIzo+R9XsfQAZtShXGFXk=
-X-Received: by 2002:a37:458f:: with SMTP id s137mr22712420qka.129.1595394478825;
- Tue, 21 Jul 2020 22:07:58 -0700 (PDT)
+        id S1727840AbgGVFk5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 22 Jul 2020 01:40:57 -0400
+Received: from smtp.utu.edu.uy ([190.0.150.6]:46274 "EHLO delta45.utu.edu.uy"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726696AbgGVFk5 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 22 Jul 2020 01:40:57 -0400
+X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Jul 2020 01:40:54 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by delta45.utu.edu.uy (Postfix) with ESMTP id B6A1E1D0EF11;
+        Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
+Received: from delta45.utu.edu.uy ([127.0.0.1])
+        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id OxV12qveerB9; Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
+Received: from localhost (localhost [127.0.0.1])
+        by delta45.utu.edu.uy (Postfix) with ESMTP id B04AD1D0EEF0;
+        Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
+X-Virus-Scanned: amavisd-new at delta45.utu.edu.uy
+Received: from delta45.utu.edu.uy ([127.0.0.1])
+        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id y6g8PCAdXJ3S; Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
+Received: from delta45.utu.edu.uy (delta45 [172.17.1.45])
+        by delta45.utu.edu.uy (Postfix) with ESMTP id 7FB051D0EEFB;
+        Wed, 22 Jul 2020 02:32:10 -0300 (GMT+3)
+Date:   Wed, 22 Jul 2020 02:32:10 -0300 (GMT-03:00)
+From:   Darlehen Bedienung <aemartinez@utu.edu.uy>
+Reply-To: info_innoxcapitalservicesolution@aol.com
+Message-ID: <754360867.138094.1595395930510.JavaMail.zimbra@utu.edu.uy>
+Subject: 
 MIME-Version: 1.0
-References: <b14432a4-bb8c-7a0f-4339-b7e6ddec9b4a@arrl.org>
- <CAH2r5msj3KMMonyhjDeyAweHEBezOHFkJwCUXpJ4Gv59Q=S9bQ@mail.gmail.com>
- <752d5d05-7b91-b119-b5a6-7fcdeb1f0ced@arrl.org> <CAH2r5muNtwm3V-0GpaRBXmrptGDO9w1vDSWN9Wrf_eebuevg6A@mail.gmail.com>
- <61450b64-ed70-6b8f-2beb-57267ddcb8c5@arrl.org> <CAH2r5mu-g-RrR9Q4ghmqjkd-mbXbfeJE=HgVSaEEosCyBNoO8Q@mail.gmail.com>
- <119a0298-4099-c65e-30db-746814e36cce@arrl.org>
-In-Reply-To: <119a0298-4099-c65e-30db-746814e36cce@arrl.org>
-From:   Isaac Boukris <iboukris@gmail.com>
-Date:   Wed, 22 Jul 2020 07:07:47 +0200
-Message-ID: <CAC-fF8TB7C2TOv9-mT68teA7hJJ0jY5YG0vW6A2OcnD_wmqTpQ@mail.gmail.com>
-Subject: Re: issue -- cifs automounts stopped working
-To:     "Michael Keane, K1MK" <mkeane@arrl.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Upstream Samba Technical Mailing list 
-        <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [172.17.1.45]
+X-Mailer: Zimbra 8.8.12_GA_3866 (zclient/8.8.12_GA_3866)
+X-Authenticated-User: aemartinez@utu.edu.uy
+Thread-Index: sHxyVNlBzwToKpIuoIGp0++CnI1oLA==
+Thread-Topic: 
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 5:48 AM Michael Keane, K1MK <mkeane@arrl.org> wrote:
->
-> Tried setting KRB5_CCNAME to KEYRING:persistent:1000 with no change
-> (Also tried KRB5CCNAME  as well, as that's the environment variable
 
-Indeed KRB5CCNAME is the right variable name, you can also run the
-upcall with KRB5_TRACE=/logfile to get more insights what the krb5
-libs are doing.
+
+Schönen Tag,Wir sind zuverlässige, vertrauenswürdige Kreditgeber, Wir bieten Darlehen an Unternehmen und Privatpersonen zu niedrigen und günstigen Zinssatz von 2%. Sind Sie auf der Suche nach einem Business-Darlehen, persönliche Darlehen, Schuldenkonsolidierung, unbesicherte Darlehen, Venture Capital. Kontaktieren Sie uns mit Name, Land, Darlehensbetrag, Dauer und Telefonnummer.GrüßeHerr DA COSTA DARREN FAY
