@@ -2,51 +2,78 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBBE228FD6
-	for <lists+linux-cifs@lfdr.de>; Wed, 22 Jul 2020 07:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0344622A6E3
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 Jul 2020 07:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbgGVFk5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 22 Jul 2020 01:40:57 -0400
-Received: from smtp.utu.edu.uy ([190.0.150.6]:46274 "EHLO delta45.utu.edu.uy"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726696AbgGVFk5 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 22 Jul 2020 01:40:57 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Jul 2020 01:40:54 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id B6A1E1D0EF11;
-        Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
-Received: from delta45.utu.edu.uy ([127.0.0.1])
-        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OxV12qveerB9; Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
-Received: from localhost (localhost [127.0.0.1])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id B04AD1D0EEF0;
-        Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
-X-Virus-Scanned: amavisd-new at delta45.utu.edu.uy
-Received: from delta45.utu.edu.uy ([127.0.0.1])
-        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id y6g8PCAdXJ3S; Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
-Received: from delta45.utu.edu.uy (delta45 [172.17.1.45])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id 7FB051D0EEFB;
-        Wed, 22 Jul 2020 02:32:10 -0300 (GMT+3)
-Date:   Wed, 22 Jul 2020 02:32:10 -0300 (GMT-03:00)
-From:   Darlehen Bedienung <aemartinez@utu.edu.uy>
-Reply-To: info_innoxcapitalservicesolution@aol.com
-Message-ID: <754360867.138094.1595395930510.JavaMail.zimbra@utu.edu.uy>
-Subject: 
+        id S1725858AbgGWFX5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 23 Jul 2020 01:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725849AbgGWFX4 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Jul 2020 01:23:56 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E0C0619DC
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Jul 2020 22:23:56 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id i18so3308798ilk.10
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Jul 2020 22:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=WpMBGot8puTiMlmSpFVXBB0Q4QQ82yXT6C9rA9c3WHg=;
+        b=RGuFtM3m8tx6EEtosK/nMI/nBTOkvWXUMT1l9IlcpiHaj+Qf/Ijg7UJ2TWtlaPWkjT
+         YJqmqpq9LcQLI08MmWtoKmwLo3jWcsWaV8ffTNQgefrNqKXq6u2t8gNWrm4T+qYHK7IE
+         MnPPwlw8WpYH4YMF82HOoe6e7DFBi/lg1jXca8M5WgH3EGpnu93H74jg3ND6NCSdG7uE
+         6bOefmooTCzGdHdJJxmXiPfcQCRxFKtmu9poZBInsdRKoRH9jd9VINV1lh3GOZWDUvnT
+         k18GZjky5t01DVfRqHnx1YDuq+pWor7rH9Hqr+tSf3dTwe05InyhxSP/61zKuyQMCBxE
+         R3Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=WpMBGot8puTiMlmSpFVXBB0Q4QQ82yXT6C9rA9c3WHg=;
+        b=UFGE+eJo3KWnxItyk86cmVUXxPcombA8MxjU6jOMS51yGwXvNbEflIVFRbCpjggyi/
+         nv0tcw4xkrCaWfruezLS9vTdgIECR2AfW1pxpwTue4JPNMbOep1rIbt2rA0Nk1fhe65G
+         liIQInLi5YqTlhRW6UMnNtV14N10VM4be9BA5uwgQWRHiTv5W8W9RrGdSEQttjf22eF5
+         lPNAAGzLYXliUTQQQb3d0JNv85VrhxPtMgdKG5+sl3vgLYyJc6R8d8TMHxGOaAREE66d
+         EGFe2+LzVBIkQdTeqUPKK4e7P7CVzbcA0yR/KL3IMVK7sO2wb0hLEiBfinvz4FeeqI4j
+         1yDQ==
+X-Gm-Message-State: AOAM532U6iW2UZYhthqRou6qLKmrVYeX2LOH6PEMa6zISJjTYkcPcAgG
+        be8EHSbzVgsAk6UWRX2JCHLTpZ6yfft9GhDZ3HSK0Gw1W1Y=
+X-Google-Smtp-Source: ABdhPJwdbodK/Av+yJlue/WJjtwYGhr+2fFwJPeY5AeK8Vy4f42TY5ezdS/3/dnV0K0BPFkFonlm5m3otdf/SSOBuw8=
+X-Received: by 2002:a92:d6d2:: with SMTP id z18mr3303661ilp.272.1595481835824;
+ Wed, 22 Jul 2020 22:23:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [172.17.1.45]
-X-Mailer: Zimbra 8.8.12_GA_3866 (zclient/8.8.12_GA_3866)
-X-Authenticated-User: aemartinez@utu.edu.uy
-Thread-Index: sHxyVNlBzwToKpIuoIGp0++CnI1oLA==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 23 Jul 2020 00:23:45 -0500
+Message-ID: <CAH2r5muh5W-OtXEKg7Ji7jBZa1h3-XVvHBn3izkyMrrWAbfrcQ@mail.gmail.com>
+Subject: xfstest 129 slowness
+To:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+In trying to debug xfstest 129 I noticed odd behavior to Windows server
+
+test 129 does 4 steps, and the second one is the very slow step
+
+$here/src/looptest -i 100000 -r -w -b 8192 -s
+$SCRATCH_MNT/looptest/looptest1.tst
+$here/src/looptest -i 10000 -t -r -w -s -b 102400
+$SCRATCH_MNT/looptest/looptest2.tst
+$here/src/looptest -i 50000 -r -w -b 256 -s $SCRATCH_MNT/looptest/looptest3.tst
+$here/src/looptest -i 2000 -o -r -w -b 8192 -s
+$SCRATCH_MNT/looptest/looptest4.tst
 
 
-Schönen Tag,Wir sind zuverlässige, vertrauenswürdige Kreditgeber, Wir bieten Darlehen an Unternehmen und Privatpersonen zu niedrigen und günstigen Zinssatz von 2%. Sind Sie auf der Suche nach einem Business-Darlehen, persönliche Darlehen, Schuldenkonsolidierung, unbesicherte Darlehen, Venture Capital. Kontaktieren Sie uns mit Name, Land, Darlehensbetrag, Dauer und Telefonnummer.GrüßeHerr DA COSTA DARREN FAY
+So the problem is the second invocation of looptest - when it is doing
+10,000 102,400 byte sequential writes and reads passing in the
+truncate flag.  What I see in the network trace (at least to Windows
+server) that is troubling is lots of "STATUS_PENDING" errors in the
+write responses.
+
+It appears that the test runs much faster to Samba
+-- 
+Thanks,
+
+Steve
