@@ -2,78 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0344622A6E3
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 Jul 2020 07:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675CE22A6F1
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 Jul 2020 07:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725858AbgGWFX5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 23 Jul 2020 01:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S1725843AbgGWFf6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 23 Jul 2020 01:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgGWFX4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Jul 2020 01:23:56 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E0C0619DC
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Jul 2020 22:23:56 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id i18so3308798ilk.10
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Jul 2020 22:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=WpMBGot8puTiMlmSpFVXBB0Q4QQ82yXT6C9rA9c3WHg=;
-        b=RGuFtM3m8tx6EEtosK/nMI/nBTOkvWXUMT1l9IlcpiHaj+Qf/Ijg7UJ2TWtlaPWkjT
-         YJqmqpq9LcQLI08MmWtoKmwLo3jWcsWaV8ffTNQgefrNqKXq6u2t8gNWrm4T+qYHK7IE
-         MnPPwlw8WpYH4YMF82HOoe6e7DFBi/lg1jXca8M5WgH3EGpnu93H74jg3ND6NCSdG7uE
-         6bOefmooTCzGdHdJJxmXiPfcQCRxFKtmu9poZBInsdRKoRH9jd9VINV1lh3GOZWDUvnT
-         k18GZjky5t01DVfRqHnx1YDuq+pWor7rH9Hqr+tSf3dTwe05InyhxSP/61zKuyQMCBxE
-         R3Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=WpMBGot8puTiMlmSpFVXBB0Q4QQ82yXT6C9rA9c3WHg=;
-        b=UFGE+eJo3KWnxItyk86cmVUXxPcombA8MxjU6jOMS51yGwXvNbEflIVFRbCpjggyi/
-         nv0tcw4xkrCaWfruezLS9vTdgIECR2AfW1pxpwTue4JPNMbOep1rIbt2rA0Nk1fhe65G
-         liIQInLi5YqTlhRW6UMnNtV14N10VM4be9BA5uwgQWRHiTv5W8W9RrGdSEQttjf22eF5
-         lPNAAGzLYXliUTQQQb3d0JNv85VrhxPtMgdKG5+sl3vgLYyJc6R8d8TMHxGOaAREE66d
-         EGFe2+LzVBIkQdTeqUPKK4e7P7CVzbcA0yR/KL3IMVK7sO2wb0hLEiBfinvz4FeeqI4j
-         1yDQ==
-X-Gm-Message-State: AOAM532U6iW2UZYhthqRou6qLKmrVYeX2LOH6PEMa6zISJjTYkcPcAgG
-        be8EHSbzVgsAk6UWRX2JCHLTpZ6yfft9GhDZ3HSK0Gw1W1Y=
-X-Google-Smtp-Source: ABdhPJwdbodK/Av+yJlue/WJjtwYGhr+2fFwJPeY5AeK8Vy4f42TY5ezdS/3/dnV0K0BPFkFonlm5m3otdf/SSOBuw8=
-X-Received: by 2002:a92:d6d2:: with SMTP id z18mr3303661ilp.272.1595481835824;
- Wed, 22 Jul 2020 22:23:55 -0700 (PDT)
-MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 23 Jul 2020 00:23:45 -0500
-Message-ID: <CAH2r5muh5W-OtXEKg7Ji7jBZa1h3-XVvHBn3izkyMrrWAbfrcQ@mail.gmail.com>
-Subject: xfstest 129 slowness
-To:     CIFS <linux-cifs@vger.kernel.org>
+        with ESMTP id S1725822AbgGWFf5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Jul 2020 01:35:57 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2D4C0619DC
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Jul 2020 22:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=EdvmQILTm5t2NWeM9s6r6EQnguhcKiV5N+U28RLNNzo=; b=nGVrHeLm4T67TkZoirPR2IT2Rr
+        dIk489PgdMtZgOL49sRwip5kHfXm71mKCCd5xmctZYtrzaoHaa2JguR4g1jugAkDimhRCvndDt291
+        95gGDQfuD4E+tlPhSP16t2oKy8KNBk04HFjGDKFtgD2j6loQ4PeLeNxkuBQfwWxbuVZh8ixfR3jt7
+        H3lXGfEbEDeQm8JOQY2YAaIAbtoEvIUmwKKuNdIWqbTVz1nnTyddB3IOr9Kxxw1Z6obHF/+wnmuNx
+        RtKHsgPTgISzP6SA9U16lldv6hVszws2K3QyqXYF3JXXsaBp1RLZtdRaT81kEwsaFgcB80+JU5zsA
+        a+LSAEGH0dyZ+PS/OX/sCPCpoxTH8p+zoEiox2w0yfcdgUpGOCJTu42kxNYzeznZ4SZw4Kk8FhMP3
+        3zuSXqd7aBzPHMCWLNavOIHLvouMEgIo/hFVdLYgTnkQdL0VE3fxNe0FlMrzwhogyghUl21mZFvqn
+        X3ujPwb1ytgCR2v36TV6p5xC;
+Received: from [2a01:4f8:192:486::6:0] (port=42964 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1jyTtZ-0007rW-SG
+        for cifs-qa@samba.org; Thu, 23 Jul 2020 05:35:53 +0000
+Received: from [::1] (port=28920 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1jyTtZ-0070b8-72
+        for cifs-qa@samba.org; Thu, 23 Jul 2020 05:35:53 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14442] Shell command injection vulnerability in mount.cifs
+Date:   Thu, 23 Jul 2020 05:35:51 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.4
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: meissner@suse.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14442-10630-ySdFs69AHO@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14442-10630@https.bugzilla.samba.org/>
+References: <bug-14442-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-In trying to debug xfstest 129 I noticed odd behavior to Windows server
+https://bugzilla.samba.org/show_bug.cgi?id=3D14442
 
-test 129 does 4 steps, and the second one is the very slow step
+--- Comment #7 from Marcus Meissner <meissner@suse.de> ---
+Looks like a valid CVE scenario. (untrusted users might be asked to input t=
+heir
+smb sharwe username which is then passed unfiltered into this kind of
+mount.cifs construct)
 
-$here/src/looptest -i 100000 -r -w -b 8192 -s
-$SCRATCH_MNT/looptest/looptest1.tst
-$here/src/looptest -i 10000 -t -r -w -s -b 102400
-$SCRATCH_MNT/looptest/looptest2.tst
-$here/src/looptest -i 50000 -r -w -b 256 -s $SCRATCH_MNT/looptest/looptest3.tst
-$here/src/looptest -i 2000 -o -r -w -b 8192 -s
-$SCRATCH_MNT/looptest/looptest4.tst
+additionaly to the proposed fixes, perhaps also check for valid characters =
+and
+abort if you encounter an invalid one.
 
-
-So the problem is the second invocation of looptest - when it is doing
-10,000 102,400 byte sequential writes and reads passing in the
-truncate flag.  What I see in the network trace (at least to Windows
-server) that is troubling is lots of "STATUS_PENDING" errors in the
-write responses.
-
-It appears that the test runs much faster to Samba
--- 
-Thanks,
-
-Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
