@@ -2,85 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 456F722C87B
-	for <lists+linux-cifs@lfdr.de>; Fri, 24 Jul 2020 16:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6309922C90B
+	for <lists+linux-cifs@lfdr.de>; Fri, 24 Jul 2020 17:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgGXOwh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 24 Jul 2020 10:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbgGXOwh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 24 Jul 2020 10:52:37 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C35FC0619D3
-        for <linux-cifs@vger.kernel.org>; Fri, 24 Jul 2020 07:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=r9Tz1umMd6hmXDCuN4nNQUXEyC5KtDhxKS5JIxMsPWU=; b=kBxSMzU/B+Cw6Tgq/KuvCnzHzQ
-        iJp2XgwS6tyjQyDqFqhwmA2rxVUkzh7LnZPP5C57fGeOkrDtCxEKRHvHq5UdjKbYgS5YKBVhbZR+7
-        7HRTfs/sllSHr7wjqrE6PpuHcqwjJdtjN7alRYCqf9wZVxSDLOD/VmzeDVHBwtrsMtxrreTci7+YS
-        CkAY0fdCyXxmiAws9+bCuPvVJdHCz2ZtGSK5wjUX5tak1kxOrCpR0Vd97EP0IsyQFtPrqUmBx3Adz
-        jDMZctIzoQw9hsEzD/sMlquoLym60XRpiNkRWaqTfvuQYprdvnp3AAsXq+I4VeCpCdRRD/FjmgNsf
-        AK4dv0IG3QSmwwobiIDKVtHwX7ccstrVNGDF15DMGfCADnYpBjtBvLylgtmNQ23Bub5pdJbXr5IJo
-        laZYf5Bwnwzac9VGgkdZvY0bRd/N5KMvUvl3fr1EdbZCwPJzU2LO2kz+qxpRExzNLjCxzHf+DMo4f
-        eTlz/udPZbXUgXwNMcI1caow;
-Received: from [2a01:4f8:192:486::6:0] (port=43734 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1jyz3p-0001L7-RP
-        for cifs-qa@samba.org; Fri, 24 Jul 2020 14:52:33 +0000
-Received: from [::1] (port=29680 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1jyz3k-007KDA-7l
-        for cifs-qa@samba.org; Fri, 24 Jul 2020 14:52:28 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14442] CVE-2020-14342: Shell command injection vulnerability in
- mount.cifs
-Date:   Fri, 24 Jul 2020 14:52:26 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.4
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: aaptel@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: short_desc
-Message-ID: <bug-14442-10630-A940hTDfdp@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14442-10630@https.bugzilla.samba.org/>
-References: <bug-14442-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1726780AbgGXP32 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 24 Jul 2020 11:29:28 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:53505 "EHLO
+        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726643AbgGXP32 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 24 Jul 2020 11:29:28 -0400
+Received: from User ([66.154.113.229]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Sat, 25 Jul 2020 00:23:25 +0900
+Reply-To: <christopherwang36@gmail.com>
+From:   "CHRISTOPHER WANG" <christopherwang36@gmail.com>
+Subject: INVESTMENT
+Date:   Fri, 24 Jul 2020 08:23:43 -0700
 MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <WIN-DAONO245HJFyTcs008ef901@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 24 Jul 2020 15:23:26.0051 (UTC) FILETIME=[60483330:01D661CE]
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14442
 
-Aur=C3=A9lien Aptel <aaptel@samba.org> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Summary|Shell command injection     |CVE-2020-14342: Shell
-                   |vulnerability in mount.cifs |command injection
-                   |                            |vulnerability in mount.cifs
+Good day,
 
---- Comment #10 from Aur=C3=A9lien Aptel <aaptel@samba.org> ---
-This bug was assigned CVE-2020-14342.
+You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client. 
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+       The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days.
+      
+       The total value of the bond is 100million pounds sterling, in a million pound denominations.
+      
+        If you can handle this, do contact me at your earliest convenience via my email christopherwang36@gmail.com
+So we can discuss the final details Thank you.
+ 
+Mr CHRISTOPHER WANG
