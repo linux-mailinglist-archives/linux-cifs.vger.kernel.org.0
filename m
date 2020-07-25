@@ -2,48 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6309922C90B
-	for <lists+linux-cifs@lfdr.de>; Fri, 24 Jul 2020 17:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8692C22D3C6
+	for <lists+linux-cifs@lfdr.de>; Sat, 25 Jul 2020 04:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgGXP32 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 24 Jul 2020 11:29:28 -0400
-Received: from [125.140.134.231] ([125.140.134.231]:53505 "EHLO
-        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726643AbgGXP32 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 24 Jul 2020 11:29:28 -0400
-Received: from User ([66.154.113.229]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
-         Sat, 25 Jul 2020 00:23:25 +0900
-Reply-To: <christopherwang36@gmail.com>
-From:   "CHRISTOPHER WANG" <christopherwang36@gmail.com>
-Subject: INVESTMENT
-Date:   Fri, 24 Jul 2020 08:23:43 -0700
+        id S1726572AbgGYCit (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 24 Jul 2020 22:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726493AbgGYCis (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 24 Jul 2020 22:38:48 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E08EC0619D3
+        for <linux-cifs@vger.kernel.org>; Fri, 24 Jul 2020 19:38:48 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id t15so2815923iob.3
+        for <linux-cifs@vger.kernel.org>; Fri, 24 Jul 2020 19:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=o794EiQiHI48xFQ97S2rbpeehuhIi4LW6BdAu5VxA6g=;
+        b=SV77cQg9i/bM/EOuHmOhtiqLgo/R4R5wDgtwZWcAK42wvVwd1XQkSQUz9L9TFqcsQk
+         qzAXZcw8BdyF6auBZkEfD62pIyMrepMMwF/hgxNd0L1Y7B+RV9cznwnVJ0G5BcxXAwFe
+         RzCCHw8UXQL7b+/MzwAPbWR4pWuEyLdE/OptPtq/kIXqpoi04b2udpVoCJFn1K4o4bI9
+         DylbQ0xNXvShdWolsENSMPu+DmDv4TUkt/zFREshpyAjlLaN5yJiibbMKhmKTbCRHrRh
+         kiNe1LzMCqljTSV187zFv/zR7KNQk6BW2AuU9e84958T6FD11XhM9WsV6L5BFN1b2fnX
+         Ritw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=o794EiQiHI48xFQ97S2rbpeehuhIi4LW6BdAu5VxA6g=;
+        b=kEbBzOiCaO/VFjVqFYs2Pi3Ax8ITPmh31ixmBZDr2aIiQ1M+ONA9j+PmZw57v79Fub
+         pKs8AsQwX79AMWE69K2rZBjmqdlny5jftpaZIUU4dYJgosAYULVLA3yluZMLIrzuSIf0
+         TjZvYGdgYS1WZAir7JNZbEzQ2N2y4yn2ppdPh2fKZZD7UzS7mJzlbVfVAysrdKxrNOte
+         fpVzbJ41Hv/aAbDUYpASLabxY68f9dAbZw9ajSmsaYYcKfHEFQksx8cxO/6zw0gG2pY/
+         97k6YErAcfhk23kpezfGeS8EQwD9gbg95tdSVjqDqB0LQSMcOTtZmgqxPRUgs4LkUMJf
+         LQsg==
+X-Gm-Message-State: AOAM532tVOXSRUbr6QhK31J7GqGcTOSHzaHH/xstCBWoweTmY8MojgRc
+        3SWHkLNwsZBYbXeLZo8RMl2NMYsfgN/AgxpVar9ORDPeHWk=
+X-Google-Smtp-Source: ABdhPJywMwwGlsObRdNowJ5NZPbzW/5GnqsS6gXViflmTSC8nn+qnv1rLZy0e3FUZsByuGRK8FGJ0byaROi/CcDelyA=
+X-Received: by 2002:a05:6638:1414:: with SMTP id k20mr13897767jad.76.1595644727705;
+ Fri, 24 Jul 2020 19:38:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <WIN-DAONO245HJFyTcs008ef901@WIN-DAONO245HJF>
-X-OriginalArrivalTime: 24 Jul 2020 15:23:26.0051 (UTC) FILETIME=[60483330:01D661CE]
-To:     unlisted-recipients:; (no To-header on input)
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 24 Jul 2020 21:38:36 -0500
+Message-ID: <CAH2r5mt_fhSnNDaCdn=DKE9_TkLMZQtCZ9hTTDVQmk5RL9PTbg@mail.gmail.com>
+Subject: [GIT PULL] CIFS Fix
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Please pull the following changes since commit
+ba47d845d715a010f7b51f6f89bae32845e6acb7:
+
+  Linux 5.8-rc6 (2020-07-19 15:41:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.8-rc6-cifs-fix
+
+for you to fetch changes up to 0e6705182d4e1b77248a93470d6d7b3013d59b30:
+
+  Revert "cifs: Fix the target file was deleted when rename failed."
+(2020-07-23 15:44:11 -0500)
+
+----------------------------------------------------------------
+Fix for a recently discovered regression in rename to older servers
+caused by a recent patch
+
+Build verification test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/375
+----------------------------------------------------------------
+Steve French (1):
+      Revert "cifs: Fix the target file was deleted when rename failed."
+
+ fs/cifs/inode.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
 
-Good day,
+-- 
+Thanks,
 
-You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client. 
-
-       The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days.
-      
-       The total value of the bond is 100million pounds sterling, in a million pound denominations.
-      
-        If you can handle this, do contact me at your earliest convenience via my email christopherwang36@gmail.com
-So we can discuss the final details Thank you.
- 
-Mr CHRISTOPHER WANG
+Steve
