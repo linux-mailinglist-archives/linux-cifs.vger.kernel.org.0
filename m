@@ -2,113 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C41A22E3A5
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Jul 2020 03:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876E722EB3F
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Jul 2020 13:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgG0BaM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 26 Jul 2020 21:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S1726946AbgG0LdL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 27 Jul 2020 07:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726741AbgG0BaM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 26 Jul 2020 21:30:12 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EC2C0619D2;
-        Sun, 26 Jul 2020 18:30:11 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id l17so1511450ilq.13;
-        Sun, 26 Jul 2020 18:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=At1n3bfLBmzVh8svaQUG7cNrFCFewk1UeCPKO8UbSNA=;
-        b=Rqxjvg1MjVMrZekSgd6Ma5pm0x3vOYks0eZwXakY57aRxoSt4xfYI1sNpBl1AoTkIx
-         mCF5Ii61O+5DgO9RN+hNQT/drTdN5hOf1odT4b9uLZoQ/dWpFjrJvSTCn42oPrGFPVvB
-         bEmSfat9IMCZqfKcDIIRC2NnbuywiKzVpMU8FCcowsZ//LwHkm45dT0dWjAEYIvD084y
-         5A10aAvpQ2vyDJMIeR4Dwp6Ij8599td1OZQPc8ngSl2SH+1lq8ix2lxm0sCqujhNgLMB
-         gAiUo3U6yN8eIqoH/4J9Ce0VioL5iEn1NNRYslUjGjBSC4Un/+1e1yNBK0h3oJGMlNM+
-         ef/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=At1n3bfLBmzVh8svaQUG7cNrFCFewk1UeCPKO8UbSNA=;
-        b=pwI+H76IqC1JY64U5plK07SK6rqRFNf8PUldJ74q4Wjd8wAHJVj+f+7AsDx/2PAhyd
-         tYcBjdfk4fY7UEnUo6Ou2h3/DJmt0P8RoTd3C3K4Qd4I11NDXEFsGh6hkZkzqYzRX0uS
-         7HPWSuICnGSOno95JTHfhpGU8A/grTzaPxFohXODZP0rD8k8GhN8/yaaK/Rr5LUaf+A3
-         BLMIuYxLKpNy61d8KrJYxTShIQ8EpoJZM/OmJplweoFyRHBiEspuYYc40enV4itYYeZx
-         CJdJ93DFwKhSjzsA+JSUsrgyOHWbp7lgd+MItSp0u4VqfQM9sqdUFAcQJjdZYBSYyS0L
-         zdTA==
-X-Gm-Message-State: AOAM531X7zinSr52GCFG+USuFo4QbOhl2km7rMWd4ZOiAyliMDRPB/eh
-        hodsqqp74qZadG/Ef6fYil6VlPJ8lY70JWo5dwkeWQTY
-X-Google-Smtp-Source: ABdhPJzLcl4LeBR3LD0Z44ay9UICBYF6WTtLTanTfzs+O1DHog2XbM6Zp/aQZLyPPREeNlt6AZF8nOLop7BXsmyjXhQ=
-X-Received: by 2002:a92:6e05:: with SMTP id j5mr143549ilc.169.1595813409750;
- Sun, 26 Jul 2020 18:30:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200725085601.98074-1-miaoqinglang@huawei.com>
-In-Reply-To: <20200725085601.98074-1-miaoqinglang@huawei.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 26 Jul 2020 20:29:58 -0500
-Message-ID: <CAH2r5mvk9BJVPGLZzRnaf2uZs1YEFDzYNg++F3WVpM0Dvhartw@mail.gmail.com>
-Subject: Re: [PATCH -next] cifs: convert to use be32_add_cpu()
-To:     Qinglang Miao <miaoqinglang@huawei.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        with ESMTP id S1726744AbgG0LdK (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 27 Jul 2020 07:33:10 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D8EC061794
+        for <linux-cifs@vger.kernel.org>; Mon, 27 Jul 2020 04:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=5niMQRnxIbwC1zyuo0URdD8vYQrluMvV+G8/2KfbvOc=; b=TNNNFD8f/qoETgi+Mxj1ywRMfo
+        dG7q+QSYNJD0WayCV7hdzPDH/93SfPD5pcBp5rcDJzONWzgbblF2aXl+X86hsb1K5lwX8DmiBHydN
+        6HSL5f5HSiRlvwFBx6Bht2C6QSTJpT8S6nkb/o30Q9UIA6M7QEje7kjT9N0aOKs4m8Lxtah5WaGQh
+        nRoRxI50m52+Lo4QrebATKGMfXHZ90GfF7KERuWSmvvbsDgA4fNoJ4rf/q97sBRY1QiSqMg34exZZ
+        Nj2qdE70acJzjUnbUmJG2BHH2Pyc3XHDaWOzH1A52665mI2ilHmC5HrD94dkSmZGT0rGZmgafWuZd
+        C4aIOlgN1ffZf3XkRG7M3wGlrSsKkJDxbVZvek5bhNHIyaUxjjvOvuWUa+ATh5whSXCu9so7rjqa9
+        9Nfsio2ZXSUiY/8Q+qejNOjnIWri/PXeF1GDmwlf5ScX5gvU4nTcI+wtHYiaYv0zxnXaeP0ANatKf
+        fCo3/mucJikjzyFIsjOdwcRW;
+Received: from [2a01:4f8:192:486::6:0] (port=45412 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k01NP-0002AV-L0
+        for cifs-qa@samba.org; Mon, 27 Jul 2020 11:33:03 +0000
+Received: from [::1] (port=31364 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k01NP-007Zb8-2m
+        for cifs-qa@samba.org; Mon, 27 Jul 2020 11:33:03 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14442] CVE-2020-14342: Shell command injection vulnerability in
+ mount.cifs
+Date:   Mon, 27 Jul 2020 11:33:01 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.4
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: aaptel@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-14442-10630-AFfsYWvei8@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14442-10630@https.bugzilla.samba.org/>
+References: <bug-14442-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+https://bugzilla.samba.org/show_bug.cgi?id=3D14442
 
-and for-next also updated with 5.8-rc7
+--- Comment #14 from Aur=C3=A9lien Aptel <aaptel@samba.org> ---
+Created attachment 16138
+  --> https://bugzilla.samba.org/attachment.cgi?id=3D16138&action=3Dedit
+patch v2 for 6.2-6.10
 
-On Sat, Jul 25, 2020 at 3:53 AM Qinglang Miao <miaoqinglang@huawei.com> wrote:
->
-> Convert cpu_to_be32(be32_to_cpu(E1) + E2) to use be32_add_cpu().
->
-> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
-> ---
->  fs/cifs/connect.c | 3 +--
->  fs/cifs/sess.c    | 3 +--
->  2 files changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> index 889fee586..552975420 100644
-> --- a/fs/cifs/connect.c
-> +++ b/fs/cifs/connect.c
-> @@ -5114,8 +5114,7 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
->         bcc_ptr += strlen("?????");
->         bcc_ptr += 1;
->         count = bcc_ptr - &pSMB->Password[0];
-> -       pSMB->hdr.smb_buf_length = cpu_to_be32(be32_to_cpu(
-> -                                       pSMB->hdr.smb_buf_length) + count);
-> +       be32_add_cpu(&pSMB->hdr.smb_buf_length, count);
->         pSMB->ByteCount = cpu_to_le16(count);
->
->         rc = SendReceive(xid, ses, smb_buffer, smb_buffer_response, &length,
-> diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
-> index 6708ab0aa..69cd58566 100644
-> --- a/fs/cifs/sess.c
-> +++ b/fs/cifs/sess.c
-> @@ -938,8 +938,7 @@ sess_sendreceive(struct sess_data *sess_data)
->         struct kvec rsp_iov = { NULL, 0 };
->
->         count = sess_data->iov[1].iov_len + sess_data->iov[2].iov_len;
-> -       smb_buf->smb_buf_length =
-> -               cpu_to_be32(be32_to_cpu(smb_buf->smb_buf_length) + count);
-> +       be32_add_cpu(&smb_buf->smb_buf_length, count);
->         put_bcc(count, smb_buf);
->
->         rc = SendReceive2(sess_data->xid, sess_data->ses,
-> --
-> 2.25.1
->
+new version of patch
++ checking non-zero len
+- dont add mount.cifs binary... (oops)
 
-
--- 
-Thanks,
-
-Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
