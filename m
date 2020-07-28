@@ -2,86 +2,63 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C894C230E92
-	for <lists+linux-cifs@lfdr.de>; Tue, 28 Jul 2020 17:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A105230F36
+	for <lists+linux-cifs@lfdr.de>; Tue, 28 Jul 2020 18:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730963AbgG1P4w (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 28 Jul 2020 11:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730679AbgG1P4v (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 28 Jul 2020 11:56:51 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67616C061794
-        for <linux-cifs@vger.kernel.org>; Tue, 28 Jul 2020 08:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=DJi3P3f4L3dTV3yUC7JT3h9eO5LWiaH+md3pK4kRLHs=; b=XQjBe2hdT9cB2Vd+DqFfGO+Bp3
-        7TiDPcAcELtE0/AKeZD1fgrTuaQtTAgT2SlCj8PS5gtsQAxhGwTmW6svV6sZm9RCN+f/evTlufS6n
-        /rXzcHUfdzWD/WDGBWS9hOB7VjqvwEVYnbRVZB9VEu8pBxG2X584cxNlrQGoPptiR3AXosGl4fNEG
-        KMf70/QrJP2KFjc2ohqfJEPWgW3iLswej1esMRS6FEyAuOxwqF22TiDWzL3I+6yz2hnWSLjked+io
-        kJ98vUhn4bEVCVSQz/FCO7XzpyLa82ZfoVhc/LEAHuP+XZNm951CFI8+4pHTtizmXLKumLEYWwhs+
-        zfw1cxjdiePI2gDc3MaPK1hiDqqyZXqnO3Pqy8j4tLH6fpFpfQR3blRuf55O84i8Pbo3v4rDtQ0Mr
-        S8pz/4J9mk632CYtE8gpfQsspfxx7e6tTRuVAGMA7/wdf+JxdBqOV2XF1ff01T8N+kjUV952ACbh4
-        LDbWFOufezue9dMQuj7Q6G3X;
-Received: from [2a01:4f8:192:486::6:0] (port=46434 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1k0RyD-0007o4-EX
-        for cifs-qa@samba.org; Tue, 28 Jul 2020 15:56:49 +0000
-Received: from [::1] (port=32388 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1k0RyB-007fCA-Cq
-        for cifs-qa@samba.org; Tue, 28 Jul 2020 15:56:47 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14442] CVE-2020-14342: Shell command injection vulnerability in
- mount.cifs
-Date:   Tue, 28 Jul 2020 15:56:46 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.4
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: aaptel@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
-Message-ID: <bug-14442-10630-fai1LR6FNE@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14442-10630@https.bugzilla.samba.org/>
-References: <bug-14442-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1731184AbgG1Q15 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 28 Jul 2020 12:27:57 -0400
+Received: from customer-201-134-139-73.uninet-ide.com.mx ([201.134.139.73]:60118
+        "EHLO correo.tlalpan.gob.mx" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731118AbgG1Q15 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 28 Jul 2020 12:27:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.tlalpan.gob.mx (Postfix) with ESMTP id A164957F9D9;
+        Tue, 28 Jul 2020 06:07:33 -0500 (CDT)
+Received: from correo.tlalpan.gob.mx ([127.0.0.1])
+        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id aInY761RyVGN; Tue, 28 Jul 2020 06:07:33 -0500 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.tlalpan.gob.mx (Postfix) with ESMTP id 0C6C24834A6;
+        Tue, 28 Jul 2020 04:09:59 -0500 (CDT)
+X-Virus-Scanned: amavisd-new at tlalpan.gob.mx
+Received: from correo.tlalpan.gob.mx ([127.0.0.1])
+        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Z9tRKAbrhomH; Tue, 28 Jul 2020 04:09:58 -0500 (CDT)
+Received: from [10.85.108.11] (unknown [105.8.2.12])
+        by correo.tlalpan.gob.mx (Postfix) with ESMTPSA id 9F4013B6FE1;
+        Tue, 28 Jul 2020 03:38:36 -0500 (CDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <aguayenergia@tlalpan.gob.mx>
+From:   ''Tayeb Souami'' <aguayenergia@tlalpan.gob.mx>
+Date:   Tue, 28 Jul 2020 10:42:54 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200728083836.9F4013B6FE1@correo.tlalpan.gob.mx>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14442
+Lieber Freund,
 
-Aur=C3=A9lien Aptel <aaptel@samba.org> changed:
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-  Attachment #16139|0                           |1
-        is obsolete|                            |
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
---- Comment #19 from Aur=C3=A9lien Aptel <aaptel@samba.org> ---
-Created attachment 16149
-  --> https://bugzilla.samba.org/attachment.cgi?id=3D16149&action=3Dedit
-patch v3 for 5.6-6.1
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Das ist dein Spendencode: [TS530342018]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
