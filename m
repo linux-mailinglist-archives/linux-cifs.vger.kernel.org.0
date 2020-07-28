@@ -2,48 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5651723104E
-	for <lists+linux-cifs@lfdr.de>; Tue, 28 Jul 2020 19:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9613623114F
+	for <lists+linux-cifs@lfdr.de>; Tue, 28 Jul 2020 20:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731551AbgG1Q7v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 28 Jul 2020 12:59:51 -0400
-Received: from customer-201-134-139-73.uninet-ide.com.mx ([201.134.139.73]:39816
-        "EHLO correo.tlalpan.gob.mx" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731523AbgG1Q7v (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 28 Jul 2020 12:59:51 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTP id 25CAF4D8492;
-        Tue, 28 Jul 2020 06:39:57 -0500 (CDT)
-Received: from correo.tlalpan.gob.mx ([127.0.0.1])
-        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id fkXZhN-H5Xfc; Tue, 28 Jul 2020 06:39:57 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTP id E05E8490F66;
-        Tue, 28 Jul 2020 04:45:01 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at tlalpan.gob.mx
-Received: from correo.tlalpan.gob.mx ([127.0.0.1])
-        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4fh0cjiys35n; Tue, 28 Jul 2020 04:45:01 -0500 (CDT)
-Received: from [197.175.64.209] (unknown [197.175.64.209])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTPSA id 664F14912F2;
-        Tue, 28 Jul 2020 04:15:56 -0500 (CDT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1732208AbgG1SJT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 28 Jul 2020 14:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728452AbgG1SJS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 28 Jul 2020 14:09:18 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F42C061794
+        for <linux-cifs@vger.kernel.org>; Tue, 28 Jul 2020 11:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=ZsXRNo+I9NMwyLylQZDrvIQmL2boeT4ESwZMAYgDk7I=; b=uypXU1cLxzmPK4z3dUhvt5MX9j
+        W51eASaXPM/GjcdeDAyxDoJ7QO9ldXZVviD0eXrd+To7qjB789PLBsZY2KpC1zSnTWvd0Hp3Awej4
+        PFU/0EZ6bqdWdopLbDATAO9w/y37XdplHrbZYwU3M9dXPrPoHAxrsORBAecyNgKGV9538A71+yTSb
+        5woiaxbTeoC0HV97RzyyAd6sYS4c9CrZicui/U71koa4C+WO60541FNp21uDhZwhqhYqc+FvF1TN6
+        29TtGtnKdvrO0gl1tQpkf+F+S3wu4CrKh/v95Nm3ZpqMpTVP0Yu9DDYyEnZ8TvPfY0ocpRozxlJWv
+        E4OtyPUcvU8obHt9ooCW+uu7TfGcDVKvy9rjjM5ouUAzG3ABYS27ZZi4/Mo6D4AXU2+keImg1nYXV
+        0Ei0aP1SurgVTJGdlXAWdDs8d7NQESIWNHh0DOMeuPNUw1L3qSpqYF+hCY1GmAyIZeVusvD5rWmIJ
+        G+QlxhTnISAbxRsy97gqELp4;
+Received: from [2a01:4f8:192:486::6:0] (port=46540 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k0U2N-0000L6-Sn
+        for cifs-qa@samba.org; Tue, 28 Jul 2020 18:09:16 +0000
+Received: from [::1] (port=32496 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k0U2N-007fLn-1x
+        for cifs-qa@samba.org; Tue, 28 Jul 2020 18:09:15 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 13470] DFS mounted shares do not allow to go subdirectories
+Date:   Tue, 28 Jul 2020 18:09:14 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sergey_ilinykh@epam.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-13470-10630-CUJs0BEogP@https.bugzilla.samba.org/>
+In-Reply-To: <bug-13470-10630@https.bugzilla.samba.org/>
+References: <bug-13470-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende von 2.000.000,00 Euro.
-To:     Recipients <rdelrazom@tlalpan.gob.mx>
-From:   "manuel franco" <rdelrazom@tlalpan.gob.mx>
-Date:   Tue, 28 Jul 2020 11:20:09 +0200
-Reply-To: manuelfrancospende001@gmail.com
-Message-Id: <20200728091558.664F14912F2@correo.tlalpan.gob.mx>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Sie haben eine Spende von 2.000.000,00 Euro.
+https://bugzilla.samba.org/show_bug.cgi?id=3D13470
 
-Mein Name ist Manuel Franco aus den USA.
-Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit.
+--- Comment #2 from Sergey <sergey_ilinykh@epam.com> ---
+Hi Aur=C3=A9lien Aptel,
+
+Following my scenario above I couldn't reproduce it anymore. Seems to work.
+
+btw I have a couple of questions unrelated to this issue:
+1. Is it possible to force smbclient/cifs mount to try all nameservers from
+/etc/resolv.conf?=20
+2. Is it possible to mount dfs root? In my case it's //epam.com
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
