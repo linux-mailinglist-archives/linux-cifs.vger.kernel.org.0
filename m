@@ -2,79 +2,107 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE4F23A70B
-	for <lists+linux-cifs@lfdr.de>; Mon,  3 Aug 2020 14:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC2123AA0B
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Aug 2020 17:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728813AbgHCM5R (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 3 Aug 2020 08:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S1728266AbgHCP7r (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 3 Aug 2020 11:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgHCMVc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Aug 2020 08:21:32 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119DFC061756
-        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 05:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=OdJtlZS8RFO8Dhe9Xj/3qrZ4MfA7gLt7cXqH3Ihp+aA=; b=CLaU2bIzptsVn7bG/VWqi1JXGE
-        aKH/FL8cdtKA/V1qfKluiCmKz4TRdmHesUWrljLAngyCl2bavm7e+I3eZzcovWz1RkxqP3P/eaO2t
-        JLT42/Bq2lzBa35AmuJiVx4sNI/uuPZ3x45kPw7/yX6LC3mxDsOJ4VQwWp8oMm14iXo65hq9gfGe2
-        ODuCV2c1bzH8aZYsTHIm8s0VWNZgvcbEmymsk0My8vN9yAeX8Ph9fGlzDl6D9Pkbvn+2nepalRenV
-        S8SLRcPKTc4a75lh6RM5IEKL6sQGtdL4yJHt/owMRYhz4qMUbqIsIaPoe7eLGsV9+8BP0JcGJKlKn
-        YPpVfDyDlMNz76INDOzbuPwUQLA35dKRqMe993/uesdezilcCext7UgJMoD+mKghT+crIeH3Yzeuf
-        zoNYx3ni05aqLL3ECuSm0HaCbOzp/7QIQX+X8/SFiK160b6jPdzgtxkQaJygjkFyQwpKiTM0vIk1c
-        c9m6XZl92ZyXUDX13/xbjgay;
-Received: from [2a01:4f8:192:486::6:0] (port=49332 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1k2ZT7-0007y6-7G
-        for cifs-qa@samba.org; Mon, 03 Aug 2020 12:21:29 +0000
-Received: from [::1] (port=35292 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1k2ZT6-008CcK-QQ
-        for cifs-qa@samba.org; Mon, 03 Aug 2020 12:21:28 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14454] cannot get symlink file attributes and target with
- cifsacl mount option
-Date:   Mon, 03 Aug 2020 12:21:28 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aaptel@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-14454-10630-5fYFhIDoKJ@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14454-10630@https.bugzilla.samba.org/>
-References: <bug-14454-10630@https.bugzilla.samba.org/>
+        with ESMTP id S1725945AbgHCP7r (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Aug 2020 11:59:47 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F06AC06174A
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 08:59:47 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id z3so21305326ilh.3
+        for <linux-cifs@vger.kernel.org>; Mon, 03 Aug 2020 08:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wi3h8O0dH6bSSmaXYkQ7INJCJCStX2v8Ef0p6Q7rMFw=;
+        b=VouzNYDTxotjvmsS07W71+Tq1ix6bQyDry1RA8tdtmjFRpwct9aY+UUPFjYBCwOfsD
+         AZPCPHXFLDk8amtysy6lJUiAq/4eSLGqrjlHG3EQnXC+rJlVf/pPFR5NZUDMOs8FWG4/
+         pvjf5qL+BIrQLn21SqsehUFUUSmBhq43RoCesuQ9V9VwCLL94pR6pKrfzksfLMAk8A8y
+         ZBnhu3RgSGbPZMs6PlsKbgMj5hUWsPR5ve8PNir0Vqvkqd2wFjbN1FEfcmudJGRViH1e
+         hLbCv6AWGPmGq0UTqif6QNqAr7xNRDYVA97QdMRC5uECP6PhkujzNxfbkJyhZdlDPzdL
+         5jVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wi3h8O0dH6bSSmaXYkQ7INJCJCStX2v8Ef0p6Q7rMFw=;
+        b=QgBNlBYxOEyilLYIYOQaJ3QxQ10lnOGQhMTMlPQin575rKJOfpCCaBFdZZpdpRd8mt
+         qeBvcUMtS5JXtDEHnVJ+V3xEz+b3WP7VAmk1RZ2t2B+hF3OdK8auTchBeMCQrk9HFY00
+         tCEUkpWtoLtkC2FmFAhW0rspIjZzYi1qJSWnRs4+NQTdI/Hs+34TF03Api9eotqsT8wy
+         amywQh3bRMvME7m1JdwnCfjIhanivOo7KnCmEPW7U0i1sOvDgVeFbE6iDxm69PXdMy4v
+         CRlKoFYYDL55yLCLF7bHwrYEok8ItavHYBJTAuQCXOBah1mY22tYjlSKCMmk7w1Mvn0k
+         r4mA==
+X-Gm-Message-State: AOAM532TnLuXA9e9UDhZ1uUoUOy/xrX8JFoSpvoZFpnjGMXXbByh5/Bd
+        6XIryLsTzqi3w9h7rjPz2reLVTPrRE3gTE4m6Dw=
+X-Google-Smtp-Source: ABdhPJx7IpKjwkGRYII7Y0ajChU5KHQwWsdUrusH81/0tCjGR2hWVhLX5z3xK0PgT0KPkCNo+iG4+O5CrdZEiEHVd1M=
+X-Received: by 2002:a92:6e05:: with SMTP id j5mr5762ilc.169.1596470386602;
+ Mon, 03 Aug 2020 08:59:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <1119714633.44793917.1596421202774.JavaMail.zimbra@redhat.com> <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com>
+In-Reply-To: <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 3 Aug 2020 10:59:35 -0500
+Message-ID: <CAH2r5muKciTKUjMa6o62J28Tvq=qaQryOGvfC8NRWkV29yiDaQ@mail.gmail.com>
+Subject: Re: fallocate can't change the cifs disk space usage
+To:     Xiaoli Feng <xifeng@redhat.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14454
+So locally on xfs this works, but Samba when receiving the request
+remotely apparently isn't doing the fallocate.  Would be curious if
+this works with vfs_btrfs and btrfs filesystem on the share - or a
+Samba server bug.
 
---- Comment #4 from Aur=C3=A9lien Aptel <aaptel@samba.org> ---
-Created attachment 16161
-  --> https://bugzilla.samba.org/attachment.cgi?id=3D16161&action=3Dedit
-capture smb3.0 without cifsacl
+On Sun, Aug 2, 2020 at 9:55 PM Xiaoli Feng <xifeng@redhat.com> wrote:
+>
+> Hello all,
+>
+> Recently when I'm investigating the xfstests generic/213 generic/228 fail=
+ures for cifs.
+> Found that fallocate can't change the cifs disk space usage. Comparing xf=
+s fileystem,
+> fallocate can update space usage.
+>
+> My tests is in 5.8.0-rc7+. I also file a bug for this issue.
+>   https://bugzilla.kernel.org/show_bug.cgi?id=3D208775
+>
+> # cat /etc/samba/smb.conf
+> [cifs]
+> path=3D/mnt/cifs
+> writeable=3Dyes
+> # mount //localhost/cifs cifs -o user=3Droot,password=3Dredhat,cache=3Dno=
+ne,actimeo=3D0
+> # df -h cifs
+> Filesystem        Size  Used Avail Use% Mounted on
+> //localhost/cifs   36G   23G   13G  66% /root/cifs
+> #  fallocate -o 0 -l 2g /root/cifs/file1
+> # df -h cifs
+> Filesystem        Size  Used Avail Use% Mounted on
+> //localhost/cifs   36G   23G   13G  66% /root/cifs
+> ]# ls -l cifs
+> total 1
+> -rwxr-xr-x. 1 root root 2147483648 Aug  2 21:57 file1
+>
+> Thanks.
+>
+> --
+> Best regards!
+> XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
+>
+
 
 --=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Thanks,
+
+Steve
