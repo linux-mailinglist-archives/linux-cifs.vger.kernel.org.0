@@ -2,139 +2,121 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B11EC23A13B
-	for <lists+linux-cifs@lfdr.de>; Mon,  3 Aug 2020 10:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642A223A3F7
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Aug 2020 14:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgHCIqU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 3 Aug 2020 04:46:20 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:51309 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726222AbgHCIqT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Aug 2020 04:46:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596444378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4bR7uOTWMj9kfPdiRqLG6vVN909/nPWN1VUTch9yl4U=;
-        b=EpQh/0ZJ43LaXSbDyp2liUaJyclFmfFH3lTbdVGiCfZ8r5zQv7LKFkUqlSVutzOuvGKyj7
-        QGvs4RMoidWLGSXdUcwwgj6HXpVsfE301efvP0ZdaT441UWHpuKwY/2V8fGAUZbKOAtXd0
-        nVF1iDSiOekUnIW10KepA8c77mnrDYc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-119-wnMgLCO3Nfyu72u8CiV8mw-1; Mon, 03 Aug 2020 04:46:14 -0400
-X-MC-Unique: wnMgLCO3Nfyu72u8CiV8mw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 43A28100944A;
-        Mon,  3 Aug 2020 08:46:13 +0000 (UTC)
-Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3AD581A7C8;
-        Mon,  3 Aug 2020 08:46:13 +0000 (UTC)
-Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
-        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 0EE6E95A72;
-        Mon,  3 Aug 2020 08:46:13 +0000 (UTC)
-Date:   Mon, 3 Aug 2020 04:46:12 -0400 (EDT)
-From:   Xiaoli Feng <xifeng@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Message-ID: <342612495.44824091.1596444372983.JavaMail.zimbra@redhat.com>
-In-Reply-To: <CAH2r5muWV2P75oHToSR4_LaVWETXC1Y0LbpEWfD-rF00jfFMFg@mail.gmail.com>
-References: <1119714633.44793917.1596421202774.JavaMail.zimbra@redhat.com> <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com> <CAH2r5muWV2P75oHToSR4_LaVWETXC1Y0LbpEWfD-rF00jfFMFg@mail.gmail.com>
-Subject: Re: fallocate can't change the cifs disk space usage
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726007AbgHCMT2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 3 Aug 2020 08:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbgHCMTZ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Aug 2020 08:19:25 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C0C06174A
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 05:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=3NUkXRrxfrXHFFuZaL5KVph5YZDi760IDrRUJOJkgMk=; b=SOXgjXyKu6/3HRiC1mfqkXe1NP
+        ul4V7+9mV2S7HwrK5E+vtR/Pr/iaVOCv1ZskO9t3hoPJiQ5UupYvRPtvYxdRGSWtPsIn3vhRa7FLg
+        6pmEMVYwwDu9Lkr9zlcLs6+ZvgJXt9/Fj+YPCM5tDFqrUJbG0gmarlT7UuEdf6eULDIooeOeLTJFr
+        JEmwh/Q816YTIH8mGdWQMAyW50gjJD1x3mX8hoNvkx3ZXpOVL/9Cn7E9VSby3a5cZwQ/fUcrUUrs5
+        cc5x3M3PkhA53/XFIhEtFJmP5HDLKujoQ1yaSClvl9IULXjqD4Oub5DhU4xbSOwnXAMtYo82lrKpO
+        cuwvLDvOGcHhlcH21L5f5wkdncO2TfMw+B5svWYnS2IsbD7n773ZJ9TqqtCrkiXsfXzen7lnuYUpW
+        l2Cl66TlG9sqZ/FUxP+xySbtoAF+sHEKcAkWUOw5dJiYeeuvMQDpksJvpyNuv7/+J8PB/GbUB9Dwp
+        vBWuWuB9YeWUp9wSc4E6qhEu;
+Received: from [2a01:4f8:192:486::6:0] (port=49310 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k2ZR3-0007wX-1J
+        for cifs-qa@samba.org; Mon, 03 Aug 2020 12:19:21 +0000
+Received: from [::1] (port=35268 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k2ZR2-008Cbn-PE
+        for cifs-qa@samba.org; Mon, 03 Aug 2020 12:19:20 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14454] New: cannot get symlink file attributes and target with
+ cifsacl mount option
+Date:   Mon, 03 Aug 2020 12:19:20 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aaptel@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone
+Message-ID: <bug-14454-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.68.5.20, 10.4.195.24]
-Thread-Topic: fallocate can't change the cifs disk space usage
-Thread-Index: o2ES4eYYrbK81j5z4Y02rM6QfIXPqQ==
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hell Steve,
+https://bugzilla.samba.org/show_bug.cgi?id=3D14454
 
+            Bug ID: 14454
+           Summary: cannot get symlink file attributes and target with
+                    cifsacl mount option
+           Product: CifsVFS
+           Version: 3.x
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: kernel fs
+          Assignee: sfrench@samba.org
+          Reporter: aaptel@samba.org
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
------ Original Message -----
-> From: "Steve French" <smfrench@gmail.com>
-> To: "Xiaoli Feng" <xifeng@redhat.com>
-> Cc: "CIFS" <linux-cifs@vger.kernel.org>, "samba-technical" <samba-technic=
-al@lists.samba.org>
-> Sent: Monday, August 3, 2020 12:42:32 PM
-> Subject: Re: fallocate can't change the cifs disk space usage
->=20
-> Any luck trying the same thing to Windows and/or Azure to see if this
-> is possible Samba bug - sounds like possible Samba server bug but need
-> more information.
+On a Windows Server 2019 share with symlinks:
 
-Thanks for quick response. When trying the same thing to windows. This issu=
-e is gone.
-fallocate can update the space usage.
+    C:\shares\data> dir
+    ...
+    12/16/2019  08:04 AM    <SYMLINKD>     DIR [sub\dir]
+    12/16/2019  08:04 AM    <SYMLINK>      foolink.txt [sub\dir\foo.txt]
+    ...
 
->=20
-> Are you using one of the Samba plug in VFS modules on the server (like
-> vfs_btrfs)?
+Mounting without cifsacl kind of works (still missing mode bits):
 
-I'm not using any samba plug in vfs.
-=20
->=20
-> What does the filesystem show (before and after) on the server side
-> (local file system not just the remote view that Samba is returning
-> for statfs) when you try the df -h?
+    # mount //nuc.test/data /mnt -o username=3Duser1,password=3Duser1,vers=
+=3D3.0
+    # ls -la /mnt
+    total 3148410
+    ...
+    l---------  1 root root          0 Dec 16  2019 DIR -> sub/dir
+    l---------  1 root root          0 Dec 16  2019 foolink.txt ->
+sub/dir/foo.txt
 
-on the server side, the space usage reported by df also keep the same befor=
-e and
-after fallocate.
+Mounting with cifsacl (with working idmap):
 
->=20
-> On Sun, Aug 2, 2020 at 9:55 PM Xiaoli Feng <xifeng@redhat.com> wrote:
-> >
-> > Hello all,
-> >
-> > Recently when I'm investigating the xfstests generic/213 generic/228
-> > failures for cifs.
-> > Found that fallocate can't change the cifs disk space usage. Comparing =
-xfs
-> > fileystem,
-> > fallocate can update space usage.
-> >
-> > My tests is in 5.8.0-rc7+. I also file a bug for this issue.
-> >   https://bugzilla.kernel.org/show_bug.cgi?id=3D208775
-> >
-> > # cat /etc/samba/smb.conf
-> > [cifs]
-> > path=3D/mnt/cifs
-> > writeable=3Dyes
-> > # mount //localhost/cifs cifs -o
-> > user=3Droot,password=3Dredhat,cache=3Dnone,actimeo=3D0
-> > # df -h cifs
-> > Filesystem        Size  Used Avail Use% Mounted on
-> > //localhost/cifs   36G   23G   13G  66% /root/cifs
-> > #  fallocate -o 0 -l 2g /root/cifs/file1
-> > # df -h cifs
-> > Filesystem        Size  Used Avail Use% Mounted on
-> > //localhost/cifs   36G   23G   13G  66% /root/cifs
-> > ]# ls -l cifs
-> > total 1
-> > -rwxr-xr-x. 1 root root 2147483648 Aug  2 21:57 file1
-> >
-> > Thanks.
-> >
-> > --
-> > Best regards!
-> > XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
-> >
->=20
->=20
-> --
-> Thanks,
->=20
-> Steve
->=20
->=20
+    # mount //nuc.test/data /mnt -o
+username=3Duser1,password=3Duser1,vers=3D3.0,cifsacl
+    # ls -la /mnt
+    ls: cannot access '/mnt/DIR': Operation not supported
+    ls: cannot access '/mnt/foolink.txt': Operation not supported
+    ...
+    d?????????  ? ?         ?                         ?            ? DIR
+    -?????????  ? ?         ?                         ?            ?
+foolink.txt
 
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
