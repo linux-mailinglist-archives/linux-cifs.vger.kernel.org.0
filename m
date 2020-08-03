@@ -2,107 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AC62352D5
-	for <lists+linux-cifs@lfdr.de>; Sat,  1 Aug 2020 16:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C907239D8C
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Aug 2020 04:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbgHAOtz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 1 Aug 2020 10:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgHAOty (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 1 Aug 2020 10:49:54 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8727C06174A;
-        Sat,  1 Aug 2020 07:49:54 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id j8so22108452ioe.9;
-        Sat, 01 Aug 2020 07:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UVNdjfkuEymtlCMjYVhcJ1dm1EhRpHn4gFio0XQo7YU=;
-        b=kEI+g4g0e4gyRGxDXB6HuB4aGlGy4Lm3cI4tsQCYmzgt4A3SiVkWv6KTOGppNfi6Zh
-         u5aOg5BDskxdER9ke/NyCE4oP3jqdOYU5Gr9KcgYG/+xIy0JN4FAbOggeOYXSZRi2dru
-         7RDosvnh8Erp/OC0akp3krFR8J97rsJL65i8jTueW5i8MipD/KYOW300Wb2bL6dvtAvE
-         AaTzBJu+gSI0SXChEoYIxjGiNrbZqp7EBql4Th9kIslh7Vd950kVD0OLqhewLixPKIkv
-         5lUzvGyk3nOYpBmjCstlHi+kYT5TRQghw9RXAo7xWORz2egPO1kzKNibz7VWvsyd0NGH
-         8THg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UVNdjfkuEymtlCMjYVhcJ1dm1EhRpHn4gFio0XQo7YU=;
-        b=b2hmqnMksJGftC/uOFeRq5Kh+wgbNFpo4IRnvfIGYMlITogvpGncRdfrjC4Nevv0V7
-         krOL35d8/b28qnA97XeQEAIjIRX2hDILNq8tLkLcbQZrqUa9rZ8Qg2xZgap74TuUB4Cq
-         g6Ebs3RK59sRZmfBW419Xe4BzAIIjlSVM1urFneH/LNqlPnOSD2wd2iES2qB12xF/Zce
-         YWM+fwqoTOzMjK27rwvuUQxeWHDEpeVskuZsARH06OaTlKfCUpMP0dJprEYZnmnVZuqQ
-         DRy8FEhtaYV5OZtE3ZCrYbuCXbgMM/W+9yJ4LInhBQNzWEW7y5/AFqSLxISxfxoVzhQ1
-         I17w==
-X-Gm-Message-State: AOAM530ozUHUCD+88gaAT63WlX/yp8hPZiCHgASjFTlmixfwPDl52LRE
-        mETNJQ+M5XokSH+b/m8KrpJf8CwgcDW23/XuvSM5h3kS
-X-Google-Smtp-Source: ABdhPJx/jOwTXIJbiM7v1rANDakrJ2QmDFARmK57MOV3E6LasX1X6K+1lQca48VHVG+yOiEIFE8ph0FlqouO8Eq1wEc=
-X-Received: by 2002:a5e:a607:: with SMTP id q7mr8479532ioi.16.1596293394048;
- Sat, 01 Aug 2020 07:49:54 -0700 (PDT)
+        id S1726358AbgHCCsN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 2 Aug 2020 22:48:13 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:26362 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725820AbgHCCsN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 2 Aug 2020 22:48:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596422892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=GqhAUeCwOFef5i9VGynTwZ3qyMu5xBnlGW6z2Tq9v88=;
+        b=GcskMSyhcQlk7OCj0SoWZ7AwH8TPc3BeMvHd4CH64NDnGE30M30zEx85+cNrqC7C5r/FDA
+        UlSF7yDkR3Rd2rvgYKR8gSN0IPWyBRlFlF+OQUgWqrJNcSK7t9O7FvpazJ5oT6e8OD8oTr
+        yu1pZVWaFFOt6F7pJiX/1YAINMiK/zs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-323-A84jVYxWM5u50b6Hdb2M1g-1; Sun, 02 Aug 2020 22:48:10 -0400
+X-MC-Unique: A84jVYxWM5u50b6Hdb2M1g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6CAE9800472
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 02:48:09 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 66A187B41F
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 02:48:09 +0000 (UTC)
+Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 60429180954D
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Aug 2020 02:48:09 +0000 (UTC)
+Date:   Sun, 2 Aug 2020 22:48:08 -0400 (EDT)
+From:   Xiaoli Feng <xifeng@redhat.com>
+To:     CIFS <linux-cifs@vger.kernel.org>
+Message-ID: <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com>
+In-Reply-To: <1119714633.44793917.1596421202774.JavaMail.zimbra@redhat.com>
+Subject: fallocate can't change the cifs disk space usage
 MIME-Version: 1.0
-References: <20200731171342.36636-1-colin.king@canonical.com>
-In-Reply-To: <20200731171342.36636-1-colin.king@canonical.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 1 Aug 2020 09:49:43 -0500
-Message-ID: <CAH2r5mv8pWOcQfKknec=JksKVLvLTu2NbowAKwSguAb5-eojSw@mail.gmail.com>
-Subject: Re: [PATCH][next] cifs: fix double free error on share and prefix
-To:     Colin King <colin.king@canonical.com>
-Cc:     Steve French <sfrench@samba.org>, Aurelien Aptel <aaptel@suse.com>,
-        Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.68.5.20, 10.4.195.14]
+Thread-Topic: fallocate can't change the cifs disk space usage
+Thread-Index: 13/8w3mJEUY0r3x+SC6Tt6L7mlrMiQ==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+Hello all,
 
-On Fri, Jul 31, 2020 at 12:15 PM Colin King <colin.king@canonical.com> wrote:
->
-> From: Colin Ian King <colin.king@canonical.com>
->
-> Currently if the call dfs_cache_get_tgt_share fails we cannot
-> fully guarantee that share and prefix are set to NULL and the
-> next iteration of the loop can end up potentially double freeing
-> these pointers. Since the semantics of dfs_cache_get_tgt_share
-> are ambiguous for failure cases with the setting of share and
-> prefix (currently now and the possibly the future), it seems
-> prudent to set the pointers to NULL when the objects are
-> free'd to avoid any double frees.
->
-> Addresses-Coverity: ("Double free")
-> Fixes: 96296c946a2a ("cifs: handle RESP_GET_DFS_REFERRAL.PathConsumed in reconnect")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  fs/cifs/connect.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> index 3c4dd4e1b9eb..4b2f5f5b3a8e 100644
-> --- a/fs/cifs/connect.c
-> +++ b/fs/cifs/connect.c
-> @@ -5574,6 +5574,8 @@ int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon, const stru
->
->                 kfree(share);
->                 kfree(prefix);
-> +               share = NULL;
-> +               prefix = NULL;
->
->                 rc = dfs_cache_get_tgt_share(tcon->dfs_path + 1, it, &share, &prefix);
->                 if (rc) {
-> --
-> 2.27.0
->
+Recently when I'm investigating the xfstests generic/213 generic/228 failur=
+es for cifs.
+Found that fallocate can't change the cifs disk space usage. Comparing xfs =
+fileystem,=20
+fallocate can update space usage.
 
+My tests is in 5.8.0-rc7+. I also file a bug for this issue.=20
+  https://bugzilla.kernel.org/show_bug.cgi?id=3D208775
 
--- 
-Thanks,
+# cat /etc/samba/smb.conf
+[cifs]
+path=3D/mnt/cifs
+writeable=3Dyes
+# mount //localhost/cifs cifs -o user=3Droot,password=3Dredhat,cache=3Dnone=
+,actimeo=3D0
+# df -h cifs
+Filesystem        Size  Used Avail Use% Mounted on
+//localhost/cifs   36G   23G   13G  66% /root/cifs
+#  fallocate -o 0 -l 2g /root/cifs/file1
+# df -h cifs
+Filesystem        Size  Used Avail Use% Mounted on
+//localhost/cifs   36G   23G   13G  66% /root/cifs
+]# ls -l cifs
+total 1
+-rwxr-xr-x. 1 root root 2147483648 Aug  2 21:57 file1
 
-Steve
+Thanks.
+
+--=20
+Best regards!
+XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
+
