@@ -2,141 +2,111 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE45D23B065
-	for <lists+linux-cifs@lfdr.de>; Tue,  4 Aug 2020 00:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AE723BEF8
+	for <lists+linux-cifs@lfdr.de>; Tue,  4 Aug 2020 19:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbgHCWpP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 3 Aug 2020 18:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S1730139AbgHDRj7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Aug 2020 13:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726548AbgHCWpP (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Aug 2020 18:45:15 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AF9C06174A;
-        Mon,  3 Aug 2020 15:45:15 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id t4so32531769iln.1;
-        Mon, 03 Aug 2020 15:45:14 -0700 (PDT)
+        with ESMTP id S1729760AbgHDRjz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Aug 2020 13:39:55 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB1C06174A
+        for <linux-cifs@vger.kernel.org>; Tue,  4 Aug 2020 10:39:55 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id c16so23134828ils.8
+        for <linux-cifs@vger.kernel.org>; Tue, 04 Aug 2020 10:39:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Agoua9JCHDPZSVu/sgTJ3ZU4j6VJQrjmmUvDnV2Qjzo=;
-        b=CBkOjCzArEuy1db7VIr7ilDZMooH0FRSZha2I7WOWv6I6Cl5GVhk/zzoc1ZwXipk57
-         eD1UgSp3wbMEyVbSDGILO6scmVJXSjC9m/cnhjaOymlrJwaUEisuniYncjGAH1AzioQ1
-         qaPRtSf6EVf69mGDKwbwscwgIjquUzPB/xX2dIUo0SueLtilcWZb89OPUmhFwLEd2wo3
-         SkWFAnoQ8Hk5+E8Ok73qcKL/nT3kfduxM3wkO3XHf+GyAYrhAIiA5FTnXUDBY3hYxya7
-         mmCKNqn8DTH/KTjxEXgxKiVl1oydrTyRAtQCCqrQ6hJt9NG5yZdK/F6QvNDN4bWUEeL0
-         SaTA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=u9w6VnTdh/5ZFN/l7HycjZcL6C2zt8bGnYSAZFgkaUo=;
+        b=avHdCiQyhqckD4ncwbLHeVbuBrphAdFdSXhf225SxF4NLEcbKcX33Bji3rhrGRUbJ4
+         n/C5Mp8xjQvxHpMfrhgm3IKd7Cz3O5FMZ384Y7cWqgFIbmdZCqAoE67Xn6u7tZ5NlWtp
+         vgzaFORu19dX2kAGrAHtBzWWAgzY81mVbchKAybCu4iwWLXfH6/juAdiuNKvRXS6bO3H
+         EpdWn4IwgWu9nWJFGxczDqJcKNN3eAXwZSkK8R7DMxEZF5XOnJouWLXEsa3ZUGzOl1/x
+         Wg8NzBlip85DmXfP37nkZVc0wkYPXtDFlaCwIRSd+2x1H7MsEtJkx9xpvi1XwM0sP2Bm
+         vwXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Agoua9JCHDPZSVu/sgTJ3ZU4j6VJQrjmmUvDnV2Qjzo=;
-        b=dSnQUgUMKcsOS4uJCuTGQD6BaewpmE4xLYMOcJlj/o6au5ZUiZBQySfjp89lAPCFnF
-         XkConIWRpeFWf9ZpE3VNC1lpuJzv4JBky8nJgL4QMQ9ycWl7yVwWWMlkPIB1Pp6YiDEB
-         BijGRDTRDA/3mGqx2r+fJpIQUcBJ/QgOWF7GTXcUanFgKx/i3MZakgCWQy3QabMLGPQ7
-         MnBPos/aHEoiLJYHNzrDYRz1qDP2H3/KX7gXGc8YfE9pW45u6oGUStM6E8ZDl3PDZH//
-         cxvdjQkGo+Hpl8mt1MQaL1mdYHXN+YlbH2fnXR2GniZqmqFn6+df9MfbnYSNFVR3yI0a
-         txZQ==
-X-Gm-Message-State: AOAM530T4aR1bgrg7+YqJWrVMadZuawJBau1AQ5hnx3qMzStMsQ53R1x
-        /mdhtxnJVqLPOurHe+D0X1NIxSrgmfalDUf+0zbxZ1hvylc=
-X-Google-Smtp-Source: ABdhPJyzb8qVkdEYKl/XUdRE8YTD5IEvET3KySG34H8fI1nLVSIeQ7QvA32FtfnyH9fXtRAoQTT5aN/scC56YizPF9Q=
-X-Received: by 2002:a92:849b:: with SMTP id y27mr1759650ilk.173.1596494714333;
- Mon, 03 Aug 2020 15:45:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=u9w6VnTdh/5ZFN/l7HycjZcL6C2zt8bGnYSAZFgkaUo=;
+        b=E234GyzbLmLcAoV58AMmfV0r6IELQvxOStAjHKykaYBzju8htRjxvB3FjAarleFSuu
+         7uXkTI1PkbAERfGP8FaWObRw6qtx1u2mTaEB4/vjoV7IK+LhxJ0ABNqKuwOIM0bPUynn
+         slUleIB21vkqq7VSwsv/nPDoaXc0CTtHSp3gQUgX0mFnWprFHeDP5bi8rhtRO0/qoQ6g
+         Cri/0zszW4zLm5duXQAGWnRySKDk9SFrJoBgxNkkbX0nGLX1EAFH7KsOrcEoh9cDAbIj
+         dEkw+Xa+YRs9fa7GVoxc3LrahQVsGjCFUp4795UrJvu/ssELXaBoEpleoqxy3reICbmJ
+         j0YA==
+X-Gm-Message-State: AOAM5318kKBKBqeJvAvWCr0mgslILMtDKmnBu4HrMVQflBU7i6JEnTYH
+        +17aHh/+QBeqIdl8IOXvBhe6kfgi+poWfUs4FVjrCbdP
+X-Google-Smtp-Source: ABdhPJxJRdwULtXoRz2qPWri3TuNWieCA3yesGfC+FloDbpXe/lbY2lcRDWueJwyGovDTrs+szxOzURwCd2xf+VZRV4=
+X-Received: by 2002:a92:890d:: with SMTP id n13mr5730347ild.5.1596562794956;
+ Tue, 04 Aug 2020 10:39:54 -0700 (PDT)
 MIME-Version: 1.0
+References: <1119714633.44793917.1596421202774.JavaMail.zimbra@redhat.com> <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com>
+In-Reply-To: <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com>
 From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 3 Aug 2020 17:45:03 -0500
-Message-ID: <CAH2r5mvA7xqmqPMmYRrU+Jc8SbF-YG=GH9OjvR+Upx_q6aH3jA@mail.gmail.com>
-Subject: [GIT PULL] CIFS/SMB3 Fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+Date:   Tue, 4 Aug 2020 12:39:43 -0500
+Message-ID: <CAH2r5mta2ueBhd=raxXvCDAaKe27Qay+Wr42KfP-W2RrmBs8tA@mail.gmail.com>
+Subject: Re: fallocate can't change the cifs disk space usage
+To:     Xiaoli Feng <xifeng@redhat.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Please pull the following changes since commit
-bcf876870b95592b52519ed4aafcf9d95999bc9c:
+I was looking in a little more detail at tests 213 and 228 ... and I
+see 228 passing to all servers I tried.  Did you see a problem with
+that?
 
-  Linux 5.8 (2020-08-02 14:21:45 -0700)
-
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc-smb3-fixes-part1
-
-for you to fetch changes up to 7efd081582619e7c270d1c0a422385dcaa99fa9f:
-
-  cifs: document and cleanup dfs mount (2020-08-02 18:00:26 -0500)
-
-----------------------------------------------------------------
-16 cifs/smb3 fixes, about half DFS related, 2 fixes for stable
-
-Still working on and testing an additional set of fixes (including
-updates to mount, and some fallocate scenario improvements) for later
-in the merge window.
-
-Build verification test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/379
-----------------------------------------------------------------
-Colin Ian King (1):
-      cifs: fix double free error on share and prefix
-
-Liao Pingfang (1):
-      cifs: Remove the superfluous break
-
-Paul Aurich (1):
-      cifs: Fix leak when handling lease break for cached root fid
-
-Paulo Alcantara (6):
-      cifs: reduce number of referral requests in DFS link lookups
-      cifs: rename reconn_inval_dfs_target()
-      cifs: handle empty list of targets in cifs_reconnect()
-      cifs: handle RESP_GET_DFS_REFERRAL.PathConsumed in reconnect
-      cifs: only update prefix path of DFS links in cifs_tree_connect()
-      cifs: document and cleanup dfs mount
-
-Qinglang Miao (1):
-      cifs: convert to use be32_add_cpu()
-
-Randy Dunlap (1):
-      cifs: delete duplicated words in header files
-
-Roberto Bergantinos Corpas (1):
-      cifs`: handle ERRBaduid for SMB1
-
-Ronnie Sahlberg (1):
-      cifs: smb1: Try failing back to SetFileInfo if SetPathInfo fails
-
-Stefan Metzmacher (1):
-      cifs: merge __{cifs,smb2}_reconnect[_tcon]() into cifs_tree_connect()
-
-Steve French (1):
-      smb3: warn on confusing error scenario with sec=krb5
-
-Wei Yongjun (1):
-      cifs: remove unused variable 'server'
-
- fs/cifs/cifsacl.h   |   4 +-
- fs/cifs/cifsglob.h  |   2 +-
- fs/cifs/cifsproto.h |   9 +-
- fs/cifs/cifssmb.c   | 151 ++++++++---------------------
- fs/cifs/connect.c   | 508
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------
- fs/cifs/dfs_cache.c | 136 +++++++++++++++++++++-----
- fs/cifs/dfs_cache.h |   7 +-
- fs/cifs/inode.c     |   2 -
- fs/cifs/misc.c      |   7 +-
- fs/cifs/netmisc.c   |  27 ++++++
- fs/cifs/sess.c      |   4 +-
- fs/cifs/smb1ops.c   |   4 +-
- fs/cifs/smb2misc.c  |  73 ++++++++++----
- fs/cifs/smb2pdu.c   | 115 +---------------------
- fs/cifs/smb2pdu.h   |   2 +-
- fs/cifs/transport.c |   2 +-
- 16 files changed, 560 insertions(+), 493 deletions(-)
+With 213 I see it working to Windows, and to Samba test 213 also works
+but only if "strict allocate =3D yes" is set in smb.conf (I just
+verified it on the buildbot)
 
 
--- 
+On Sun, Aug 2, 2020 at 9:55 PM Xiaoli Feng <xifeng@redhat.com> wrote:
+>
+> Hello all,
+>
+> Recently when I'm investigating the xfstests generic/213 generic/228 fail=
+ures for cifs.
+> Found that fallocate can't change the cifs disk space usage. Comparing xf=
+s fileystem,
+> fallocate can update space usage.
+>
+> My tests is in 5.8.0-rc7+. I also file a bug for this issue.
+>   https://bugzilla.kernel.org/show_bug.cgi?id=3D208775
+>
+> # cat /etc/samba/smb.conf
+> [cifs]
+> path=3D/mnt/cifs
+> writeable=3Dyes
+> # mount //localhost/cifs cifs -o user=3Droot,password=3Dredhat,cache=3Dno=
+ne,actimeo=3D0
+> # df -h cifs
+> Filesystem        Size  Used Avail Use% Mounted on
+> //localhost/cifs   36G   23G   13G  66% /root/cifs
+> #  fallocate -o 0 -l 2g /root/cifs/file1
+> # df -h cifs
+> Filesystem        Size  Used Avail Use% Mounted on
+> //localhost/cifs   36G   23G   13G  66% /root/cifs
+> ]# ls -l cifs
+> total 1
+> -rwxr-xr-x. 1 root root 2147483648 Aug  2 21:57 file1
+>
+> Thanks.
+>
+> --
+> Best regards!
+> XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
+>
+
+
+--=20
 Thanks,
 
 Steve
