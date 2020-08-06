@@ -2,80 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E113A23E39F
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 Aug 2020 23:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD1423E40A
+	for <lists+linux-cifs@lfdr.de>; Fri,  7 Aug 2020 00:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgHFVre (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 6 Aug 2020 17:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbgHFVre (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 Aug 2020 17:47:34 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A806FC061574
-        for <linux-cifs@vger.kernel.org>; Thu,  6 Aug 2020 14:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=4pyPFJ1msjPajwihKHU+ksoJ3u2KKppvrG/Qqklyqrs=; b=avL9hOW0XTaiOcGqjmC2k45BN2
-        9j/rG/PhQR7Is4ASOvvsUi9uOuN868S21mpxxyVzdszghhSyzxvRNShlPS3b6v/TB9qxtphoyCLtK
-        49lUu04ALDzP8SWGNRTmX7nqf41KumzZqJTudM0phwKYgOYMhlGA7aRj0juomCixqIjVG8fiqgCtL
-        c0I3cTFeCYqRw3EuNEiQa7D8n8Jz+Tu0NR5Ypmjnqh33b2Wh9HXF6IrYQF3e5lfbGsm7t13G1iqp3
-        RqNKsst86bQumSWkTdBGjUwU3QEn5MH13FjqTvfy7XcLwv2i9oFe+z15X97jj1F1Kill/oOYZ+BQK
-        OQBwnsgZshpAjjsg0ykUpxDs+TXaZnVWV66yPaOTINYtZKyCp79uvQTS33jtJO+8ayWEh7hmNgOaw
-        4mDU69G6v+XnPxiy17Zi7b5p2VHikUHai9vg8h5VVA/vfFAZWx3cLMm7B7NOPtbOeGZf837tbfCeS
-        ybinufr+DsNpjSnEEmx4BW72;
-Received: from [2a01:4f8:192:486::6:0] (port=50946 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1k3njX-0004UW-M1
-        for cifs-qa@samba.org; Thu, 06 Aug 2020 21:47:31 +0000
-Received: from [::1] (port=36904 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1k3njX-008TUN-E3
-        for cifs-qa@samba.org; Thu, 06 Aug 2020 21:47:31 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 13795] Race condition in fs/cifs/connect.c causing "has not
- responded in 120 seconds. Reconnecting..."
-Date:   Thu, 06 Aug 2020 21:47:31 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: piastryyy@gmail.com
-X-Bugzilla-Status: CLOSED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status
-Message-ID: <bug-13795-10630-l8YFrS2CJO@https.bugzilla.samba.org/>
-In-Reply-To: <bug-13795-10630@https.bugzilla.samba.org/>
-References: <bug-13795-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1726055AbgHFWdq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 6 Aug 2020 18:33:46 -0400
+Received: from ozlabs.org ([203.11.71.1]:39085 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726027AbgHFWdq (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 6 Aug 2020 18:33:46 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BN3Dm29y5z9sPB;
+        Fri,  7 Aug 2020 08:33:44 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1596753224;
+        bh=FsB5kYxkaUFGzjHKfdToVWaIcno3UIYxxqaOUIlfcCI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wgf24cwa57IK9UcVS8Z4TojTJzkry95gJ9mpg9gneW6Bk34ZuJuJVDcXbruV/3rA5
+         uYiuxLSq0z0lMx0aq4Sz5wbkmJJmep+HZ80HTHJHUOuUNwxZyB2o3y1SJQ1fCq8qZf
+         6jIV5JYa3alpxFJSOu1FzEG8aeHHphBh7LH4S1hdv/IWMK9yyi0yw8JiVBmbLaW3CU
+         krCQtVvF6KTfC5C7q7hsiJVr3ZbiHmlF1t3w4+eKHV2FIbxktlplr/ZqWbfN/0POuB
+         1HxhReCqusyiCzt/6Imwcr7Ircf3TyKvR5f18/QZUDWOjGuKJXRgm07ftci24UKXNC
+         zswADLUmiXvLw==
+Date:   Fri, 7 Aug 2020 08:33:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20200807083342.6977153b@canb.auug.org.au>
+In-Reply-To: <CAH2r5mvGD3ftLDfwrpx61kaJQnPpspupdDHD8NOjnF-q-ByTfg@mail.gmail.com>
+References: <20200806164505.0eada105@canb.auug.org.au>
+        <CAH2r5mvGD3ftLDfwrpx61kaJQnPpspupdDHD8NOjnF-q-ByTfg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/gLZlApbWK/zRikX/hm+fGUR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D13795
+--Sig_/gLZlApbWK/zRikX/hm+fGUR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Pavel Shilovsky <piastryyy@gmail.com> changed:
+Hi Steve,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |CLOSED
+Thanks for fixing this up.
+
+On Thu, 6 Aug 2020 10:31:33 -0500 Steve French <smfrench@gmail.com> wrote:
+>
+> I just fixed the Author tag in this patch to match your email address
+> but seems like the author email address gets mangled when sent through
+> some mailing lists.  Any ideas how to avoid this.
+
+You may need to ask people to add an explicit From: line at the start
+of the body for patches sent via the samba.org mailing lists (since
+they mangle addresses to get around DKIM checks, I assume).
 
 --=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Cheers,
+Stephen Rothwell
+
+--Sig_/gLZlApbWK/zRikX/hm+fGUR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8shUcACgkQAVBC80lX
+0Gw1Gwf/XWj7q5tp9zlh9ivEzpmZpfatsr98aHls5d/vEsSZEnbEjunSiqYbMXL4
+BKr6+Hl9yhN5RjiGFx7VdmZPnq2GxYKH1xCSGakENhJZBFV41vcUgzuxqXuulHYL
+0eFuuESEDv1TpTz7ACCXcRCAo6LP7EyHvBUQLLzf+We0/43y4sttf58tMVgdVg4w
+NXqghR54mkmAhI/8HPS1C6Q7s2bCbb78RrwZ8xMRZRglfFOEtmSdYDZhJYVwun33
+LBB2R9DVIjhKEx0dFPGNeR5X1RmoNl+a8+r3TOHJXPNOc91mQ3Z8BhZnUP5feOtc
+EZ+zLKtcXCk5AbcKA+NdIwsUpnRSmA==
+=HyuJ
+-----END PGP SIGNATURE-----
+
+--Sig_/gLZlApbWK/zRikX/hm+fGUR--
