@@ -2,92 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 174C823DC71
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 Aug 2020 18:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EF923E39E
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 Aug 2020 23:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729616AbgHFQwB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 6 Aug 2020 12:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S1726159AbgHFVrK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 6 Aug 2020 17:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729508AbgHFQvD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 Aug 2020 12:51:03 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717FCC0086AB;
-        Thu,  6 Aug 2020 08:31:45 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id z6so50062328iow.6;
-        Thu, 06 Aug 2020 08:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T9d2cPoZwDqNGPTOF/xh+MxXI5gE97qXPjeblukEaaA=;
-        b=vQcflc2YsOmgW2sQjngcKtZEcaKtv5UkXvVETU5hbzK6g0ksH2yEr8GcVsuKfRcpsR
-         EFW2Dxuq+ZVOurLvqdJcInXpyTCS4D5zF0d9Gu1tWjyu6PSFcwzbHQoqPL9cVwSsVT4I
-         THCWUNf3YKvfZhJG/jaBUwiX7vn+TLoxKzj33KMkHw2AABschis+j1bRkvEk6gvGBOHV
-         gvNx8YOSEbBcBQO5NDwNosSImG3Jg9yxf3z87RhWVJkfTQPlHDuICSpTDX08c+rws8ZR
-         CF51+6gtwtvDWoSteC6vZ2C3x6k1f+8j9/p1QeDxVSxuOZR4yvDnu+NtziMwVpVpauNa
-         ccJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T9d2cPoZwDqNGPTOF/xh+MxXI5gE97qXPjeblukEaaA=;
-        b=hqdq/N9R+HxJtnC0gmqQqmjbRwVIvD6kdQyW7TYK3MSFQ7HXxZJGYfu+9p+bhREK1f
-         qAQm5XykoW1arwnS628T5Wit3j10ZyYf9XfOoaTkbZelx8KwZm9F0W5MF6lWb1vsLUMz
-         P2UoCX0zmQmsoveZbQWx0gtzyVt+ee2RFzqD/qFPV05lU+fSFxDjOEduUa+8tzekPIcz
-         7Ncr0p00plsqlVFlBEpDU2zXa6YRp71WNtKOpJ/FBGUnjKf7ulErUeXZDDqPLyX/MnMx
-         BdqVFmICzacH3aj4yplVv4aM/AuDsRHV+JYdbA/CN+7wo43+mEqA390MVF91e1Yhd4E0
-         A3ew==
-X-Gm-Message-State: AOAM531D7Eieg7u1InwFawT4WT7LwwKCy0RapBJrQh6/tW9EeQ2BbDk2
-        KZ4d4atOpGkM6eg4Q2qJ6NXVGmwTwpdeQhOiHsSQ8Yoo
-X-Google-Smtp-Source: ABdhPJzmjtu3I9LpJ7xxUqAWkEMGb6vq1m8lbFSQ4AwTzFSkP9twdx78ZCkmV7yKZa1BLk2PvG5WRWqNadBbvjcTUho=
-X-Received: by 2002:a5e:d80e:: with SMTP id l14mr10808869iok.65.1596727904697;
- Thu, 06 Aug 2020 08:31:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200806164505.0eada105@canb.auug.org.au>
-In-Reply-To: <20200806164505.0eada105@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 6 Aug 2020 10:31:33 -0500
-Message-ID: <CAH2r5mvGD3ftLDfwrpx61kaJQnPpspupdDHD8NOjnF-q-ByTfg@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        with ESMTP id S1725812AbgHFVrJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 Aug 2020 17:47:09 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051DCC061574
+        for <linux-cifs@vger.kernel.org>; Thu,  6 Aug 2020 14:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=xraF0eb9AhOp4J8oZWNneh4RwFwPxxMMFR0FGCHNDJQ=; b=aYbt6io5Vg539lT6JbMB2KbKB3
+        lwzE/ahxNO+6GqssyW0mCfE53G7MQq3m3Enq1jZ1zPR7GwcviYKiY+rt4JVBI1a39JhahQw85Zwk5
+        /+DdPHCADK5QtFhBHPppUd4enaFWM54Yt/7WbzvbDTmVTTm5gvBnY85HsxExVPu+RJvmiTkSiNm/T
+        ORNgF7MLa8HoEFUNw9AYLHmUcUuZLuFoGDLEi2vOTMUNE3zu20Xh2IL53asdnPPfNroWkPEYcb3UL
+        WvGsYr762i6Xj1ibYw7lTG0bbnFjZgch9HJj5Ggs0K4Omcdl0SV4L6X/AR6p0DCMZkw33eFHnWK1U
+        OZ86luGyxDrNqHf2aW449wK8rN0PYDmYWoBG5RArdCEAckKUDqTOwORxZjUWqCa8wWZOvWuP5bHAs
+        kXM5dtQkMMLskFDB0FbZR+W2yAIHZ2eVc1xXfqQpabHxF0z6hsyPKoYi1Mn49y1N3jWhdJAyXNdSW
+        J+/5l9tAqqK8McpAfm8qov+5;
+Received: from [2a01:4f8:192:486::6:0] (port=50938 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k3nj6-0004Tr-3r
+        for cifs-qa@samba.org; Thu, 06 Aug 2020 21:47:04 +0000
+Received: from [::1] (port=36890 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k3nj5-008TU4-IU
+        for cifs-qa@samba.org; Thu, 06 Aug 2020 21:47:03 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 13795] Race condition in fs/cifs/connect.c causing "has not
+ responded in 120 seconds. Reconnecting..."
+Date:   Thu, 06 Aug 2020 21:47:02 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: piastryyy@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-13795-10630-VdjZ1FKL0s@https.bugzilla.samba.org/>
+In-Reply-To: <bug-13795-10630@https.bugzilla.samba.org/>
+References: <bug-13795-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dan,
-I just fixed the Author tag in this patch to match your email address
-but seems like the author email address gets mangled when sent through
-some mailing lists.  Any ideas how to avoid this.
+https://bugzilla.samba.org/show_bug.cgi?id=3D13795
 
-On Thu, Aug 6, 2020 at 1:45 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   2676d210d2f4 ("cifs: Fix an error pointer dereference in cifs_mount()")
->
-> is missing a Signed-off-by from its author.
->
-> This is only pisked up by my script because of the mangling of the email
-> sender address by the mailing list it passed through.  I guess a little
-> more care is required to make sure the author attribution is correct in
-> this case.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Pavel Shilovsky <piastryyy@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-
--- 
-Thanks,
-
-Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
