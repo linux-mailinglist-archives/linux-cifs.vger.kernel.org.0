@@ -2,92 +2,137 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC5C23C996
-	for <lists+linux-cifs@lfdr.de>; Wed,  5 Aug 2020 11:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A81723D582
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 Aug 2020 04:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgHEJyU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 5 Aug 2020 05:54:20 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:37084 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgHEJxD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 5 Aug 2020 05:53:03 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0759qKUc058845;
-        Wed, 5 Aug 2020 09:52:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=gP37RsrMGaMF6BzssPUZ8VhQW8vT8S6L5/66gaCLThs=;
- b=cGr8Cb6VWuOPVIQ5y7FcEXR83vpJFUkHr/91b/E8gbZPo+/LvuXc6fsGM+PXPSB61fgh
- MFZJPAiJQyx/27ZdKdiVUylq+/gP+4KIbS3x/CHAFG9G3e25Bn1g7l4YbKMsm9UG8+YV
- If1FeSCNgRFRaFj7enuqwe1uJYRLZUpv8qinyaP1TchNrlWPMV25WvB4msXOX48e6F5z
- DNXLy0fdcm56vQkMUmmjPHyCKyHm9rfF4mLXR0BEqvYyuNYb6BDn/MSSZcyPEfUyOOdx
- s/AAGDIRSFMNWaDNGmpxG71e2M00cz27Rm/59DmQ1jwX4g5TXy8DISKLStQGFGqKgXYn LA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 32qnd41c9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 05 Aug 2020 09:52:20 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0759mtDI068676;
-        Wed, 5 Aug 2020 09:52:20 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 32pdnsv8uu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Aug 2020 09:52:20 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0759qFNj018545;
-        Wed, 5 Aug 2020 09:52:16 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 05 Aug 2020 02:52:14 -0700
-Date:   Wed, 5 Aug 2020 12:52:07 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>
-Cc:     Aurelien Aptel <aaptel@suse.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] cifs: Fix an error pointer dereference in cifs_mount()
-Message-ID: <20200805095207.GC483832@mwanda>
+        id S1726005AbgHFCfb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 5 Aug 2020 22:35:31 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:32450 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725999AbgHFCfa (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 5 Aug 2020 22:35:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596681329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cbI4f5kQHkquNifdlfQWRY8uKEK7k/f20zE6A4j+W88=;
+        b=XUfl9FDjCiepctMOqv+jjUqecO+P7yU3+sOd3SdRt9YmNHRXs+a+hikzdpIL2LMVuCG/6y
+        OFFqD8tmRV8IfjjtV98MJfSCgzZCkZH4eUR9G+9Cc90slSOEQbVgaNMnpUbvX32Pjgv0cy
+        UqSqzhtBbw9NaI6EGHeOF+F/ZBeAtj8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-335-97_awbMBPSmgfNV3IANozw-1; Wed, 05 Aug 2020 22:35:27 -0400
+X-MC-Unique: 97_awbMBPSmgfNV3IANozw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A4F68015F4;
+        Thu,  6 Aug 2020 02:35:26 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 12EEB5C1D2;
+        Thu,  6 Aug 2020 02:35:26 +0000 (UTC)
+Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 0B8C696925;
+        Thu,  6 Aug 2020 02:35:26 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 22:35:25 -0400 (EDT)
+From:   Xiaoli Feng <xifeng@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Message-ID: <595851922.45241022.1596681325405.JavaMail.zimbra@redhat.com>
+In-Reply-To: <CAH2r5mta2ueBhd=raxXvCDAaKe27Qay+Wr42KfP-W2RrmBs8tA@mail.gmail.com>
+References: <1119714633.44793917.1596421202774.JavaMail.zimbra@redhat.com> <506179292.44794805.1596422888744.JavaMail.zimbra@redhat.com> <CAH2r5mta2ueBhd=raxXvCDAaKe27Qay+Wr42KfP-W2RrmBs8tA@mail.gmail.com>
+Subject: Re: fallocate can't change the cifs disk space usage
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9703 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 mlxscore=0
- bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008050081
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9703 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 clxscore=1011 mlxscore=0
- priorityscore=1501 mlxlogscore=999 malwarescore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008050082
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.68.5.20, 10.4.195.1]
+Thread-Topic: fallocate can't change the cifs disk space usage
+Thread-Index: 8vmwHyy6cUr6jh8jU9oqQcs8FxZeZw==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The error handling calls kfree(full_path) so we can't let it be a NULL
-pointer.  There used to be a NULL assignment here but we accidentally
-deleted it.  Add it back.
+Hi,
 
-Fixes: 7efd08158261 ("cifs: document and cleanup dfs mount")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- fs/cifs/connect.c | 1 +
- 1 file changed, 1 insertion(+)
+----- Original Message -----
+> From: "Steve French" <smfrench@gmail.com>
+> To: "Xiaoli Feng" <xifeng@redhat.com>
+> Cc: "CIFS" <linux-cifs@vger.kernel.org>
+> Sent: Wednesday, August 5, 2020 1:39:43 AM
+> Subject: Re: fallocate can't change the cifs disk space usage
+>=20
+> I was looking in a little more detail at tests 213 and 228 ... and I
+> see 228 passing to all servers I tried.  Did you see a problem with
+> that?
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 0ad1309e88d3..a275ee399dce 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -4886,6 +4886,7 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb_vol *vol)
- 		full_path = build_unc_path_to_root(vol, cifs_sb, !!count);
- 		if (IS_ERR(full_path)) {
- 			rc = PTR_ERR(full_path);
-+			full_path = NULL;
- 			break;
- 		}
- 		/* Chase referral */
--- 
-2.27.0
+Sorry, I made a mistake. I tested 228 in RHEL8 before. It's failed.=20
+Maybe it needs some patches. Now I re-test 228 in 5.8.0-rc7+. It's=20
+passed for both servers. And 213 is also passed if "strict allocate
+ =3D yes" is set. And now I met another issue for windows file server.
+client is 5.8.0-rc7+.
+
+# truncate -s 320k windows/file
+# fallocate -o 2k -l 256k windows/file
+fallocate: fallocate failed: Operation not supported
+# fallocate -o 320k -l 256k windows/file
+#=20
+
+Seems the offset for fallocate need beyond the size of truncate. But
+for xfs, it's passed. This test is base on test 255.
+
+>=20
+> With 213 I see it working to Windows, and to Samba test 213 also works
+> but only if "strict allocate =3D yes" is set in smb.conf (I just
+> verified it on the buildbot)
+>=20
+>=20
+> On Sun, Aug 2, 2020 at 9:55 PM Xiaoli Feng <xifeng@redhat.com> wrote:
+> >
+> > Hello all,
+> >
+> > Recently when I'm investigating the xfstests generic/213 generic/228
+> > failures for cifs.
+> > Found that fallocate can't change the cifs disk space usage. Comparing =
+xfs
+> > fileystem,
+> > fallocate can update space usage.
+> >
+> > My tests is in 5.8.0-rc7+. I also file a bug for this issue.
+> >   https://bugzilla.kernel.org/show_bug.cgi?id=3D208775
+> >
+> > # cat /etc/samba/smb.conf
+> > [cifs]
+> > path=3D/mnt/cifs
+> > writeable=3Dyes
+> > # mount //localhost/cifs cifs -o
+> > user=3Droot,password=3Dredhat,cache=3Dnone,actimeo=3D0
+> > # df -h cifs
+> > Filesystem        Size  Used Avail Use% Mounted on
+> > //localhost/cifs   36G   23G   13G  66% /root/cifs
+> > #  fallocate -o 0 -l 2g /root/cifs/file1
+> > # df -h cifs
+> > Filesystem        Size  Used Avail Use% Mounted on
+> > //localhost/cifs   36G   23G   13G  66% /root/cifs
+> > ]# ls -l cifs
+> > total 1
+> > -rwxr-xr-x. 1 root root 2147483648 Aug  2 21:57 file1
+> >
+> > Thanks.
+> >
+> > --
+> > Best regards!
+> > XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
+> >
+>=20
+>=20
+> --
+> Thanks,
+>=20
+> Steve
+>=20
+>=20
 
