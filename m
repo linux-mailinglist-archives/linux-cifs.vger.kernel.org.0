@@ -2,80 +2,122 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B265623F97C
-	for <lists+linux-cifs@lfdr.de>; Sun,  9 Aug 2020 01:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E028623FF54
+	for <lists+linux-cifs@lfdr.de>; Sun,  9 Aug 2020 18:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgHHXV3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 8 Aug 2020 19:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S1726234AbgHIQqp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 9 Aug 2020 12:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbgHHXV3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 8 Aug 2020 19:21:29 -0400
+        with ESMTP id S1726199AbgHIQqp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 9 Aug 2020 12:46:45 -0400
 Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F583C061756
-        for <linux-cifs@vger.kernel.org>; Sat,  8 Aug 2020 16:21:29 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id w12so5435165iom.4
-        for <linux-cifs@vger.kernel.org>; Sat, 08 Aug 2020 16:21:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE39CC061756;
+        Sun,  9 Aug 2020 09:46:44 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id v6so6601920iow.11;
+        Sun, 09 Aug 2020 09:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RFjST6WTWl2HErgo/MFlw9oz3Ck4pyxWRgkJWzlGF00=;
-        b=F6dzX6tcELwEWGPV1d0we0jkFYVL94h9O/FRnIZ2I/mnTP5N8lnA7q3rOwzmKMdEqg
-         wvRRb4ik9zI1mM7fuapVBB0bAzM3i4LVPP+02psF1iEke7JYougSYpxg9QNw32TvyZPu
-         z/1PJX6lHGU4jDTu37VtJuJK+D6jbG7DyHls7HLHqplptNkE7IonOtu8ZGwhUQF1yVav
-         CDzTszCr1eG3EvhhT4FGoq5Q1mj4Tahre3VGrgft/PMWNa3xJVPC48W7NmehSzkC1ktd
-         h3IbxlSXraKnPntW+XhW4OsG4W10Otz71GJc/RUIjv0XfSCKMH5iCwHFYiWENODHHsd9
-         nDQQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UCHvINa6VosD8msvnuFOWiWxKgJoPHzS7PIxpE/jDKE=;
+        b=SUUlQ486bbodonuMFEkprugAhuuwL2vHbLCV1+2ijqzaObbJzRpgSGucKZ6F+5UQh9
+         vNQ/6Wp1o6OXrBW/ujPh9GzKi3skf1L3CWxuMSIsgzAtUBWnhsCMb/dYega9BNkcFm5h
+         zaEaSbVPN00rGpU0UWU/XDauI/L36qM13aUNnmWiEJLIgdCYkof1ip3ZO1N9ToqwH3ml
+         UhFH7V6cK4rdCblXegiI4p35SYmrGKVPGhUmbCN9aA6Dzn0XUCJHsq+3bShzqKeRtx1V
+         ckK3GO3ckXG2gSTC9CjqIO+bpEra0Xj5TTk+se3ZhfBBl1UMmN56N9kA+M+IaI5j9EH9
+         fGxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RFjST6WTWl2HErgo/MFlw9oz3Ck4pyxWRgkJWzlGF00=;
-        b=uLjAHcZlDx/qGvrizxwec1bEvjiNieWITFWXnrZY7l6kmX9q4FGLptpj50tJ3ZcsV5
-         GeoeJcxNuXb+LfaaDTdL2wGDpMZBbiqIKWQhdXL79SUND29tyba644OIl0/HYYBOZcLL
-         SaH1KWweE+TvLuZVvMKg2uSfx5UbjcQwPUdp207bcCfE24iGq3Az7JDVyogS4hehQQyO
-         F6g47e/OQwMsQeAIajwEhzKXjRtxtPGQjUofW/K+swXM1H+fTnIvQhNaKzIXlMcF5fgi
-         5q8SKtxajaKSkmTyd0m7C20Uto7Yg3m+edM/eyHloTrRTOgS2GAOQapH1Y8OQbc3lhAp
-         9lzQ==
-X-Gm-Message-State: AOAM5318FGyB12czBGD+zB/stDHNkCE7nL+mdzYcKBHidQy8pmvntOMq
-        VrUBaptiLgvgZ95bp9pCDm7ikQLcTqn293mhCd4=
-X-Google-Smtp-Source: ABdhPJyMRqrT6F3yzsJnOEWbA930gu8QCpVpVMGKETeKbC5vXRLYvXS3ltENUxorE9HABi7a73YYC+4FkrBOfs+tPh4=
-X-Received: by 2002:a02:a389:: with SMTP id y9mr11940478jak.82.1596928888373;
- Sat, 08 Aug 2020 16:21:28 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UCHvINa6VosD8msvnuFOWiWxKgJoPHzS7PIxpE/jDKE=;
+        b=Bjmo0SeYgqeVyuRrB+Zz94V+3Snuqh6hEMLwzrK1MPyGQwaa87aGHh3i5o10zQqPNS
+         RwFyc18DlY8FkMh6HQoOYXh8YYpRsr87V8NMhOIhh4h3Y13zfjnPwPmiwVUTNk1+RP/F
+         BJyirTbtSK4wUWAD0Z2YrGKy930a1I7EMlWbPgNAAWF2cRXVhlZZNDVQN2wG1DQjS2Rn
+         NeSIGP7UmlqVQbBZPojsr+W6zoE/Svrn4/wbdQoZdymh/4Wv1QKj4o1L7Prz2RtwuqKj
+         jCB2n2pF1pzULwE1GwYpdInUsTI77WuDWQaMIjanQhhkL8YwPqBODOCBljXER4blxMPk
+         La8Q==
+X-Gm-Message-State: AOAM530D8KxJ6cduZRZiMI1DWnIuqKCrnXcdtCPYYuCuuO6x7K3k1x0J
+        Cb+WvZZqdEGtaQAh78hpUkWDO6rCpF7cV5wPA6Rl8iVrG4Y=
+X-Google-Smtp-Source: ABdhPJxoK4IbE9i3/uwbgKBES4omB1Sn1yEUDgiKt1behl2IAnP9cuy6hGYY0MP9i6FNBs4RCSbb+ZuPMaYpszZy2ZU=
+X-Received: by 2002:a05:6638:635:: with SMTP id h21mr16236867jar.27.1596991604178;
+ Sun, 09 Aug 2020 09:46:44 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a02:9a05:0:0:0:0:0 with HTTP; Sat, 8 Aug 2020 16:21:27 -0700 (PDT)
-Reply-To: dunawattara96@outlook.com
-From:   Mr Duna Wattara <drhajizo31@gmail.com>
-Date:   Sat, 8 Aug 2020 16:21:27 -0700
-Message-ID: <CACp2wHy65DXLdzFuW5J+rFKqDh_+e8jrVhJgfKhv4ic9YxKubw@mail.gmail.com>
-Subject: with due respect
-To:     undisclosed-recipients:;
+References: <1596875797-22710-1-git-send-email-linmiaohe@huawei.com>
+In-Reply-To: <1596875797-22710-1-git-send-email-linmiaohe@huawei.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 9 Aug 2020 11:46:33 -0500
+Message-ID: <CAH2r5mvHLXtCAam9Wcw6PJUGg3bY8PvjYG8ijFh0km-CKNEUnA@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Convert to use the fallthrough macro
+To:     linmiaohe <linmiaohe@huawei.com>
+Cc:     Steve French <sfrench@samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Friend,
+Is this conversion from "/* Fallthrough */"   to the preferred (?)
+"fallthrough;" documented anywhere?
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication.
+All I see is a few fs changesets like:
 
-I need your urgent assistance in transferring the sum of $11.3million
-immediately to your private account.The money has been here in our
-Bank lying dormant for years now without anybody coming for the claim of it.
+commit c730ae0c6bb3125ccb776fb2ab6abbdff500c02c
+Author: Marcos Paulo de Souza <mpdesouza@suse.com>
+Date:   Tue Jun 16 15:54:29 2020 -0300
 
-I want to release the money to you as the relative to our deceased
-customer (the account owner) who died a long with his supposed NEXT OF
-KIN since 16th October 2005. The Banking laws here does not allow such
-money to stay more than 15 years, because the money will be recalled
-to the Bank treasury account as unclaimed fund.
+    btrfs: convert comments to fallthrough annotations
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
+    Convert fall through comments to the pseudo-keyword which is now the
+    preferred way.
 
-Please respond urgently and delete if you are not interested.
+And the vast majority of places (33 vs. 4) use "/* Fallthrough */ in
+the fs directory
 
-Best Regards,
-Mr. Duna Wattara.
+On Sat, Aug 8, 2020 at 3:34 AM linmiaohe <linmiaohe@huawei.com> wrote:
+>
+> From: Miaohe Lin <linmiaohe@huawei.com>
+>
+> Convert the uses of fallthrough comments to fallthrough macro.
+>
+> Signed-off-by: Hongxiang Lou <louhongxiang@huawei.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  fs/cifs/smb2pdu.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> index 24c2ac360591..667d70aa335f 100644
+> --- a/fs/cifs/smb2pdu.c
+> +++ b/fs/cifs/smb2pdu.c
+> @@ -3913,7 +3913,7 @@ smb2_readv_callback(struct mid_q_entry *mid)
+>         case MID_RESPONSE_MALFORMED:
+>                 credits.value = le16_to_cpu(shdr->CreditRequest);
+>                 credits.instance = server->reconnect_instance;
+> -               /* fall through */
+> +               fallthrough;
+>         default:
+>                 rdata->result = -EIO;
+>         }
+> @@ -4146,7 +4146,7 @@ smb2_writev_callback(struct mid_q_entry *mid)
+>         case MID_RESPONSE_MALFORMED:
+>                 credits.value = le16_to_cpu(rsp->sync_hdr.CreditRequest);
+>                 credits.instance = server->reconnect_instance;
+> -               /* fall through */
+> +               fallthrough;
+>         default:
+>                 wdata->result = -EIO;
+>                 break;
+> --
+> 2.19.1
+>
+
+
+-- 
+Thanks,
+
+Steve
