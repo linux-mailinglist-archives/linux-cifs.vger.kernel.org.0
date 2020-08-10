@@ -2,62 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CDD23FF69
-	for <lists+linux-cifs@lfdr.de>; Sun,  9 Aug 2020 19:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB0E24083B
+	for <lists+linux-cifs@lfdr.de>; Mon, 10 Aug 2020 17:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbgHIRPu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 9 Aug 2020 13:15:50 -0400
-Received: from smtprelay0243.hostedemail.com ([216.40.44.243]:50462 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726210AbgHIRPu (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 9 Aug 2020 13:15:50 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id 88D8B18009FF0
-        for <linux-cifs@vger.kernel.org>; Sun,  9 Aug 2020 17:07:10 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 5E97B182CED2A;
-        Sun,  9 Aug 2020 17:07:09 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1567:1593:1594:1711:1714:1730:1747:1777:1792:2194:2198:2199:2200:2393:2525:2561:2564:2682:2685:2731:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3622:3865:3866:3867:3870:3871:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:5007:6119:9010:9025:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13019:13069:13200:13229:13311:13357:13439:14181:14659:14721:21080:21433:21627:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: crate03_55148a926fd3
-X-Filterd-Recvd-Size: 1638
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Sun,  9 Aug 2020 17:07:08 +0000 (UTC)
-Message-ID: <5788fcd4bc9d055fa40302ecb6728265c7618772.camel@perches.com>
-Subject: Re: [PATCH] cifs: Convert to use the fallthrough macro
-From:   Joe Perches <joe@perches.com>
-To:     Steve French <smfrench@gmail.com>, linmiaohe <linmiaohe@huawei.com>
-Cc:     Steve French <sfrench@samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Sun, 09 Aug 2020 10:07:07 -0700
-In-Reply-To: <CAH2r5mvHLXtCAam9Wcw6PJUGg3bY8PvjYG8ijFh0km-CKNEUnA@mail.gmail.com>
-References: <1596875797-22710-1-git-send-email-linmiaohe@huawei.com>
-         <CAH2r5mvHLXtCAam9Wcw6PJUGg3bY8PvjYG8ijFh0km-CKNEUnA@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        id S1726338AbgHJPRO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 10 Aug 2020 11:17:14 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:20051 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725894AbgHJPRO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 10 Aug 2020 11:17:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597072633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tzFIJ6QrKu4yoI3w842fEVOcfFitxszWJPwA8w1tzak=;
+        b=CAwx8sfioP43zkOeKWxY5PXeBlKhWdrIMh4K0LgfRTsRXs91k0NKRctpphYOjr+dS/G66l
+        1y86+xe4PX8ELzvf0ETpFllbjDD0dpXlI3jXk3/3gk0lP4X8wjyPuBAkbQmLYsL8sJ+eNG
+        FbqBYYKteP4EKp6ShnI2bfo53FNj7YI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-298-F6eKrt3VN1Knd3NgOWyHPg-1; Mon, 10 Aug 2020 11:17:09 -0400
+X-MC-Unique: F6eKrt3VN1Knd3NgOWyHPg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7D0288005B0;
+        Mon, 10 Aug 2020 15:17:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-113-69.rdu2.redhat.com [10.10.113.69])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CB1795D9CD;
+        Mon, 10 Aug 2020 15:16:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1851200.1596472222@warthog.procyon.org.uk>
+References: <1851200.1596472222@warthog.procyon.org.uk> <447452.1596109876@warthog.procyon.org.uk>
+To:     torvalds@linux-foundation.org
+Cc:     dhowells@redhat.com, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Jeff Layton <jlayton@redhat.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fscache rewrite -- please drop for now
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <667819.1597072619.1@warthog.procyon.org.uk>
+Date:   Mon, 10 Aug 2020 16:16:59 +0100
+Message-ID: <667820.1597072619@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Sun, 2020-08-09 at 11:46 -0500, Steve French wrote:
-> Is this conversion from "/* Fallthrough */"   to the preferred (?)
-> "fallthrough;" documented anywhere?
+Hi Linus,
 
-Documentation/process/deprecated.rst
+Can you drop the fscache rewrite pull for now.  We've seem an issue in NFS
+integration and need to rework the read helper a bit.  I made an assumption
+that fscache will always be able to request that the netfs perform a read of a
+certain minimum size - but with NFS you can break that by setting rsize too
+small.
 
-As there have been a long list of flaws `due to missing "break" statements
-<https://cwe.mitre.org/data/definitions/484.html>`_, we no longer allow
-implicit fall-through. In order to identify intentional fall-through
-cases, we have adopted a pseudo-keyword macro "fallthrough" which
-expands to gcc's extension `__attribute__((__fallthrough__))
-<https://gcc.gnu.org/onlinedocs/gcc/Statement-Attributes.html>`_.
+We need to make the read helper able to make multiple netfs reads.  This can
+help ceph too.
 
-
+Thanks,
+David
 
