@@ -2,113 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46C1240B9E
-	for <lists+linux-cifs@lfdr.de>; Mon, 10 Aug 2020 19:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D86824148B
+	for <lists+linux-cifs@lfdr.de>; Tue, 11 Aug 2020 03:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbgHJRI2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 10 Aug 2020 13:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbgHJRI2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 10 Aug 2020 13:08:28 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D070C061756;
-        Mon, 10 Aug 2020 10:08:28 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id g19so9691239ioh.8;
-        Mon, 10 Aug 2020 10:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EV/Inn1yIq80k4xTWqNtB11Yxfxj2hvMoKBR9JcOwIo=;
-        b=D4odPv7PmDBTv8Fr4bfErHYxqALMVwFsfFMmqsp82assrut3e69ZNXKmR+KDkxZRWG
-         YHKA9IhaMldTiRLhsg500chNRM/ou501nJfjU3npvH1nZRX3900zmodkNGZi3mN8tIoC
-         HG16jK4Jnd2ViNjtQv+rUQGWNzryHDcq8vAjZlzkA/BsTBqYxrVOPg6fwdiMCiUvEEre
-         Oe23p+rdRhbdZd1C1OouJkp9juFnW93XUHKeSWiIVWd3wShY2JzsDi5U6LMui2hesChO
-         FdLfAuwk/X5i0ZDdCJEU6MnAh5Emt7tb8nDx2Ia3X5f0BIpeXi+UQ5A/NvmrXqPKBFmF
-         /5Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EV/Inn1yIq80k4xTWqNtB11Yxfxj2hvMoKBR9JcOwIo=;
-        b=RjV6xbUPCA8Y0sOFoSobXIzpE2fpS1s5OuqNvyER7BmLjUj6EB+Hqr5CXCCrU2BXWl
-         KH3Wb6yb0XxHZuLE69mcgPB726SRP6AS1Jgwl9SuVUShONp9aGhSBzw1j07NPcd7gBsw
-         4gHirGSOWwHpGaRcGuSWIswQnUEGu3z49Dl/kVv1PDpsYTyjaGS8IsQ7ROJHEqw7jxMZ
-         pFA8ZnZkP000424P+64GQ15dUEn5oXhOpg82wx0tI/qGnFmX+NfVjhjrre7jB7XBD2Uv
-         9Xov+7d9y5NU4FCb4hrzhPaxxIRgGKap0m2I5xxHEYTX6c1GkvRVdQYAttfaRNb1ajI7
-         XVcg==
-X-Gm-Message-State: AOAM531YmzisXUL1fufAltKF67um1nMpv7wg0sGMqckP084dZD10v+RQ
-        f7+j/vKKAkBtMSUUl6icy7gPNqQXECSaLU2Cv70=
-X-Google-Smtp-Source: ABdhPJzz4KKqCWD8DewPuuMqNyLgFicLPDFscAPkzIrLXWdzhAtY0bnr7EccVxuIqigNWXrcGkoPoLjwlE3xYY1EmEg=
-X-Received: by 2002:a05:6638:2604:: with SMTP id m4mr21271201jat.76.1597079306859;
- Mon, 10 Aug 2020 10:08:26 -0700 (PDT)
+        id S1727930AbgHKBZd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 10 Aug 2020 21:25:33 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49521 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727985AbgHKBZd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 10 Aug 2020 21:25:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597109132;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=wbtvcQspsBIoUXrnb488GjLwznDX71oWzwrHbQ5iJ50=;
+        b=FIP5mv0UN6C1w+pFWikNux876YbFd1FDW+K0Kbc8d8+DGjqmnTLr4Xdb6YMBoQ9u0ZIF1g
+        tvlcN9tMyCmAjCpFnz6JO5/ruMd8iWCBG6j8CmUIgvxgELOmJVtuS95WyMO2wcBFjA18yJ
+        CZ8kD0cGpsRG321hJYiBuj6nuZqnlhI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-148-pNf-ZVevMQSOf93q1N0dzg-1; Mon, 10 Aug 2020 21:25:30 -0400
+X-MC-Unique: pNf-ZVevMQSOf93q1N0dzg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8DE2559
+        for <linux-cifs@vger.kernel.org>; Tue, 11 Aug 2020 01:25:28 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8751761982
+        for <linux-cifs@vger.kernel.org>; Tue, 11 Aug 2020 01:25:28 +0000 (UTC)
+Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 8176D4EDB7
+        for <linux-cifs@vger.kernel.org>; Tue, 11 Aug 2020 01:25:28 +0000 (UTC)
+Date:   Mon, 10 Aug 2020 21:25:27 -0400 (EDT)
+From:   Xiaoli Feng <xifeng@redhat.com>
+To:     CIFS <linux-cifs@vger.kernel.org>
+Message-ID: <3704067.45751512.1597109127904.JavaMail.zimbra@redhat.com>
+In-Reply-To: <1097808468.45751159.1597108422888.JavaMail.zimbra@redhat.com>
+Subject: FS-Cache for cifs
 MIME-Version: 1.0
-References: <1596875797-22710-1-git-send-email-linmiaohe@huawei.com>
-In-Reply-To: <1596875797-22710-1-git-send-email-linmiaohe@huawei.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 10 Aug 2020 12:08:15 -0500
-Message-ID: <CAH2r5mstN6P_kU_Riobdv5NJPL-pF6=oZoAh6k9qj1+nz9Z8Cw@mail.gmail.com>
-Subject: Re: [PATCH] cifs: Convert to use the fallthrough macro
-To:     linmiaohe <linmiaohe@huawei.com>
-Cc:     Steve French <sfrench@samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.68.5.20, 10.4.195.16]
+Thread-Topic: FS-Cache for cifs
+Thread-Index: KXhuMfHTM790eCXfua/oIh10OZKIXQ==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+Hello everyone,
 
-(but note that most places in fs directory other than cifs and btrfs
-have not been updated), and I noticed another 8 places in fs/cifs that
-you didn't change in your patch (ie change from the older way of
-indicating fallthrough   /* Fallthrough */ as a comment to the newer
-fallthrough macro.
+Recently I'd like to test fs-cache for cifs. But CONFIG_CIFS_FSCACHE is not=
+ set defaultly.
+Are there any concern to enable it? Test it to enbale fs-cache. It seems wo=
+rk. The file=20
+/proc/fs/fscache/stats is update when do some cp operations.
 
-On Sat, Aug 8, 2020 at 3:34 AM linmiaohe <linmiaohe@huawei.com> wrote:
->
-> From: Miaohe Lin <linmiaohe@huawei.com>
->
-> Convert the uses of fallthrough comments to fallthrough macro.
->
-> Signed-off-by: Hongxiang Lou <louhongxiang@huawei.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  fs/cifs/smb2pdu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> index 24c2ac360591..667d70aa335f 100644
-> --- a/fs/cifs/smb2pdu.c
-> +++ b/fs/cifs/smb2pdu.c
-> @@ -3913,7 +3913,7 @@ smb2_readv_callback(struct mid_q_entry *mid)
->         case MID_RESPONSE_MALFORMED:
->                 credits.value = le16_to_cpu(shdr->CreditRequest);
->                 credits.instance = server->reconnect_instance;
-> -               /* fall through */
-> +               fallthrough;
->         default:
->                 rdata->result = -EIO;
->         }
-> @@ -4146,7 +4146,7 @@ smb2_writev_callback(struct mid_q_entry *mid)
->         case MID_RESPONSE_MALFORMED:
->                 credits.value = le16_to_cpu(rsp->sync_hdr.CreditRequest);
->                 credits.instance = server->reconnect_instance;
-> -               /* fall through */
-> +               fallthrough;
->         default:
->                 wdata->result = -EIO;
->                 break;
-> --
-> 2.19.1
->
+Thanks.
 
+--=20
+Best regards!
+XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
 
--- 
-Thanks,
-
-Steve
