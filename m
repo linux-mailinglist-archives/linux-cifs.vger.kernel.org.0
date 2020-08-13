@@ -2,74 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC4F244128
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 00:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E7A2441A0
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 01:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgHMWQu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 13 Aug 2020 18:16:50 -0400
-Received: from [186.47.21.114] ([186.47.21.114]:59396 "EHLO mail.hmvi.gob.ec"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726384AbgHMWQu (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 13 Aug 2020 18:16:50 -0400
-X-Greylist: delayed 11740 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Aug 2020 18:16:49 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hmvi.gob.ec (Postfix) with ESMTP id 88391C010F557;
-        Thu, 13 Aug 2020 12:28:48 -0500 (-05)
-Received: from mail.hmvi.gob.ec ([127.0.0.1])
-        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id hhQXhqz04aq6; Thu, 13 Aug 2020 12:28:48 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hmvi.gob.ec (Postfix) with ESMTP id EA313C013788E;
-        Thu, 13 Aug 2020 12:15:04 -0500 (-05)
-X-Virus-Scanned: amavisd-new at hmvi.gob.ec
-Received: from mail.hmvi.gob.ec ([127.0.0.1])
-        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pSSDBRrlCBXC; Thu, 13 Aug 2020 12:15:04 -0500 (-05)
-Received: from [10.73.80.190] (unknown [105.8.3.183])
-        by mail.hmvi.gob.ec (Postfix) with ESMTPSA id E338FC003E60A;
-        Thu, 13 Aug 2020 12:04:04 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1726486AbgHMXKS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 13 Aug 2020 19:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgHMXKS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 13 Aug 2020 19:10:18 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB655C061757
+        for <linux-cifs@vger.kernel.org>; Thu, 13 Aug 2020 16:10:17 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id o18so8004680eje.7
+        for <linux-cifs@vger.kernel.org>; Thu, 13 Aug 2020 16:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5sAzcnpsWkVdMF718dYK82AuN1Oi+sG8wE5AGh59yfI=;
+        b=Y3r/ESTq0faQhG5aeHa9zWsseof8CaspfWzGZkJqw/2M3Kmww92AwPX96GBP2KUXN3
+         25cbKJRcgtZX1IJhArr65clloFo1LhAw1XscRCdeVePkhj8y1nu217H8ZLbyH//OlQao
+         mXPrCNjP5n+hCX+q0HXGrPGTHJBHedH+qUvCB/C1J02O75dTJrhhBstgwifGkZgHYJC/
+         0f4XbUGEVAFxmul3R2XhHmBdzNohgoJx8qpm79IOfwzcrlvGnml/6h5uOkYXu4vFDpSv
+         IVMtlLKr0gbaIccw6oPvHRXHXY1/96/xMPrln2CgubK0bQ9KnnK4YduLebk/4eOFHkoW
+         ol0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5sAzcnpsWkVdMF718dYK82AuN1Oi+sG8wE5AGh59yfI=;
+        b=r235okUPsAi3RF2BdY3jH/LIiZqqr41IhLjdRo58sNWWgi7EHkUqNDn5lHW1jUBz2T
+         PqyOUe++p95iNXNVqU0bCclskWbvES8mTmyj0G3nDREKrXts9KPMqe+EZEx64YZk5pL1
+         Uv3cc+6yaNKaBRu3RmdhH2ANgtOd1znabP/GvUXJ8kSLa+gT1Aoyc1eRHUfGfxgO/ze0
+         YrAw6WwGw+wnDtwqv6XEaxyxOnps9ZN4uVLuS4CxLFiVOOcNym6C2WEeMWulTlI7CqCp
+         k1sgTGEnLszAi6MMHE67DloJCuoMQ/rE6Xob+yLVVGNVNfdboU9FRzDe1MJ34ROPQD0e
+         dbaQ==
+X-Gm-Message-State: AOAM531fD7PBW12xe9m1D/Uf3UO4xsL6j2DPegHijZNUHnA85C40/EcV
+        Ac23VK8ZbxnyA20nmhcvTND7KgogLH0R+YsaBCOw
+X-Google-Smtp-Source: ABdhPJx5JuFmpzTG+WkkbJLJhii8mHkWyqr98Ufb5TQOea3uizO+x4FE3VtVDi5BJD8yL2SruqYVDlqco38TVJElVuA=
+X-Received: by 2002:a17:906:248b:: with SMTP id e11mr6868479ejb.280.1597360216276;
+ Thu, 13 Aug 2020 16:10:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <danny.puetate@mail.hmvi.gob.ec>
-From:   ''Tayeb Souami'' <danny.puetate@mail.hmvi.gob.ec>
-Date:   Thu, 13 Aug 2020 19:03:44 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20200813170404.E338FC003E60A@mail.hmvi.gob.ec>
+References: <CAH2r5ms-cXJzTqbTuE8_095aUssB8RvaqBTkfY2gHROjg7GsAQ@mail.gmail.com>
+ <87blje5t1y.fsf@cjr.nz>
+In-Reply-To: <87blje5t1y.fsf@cjr.nz>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Thu, 13 Aug 2020 16:10:05 -0700
+Message-ID: <CAKywueTOxmPxLG-ghVkokpDNuRyYK29Ogx39QtGzBYGBvGXDGg@mail.gmail.com>
+Subject: Re: [PATCH][SMB3] Fix mkdir when idsfromsid configured on mount
+To:     Paulo Alcantara <pc@cjr.nz>
+Cc:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Lieber Freund,
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+--
+Best regards,
+Pavel Shilovsky
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika,
-der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich
-an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre
-E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines
-Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und
-Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die
-Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden,
-um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite
-unten.
-
-
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
-
-
-Das ist dein Spendencode: [TS530342018]
-
-
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-
-Grüße
-
-Herr Tayeb Souami
+=D1=87=D1=82, 13 =D0=B0=D0=B2=D0=B3. 2020 =D0=B3. =D0=B2 10:56, Paulo Alcan=
+tara <pc@cjr.nz>:
+>
+> Steve French <smfrench@gmail.com> writes:
+>
+> > From c8e2d959ddac89ee44f170b2f2549e749581ec55 Mon Sep 17 00:00:00 2001
+> > From: Steve French <stfrench@microsoft.com>
+> > Date: Thu, 13 Aug 2020 12:38:08 -0500
+> > Subject: [PATCH] SMB3: Fix mkdir when idsfromsid configured on mount
+> >
+> > mkdir uses a compounded create operation which was not setting
+> > the security descriptor on create of a directory. Fix so
+> > mkdir now sets the mode and owner info properly when idsfromsid
+> > and modefromsid are configured on the mount.
+> >
+> > Signed-off-by: Steve French <stfrench@microsoft.com>
+> > CC: Stable <stable@vger.kernel.org> # v5.8
+> > ---
+> >  fs/cifs/smb2inode.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/fs/cifs/smb2inode.c b/fs/cifs/smb2inode.c
+> > index b9db73687eaa..eba01d0908dd 100644
+> > --- a/fs/cifs/smb2inode.c
+> > +++ b/fs/cifs/smb2inode.c
+> > @@ -115,6 +115,7 @@ smb2_compound_op(const unsigned int xid, struct cif=
+s_tcon *tcon,
+> >       vars->oparms.fid =3D &fid;
+> >       vars->oparms.reconnect =3D false;
+> >       vars->oparms.mode =3D mode;
+> > +     vars->oparms.cifs_sb =3D cifs_sb;
+> >
+> >       rqst[num_rqst].rq_iov =3D &vars->open_iov[0];
+> >       rqst[num_rqst].rq_nvec =3D SMB2_CREATE_IOV_SIZE;
+>
+> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
