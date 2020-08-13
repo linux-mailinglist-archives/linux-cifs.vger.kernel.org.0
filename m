@@ -2,77 +2,74 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B835B243E87
-	for <lists+linux-cifs@lfdr.de>; Thu, 13 Aug 2020 19:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC4F244128
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 00:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgHMR4B (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 13 Aug 2020 13:56:01 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:19124 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726174AbgHMR4A (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 13 Aug 2020 13:56:00 -0400
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id E2E6A7FD27;
-        Thu, 13 Aug 2020 17:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1597341358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jUD8C4+Fo5usLbgC7EHtJOMbGA7JXM6175H4cbNJK0w=;
-        b=V7BHS4AJYHXvH+P8rH/vkIEODkt710MvQgUIf1GbprltXC2mMR2xE8RzU0uGmvjORfze/d
-        PmwS3Pv1JT5dByOUUsxykQ6/umZWShRDr9wo6/Dkten0lOnsdo01EALHV+OTgcRNLvCyY2
-        5d0rQezG0KnJmTiFHEcOw97wK2LJUkCojMYeMjApavLARqczxCSbP5sjHs3RlB4qy7QXRu
-        Fax5LfH4KAq2zFFcEEGjxMHkcRZ3SR+dTOdeLUmbCzwzSIfozwyEhPNZyzsIJaOUrX0hN7
-        8K9n+aMd2a43j5BNNd2/3tORaQRIJB4C5e9s+XpX8L/kpA6aCb4CLUxV44B92Q==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: [PATCH][SMB3] Fix mkdir when idsfromsid configured on mount
-In-Reply-To: <CAH2r5ms-cXJzTqbTuE8_095aUssB8RvaqBTkfY2gHROjg7GsAQ@mail.gmail.com>
-References: <CAH2r5ms-cXJzTqbTuE8_095aUssB8RvaqBTkfY2gHROjg7GsAQ@mail.gmail.com>
-Date:   Thu, 13 Aug 2020 14:55:53 -0300
-Message-ID: <87blje5t1y.fsf@cjr.nz>
+        id S1726570AbgHMWQu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 13 Aug 2020 18:16:50 -0400
+Received: from [186.47.21.114] ([186.47.21.114]:59396 "EHLO mail.hmvi.gob.ec"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726384AbgHMWQu (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 13 Aug 2020 18:16:50 -0400
+X-Greylist: delayed 11740 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Aug 2020 18:16:49 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id 88391C010F557;
+        Thu, 13 Aug 2020 12:28:48 -0500 (-05)
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id hhQXhqz04aq6; Thu, 13 Aug 2020 12:28:48 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id EA313C013788E;
+        Thu, 13 Aug 2020 12:15:04 -0500 (-05)
+X-Virus-Scanned: amavisd-new at hmvi.gob.ec
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id pSSDBRrlCBXC; Thu, 13 Aug 2020 12:15:04 -0500 (-05)
+Received: from [10.73.80.190] (unknown [105.8.3.183])
+        by mail.hmvi.gob.ec (Postfix) with ESMTPSA id E338FC003E60A;
+        Thu, 13 Aug 2020 12:04:04 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <danny.puetate@mail.hmvi.gob.ec>
+From:   ''Tayeb Souami'' <danny.puetate@mail.hmvi.gob.ec>
+Date:   Thu, 13 Aug 2020 19:03:44 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200813170404.E338FC003E60A@mail.hmvi.gob.ec>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Steve French <smfrench@gmail.com> writes:
+Lieber Freund,
 
-> From c8e2d959ddac89ee44f170b2f2549e749581ec55 Mon Sep 17 00:00:00 2001
-> From: Steve French <stfrench@microsoft.com>
-> Date: Thu, 13 Aug 2020 12:38:08 -0500
-> Subject: [PATCH] SMB3: Fix mkdir when idsfromsid configured on mount
->
-> mkdir uses a compounded create operation which was not setting
-> the security descriptor on create of a directory. Fix so
-> mkdir now sets the mode and owner info properly when idsfromsid
-> and modefromsid are configured on the mount.
->
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> CC: Stable <stable@vger.kernel.org> # v5.8
-> ---
->  fs/cifs/smb2inode.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/fs/cifs/smb2inode.c b/fs/cifs/smb2inode.c
-> index b9db73687eaa..eba01d0908dd 100644
-> --- a/fs/cifs/smb2inode.c
-> +++ b/fs/cifs/smb2inode.c
-> @@ -115,6 +115,7 @@ smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
->  	vars->oparms.fid = &fid;
->  	vars->oparms.reconnect = false;
->  	vars->oparms.mode = mode;
-> +	vars->oparms.cifs_sb = cifs_sb;
->  
->  	rqst[num_rqst].rq_iov = &vars->open_iov[0];
->  	rqst[num_rqst].rq_nvec = SMB2_CREATE_IOV_SIZE;
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika,
+der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich
+an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre
+E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines
+Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und
+Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die
+Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden,
+um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite
+unten.
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+
+Grüße
+
+Herr Tayeb Souami
