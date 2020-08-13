@@ -2,69 +2,86 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C07C243C87
-	for <lists+linux-cifs@lfdr.de>; Thu, 13 Aug 2020 17:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06104243D0E
+	for <lists+linux-cifs@lfdr.de>; Thu, 13 Aug 2020 18:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgHMPcV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 13 Aug 2020 11:32:21 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:57452 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726253AbgHMPcU (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 13 Aug 2020 11:32:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597332739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rI+VkqySahTGBo+LZ6196lJmvR/3YlmhnUdKT+7qOco=;
-        b=HH61uerQdQ0JXMLrUtjwbumRYJ5x59DUNLNVuv5/mV5GFgNi0hy2hKrf4WujXjDthsHgkj
-        ePw9eevWTbKI/pmX+KHR4+a/5QSc82kPOqVF7oCFY7ydjuI5ZIomWRI5nK8yUe5kjy/rwn
-        X7mZLHHV3yGPif7kayKi+TDigtoGc1Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-363-jDTk2fcrN4qB8i1FYCNzRA-1; Thu, 13 Aug 2020 11:32:17 -0400
-X-MC-Unique: jDTk2fcrN4qB8i1FYCNzRA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 817C01DDE0;
-        Thu, 13 Aug 2020 15:32:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-127.rdu2.redhat.com [10.10.120.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8CC515C1A3;
-        Thu, 13 Aug 2020 15:32:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <87tux64mns.fsf@suse.com>
-References: <87tux64mns.fsf@suse.com> <1097808468.45751159.1597108422888.JavaMail.zimbra@redhat.com> <3704067.45751512.1597109127904.JavaMail.zimbra@redhat.com> <CAH2r5mt389QPfeZPSTun9qkc=88ehFC1NzayewCoKU=qv+Epaw@mail.gmail.com>
-To:     =?us-ascii?Q?=3D=3Futf-8=3FQ=3FAur=3DC3=3DA9lien=3F=3D?= Aptel 
-        <aaptel@suse.com>
-Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        Xiaoli Feng <xifeng@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: FS-Cache for cifs
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726606AbgHMQNt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 13 Aug 2020 12:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbgHMQNs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 13 Aug 2020 12:13:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F55C061757
+        for <linux-cifs@vger.kernel.org>; Thu, 13 Aug 2020 09:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=Wz8wZ1QarTO0af7M4ZP5XDbHTxEZnt3oO9ey3vyTSMo=; b=sKhFphXcryLQv18/HJa+Q0ts80
+        Hm2gnu9nfGXx2NZVTFAwqSwzVBIAYZTqOliatcB+QAUvONYzRvv6z3JlolxMgGmOL2RIM+UVaZogd
+        rSR99ppX5IXKFKtXjWJEGw93JcVf3TMQenke0FePvdwQl0gnbt7fiwm6+R71vP/wDFiKh65IFGKmS
+        +tAKFbyvmalrGA6k6V5znn4zQDYDF0TundRgNH2bLwBh+3SMrHL6eGsg2FIQK0z+tyDjCQTWvVez3
+        vk1ahUV/QOrHDpY9rIPieGN0rYRpAWDYPzO40ogadusWTajnEzszI8+n9IxooqCnUvPMQeOcyUhyO
+        vbMbv0DBSjGdexCQz58GaxLAbzPBPRHEZw0sTOOtbnnbz8U3oI8jgXV78moScz9fpVHjJ66wm/0Ca
+        dByUMKCM5jBFKbqoMZryP2EduS5w234FQt/HVIDe7NVy564Y5ck1qbs8S+8v2z8n5i/YpfNUqE2dP
+        A3gt1qlL47PkguvbvtNsc/ty;
+Received: from [2a01:4f8:192:486::6:0] (port=53836 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k6FrO-0002WG-GE
+        for cifs-qa@samba.org; Thu, 13 Aug 2020 16:13:46 +0000
+Received: from [::1] (port=39794 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k6FrM-00932u-Dz
+        for cifs-qa@samba.org; Thu, 13 Aug 2020 16:13:44 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 9078] Cifs share File corrupted after first use
+Date:   Thu, 13 Aug 2020 16:13:44 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.6
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: critical
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status cc resolution
+Message-ID: <bug-9078-10630-3COKF2VtAI@https.bugzilla.samba.org/>
+In-Reply-To: <bug-9078-10630@https.bugzilla.samba.org/>
+References: <bug-9078-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 13 Aug 2020 16:32:14 +0100
-Message-ID: <322210.1597332734@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Aur=C3=A9lien Aptel <aaptel@suse.com> wrote:
+https://bugzilla.samba.org/show_bug.cgi?id=3D9078
 
-> Is there an overview document somewhere that describe what fscache does?
-> We are seeing some warnings about duplicated entries in some scenarios
-> but I'd like to understand better what it does before changing what goes
-> in the key.
+Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
 
-Documentation/filesystems/caching/* in the kernel.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |bjacke@samba.org
+         Resolution|---                         |FIXED
 
-David
+--- Comment #5 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
+this seems to be fixed, can you confirm? I tried 10 runs againt an old XP b=
+ox,
+all results OK.
 
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
