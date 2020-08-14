@@ -2,87 +2,60 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 499A624476A
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 11:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15430244A70
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 15:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgHNJwq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 14 Aug 2020 05:52:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37486 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727039AbgHNJwp (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 14 Aug 2020 05:52:45 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id EFDE8ACB0;
-        Fri, 14 Aug 2020 09:53:06 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical@lists.samba.org,
-        Pavel Shilovsky <piastryyy@gmail.com>,
-        Steve French <smfrench@gmail.com>, sribhat.msa@outlook.com
-Subject: Re: [PATCH][SMB3] mount.cifs integration with PAM
-In-Reply-To: <CANT5p=pxPsBwAv3oJX6Ae9wjpZoEjLvyfGM1sM9DEhS11RNgog@mail.gmail.com>
-References: <CANT5p=pxPsBwAv3oJX6Ae9wjpZoEjLvyfGM1sM9DEhS11RNgog@mail.gmail.com>
-Date:   Fri, 14 Aug 2020 11:52:42 +0200
-Message-ID: <87pn7t4kr9.fsf@suse.com>
+        id S1726237AbgHNNdr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 14 Aug 2020 09:33:47 -0400
+Received: from mail.munisurquillo.gob.pe ([190.187.155.157]:56664 "EHLO
+        mail.munisurquillo.gob.pe" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726196AbgHNNdq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 14 Aug 2020 09:33:46 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.munisurquillo.gob.pe (Postfix) with ESMTP id 2E9E04B359C1B;
+        Fri, 14 Aug 2020 02:13:20 -0500 (-05)
+Received: from mail.munisurquillo.gob.pe ([127.0.0.1])
+        by localhost (mail.munisurquillo.gob.pe [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id reeeVzWlxVim; Fri, 14 Aug 2020 02:13:19 -0500 (-05)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.munisurquillo.gob.pe (Postfix) with ESMTP id 827484AA94996;
+        Fri, 14 Aug 2020 02:13:17 -0500 (-05)
+X-Virus-Scanned: amavisd-new at munisurquillo.gob.pe
+Received: from mail.munisurquillo.gob.pe ([127.0.0.1])
+        by localhost (mail.munisurquillo.gob.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id m8bl9fyzHjK0; Fri, 14 Aug 2020 02:13:17 -0500 (-05)
+Received: from [10.54.17.114] (unknown [105.4.7.153])
+        by mail.munisurquillo.gob.pe (Postfix) with ESMTPSA id 3D6D048243B27;
+        Fri, 14 Aug 2020 02:13:02 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <lu.marin@munisurquillo.gob.pe>
+From:   ''charles jackson'' <lu.marin@munisurquillo.gob.pe>
+Date:   Fri, 14 Aug 2020 09:12:53 +0200
+Reply-To: charlesjacksonjr001@gmail.com
+Message-Id: <20200814071303.3D6D048243B27@mail.munisurquillo.gob.pe>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Shyam,
+Hallo
 
-Shyam Prasad N <nspmangalore@gmail.com> writes:
-> Currently, for sec=krb5, mount.cifs assumes that the kerberos TGT is
-> already downloaded and stored in krb5 cred cache file. If an AD user
-> is logged in through ssh or su, those utilities authenticate with PAM
-> (winbind or sssd), and winbind/sssd can be configured to perform
-> krbtgt house-keeping (like refreshing the tickets). However, if the AD
-> user is not logged in, and the local root user wants to mount the
-> share using the credentials for an AD user, he/she will need to resort
-> to manual kinit, and this does not go through winbind/sssd.
+Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f�r das Corona-Virus.
 
-That is correct, I think. Note that using when login in the system PAM
-also sets up KRB5CCNAME variable that points to the credential cache
-(e.g. "FILE:/tmp/krb5cc_0") and is then inherited in all processes in
-the session.
+Dies ist Ihr Spendencode: [CJ530342019]
 
-> Attached patch will introduce PAM authentication in mount.cifs. If
-> sec=krb5 is specified, mount.cifs will attempt to authenticate with
-> PAM as the username mentioned in mount options. If the authentication
-> fails, we fall back to the old behavior and proceed with the mount
-> nevertheless.
+www.youtube.com/watch?v=BSr8myiLPMQ
 
-Shouldn't we do it the other way around? i.e. try to use any existing
-credential cache, and if that fails auth again with PAM. I think we
-might end up overwriting an existing cache or logging in twice
-otherwise.
+Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
 
-> @linux-cifs: Please review the overall flow, and let me know if there
-> are any issues/suggestions. The feature is enabled by default in a
-> configure parameter (krb5pam), and can be disabled. Do we also need a
-> new mount option to trigger this new behavior? (try-pam-auth?)
+charlesjacksonjr001@gmail.com
 
-> @samba-technical: Please review the overall flow of PAM
-> authentication. Currently, I'm mainly doing pam_authenticate and
-> pam_setcreds. Is there any added benefit opening and closing session?
-> Is it possible to call pam_open_session from mount.cifs, and then call
-> pam_close_session in another binary (umount.cifs)?
+Ich hoffe, dass Sie und Ihre Familie dies durchkommen
 
-I am not 100% sure about this but I think the session should be opened
-in the context of the parent shell process to be able to be persistent,
-otherwise the session will close when mount.cifs exits. Maybe there is a
-way to pin the session on a different processes... But most likely there
-is an existing session opened by PAM when the user initially logged in
-the system (regardless of the PAM backend/params).
 
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+Herr Charles Jackson
