@@ -2,60 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15430244A70
-	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 15:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F777244B2E
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Aug 2020 16:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgHNNdr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 14 Aug 2020 09:33:47 -0400
-Received: from mail.munisurquillo.gob.pe ([190.187.155.157]:56664 "EHLO
-        mail.munisurquillo.gob.pe" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726196AbgHNNdq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 14 Aug 2020 09:33:46 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.munisurquillo.gob.pe (Postfix) with ESMTP id 2E9E04B359C1B;
-        Fri, 14 Aug 2020 02:13:20 -0500 (-05)
-Received: from mail.munisurquillo.gob.pe ([127.0.0.1])
-        by localhost (mail.munisurquillo.gob.pe [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id reeeVzWlxVim; Fri, 14 Aug 2020 02:13:19 -0500 (-05)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.munisurquillo.gob.pe (Postfix) with ESMTP id 827484AA94996;
-        Fri, 14 Aug 2020 02:13:17 -0500 (-05)
-X-Virus-Scanned: amavisd-new at munisurquillo.gob.pe
-Received: from mail.munisurquillo.gob.pe ([127.0.0.1])
-        by localhost (mail.munisurquillo.gob.pe [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id m8bl9fyzHjK0; Fri, 14 Aug 2020 02:13:17 -0500 (-05)
-Received: from [10.54.17.114] (unknown [105.4.7.153])
-        by mail.munisurquillo.gob.pe (Postfix) with ESMTPSA id 3D6D048243B27;
-        Fri, 14 Aug 2020 02:13:02 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1728675AbgHNOVw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 14 Aug 2020 10:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728497AbgHNOVv (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 14 Aug 2020 10:21:51 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C22C061384
+        for <linux-cifs@vger.kernel.org>; Fri, 14 Aug 2020 07:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=IkN1EuhVrTj/QmSKE3Ic6P7S+rneJbcbD20zoFYsHWI=; b=IQ7LRSpIoA2e1k9ZuM+aorsWj2
+        yp1fcyoZworKlay5NwpDfU4Dnue4PtoyZk+mcgpdfZ2RNhwh1bhzut9KxlVIFaK2dIGMVdUFJv7rD
+        QErCsZ/nFoNWADIVg8tpuX25pTM+i1cNvc/utymqEgahKcAIJut1rUrmXicUaDTjsKww2fX4xo9M3
+        FoH9AnBNOMXGNKNOX0AOPFvCOoVvw5Lc6pYc1/XkgOeA76J2+x+iago5D3OfnClB9BHWN7wd3cXK0
+        ic0SuxbZD3POt082Q6JHH9zICtPddLC/iqFzyyfdUmMFCP4rXrNPOAOojtoP+TtKQlRNPOWtBtxKF
+        oZJyDwJmYhRj6Hebxu6bWAfpJXxqr9y0u+DrnsEqa064poYo8RN6VFOJthcQM924tsUOe6B0gcZLx
+        d3c4UO7a+NBqmrRdg/Zs+7OOETw/IOjms1vCVBGuJ7yRuDRQuC9nuC/VJFUM959qxX1CYrXXwU4QT
+        0TwKFBjjMIudyo7TYFEKS+5z;
+Received: from [2a01:4f8:192:486::6:0] (port=54318 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1k6aaZ-00037b-Nq
+        for cifs-qa@samba.org; Fri, 14 Aug 2020 14:21:47 +0000
+Received: from [::1] (port=40274 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1k6aaW-0098Lr-LA
+        for cifs-qa@samba.org; Fri, 14 Aug 2020 14:21:44 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 8431] Jumbo frames cannot be used by Linux client side
+Date:   Fri, 14 Aug 2020 14:21:44 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.6
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: regression
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-8431-10630-0eHDlcMmqD@https.bugzilla.samba.org/>
+In-Reply-To: <bug-8431-10630@https.bugzilla.samba.org/>
+References: <bug-8431-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <lu.marin@munisurquillo.gob.pe>
-From:   ''charles jackson'' <lu.marin@munisurquillo.gob.pe>
-Date:   Fri, 14 Aug 2020 09:12:53 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20200814071303.3D6D048243B27@mail.munisurquillo.gob.pe>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hallo
+https://bugzilla.samba.org/show_bug.cgi?id=3D8431
 
-Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder für das Corona-Virus.
+Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
 
-Dies ist Ihr Spendencode: [CJ530342019]
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-www.youtube.com/watch?v=BSr8myiLPMQ
+--- Comment #3 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
+if the number of connections grow, then it looks like you have a network is=
+sue
+there I guess, maybe not all the network componets support jumbo frames the=
+re
+correctly? This does not look like a cifs vfs issue to me in any case.
 
-Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
-
-charlesjacksonjr001@gmail.com
-
-Ich hoffe, dass Sie und Ihre Familie dies durchkommen
-
-
-Herr Charles Jackson
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
