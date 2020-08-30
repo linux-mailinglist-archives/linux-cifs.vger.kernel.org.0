@@ -2,86 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E48256F02
-	for <lists+linux-cifs@lfdr.de>; Sun, 30 Aug 2020 17:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE79125700C
+	for <lists+linux-cifs@lfdr.de>; Sun, 30 Aug 2020 21:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgH3PYv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 30 Aug 2020 11:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgH3PYr (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 30 Aug 2020 11:24:47 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52FBC061573;
-        Sun, 30 Aug 2020 08:24:46 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id p6so790677ybk.10;
-        Sun, 30 Aug 2020 08:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=xPEmvOdyFWFWiXw0OzaZ2AdwbLQ6oITkLsywFrkSA6I=;
-        b=A1R6aWf4Q4uUMuI28bQmYpT/5GFz6zhQW4A/XUVGvhDnPffnQSspF2HtchPc3/hoo6
-         j45vOm7gwqkxg2iaWntVTLX5YPzzGpEyDvT9FHck4PGagwCAIp4fAldmNDwMQusRytNm
-         u8CcPcw3iBlcBrdzrf+e4u77sYVqcGSXkQJknEqbrGdm8hyqWZAUJfJnq6Wkab74QW4i
-         ktstaYbt/ciTgg1PJNz8CQzAVz5KPK6ku0+aw8VmKnGg/eQVuZATj0ag7yBve4RsY1zj
-         g7cKnUh4h1Jb88e8BihE7V4gKn1o+unPu4o4TrQY+BUP6Zf0o67JGGypuegMRZOimuZM
-         PIgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=xPEmvOdyFWFWiXw0OzaZ2AdwbLQ6oITkLsywFrkSA6I=;
-        b=tIme9RugWBxRkao4NW9KqLTp365s4/PwYftQPuXAK+6AcsfAcQh/Xo7BFwd6C2EXAn
-         UScP1v7ttQ6SodIHVqPBkAdgEojo9egqzk1xcisdoIg3UmQdaZqtFoiIhKEQvaKjbvNt
-         wUnTVsCJXmZztLle97tSkCyjcnNQ8gYxeqys2JD1kaKBuMMOy4DTA8LpRT0YIeh3wzaL
-         DEQ+Ia1vBmvcCILRf0RmalxJIOwv8ek7/0/LpyXYr5okLF2VC9h8HAtRkdy8W/Og3RDY
-         WvGvLKDDfyC69aUMjo9aQPs7VHWpa06gd/aXAI2s101zypHtp+9Uq+py1gSE3ljmjIzn
-         iFMQ==
-X-Gm-Message-State: AOAM531ZmCIC49Vx92IcXIS6W9Rq8JyhT7rns7b48TX4edYUfN2uBHbj
-        FMh9j5SDBhkC+nlLnszSzjItlVE6yFO+UqVvnJRFbKOJSkDD2Q==
-X-Google-Smtp-Source: ABdhPJzIxMknA/9cGWu6XWa2J1gqfETqgv4UKVYpoPJJpNLTnthg0P59Q0GqxUmaBXJ5+qsrK+k21Fda9eEAYCLjY2Y=
-X-Received: by 2002:a25:c606:: with SMTP id k6mr8470070ybf.183.1598801084119;
- Sun, 30 Aug 2020 08:24:44 -0700 (PDT)
-MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 30 Aug 2020 10:24:33 -0500
-Message-ID: <CAH2r5mvs8Rdy_615XjMea7cCL1YrWthhr=GJW0ffTyDUwjtSrg@mail.gmail.com>
-Subject: [GIT PULL] CIFS Fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        id S1727065AbgH3TRM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 30 Aug 2020 15:17:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44428 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726465AbgH3TPd (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sun, 30 Aug 2020 15:15:33 -0400
+Subject: Re: [GIT PULL] CIFS Fix
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598814932;
+        bh=Smp7rdArAfXO/SuafC7EkEbhf4T/X6GhDs3NyOWaSMo=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=R5suTdPIVuTJxcOJu38LSAoXO1pr7UDCmvDe4wrbogFfcWNjj8w5JVjJPTpi7V038
+         volIrx5wtIL8IJjhunczhhpJv2PHteaz4uXkXDqQ10x/WybF1hhS0APkV8v9ocHYpG
+         dC0Od7DZFhjbETVWl36X09KYWkaDcMsoK3qpgnVM=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mvs8Rdy_615XjMea7cCL1YrWthhr=GJW0ffTyDUwjtSrg@mail.gmail.com>
+References: <CAH2r5mvs8Rdy_615XjMea7cCL1YrWthhr=GJW0ffTyDUwjtSrg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mvs8Rdy_615XjMea7cCL1YrWthhr=GJW0ffTyDUwjtSrg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc2-smb-fix
+X-PR-Tracked-Commit-Id: e183785f2529b4135f00a0330a3b08e7c86530c8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3edd8db2d53fe6c96ad66248bb1479ae62807268
+Message-Id: <159881493275.11937.16692614311127964701.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Aug 2020 19:15:32 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Please pull the following changes since commit
-d012a7190fc1fd72ed48911e77ca97ba4521bccd:
+The pull request you sent on Sun, 30 Aug 2020 10:24:33 -0500:
 
-  Linux 5.9-rc2 (2020-08-23 14:08:43 -0700)
+> git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc2-smb-fix
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3edd8db2d53fe6c96ad66248bb1479ae62807268
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc2-smb-fix
-
-for you to fetch changes up to e183785f2529b4135f00a0330a3b08e7c86530c8:
-
-  cifs: fix check of tcon dfs in smb1 (2020-08-28 12:27:33 -0500)
-
-----------------------------------------------------------------
-DFS fix for referral problem when using SMB1
-
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/386
-----------------------------------------------------------------
-Paulo Alcantara (1):
-      cifs: fix check of tcon dfs in smb1
-
- fs/cifs/cifsglob.h | 15 +++++++++++++++
- fs/cifs/connect.c  |  2 +-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Thank you!
 
 -- 
-Thanks,
-
-Steve
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
