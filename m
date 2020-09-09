@@ -2,103 +2,79 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93082657C3
-	for <lists+linux-cifs@lfdr.de>; Fri, 11 Sep 2020 05:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19449265AA6
+	for <lists+linux-cifs@lfdr.de>; Fri, 11 Sep 2020 09:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725765AbgIKD66 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 10 Sep 2020 23:58:58 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:59462 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725648AbgIKD64 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 10 Sep 2020 23:58:56 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 581677D1528170FD2269;
-        Fri, 11 Sep 2020 11:58:54 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Fri, 11 Sep 2020
- 11:58:46 +0800
-From:   Zheng Bin <zhengbin13@huawei.com>
-To:     <sfrench@samba.org>, <linux-cifs@vger.kernel.org>,
-        <samba-technical@lists.samba.org>, <linux-kernel@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH -next 5/5] cifs: fix comparison to bool warning in smb2ops.c
-Date:   Fri, 11 Sep 2020 12:05:39 +0800
-Message-ID: <20200911040539.113307-6-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.26.0.106.g9fadedd
-In-Reply-To: <20200911040539.113307-1-zhengbin13@huawei.com>
-References: <20200911040539.113307-1-zhengbin13@huawei.com>
+        id S1725764AbgIKHml convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 11 Sep 2020 03:42:41 -0400
+Received: from mail.flex.co.jp ([211.8.82.123]:60540 "EHLO www.flex.co.jp"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725613AbgIKHmk (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 11 Sep 2020 03:42:40 -0400
+Received: from live.com.mx ([103.89.89.225])
+        (authenticated bits=0)
+        by www.flex.co.jp (MTA) with ESMTP id 0898njWG009557
+        for <linux-cifs@vger.kernel.org>; Wed, 9 Sep 2020 17:49:49 +0900
+Reply-To: powerinthewords@yahoo.co.jp
+From:   piyin.crhe@live.com.mx
+To:     linux-cifs@vger.kernel.org
+Subject: =?utf-8?Q?=5BSpam=5D?=
+ We are still waiting for your email...
+Date:   09 Sep 2020 01:49:47 -0700
+Message-ID: <20200909014947.D7F94276C6292AD4@live.com.mx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Fixes coccicheck warning:
+Dear Beneficiary,
 
-fs/cifs/smb2ops.c:3199:6-15: WARNING: Comparison to bool
-fs/cifs/smb2ops.c:3223:5-14: WARNING: Comparison to bool
-fs/cifs/smb2ops.c:3301:6-15: WARNING: Comparison to bool
-fs/cifs/smb2ops.c:3311:6-15: WARNING: Comparison to bool
-fs/cifs/smb2ops.c:3341:6-15: WARNING: Comparison to bool
+We wish to inform you that a power of attorney was forwarded to 
+our office  by two gentlemen regarding your unclaimed fund of $56 
+Million Dollar. One of them is an American citizen named Mr. 
+Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
+citizen.We have be waiting for you to contact us since last year.
 
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
----
- fs/cifs/smb2ops.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+The document claims these gentlemen to be your authorized 
+representatives, and the power of attorney states that you are 
+already deceased.  It further states that your death was due to 
+lung cancer, with your date of death being January 27th, 2020.
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 32f90dc82c84..213a0e3d9f76 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -3196,7 +3196,7 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
+They have now submitted a new account to replace the receiving 
+account that was in the original claim of funds. These funds have 
+remained unclaimed for quite some time and the need for 
+resolution is pressing. Below is the new account they have 
+submitted.
 
- 	/* if file not oplocked can't be sure whether asking to extend size */
- 	if (!CIFS_CACHE_READ(cifsi))
--		if (keep_size == false) {
-+		if (!keep_size) {
- 			rc = -EOPNOTSUPP;
- 			trace_smb3_zero_err(xid, cfile->fid.persistent_fid,
- 				tcon->tid, ses->Suid, offset, len, rc);
-@@ -3220,7 +3220,7 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
- 	/*
- 	 * do we also need to change the size of the file?
- 	 */
--	if (keep_size == false && i_size_read(inode) < offset + len) {
-+	if (!keep_size && i_size_read(inode) < offset + len) {
- 		eof = cpu_to_le64(offset + len);
- 		rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
- 				  cfile->fid.volatile_fid, cfile->pid, &eof);
-@@ -3298,7 +3298,7 @@ static long smb3_simple_falloc(struct file *file, struct cifs_tcon *tcon,
- 				tcon->ses->Suid, off, len);
- 	/* if file not oplocked can't be sure whether asking to extend size */
- 	if (!CIFS_CACHE_READ(cifsi))
--		if (keep_size == false) {
-+		if (!keep_size) {
- 			trace_smb3_falloc_err(xid, cfile->fid.persistent_fid,
- 				tcon->tid, tcon->ses->Suid, off, len, rc);
- 			free_xid(xid);
-@@ -3308,7 +3308,7 @@ static long smb3_simple_falloc(struct file *file, struct cifs_tcon *tcon,
- 	/*
- 	 * Extending the file
- 	 */
--	if ((keep_size == false) && i_size_read(inode) < off + len) {
-+	if (!keep_size && i_size_read(inode) < off + len) {
- 		rc = inode_newsize_ok(inode, off + len);
- 		if (rc)
- 			goto out;
-@@ -3338,7 +3338,7 @@ static long smb3_simple_falloc(struct file *file, struct cifs_tcon *tcon,
- 		goto out;
- 	}
+Account Name's :  Robert Porter /Wilhelm Berg
+Account: 5007-29 438 66
+IBAN-nr: SE4150000000050072943866
+Bic-kod: ESSESESS
+Skandinaviska Enskilda Banken. (SEB :)
+SWEDEN .
 
--	if ((keep_size == true) || (i_size_read(inode) >= off + len)) {
-+	if (keep_size || (i_size_read(inode) >= off + len)) {
- 		/*
- 		 * Check if falloc starts within first few pages of file
- 		 * and ends within a few pages of the end of file to
---
-2.26.0.106.g9fadedd
+In the event that you are in fact still alive, we ask that you 
+confirm your existence by responding to this email. You are to 
+view this as a matter requiring immediate attention and response. 
+We have 48 hr monitoring of all activities within Federal Reserve 
+Bank.On this regard,you will be directed to any of our office 
+center that you will go in person to sign the final papers,
+because we have our payment center in Europe,Asia,America and 
+Canada.You will go to any of the office that you will be directed 
+to with the copy of the documents of your fund.
 
+We have contacted the bank in the Sweden asking them to wait for 
+further directives from Federal Reserve Bank, prior to 
+authorizing any withdrawals in any form.  Our request is based 
+entirely on our attempt to verify that you are in fact deceased, 
+before money is wrongly disbursed.
+
+Your in Service,
+
+Robert Steven Kaplan
+2200 N Pearl St, Dallas, TX 75201, United States
