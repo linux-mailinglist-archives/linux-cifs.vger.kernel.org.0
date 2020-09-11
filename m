@@ -2,56 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EA426429C
-	for <lists+linux-cifs@lfdr.de>; Thu, 10 Sep 2020 11:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC8C2657CC
+	for <lists+linux-cifs@lfdr.de>; Fri, 11 Sep 2020 05:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728207AbgIJJnu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 10 Sep 2020 05:43:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56446 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730077AbgIJJnb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 10 Sep 2020 05:43:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 07929AD39;
-        Thu, 10 Sep 2020 09:43:44 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>, samba-technical@lists.samba.org,
-        Pavel Shilovsky <piastryyy@gmail.com>,
-        Steve French <smfrench@gmail.com>, sribhat.msa@outlook.com
-Subject: Re: [PATCH][SMB3] mount.cifs integration with PAM
-In-Reply-To: <CANT5p=o07RqmMkcFoLeUVTeQHhzh5MmFYpfAdv0755iiGbp1ZA@mail.gmail.com>
-References: <CANT5p=pxPsBwAv3oJX6Ae9wjpZoEjLvyfGM1sM9DEhS11RNgog@mail.gmail.com>
- <87pn7t4kr9.fsf@suse.com>
- <CANT5p=oeY91u17DPe6WO75Eq_bjzrVC0kmAErrZ=h3S1qh-Wxw@mail.gmail.com>
- <87eeo54q0i.fsf@suse.com>
- <CANT5p=rxp3iQMgxaM_mn3RE3B+zezWr3o8zpkFyWUR27CpeVCA@mail.gmail.com>
- <CANT5p=qMHxq_L5RpXAixzrQztjMr8-P_aO4aPg5uqfPSLNUiTA@mail.gmail.com>
- <874ko7vy0z.fsf@suse.com>
- <CANT5p=o07RqmMkcFoLeUVTeQHhzh5MmFYpfAdv0755iiGbp1ZA@mail.gmail.com>
-Date:   Thu, 10 Sep 2020 11:43:27 +0200
-Message-ID: <87mu1yc6gw.fsf@suse.com>
+        id S1725791AbgIKD66 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 10 Sep 2020 23:58:58 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:59458 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725781AbgIKD64 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 10 Sep 2020 23:58:56 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 5CA0CFAF68D513454F8A;
+        Fri, 11 Sep 2020 11:58:54 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Fri, 11 Sep 2020
+ 11:58:44 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <sfrench@samba.org>, <linux-cifs@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <linux-kernel@vger.kernel.org>
+CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
+Subject: [PATCH -next 0/5] cifs: fix comparison to bool warning
+Date:   Fri, 11 Sep 2020 12:05:34 +0800
+Message-ID: <20200911040539.113307-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Shyam Prasad N <nspmangalore@gmail.com> writes:
-> Your understanding is correct. We could also go for a hybrid approach,
-> where we fallback to option b when option a fails to authenticate.
-> But for now, I'll resubmit a patch with option a as a fallback when
-> regular mount fails, just like you had suggested.
+Zheng Bin (5):
+  cifs: fix comparison to bool warning in cifsacl.c
+  cifs: fix comparison to bool warning in file.c
+  cifs: fix comparison to bool warning in smb2misc.c
+  cifs: fix comparison to bool warning in connect.c
+  cifs: fix comparison to bool warning in smb2ops.c
 
-Please try DFS setups as well. On DFS links a sub-mount is made from the
-kernel and mount.cifs is not called.
+ fs/cifs/cifsacl.c  |  2 +-
+ fs/cifs/connect.c  |  6 +++---
+ fs/cifs/file.c     |  2 +-
+ fs/cifs/smb2misc.c |  2 +-
+ fs/cifs/smb2ops.c  | 10 +++++-----
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+--
+2.26.0.106.g9fadedd
+
