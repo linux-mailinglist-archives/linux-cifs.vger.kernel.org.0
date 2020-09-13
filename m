@@ -2,53 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CD3267C33
-	for <lists+linux-cifs@lfdr.de>; Sat, 12 Sep 2020 22:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C772026888D
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Sep 2020 11:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgILUA0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 12 Sep 2020 16:00:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58336 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725892AbgILUAX (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 12 Sep 2020 16:00:23 -0400
-Subject: Re: [GIT PULL] SMB3 DFS Fix
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599940822;
-        bh=h/1KOfd2TqTSi//lfIGGOxG+zaYP8F/XCxqYsvdAa5k=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=xbSuZmJQsX8ZDCZpleN2blbI5WxrzExHG0HXfD4bxm2b/T5d5sPMnWkFQurrnEv60
-         JsVYDUc9aHAsBhZM7C6C1RArcGoQoyDo6DVDB6FZ4FFVYupU4FSEHFuMzIh5VCxFgc
-         /vHP/kco7rX/MyNOLyq1NlEPqF8zw6XnVB5yY5NY=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mtri0syQbck4DG0o1t9Ri8vHmb_q3PUg0nca7nHbnLTQg@mail.gmail.com>
-References: <CAH2r5mtri0syQbck4DG0o1t9Ri8vHmb_q3PUg0nca7nHbnLTQg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mtri0syQbck4DG0o1t9Ri8vHmb_q3PUg0nca7nHbnLTQg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc4-smb3-fix
-X-PR-Tracked-Commit-Id: 01ec372cef1e5afa4ab843bbaf88a6fcb64dc14c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5a3c558a9f05f4664f569b06f04d6b217785fd21
-Message-Id: <159994082277.28783.4514566928537891429.pr-tracker-bot@kernel.org>
-Date:   Sat, 12 Sep 2020 20:00:22 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        id S1726308AbgINJfz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 14 Sep 2020 05:35:55 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:33202 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726237AbgINJfy (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Sep 2020 05:35:54 -0400
+X-Greylist: delayed 11037 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Sep 2020 05:35:51 EDT
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 64F6B34C71C4;
+        Sun, 13 Sep 2020 22:00:49 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id plzWVvQJh3rV; Sun, 13 Sep 2020 22:00:49 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 62F0E3381D01;
+        Sun, 13 Sep 2020 20:36:02 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gdNM50t5LxZA; Sun, 13 Sep 2020 20:36:02 -0400 (-04)
+Received: from [192.168.8.101] (8ta-229-1-199.telkomadsl.co.za [197.229.1.199])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 1B83C34A4701;
+        Sun, 13 Sep 2020 19:14:28 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuelfranco@info.com>
+From:   "manuel franco" <manuelfranco@info.com>
+Date:   Mon, 14 Sep 2020 01:14:19 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200913231429.1B83C34A4701@correo.bnv.gob.ve>
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Sat, 12 Sep 2020 11:56:45 -0500:
+ Sie haben eine Spende von 2.000.000,00 Euro.
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.9-rc4-smb3-fix
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5a3c558a9f05f4664f569b06f04d6b217785fd21
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Mein Name ist Manuel Franco aus den USA.
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit.
