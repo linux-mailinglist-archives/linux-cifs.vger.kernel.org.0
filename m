@@ -2,80 +2,107 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75870269ED2
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Sep 2020 08:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DEA26A0C8
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Sep 2020 10:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgIOGtD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 15 Sep 2020 02:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S1726397AbgIOIZO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 15 Sep 2020 04:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726031AbgIOGtC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Sep 2020 02:49:02 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BA0C06174A
-        for <linux-cifs@vger.kernel.org>; Mon, 14 Sep 2020 23:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=ZGmWz/TKCClrwKN18abG+vk9a3Ed3xewdT/JBFFGUKA=; b=mUpzvp07/Bn7uWJ/u9J3WAPvip
-        a1vI+ChgmKZQEYMiNDgZt4Kh3XvHqJ/ljlRaAz/vKj+MQ2N+iKXMUo/fltHiwO/E9nnFTE1wfkiLb
-        a3Fwiqb2lWCyqlspv4tLT1tx2X6YujZVsz7cY46OZq1TJpemhWrA0gZZhatB8dWx4I0PmYB+JdSrX
-        ofpPn9llOqjy8t1uYiy0BMd2xX3MCuR55tQpDXkHgCa8zbnRYtxocjYEzQ00Md4tykSwGUjZEYQGb
-        PzacWt4vzlPSY1f9vy/uwObyfX+KjaJ2ixTOYNszftL9m4fI+ETblG8U1mCIXwCeDHgp2Lf9Gix2/
-        HAjnA5w2X0fiodCiEj7inmIzGZhvloq/aUtMO/h9RUrg7cJd0MJPhl+kv522TaJSCYpUqZDRVPax/
-        0JrKPi4Sgr0vLQhENwnmt2CXPybAjHHqo9GXV52TgSirq5ZDKSwKjPIuBOIJcWh7xsL9qQP/fkgXw
-        gXy66Wpf+TZEoNBeG0Sfnb2N;
-Received: from [2a01:4f8:192:486::6:0] (port=60872 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kI4lt-0005Sw-Vr
-        for cifs-qa@samba.org; Tue, 15 Sep 2020 06:48:58 +0000
-Received: from [::1] (port=26012 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kI4lb-002KfG-TF
-        for cifs-qa@samba.org; Tue, 15 Sep 2020 06:48:40 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14493] Conventional tools for managing ACLs can mislead the
- user
-Date:   Tue, 15 Sep 2020 06:48:38 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: nspmangalore@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14493-10630-PLOKYVFzJ8@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14493-10630@https.bugzilla.samba.org/>
-References: <bug-14493-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1726217AbgIOIO6 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Sep 2020 04:14:58 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5949EC061788
+        for <linux-cifs@vger.kernel.org>; Tue, 15 Sep 2020 01:14:42 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id s19so1984841ybc.5
+        for <linux-cifs@vger.kernel.org>; Tue, 15 Sep 2020 01:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=3z4hdmUKTqraBA0Uq6EwHsoH2Zas08kdcwUINGeFTp0=;
+        b=VFRvKmxwDBFLXc2VP0MBILbQ1NNLgSHR3PK/NQruokyFBGLk7cU83wES9w1ViQO6z5
+         K2Wdqt2H/PzJDbdaPoNWQSPWhrDjSnRODRofAzQquHc1YTCKaNXNyrg2ydm3TR/TTxyv
+         QZrNmp/6JjHf2F5GG5TLnPFtvTxWw+0Ca0n9EhoZZJjrW+Btlm01/PckeSkdFYrJR021
+         bplpejUh9meTodMMVRoAv1ILhGdxEME+1R3jNTwiwSOpmNbg5UbeMOgtuPiyiKffnIal
+         qY8wjaQTZhdKZP52/lQJwgHyzgDRRavVzWnY8e4Yu55eFL+YRmT3/wlA7Xjz6t5ygIQr
+         vfLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=3z4hdmUKTqraBA0Uq6EwHsoH2Zas08kdcwUINGeFTp0=;
+        b=sFjAQxdU1daQ27f5j8C3j5aHh+wR8kcwCY0te5RlVoI19wrWMNrs4ctbfmquOTnFiI
+         kZvOfO2yq08KwPnaaw8hcWy7R/ETYCU6HC63Diw02VGb1msCeaNOuRiV0HVtMXDz80TV
+         mtD9IpFJguI/iAabmbPxz2u21hjygIg3sDCAI8gLGlzXo4mc8e7DXLz8cruvoUGIRDya
+         aItDMJQowGb1skaXnoHVlwksOopJlojAZEEcBZk3j9FlF4yNL4bfWbI4fwrGZefP5TpS
+         m976pMTD0KaCDQDRAyYgPta+35tZd0jO5xlBFaXM65hiVqoHtzKr0Zm17sNHu6iYWbXm
+         tQPg==
+X-Gm-Message-State: AOAM531YET8kgCYMlo7QNeHDj3QtZYJg73vh4nyguIHJtkRuu9/tNo2A
+        TEWvxmCldAjpTMFJGXOPjTSWvz6m2P6pkUO/aPI=
+X-Google-Smtp-Source: ABdhPJyIXNfgPDc1G/C5R/4/Gh/9/d3vFvK1V5hEIDgPEeBrlAS6i3sUP7hcc/Y2O9ZhjYr9E29pjwYzaGvRiAXlI0c=
+X-Received: by 2002:a25:aca3:: with SMTP id x35mr24418717ybi.3.1600157680689;
+ Tue, 15 Sep 2020 01:14:40 -0700 (PDT)
 MIME-Version: 1.0
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Tue, 15 Sep 2020 13:44:29 +0530
+Message-ID: <CANT5p=rNZoOqt59zaX_C6vnm-a_wFMsEVgAf7_Kemwabfs-a0Q@mail.gmail.com>
+Subject: Use case for init_cc_from_keytab
+To:     Jeff Layton <jlayton@redhat.com>,
+        Steve French <smfrench@gmail.com>,
+        Pavel Shilovsky <piastryyy@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14493
+Hi Jeff,
 
---- Comment #1 from Shyam Prasad N <nspmangalore@gmail.com> ---
-Hi Micah,
-If you're expecting translation of unix perm bits to ACLs, you need to use =
-the
-"cifsacl" mount option. Can you try that and see if it helps for you?
+Recently, I've been spending some time with the cifs.upcall code which
+does a "kinit" for a user using the system keytab file. git blame
+shows that you were the author of this function init_cc_from_keytab().
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+I want to understand these patches mainly:
+
+commit 2dcecd21262513a0866c321643fc33d3d0135915
+Author: Jeff Layton <jlayton@samba.org>
+Date:   Thu Feb 23 18:28:24 2017 -0500
+
+    cifs.upcall: unset $KRB5CCNAME when creating new credcache from keytab
+
+    We don't want to trust $KRB5CCNAME when creating or updating a new
+    credcache since we could be operating under the wrong credentials.
+    Always create new credcaches in the default location instead.
+
+    Reported-by: Chad William Seys <cwseys@physics.wisc.edu>
+    Signed-off-by: Jeff Layton <jlayton@samba.org>
+
+commit 69949ba0086ac7a4f07ade7558fbe5c537220ebb
+Author: Jeff Layton <jlayton@samba.org>
+Date:   Fri Feb 24 10:48:57 2017 -0500
+
+    cifs.upcall: use a MEMORY: ccache when instantiating from a keytab
+
+    Using a more permanent ccache is potentially problematic when we're
+    instantiating a new one. We might be operating under different creds
+    than expected. Just use a MEMORY: ccache since we don't need it to
+    last longer than the life of the upcall anyway.
+
+    Reported-and-Tested-by: Chad William Seys <cwseys@physics.wisc.edu>
+    Signed-off-by: Jeff Layton <jlayton@samba.org>
+
+Few things I want to understand about this:
+1. What was the purpose of this code path in the first place? i.e.
+init_cc_from_keytab
+2. It looks like we read the cred cache file at it's default location.
+Why can't we write the cred cache file as indicated by the env as
+well? Why do we want to create an in-memory cache here, and not dump
+the TGT in the default cc as indicated by env? Why waste the
+authentication which was already done?
+
+The reason why I ask this is because I'm exploring the possibility of
+populating the keytab file in mount.cifs, and let cifs.upcall acquire
+tickets when needed.
+
+-- 
+-Shyam
