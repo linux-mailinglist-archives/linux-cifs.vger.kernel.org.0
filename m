@@ -2,112 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAB826C75C
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 20:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0422826C8FB
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 21:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgIPSZW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 16 Sep 2020 14:25:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37850 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727929AbgIPSXo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:23:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7B7EFACE3;
-        Wed, 16 Sep 2020 10:57:07 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>,
-        Pavel Shilovsky <piastryyy@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
-Subject: Re: [PATCH][SMB3] mount.cifs: use SUDO_UID env variable for cruid
-In-Reply-To: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
-References: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
-Date:   Wed, 16 Sep 2020 12:56:51 +0200
-Message-ID: <87r1r2ugzw.fsf@suse.com>
+        id S1728173AbgIPTBi (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Sep 2020 15:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727535AbgIPRsy (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 13:48:54 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EDDC06178B
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 10:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=77NnYH5ZvfIFIyHiyKvHOrWUv8EGAZcGimAFJnZWzB8=; b=hNPjPb2owcJgsLEBfDu9+Y8hlr
+        UhcCxqMgtUSrntJm9IJC6sPAP13i5IjbF+rD4Q+tSFNTqDVgUiPaD1Pth5TbZV9llWoTzBjsgubF4
+        GYLEZp9iLJlY0wrjNzUu+E3oWR3pxcgeqZQg6v3OPDKuZA9BePYdbQN4uJzEhK5tdoD60mloUb+np
+        UDgwXwYUhuH3tZ+rjYp6vNmQk2fSA3Y6vlEb44erDJ7/6XA4oSnK14dapH69TXF/xMWO43XyuTxEl
+        A70gKSdg2FofjVAduByLDNP0vykK18feTniyoAMvKlo1Kw9j4DL51Nj5JxzcLc1y1Pth32Zo6BvzR
+        dAnN+5JC8EturkMWrX/xJ2C/FQAn0NXn1Sa0HA9hKYCClcw6pnk+pXF887j5wl/2/s78h6R/f9ZK5
+        BlGaZ/TN0EFUXIvsNlggBHqmy5uJOkEhUtBV08dnnlfaHhIzBfnr3aQGY2egNYbK82L0ZlmJUCb+S
+        We8TkwzyldWQF10mGiusAXzv;
+Received: from [2a01:4f8:192:486::6:0] (port=61620 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kIbXi-0007W8-Mp
+        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:48:30 +0000
+Received: from [::1] (port=26762 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kIbXi-002T1l-I0
+        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:48:30 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14498] Why is mount -a is not detecting an already mounted DFS
+ share endpoint
+Date:   Wed, 16 Sep 2020 17:48:30 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Chris@craftypenguins.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14498-10630-yVEtJfx7Uv@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14498-10630@https.bugzilla.samba.org/>
+References: <bug-14498-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Shyam Prasad N <nspmangalore@gmail.com> writes:
-> This is a fix for the scenario of a krb5 user running a "sudo mount".
-> Even if the user has cred cache populated, when the mount is run using
-> sudo, uid switches to 0. So cred cache for the root user will be
-> searched for, unless cruid is specified explicitly. This fix checks
-> for cruid=$SUDO_UID as a fallback option, when the mount fails with
-> ENOKEY.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14498
 
-The idea seems good.
+--- Comment #1 from Chris Pickett <Chris@craftypenguins.net> ---
+The result is duplicate mount processes created for every mount -a attempte=
+d.
+We had a cron that was calling mount -a every 5 min so we were building up
+quite a few entries in /proc/mounts.
 
-> @@ -2053,7 +2066,24 @@ int main(int argc, char **argv)
->  		parsed_info = NULL;
->  		fprintf(stderr, "Unable to allocate memory: %s\n",
->  				strerror(errno));
-> -		return EX_SYSERR;
-> +		rc = EX_SYSERR;
-> +		goto mount_exit;
-> +	}
-> +
-> +	reinit_parsed_info = 
-> +		(struct parsed_mount_info *) malloc(sizeof(*reinit_parsed_info));
-> +	if (reinit_parsed_info == NULL) {
-> +		fprintf(stderr, "Unable to allocate memory: %s\n",
-> +				strerror(errno));
-> +		rc = EX_SYSERR;
-> +		goto mount_exit;
-> +	}
-> +
-> +	options = calloc(options_size, 1);
-> +	if (!options) {
-> +		fprintf(stderr, "Unable to allocate memory.\n");
-> +		rc = EX_SYSERR;
-> +		goto mount_exit;
-
-This function later forks, so if you allocate before the fork, you need
-to free in parent and in the child.
-> @@ -2228,6 +2252,7 @@ mount_retry:
->  				if (nextaddress)
->  					*nextaddress++ = '\0';
->  			}
-> +			memset(options, 0, sizeof(*options));
->  			goto mount_retry;
-
-Altho not wrong this is a bit misleading as options is a char*. If you
-do a memset do it option_size, or do options[0] = 0;
-
->  		case ENODEV:
->  			fprintf(stderr,
-> @@ -2250,6 +2275,21 @@ mount_retry:
->  				already_uppercased = 1;
->  				goto mount_retry;
->  			}
-
-Need to reset options again before goto I guess. Maybe reset option
-after the retry label?
-
->  	}
-> -	free(options);
-> -	free(orgoptions);
-> -	free(mountpoint);
-> +	if (reinit_parsed_info)
-> +		free(reinit_parsed_info);
-> +	if (options)
-> +		free(options);
-> +	if (orgoptions)
-> +		free(orgoptions);
-> +	if (mountpoint)
-> +		free(mountpoint);
->  	return rc;
-
-free(NULL) is defined to be a no-op, you don't need the checks.
-
-Cheers,
--- 
-Aurélien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
