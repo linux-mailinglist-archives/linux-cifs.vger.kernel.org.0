@@ -2,80 +2,183 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0422826C8FB
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 21:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4133F26CCCA
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 22:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728173AbgIPTBi (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 16 Sep 2020 15:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S1726756AbgIPUt2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Sep 2020 16:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727535AbgIPRsy (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 13:48:54 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EDDC06178B
-        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 10:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=77NnYH5ZvfIFIyHiyKvHOrWUv8EGAZcGimAFJnZWzB8=; b=hNPjPb2owcJgsLEBfDu9+Y8hlr
-        UhcCxqMgtUSrntJm9IJC6sPAP13i5IjbF+rD4Q+tSFNTqDVgUiPaD1Pth5TbZV9llWoTzBjsgubF4
-        GYLEZp9iLJlY0wrjNzUu+E3oWR3pxcgeqZQg6v3OPDKuZA9BePYdbQN4uJzEhK5tdoD60mloUb+np
-        UDgwXwYUhuH3tZ+rjYp6vNmQk2fSA3Y6vlEb44erDJ7/6XA4oSnK14dapH69TXF/xMWO43XyuTxEl
-        A70gKSdg2FofjVAduByLDNP0vykK18feTniyoAMvKlo1Kw9j4DL51Nj5JxzcLc1y1Pth32Zo6BvzR
-        dAnN+5JC8EturkMWrX/xJ2C/FQAn0NXn1Sa0HA9hKYCClcw6pnk+pXF887j5wl/2/s78h6R/f9ZK5
-        BlGaZ/TN0EFUXIvsNlggBHqmy5uJOkEhUtBV08dnnlfaHhIzBfnr3aQGY2egNYbK82L0ZlmJUCb+S
-        We8TkwzyldWQF10mGiusAXzv;
-Received: from [2a01:4f8:192:486::6:0] (port=61620 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kIbXi-0007W8-Mp
-        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:48:30 +0000
-Received: from [::1] (port=26762 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kIbXi-002T1l-I0
-        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:48:30 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14498] Why is mount -a is not detecting an already mounted DFS
- share endpoint
-Date:   Wed, 16 Sep 2020 17:48:30 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: user space tools
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Chris@craftypenguins.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: jlayton@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14498-10630-yVEtJfx7Uv@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14498-10630@https.bugzilla.samba.org/>
-References: <bug-14498-10630@https.bugzilla.samba.org/>
+        with ESMTP id S1726668AbgIPQ6x (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 12:58:53 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E1C035433
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 09:17:37 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id s19so5825580ybc.5
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 09:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QvqMZZbehGU480XHJh/s30Ptd76/W0ORw+Qbz/0V5Qo=;
+        b=UEA51e3CxfA7556R/xsloNZAAG96Lg369ezJw7V82WOCXZgwac2iXEEtokXTOVvAx5
+         zo+3KkVmeg0lzB+DfpnmcRTMTyJkPjZxvlcY1eP2yX7dA2s5V9Bp995TYggtu1nYQYnn
+         EEoHC1XLqOlOAz2dGzVjI6LBgB1QhjgQJLkAx0EikFjESXHJejbdp8gBvpbMOjy660Gp
+         NiEqgrWAtE4AkeGRtD29Tdn0qq1R1+1Rw7wDUWmprDWcUSLiGirHKvcOuvJsnLNuHHuZ
+         3k3ajAGSSalEZ1ttOkc5kin/meCv3wrk8rJLjKDBDX5uBUqyiErdhjmUBJ5NFI9xt9fV
+         CkmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QvqMZZbehGU480XHJh/s30Ptd76/W0ORw+Qbz/0V5Qo=;
+        b=LbCvxvV8UhdUFxubQgL/ZVmmHPfbdc67qKC10Czo+c23vPxvQPG795cFu6/EuMV4k9
+         sFaWzXJMNkzZ++nigsNzna8HlR61tUKfiWsEWhhM7/EOd97PjzvNcM3SSgLSSvNpHSDM
+         VtWGj16w3uWQ/Pkl+EZgqpgly662JNyWTLNFMWLoKSCTh/XoMoRTE9SDfu72RS8FaHw3
+         2wLJFsn3q1H+e0BYhtpSN0gsjlmWMt/Q7VOKF2Ea4nZXuL99d5Q3RzeW0wEy4VXDzdPS
+         zzeb+FIyJMyF6rr2/oMb7JZDdKzCadMtEvWWg5YsNw8ETXwKcaIMm4ahEikrhhhLil1z
+         iz9A==
+X-Gm-Message-State: AOAM5316VoysdnteTrXu8caefeqYqFs6U3Bew2uhKBGtWThTD1aJ9OMB
+        939VndQIrjMnLC2WTN6TikKtcuYZ9G8zuIFfm9nadpG64U6RQQ==
+X-Google-Smtp-Source: ABdhPJyyL0OhXI+3KzTYmMrNSp9UM1maWxc6Ubj1OVHjjAba2NvJSAyhOAItyYiT5GvlA2KvS5uKTKYC3j1eXCQTF3k=
+X-Received: by 2002:a25:54d:: with SMTP id 74mr34669758ybf.331.1600273056634;
+ Wed, 16 Sep 2020 09:17:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
+ <87r1r2ugzw.fsf@suse.com>
+In-Reply-To: <87r1r2ugzw.fsf@suse.com>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Wed, 16 Sep 2020 21:47:25 +0530
+Message-ID: <CANT5p=qV6BWojwBET+kYUwJf7tQDFoRtUb8O+pWHrqWMw5e5LQ@mail.gmail.com>
+Subject: Re: [PATCH][SMB3] mount.cifs: use SUDO_UID env variable for cruid
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Pavel Shilovsky <piastryyy@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14498
+Hi Aur=C3=A9lien,
 
---- Comment #1 from Chris Pickett <Chris@craftypenguins.net> ---
-The result is duplicate mount processes created for every mount -a attempte=
-d.
-We had a cron that was calling mount -a every 5 min so we were building up
-quite a few entries in /proc/mounts.
+Thanks for the review. Please read my responses inline below.
+
+On Wed, Sep 16, 2020 at 4:26 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
+:
+>
+> Shyam Prasad N <nspmangalore@gmail.com> writes:
+> > This is a fix for the scenario of a krb5 user running a "sudo mount".
+> > Even if the user has cred cache populated, when the mount is run using
+> > sudo, uid switches to 0. So cred cache for the root user will be
+> > searched for, unless cruid is specified explicitly. This fix checks
+> > for cruid=3D$SUDO_UID as a fallback option, when the mount fails with
+> > ENOKEY.
+>
+> The idea seems good.
+This was Pavel's suggestion. :)
+
+>
+> > @@ -2053,7 +2066,24 @@ int main(int argc, char **argv)
+> >               parsed_info =3D NULL;
+> >               fprintf(stderr, "Unable to allocate memory: %s\n",
+> >                               strerror(errno));
+> > -             return EX_SYSERR;
+> > +             rc =3D EX_SYSERR;
+> > +             goto mount_exit;
+> > +     }
+> > +
+> > +     reinit_parsed_info =3D
+> > +             (struct parsed_mount_info *) malloc(sizeof(*reinit_parsed=
+_info));
+> > +     if (reinit_parsed_info =3D=3D NULL) {
+> > +             fprintf(stderr, "Unable to allocate memory: %s\n",
+> > +                             strerror(errno));
+> > +             rc =3D EX_SYSERR;
+> > +             goto mount_exit;
+> > +     }
+> > +
+> > +     options =3D calloc(options_size, 1);
+> > +     if (!options) {
+> > +             fprintf(stderr, "Unable to allocate memory.\n");
+> > +             rc =3D EX_SYSERR;
+> > +             goto mount_exit;
+>
+> This function later forks, so if you allocate before the fork, you need
+> to free in parent and in the child.
+
+Good point.
+I think I'm doing it right though. I allocate all that I need at the beginn=
+ing.
+And the function always terminates in mount_exit, both for parent and
+child. That is where the allocations are freed.
+I know the child will have the options buffer unnecessarily allocated,
+but isn't the code flow simpler this way?
+Please let me know if you see an issue there.
+
+> > @@ -2228,6 +2252,7 @@ mount_retry:
+> >                               if (nextaddress)
+> >                                       *nextaddress++ =3D '\0';
+> >                       }
+> > +                     memset(options, 0, sizeof(*options));
+> >                       goto mount_retry;
+>
+> Altho not wrong this is a bit misleading as options is a char*. If you
+> do a memset do it option_size, or do options[0] =3D 0;
+
+Got it. Will do.
+
+>
+> >               case ENODEV:
+> >                       fprintf(stderr,
+> > @@ -2250,6 +2275,21 @@ mount_retry:
+> >                               already_uppercased =3D 1;
+> >                               goto mount_retry;
+> >                       }
+>
+> Need to reset options again before goto I guess. Maybe reset option
+> after the retry label?
+
+Good catch. This code existed before my changes, and I had noted this
+bug. But forgot it during my changes. :)
+I was actually confused if I should reset after the label, or before the go=
+to.
+After the label is an added overhead in the "happy" code path, so went
+with this. But it does reduce the chances of missing out a reset.
+For now I'll reset options before each goto mount_retry. Please let me
+know if you feel the other approach is better.
+
+>
+> >       }
+> > -     free(options);
+> > -     free(orgoptions);
+> > -     free(mountpoint);
+> > +     if (reinit_parsed_info)
+> > +             free(reinit_parsed_info);
+> > +     if (options)
+> > +             free(options);
+> > +     if (orgoptions)
+> > +             free(orgoptions);
+> > +     if (mountpoint)
+> > +             free(mountpoint);
+> >       return rc;
+>
+> free(NULL) is defined to be a no-op, you don't need the checks.
+Sure. Will do.
+
+>
+> Cheers,
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
+ DE
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
+=BCnchen)
+
+
 
 --=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+-Shyam
