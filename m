@@ -2,156 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A886826C652
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 19:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAB826C75C
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 20:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbgIPRpv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 16 Sep 2020 13:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbgIPRpi (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 13:45:38 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED36C06178B
-        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 10:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=co+aE86MQ1OwE6c4K6MlweQ1WffNPTpkviewRQB67TE=; b=UbfGFvO7C/9ZFHqR/L1/lR4W2a
-        LwLPQG6XwvO1IxH8LPjFDCqPv7uDgZVGv/QpWhNR6QPgFXT5G1Uxtos7QXQvkMHcQ+82dkvOEI988
-        EX8964/VnX+gQHUwMPD9w7Dxkh7w6f3RGY/DcV4Vi+CCHBAS2pMzS3029XkHlxuuGs8VOAPOoG2y1
-        7OZFlPv/CFS9ZefOEhio+KHBq90hW4D6vlvprxDNJ1qzStYp9c2zNHEBzHN1norczZSh+j69ud+gv
-        na1VBTAwEcImWdZm1/CM8o5qwjzny9O/L/6wt56EHFGmn49hynzmOYRq8NHkEqsn0WiGhTQw8bI1v
-        tKJKBhy2b8SPoE6Ret1+YKadrxL4naxMQdB8tnqfFgAEgl7H09ca3xypQjv4QpwF/CEkhAyUGrKOT
-        eWqHjyl5WyeOsYlRsazSZmen4x+j19ZG55XGNp4GL/IEvjvRs+aZnAgfOiEz4JQ1IVo0qYOCZff4P
-        Q23lFjdl5vOvrSkyYUjLmUxn;
-Received: from [2a01:4f8:192:486::6:0] (port=61614 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kIbUb-0007RM-Af
-        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:45:17 +0000
-Received: from [::1] (port=26756 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kIbUa-002T1c-K6
-        for cifs-qa@samba.org; Wed, 16 Sep 2020 17:45:16 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14498] New: Why is mount -a is not detecting an already mounted
- DFS share endpoint
-Date:   Wed, 16 Sep 2020 17:45:15 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: user space tools
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Chris@craftypenguins.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: jlayton@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- qa_contact target_milestone
-Message-ID: <bug-14498-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1728000AbgIPSZW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 16 Sep 2020 14:25:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37850 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727929AbgIPSXo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:23:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7B7EFACE3;
+        Wed, 16 Sep 2020 10:57:07 +0000 (UTC)
+From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
+To:     Shyam Prasad N <nspmangalore@gmail.com>,
+        Pavel Shilovsky <piastryyy@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
+Subject: Re: [PATCH][SMB3] mount.cifs: use SUDO_UID env variable for cruid
+In-Reply-To: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
+References: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
+Date:   Wed, 16 Sep 2020 12:56:51 +0200
+Message-ID: <87r1r2ugzw.fsf@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14498
+Shyam Prasad N <nspmangalore@gmail.com> writes:
+> This is a fix for the scenario of a krb5 user running a "sudo mount".
+> Even if the user has cred cache populated, when the mount is run using
+> sudo, uid switches to 0. So cred cache for the root user will be
+> searched for, unless cruid is specified explicitly. This fix checks
+> for cruid=$SUDO_UID as a fallback option, when the mount fails with
+> ENOKEY.
 
-            Bug ID: 14498
-           Summary: Why is mount -a is not detecting an already mounted
-                    DFS share endpoint
-           Product: CifsVFS
-           Version: 3.x
-          Hardware: x64
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: user space tools
-          Assignee: jlayton@samba.org
-          Reporter: Chris@craftypenguins.net
-        QA Contact: cifs-qa@samba.org
-  Target Milestone: ---
+The idea seems good.
 
-I am trying to figure out why mount -a is not detecting an already mounted =
-DFS
-share endpoint. It works as expected on mount.cifs version 5.5 but not 6.7
+> @@ -2053,7 +2066,24 @@ int main(int argc, char **argv)
+>  		parsed_info = NULL;
+>  		fprintf(stderr, "Unable to allocate memory: %s\n",
+>  				strerror(errno));
+> -		return EX_SYSERR;
+> +		rc = EX_SYSERR;
+> +		goto mount_exit;
+> +	}
+> +
+> +	reinit_parsed_info = 
+> +		(struct parsed_mount_info *) malloc(sizeof(*reinit_parsed_info));
+> +	if (reinit_parsed_info == NULL) {
+> +		fprintf(stderr, "Unable to allocate memory: %s\n",
+> +				strerror(errno));
+> +		rc = EX_SYSERR;
+> +		goto mount_exit;
+> +	}
+> +
+> +	options = calloc(options_size, 1);
+> +	if (!options) {
+> +		fprintf(stderr, "Unable to allocate memory.\n");
+> +		rc = EX_SYSERR;
+> +		goto mount_exit;
 
-Distributor ID: Debian
-Description:    Debian GNU/Linux 9.13 (stretch)
-Release:        9.13
-Codename:       stretch
+This function later forks, so if you allocate before the fork, you need
+to free in parent and in the child.
+> @@ -2228,6 +2252,7 @@ mount_retry:
+>  				if (nextaddress)
+>  					*nextaddress++ = '\0';
+>  			}
+> +			memset(options, 0, sizeof(*options));
+>  			goto mount_retry;
 
-Mount.cifs version 6.7.=20
+Altho not wrong this is a bit misleading as options is a char*. If you
+do a memset do it option_size, or do options[0] = 0;
 
-/etc/fstab=20
-//ctserver6/ops_apps    /mnt/ops_apps cifs=20=20
-defaults,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft   0 0=20
-//ctserverbc/Public     /mnt/ctserverbc cifs=20=20=20
-defaults,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft 0 0=20
-#//ctserver3/ops         /mnt/ops cifs=20=20=20=20=20=20=20=20=20=20=20=20=
-=20
-defaults,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft   0 0=20
-#//ctserver3/public      /mnt/public cifs=20=20=20=20=20=20=20=20
-defaults,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft 0 0=20
-//ctdomain.local/DFS_OPS/OPS       /mnt/ops cifs=20=20=20=20=20=20=20
-vers=3D2.1,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft   0 0=
-=20
-//ctdomain.local/DFS_OPS/Public    /mnt/public cifs=20=20=20
-vers=3D2.1,credentials=3D/root/.smbcredentials,rw,users,_netdev,soft   0 0=
-=20
+>  		case ENODEV:
+>  			fprintf(stderr,
+> @@ -2250,6 +2275,21 @@ mount_retry:
+>  				already_uppercased = 1;
+>  				goto mount_retry;
+>  			}
 
-If I leave off the vers=3D2.1 option it will create a new mount process and
-duplicate in /proc/mounts :
-/mnt/ops_apps            : already mounted
-/mnt/ctserverbc          : already mounted
-mount.cifs kernel mount options:
-ip=3D192.168.111.10,unc=3D\\ctdomain.local\DFS_OPS,soft,user=3Dctlinux,pref=
-ixpath=3DOPS,pass=3D********
-/mnt/ops                 : successfully mounted
-mount.cifs kernel mount options:
-ip=3D192.168.111.20,unc=3D\\ctdomain.local\DFS_OPS,soft,user=3Dctlinux,pref=
-ixpath=3DPublic,pass=3D********
-/mnt/public              : successfully mounted
+Need to reset options again before goto I guess. Maybe reset option
+after the retry label?
 
-With vers=3D2.1 I get:
+>  	}
+> -	free(options);
+> -	free(orgoptions);
+> -	free(mountpoint);
+> +	if (reinit_parsed_info)
+> +		free(reinit_parsed_info);
+> +	if (options)
+> +		free(options);
+> +	if (orgoptions)
+> +		free(orgoptions);
+> +	if (mountpoint)
+> +		free(mountpoint);
+>  	return rc;
 
-/mnt/ops_apps            : already mounted=20
-/mnt/ctserverbc          : already mounted=20
-mount.cifs kernel mount options:
-ip=3D192.168.111.20,unc=3D\\ctdomain.local\DFS_OPS,vers=3D2.1,soft,user=3Dc=
-tlinux,prefixpath=3DOPS,pass=3D********=20
-mount error(16): Device or resource busy Refer to the mount.cifs(8) manual =
-page
-(e.g. man mount.cifs)=20
-mount.cifs kernel mount options:
-ip=3D192.168.111.20,unc=3D\\ctdomain.local\DFS_OPS,vers=3D2.1,soft,user=3Dc=
-tlinux,prefixpath=3DPublic,pass=3D********=20
-mount error(16): Device or resource busy Refer to the mount.cifs(8) manual =
-page
-(e.g. man mount.cifs)=20
+free(NULL) is defined to be a no-op, you don't need the checks.
 
-On 5.5 it will detect the DFS share is mounted already
-
---=20
-
-
-Chris Pickett |
-Linux Systems Engineer
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Cheers,
+-- 
+Aurélien Aptel / SUSE Labs Samba Team
+GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg, DE
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah HRB 247165 (AG München)
