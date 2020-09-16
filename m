@@ -2,78 +2,180 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A680926ABD8
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Sep 2020 20:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B257026C150
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 12:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbgIOS1h (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 15 Sep 2020 14:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
+        id S1726669AbgIPKBl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Sep 2020 06:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727804AbgIOS1U (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Sep 2020 14:27:20 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1489CC06174A
-        for <linux-cifs@vger.kernel.org>; Tue, 15 Sep 2020 11:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=ajhWPqMPABc7JVPLiJ6fjvd2rzSoPSkLmchFxeBWqCE=; b=AcdJLfA5HWj1xMUDOZECC8UXnc
-        MNVCHs7/gTQDtrtRN5oWvBGDMudi1YolC9OxEqYassKf+8vaxv+yK0tjU1TiwdAeEhrot3xN/6wEM
-        WD+6/xPL3/8BL3j7AYsgNV+vaskzFLxqrFqrzY3sgXvB3+1msjX91PkS2dMLpuQzJcU9qT+2biGn/
-        UBQSh9uihm7dUqKLGXokpLr2kgHxV2zgVynBuAPTW19eI9Kc3dn7N0gZD429PCpNfeLln3rko544h
-        mvaPUCy5Vm4F2fBiRn9Qs6wLWRJE6P4F9ilYPlfuI0Rd6hIdVFeeqhH8lB4QSY13uNXi5etCD6Nxx
-        zX2cfOXUdG76L9OGfv8JrtfDNOnVMjtRsWTrNWbD/4ACERIIBbS7WgQYh0mwhzeX6oLB8h0WA1bOD
-        Uox4F+p0l1dhMqGldUuicN0grpqUxk1r7lRXpLiBAfXPSjd+EZ5gzv9qAONkUTdLEusfiU9qEaqmN
-        UY6qEivoaPd3I6u7x8kYz4iN;
-Received: from [2a01:4f8:192:486::6:0] (port=61064 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kIFfh-0003KC-El
-        for cifs-qa@samba.org; Tue, 15 Sep 2020 18:27:17 +0000
-Received: from [::1] (port=26204 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kIFff-002LJz-Ii
-        for cifs-qa@samba.org; Tue, 15 Sep 2020 18:27:15 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14492] Minshall-French symlinks cannot be searched for with
- "find . -type l"
-Date:   Tue, 15 Sep 2020 18:27:15 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: sfrench@samba.org
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14492-10630-b4a3uPAED5@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14492-10630@https.bugzilla.samba.org/>
-References: <bug-14492-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1726243AbgIPKBG (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 06:01:06 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFF3C06178A
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 03:01:00 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id a2so5000721ybj.2
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 03:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=w1sACbCLdllwaOjc2Leq8KkgtBTfrF9M6fUFhkc3+y0=;
+        b=Hjf0x/DjHYd3Kf5OMTxRhVHxu0b3I7118xkofmHi8cp4kOkBMqwOrTDDSCWO/1PssH
+         yM3QI7JX8onyv3zXnAlG0fyu5uHRphuT8MtXlFrTzzZdiWado7VuXrIhvv9O528+5L+B
+         jeKL6GT2d20z5D9a6/aFmAr0RL1m3khvLx4ZYoQ7i6VWfmnSjjke9cU7U1O5acGdWnBh
+         7PTCI4rL6Pd7jnT79/3jtMM979ObyTgGRIc56JLTTFCqzzRtfL3bopNfco50c3MmWWXL
+         lm51ej8OrxKZ7cXC2iwimHX1jtvb0KdizCrBM5GjbhseKOcmtjD3VozcUVRL2c0/X0n/
+         s4sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=w1sACbCLdllwaOjc2Leq8KkgtBTfrF9M6fUFhkc3+y0=;
+        b=UYssNyI17BE98j/qC8Fd5Tp0R7ggv4hYmOL7WXudpTQXWuiwjjcLaUJHXn1sH8JWq7
+         Try9hrW1Y1iA7BNGrS2a5htNdS+/qVfTcTuLpO8atBuzOZ8jm9Z2RvwRauu9hY5YIya1
+         VVsAREbVMYnfUyADlkb1vOJy9if0zxlHZzkuYKVTq0NQDA8PtmfPQbr2UkdlMK8Z3wP0
+         zueRiMYdqbA16PPxQbdcfzcvJqvsw5Ejs61H+OofrH2R9Tdco1twJF3c0CXFzQiIKeaq
+         nzUZZN3GvBJnHyXLuRknd0YEi58Fv11O0CFmKGWR+vCBX/BMBKEpm1TE2Ri0053bdtlx
+         4Rqg==
+X-Gm-Message-State: AOAM532/jvZzJjDIHmpGWKWkd2n8Bz7u0tQiIANpJDky67xj8dJmrjcE
+        mCee5TChWk3JhEI3wYdb83ltv7Eq159MZBTqoSE=
+X-Google-Smtp-Source: ABdhPJz4NYYXdZ5DW0PHcxVbRhBVSZ3Kce4G494UNnjimDiZvNVtV+vvlGAGkrrfPPekVYMo76viKuwHRstT7qg0GL0=
+X-Received: by 2002:a25:5f4c:: with SMTP id h12mr32324277ybm.97.1600250459596;
+ Wed, 16 Sep 2020 03:00:59 -0700 (PDT)
 MIME-Version: 1.0
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Wed, 16 Sep 2020 15:30:49 +0530
+Message-ID: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
+Subject: [PATCH][SMB3] mount.cifs: use SUDO_UID env variable for cruid
+To:     Pavel Shilovsky <piastryyy@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
+Content-Type: multipart/mixed; boundary="000000000000324f4005af6b5808"
 Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14492
+--000000000000324f4005af6b5808
+Content-Type: text/plain; charset="UTF-8"
 
---- Comment #2 from Steve French <sfrench@samba.org> ---
-Presumably have to flag files which are 1067 bytes with an additional check
-before returning their file type in readdir
+Hi,
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+This is a fix for the scenario of a krb5 user running a "sudo mount".
+Even if the user has cred cache populated, when the mount is run using
+sudo, uid switches to 0. So cred cache for the root user will be
+searched for, unless cruid is specified explicitly. This fix checks
+for cruid=$SUDO_UID as a fallback option, when the mount fails with
+ENOKEY.
+
+--
+-Shyam
+
+--000000000000324f4005af6b5808
+Content-Type: application/octet-stream; 
+	name="0001-mount.cifs-use-SUDO_UID-env-variable-for-cruid.patch"
+Content-Disposition: attachment; 
+	filename="0001-mount.cifs-use-SUDO_UID-env-variable-for-cruid.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kf57mc7z0>
+X-Attachment-Id: f_kf57mc7z0
+
+RnJvbSAxNWFjMDgwNTZlYzNjNzE3NWRhMWI2ZDIwYTUwY2FlODU1MTg5MjU4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
+PgpEYXRlOiBXZWQsIDE2IFNlcCAyMDIwIDAwOjE4OjQ0IC0wNzAwClN1YmplY3Q6IFtQQVRDSF0g
+bW91bnQuY2lmczogdXNlIFNVRE9fVUlEIGVudiB2YXJpYWJsZSBmb3IgY3J1aWQKCkluIHRoZSBj
+dXJyZW50IG1vdW50LmNpZnMgbG9naWMsIHdoZW4gc3VkbyBpcyB1c2VkIGZvciBtb3VudCwKdWlk
+PTAsIHNvIHRoZSBtb3VudCBjb21tYW5kIHNlYXJjaGVzIGZvciBjcnVpZD0wIHVubGVzcyBleHBs
+aWNpdGx5CnNwZWNpZmllZCBieSB0aGUgdXNlci4gVGhlIHVzZXIgbWF5IGFscmVhZHkgaGF2ZSBj
+cmVkIGNhY2hlIHBvcHVsYXRlZApidXQgbW91bnQuY2lmcyB3b3VsZCBlbmQgdXAgc2VhcmNoaW5n
+IGNyZWQgY2FjaGUgZm9yIHVpZD0wLgoKbW91bnQuY2lmcyBjYW4gYXZvaWQgdGhpcyBjb25mdXNp
+b24gYnkgcmVhZGluZyB0aGUgY3J1aWQgZnJvbSBTVURPX1VJRAplbnZpcm9ubWVudCB2YXJpYWJs
+ZS4gSWYgaXQgaXMgc2V0IHRvIG5vbi16ZXJvLCB3ZSBjYW4gbWFrZSBjcnVpZD0kU1VET19VSUQu
+CgpIb3dldmVyLCB0byBtYWludGFpbiBiYWNrd2FyZCBjb21wYXRpYmlsaXR5LCBrZWVwaW5nIHRo
+aXMgYXMgYSBmYWxsYmFjayBvcHRpb24uCklmIG1vdW50IGZhaWxzIHdpdGggcGVybWlzc2lvbiBk
+ZW5pZWQsIHRoZW4gcmV0cnkgd2l0aCB0aGlzIG9wdGlvbi4KVG8gZW5hYmxlIHRoaXMgZmFsbGJh
+Y2ssIEkgaGFkIHRvIG1ha2UgYSBmZXcgbWlub3IgY2hhbmdlcyBpbiB0aGUgZmxvdy4KLS0tCiBt
+b3VudC5jaWZzLmMgfCA3OSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+Ky0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNjIgaW5zZXJ0aW9ucygrKSwgMTcgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvbW91bnQuY2lmcy5jIGIvbW91bnQuY2lmcy5jCmluZGV4IDRm
+ZWIzOTcuLmNmNjJjMzAgMTAwNjQ0Ci0tLSBhL21vdW50LmNpZnMuYworKysgYi9tb3VudC5jaWZz
+LmMKQEAgLTE3MSw3ICsxNzEsMTEgQEAKIAogI2RlZmluZSBOVEZTX1RJTUVfT0ZGU0VUICgodW5z
+aWduZWQgbG9uZyBsb25nKSgzNjkqMzY1ICsgODkpICogMjQgKiAzNjAwICogMTAwMDAwMDApCiAK
+LS8qIHN0cnVjdCBmb3IgaG9sZGluZyBwYXJzZWQgbW91bnQgaW5mbyBmb3IgdXNlIGJ5IHByaXZp
+bGVnZWQgcHJvY2VzcyAqLworLyoKKyogc3RydWN0IGZvciBob2xkaW5nIHBhcnNlZCBtb3VudCBp
+bmZvIGZvciB1c2UgYnkgcHJpdmlsZWdlZCBwcm9jZXNzLgorKiBQbGVhc2UgZG8gbm90IGtlZXAg
+cG9pbnRlcnMgaW4gdGhpcyBzdHJ1Y3QuCisqIFRoYXQgd2F5LCByZWluaXQgb2YgdGhpcyBzdHJ1
+Y3QgaXMgYSBzaW1wbGUgbWVtc2V0LgorKi8KIHN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyB7CiAJ
+dW5zaWduZWQgbG9uZyBmbGFnczsKIAljaGFyIGhvc3RbTklfTUFYSE9TVCArIDFdOwpAQCAtMTg5
+LDYgKzE5Myw3IEBAIHN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyB7CiAJdW5zaWduZWQgaW50IHZl
+cmJvc2VmbGFnOjE7CiAJdW5zaWduZWQgaW50IG5vZmFpbDoxOwogCXVuc2lnbmVkIGludCBnb3Rf
+ZG9tYWluOjE7CisJdWlkX3Qgc3Vkb191aWQ7CiB9OwogCiBzdGF0aWMgY29uc3QgY2hhciAqdGhp
+c3Byb2dyYW07CkBAIC0xMTk5LDYgKzEyMDQsMTAgQEAgbm9jb3B5OgogCQlzbnByaW50ZihvdXQg
+KyBvdXRfbGVuLCB3b3JkX2xlbiArIDUsICJ1aWQ9JXMiLCB0eHRidWYpOwogCQlvdXRfbGVuID0g
+c3RybGVuKG91dCk7CiAJfQorCWlmIChwYXJzZWRfaW5mby0+c3Vkb191aWQpIHsKKwkJY3J1aWQg
+PSBwYXJzZWRfaW5mby0+c3Vkb191aWQ7CisJCWdvdF9jcnVpZCA9IDE7CisJfQogCWlmIChnb3Rf
+Y3J1aWQpIHsKIAkJd29yZF9sZW4gPSBzbnByaW50Zih0eHRidWYsIHNpemVvZih0eHRidWYpLCAi
+JXUiLCBjcnVpZCk7CiAKQEAgLTIwMTIsMTIgKzIwMjEsMTYgQEAgaW50IG1haW4oaW50IGFyZ2Ms
+IGNoYXIgKiphcmd2KQogCWNoYXIgKm9wdGlvbnMgPSBOVUxMOwogCWNoYXIgKm9yaWdfZGV2ID0g
+TlVMTDsKIAljaGFyICpjdXJyZW50YWRkcmVzcywgKm5leHRhZGRyZXNzOworCWNoYXIgKnZhbHVl
+ID0gTlVMTDsKKwljaGFyICplcCA9IE5VTEw7CiAJaW50IHJjID0gMDsKIAlpbnQgYWxyZWFkeV91
+cHBlcmNhc2VkID0gMDsKIAlpbnQgc2xvcHB5ID0gMDsKIAlzaXplX3Qgb3B0aW9uc19zaXplID0g
+TUFYX09QVElPTlNfTEVOOwogCXN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyAqcGFyc2VkX2luZm8g
+PSBOVUxMOworCXN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyAqcmVpbml0X3BhcnNlZF9pbmZvID0g
+TlVMTDsKIAlwaWRfdCBwaWQ7CisJdWlkX3Qgc3Vkb191aWQgPSAwOwogCiAJcmMgPSBjaGVja19z
+ZXR1aWQoKTsKIAlpZiAocmMpCkBAIC0yMDUzLDcgKzIwNjYsMjQgQEAgaW50IG1haW4oaW50IGFy
+Z2MsIGNoYXIgKiphcmd2KQogCQlwYXJzZWRfaW5mbyA9IE5VTEw7CiAJCWZwcmludGYoc3RkZXJy
+LCAiVW5hYmxlIHRvIGFsbG9jYXRlIG1lbW9yeTogJXNcbiIsCiAJCQkJc3RyZXJyb3IoZXJybm8p
+KTsKLQkJcmV0dXJuIEVYX1NZU0VSUjsKKwkJcmMgPSBFWF9TWVNFUlI7CisJCWdvdG8gbW91bnRf
+ZXhpdDsKKwl9CisKKwlyZWluaXRfcGFyc2VkX2luZm8gPSAKKwkJKHN0cnVjdCBwYXJzZWRfbW91
+bnRfaW5mbyAqKSBtYWxsb2Moc2l6ZW9mKCpyZWluaXRfcGFyc2VkX2luZm8pKTsKKwlpZiAocmVp
+bml0X3BhcnNlZF9pbmZvID09IE5VTEwpIHsKKwkJZnByaW50ZihzdGRlcnIsICJVbmFibGUgdG8g
+YWxsb2NhdGUgbWVtb3J5OiAlc1xuIiwKKwkJCQlzdHJlcnJvcihlcnJubykpOworCQlyYyA9IEVY
+X1NZU0VSUjsKKwkJZ290byBtb3VudF9leGl0OworCX0KKworCW9wdGlvbnMgPSBjYWxsb2Mob3B0
+aW9uc19zaXplLCAxKTsKKwlpZiAoIW9wdGlvbnMpIHsKKwkJZnByaW50ZihzdGRlcnIsICJVbmFi
+bGUgdG8gYWxsb2NhdGUgbWVtb3J5LlxuIik7CisJCXJjID0gRVhfU1lTRVJSOworCQlnb3RvIG1v
+dW50X2V4aXQ7CiAJfQogCiAJLyogYWRkIHNoYXJlbmFtZSBpbiBvcHRzIHN0cmluZyBhcyB1bmM9
+IHBhcm0gKi8KQEAgLTIxMTAsMTAgKzIxNDAsMTMgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIg
+Kiphcmd2KQogCS8qIGNoZGlyIGludG8gbW91bnRwb2ludCBhcyBzb29uIGFzIHBvc3NpYmxlICov
+CiAJcmMgPSBhY3F1aXJlX21vdW50cG9pbnQoJm1vdW50cG9pbnQpOwogCWlmIChyYykgewotCQlm
+cmVlKG9yZ29wdGlvbnMpOwotCQlyZXR1cm4gcmM7CisJCWdvdG8gbW91bnRfZXhpdDsKIAl9CiAK
+KwkvKiBCZWZvcmUgZ290byBhc3NlbWJsZV9yZXRyeSwgcmVpbml0aWFsaXplIHBhcnNlZF9pbmZv
+IHdpdGggcmVpbml0X3BhcnNlZF9pbmZvICovCisJbWVtY3B5KHJlaW5pdF9wYXJzZWRfaW5mbywg
+cGFyc2VkX2luZm8sCXNpemVvZigqcmVpbml0X3BhcnNlZF9pbmZvKSk7CisKK2Fzc2VtYmxlX3Jl
+dHJ5OgogCS8qCiAJICogbW91bnQuY2lmcyBkb2VzIHByaXZpbGVnZSBzZXBhcmF0aW9uLiBNb3N0
+IG9mIHRoZSBjb2RlIHRvIGhhbmRsZQogCSAqIGFzc2VtYmxpbmcgdGhlIG1vdW50IGluZm8gaXMg
+ZG9uZSBpbiBhIGNoaWxkIHByb2Nlc3MgdGhhdCBkcm9wcwpAQCAtMjEzMSw5ICsyMTY0LDcgQEAg
+aW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQogCQkvKiBjaGlsZCAqLwogCQlyYyA9IGFz
+c2VtYmxlX21vdW50aW5mbyhwYXJzZWRfaW5mbywgdGhpc3Byb2dyYW0sIG1vdW50cG9pbnQsCiAJ
+CQkJCW9yaWdfZGV2LCBvcmdvcHRpb25zKTsKLQkJZnJlZShvcmdvcHRpb25zKTsKLQkJZnJlZSht
+b3VudHBvaW50KTsKLQkJcmV0dXJuIHJjOworCQlnb3RvIG1vdW50X2V4aXQ7CiAJfSBlbHNlIHsK
+IAkJLyogcGFyZW50ICovCiAJCXBpZCA9IHdhaXQoJnJjKTsKQEAgLTIxNDcsMTMgKzIxNzgsNiBA
+QCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJCQlnb3RvIG1vdW50X2V4aXQ7CiAJ
+fQogCi0Jb3B0aW9ucyA9IGNhbGxvYyhvcHRpb25zX3NpemUsIDEpOwotCWlmICghb3B0aW9ucykg
+ewotCQlmcHJpbnRmKHN0ZGVyciwgIlVuYWJsZSB0byBhbGxvY2F0ZSBtZW1vcnkuXG4iKTsKLQkJ
+cmMgPSBFWF9TWVNFUlI7Ci0JCWdvdG8gbW91bnRfZXhpdDsKLQl9Ci0KIAljdXJyZW50YWRkcmVz
+cyA9IHBhcnNlZF9pbmZvLT5hZGRybGlzdDsKIAluZXh0YWRkcmVzcyA9IHN0cmNocihjdXJyZW50
+YWRkcmVzcywgJywnKTsKIAlpZiAobmV4dGFkZHJlc3MpCkBAIC0yMjI4LDYgKzIyNTIsNyBAQCBt
+b3VudF9yZXRyeToKIAkJCQlpZiAobmV4dGFkZHJlc3MpCiAJCQkJCSpuZXh0YWRkcmVzcysrID0g
+J1wwJzsKIAkJCX0KKwkJCW1lbXNldChvcHRpb25zLCAwLCBzaXplb2YoKm9wdGlvbnMpKTsKIAkJ
+CWdvdG8gbW91bnRfcmV0cnk7CiAJCWNhc2UgRU5PREVWOgogCQkJZnByaW50ZihzdGRlcnIsCkBA
+IC0yMjUwLDYgKzIyNzUsMjEgQEAgbW91bnRfcmV0cnk6CiAJCQkJYWxyZWFkeV91cHBlcmNhc2Vk
+ID0gMTsKIAkJCQlnb3RvIG1vdW50X3JldHJ5OwogCQkJfQorCQkJYnJlYWs7CisJCWNhc2UgRU5P
+S0VZOgorCQkJLyogbW91bnQgY291bGQgaGF2ZSBmYWlsZWQgYmVjYXVzZSBjcnVpZCBvcHRpb24g
+d2FzIG5vdCBwYXNzZWQgd2hlbiB0cmlnZ2VyZWQgd2l0aCBzdWRvICovCisJCQl2YWx1ZSA9IGdl
+dGVudigiU1VET19VSUQiKTsKKwkJCWlmICh2YWx1ZSAmJiAhcGFyc2VkX2luZm8tPnN1ZG9fdWlk
+KSB7CisJCQkJZXJybm8gPSAwOworCQkJCXN1ZG9fdWlkID0gc3RydG91bCh2YWx1ZSwgJmVwLCAx
+MCk7CisJCQkJaWYgKGVycm5vID09IDAgJiYgKmVwID09ICdcMCcgJiYgc3Vkb191aWQpIHsKKwkJ
+CQkJLyogUmVpbml0aWFsaXplIHBhcnNlZF9pbmZvIGFuZCBhc3NlbWJsZSBvcHRpb25zIGFnYWlu
+IHdpdGggc3Vkb191aWQgKi8KKwkJCQkJbWVtY3B5KHBhcnNlZF9pbmZvLCByZWluaXRfcGFyc2Vk
+X2luZm8sIHNpemVvZigqcGFyc2VkX2luZm8pKTsKKwkJCQkJcGFyc2VkX2luZm8tPnN1ZG9fdWlk
+ID0gc3Vkb191aWQ7CisJCQkJCWdvdG8gYXNzZW1ibGVfcmV0cnk7CisJCQkJfQorCQkJfQorCQkJ
+YnJlYWs7CiAJCX0KIAkJZnByaW50ZihzdGRlcnIsICJtb3VudCBlcnJvciglZCk6ICVzXG4iLCBl
+cnJubywKIAkJCXN0cmVycm9yKGVycm5vKSk7CkBAIC0yMjc2LDggKzIzMTYsMTMgQEAgbW91bnRf
+ZXhpdDoKIAkJbWVtc2V0KHBhcnNlZF9pbmZvLT5wYXNzd29yZCwgMCwgc2l6ZW9mKHBhcnNlZF9p
+bmZvLT5wYXNzd29yZCkpOwogCQltdW5tYXAocGFyc2VkX2luZm8sIHNpemVvZigqcGFyc2VkX2lu
+Zm8pKTsKIAl9Ci0JZnJlZShvcHRpb25zKTsKLQlmcmVlKG9yZ29wdGlvbnMpOwotCWZyZWUobW91
+bnRwb2ludCk7CisJaWYgKHJlaW5pdF9wYXJzZWRfaW5mbykKKwkJZnJlZShyZWluaXRfcGFyc2Vk
+X2luZm8pOworCWlmIChvcHRpb25zKQorCQlmcmVlKG9wdGlvbnMpOworCWlmIChvcmdvcHRpb25z
+KQorCQlmcmVlKG9yZ29wdGlvbnMpOworCWlmIChtb3VudHBvaW50KQorCQlmcmVlKG1vdW50cG9p
+bnQpOwogCXJldHVybiByYzsKIH0KLS0gCjIuMjUuMQoK
+--000000000000324f4005af6b5808--
