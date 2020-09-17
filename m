@@ -2,71 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3867526DF4D
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Sep 2020 17:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C7726E124
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Sep 2020 18:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728010AbgIQPNG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Sep 2020 11:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727955AbgIQPLm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Sep 2020 11:11:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9725C061353;
-        Thu, 17 Sep 2020 08:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=5bMB1AIyFb3Uo5KQX9JPM+gHHI0JgEg44Zm96s2wWSw=; b=rBA3BEedGxTEi6jjWgdFgG9hWD
-        rAtzju3sIMBKwrAld+mQATn7QaELiGbXVXmda93yYxh+yGS2+0GwA617L8+TIuo3Jk8ylfnIXk1LL
-        H0TvouglbVTFDzhXbSrLLJR8GAx9F0XOhb7d7HXvbImpXSlYZ+WbfMfJ7KLJgKaDDRuyCUS26Oz12
-        KxWnZX+HUeYpcjcOv6pJRJj8WdPq//IKqqm0bFb6zeal4AaAU3BZ/IPEj68NH4x1qS98+Qp9MtRPu
-        cADf27TdVH4fZZTEQTThue/nS5onCBKmS8Q73H+9r1P8RaGh4WeCO+yzsvRmbQR5olV5anJvC0EkL
-        rdhWhOtg==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIvYk-0001QE-67; Thu, 17 Sep 2020 15:10:54 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, v9fs-developer@lists.sourceforge.net,
+        id S1728668AbgIQQt7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Sep 2020 12:49:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728640AbgIQQtn (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 17 Sep 2020 12:49:43 -0400
+Received: from tleilax.poochiereds.net (68-20-15-154.lightspeed.rlghnc.sbcglobal.net [68.20.15.154])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 650562220E;
+        Thu, 17 Sep 2020 16:49:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600361382;
+        bh=sF5GNWOZkQ3nf3+Th5gnQt2xcpsdwKBCS7zrVGfmbVw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=y+iGlgpCeM9xb9d27IMJV7+wkEMiK0mQoV9W7l5UCg8sFTmZkgM99uNvIc2+GWqlH
+         0ZPlY/toTe9JazTgGCZZDIpYPmlLHd2V1m/PsaZcDqBuvctHhOeuwFRx8Pao5bfxG/
+         9CS6yNA1rBp1Aud48qlKW00CelvRgOeuZ6WNzkHg=
+Message-ID: <57d35fdb5ea646f96b70fd8b8a29434761c3f1d3.camel@kernel.org>
+Subject: Re: [PATCH 04/13] ceph: Tell the VFS that readpage was synchronous
+From:   Jeff Layton <jlayton@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     linux-mm@kvack.org, v9fs-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org, linux-afs@lists.infradead.org,
         ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
         ecryptfs@vger.kernel.org, linux-um@lists.infradead.org,
         linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>
-Subject: [PATCH 09/13] hostfs: Tell the VFS that readpage was synchronous
-Date:   Thu, 17 Sep 2020 16:10:46 +0100
-Message-Id: <20200917151050.5363-10-willy@infradead.org>
-X-Mailer: git-send-email 2.21.3
-In-Reply-To: <20200917151050.5363-1-willy@infradead.org>
+Date:   Thu, 17 Sep 2020 12:49:40 -0400
+In-Reply-To: <20200917151050.5363-5-willy@infradead.org>
 References: <20200917151050.5363-1-willy@infradead.org>
+         <20200917151050.5363-5-willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The hostfs readpage implementation was already synchronous, so use
-AOP_UPDATED_PAGE to avoid cycling the page lock.
+On Thu, 2020-09-17 at 16:10 +0100, Matthew Wilcox (Oracle) wrote:
+> The ceph readpage implementation was already synchronous, so use
+> AOP_UPDATED_PAGE to avoid cycling the page lock.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  fs/ceph/addr.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+> index 6ea761c84494..b2bf8bf7a312 100644
+> --- a/fs/ceph/addr.c
+> +++ b/fs/ceph/addr.c
+> @@ -291,10 +291,11 @@ static int ceph_do_readpage(struct file *filp, struct page *page)
+>  static int ceph_readpage(struct file *filp, struct page *page)
+>  {
+>  	int r = ceph_do_readpage(filp, page);
+> -	if (r != -EINPROGRESS)
+> -		unlock_page(page);
+> -	else
+> -		r = 0;
+> +	if (r == -EINPROGRESS)
+> +		return 0;
+> +	if (r == 0)
+> +		return AOP_UPDATED_PAGE;
+> +	unlock_page(page);
+>  	return r;
+>  }
+>  
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- fs/hostfs/hostfs_kern.c | 2 ++
- 1 file changed, 2 insertions(+)
+Looks good to me. I assume you'll merge all of these as a set since the
+early ones are a prerequisite?
 
-diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
-index c070c0d8e3e9..c49221c09c4b 100644
---- a/fs/hostfs/hostfs_kern.c
-+++ b/fs/hostfs/hostfs_kern.c
-@@ -455,6 +455,8 @@ static int hostfs_readpage(struct file *file, struct page *page)
-  out:
- 	flush_dcache_page(page);
- 	kunmap(page);
-+	if (!ret)
-+		return AOP_UPDATED_PAGE;
- 	unlock_page(page);
- 	return ret;
- }
--- 
-2.28.0
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
 
