@@ -2,183 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133F26CCCA
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Sep 2020 22:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FFC26D109
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Sep 2020 04:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgIPUt2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 16 Sep 2020 16:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S1725987AbgIQCSB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Sep 2020 22:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726668AbgIPQ6x (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 12:58:53 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E1C035433
-        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 09:17:37 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id s19so5825580ybc.5
-        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 09:17:37 -0700 (PDT)
+        with ESMTP id S1725267AbgIQCSA (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Sep 2020 22:18:00 -0400
+X-Greylist: delayed 597 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 22:18:00 EDT
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3194C06178B
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 19:08:01 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id x20so503599ybs.8
+        for <linux-cifs@vger.kernel.org>; Wed, 16 Sep 2020 19:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QvqMZZbehGU480XHJh/s30Ptd76/W0ORw+Qbz/0V5Qo=;
-        b=UEA51e3CxfA7556R/xsloNZAAG96Lg369ezJw7V82WOCXZgwac2iXEEtokXTOVvAx5
-         zo+3KkVmeg0lzB+DfpnmcRTMTyJkPjZxvlcY1eP2yX7dA2s5V9Bp995TYggtu1nYQYnn
-         EEoHC1XLqOlOAz2dGzVjI6LBgB1QhjgQJLkAx0EikFjESXHJejbdp8gBvpbMOjy660Gp
-         NiEqgrWAtE4AkeGRtD29Tdn0qq1R1+1Rw7wDUWmprDWcUSLiGirHKvcOuvJsnLNuHHuZ
-         3k3ajAGSSalEZ1ttOkc5kin/meCv3wrk8rJLjKDBDX5uBUqyiErdhjmUBJ5NFI9xt9fV
-         CkmA==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=JHnHkJ2uopug0Es0IzDJr1dgkC5qx7eXuHCd1M02iX8=;
+        b=PhQ+u5UL+55fhl7fAWZVNUFqxJKA+H1P2GnxGonofPnFtyPiRLfdGkZ8Y2JQ28eatP
+         /gKSCxS486U/CylmX1HGjr5nI8Sdy5f0gD1H2/HjJpT00XhfY8Q5RzLc076uKGttPY8h
+         WDCWZKRXyQ6vwLzucfk1T1vIE+DMuDiq/0jL5Si6OAztB6082uFk74xRsUkuZGfkoDVd
+         ks009IOhGkgWcyszupCznJxY+X4TwTjxxq7DOaRvf0GWD0Zff3w5W2JJUESKhhcDvXmr
+         otOj0YZMQlHe4jUXXwlB/YputdeC0TWowv+d2eQ21+dbLYlmtgicHi5lL1VnIOOv13sq
+         EpXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QvqMZZbehGU480XHJh/s30Ptd76/W0ORw+Qbz/0V5Qo=;
-        b=LbCvxvV8UhdUFxubQgL/ZVmmHPfbdc67qKC10Czo+c23vPxvQPG795cFu6/EuMV4k9
-         sFaWzXJMNkzZ++nigsNzna8HlR61tUKfiWsEWhhM7/EOd97PjzvNcM3SSgLSSvNpHSDM
-         VtWGj16w3uWQ/Pkl+EZgqpgly662JNyWTLNFMWLoKSCTh/XoMoRTE9SDfu72RS8FaHw3
-         2wLJFsn3q1H+e0BYhtpSN0gsjlmWMt/Q7VOKF2Ea4nZXuL99d5Q3RzeW0wEy4VXDzdPS
-         zzeb+FIyJMyF6rr2/oMb7JZDdKzCadMtEvWWg5YsNw8ETXwKcaIMm4ahEikrhhhLil1z
-         iz9A==
-X-Gm-Message-State: AOAM5316VoysdnteTrXu8caefeqYqFs6U3Bew2uhKBGtWThTD1aJ9OMB
-        939VndQIrjMnLC2WTN6TikKtcuYZ9G8zuIFfm9nadpG64U6RQQ==
-X-Google-Smtp-Source: ABdhPJyyL0OhXI+3KzTYmMrNSp9UM1maWxc6Ubj1OVHjjAba2NvJSAyhOAItyYiT5GvlA2KvS5uKTKYC3j1eXCQTF3k=
-X-Received: by 2002:a25:54d:: with SMTP id 74mr34669758ybf.331.1600273056634;
- Wed, 16 Sep 2020 09:17:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=JHnHkJ2uopug0Es0IzDJr1dgkC5qx7eXuHCd1M02iX8=;
+        b=V0UR5Bf3yCallHp3G4IGW6EBT0IF/yudGShPHojyfK7nYYJnU10nBb7K0q76JcStpo
+         mIS2wZvQP4/eJ3bUSpgMl/9kmmi7AVnT1Dz6c47jHS89Ey/chzxCwzOGTakB6Eb5qH5e
+         iUWBdkaN+Us9EcNYZSyKbEiITa1W96BWjr1Wbo5lRSUBXi4q6wWGyeTAUkrQOkFTMZPg
+         q/JYx34Th3dC8/p2JG6ribdYiS6YEIXZWwmyjPSI3xx36RptNqYhFXrLrZw1XMeQ6CAD
+         hIsnVOPAEUdOIHWPLb3cd2mbK1b2AHtLxAzmbdRWsO1fQXKWuOwhVqfbDibWn31wrhcx
+         TkLA==
+X-Gm-Message-State: AOAM5322xA8FW0KMSPYFE6KSVdlO3vK0S/FeunPLvyZcaWhP2wQSsVA6
+        dIIR3KxrwG5IDLes1m/teDF2zIUQREutJacDBfU=
+X-Google-Smtp-Source: ABdhPJzvlc4q9trvVKdS9DzFUu1uhcU5oiWkUk/LJvr+XKVd7YaLxAqPqnDZb4FtUBNdn40NFJouDJhiqS/9RaNmNQ4=
+X-Received: by 2002:a25:5f4c:: with SMTP id h12mr37314503ybm.97.1600308480669;
+ Wed, 16 Sep 2020 19:08:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <CANT5p=oiTY63d5yVyywiTrCqpAmvaugMVVpQRV7RT7ZA9HU2+Q@mail.gmail.com>
- <87r1r2ugzw.fsf@suse.com>
-In-Reply-To: <87r1r2ugzw.fsf@suse.com>
 From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Wed, 16 Sep 2020 21:47:25 +0530
-Message-ID: <CANT5p=qV6BWojwBET+kYUwJf7tQDFoRtUb8O+pWHrqWMw5e5LQ@mail.gmail.com>
-Subject: Re: [PATCH][SMB3] mount.cifs: use SUDO_UID env variable for cruid
-To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
-Cc:     Pavel Shilovsky <piastryyy@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
+Date:   Thu, 17 Sep 2020 07:37:50 +0530
+Message-ID: <CANT5p=qTXPkjqBuR9cvwQoRZFb72gY4M22tMG5Q_1XC9vvKZcg@mail.gmail.com>
+Subject: mutiuser request_key in both ntlmssp and krb5
+To:     Steve French <smfrench@gmail.com>,
+        Pavel Shilovsky <piastryyy@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Sender: linux-cifs-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Aur=C3=A9lien,
+Hi,
 
-Thanks for the review. Please read my responses inline below.
+I was going through the code path in cifs.ko where we get the
+credentials of an user using request_key mechanism. And I think there
+may be an issue in both ntlmssp and krb5 case.
 
-On Wed, Sep 16, 2020 at 4:26 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
-:
->
-> Shyam Prasad N <nspmangalore@gmail.com> writes:
-> > This is a fix for the scenario of a krb5 user running a "sudo mount".
-> > Even if the user has cred cache populated, when the mount is run using
-> > sudo, uid switches to 0. So cred cache for the root user will be
-> > searched for, unless cruid is specified explicitly. This fix checks
-> > for cruid=3D$SUDO_UID as a fallback option, when the mount fails with
-> > ENOKEY.
->
-> The idea seems good.
-This was Pavel's suggestion. :)
+1. For ntlmssp, I see that the credentials are stored in the keyring
+with IPv4 or IPv6 address as the key. Suppose the mount was initially
+done using hostname, and IP address changes (more likely in Azure
+scenario), we may end up looking for credentials with the wrong key.
 
->
-> > @@ -2053,7 +2066,24 @@ int main(int argc, char **argv)
-> >               parsed_info =3D NULL;
-> >               fprintf(stderr, "Unable to allocate memory: %s\n",
-> >                               strerror(errno));
-> > -             return EX_SYSERR;
-> > +             rc =3D EX_SYSERR;
-> > +             goto mount_exit;
-> > +     }
-> > +
-> > +     reinit_parsed_info =3D
-> > +             (struct parsed_mount_info *) malloc(sizeof(*reinit_parsed=
-_info));
-> > +     if (reinit_parsed_info =3D=3D NULL) {
-> > +             fprintf(stderr, "Unable to allocate memory: %s\n",
-> > +                             strerror(errno));
-> > +             rc =3D EX_SYSERR;
-> > +             goto mount_exit;
-> > +     }
-> > +
-> > +     options =3D calloc(options_size, 1);
-> > +     if (!options) {
-> > +             fprintf(stderr, "Unable to allocate memory.\n");
-> > +             rc =3D EX_SYSERR;
-> > +             goto mount_exit;
->
-> This function later forks, so if you allocate before the fork, you need
-> to free in parent and in the child.
+2. For ntlmssp, if I add another user credentials to the keyring using
+cifscreds, doesn=E2=80=99t that overwrite the prev user=E2=80=99s credentia=
+ls? Or is
+there a way to store multiple credentials for the same server?
 
-Good point.
-I think I'm doing it right though. I allocate all that I need at the beginn=
-ing.
-And the function always terminates in mount_exit, both for parent and
-child. That is where the allocations are freed.
-I know the child will have the options buffer unnecessarily allocated,
-but isn't the code flow simpler this way?
-Please let me know if you see an issue there.
-
-> > @@ -2228,6 +2252,7 @@ mount_retry:
-> >                               if (nextaddress)
-> >                                       *nextaddress++ =3D '\0';
-> >                       }
-> > +                     memset(options, 0, sizeof(*options));
-> >                       goto mount_retry;
->
-> Altho not wrong this is a bit misleading as options is a char*. If you
-> do a memset do it option_size, or do options[0] =3D 0;
-
-Got it. Will do.
-
->
-> >               case ENODEV:
-> >                       fprintf(stderr,
-> > @@ -2250,6 +2275,21 @@ mount_retry:
-> >                               already_uppercased =3D 1;
-> >                               goto mount_retry;
-> >                       }
->
-> Need to reset options again before goto I guess. Maybe reset option
-> after the retry label?
-
-Good catch. This code existed before my changes, and I had noted this
-bug. But forgot it during my changes. :)
-I was actually confused if I should reset after the label, or before the go=
-to.
-After the label is an added overhead in the "happy" code path, so went
-with this. But it does reduce the chances of missing out a reset.
-For now I'll reset options before each goto mount_retry. Please let me
-know if you feel the other approach is better.
-
->
-> >       }
-> > -     free(options);
-> > -     free(orgoptions);
-> > -     free(mountpoint);
-> > +     if (reinit_parsed_info)
-> > +             free(reinit_parsed_info);
-> > +     if (options)
-> > +             free(options);
-> > +     if (orgoptions)
-> > +             free(orgoptions);
-> > +     if (mountpoint)
-> > +             free(mountpoint);
-> >       return rc;
->
-> free(NULL) is defined to be a no-op, you don't need the checks.
-Sure. Will do.
-
->
-> Cheers,
-> --
-> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
- DE
-> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
-=BCnchen)
-
-
+3. For krb5, and multiuser mount, how should cifs.ko get the username
+for a user? Currently, I don=E2=80=99t think we read the username from
+anywhere.
 
 --=20
 -Shyam
