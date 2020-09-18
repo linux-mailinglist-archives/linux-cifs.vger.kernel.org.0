@@ -2,98 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7008026F883
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 10:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5877526FB48
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 13:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726306AbgIRIkp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Sep 2020 04:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S1726239AbgIRLTV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Sep 2020 07:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726201AbgIRIkp (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Sep 2020 04:40:45 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC0C06174A
-        for <linux-cifs@vger.kernel.org>; Fri, 18 Sep 2020 01:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=Fi+XjWa4Hv7FDzAUXQBkH7efRJKAZpcrreZbMM79ysk=; b=e9Mc7Oj7Bvi4ge66EpMJzwSrvw
-        vlynT+sFz/4nQA+ZOXFs9Wc0QHKRqefkVs/6xu3brX000zRanj7yEwKlokU8lYRJ9Otqj3A/Yu0Jg
-        ZE0qFd1VngJiM60XhANGu9NfBRNeMO+JKgiRdMNS+MPo3MIRFeXREG5CjhRCVbmLnuiImPVH41ffW
-        ZVMokKTDIAEkvb5SSYYv+lCvb96CVQKc/heGLWXecX5mCAvLjA6jv7RyIDE3BvBZzeTAS7uZaXZB7
-        A3TD675HuwxRXN+4o3nglKD0oyoPD6RRFAP6B6R1KzNltypJ5TDEODeEH2jKRr61WCYAGOkaoSAcZ
-        LedlWA5+VPra9g6zFWcgqW3jUitffYHzYI8+uq522K3ROvcILrVg/KRgu5lEIkgc5gdD6XdysKuNM
-        Q4J3Gpx23QnsrHerDl3pi+jG3iQPuvTSkJP8QASooydqfYW68NpY0J2Ten+yc4FkU4zfMUDOjlN6G
-        9JKiCm82JL6DNHuaOJRkA4vH;
-Received: from [2a01:4f8:192:486::6:0] (port=63960 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kJBwh-000781-AF
-        for cifs-qa@samba.org; Fri, 18 Sep 2020 08:40:43 +0000
-Received: from [::1] (port=29102 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kJBwc-002e82-8f
-        for cifs-qa@samba.org; Fri, 18 Sep 2020 08:40:38 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14499] New: expose NT ACLs via system.nfs4_acl EA
-Date:   Fri, 18 Sep 2020 08:40:37 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: enhancement
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- qa_contact target_milestone
-Message-ID: <bug-14499-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1725900AbgIRLTV (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Sep 2020 07:19:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DF9C06174A;
+        Fri, 18 Sep 2020 04:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=D2ju8jMz6rNG3JDmyLzknrnz9KKFGg0PYq+DeMuVZKY=; b=OhWnaBzrqkDRbzOwxxDZrAitsW
+        uGCQAikASHjYa/PMPuiPlUOcliemRBZlSc/1RLXgVWxgpXKT26jnRaH2hmTM72gxSVdhOPqu6kQPd
+        h+y2nYjcOI/MK6CMWwhrlZi9ICHnkGIztdyZsb1kUMTfkP470jFOrvRJfyuy8uYVb1UtlcOcYJKpU
+        E5Rm9//Op9Yh9xVsMJdzShSN0jO9N6AGwLLD/O1r3P9sdUd2Ic22Cm/qIxyYzHn5gT/lwgN84usJW
+        ACafXKejemQbxTWMfkPL3z3ucBuijE/zG8VKPfz4WQt3m2mP+hkouoscs89VtGRxh2HUUy/mInKXY
+        PZ8Gd81Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kJEQ9-0002ra-1H; Fri, 18 Sep 2020 11:19:17 +0000
+Date:   Fri, 18 Sep 2020 12:19:16 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-mtd@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org
+Subject: Re: [V9fs-developer] [PATCH 02/13] 9p: Tell the VFS that readpage
+ was synchronous
+Message-ID: <20200918111916.GA32101@casper.infradead.org>
+References: <20200917151050.5363-1-willy@infradead.org>
+ <20200917151050.5363-3-willy@infradead.org>
+ <20200918055919.GA30929@nautica>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200918055919.GA30929@nautica>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14499
+On Fri, Sep 18, 2020 at 07:59:19AM +0200, Dominique Martinet wrote:
+> Matthew Wilcox (Oracle) wrote on Thu, Sep 17, 2020:
+> > diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+> > index cce9ace651a2..506ca0ba2ec7 100644
+> > --- a/fs/9p/vfs_addr.c
+> > +++ b/fs/9p/vfs_addr.c
+> > @@ -280,6 +280,10 @@ static int v9fs_write_begin(struct file *filp, struct address_space *mapping,
+> >  		goto out;
+> >  
+> >  	retval = v9fs_fid_readpage(v9inode->writeback_fid, page);
+> > +	if (retval == AOP_UPDATED_PAGE) {
+> > +		retval = 0;
+> > +		goto out;
+> > +	}
+> 
+> FWIW this is a change of behaviour; for some reason the code used to
+> loop back to grab_cache_page_write_begin() and bail out on
+> PageUptodate() I suppose; some sort of race check?
+> The whole pattern is a bit weird to me and 9p has no guarantee on
+> concurrent writes to a file with cache enabled (except that it will
+> corrupt something), so this part is fine with me.
+> 
+> What I'm curious about is the page used to be both unlocked and put, but
+> now isn't either and the return value hasn't changed for the caller to
+> make a difference on write_begin / I don't see any code change in the
+> vfs  to handle that.
+> What did I miss?
 
-            Bug ID: 14499
-           Summary: expose NT ACLs via system.nfs4_acl EA
-           Product: CifsVFS
-           Version: 5.x
-          Hardware: All
-                OS: All
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: kernel fs
-          Assignee: sfrench@samba.org
-          Reporter: bjacke@samba.org
-        QA Contact: cifs-qa@samba.org
-  Target Milestone: ---
+The page cache is kind of subtle.  The grab_cache_page_write_begin()
+will return a Locked page with an increased refcount.  If it's Uptodate,
+that's exactly what we want, and we return it.  If we have to read the
+page, readpage used to unlock the page before returning, and rather than
+re-lock it, we would drop the reference to the page and look it up again.
+It's possible that after dropping the lock on that page that the page
+was replaced in the page cache and so we'd get a different page.
 
-At SambaXP 2020 the idea came up to expose the NT ACLs via the more commonly
-used extended attribute system.nfs4_acl - which is the default attribute al=
-so
-for NFS4. Those ACLs can be managed with the well known toolset of
-nfs4-acl-tools and those ACLs could even be managed by Samba through the
-nfs4acl_xattr module. This would improve overall cifs ACL management a lot.
-
-This bug is to folow the status of this idea, is there some rough eta for t=
-his,
-Steve?
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Anyway, now (unless fscache is involved), v9fs_fid_readpage will return
+the page without unlocking it.  So we don't need to do the dance of
+dropping the lock, putting the refcount and looking the page back up
+again.  We can just return the page.  The VFS doesn't need a special
+return code because nothing has changed from the VFS's point of view --
+it asked you to get a page and you got the page.
