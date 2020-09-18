@@ -2,27 +2,27 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A2E26EDD7
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 04:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6125526F1BC
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 04:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbgIRCYD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Sep 2020 22:24:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46564 "EHLO mail.kernel.org"
+        id S1727978AbgIRCHq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Sep 2020 22:07:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58162 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729423AbgIRCQl (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:16:41 -0400
+        id S1727022AbgIRCHk (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:07:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B58523976;
-        Fri, 18 Sep 2020 02:16:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B1692396E;
+        Fri, 18 Sep 2020 02:07:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395400;
-        bh=owqMCSq/juuzMI9jS1ARy6GjOUuI6uienC/99N+q3/w=;
+        s=default; t=1600394859;
+        bh=DvhlGhzzX8PcM7OlB4/U7DuP+5s8e0AMYjhI8kVwK5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fsSmsWPrcCBQ5WUZYcBv1nG5DxvPzG3N+mh9Yf6NKI1ZrtqXC6ZSZhe5V6t4xBLRE
-         PCBlmsI4G5nYqbzn3H61a4uVy2S8KzRuTCASR+d5eyxKs6ujme5ozBKqNfbG85nD33
-         3QGdF1JdPUpSvHEaoEu5kShhs9lnDhpOXOB6DejU=
+        b=HCP02ThE33QzvVqwTW82zVHVt4+mupNV7Gc9O4JHtXZlGpeBFo8JlRjCCGZtsb3hA
+         KGBPQJLhwofBOrlRq/U0knMTDVgwHwCYqrUy0yL5dxOJEQ9wP5E/h4Z59FEaCKJVWb
+         hAJu2k8LhO0EjZVFtBywe/kN0MXKOWrGS5RHGvvc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
@@ -31,12 +31,12 @@ Cc:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
         Ronnie Sahlberg <lsahlber@redhat.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.9 88/90] cifs: Fix double add page to memcg when cifs_readpages
-Date:   Thu, 17 Sep 2020 22:14:53 -0400
-Message-Id: <20200918021455.2067301-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 313/330] cifs: Fix double add page to memcg when cifs_readpages
+Date:   Thu, 17 Sep 2020 22:00:53 -0400
+Message-Id: <20200918020110.2063155-313-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021455.2067301-1-sashal@kernel.org>
-References: <20200918021455.2067301-1-sashal@kernel.org>
+In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
+References: <20200918020110.2063155-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -139,10 +139,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index dca78b6e9ea32..24508b69e78b7 100644
+index 14ae341755d47..31d578739341b 100644
 --- a/fs/cifs/file.c
 +++ b/fs/cifs/file.c
-@@ -3531,7 +3531,8 @@ readpages_get_pages(struct address_space *mapping, struct list_head *page_list,
+@@ -4269,7 +4269,8 @@ readpages_get_pages(struct address_space *mapping, struct list_head *page_list,
  			break;
  
  		__SetPageLocked(page);
@@ -152,7 +152,7 @@ index dca78b6e9ea32..24508b69e78b7 100644
  			__ClearPageLocked(page);
  			break;
  		}
-@@ -3547,6 +3548,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
+@@ -4285,6 +4286,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
  	struct list_head *page_list, unsigned num_pages)
  {
  	int rc;
@@ -160,7 +160,7 @@ index dca78b6e9ea32..24508b69e78b7 100644
  	struct list_head tmplist;
  	struct cifsFileInfo *open_file = file->private_data;
  	struct cifs_sb_info *cifs_sb = CIFS_FILE_SB(file);
-@@ -3587,7 +3589,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
+@@ -4329,7 +4331,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
  	 * the order of declining indexes. When we put the pages in
  	 * the rdata->pages, then we want them in increasing order.
  	 */
@@ -169,7 +169,7 @@ index dca78b6e9ea32..24508b69e78b7 100644
  		unsigned int i, nr_pages, bytes, rsize;
  		loff_t offset;
  		struct page *page, *tpage;
-@@ -3610,9 +3612,10 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
+@@ -4362,9 +4364,10 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
  			return 0;
  		}
  
