@@ -2,78 +2,98 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9570F26F5D5
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 08:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7008026F883
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 10:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgIRGUu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Sep 2020 02:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S1726306AbgIRIkp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Sep 2020 04:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgIRGUs (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Sep 2020 02:20:48 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF26C06174A
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Sep 2020 23:20:48 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id j2so5647915ioj.7
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Sep 2020 23:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ow1PmgvtDy0O+F6XzVp/9iPFGbpf068boDygZBZxOM4=;
-        b=Oqwkg5nw20cOYutG9HyCHElov2W/xP1bZ4ApwsOC9pmfcYDHoaSOW/Cw+w6CsPIeE8
-         ej4Y9kax7+tfZ8eJSuXV8S0vqtdk8S1qLmMusTjdkgI7VqW6TcCHTbe5f7jYgv+lgoS2
-         5IUHInnhevC9S9Xwwu8rXrRGIZLXfDVoVV6IMzJt+ByJF+iH7yWV8uRIDS+yh4s3f4AU
-         Upz2Wyaik0CmoA6G2JZbwkjEs9owlRzUcOe2bCUdXbYkQczWqaNtEgDZgIzRSx6y8YUC
-         z+MWI+x3KPFHe7t7t5/EBX59nkvwkFHfqpybp4Y/ZnAtqUEfLIV7tx7D89uxJds8WHYX
-         lLDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ow1PmgvtDy0O+F6XzVp/9iPFGbpf068boDygZBZxOM4=;
-        b=eO41VuuHCb7hGYtra3EqZXwHL30Q5N1UjjICygkwvkkpJbjksJXUObjHlqn73IiEQf
-         yaK9Wmaix6ztgftU35LOoIA62z3lB9Rj73ioPm0/Br+4mk1IdIxcsOqsDPz8Az7W7Hbq
-         aIrVZG39jjrlhjZoMZaDQxjwZohjB+GWghZRGDdtaCLxfOp9gIieFS6LgXXlvLMsLzkv
-         MYvZMdr6KO8NpiE3GFfMdrTACgqHIlm+90pSlCW4XU8UtLn+aOhdDP6tDVuxdCLL8iW4
-         flshEKu0CeweZf+k+SntLJe+zF3WE+mCpZ3VqIZoc8ifdQ9ZCWhBaWs5Xz2uCzUw3Vad
-         K77g==
-X-Gm-Message-State: AOAM531R482HStwzqXUjvL6J5H+8DTYaUanlupfzItt5rBXCZseW23p5
-        cnQs7rUsbNCuAM8Yf0y1ttuAFma1LqAyQAhzLRF99a+A
-X-Google-Smtp-Source: ABdhPJwiosHQXIUHVdGHnKaAxxreUX4ncAIUZZH5Axzg54HDtJ8edcpFZgLffVC0xLmYPuQGOf4lGq6H+x6HfesT4oU=
-X-Received: by 2002:a5e:9613:: with SMTP id a19mr25784622ioq.116.1600410047541;
- Thu, 17 Sep 2020 23:20:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACdtm0YSSsH=MOX6BTimj=uppBDxO66yJWK5ikkyd+knhBXKmw@mail.gmail.com>
-In-Reply-To: <CACdtm0YSSsH=MOX6BTimj=uppBDxO66yJWK5ikkyd+knhBXKmw@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Fri, 18 Sep 2020 16:20:35 +1000
-Message-ID: <CAN05THShczOiSTD_bbRfPqHkOfOBLgNiaiibMu6GB+RzXsgK4A@mail.gmail.com>
-Subject: Re: [PATCH][SMB3] Handle STATUS_IO_TIMEOUT gracefully
-To:     rohiths msft <rohiths.msft@gmail.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        Pavel Shilovsky <piastryyy@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        sribhat.msa@outlook.com, linux-cifs <linux-cifs@vger.kernel.org>
+        with ESMTP id S1726201AbgIRIkp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Sep 2020 04:40:45 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC0C06174A
+        for <linux-cifs@vger.kernel.org>; Fri, 18 Sep 2020 01:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=Fi+XjWa4Hv7FDzAUXQBkH7efRJKAZpcrreZbMM79ysk=; b=e9Mc7Oj7Bvi4ge66EpMJzwSrvw
+        vlynT+sFz/4nQA+ZOXFs9Wc0QHKRqefkVs/6xu3brX000zRanj7yEwKlokU8lYRJ9Otqj3A/Yu0Jg
+        ZE0qFd1VngJiM60XhANGu9NfBRNeMO+JKgiRdMNS+MPo3MIRFeXREG5CjhRCVbmLnuiImPVH41ffW
+        ZVMokKTDIAEkvb5SSYYv+lCvb96CVQKc/heGLWXecX5mCAvLjA6jv7RyIDE3BvBZzeTAS7uZaXZB7
+        A3TD675HuwxRXN+4o3nglKD0oyoPD6RRFAP6B6R1KzNltypJ5TDEODeEH2jKRr61WCYAGOkaoSAcZ
+        LedlWA5+VPra9g6zFWcgqW3jUitffYHzYI8+uq522K3ROvcILrVg/KRgu5lEIkgc5gdD6XdysKuNM
+        Q4J3Gpx23QnsrHerDl3pi+jG3iQPuvTSkJP8QASooydqfYW68NpY0J2Ten+yc4FkU4zfMUDOjlN6G
+        9JKiCm82JL6DNHuaOJRkA4vH;
+Received: from [2a01:4f8:192:486::6:0] (port=63960 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kJBwh-000781-AF
+        for cifs-qa@samba.org; Fri, 18 Sep 2020 08:40:43 +0000
+Received: from [::1] (port=29102 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kJBwc-002e82-8f
+        for cifs-qa@samba.org; Fri, 18 Sep 2020 08:40:38 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14499] New: expose NT ACLs via system.nfs4_acl EA
+Date:   Fri, 18 Sep 2020 08:40:37 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone
+Message-ID: <bug-14499-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 4:08 PM rohiths msft <rohiths.msft@gmail.com> wrote:
->
-> Hi All,
->
-> This fix is to handle STATUS_IO_TIMEOUT status code. This status code
-> is returned by the server in case of unavailability(internal
-> disconnects,etc) and is not treated by linux clients as retriable. So,
-> this fix maps the status code as retriable error and also has a check
-> to drop the connection to not overload the server.
->
+https://bugzilla.samba.org/show_bug.cgi?id=3D14499
 
-Do we need a new method for this? Wouldn't it be enough to just do the
-remap-to-EAGAIN and have it handled as all other retryable errors?
+            Bug ID: 14499
+           Summary: expose NT ACLs via system.nfs4_acl EA
+           Product: CifsVFS
+           Version: 5.x
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: kernel fs
+          Assignee: sfrench@samba.org
+          Reporter: bjacke@samba.org
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
+At SambaXP 2020 the idea came up to expose the NT ACLs via the more commonly
+used extended attribute system.nfs4_acl - which is the default attribute al=
+so
+for NFS4. Those ACLs can be managed with the well known toolset of
+nfs4-acl-tools and those ACLs could even be managed by Samba through the
+nfs4acl_xattr module. This would improve overall cifs ACL management a lot.
 
-> Regards,
-> Rohith
+This bug is to folow the status of this idea, is there some rough eta for t=
+his,
+Steve?
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
