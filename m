@@ -2,73 +2,76 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E6526F4A2
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 05:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE5226F4E8
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Sep 2020 06:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgIRDSX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Sep 2020 23:18:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60725 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726201AbgIRDSX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 17 Sep 2020 23:18:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600399102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=B7QZN5bB1ODEfpgdiy0j8chyOajh/Pya1JzNV03v1jw=;
-        b=Mjd/T38ShaffP9mX2KHimRRxs6Ktzy2Ly5cdFtqH30P116JPfSP1+jKhm58i/RFang+d0g
-        9qfnHLad/VrdtTHoa517e7lB8WvFzme9qkIbHOiYbGFaSvHniS6zrYbUuaR5Zt7JEkW9xq
-        nbCOKRZmHJG/h8pNzWfE/VYfIDbTL18=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189-FEGNzavJPuey-S0FoEE3Tg-1; Thu, 17 Sep 2020 23:18:20 -0400
-X-MC-Unique: FEGNzavJPuey-S0FoEE3Tg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EA8401006717;
-        Fri, 18 Sep 2020 03:18:18 +0000 (UTC)
-Received: from test1103.test.redhat.com (vpn2-54-64.bne.redhat.com [10.64.54.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 88E1D7880F;
-        Fri, 18 Sep 2020 03:18:18 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH] cifs: treat password/account expired as -EACCES
-Date:   Fri, 18 Sep 2020 13:18:12 +1000
-Message-Id: <20200918031812.20578-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        id S1726149AbgIREIs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Sep 2020 00:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726117AbgIREIs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Sep 2020 00:08:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE34C06174A
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Sep 2020 21:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=30kW5YumiHdhELPwG+A5BpDyoHcfx0ILrm2nWPfQ9cU=; b=XYifAyuOdPpz8Z/jwEGW1jOHbo
+        VdkmB//x7NUwKXKrrIbJtxyIptBUgGqVEZ50cI/Fq2z/4SAkjcC+cUmlY8pr+Id4/Ey5d4/bskTeg
+        f0NQs3ET2IXmqH0o+9swGQB3ZGY/Jyfopx99Jzquk25Xd5iC1xpCdH/6RiPVuMuinPS1/vYYOMV2d
+        nnS6igFD0Y+kly69Vx01JWIDkRAGH0yJgqYFN416BsFmX5lhKinqI9PYnLGU/H1vyBqmLAz3QDCBK
+        bczbCyTAa3ZLzZX8RIuyeTf1Ihrmd/9z12mF3rAmoSV3ewxDKhw3OH0zWP/aVmSzLB6QXYvxNNAb1
+        qO1ItcJ4DLAo0WKKks5QlOxCEH1aybC8UtYYYME5cy9xTb/Mrx5Dl7/9g3zJM1RrFjHaG4BsgvyNn
+        MPLPpcod0KqFEDH2gyw8p0z2WJNGLd8CgPBAzUa1lV4nKNMVeQm5DKW+R7Ye57aWkwc8oBSKH6YrF
+        t2XNZNoy+TrVf8z7cmq4N/2/;
+Received: from [2a01:4f8:192:486::6:0] (port=62748 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kJ7hS-0001SH-4x
+        for cifs-qa@samba.org; Fri, 18 Sep 2020 04:08:42 +0000
+Received: from [::1] (port=27892 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kJ7hR-002d6n-Lg
+        for cifs-qa@samba.org; Fri, 18 Sep 2020 04:08:41 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14498] Why is mount -a is not detecting an already mounted DFS
+ share endpoint
+Date:   Fri, 18 Sep 2020 04:08:41 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sfrench@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14498-10630-uilgvv6mCS@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14498-10630@https.bugzilla.samba.org/>
+References: <bug-14498-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-These two errors both require admin changes to the server before they can
-be resolved so there is no point in looping to try to reconnect
-indefinitely. Change the mapping to -EACCES so that we will quickly
-terminate the reconnect for these threads and return an error back to userland.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14498
 
-RHBZ: 1798031
+--- Comment #2 from Steve French <sfrench@samba.org> ---
+What is the kernel version on the two (the failing and working kernels)?
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/smb2maperror.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/cifs/smb2maperror.c b/fs/cifs/smb2maperror.c
-index 7fde3775cb57..9cd231486af4 100644
---- a/fs/cifs/smb2maperror.c
-+++ b/fs/cifs/smb2maperror.c
-@@ -409,8 +409,8 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
- 	{STATUS_ACCOUNT_RESTRICTION, -EACCES, "STATUS_ACCOUNT_RESTRICTION"},
- 	{STATUS_INVALID_LOGON_HOURS, -EACCES, "STATUS_INVALID_LOGON_HOURS"},
- 	{STATUS_INVALID_WORKSTATION, -EACCES, "STATUS_INVALID_WORKSTATION"},
--	{STATUS_PASSWORD_EXPIRED, -EKEYEXPIRED, "STATUS_PASSWORD_EXPIRED"},
--	{STATUS_ACCOUNT_DISABLED, -EKEYREVOKED, "STATUS_ACCOUNT_DISABLED"},
-+	{STATUS_PASSWORD_EXPIRED, -EACCES, "STATUS_PASSWORD_EXPIRED"},
-+	{STATUS_ACCOUNT_DISABLED, -EACCES, "STATUS_ACCOUNT_DISABLED"},
- 	{STATUS_NONE_MAPPED, -EIO, "STATUS_NONE_MAPPED"},
- 	{STATUS_TOO_MANY_LUIDS_REQUESTED, -EIO,
- 	"STATUS_TOO_MANY_LUIDS_REQUESTED"},
--- 
-2.13.6
-
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
