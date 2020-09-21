@@ -2,70 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775E6271F44
-	for <lists+linux-cifs@lfdr.de>; Mon, 21 Sep 2020 11:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8045F271F68
+	for <lists+linux-cifs@lfdr.de>; Mon, 21 Sep 2020 11:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgIUJty (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 21 Sep 2020 05:49:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57108 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgIUJty (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 21 Sep 2020 05:49:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600681793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FBm2H2GCFlplthkyhYpDb0vxg81ycvjt+IhwCnQrRj4=;
-        b=ft5VancqcLvlhKwzI69fK+pStMD68sYlon4wQGRFmRVuEIGowzbZk9wZtbe2D5Yz4NSkfX
-        gVRHYrqJy0s7HmY8lnSUlC68ybPpXavJNcP0YtYrfdfiSVzzYAdSZkuTjb2OdAUmueDZNW
-        +LjfObroabWel3eSN6UxjX6tFwQ3WSg=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8920FAD83;
-        Mon, 21 Sep 2020 09:50:29 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <smfrench@gmail.com>
-Cc:     Pavel Shilovsky <piastryyy@gmail.com>, Paulo Alcantara <pc@cjr.nz>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: mutiuser request_key in both ntlmssp and krb5
-In-Reply-To: <87imc7lblm.fsf@suse.com>
-References: <CANT5p=qTXPkjqBuR9cvwQoRZFb72gY4M22tMG5Q_1XC9vvKZcg@mail.gmail.com>
- <87tuvwlpto.fsf@suse.com> <87r1r0lp9s.fsf@suse.com>
- <CAH2r5muiYZGr=1rZHobpKXAtG+OCDORZok_acOkL6TQssVrm3Q@mail.gmail.com>
- <CANT5p=ob6gSFkdy+k0Hera9mLQVhZ743RUiGk7gHbTGwuu7KEw@mail.gmail.com>
- <87imc7lblm.fsf@suse.com>
-Date:   Mon, 21 Sep 2020 11:49:52 +0200
-Message-ID: <87ft7blarj.fsf@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726366AbgIUJ5K (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 21 Sep 2020 05:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgIUJ5K (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 21 Sep 2020 05:57:10 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B73C061755
+        for <linux-cifs@vger.kernel.org>; Mon, 21 Sep 2020 02:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=RwzJ9I5iEqu1eKP5f4NqNFdt7v+JuhBAa8SQrKw8sLA=; b=ppJLt6cWxc/RpxXJp/KH2ds0yW
+        4HTu3PY6/LeGtj83+MW4WniYE5TLW+xjwYBM1XVxe9ei8gWTjH+DN6Cd9CxnmaiCQ1JFc4kGd8rpu
+        PB9bwEC3uhgONoDF+MDEbXQmbHPdi5Bgzo+Yxntgce9Nq3l0QNNt6mRtfphSzmvEp4mkii0dej3hG
+        ofLhbE5iarHhvp0L+9vQWPboaya986OjGv1FZf3KNv7s9g9exT921eFQ+1YaftlnO4iTE1bRDxEB1
+        bTmxo+3EI7tzKOtgi8iow57bwhdzPQSwDwR7wPBls5RRUPBl5L1o03GUmcrbzjbejn+ZV++zpsvYG
+        ysc3o7WISLFYcZbJj47Ilz1dvgNJ5GukqnBx0Z/yeLhxLw2RNmtoNa1TGUx5F6R5pAwpxg4GM4PAQ
+        SIePmwDBh0GyHM3kLLDwI1fZnizvc3l0olOxa/p6uq6s2svufnix9Tb5THe8lVTKUD9+oUdmswMe5
+        jks0nSvst3dwEE4lFtglcJbt;
+Received: from [2a01:4f8:192:486::6:0] (port=18328 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kKIZF-0003OH-IT
+        for cifs-qa@samba.org; Mon, 21 Sep 2020 09:57:05 +0000
+Received: from [::1] (port=31006 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kKIZF-002uhW-4T
+        for cifs-qa@samba.org; Mon, 21 Sep 2020 09:57:05 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14506] New: cifs mount with missing krb5 key should give better
+ error message
+Date:   Mon, 21 Sep 2020 09:57:04 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone
+Message-ID: <bug-14506-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Aur=C3=A9lien Aptel <aaptel@suse.com> writes:
->> Ah, I see. So I'm wondering how the multiuser mounts for ntlmssp work?
->> On each login, does the user have to populate the keyring with his/her
->> credentials?
->
-> I think that was the idea yes, or maybe integrate with PAM somehow? But
-> you'll have to do some archeological work with Jeff Layton to get to the
-> bottom of this :)
+https://bugzilla.samba.org/show_bug.cgi?id=3D14506
 
-If you were asking *how* can the user populate it at this moment, then
-the answer is with the cifscreds program. But I don't know what was the
-planned scenario for users (login once, then manually call cifscreds a
-to login a 2nd time?)
+            Bug ID: 14506
+           Summary: cifs mount with missing krb5 key should give better
+                    error message
+           Product: CifsVFS
+           Version: 5.x
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: user space tools
+          Assignee: jlayton@samba.org
+          Reporter: bjacke@samba.org
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
-https://github.com/piastry/cifs-utils/blob/master/cifscreds.c
+when trying to mount a cifs share with sec=3Dkrb5 but with missing krb5 key=
+, then
+the mount command returns:
 
-Cheers,
+mount error(2): No such file or directory
+
+This error message does not really help most of the users, I think.
+
+If there is a sec=3Dkrb5 cifs mount with an *expired* key and you try to ac=
+cess
+the mount point, the error message is better:
+
+ls: =C3=96ffnen von Verzeichnis '.' nicht m=C3=B6glich: Der notwendige Schl=
+=C3=BCssel ist
+nicht verf=C3=BCgbar
+
+(in English like "opening directory "." not possible: the required key is n=
+ot
+availbale").=20
+
+A similar message would be good at mount time if the required key is not
+available.
+
 --=20
-Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, DE
-GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=BC=
-nchen)
+You are receiving this mail because:
+You are the QA Contact for the bug.=
