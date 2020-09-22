@@ -2,82 +2,49 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2489927524A
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 09:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EA527536B
+	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 10:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbgIWH2e (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 23 Sep 2020 03:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726615AbgIWH2e (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 23 Sep 2020 03:28:34 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67DC061755
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Sep 2020 00:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=geUM4RuaxNk5A0dbynUMHjGSRVgbK5Kd22NUN0x8TBk=; b=hoQQYqq4Ch+DGmKusr1JyXREcS
-        WSYq6NAQx8aM8VhyXIRkLeRrm5m2JFnqi+ctVb7m9ysJmI74T7v49Mj85z3nU+3oTIYEbx3VuGUpJ
-        b1ImohfFyJQFVhakGAnk0eVRyiD6djSWCZoMsnIvafnV5Y2+ek+a/5LxR7ljLHLluvjk7o+53YTGo
-        X5wt1P1LZZHTAongmLc3vhg6nNBW2FwLpUgPgPS0IKXd9VkAflkPB2OqJ5t0+pkcb1Q53IIbD8bWZ
-        8OmEqYQGu30sFBs8/nbsLFN+7P244kRLCYbYfFmT/1A2CPv/Q17dSYlWU4TJLxnA0k9WHXbu8HMlD
-        A6pbmjClAT8avxQH1N42Lvpu+0HibHfM5yLWHnCcLZX/mTDRdn8ZPhdUiopCFZhCoFcey+0wPyZz5
-        0xcUf1vidOYXMt7hQ3CXMVy4gO8O7Q7mV3Ceix1u8B33XDdmudWptCIyftjl38+dut7c1RoXFU6nZ
-        EJfWsoT/5m5VSQm7LcsetoFT;
-Received: from [2a01:4f8:192:486::6:0] (port=19142 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kKzCY-0007qn-L1
-        for cifs-qa@samba.org; Wed, 23 Sep 2020 07:28:30 +0000
-Received: from [::1] (port=31820 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kKzCY-00391m-9k
-        for cifs-qa@samba.org; Wed, 23 Sep 2020 07:28:30 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14509] Interworking Problem OpenVMS Samba Server 4.6.5 with
- Linux Samba Client 4.7.6
-Date:   Wed, 23 Sep 2020 07:28:29 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: minor
-X-Bugzilla-Who: john.dite@compinia.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14509-10630-Um9Ihjr35k@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14509-10630@https.bugzilla.samba.org/>
-References: <bug-14509-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1726242AbgIWIkR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 23 Sep 2020 04:40:17 -0400
+Received: from one2.ekof.bg.ac.rs ([147.91.245.208]:41338 "EHLO
+        one2.ekof.bg.ac.rs" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgIWIkR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 23 Sep 2020 04:40:17 -0400
+X-Greylist: delayed 8805 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 04:40:16 EDT
+Received: from one2.ekof.bg.ac.rs (localhost [127.0.0.1])
+        by one2.ekof.bg.ac.rs (Postfix) with ESMTPS id 89F36D10337;
+        Wed, 23 Sep 2020 02:59:19 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by one2.ekof.bg.ac.rs (Postfix) with ESMTP id 1F570DAE48B;
+        Wed, 23 Sep 2020 02:21:59 +0200 (CEST)
+Received: from one2.ekof.bg.ac.rs ([127.0.0.1])
+        by localhost (one2.ekof.bg.ac.rs [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eWPTf_itckQi; Wed, 23 Sep 2020 02:21:58 +0200 (CEST)
+Received: from [172.20.10.4] (unknown [129.205.124.102])
+        by one2.ekof.bg.ac.rs (Postfix) with ESMTPSA id 5A426C92666;
+        Wed, 23 Sep 2020 01:09:52 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: For You!!!
+To:     Recipients <info@foundation.org>
+From:   info@foundation.org
+Date:   Tue, 22 Sep 2020 16:09:53 -0700
+Reply-To: premjihfoundation@gmail.com
+Message-Id: <20200922230953.5A426C92666@one2.ekof.bg.ac.rs>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14509
+Hello,
 
---- Comment #9 from John Dite <john.dite@compinia.de> ---
-It's not a 100% clear for me.=20
+I'm Azim Hashim Premji, an Indian business tycoon, investor, and philanthropist. I'm the chairman of Wipro Limited. I gave away 25 per cent of my personal wealth to charity. And I also pledged to give away the rest of 25% this year 2020. I have decided to donate $500,000 to you. If you are interested in my donation, do contact me for more info.
+You can also read more about me via the link below
 
-If "filename MUST be at least one character but no more than 255 characters=
- in
-length" why does it not lead to a protocol violation on the part of the Lin=
-ux
-Client SMB state M/C. I don't see that in my Wireshark trace.
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+http://en.wikipedia.org/wiki/A zim_Premji
+Thank You
+CEO Wipro Limited
+Azim Hashim Premji
+Email: premjihfoundation@gmail.com
