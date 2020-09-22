@@ -2,95 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E5527366C
-	for <lists+linux-cifs@lfdr.de>; Tue, 22 Sep 2020 01:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019F7274498
+	for <lists+linux-cifs@lfdr.de>; Tue, 22 Sep 2020 16:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728822AbgIUXMV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 21 Sep 2020 19:12:21 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:58282 "EHLO mail.rusoil.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728741AbgIUXMV (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:12:21 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:12:11 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 9EF1840C07;
-        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id SVpSP78GR2pZ; Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 3D89E40D78;
-        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 3D89E40D78
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729693;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
-         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
-         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KLkCjnFIcNrK; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
-        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726706AbgIVOpG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 22 Sep 2020 10:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbgIVOpF (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 22 Sep 2020 10:45:05 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ACEC061755
+        for <linux-cifs@vger.kernel.org>; Tue, 22 Sep 2020 07:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=6BclYkMsq/qUQWwD9DZEviJpjQXhjyK36P9D3dFRGFo=; b=eUGwGd4jml21q2NPAq8W5rcb6I
+        gHnhzWCWmVBKMOgPDreiE2pHiUUgF8c36/olRFY3ymwQYromFZg6JO3DIXRiCvcRIN99r/hJ10Oy9
+        GVrVUyTY/vA7ViSrWnIBDixQpE5255Dj7VvoRm5A3kLg+EYpdwlm6vE1lZpoxwVY9/1KiFjmeeIoa
+        1R3c8gXTMlibNFJwvP5FzjkfzNgC6oOQU1Dx1Ef6LN2Y0zkma6pxZggSAYiJZnk8c8oXoiNyteH58
+        7/Mq6M4JELO6Qarik1akkXwqTJug+gw4LjHWESeAlN7IHX9SKqNBTQcarWh7xn46bXth5N59r9kbx
+        AoJX4l+v3JotrXqUkDN40cKLn81eFse0jo/wNDXpPvP+umTQBOd8bfdLT7Y4+PAzXLH8PmAG4KeiP
+        Jt9nRyt/BITYJC5+ef0oa+VMzr88hM4uRddsyyl7aQxaGFLBsS7j9c4EEWfiU8lHczzBiS2ZmP4aD
+        5PVkXndH9VlQBTTzXqFeyg3q;
+Received: from [2a01:4f8:192:486::6:0] (port=18898 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kKjXS-0000Lu-9j
+        for cifs-qa@samba.org; Tue, 22 Sep 2020 14:45:02 +0000
+Received: from [::1] (port=31574 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kKjXR-0032AM-RR
+        for cifs-qa@samba.org; Tue, 22 Sep 2020 14:45:01 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14509] Interworking Problem OpenVMS Samba Server 4.6.5 with
+ Linux Samba Client 4.7.6
+Date:   Tue, 22 Sep 2020 14:45:01 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: minor
+X-Bugzilla-Who: slow@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: version assigned_to qa_contact product component
+Message-ID: <bug-14509-10630-QJ7ApQSjOz@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14509-10630@https.bugzilla.samba.org/>
+References: <bug-14509-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+https://bugzilla.samba.org/show_bug.cgi?id=3D14509
 
+Ralph B=C3=B6hme <slow@samba.org> changed:
 
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Version|4.7.6                       |5.x
+           Assignee|samba-qa@samba.org          |sfrench@samba.org
+         QA Contact|samba-qa@samba.org          |cifs-qa@samba.org
+            Product|Samba 4.1 and newer         |CifsVFS
+          Component|libsmbclient                |kernel fs
 
+--- Comment #2 from Ralph B=C3=B6hme <slow@samba.org> ---
+Chaning to product to cifs vfs as this seems to be a bug with the Linux ker=
+nel
+SMB client.
 
-Eine kurze Einf=C3=BChrung.
-
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
-
-
-Darlehensverfahren
-
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
-
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
-
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
-
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
-
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
-
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
