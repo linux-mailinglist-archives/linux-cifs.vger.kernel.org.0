@@ -2,288 +2,240 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFC02757AA
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 14:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADE7275932
+	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 15:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgIWMHA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 23 Sep 2020 08:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726498AbgIWMHA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 23 Sep 2020 08:07:00 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C8AC0613CE
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Sep 2020 05:07:00 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id a2so15264549ybj.2
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Sep 2020 05:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sxkw34fKd30OMBJqtT0ky7g0HdU6GFZSuJFx0g0UQQ0=;
-        b=GiJHqnMdGnbS++m6ZMpEOAMXPRjnhTEoEcbWfSjq2r6M4I3OwvJaqG/aTWdIuQbMdc
-         U0fuT3xDjL9qkAmADoIOibs3F5I9VlRjSZNpFOogH2SFbfGyrR13nO8/FVUsv4pkNIM7
-         62yj30Lv7Ppk7TH8DizkON9FJ+I9U5nij5YcQogSjSgjMDRu44LTDH6gIMURRLVM+Vyp
-         e4LQuxYERybMq0w7QnVEJ/yB/xdvji1ZTdGhY9XBe3ah/Af/KkN6w+7NfpGykUp6Fq8s
-         2JCEFYaXk6ts7IOS4VcwTm4jVNc2dnxPNKD+6TP1DZj+be6MHRd9kcpYnTI4TY9yYgNb
-         FPbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sxkw34fKd30OMBJqtT0ky7g0HdU6GFZSuJFx0g0UQQ0=;
-        b=AR9BRchvQqize/yLx7Iji4nxVmpiKB/28FW+anD7y10QO6Dkc7RVDjpDDptUpJf+8J
-         8jxm7bwOgvH23LCh0o6RS4oY3HrABjv6NN0KVqq+PnW0UPNFPAmyZ+auW8CFHDRsJHdT
-         9DHOtpDhFheYprbFx1UkL5JH4SIWaILBuxBauuaLWIG5VeK0ACRt1uep9qHw5T/hTr9S
-         N6IQE+r8Wwuq5GYrLD00z4qaXOivxM7rmpqIJDn76fSYPKmgxvQ1N3FsfYgPmLMsuUsB
-         qwkDoqrmyzfrOP09f0gLnUEsBbaG8H9xo4d7FmDmo5zIoi1xh3m5gwA5kWmeISGBufLD
-         ZOeQ==
-X-Gm-Message-State: AOAM531YxBVcB2FGvOLtNRE3cpPkwNYQsEiF0UvXZq6bs5RcbB9DkUBG
-        JXRe0pStTdO9u0qEIGhrOqb/JAOS5TCP9Z/03+k=
-X-Google-Smtp-Source: ABdhPJwhBPQW8nR3wEAa15FNYXz4RXwJe/uLMwSzicwlBhDaCcqZbRlqRotRljzPQyRxN+Y011+cMih1lwHW0CbLB9g=
-X-Received: by 2002:a25:cbd1:: with SMTP id b200mr14541385ybg.293.1600862819165;
- Wed, 23 Sep 2020 05:06:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANT5p=pxPsBwAv3oJX6Ae9wjpZoEjLvyfGM1sM9DEhS11RNgog@mail.gmail.com>
- <87pn7t4kr9.fsf@suse.com> <CANT5p=oeY91u17DPe6WO75Eq_bjzrVC0kmAErrZ=h3S1qh-Wxw@mail.gmail.com>
- <87eeo54q0i.fsf@suse.com> <CANT5p=rxp3iQMgxaM_mn3RE3B+zezWr3o8zpkFyWUR27CpeVCA@mail.gmail.com>
- <CANT5p=qMHxq_L5RpXAixzrQztjMr8-P_aO4aPg5uqfPSLNUiTA@mail.gmail.com>
- <874ko7vy0z.fsf@suse.com> <CANT5p=o07RqmMkcFoLeUVTeQHhzh5MmFYpfAdv0755iiGbp1ZA@mail.gmail.com>
- <87mu1yc6gw.fsf@suse.com>
-In-Reply-To: <87mu1yc6gw.fsf@suse.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Wed, 23 Sep 2020 17:36:48 +0530
-Message-ID: <CANT5p=r0Jix9EuuF8gJzQBGHLp0Y-Oogxzju7_2cJog_jF2fjg@mail.gmail.com>
-Subject: Re: [PATCH][SMB3] mount.cifs integration with PAM
-To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+        id S1726332AbgIWN4a (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 23 Sep 2020 09:56:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49048 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726156AbgIWN4a (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 23 Sep 2020 09:56:30 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600869388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zcoTu+a8alJcmTsZ5n6l439ICCBUt2mjAveOy+f3ihM=;
+        b=DUDcR/70gE7bx6AnHTCoWapt4VDDyIf7KvovT2tljCUYmfNPa5Qo7Lcp2al/FhJIny0jI5
+        7iXtsk1St7rY4X4kezkwE2MvZnWFjrYyPbQO3+VVDqxJmNkte0OD3sIP5BDSr9lyGR7R58
+        bHwQwll3mrwyW1qLnH7kZZz0ij0dkpU=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id DA6A4AC26;
+        Wed, 23 Sep 2020 13:57:05 +0000 (UTC)
+From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
+To:     Shyam Prasad N <nspmangalore@gmail.com>
 Cc:     CIFS <linux-cifs@vger.kernel.org>, samba-technical@lists.samba.org,
         Pavel Shilovsky <piastryyy@gmail.com>,
         Steve French <smfrench@gmail.com>, sribhat.msa@outlook.com
-Content-Type: multipart/mixed; boundary="000000000000abbf8c05aff9eb06"
+Subject: Re: [PATCH][SMB3] mount.cifs integration with PAM
+In-Reply-To: <CANT5p=r0Jix9EuuF8gJzQBGHLp0Y-Oogxzju7_2cJog_jF2fjg@mail.gmail.com>
+References: <CANT5p=pxPsBwAv3oJX6Ae9wjpZoEjLvyfGM1sM9DEhS11RNgog@mail.gmail.com>
+ <87pn7t4kr9.fsf@suse.com>
+ <CANT5p=oeY91u17DPe6WO75Eq_bjzrVC0kmAErrZ=h3S1qh-Wxw@mail.gmail.com>
+ <87eeo54q0i.fsf@suse.com>
+ <CANT5p=rxp3iQMgxaM_mn3RE3B+zezWr3o8zpkFyWUR27CpeVCA@mail.gmail.com>
+ <CANT5p=qMHxq_L5RpXAixzrQztjMr8-P_aO4aPg5uqfPSLNUiTA@mail.gmail.com>
+ <874ko7vy0z.fsf@suse.com>
+ <CANT5p=o07RqmMkcFoLeUVTeQHhzh5MmFYpfAdv0755iiGbp1ZA@mail.gmail.com>
+ <87mu1yc6gw.fsf@suse.com>
+ <CANT5p=r0Jix9EuuF8gJzQBGHLp0Y-Oogxzju7_2cJog_jF2fjg@mail.gmail.com>
+Date:   Wed, 23 Sep 2020 15:56:27 +0200
+Message-ID: <874knolhpw.fsf@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---000000000000abbf8c05aff9eb06
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Shyam Prasad N <nspmangalore@gmail.com> writes:
+> Also, I'll test this out with DFS once I figure out how to set it up. :)
+> Re-attaching the patch with some minor changes with just the
+> "force_pam" mount option.
 
-I tried to use this as a fallback option, but there's an issue. During
-the first mount attempt, cifs.upcall pushes the credentials lookup
-failure to the keyring. So on the next attempt, request_key() doesn't
-even call into the userspace, since there's already an entry there. So
-we'll probably have to call it under a new child process on the
-fallback attempt.
+You will need 2 Windows VM. DFS is basically symlinks across
+servers. The DFS root VM will host the links (standalone namespace) and
+you have to make them point to shares on the 2nd VM. You don't need to
+setup replication to test.
 
-@Aur=C3=A9lien Aptel Do you think that it is worth the effort? or should we
-just keep force_pam as a mount option?
-
-Also, I'll test this out with DFS once I figure out how to set it up. :)
-Re-attaching the patch with some minor changes with just the
-"force_pam" mount option.
-
-Regards,
-Shyam
-
-On Thu, Sep 10, 2020 at 3:13 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
-:
->
-> Shyam Prasad N <nspmangalore@gmail.com> writes:
-> > Your understanding is correct. We could also go for a hybrid approach,
-> > where we fallback to option b when option a fails to authenticate.
-> > But for now, I'll resubmit a patch with option a as a fallback when
-> > regular mount fails, just like you had suggested.
->
-> Please try DFS setups as well. On DFS links a sub-mount is made from the
-> kernel and mount.cifs is not called.
->
-> Cheers,
-> --
-> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
- DE
-> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
-=BCnchen)
+When you mount the root in cifs.ko and access a link, the server will
+reply that the file is remote. cifs.ko then does an FSCTL on the link to
+resolve the target it points to and then connects to the target and
+mounts it under the link seemlessly.
 
 
+Regarding the patch:
 
+* need to update the man page with option and explanation
+
+I have some comments with the style, I know it's annoying.. but it
+would be best to keep the same across the code.
+
+* use the existing indent style (tabs) and avoid adding trailing whitespace=
+s.
+* no () for return statements
+* no casting for memory allocation
+* if (X) free(X)  =3D> free(X)
+
+Below some comments about pam_auth_krb5_conv():
+
+> @@ -1809,6 +1824,119 @@ get_password(const char *prompt, char *input, int=
+ capacity)
+>  	return input;
+>  }
+>=20=20
+> +#ifdef HAVE_KRB5PAM
+> +#define PAM_CIFS_SERVICE "cifs"
+> +
+> +static int
+> +pam_auth_krb5_conv(int n, const struct pam_message **msg,
+> +    struct pam_response **resp, void *data)
+> +{
+> +    struct parsed_mount_info *parsed_info;
+> +	struct pam_response *reply;
+> +	int i;
+> +
+> +	*resp =3D NULL;
+> +
+> +    parsed_info =3D data;
+> +    if (parsed_info =3D=3D NULL)
+> +		return (PAM_CONV_ERR);
+> +	if (n <=3D 0 || n > PAM_MAX_NUM_MSG)
+> +		return (PAM_CONV_ERR);
+> +
+> +	if ((reply =3D calloc(n, sizeof(*reply))) =3D=3D NULL)
+> +		return (PAM_CONV_ERR);
+> +
+> +	for (i =3D 0; i < n; ++i) {
+> +		switch (msg[i]->msg_style) {
+> +		case PAM_PROMPT_ECHO_OFF:
+> +            if ((reply[i].resp =3D (char *) malloc(MOUNT_PASSWD_SIZE + 1=
+)) =3D=3D NULL)
+> +                goto fail;
+> +
+> +            if (parsed_info->got_password && parsed_info->password !=3D =
+NULL) {
+> +                strncpy(reply[i].resp, parsed_info->password, MOUNT_PASS=
+WD_SIZE + 1);
+> +            } else if (get_password(msg[i]->msg, reply[i].resp, MOUNT_PA=
+SSWD_SIZE + 1) =3D=3D NULL) {
+> +                goto fail;
+> +            }
+> +            reply[i].resp[MOUNT_PASSWD_SIZE] =3D '\0';
+> +
+> +			reply[i].resp_retcode =3D PAM_SUCCESS;
+> +			break;
+> +		case PAM_PROMPT_ECHO_ON:
+> +			fprintf(stderr, "%s: ", msg[i]->msg);
+> +            if ((reply[i].resp =3D (char *) malloc(MOUNT_PASSWD_SIZE + 1=
+)) =3D=3D NULL)
+> +                goto fail;
+> +
+> +			if (fgets(reply[i].resp, MOUNT_PASSWD_SIZE + 1, stdin) =3D=3D NULL)
+
+Do we need to remove the trailing \n from the buffer?
+
+> +                goto fail;
+> +
+> +            reply[i].resp[MOUNT_PASSWD_SIZE] =3D '\0';
+> +
+> +			reply[i].resp_retcode =3D PAM_SUCCESS;
+> +			break;
+> +		case PAM_ERROR_MSG:
+
+Shouldn't this PAM_ERROR_MSG case goto fail?
+
+> +		case PAM_TEXT_INFO:
+> +			fprintf(stderr, "%s: ", msg[i]->msg);
+> +
+> +			reply[i].resp_retcode =3D PAM_SUCCESS;
+> +			break;
+> +		default:
+> +			goto fail;
+> +		}
+> +	}
+> +	*resp =3D reply;
+> +	return (PAM_SUCCESS);
+> +
+> + fail:
+> +	for(i =3D 0; i < n; i++) {
+> +        if (reply[i].resp)
+> +            free(reply[i].resp);
+
+free(NULL) is a no-op, remove the checks.
+
+> +	}
+> +	free(reply);
+> +	return (PAM_CONV_ERR);
+> +}
+
+I gave this a try with a properly configured system joined to AD from
+local root account:
+
+aaptel$ ./configure
+...
+checking krb5.h usability... yes
+checking krb5.h presence... yes
+checking for krb5.h... yes
+checking krb5/krb5.h usability... yes
+checking krb5/krb5.h presence... yes
+checking for krb5/krb5.h... yes
+checking for keyvalue in krb5_keyblock... no
+...
+checking keyutils.h usability... yes
+checking keyutils.h presence... yes
+checking for keyutils.h... yes
+checking for krb5_init_context in -lkrb5... yes
+...
+checking for WBCLIENT... yes
+checking for wbcSidsToUnixIds in -lwbclient... yes
+...
+checking for keyutils.h... (cached) yes
+checking security/pam_appl.h usability... yes
+checking security/pam_appl.h presence... yes
+checking for security/pam_appl.h... yes
+checking for pam_start in -lpam... yes
+checking for security/pam_appl.h... (cached) yes
+checking for krb5_auth_con_getsendsubkey... yes
+checking for krb5_principal_get_realm... no
+checking for krb5_free_unparsed_name... yes
+checking for krb5_auth_con_setaddrs... yes
+checking for krb5_auth_con_set_req_cksumtype... yes
+...
+aaptel$ make
+....(ok)
+
+Without force_pam:
+
+root# ./mount.cifs -v //adnuc.nuc.test/data /x -o sec=3Dkrb5,username=3Dadm=
+inistrator,domain=3DNUC
+mount.cifs kernel mount options: ip=3D192.168.2.111,unc=3D\\adnuc.nuc.test\=
+data,sec=3Dkrb5,user=3Dadministrator,domain=3DNUC
+mount error(2): No such file or directory
+Refer to the mount.cifs(8) manual page (e.g. man mount.cifs) and kernel log=
+ messages (dmesg)
+
+With force_pam:
+
+root# ./mount.cifs -v //adnuc.nuc.test/data /x -o sec=3Dkrb5,username=3Dadm=
+inistrator,domain=3DNUC,force_pam
+Authenticating as user: administrator
+Error in authenticating user with PAM: Authentication failure
+Attempt to authenticate user with PAM unsuccessful. Still, proceeding with =
+mount.
+
+=3D> no further message but mount failed and no msg in dmesg, it didn't
+   reach the mount() call
+
+Not sure what is going on. Does the domain need to be passed to PAM?
+
+Cheers,
 --=20
--Shyam
-
---000000000000abbf8c05aff9eb06
-Content-Type: application/octet-stream; 
-	name="0001-mount.cifs-Have-an-option-to-authenticate-against-PA.patch"
-Content-Disposition: attachment; 
-	filename="0001-mount.cifs-Have-an-option-to-authenticate-against-PA.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kffc805l0>
-X-Attachment-Id: f_kffc805l0
-
-RnJvbSA2YWQ4MjlmMmUwZTNkMDM5MDU4MGQxYTJhMGJmNzRiN2Y4YTMyMWFhIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
-PgpEYXRlOiBUaHUsIDEzIEF1ZyAyMDIwIDA4OjUzOjA4IC0wNzAwClN1YmplY3Q6IFtQQVRDSF0g
-bW91bnQuY2lmczogSGF2ZSBhbiBvcHRpb24gdG8gYXV0aGVudGljYXRlIGFnYWluc3QgUEFNLgoK
-QXV0aGVudGljYXRpb24gYWdhaW5zdCBQQU0gaGFzIHR3byBiZW5lZml0czoKLSBUaGUgUEFNIG1v
-ZHVsZSAod2luYmluZCBvciBzc3NkKSB3aWxsIHBlcmZvcm0gdGhlIGhvdXNlLWtlZXBpbmcgb2YK
-dGhlIGtyYjUgdGlja2V0cyBhbmQgbWFrZSBzdXJlIHRoZXkgYXJlbid0IGV4cGlyZWQuCi0gVGhl
-IG1vdW50LmNpZnMgdXRpbGl0eSBuZWVkIG5vdCByZWx5IG9uIHNzaGQgb3Igc3UgdG8gYXV0aGVu
-dGljYXRlCmFnYWluc3QgUEFNIGFuZCBhcnJhbmdlIHRoZSBrcmI1IFRHVC4gSW4gY2FzZSBvZiBz
-c2ggd2l0aCBwcml2YXRlIGtleXMsCnNzaCBkb2Vzbid0IGludm9sdmUgUEFNLiBTbyBrcmI1IFRH
-VCBtYXkgYmUgbWlzc2luZy4KClRoaXMgaW50cm9kdWNlcyBhIG5ldyBQQU0gYXBwbGljYXRpb24g
-bmFtZWQgImNpZnMiLgpUaGUgdXNlciBtYXkgdXNlIHRoaXMgdG8gY3VzdG9taXplIHRoZSBQQU0g
-c3RhY2sgZm9yIGp1c3QgdGhpcyBhcHBsaWNhdGlvbi4KT3RoZXJ3aXNlLCB0aGUgZGVmYXVsdCBQ
-QU0gY29uZmlndXJhdGlvbiBpcyB1c2VkLgpBbHNvLCB0byBkaXNhYmxlIHRoaXMgZmVhdHVyZSBh
-dCB0aGUgdGltZSBvZiBidWlsZCwgb25lIGNhbiBydW4KY29uZmlndXJlIHdpdGggLS1lbmFibGUt
-a3JiNXBhbT1uby4KLS0tCiBNYWtlZmlsZS5hbSAgfCAgIDIgKy0KIGNvbmZpZ3VyZS5hYyB8ICAy
-NyArKysrKysrKysKIG1vdW50LmNpZnMuYyB8IDE1NyArKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKy0KIDMgZmlsZXMgY2hhbmdlZCwgMTgyIGluc2VydGlv
-bnMoKyksIDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvTWFrZWZpbGUuYW0gYi9NYWtlZmls
-ZS5hbQppbmRleCBmZTljZDM0Li41MWM1YzQ3IDEwMDY0NAotLS0gYS9NYWtlZmlsZS5hbQorKysg
-Yi9NYWtlZmlsZS5hbQpAQCAtNCw3ICs0LDcgQEAgQUNMT0NBTF9BTUZMQUdTID0gLUkgYWNsb2Nh
-bAogcm9vdF9zYmluZGlyID0gJChST09UU0JJTkRJUikKIHJvb3Rfc2Jpbl9QUk9HUkFNUyA9IG1v
-dW50LmNpZnMKIG1vdW50X2NpZnNfU09VUkNFUyA9IG1vdW50LmNpZnMuYyBtdGFiLmMgcmVzb2x2
-ZV9ob3N0LmMgdXRpbC5jCi1tb3VudF9jaWZzX0xEQUREID0gJChMSUJDQVApICQoQ0FQTkdfTERB
-REQpICQoUlRfTERBREQpCittb3VudF9jaWZzX0xEQUREID0gJChMSUJDQVApICQoTElCUEFNKSAk
-KENBUE5HX0xEQUREKSAkKFJUX0xEQUREKQogaW5jbHVkZV9IRUFERVJTID0gY2lmc2lkbWFwLmgK
-IHJzdF9tYW5fcGFnZXMgPSBtb3VudC5jaWZzLjgKIApkaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFj
-IGIvY29uZmlndXJlLmFjCmluZGV4IDIyZTc4ZWYuLmZhOGFmMGYgMTAwNjQ0Ci0tLSBhL2NvbmZp
-Z3VyZS5hYworKysgYi9jb25maWd1cmUuYWMKQEAgLTU1LDYgKzU1LDExIEBAIEFDX0FSR19FTkFC
-TEUocGFtLAogCWVuYWJsZV9wYW09JGVuYWJsZXZhbCwKIAllbmFibGVfcGFtPSJtYXliZSIpCiAK
-K0FDX0FSR19FTkFCTEUoa3JiNXBhbSwKKyAgICBbQVNfSEVMUF9TVFJJTkcoWy0tZW5hYmxlLWty
-YjVwYW1dLFtBZGQgUEFNIGF1dGhlbnRpY2F0aW9uIHN1cHBvcnQgd2hlbiB1c2luZyBzZWM9a3Ji
-NSBAPDpAZGVmYXVsdD15ZXNAXSldLCwKKyAgICBlbmFibGVfa3JiNXBhbT0kZW5hYmxldmFsCisg
-ICAgZW5hYmxlX2tyYjVwYW09InllcyIpCisKIEFDX0FSR19FTkFCTEUoc3lzdGVtZCwKIAlbQVNf
-SEVMUF9TVFJJTkcoWy0tZW5hYmxlLXN5c3RlbWRdLFtFbmFibGUgc3lzdGVtZCBzcGVjaWZpYyBi
-ZWhhdmlvciBmb3IgbW91bnQuY2lmcyBAPDpAZGVmYXVsdD15ZXNAOj5AXSldLAogCWVuYWJsZV9z
-eXN0ZW1kPSRlbmFibGV2YWwsCkBAIC0yNDEsNiArMjQ2LDI3IEBAIGlmIHRlc3QgJGVuYWJsZV9w
-YW0gIT0gIm5vIjsgdGhlbgogCQkJXSkKIGZpCiAKK2lmIHRlc3QgIngkZW5hYmxlX2tyYjVwYW0i
-ID0gInhubyI7IHRoZW4KKwllbmFibGVfa3JiNXBhbT0ibm8iCitlbHNlCisJQUNfQ0hFQ0tfTElC
-KFtwYW1dLCBbcGFtX3N0YXJ0XSwgZW5hYmxlX2tyYjVwYW09InllcyIsIGVuYWJsZV9rcmI1cGFt
-PSJubyIsICkKKwlBQ19DSEVDS19IRUFERVJTKFtzZWN1cml0eS9wYW1fYXBwbC5oXSwgLAorCQkJ
-IFsKKwkJCQlpZiB0ZXN0ICRlbmFibGVfa3JiNXBhbSA9ICJ5ZXMiOyB0aGVuCisJCQkJCUFDX01T
-R19FUlJPUihbc2VjdXJpdHkvcGFtX2FwcGwuaCBub3QgZm91bmQsIGNvbnNpZGVyIGluc3RhbGxp
-bmcga2V5dXRpbHMtbGlicy1kZXZlbC5dKQorCQkJCWVsc2UKKwkJCQkJQUNfTVNHX1dBUk4oW3Nl
-Y3VyaXR5L3BhbV9hcHBsLmggbm90IGZvdW5kLCBjb25zaWRlciBpbnN0YWxsaW5nIHBhbS1kZXZl
-bC4gRGlzYWJsaW5nIGNpZnNjcmVkcyBQQU0gbW9kdWxlLl0pCisJCQkJCWVuYWJsZV9rcmI1cGFt
-PSJubyIKKwkJCQlmaQorCQkJIF0pCitmaQorCitpZiB0ZXN0ICIkZW5hYmxlX2tyYjVwYW0iID0g
-InllcyI7IHRoZW4KKwlBQ19ERUZJTkUoW0hBVkVfS1JCNVBBTV0sWzFdLCBbRGVmaW5lIGlmIFBB
-TSBhdXRoIGlzIGVuYWJsZWQgZm9yIGtyYjVdKQorCUxJQlBBTT0tbHBhbQorCUFDX1NVQlNUKExJ
-QlBBTSkKK2ZpCisKICMgdWdseSwgYnV0IEknbSBub3Qgc3VyZSBob3cgdG8gY2hlY2sgZm9yIGZ1
-bmN0aW9ucyBpbiBhIGxpYnJhcnkgdGhhdCdzIG5vdCBpbiAkTElCUwogY3Vfc2F2ZWRfbGlicz0k
-TElCUwogTElCUz0iJExJQlMgJEtSQjVfTERBREQiCkBAIC0yODgsNiArMzE0LDcgQEAgQU1fQ09O
-RElUSU9OQUwoQ09ORklHX0NJRlNBQ0wsIFt0ZXN0ICIkZW5hYmxlX2NpZnNhY2wiICE9ICJubyJd
-KQogQU1fQ09ORElUSU9OQUwoQ09ORklHX1NNQklORk8sIFt0ZXN0ICIkZW5hYmxlX3NtYmluZm8i
-ICE9ICJubyJdKQogQU1fQ09ORElUSU9OQUwoQ09ORklHX1BZVEhPTl9UT09MUywgW3Rlc3QgIiRl
-bmFibGVfcHl0aG9udG9vbHMiICE9ICJubyJdKQogQU1fQ09ORElUSU9OQUwoQ09ORklHX1BBTSwg
-W3Rlc3QgIiRlbmFibGVfcGFtIiAhPSAibm8iXSkKK0FNX0NPTkRJVElPTkFMKENPTkZJR19LUkI1
-UEFNLCBbdGVzdCAiJGVuYWJsZV9rcmI1cGFtIiAhPSAibm8iXSkKIEFNX0NPTkRJVElPTkFMKENP
-TkZJR19QTFVHSU4sIFt0ZXN0ICIkZW5hYmxlX2NpZnNpZG1hcCIgIT0gIm5vIiAtbyAiJGVuYWJs
-ZV9jaWZzYWNsIiAhPSAibm8iXSkKIAogTElCQ0FQX05HX1BBVEgKZGlmZiAtLWdpdCBhL21vdW50
-LmNpZnMuYyBiL21vdW50LmNpZnMuYwppbmRleCA0ZmViMzk3Li40YTBkMDNmIDEwMDY0NAotLS0g
-YS9tb3VudC5jaWZzLmMKKysrIGIvbW91bnQuY2lmcy5jCkBAIC00Niw2ICs0Niw5IEBACiAjaW5j
-bHVkZSA8dGltZS5oPgogI2luY2x1ZGUgPHN5cy9tbWFuLmg+CiAjaW5jbHVkZSA8c3lzL3dhaXQu
-aD4KKyNpZmRlZiBIQVZFX0tSQjVQQU0KKyNpbmNsdWRlIDxzZWN1cml0eS9wYW1fYXBwbC5oPgor
-I2VuZGlmIC8qIEhBVkVfS1JCNVBBTSAqLwogI2lmZGVmIEhBVkVfU1lTX0ZTVUlEX0gKICNpbmNs
-dWRlIDxzeXMvZnN1aWQuaD4KICNlbmRpZiAvKiBIQVZFX1NZU19GU1VJRF9IICovCkBAIC0xNjMs
-NiArMTY2LDcgQEAKICNkZWZpbmUgT1BUX0JLVVBHSUQgICAgMzEKICNkZWZpbmUgT1BUX05PRkFJ
-TCAgICAgMzIKICNkZWZpbmUgT1BUX1NOQVBTSE9UICAgMzMKKyNkZWZpbmUgT1BUX0ZPUkNFX1BB
-TSAgMzQKIAogI2RlZmluZSBNTlRfVE1QX0ZJTEUgIi8ubXRhYi5jaWZzLlhYWFhYWCIKIApAQCAt
-MTg5LDYgKzE5Myw4IEBAIHN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyB7CiAJdW5zaWduZWQgaW50
-IHZlcmJvc2VmbGFnOjE7CiAJdW5zaWduZWQgaW50IG5vZmFpbDoxOwogCXVuc2lnbmVkIGludCBn
-b3RfZG9tYWluOjE7CisJdW5zaWduZWQgaW50IGlzX2tyYjU6MTsKKwl1bnNpZ25lZCBpbnQgZm9y
-Y2VfcGFtOjE7CiB9OwogCiBzdGF0aWMgY29uc3QgY2hhciAqdGhpc3Byb2dyYW07CkBAIC03MTMs
-NiArNzE5LDggQEAgc3RhdGljIGludCBwYXJzZV9vcHRfdG9rZW4oY29uc3QgY2hhciAqdG9rZW4p
-CiAJCXJldHVybiBPUFRfUEFTUzsKIAlpZiAoc3RyY21wKHRva2VuLCAic2VjIikgPT0gMCkKIAkJ
-cmV0dXJuIE9QVF9TRUM7CisJaWYgKHN0cmNtcCh0b2tlbiwgImZvcmNlX3BhbSIpID09IDApCisJ
-CXJldHVybiBPUFRfRk9SQ0VfUEFNOwogCWlmIChzdHJjbXAodG9rZW4sICJpcCIpID09IDAgfHwK
-IAkJc3RyY21wKHRva2VuLCAiYWRkciIpID09IDApCiAJCXJldHVybiBPUFRfSVA7CkBAIC04OTEs
-MTIgKzg5OSwxOSBAQCBwYXJzZV9vcHRpb25zKGNvbnN0IGNoYXIgKmRhdGEsIHN0cnVjdCBwYXJz
-ZWRfbW91bnRfaW5mbyAqcGFyc2VkX2luZm8pCiAKIAkJY2FzZSBPUFRfU0VDOgogCQkJaWYgKHZh
-bHVlKSB7Ci0JCQkJaWYgKCFzdHJuY21wKHZhbHVlLCAibm9uZSIsIDQpIHx8Ci0JCQkJICAgICFz
-dHJuY21wKHZhbHVlLCAia3JiNSIsIDQpKQorCQkJCWlmICghc3RybmNtcCh2YWx1ZSwgIm5vbmUi
-LCA0KSkKIAkJCQkJcGFyc2VkX2luZm8tPmdvdF9wYXNzd29yZCA9IDE7CisJCQkJaWYgKCFzdHJu
-Y21wKHZhbHVlLCAia3JiNSIsIDQpKQorCQkJCQlwYXJzZWRfaW5mby0+aXNfa3JiNSA9IDE7CiAJ
-CQl9CiAJCQlicmVhazsKIAorI2lmZGVmIEhBVkVfS1JCNVBBTQorCQljYXNlIE9QVF9GT1JDRV9Q
-QU06CisJCQlwYXJzZWRfaW5mby0+Zm9yY2VfcGFtID0gMTsKKwkJCWdvdG8gbm9jb3B5OworI2Vu
-ZGlmIC8qIEhBVkVfS1JCNVBBTSAqLworCQkJCiAJCWNhc2UgT1BUX0lQOgogCQkJaWYgKCF2YWx1
-ZSB8fCAhKnZhbHVlKSB7CiAJCQkJZnByaW50ZihzdGRlcnIsCkBAIC0xODA5LDYgKzE4MjQsMTE5
-IEBAIGdldF9wYXNzd29yZChjb25zdCBjaGFyICpwcm9tcHQsIGNoYXIgKmlucHV0LCBpbnQgY2Fw
-YWNpdHkpCiAJcmV0dXJuIGlucHV0OwogfQogCisjaWZkZWYgSEFWRV9LUkI1UEFNCisjZGVmaW5l
-IFBBTV9DSUZTX1NFUlZJQ0UgImNpZnMiCisKK3N0YXRpYyBpbnQKK3BhbV9hdXRoX2tyYjVfY29u
-dihpbnQgbiwgY29uc3Qgc3RydWN0IHBhbV9tZXNzYWdlICoqbXNnLAorICAgIHN0cnVjdCBwYW1f
-cmVzcG9uc2UgKipyZXNwLCB2b2lkICpkYXRhKQoreworICAgIHN0cnVjdCBwYXJzZWRfbW91bnRf
-aW5mbyAqcGFyc2VkX2luZm87CisJc3RydWN0IHBhbV9yZXNwb25zZSAqcmVwbHk7CisJaW50IGk7
-CisKKwkqcmVzcCA9IE5VTEw7CisKKyAgICBwYXJzZWRfaW5mbyA9IGRhdGE7CisgICAgaWYgKHBh
-cnNlZF9pbmZvID09IE5VTEwpCisJCXJldHVybiAoUEFNX0NPTlZfRVJSKTsKKworCWlmIChuIDw9
-IDAgfHwgbiA+IFBBTV9NQVhfTlVNX01TRykKKwkJcmV0dXJuIChQQU1fQ09OVl9FUlIpOworCisJ
-aWYgKChyZXBseSA9IGNhbGxvYyhuLCBzaXplb2YoKnJlcGx5KSkpID09IE5VTEwpCisJCXJldHVy
-biAoUEFNX0NPTlZfRVJSKTsKKworCWZvciAoaSA9IDA7IGkgPCBuOyArK2kpIHsKKwkJc3dpdGNo
-IChtc2dbaV0tPm1zZ19zdHlsZSkgeworCQljYXNlIFBBTV9QUk9NUFRfRUNIT19PRkY6CisgICAg
-ICAgICAgICBpZiAoKHJlcGx5W2ldLnJlc3AgPSAoY2hhciAqKSBtYWxsb2MoTU9VTlRfUEFTU1dE
-X1NJWkUgKyAxKSkgPT0gTlVMTCkKKyAgICAgICAgICAgICAgICBnb3RvIGZhaWw7CisKKyAgICAg
-ICAgICAgIGlmIChwYXJzZWRfaW5mby0+Z290X3Bhc3N3b3JkICYmIHBhcnNlZF9pbmZvLT5wYXNz
-d29yZCAhPSBOVUxMKSB7CisgICAgICAgICAgICAgICAgc3RybmNweShyZXBseVtpXS5yZXNwLCBw
-YXJzZWRfaW5mby0+cGFzc3dvcmQsIE1PVU5UX1BBU1NXRF9TSVpFICsgMSk7CisgICAgICAgICAg
-ICB9IGVsc2UgaWYgKGdldF9wYXNzd29yZChtc2dbaV0tPm1zZywgcmVwbHlbaV0ucmVzcCwgTU9V
-TlRfUEFTU1dEX1NJWkUgKyAxKSA9PSBOVUxMKSB7CisgICAgICAgICAgICAgICAgZ290byBmYWls
-OworICAgICAgICAgICAgfQorICAgICAgICAgICAgcmVwbHlbaV0ucmVzcFtNT1VOVF9QQVNTV0Rf
-U0laRV0gPSAnXDAnOworCisJCQlyZXBseVtpXS5yZXNwX3JldGNvZGUgPSBQQU1fU1VDQ0VTUzsK
-KwkJCWJyZWFrOworCQljYXNlIFBBTV9QUk9NUFRfRUNIT19PTjoKKwkJCWZwcmludGYoc3RkZXJy
-LCAiJXM6ICIsIG1zZ1tpXS0+bXNnKTsKKyAgICAgICAgICAgIGlmICgocmVwbHlbaV0ucmVzcCA9
-IChjaGFyICopIG1hbGxvYyhNT1VOVF9QQVNTV0RfU0laRSArIDEpKSA9PSBOVUxMKQorICAgICAg
-ICAgICAgICAgIGdvdG8gZmFpbDsKKworCQkJaWYgKGZnZXRzKHJlcGx5W2ldLnJlc3AsIE1PVU5U
-X1BBU1NXRF9TSVpFICsgMSwgc3RkaW4pID09IE5VTEwpCisgICAgICAgICAgICAgICAgZ290byBm
-YWlsOworCisgICAgICAgICAgICByZXBseVtpXS5yZXNwW01PVU5UX1BBU1NXRF9TSVpFXSA9ICdc
-MCc7CisKKwkJCXJlcGx5W2ldLnJlc3BfcmV0Y29kZSA9IFBBTV9TVUNDRVNTOworCQkJYnJlYWs7
-CisJCWNhc2UgUEFNX0VSUk9SX01TRzoKKwkJY2FzZSBQQU1fVEVYVF9JTkZPOgorCQkJZnByaW50
-ZihzdGRlcnIsICIlczogIiwgbXNnW2ldLT5tc2cpOworCisJCQlyZXBseVtpXS5yZXNwX3JldGNv
-ZGUgPSBQQU1fU1VDQ0VTUzsKKwkJCWJyZWFrOworCQlkZWZhdWx0OgorCQkJZ290byBmYWlsOwor
-CQl9CisJfQorCSpyZXNwID0gcmVwbHk7CisJcmV0dXJuIChQQU1fU1VDQ0VTUyk7CisKKyBmYWls
-OgorCWZvcihpID0gMDsgaSA8IG47IGkrKykgeworICAgICAgICBpZiAocmVwbHlbaV0ucmVzcCkK
-KyAgICAgICAgICAgIGZyZWUocmVwbHlbaV0ucmVzcCk7CisJfQorCWZyZWUocmVwbHkpOworCXJl
-dHVybiAoUEFNX0NPTlZfRVJSKTsKK30KKworc3RhdGljIGludCAKK3BhbV9hdXRoX2tyYjVfdXNl
-cihzdHJ1Y3QgcGFyc2VkX21vdW50X2luZm8gKnBhcnNlZF9pbmZvKQoreworICAgIGludCByYyA9
-IC0xOworICAgIHBhbV9oYW5kbGVfdCAqcGFtaCA9IE5VTEw7CisgICAgc3RydWN0IHBhbV9jb252
-IHBhbV9jb252ID0geworICAgICAgICAuY29udiA9IHBhbV9hdXRoX2tyYjVfY29udiwKKyAgICAg
-ICAgLmFwcGRhdGFfcHRyID0gKHZvaWQgKikgcGFyc2VkX2luZm8KKyAgICB9OworICAgIAorICAg
-IGZwcmludGYoc3Rkb3V0LCAiQXV0aGVudGljYXRpbmcgYXMgdXNlcjogJXNcbiIsIHBhcnNlZF9p
-bmZvLT51c2VybmFtZSk7CisgICAgcmMgPSBwYW1fc3RhcnQoUEFNX0NJRlNfU0VSVklDRSwgcGFy
-c2VkX2luZm8tPnVzZXJuYW1lLCAmcGFtX2NvbnYsICZwYW1oKTsKKyAgICBpZiAocmMgIT0gUEFN
-X1NVQ0NFU1MpIHsKKyAgICAgICAgZnByaW50ZihzdGRlcnIsICJFcnJvciBzdGFydGluZyBQQU0g
-dHJhbnNhY3Rpb246ICVzXG4iLCBwYW1fc3RyZXJyb3IocGFtaCwgcmMpKTsKKyAgICAgICAgcmV0
-dXJuIHJjOworICAgIH0KKworICAgIHJjID0gcGFtX2F1dGhlbnRpY2F0ZShwYW1oLCAwKTsKKyAg
-ICBpZiAocmMgIT0gUEFNX1NVQ0NFU1MpIHsKKyAgICAgICAgZnByaW50ZihzdGRlcnIsICJFcnJv
-ciBpbiBhdXRoZW50aWNhdGluZyB1c2VyIHdpdGggUEFNOiAlc1xuIiwgcGFtX3N0cmVycm9yKHBh
-bWgsIHJjKSk7CisgICAgICAgIGdvdG8gZW5kOworICAgIH0KKworICAgIHJjID0gcGFtX2FjY3Rf
-bWdtdChwYW1oLCAwKTsKKyAgICBpZiAocmMgIT0gUEFNX1NVQ0NFU1MpIHsKKyAgICAgICAgZnBy
-aW50ZihzdGRlcnIsICJVc2VyIGFjY291bnQgaW52YWxpZDogJXNcbiIsIHBhbV9zdHJlcnJvcihw
-YW1oLCByYykpOworICAgICAgICBnb3RvIGVuZDsKKyAgICB9CisKKyAgICByYyA9IHBhbV9zZXRj
-cmVkKHBhbWgsIFBBTV9FU1RBQkxJU0hfQ1JFRCk7CisgICAgaWYgKHJjICE9IFBBTV9TVUNDRVNT
-KSB7CisgICAgICAgIGZwcmludGYoc3RkZXJyLCAiRXJyb3IgaW4gc2V0dGluZyBQQU0gY3JlZGVu
-dGlhbHM6ICVzXG4iLCBwYW1fc3RyZXJyb3IocGFtaCwgcmMpKTsKKyAgICAgICAgZ290byBlbmQ7
-CisgICAgfQorCitlbmQ6CisgICAgcGFtX2VuZChwYW1oLCByYyk7CisgICAgcmV0dXJuIHJjOwor
-fQorI2VuZGlmIC8qIEhBVkVfS1JCNVBBTSAqLworCiBzdGF0aWMgaW50CiBhc3NlbWJsZV9tb3Vu
-dGluZm8oc3RydWN0IHBhcnNlZF9tb3VudF9pbmZvICpwYXJzZWRfaW5mbywKIAkJICAgY29uc3Qg
-Y2hhciAqdGhpc3Byb2dyYW0sIGNvbnN0IGNoYXIgKm1vdW50cG9pbnQsCkBAIC0xODkxLDcgKzIw
-MTksMzAgQEAgYXNzZW1ibGVfbW91bnRpbmZvKHN0cnVjdCBwYXJzZWRfbW91bnRfaW5mbyAqcGFy
-c2VkX2luZm8sCiAJCXBhcnNlZF9pbmZvLT5nb3RfdXNlciA9IDE7CiAJfQogCi0JaWYgKCFwYXJz
-ZWRfaW5mby0+Z290X3Bhc3N3b3JkKSB7CisjaWZkZWYgSEFWRV9LUkI1UEFNCisJaWYgKHBhcnNl
-ZF9pbmZvLT5pc19rcmI1ICYmIHBhcnNlZF9pbmZvLT5mb3JjZV9wYW0pIHsKKwkJLyogCisJCSAq
-IEF0dGVtcHQgdG8gYXV0aGVudGljYXRlIHdpdGggUEFNLiAKKwkJICogSWYgUEFNIGlzIGNvbmZp
-Z3VyZWQgcHJvcGVybHksIGxldCBpdCBnZXQgdGhlIGtyYjUgdGlja2V0cyBuZWNlc3NhcnkgZm9y
-IHRoZSBtb3VudC4KKwkJICogRXZlbiBpZiB0aGlzIGZhaWxzLCBpdCBjb3VsZCBiZSB0aGUgY2Fz
-ZSBvZiBQQU0gbm90IGNvbmZpZ3VyZWQgcHJvcGVybHkuIAorCQkgKiBJbiB0aGF0IGNhc2UsIHJl
-dGFpbiB0aGUgY3VycmVudCBiZWhhdmlvci4gU28gdGhpcyBpcyBqdXN0IGEgYmVzdC1lZmZvcnQu
-CisJCSAqLworCQlyYyA9IHBhbV9hdXRoX2tyYjVfdXNlcihwYXJzZWRfaW5mbyk7CisJCWlmIChy
-YykgeworCQkJZnByaW50ZihzdGRlcnIsICJBdHRlbXB0IHRvIGF1dGhlbnRpY2F0ZSB1c2VyIHdp
-dGggIiBcCisJCQkJCSJQQU0gdW5zdWNjZXNzZnVsLiBTdGlsbCwgcHJvY2VlZGluZyB3aXRoIG1v
-dW50LlxuIik7CisgICAgICAgICAgICAvKgorICAgICAgICAgICAgICogRXZlbiBpZiB0aGlzIGlz
-IGEgZmFpbHVyZSwgZmFsbHRocm91Z2ggYW5kIHNlZSBpZiBjaWZzLmtvIGNhbiBzdGlsbCAKKyAg
-ICAgICAgICAgICAqIGF1dGhlbnRpY2F0ZSB0aGUgdXNlci4KKyAgICAgICAgICAgICAqLworCQl9
-CisKKwkJcGFyc2VkX2luZm8tPmdvdF9wYXNzd29yZCA9IDE7CisJfQorI2VuZGlmIC8qIEhBVkVf
-S1JCNVBBTSAqLworCisJLyogSWYgc2VjPWtyYjUsIHRoZW4gcGFzc3dvcmQgaXMgY29sbGVjdGVk
-IGJ5IG90aGVyIG1lYW5zICovCisJaWYgKCFwYXJzZWRfaW5mby0+aXNfa3JiNSAmJiAhcGFyc2Vk
-X2luZm8tPmdvdF9wYXNzd29yZCkgewogCQljaGFyIHRtcF9wYXNzW01PVU5UX1BBU1NXRF9TSVpF
-ICsgMV07CiAJCWNoYXIgKnByb21wdCA9IE5VTEw7CiAKLS0gCjIuMjUuMQoK
---000000000000abbf8c05aff9eb06--
+Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, DE
+GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=BC=
+nchen)
