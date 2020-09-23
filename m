@@ -2,49 +2,72 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EA527536B
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 10:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01BC275506
+	for <lists+linux-cifs@lfdr.de>; Wed, 23 Sep 2020 12:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgIWIkR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 23 Sep 2020 04:40:17 -0400
-Received: from one2.ekof.bg.ac.rs ([147.91.245.208]:41338 "EHLO
-        one2.ekof.bg.ac.rs" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgIWIkR (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 23 Sep 2020 04:40:17 -0400
-X-Greylist: delayed 8805 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 04:40:16 EDT
-Received: from one2.ekof.bg.ac.rs (localhost [127.0.0.1])
-        by one2.ekof.bg.ac.rs (Postfix) with ESMTPS id 89F36D10337;
-        Wed, 23 Sep 2020 02:59:19 +0200 (CEST)
+        id S1726314AbgIWKDc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 23 Sep 2020 06:03:32 -0400
+Received: from hermes.cta.br ([161.24.235.5]:58092 "EHLO hermes.cta.br"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726130AbgIWKDb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 23 Sep 2020 06:03:31 -0400
+X-Greylist: delayed 9333 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 06:03:30 EDT
 Received: from localhost (localhost [127.0.0.1])
-        by one2.ekof.bg.ac.rs (Postfix) with ESMTP id 1F570DAE48B;
-        Wed, 23 Sep 2020 02:21:59 +0200 (CEST)
-Received: from one2.ekof.bg.ac.rs ([127.0.0.1])
-        by localhost (one2.ekof.bg.ac.rs [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eWPTf_itckQi; Wed, 23 Sep 2020 02:21:58 +0200 (CEST)
-Received: from [172.20.10.4] (unknown [129.205.124.102])
-        by one2.ekof.bg.ac.rs (Postfix) with ESMTPSA id 5A426C92666;
-        Wed, 23 Sep 2020 01:09:52 +0200 (CEST)
+        by hermes.cta.br (Postfix) with ESMTP id 3DD4116E8C20;
+        Wed, 23 Sep 2020 03:22:29 -0300 (-03)
+Received: from hermes.cta.br ([127.0.0.1])
+        by localhost (hermes.cta.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id j2r3RCe3JZ_p; Wed, 23 Sep 2020 03:22:28 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by hermes.cta.br (Postfix) with ESMTP id 8303016E6950;
+        Wed, 23 Sep 2020 01:57:30 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 hermes.cta.br 8303016E6950
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cta.br;
+        s=50824260-A46F-11E8-B5E3-16F5207DEC71; t=1600837050;
+        bh=PEgy+RpcsckcVXxslQn6d+tc//P81+6V7lvSU9dRFp0=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=yYKQtKGH6SAmJx/AZti4REy1zl47wn4U2T/cwHljUxSVMSVBwNFXUDdWa1KmUso/o
+         hLDP/nB8hGNjLyHYlM3LGubCvXuQLcAQINOSs3ZBeaIqRLRXnVzj8fs5h3wiinDsWA
+         G9Af0hZm2yvlZTVv8tjlWoR2tHbH+n9/pAHY2hXEM1KMZrWv1ik/M65Q6zZVJpj5pF
+         o6Lhk5BHdxtw6zyh3M3bQch/T2pnCTzuHFtswRtwxhlXk5kNR/EtP44CPLOm2ZKuyD
+         UQTrBYZJ9dHbR0h+l6rMeX3askNqs3MGeOO09nQ568Tio1gkWmDgimpeqEnxcc6Vwo
+         MWKpW2WTIKkEw==
+X-Virus-Scanned: amavisd-new at cta.br
+Received: from hermes.cta.br ([127.0.0.1])
+        by localhost (hermes.cta.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id iLrbAnVoNRBd; Wed, 23 Sep 2020 01:57:30 -0300 (-03)
+Received: from [10.120.212.214] (unknown [105.12.3.179])
+        by hermes.cta.br (Postfix) with ESMTPSA id 8CF811548A43;
+        Wed, 23 Sep 2020 01:27:33 -0300 (-03)
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Content-Description: Mail message body
-Subject: Re: For You!!!
-To:     Recipients <info@foundation.org>
-From:   info@foundation.org
-Date:   Tue, 22 Sep 2020 16:09:53 -0700
-Reply-To: premjihfoundation@gmail.com
-Message-Id: <20200922230953.5A426C92666@one2.ekof.bg.ac.rs>
+Subject: spende von 2,000,000 euro
+To:     Recipients <scco@cta.br>
+From:   ''Tayeb souami'' <scco@cta.br>
+Date:   Wed, 23 Sep 2020 06:29:53 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200923042734.8CF811548A43@hermes.cta.br>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello,
+Hallo mein lieber Freund
+                                  Mein Name ist Tayeb Souami aus New Jersey=
+ in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro=
+ gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an f=FC=
+nf gl=FCckliche Personen zu spenden, und Sie wurden als einer der Beg=FCnst=
+igten ausgew=E4hlt. Bitte klicken Sie auf diesen Link, um mehr =FCber meine=
+n Gewinn zu erfahren.
 
-I'm Azim Hashim Premji, an Indian business tycoon, investor, and philanthropist. I'm the chairman of Wipro Limited. I gave away 25 per cent of my personal wealth to charity. And I also pledged to give away the rest of 25% this year 2020. I have decided to donate $500,000 to you. If you are interested in my donation, do contact me for more info.
-You can also read more about me via the link below
 
-http://en.wikipedia.org/wiki/A zim_Premji
-Thank You
-CEO Wipro Limited
-Azim Hashim Premji
-Email: premjihfoundation@gmail.com
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
+
+Bitte kontaktieren Sie mich =FCber diese E-Mail: Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=FCcklich zu machen.
+
+Gr=FC=DFe
+Herr Tayeb Souami
