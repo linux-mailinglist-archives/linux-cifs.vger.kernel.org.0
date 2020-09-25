@@ -2,88 +2,124 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FEB277A3E
-	for <lists+linux-cifs@lfdr.de>; Thu, 24 Sep 2020 22:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C53277DA7
+	for <lists+linux-cifs@lfdr.de>; Fri, 25 Sep 2020 03:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgIXU34 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 24 Sep 2020 16:29:56 -0400
-Received: from [125.140.134.231] ([125.140.134.231]:59260 "EHLO
-        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726281AbgIXU34 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 24 Sep 2020 16:29:56 -0400
-Received: from User ([185.191.231.247]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
-         Fri, 25 Sep 2020 05:26:34 +0900
-Reply-To: <samthong5555@yahoo.com>
-From:   "SAM THONG" <samthong5555@gmail.com>
-Subject: Business Acquisition 1
-Date:   Thu, 24 Sep 2020 13:26:34 -0700
+        id S1726730AbgIYBcG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 24 Sep 2020 21:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726704AbgIYBcF (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 24 Sep 2020 21:32:05 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA49C0613CE
+        for <linux-cifs@vger.kernel.org>; Thu, 24 Sep 2020 18:32:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ByDss4hjkz9sSJ;
+        Fri, 25 Sep 2020 11:32:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=meltin.net; s=202004;
+        t=1600997521; bh=B1gDqm6X860KDYsF37E54Nv4HdBvz+r/6OIzO1w3HSM=;
+        h=Date:From:To:Subject:From;
+        b=DhZ5MdTsC8T+ovxkKQs7I+MY4yP74Qn5pMh8REFkmu7SonfgzuZ7j0dYUExYoJhbB
+         lLyJ10JyXBNEfG7xaYlptSFYMsZGREn99hUkNWb5WxblElzkU5/DCmzHHq7PtvNcAK
+         duku/0MkqBOclo6cGEHnkw0/m1doUE86LQhz1fCbSX7DOIASqINffOvmOhnlsDInRa
+         8CSofsp+aAhVQRCdjKN+9n7XMvJoQoZKPnQ3HDhw5FNIVMIqGCRTKnu8bmOv57V2gs
+         UoiS8m77vpAaNmt2QAyGrIdpv+nwkfPNs6HnAs7klwTg+efGuVac/9kvxmakrKYVDB
+         GaEZOvcw0qElQ==
+Date:   Fri, 25 Sep 2020 11:32:00 +1000
+From:   Martin Schwenke <martin@meltin.net>
+To:     linux-cifs@vger.kernel.org
+Subject: [PATCH] mount.cifs: ignore comment mount option
+Message-ID: <20200925113200.371db298@martins.ozlabs.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <WIN-DAONO245HJFc4tf00e70a05@WIN-DAONO245HJF>
-X-OriginalArrivalTime: 24 Sep 2020 20:26:34.0476 (UTC) FILETIME=[FF0A1AC0:01D692B0]
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/mixed; boundary="MP_/zYa2VsE/VS43kWB_AshZQU1"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+--MP_/zYa2VsE/VS43kWB_AshZQU1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+mount.cifs currently complains about the "comment" option:
+
+  CIFS: Unknown mount option "comment=foo"
+
+mount(8) on Linux says:
+
+  The command mount does not pass the mount options unbindable,
+  runbindable, private, rprivate, slave, rslave, shared, rshared,
+  auto, noauto, comment, x-*, loop, offset and sizelimit to the
+  mount.<suffix> helpers.
+
+So if mount.cifs decides to re-read /etc/fstab it should ignore the
+comment option.
+
+A lot of online posts say to use comment=x-gvfs-show as an option to
+have a Linux file manager display a mountpoint for a user mountable
+filesystem.  While the "comment=" part is superfluous when combined
+with an x-* option, the problem is still difficult to debug.
+
+Patch attached...
+
+peace & happiness,
+martin
+
+--MP_/zYa2VsE/VS43kWB_AshZQU1
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=0001-mount.cifs-ignore-comment-mount-option.patch
+
+From 97a071f7f1bf5274c027ee92fc0f6ca629ecdd65 Mon Sep 17 00:00:00 2001
+From: Martin Schwenke <martin@meltin.net>
+Date: Fri, 25 Sep 2020 11:16:39 +1000
+Subject: [PATCH] mount.cifs: ignore comment mount option
+
+mount.cifs currently complains about the "comment" option:
+
+  CIFS: Unknown mount option "comment=foo"
+
+mount(8) on Linux says:
+
+  The command mount does not pass the mount options unbindable,
+  runbindable, private, rprivate, slave, rslave, shared, rshared,
+  auto, noauto, comment, x-*, loop, offset and sizelimit to the
+  mount.<suffix> helpers.
+
+So if mount.cifs decides to re-read /etc/fstab it should ignore the
+comment option.
+
+A lot of online posts say to use comment=x-gvfs-show as an option to
+have a Linux file manager display a mountpoint for a user mountable
+filesystem.  While the "comment=" part is superfluous when combined
+with an x-* option, the problem is still difficult to debug.
+
+Signed-off-by: Martin Schwenke <martin@meltin.net>
+---
+ mount.cifs.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mount.cifs.c b/mount.cifs.c
+index 4feb397..5d43c00 100644
+--- a/mount.cifs.c
++++ b/mount.cifs.c
+@@ -777,6 +777,8 @@ static int parse_opt_token(const char *token)
+ 		return OPT_BKUPGID;
+ 	if (strcmp(token, "nofail") == 0)
+ 		return OPT_NOFAIL;
++	if (strcmp(token, "comment") == 0)
++		return OPT_IGNORE;
+ 	if (strncmp(token, "x-", 2) == 0)
+ 		return OPT_IGNORE;
+ 	if (strncmp(token, "snapshot", 8) == 0)
+-- 
+2.28.0
 
 
-Dear sir
-
-Our underwriter company is seeking the attention of genuine and reliable persons, companies
-
-who are indeed in need of funds as investment capital or business expansion in form of a
-
-direct loan to partner with us and benefit in our new Loan and Project funding programs.
-
-
-
-We offer flexible loans and funding for various projects at very affordable low interest
-
-rate of 3% annually for a period of 1-15 years on Non collateral loan/funding . We offer
-
-loan/funding from a minimum of Euro ? / USD$ 1 Million to Euro ? / USD$ 1 Billion. Max,
-
-depending on the nature of business/project.
-
-We are currently funding for:-
-
-
-
-* Starting up a Franchise
-
-* Business Acquisition
-
-* Business Expansion
-
-* Commercial Real Estate purchase
-
-* Consultancy and Contract Execution, Marine , ETC.
-
-
-
-Kindly get in touch for further details and procedure. samthong5555@yahoo.com 
-
-
-
-Respectfully,
-
-
-SAM THONG
-
-
-
-
-
-
-
-	
-
-
-
+--MP_/zYa2VsE/VS43kWB_AshZQU1--
