@@ -2,71 +2,89 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1783427D480
-	for <lists+linux-cifs@lfdr.de>; Tue, 29 Sep 2020 19:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227F327D4C7
+	for <lists+linux-cifs@lfdr.de>; Tue, 29 Sep 2020 19:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728959AbgI2Ra2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 29 Sep 2020 13:30:28 -0400
-Received: from p3plsmtpa11-02.prod.phx3.secureserver.net ([68.178.252.103]:56026
-        "EHLO p3plsmtpa11-02.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728205AbgI2Ra1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 29 Sep 2020 13:30:27 -0400
-X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Sep 2020 13:30:27 EDT
-Received: from [192.168.0.117] ([71.184.94.153])
-        by :SMTPAUTH: with ESMTPSA
-        id NJLIkbl8Tff3BNJLIkJ8Ws; Tue, 29 Sep 2020 10:23:09 -0700
-X-CMAE-Analysis: v=2.3 cv=JL9FTPCb c=1 sm=1 tr=0
- a=vbvdVb1zh1xTTaY8rfQfKQ==:117 a=vbvdVb1zh1xTTaY8rfQfKQ==:17
- a=IkcTkHD0fZMA:10 a=vggBfdFIAAAA:8 a=VwQbUJbxAAAA:8 a=hGzw-44bAAAA:8
- a=4OsUFv_FbRoPP-9s6jYA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=HvKuF1_PTVFglORKqfwH:22
-X-SECURESERVER-ACCT: tom@talpey.com
-Subject: Re: Fwd: [PATCH] Convert trailing spaces and periods in path
- components
-To:     Boris Protopopov <boris.v.protopopov@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-References: <20200924003638.2668-1-pboris@amazon.com>
- <CAHhKpQ4UFhtfRhByRiAm6KPy=KAzttYzZADLfakbMwpsp5GjpA@mail.gmail.com>
-From:   Tom Talpey <tom@talpey.com>
-Message-ID: <9f6ee329-b91b-9d43-a787-0450a2c8143d@talpey.com>
-Date:   Tue, 29 Sep 2020 13:23:08 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728386AbgI2RqJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 29 Sep 2020 13:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728302AbgI2RqJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 29 Sep 2020 13:46:09 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE9C061755
+        for <linux-cifs@vger.kernel.org>; Tue, 29 Sep 2020 10:46:09 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id x8so4229616ybe.12
+        for <linux-cifs@vger.kernel.org>; Tue, 29 Sep 2020 10:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6o8exDLzqy3QxVkizQuPaks8jxk7r3Sn0M6HAav+s3M=;
+        b=PLIQE3S3WcFVZ5DfYGgHWwTUo0rKfo/BuM1m9C4jwoJykTQSwrasSKzFSxr03ImouB
+         FQKL5kKK/MBsz6IEx5Ym//1x0gqT5yB4sTNOQ4DSaAZq8j/kjiRyirRSUzqja6pn8aZL
+         DWKkCsHmaeyG7BAvKy1Z179uv4O6aHibeEZ4JdJIeVEA1jUs7ne/alMbFP8/Xm6izSBL
+         Ll1HvXQpGUFtXeK7J2ZuQ384TTejpUvt+RFLO3bBjQST0GZT03MtyACLdto2idi9HXv0
+         Vnm6Iwxkrl00aU64Rny7+5Gf0PhtfJqz4/O4iL+lPEiEFXNJI5EWhBLXyuBjwEEs04O/
+         MvDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6o8exDLzqy3QxVkizQuPaks8jxk7r3Sn0M6HAav+s3M=;
+        b=JuxUyxi2TfrMPuHbEv2zfGGZ3Z/QZmgNnCeJgf4fCemBWkka6Ja0LrNAoDhFf5A6PZ
+         YV973DWI7GpZAhm3UHHXub/NcC1dKggs7MfHkpoHGO0CMkp7iu5DAbjouwUy5oTlbV5V
+         NaUHub60Y2II5lBHNxRqWUqjcNcprrvcnwDvjqFmshlQIO2f8r+EHLHPU1RX+4GcCnJi
+         mjJL4pwHY6+oreSpbVH8VepzKavGBGbiUw8S0j9kj1rAx7YsMx0Rquu59TBtpJUpLTGw
+         KCxab6W0zIHR7mMfOVXcA+9BLe2HoLyYB8uPZ6QQxbFzMJB5VZA3OZAmwh18xrz0A6I5
+         NreA==
+X-Gm-Message-State: AOAM531n8fSJBuKp5TIpZFSoFwhlTbckNzkv+RyPIdUfTxLg895p2edS
+        VQzA8tarfVHJmS6X0maxXmcEgesxsBnlS20rsobP/p1Jn/c3Hg==
+X-Google-Smtp-Source: ABdhPJwZN//W8LT7yvBPSgFaloyGossGzc7oD3VsWC0FYjyKBKdwBJ7aVbQ9x4lWTpNgGomm5W2I0e3bE0v0r0nO4K0=
+X-Received: by 2002:a25:918b:: with SMTP id w11mr8217655ybl.376.1601401568416;
+ Tue, 29 Sep 2020 10:46:08 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200924003638.2668-1-pboris@amazon.com> <CAHhKpQ4UFhtfRhByRiAm6KPy=KAzttYzZADLfakbMwpsp5GjpA@mail.gmail.com>
 In-Reply-To: <CAHhKpQ4UFhtfRhByRiAm6KPy=KAzttYzZADLfakbMwpsp5GjpA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfA8VYISm6+QuhnsyfPxelmv+j34UTbruYIHx23a7pTHRi+J1aJJ/3fECa3XdrOrykdrJvg6xo5JKLx/4ss498JYX8nZflFIS6IQeiArA9rVmhgnRJp8U
- mxVS5fMnztBoQSXAIv6OOlObLTjhkGGRV9AqHwnRU3wfXTBOZ/feup2dJNpbCYoA4vTyS7IWIpqUpBudPRLVx+1Mq5k4VOun5RVEJJFrSKUg2tODK/BZ+POR
- pa+NGr7IqKP2Yp3qhgMRPg==
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 29 Sep 2020 12:45:57 -0500
+Message-ID: <CAH2r5mvWZSPjtg1g2FhZ+gZNpakdaFnugw=FhFV92Ed83VzAuQ@mail.gmail.com>
+Subject: Re: [PATCH] Convert trailing spaces and periods in path components
+To:     Boris Protopopov <boris.v.protopopov@gmail.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-What was the server for these tests?
+tentatively merged ... running the usual functional tests
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/bui=
+lds/399
 
-On 9/29/2020 1:08 PM, Boris Protopopov wrote:
+On Tue, Sep 29, 2020 at 12:08 PM Boris Protopopov
+<boris.v.protopopov@gmail.com> wrote:
+>
 > Testing:
-> 
+>
 > Prior to the patch:
-> 
+>
 > % mount -v
-> …
-> //host/share/home on /tmp/diry type cifs (rw,relatime,vers=default,...
+> =E2=80=A6
+> //host/share/home on /tmp/diry type cifs (rw,relatime,vers=3Ddefault,...
 > % ls -l /tmp/diry/tmp
 > total 0
 > % mkdir /tmp/diry/tmp/DirWithTrailingDot.
 > % ls -l  /tmp/diry/tmp/DirWithTrailingDot.
 > total 0
 > % touch  /tmp/diry/tmp/DirWithTrailingDot./file
-> touch: cannot touch ‘/tmp/diry/tmp/DirWithTrailingDot./file’: No such
+> touch: cannot touch =E2=80=98/tmp/diry/tmp/DirWithTrailingDot./file=E2=80=
+=99: No such
 > file or directory
 > % mkdir  /tmp/diry/tmp/DirWithTrailingDot./dir
 > mkdir: cannot create directory
-> ‘/tmp/diry/tmp/DirWithTrailingDot./dir’: No such file or directory
+> =E2=80=98/tmp/diry/tmp/DirWithTrailingDot./dir=E2=80=99: No such file or =
+directory
 > % find  /tmp/diry/tmp/DirWithTrailingDot.
 > /tmp/diry/tmp/DirWithTrailingDot.
 > % find  /tmp/diry/tmp/DirWithTrailingSpace\
@@ -75,14 +93,16 @@ On 9/29/2020 1:08 PM, Boris Protopopov wrote:
 > % ls -l  /tmp/diry/tmp/DirWithTrailingSpace\
 > total 0
 > % touch /tmp/diry/tmp/DirWithTrailingSpace\ /file
-> touch: cannot touch ‘/tmp/diry/tmp/DirWithTrailingSpace /file’: No
+> touch: cannot touch =E2=80=98/tmp/diry/tmp/DirWithTrailingSpace /file=E2=
+=80=99: No
 > such file or directory
 > % mkdir /tmp/diry/tmp/DirWithTrailingSpace\ /dir
-> mkdir: cannot create directory ‘/tmp/diry/tmp/DirWithTrailingSpace
-> /dir’: No such file or directory
-> 
+> mkdir: cannot create directory =E2=80=98/tmp/diry/tmp/DirWithTrailingSpac=
+e
+> /dir=E2=80=99: No such file or directory
+>
 > After the patch:
-> 
+>
 > % umount /tmp/diry
 > % modprobe -r cifs
 > # load the fix
@@ -104,7 +124,7 @@ On 9/29/2020 1:08 PM, Boris Protopopov wrote:
 > % rm -rf /tmp/diry/tmp/*
 > % find  /tmp/diry/tmp/
 > /tmp/diry/tmp/
-> 
+>
 > ---------- Forwarded message ---------
 > From: Boris Protopopov <pboris@amazon.com>
 > Date: Wed, Sep 23, 2020 at 8:39 PM
@@ -112,8 +132,8 @@ On 9/29/2020 1:08 PM, Boris Protopopov wrote:
 > To:
 > Cc: <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
 > Boris Protopopov <pboris@amazon.com>
-> 
-> 
+>
+>
 > When converting trailing spaces and periods in paths, do so
 > for every component of the path, not just the last component.
 > If the conversion is not done for every path component, then
@@ -121,33 +141,43 @@ On 9/29/2020 1:08 PM, Boris Protopopov wrote:
 > periods (e.g. create(), mkdir()) will fail with ENOENT. This
 > is because on the server, the directory will have a special
 > symbol in its name, and the client needs to provide the same.
-> 
+>
 > Signed-off-by: Boris Protopopov <pboris@amazon.com>
 > ---
->   fs/cifs/cifs_unicode.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
+>  fs/cifs/cifs_unicode.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
 > diff --git a/fs/cifs/cifs_unicode.c b/fs/cifs/cifs_unicode.c
 > index 498777d859eb..9bd03a231032 100644
 > --- a/fs/cifs/cifs_unicode.c
 > +++ b/fs/cifs/cifs_unicode.c
 > @@ -488,7 +488,13 @@ cifsConvertToUTF16(__le16 *target, const char
 > *source, int srclen,
->                  else if (map_chars == SFM_MAP_UNI_RSVD) {
->                          bool end_of_string;
-> 
-> -                       if (i == srclen - 1)
+>                 else if (map_chars =3D=3D SFM_MAP_UNI_RSVD) {
+>                         bool end_of_string;
+>
+> -                       if (i =3D=3D srclen - 1)
 > +                       /**
-> +                        * Remap spaces and periods found at the end of every
-> +                        * component of the path. The special cases of '.' and
-> +                        * '..' do not need to be dealt with explicitly because
-> +                        * they are addressed in namei.c:link_path_walk().
+> +                        * Remap spaces and periods found at the end of e=
+very
+> +                        * component of the path. The special cases of '.=
+' and
+> +                        * '..' do not need to be dealt with explicitly b=
+ecause
+> +                        * they are addressed in namei.c:link_path_walk()=
+.
 > +                        **/
-> +                       if ((i == srclen - 1) || (source[i+1] == '\\'))
->                                  end_of_string = true;
->                          else
->                                  end_of_string = false;
+> +                       if ((i =3D=3D srclen - 1) || (source[i+1] =3D=3D =
+'\\'))
+>                                 end_of_string =3D true;
+>                         else
+>                                 end_of_string =3D false;
 > --
 > 2.18.4
-> 
-> 
+
+
+
+--=20
+Thanks,
+
+Steve
