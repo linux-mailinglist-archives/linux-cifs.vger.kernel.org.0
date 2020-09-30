@@ -2,44 +2,116 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8032D27F041
-	for <lists+linux-cifs@lfdr.de>; Wed, 30 Sep 2020 19:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3925A27F3FE
+	for <lists+linux-cifs@lfdr.de>; Wed, 30 Sep 2020 23:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731106AbgI3RYN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 30 Sep 2020 13:24:13 -0400
-Received: from [110.74.151.213] ([110.74.151.213]:36213 "EHLO
-        mail.bless.gov.my" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725837AbgI3RYN (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 30 Sep 2020 13:24:13 -0400
-Received: from User (unknown [172.20.84.1])
-        by mail.bless.gov.my (Postfix) with SMTP id 3992868525BE;
-        Wed, 30 Sep 2020 18:45:48 +0800 (MYT)
-Reply-To: <iinfo446@gmail.com>
-From:   "Mrs. Susan Carter" <test@mail.bless.gov.my>
-Subject: Good day,    
-Date:   Wed, 30 Sep 2020 11:46:09 +0100
+        id S1725799AbgI3VNt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 30 Sep 2020 17:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgI3VNt (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 30 Sep 2020 17:13:49 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5C0C061755
+        for <linux-cifs@vger.kernel.org>; Wed, 30 Sep 2020 14:13:49 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id j76so2371599ybg.3
+        for <linux-cifs@vger.kernel.org>; Wed, 30 Sep 2020 14:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XWZh5TTaZL/JrxLQE+ezAnN/H7M7/IC6XwTfxTqFzRI=;
+        b=tP+asR19jcPp5z85eNY42vq7Ac4Fp/v5ip3wzLOM/VENyffArJpvcxuLuk9MjU8uyV
+         ytrpB5iLJEtGCICSfzRZJoWNAMk2E38f7D+/ubUu/Q0kVEKYgxoV73XcXREJPd7RRwFM
+         mIgOOhrjC0048i5Yx+36fgRK8/NOXP+atC8rbolvpYjscxYpk0W7AGaTCQySEQvfNKsF
+         +2u4Fih0xS2KOfmYJX4JUdcNtgUpsJHE8MOsSfa2AvEfD5qrjm4nvb625E1+Jw/Is56Z
+         QwpwuS1ZL01r/ucaDagaRsTGqcrM7Zapl4wpsUZzzuyp4+ypyqXPCujc76+M2BfiGty9
+         itUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XWZh5TTaZL/JrxLQE+ezAnN/H7M7/IC6XwTfxTqFzRI=;
+        b=UfB6SrzCksx1CnuvprrErboAPr9iS4Ioh1Z+0Y1u6TxkOpBRwQv0Ii1YPCQZ9aqabR
+         NAsJztWsJlGTJMTHU20fYxe/lzW3Y+bgVpDvLjxmYDHadECRjK7/pBcT8agar/F2eiwc
+         G6dD6wB8aIPLD3AO+HC1AIKPUiz2HtcwreuxnKodK6SGDHFKplelEXJqebrFfgYokL2q
+         3HsIOU5k9HguE3cKdbenqVK6AUu/8XaCLLADArYxz5D4WSx7ei6xEAyQlHHdyA4IkCBd
+         44ufwP3nhgjTYLv15ytDAWToBqu4LpnPdhnIEHPC5ImhM853LtpXbLomm+Z187kGzckT
+         sCEQ==
+X-Gm-Message-State: AOAM533q48RtAuI2T+2pmXqR27AXYVmgrWzhvIaR4lhcb2Z0tujTvrym
+        j5JrC/Ea3jPRJLWFSaYP/gDJjvt9+COCz6IytyA=
+X-Google-Smtp-Source: ABdhPJxODx2Gttwh3UuHrM8KO9fZTyEEqXr6ujtwWxYPtyzvBgszN/1y5xPdD4DoRgG8P60XOdFutimZSe6gTo+3HTg=
+X-Received: by 2002:a25:b98b:: with SMTP id r11mr6515596ybg.70.1601500428684;
+ Wed, 30 Sep 2020 14:13:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20200930104549.3992868525BE@mail.bless.gov.my>
-To:     undisclosed-recipients:;
+References: <20200924003638.2668-1-pboris@amazon.com> <CAHhKpQ4UFhtfRhByRiAm6KPy=KAzttYzZADLfakbMwpsp5GjpA@mail.gmail.com>
+ <CAH2r5mvWZSPjtg1g2FhZ+gZNpakdaFnugw=FhFV92Ed83VzAuQ@mail.gmail.com> <878scrk45e.fsf@suse.com>
+In-Reply-To: <878scrk45e.fsf@suse.com>
+From:   Boris Protopopov <boris.v.protopopov@gmail.com>
+Date:   Wed, 30 Sep 2020 17:13:38 -0400
+Message-ID: <CAHhKpQ5pVuxAW8=znu1oYReSE-KOrO=5g=BP1T-VzhQW7EZkJg@mail.gmail.com>
+Subject: Re: [PATCH] Convert trailing spaces and periods in path components
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Good day,
+I agree with testing, but also, looking at the comments:
 
-My name are Mrs. Susan Carter an America but a United Kingdom Citizen, I???m 57 years old, widow, married to late Eng Martins Carter who is a British, who until his death worked with Dutch Filtration for Twenty-Six years before he died in the year 2015 after a brief illness that lasted only five days.
+/*
+ * Convert 16 bit Unicode pathname to wire format from string in
+current code
+ * page. Conversion may involve remapping up the six characters that
+are
+ * only legal in POSIX-like OS (if they are present in the string).
+Path
+ * names are little endian 16 bit Unicode on the wire
+ */
+int
+cifsConvertToUTF16(__le16 *target, const char *source, int srclen,
+                 const struct nls_table *cp, int map_chars)
+{
+        int i, charlen;
+        int j =3D 0;
+        char src_char;
+        __le16 dst_char;
+        wchar_t tmp;
+        wchar_t *wchar_to;      /* UTF-16 */
+        int ret;
+        unicode_t u;
 
-When my late husband was alive he deposited the sum of US$50 Million in bank USA through his Financial Lawyer in the United State of America and we all agreed as a couple to donate all of that to charity. Following my health (Lung Cancer), my Doctor told me that I may not live longer than required due to my health condition.
+        if (map_chars =3D=3D NO_MAP_UNI_RSVD)
+                return cifs_strtoUTF16(target, source, PATH_MAX, cp);
 
-Looking forward to seeing someone who can use the money for charitable work.
+...
 
-Best Regards
-Yours sincerely
-Mrs. Susan Carter
+it would seem that as long as the correct map_chars is picked, it
+should work correctly? The latter, if not automatically determined,
+can be controlled with mount options, I believe.
+
+Boris.
+
+On Wed, Sep 30, 2020 at 5:25 AM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
+:
+>
+> Steve French <smfrench@gmail.com> writes:
+> > tentatively merged ... running the usual functional tests
+> > http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2=
+/builds/399
+>
+> We need to make sure it works with samba smb1&smb2 posix extensions.
+> In smb1 posix extensions the paths are sent with / and \ is a valid
+> component (and no restrictions on file name endings).
+>
+> Cheers,
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
+ DE
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
+=BCnchen)
