@@ -2,106 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA262845B1
-	for <lists+linux-cifs@lfdr.de>; Tue,  6 Oct 2020 07:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5782848ED
+	for <lists+linux-cifs@lfdr.de>; Tue,  6 Oct 2020 11:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgJFFyG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 6 Oct 2020 01:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S1725977AbgJFJBe (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Oct 2020 05:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbgJFFyF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Oct 2020 01:54:05 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CD5C0613A7
-        for <linux-cifs@vger.kernel.org>; Mon,  5 Oct 2020 22:54:05 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id n6so5296899ioc.12
-        for <linux-cifs@vger.kernel.org>; Mon, 05 Oct 2020 22:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NpCrmllG71Cw+19EzjfgNasiTicD2S0gRmtQXvQeCWk=;
-        b=oNsCy8g6LXt6CCbSnIawPxwBDSQhaqL86RTRcMYe+XwVHaw8VCmsRmxQNO3ErsREgG
-         xYp7lVRXPKjAuoaXmeveMASZ4ViXefKqwzZJUw8TnvyMrq54+0PC5PALTiAgxHRQfmGV
-         HcSHGHVjqTdYhCU+CnYEXn1VnMesvI5pd/4QrQLiY9Cb3thHan7Km/TN15Ks3tQFwcBV
-         iawXnu8AslZ2bzwIx26vDvvybXWZK19wOn99Sy4m6oPg1s6suQaJmZZ8Ir1Ij42t6YkQ
-         DMA7DNAsnvjK/Dc/mRW6UhdNBIeRnPb2mYCvxdYTyHvCJv6FqNfwk+I5S6SQJcuwRHnD
-         cEiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NpCrmllG71Cw+19EzjfgNasiTicD2S0gRmtQXvQeCWk=;
-        b=ip6y/KchP4xZECqeazbSUH1T2Gy0792eX5sHucwKbwi9wqxG9TnYOMvyZ1a5qxZEon
-         4ylSRbvBJOPUY0feEFP+my2XZ2PE6IRaOtPWGKWYtoOoYs/INg8oYOt90A6HgQX6zcuc
-         hk8wvWxQLj1gWax1hu8JiyuKySsB+4valFW6Gm92fNgYqgyTlw0kncNa6wpi2TRcvNnG
-         0GI73/RMcuAfOIfTA//Wj2Xk4tw02ryD14ZWy8UjnBt5qimzwPSBZssKfU5oBgDHXykE
-         t18qCSuGgsQGw5yeAreD1gHZ0zzK7yV/+hnzx+k9VOweCWdlM3xwFlwxmtfWMrwL//nM
-         XQAQ==
-X-Gm-Message-State: AOAM533I4a8dorglqvM5mw2NQWD0jPiuyn3+zm6c4+CAgXkK5sFptav1
-        6rgxjc+Qplrtpe452NcIUGr+ZxLa7di/X3Jj79A=
-X-Google-Smtp-Source: ABdhPJzXhjKqftv6+KAmsqu9mBfUQ34AEq0pz+5ZPq9HrutLkrWBcENhn+antI7hP2FoqEgZVyMpkw7gX5EnEq/VG74=
-X-Received: by 2002:a5e:9613:: with SMTP id a19mr2681975ioq.116.1601963644898;
- Mon, 05 Oct 2020 22:54:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANT5p=oUOsR---hHYF2k0smsq+qu7K4W3hUYXD2-c3D_cCsf1g@mail.gmail.com>
-In-Reply-To: <CANT5p=oUOsR---hHYF2k0smsq+qu7K4W3hUYXD2-c3D_cCsf1g@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Tue, 6 Oct 2020 15:53:53 +1000
-Message-ID: <CAN05THSL9WBtaKaWVn7NJtzV90dtxghqHiGU4NBCB71ms_JNvg@mail.gmail.com>
-Subject: Re: ENOTSUPP to userspace
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
+        with ESMTP id S1725946AbgJFJBd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Oct 2020 05:01:33 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA91C061755
+        for <linux-cifs@vger.kernel.org>; Tue,  6 Oct 2020 02:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=lL0kU8GOzcDDkzzntwsuzgRICyn5HY4p5XHbEo7Fc3M=; b=mMe7u4R/wdKUfJ5DYeRlcOxAZ5
+        VnLqUuY4Gp3ucqfLL+4VprBjZtqCGIAKmPpwJKqToLDQo764mL+gczUObuJv6iiUQ38AvjHHV4wzd
+        NRBkmtsS481WsDPHD27Ij5OiuMrCAHCCveIuO8w0ZeuPMeVz3WlVLMq/k3kxnOJ/O9250S6/tfEC2
+        oe2WI6LcV1W7au91BK8OQB2RxXcJdQACWE/akDtvnVBUPPuXSLp/vFbpS7LGUWpuRCXW+MYpmDsG2
+        /1/Sk7hI+0EHjXsfitoHrfcnya8eIhpYgxZby8yppVCc9tbpgvDluf1vraOiyUoTUE95kOCjAemX2
+        TLxh8sc2mhRdeKUqHtIhhOfSOhdxCrP3DiVBjZyeXVkZ6DBb6ET8Vn3vdxODh48ccknC2iapzzDxI
+        /x3Ux0jNVyuijVWGmbCCvGwUns5T837fNjjZv6WT3RkTLEp6ghO7ei72YEPnyERc2IfusAMmulnB5
+        QVSQRMW2OtfqsVfigggMOSXL;
+Received: from [2a01:4f8:192:486::6:0] (port=23136 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kPiqh-0005S9-3q
+        for cifs-qa@samba.org; Tue, 06 Oct 2020 09:01:31 +0000
+Received: from [::1] (port=35816 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kPiqd-004D2n-0M
+        for cifs-qa@samba.org; Tue, 06 Oct 2020 09:01:27 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14521] CIFS mount shows only "vers=default" instead of specific
+ SMB version
+Date:   Tue, 06 Oct 2020 09:01:26 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 4.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aaptel@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-14521-10630-HcneHh3BAi@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14521-10630@https.bugzilla.samba.org/>
+References: <bug-14521-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 3:25 PM Shyam Prasad N <nspmangalore@gmail.com> wrote:
->
-> Hi,
->
-> Recently, we saw one customer hitting an error during file I/O with
-> error "Unknown error" 524. Since this error does not translate to any
-> error using strerror(), it was quite confusing. Only when I saw that
-> in errno.h in Linux kernel, I could see that this error corresponds to
-> ENOTSUPP, which we return in a few places in our code.
->
-> I also noticed that there's an error ENOTSUP, which does translate to
-> a userspace error.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14521
 
-After a quick look, we do not use ENOTSUPP a lot.
-But there are three places in transport.c that look suspicious.
-They all trigger if we run out of credits for an extended period and
-from a brief glance it might be able to leak ENOTSUPP to userspace for
-almost any syscall.
+Aur=C3=A9lien Aptel <aaptel@samba.org> changed:
 
-I think this needs to be audited. The places are
-wait_for_compound_request() and wait_for_free_request().
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |aaptel@samba.org
 
-What to do here is not obvious. We could retry in cifs.ko but we can't
-do this indefinitely since when we have no credits
-for an extended time, every syscall will become a new thread that gets
-stuck in cifs.ko waiting for credits that might never become
-available.
-So maybe we should rework this and return -EAGAIN here, push it to
-userspace right away and hope userspace can deal with it?
+--- Comment #1 from Aur=C3=A9lien Aptel <aaptel@samba.org> ---
+Just to make sure I get this right:
 
-And if we decide to push -EAGAIN to userspace we might do that right
-away without any retries in cifs.ko since if we have been at zero
-credits for a long long time already chances are that retry will not
-work and we will remain at zero credits for a long time more.
+With the same version of the kernel (openSUSE-LEAP-15.2 with Linux-5.3), wh=
+en
+you mount with vers=3Ddefault:
+- a Windows Server 2012 share you see vers=3D3.11 in /proc/mounts
+- anything else you see vers=3Ddefault in /proc/mounts
+
+And you are expecting the see the explicit version instead of default. Is t=
+hat
+right?
 
 
+As a side note, if you just need to version you can look at
+/proc/fs/cifs/DebugData. It will list all currently active connections along
+with their version as "Dialect":
 
-> My question here are:
-> 1. What's the purpose of these two error codes which look similar?
-> 2. Who should we talk to about having corresponding translation in strerror?
-> 3. Should we be returning ENOTSUPP to userspace at all? The open man
-> page says that for ENOTSUPP: The filesystem containing pathname does
-> not support O_TMPFILE. Is this the only reason where we return
-> ENOTSUPP?
->
-> --
-> -Shyam
+    # mount.cifs //foo/bar ....
+    # grep Dialect /proc/fs/cifs/DebugData=20
+    Number of credits: 407 Dialect 0x311 signed
+
+=3D> 0x311 is 3.1.1
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
