@@ -2,170 +2,78 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C13B285F02
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Oct 2020 14:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83016286475
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Oct 2020 18:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727927AbgJGMVo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 7 Oct 2020 08:21:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38750 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727253AbgJGMVo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 7 Oct 2020 08:21:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1602073303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6zxoIqWpwie/Kgg0D/Thz9Sv8wollP1erwCjwjWsQik=;
-        b=BRzrpiUjYbzrMriAEkx3cZSBAXwlt8Cvax1gCMklWdom6t9R+Q81/39eC7P8DI72PPAzVH
-        eD3z1WQO2/ktuYDom2jVQrpCoixYnMgFeqGdXnlaI/AA4hGzGYQ/xVxC5cZ9657Og8h9U+
-        0pJHdbiGNsdv1yeWTpYqExnGlkqFfrI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 66AC0ABBE;
-        Wed,  7 Oct 2020 12:21:43 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>
-Subject: Re: [PATCH 3/3] cifs: cache the directory content for shroot
-In-Reply-To: <20201005211622.18097-1-lsahlber@redhat.com>
-References: <20201005211622.18097-1-lsahlber@redhat.com>
-Date:   Wed, 07 Oct 2020 14:21:42 +0200
-Message-ID: <878scii5ux.fsf@suse.com>
+        id S1727033AbgJGQdS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 7 Oct 2020 12:33:18 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:37310 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726138AbgJGQdR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 7 Oct 2020 12:33:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088392; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=RJIaLsz6nh4+6vSa7cZaxk/7R7kcGW25pjSOKXhdJrnBP4lQ4AmLBShxa/8MJiJRj/F++Dxu/p+d2oXo1A8xkrPQpJwLq2cbq6te4YR7XfcguTPLkheM1HxdJfjXDuGH0LX6gSi5uuPXISqhctBBwSKBSDBVI5xWPnThdjzTStxe0Wf8BRk1YlU63Z7/nNO0qf7ylcdlBnV0nnSAgztrhj9jws1NC6Cs9/zVyFxbHQkJKJGB5lFBFq0ilmt/gD1pbK+/IniUAPPzH1pdP5ScO/wDzNi73o6PjToearr1PuGgtD7FVg+j/a3sTAvRkn/CWGF3IR8+ScP79zV1YRfpbw==
+X-YMail-OSG: m7.UIRAVM1k9IHpsSF_9aOSrQGJM2c4H6eM3UVt7KHA9_uvFmf8kxv63vpI5KFK
+ oqpQz4emE_LEUvajcmQvgNurTCqVEb9z__yfjJhX.2gkFZ9Rr0CGqIUSM5Rw3.91b7mAjg3ukNYy
+ epxkbDeWCdDVkIFU3pooljRZHDXumcdKwrfoq3TZBZhHmRay1mzV9dTilii0QPx1rkvAhdBoqYUl
+ SehPFlTG.isQQziUHz.pAF6yfK5pF7Uh1Dvfi6tYh9z9JToUjQ6i2addZxo71RL.Ssmv762zveim
+ 5NcN1RttpvH53m7dDm9OofCKTgrFS0dCVgjtw8WhoPX1m_XUdZIvl_Gcd2Cizw5UocYDoqUzuWB7
+ 5V7dTn9Tdb.3RudtT7NbKceKrc8N_1Jwauesoz6ox7z8SV1WGQAu_adgu5a1VoT3OOVLAVofrsJ0
+ ywMoMVA4hFF2NwCHHxl21bXUChzFfdLvTf5IlRYunem1M8jBCPuQelIGZBBqXiubBsdQL0J2.2xz
+ 5cMkOWU_QJ_cGYVzaVGQrsjRNgshYgvaoPj0GNofARp_20UXZt4BKbXHuuzAdhb.Z68kHWpcZ8wE
+ P3dM1cIVFw5pnxLkMlZOI5JlEokhn2mw31DRru_vRFNiKvlfSEwcNLhFrvGyiEadq7iLcbCrW1Zu
+ Hy21m_X88ZZr3ub52OXe_RlA5GYP4owS.lMAtuRq737JtpEl.Dn6HsONlDd_yfsvTfKyolrCyiqu
+ egeaDGYMzW45sKiwJwNPsv2t9MMt5y83pAof3nLNMpovkUIXO1LkYIjFyXg47RzLoHYouR7315Qq
+ Xa7dMdQgeneTSUJXaa4jnUZWrBTlz8o9ce4UcatJOq.JSFGdmQdwLmcYsgiogUK3xr1Rzn05.v5n
+ z.pjGwpN5hTQkseHe3l71ljxtQyRQpeTJhcgnEHDJaChiZ.RrQCy6uC_ResaiTSdfTbrMGxVjo7I
+ ciAQ4aQWHFzcbbSBAqDkm_7Bb9r3Cfmwnwyv8C9M.CER7r.dudz0VQP0mlXF52iLVEDKEYnC0G9o
+ txVVtQX4nP7gXL.ehF1Z_E3xVpyIhFRv9.dSVzOjPXcRrBvjE6BK.u2Td4gfz8j.nT9g6o06HSMg
+ rs_BVzOdU9cn5QqWcXG7fOf0YDe.nAX9ELK1RQgj7YXqDJPzhmXwVQiOXDKwv_wmrMpm_6z03BwZ
+ cBjpLsNhGeq7DQ0MYneJi_JRjEgvo_cfG5dyRH6vHQQMSyfNDSzbYHZ9pKM4xLXYMCt6hLZc7KNV
+ MLR_jZ2MTttfkX9eMEk6zmBQESLqdCe764s54wcWa8KJ54wS3_PgHkQHuQ0j79Up6qpEaqd0PFDs
+ Mh09gB9wox6T_xTVJAIOq5GMiQePep_KuniV5n3OYkogucvacxszVNY8jFiUVFyXg9bcMzv5XNRx
+ ioAas8T0CausajOUReODHctMqqj0c8aNZWVMGWw--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Wed, 7 Oct 2020 16:33:12 +0000
+Date:   Wed, 7 Oct 2020 16:29:34 +0000 (UTC)
+From:   Marilyn Robert <fredodinga22@gmail.com>
+Reply-To: marilyobert@gmail.com
+Message-ID: <1390213149.148810.1602088174847@mail.yahoo.com>
+Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+References: <1390213149.148810.1602088174847.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Ronnie,
-
-I'm assuming this is the latest V4:
-
-Can you document which functions require a lock to be held when calling?
-
-Would it work properly if in any of the patched functions we have this scen=
-ario:
-
-TASK A                              DEMULTIPLEX THREAD
-------                              ------------------
-open_shroot()=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20
-...                                    oplock break on shroot
-                                       ...close/reopen shroot, fid and ptr =
-gets updated...
-...=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-do stuff with dirents (with old fid/ptr?)
-...
-close_shroot()
-
-More comments below:
-
-Ronnie Sahlberg <lsahlber@redhat.com> writes:
-> +
-> +static bool cifs_dir_emit(struct dir_context *ctx,
-> +			  const char *name, int namelen,
-> +			  u64 ino, unsigned type,
-> +			  struct cached_fid *cfid)
-> +{
-> +	bool rc;
-> +
-> +	rc =3D dir_emit(ctx, name, namelen, ino, type);
-> +	if (!rc)
-> +		return rc;
-> +
-> +	if (cfid) {
-> +		mutex_lock(&cfid->dirents.de_mutex);
-> +		add_cached_dirent(&cfid->dirents, ctx, name, namelen, ino,
-> +				  type);
-> +		mutex_unlock(&cfid->dirents.de_mutex);
-> +	}
-> +
-> +	return rc;
-> +}
-
-Should return cfid->dirents.is_failed?
-
-> -
->  int cifs_readdir(struct file *file, struct dir_context *ctx)
->  {
->  	int rc =3D 0;
->  	unsigned int xid;
->  	int i;
-> -	struct cifs_tcon *tcon;
-> +	struct cifs_tcon *tcon, *mtcon;
->  	struct cifsFileInfo *cifsFile =3D NULL;
->  	char *current_entry;
->  	int num_to_fill =3D 0;
-> @@ -920,15 +1021,59 @@ int cifs_readdir(struct file *file, struct dir_con=
-text *ctx)
->  	char *end_of_smb;
->  	unsigned int max_len;
->  	char *full_path =3D NULL;
-> +	struct cached_fid *cfid =3D NULL;
-> +	struct cifs_sb_info *cifs_sb =3D CIFS_FILE_SB(file);
->=20=20
->  	xid =3D get_xid();
-> -
->  	full_path =3D build_path_from_dentry(file_dentry(file));
->  	if (full_path =3D=3D NULL) {
->  		rc =3D -ENOMEM;
->  		goto rddir2_exit;
->  	}
->=20=20
-> +	mtcon =3D cifs_sb_master_tcon(cifs_sb);
-
-Why using the master tcon? The rest of the code is using the user
-tcon.
-
-
-> +	if (!is_smb1_server(mtcon->ses->server) && !strcmp(full_path, "")) {
-> +		rc =3D open_shroot(xid, mtcon, cifs_sb, &cfid);
-> +		if (rc)
-> +			goto cache_not_found;
-> +
-> +		mutex_lock(&cfid->dirents.de_mutex);
-> +		/*
-> +		 * If this was reading from the start of the directory
-> +		 * we need to initialize scanning and storing the
-> +		 * directory content.
-> +		 */
-> +		if (ctx->pos =3D=3D 0 && cfid->dirents.ctx =3D=3D NULL) {
-> +			cfid->dirents.ctx =3D ctx;
-> +			cfid->dirents.pos =3D 2;
-> +		}
-> +		/*
-> +		 * If we already have the entire directory cached then
-> +		 * we can just serve the cache.
-> +		 */
-> +		if (cfid->dirents.is_valid) {
-> +			if (!dir_emit_dots(file, ctx)){
-> +				mutex_unlock(&cfid->dirents.de_mutex);
-> +				goto rddir2_exit;
-> +			}
-> +			emit_cached_dirents(&cfid->dirents, ctx);
-> +			mutex_unlock(&cfid->dirents.de_mutex);
-> +			goto rddir2_exit;
-> +		}
-> +		mutex_unlock(&cfid->dirents.de_mutex);
-> +	}
-> + cache_not_found:
-> +
-> +	/* Drop the cache while calling initiate_cifs_search and
-> +	 * find_cifs_entry in case there will be reconnects during
-> +	 * query_directory.
-> +	 */
-
-comment style
-
-Cheers,
---=20
-Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, DE
-GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=BC=
-nchen)
+DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
+0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
+0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
+INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
+vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
+0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
+tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
+0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
+0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
+0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
+s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
+vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
+gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
+vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
+vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
+0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
+0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
+0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
+vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
+uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
+0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
+0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
+0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
+0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
+0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
+0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
+sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
+v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
+gNC40LvQuNC9INCg0L7QsdC10YDRgg==
