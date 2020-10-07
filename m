@@ -2,74 +2,67 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F95285D1B
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Oct 2020 12:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C28285D59
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Oct 2020 12:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbgJGKpm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 7 Oct 2020 06:45:42 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35316 "EHLO mx2.suse.de"
+        id S1728247AbgJGKuS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 7 Oct 2020 06:50:18 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:57224 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726096AbgJGKpm (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 7 Oct 2020 06:45:42 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1602067541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rytuVFf34C/HUOxZNFl7qzkRLkeD/jgOPdwjZkmOHMk=;
-        b=kurzvFDOrHI4b65nYMMfyJ0lkHavO2dArTHG7nw56QrqDm/SmbznA5bMP3ae+qWXeUEkod
-        A3IuXNl4HRx7H9iicr58AijiCF+CQ9xpTnJHIyk4b9JmeDRfivDXboBCa/L4Mz/3xZ86ag
-        RTjRvu1pPQBKf2OzzW+kzqHDdWVZffg=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 81A2BAD5F;
-        Wed,  7 Oct 2020 10:45:41 +0000 (UTC)
-From:   =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>
-Subject: Re: [PATCH] cifs: handle -EINTR in cifs_setattr
-In-Reply-To: <CAN05THRzdzc7Xy0fi2pF4jEs=QfsS-GSG_LEz_YwbexesRHvhw@mail.gmail.com>
-References: <20201006052643.6298-1-lsahlber@redhat.com>
- <87ft6ripw9.fsf@suse.com>
- <CAN05THRzdzc7Xy0fi2pF4jEs=QfsS-GSG_LEz_YwbexesRHvhw@mail.gmail.com>
-Date:   Wed, 07 Oct 2020 12:45:40 +0200
-Message-ID: <87d01uiaaz.fsf@suse.com>
+        id S1728238AbgJGKuR (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:50:17 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 3DEFE634F0
+        for <linux-cifs@vger.kernel.org>; Wed,  7 Oct 2020 13:50:14 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id F0791634B2
+        for <linux-cifs@vger.kernel.org>; Wed,  7 Oct 2020 13:50:13 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 5AF29628C0; Wed,  7 Oct 2020 13:50:11 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 902095E426;
+        Wed,  7 Oct 2020 13:50:04 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Wed, 07 Oct 2020 07:49:56 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201007105011.5AF29628C0@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./mmm,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201007 notchecked
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-ronnie sahlberg <ronniesahlberg@gmail.com> writes:
-> glibc have handling for EINTR in most places, but not in for example utim=
-ensat()
-> because this function is not supposed to be able to return this error.
-> Similarly we have functions like chmod and chown that also come into cifs=
-.ko
-> via the same entrypoint: cifs_setattr()
-> I think all of these "update inode data" are never supposed to be
-> interruptible since
-> they were classically just updating the in-memory inode and the thread
-> would never hit d-state.
+Hello Dear,
 
-I see, thanks for the explanation.
 
-> Anyway, for these functions EINTR is not a valid return code so I
-> think we should take care to not
-> return it. Even if we change glibc adn the very very thin wrapper for
-> this functions there are applications
-> that might call the systemcall directly or via a different c-library.
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-Should we use is_retryable_error() to check for the errcode?
 
-Cheers,
---=20
-Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, DE
-GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=BC=
-nchen)
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
