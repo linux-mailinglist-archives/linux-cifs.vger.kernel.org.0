@@ -2,78 +2,110 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 070F32863F4
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Oct 2020 18:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CD3287643
+	for <lists+linux-cifs@lfdr.de>; Thu,  8 Oct 2020 16:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgJGQ3v (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 7 Oct 2020 12:29:51 -0400
-Received: from sonic313-13.consmr.mail.bf2.yahoo.com ([74.6.133.123]:36978
-        "EHLO sonic313-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726463AbgJGQ3t (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 7 Oct 2020 12:29:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088187; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=JLxmg9ckCbNPLhWzaCODHUYo+vlCuvD4y5WNb7+Bzfic05G/CAiE3XJIHdlnO3ExFSTWksFge6TR0lxsTAft01/MKPArYAdRub6IKSmnJyP2soDHi1CCaFB+wAKu1EbNkXIefKulPOjVFShl9Gao4AQ7IObnWCf09LJAd7PW5Az7tA3ZsqLw82zxIC0cYsWcI4mb8yalAJGe6s7+cWMbIU5BmcZfNfNfUqfUvdq67UXalxjzscwnhv9YwPYphqpmpSeZRu7Byh06CtyqHyyv63lxfJalSQcvYcd6WZF6n06nqo5ImjLs5VOx3NVrZ2KKB6Ubx7aaCaFUujpyEPMU0A==
-X-YMail-OSG: m7.UIRAVM1k9IHpsSF_9aOSrQGJM2c4H6eM3UVt7KHA9_uvFmf8kxv63vpI5KFK
- oqpQz4emE_LEUvajcmQvgNurTCqVEb9z__yfjJhX.2gkFZ9Rr0CGqIUSM5Rw3.91b7mAjg3ukNYy
- epxkbDeWCdDVkIFU3pooljRZHDXumcdKwrfoq3TZBZhHmRay1mzV9dTilii0QPx1rkvAhdBoqYUl
- SehPFlTG.isQQziUHz.pAF6yfK5pF7Uh1Dvfi6tYh9z9JToUjQ6i2addZxo71RL.Ssmv762zveim
- 5NcN1RttpvH53m7dDm9OofCKTgrFS0dCVgjtw8WhoPX1m_XUdZIvl_Gcd2Cizw5UocYDoqUzuWB7
- 5V7dTn9Tdb.3RudtT7NbKceKrc8N_1Jwauesoz6ox7z8SV1WGQAu_adgu5a1VoT3OOVLAVofrsJ0
- ywMoMVA4hFF2NwCHHxl21bXUChzFfdLvTf5IlRYunem1M8jBCPuQelIGZBBqXiubBsdQL0J2.2xz
- 5cMkOWU_QJ_cGYVzaVGQrsjRNgshYgvaoPj0GNofARp_20UXZt4BKbXHuuzAdhb.Z68kHWpcZ8wE
- P3dM1cIVFw5pnxLkMlZOI5JlEokhn2mw31DRru_vRFNiKvlfSEwcNLhFrvGyiEadq7iLcbCrW1Zu
- Hy21m_X88ZZr3ub52OXe_RlA5GYP4owS.lMAtuRq737JtpEl.Dn6HsONlDd_yfsvTfKyolrCyiqu
- egeaDGYMzW45sKiwJwNPsv2t9MMt5y83pAof3nLNMpovkUIXO1LkYIjFyXg47RzLoHYouR7315Qq
- Xa7dMdQgeneTSUJXaa4jnUZWrBTlz8o9ce4UcatJOq.JSFGdmQdwLmcYsgiogUK3xr1Rzn05.v5n
- z.pjGwpN5hTQkseHe3l71ljxtQyRQpeTJhcgnEHDJaChiZ.RrQCy6uC_ResaiTSdfTbrMGxVjo7I
- ciAQ4aQWHFzcbbSBAqDkm_7Bb9r3Cfmwnwyv8C9M.CER7r.dudz0VQP0mlXF52iLVEDKEYnC0G9o
- txVVtQX4nP7gXL.ehF1Z_E3xVpyIhFRv9.dSVzOjPXcRrBvjE6BK.u2Td4gfz8j.nT9g6o06HSMg
- rs_BVzOdU9cn5QqWcXG7fOf0YDe.nAX9ELK1RQgj7YXqDJPzhmXwVQiOXDKwv_wmrMpm_6z03BwZ
- cBjpLsNhGeq7DQ0MYneJi_JRjEgvo_cfG5dyRH6vHQQMSyfNDSzbYHZ9pKM4xLXYMCt6hLZc7KNV
- MLR_jZ2MTttfkX9eMEk6zmBQESLqdCe764s54wcWa8KJ54wS3_PgHkQHuQ0j79Up6qpEaqd0PFDs
- Mh09gB9wox6T_xTVJAIOq5GMiQePep_KuniV5n3OYkogucvacxszVNY8jFiUVFyXg9bcMzv5XNRx
- ioAas8T0CausajOUReODHctMqqj0c8aNZWVMGWw--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.bf2.yahoo.com with HTTP; Wed, 7 Oct 2020 16:29:47 +0000
-Date:   Wed, 7 Oct 2020 16:29:34 +0000 (UTC)
-From:   Marilyn Robert <fredodinga22@gmail.com>
-Reply-To: marilyobert@gmail.com
-Message-ID: <1390213149.148810.1602088174847@mail.yahoo.com>
-Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
+        id S1730538AbgJHOkK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 8 Oct 2020 10:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729770AbgJHOkK (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Oct 2020 10:40:10 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127BAC061755
+        for <linux-cifs@vger.kernel.org>; Thu,  8 Oct 2020 07:40:10 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id d81so6726105wmc.1
+        for <linux-cifs@vger.kernel.org>; Thu, 08 Oct 2020 07:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=BQBoHmAffr2kLPF5TWAxk6Ogan+AQ1kLlEbP7MgWHZk=;
+        b=EUT7v9Ncr8dJ77zDCtPq+qJDZrGCKdiN4ZS5xd46dhS9Bh600iqhWMZc9h7ni2hl6Z
+         1C+rlUCOb14MSBhm+7OAS6LIs3V9Iex84Azh/l+9lV/72AUCqzZCaVmt9TkdkHQrWLN8
+         ztsbeu44WIk49pxXoG/OOM/tjvvoATuOX6t6Yg9goIjSle1m5U6y+Xwm6oUNi1akbnLN
+         pewIbuSq0AnBHzUr1w+LPk6H2dhSxJNEt4PVNGvIvLSeVsvuyWqafBhQGKsTtXdNfGP8
+         ZRLkZRv09wAXTsosbwh91DbxjIbSLti95FFfBn0qBgSkV0MF7L8PyonfRH/+SAqrkki3
+         YwaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=BQBoHmAffr2kLPF5TWAxk6Ogan+AQ1kLlEbP7MgWHZk=;
+        b=EZfGjozYSNaUk8WclL8G5rhrFifzxmNwazXE6PSIfCImJGfTp8NoKN8FtbffcLeYUQ
+         MNAR6nVesxaw2buIqVTIYe3oB3wBh/2TS4Bq5G0RoZpCcL8tQvA12f2G5CAFA7PDxQ+o
+         sOtcRcSORAwJBjJBw+ImMD/f+m5Yqk2sk1d29Bhg6fbld6R9cDUeqc9vTrMPh5A6b/aI
+         cfDuxDHwjmJ0zGkmkUCFkvt8FU7ysPtbOo85Mp6p1ylVZVnzizlvqZgL2eTwdCNEY1Xm
+         fBSgXH/YLtRp4CWAQgVzuTy+C+RPzALIE5cxaSsC6O4spP+ONgON+MgAT0/A2FaDYZ5Q
+         mCQA==
+X-Gm-Message-State: AOAM532WXuQyGpsyWC3cDbBqPHMo2MbfG1p9p8GpgbakWubjV5QYvt/w
+        U2+AQCj0nYmvKM3idgznepCk1O0ImImTl76k3tY=
+X-Google-Smtp-Source: ABdhPJwywdB7RFOFTVdGk51oQj5qYLQ42oBlAGg9vjY0hkWnAO9ojbcJt27Ed9tiAuuY4602oS55BNXf44qiJhDDbxs=
+X-Received: by 2002:a1c:3cc3:: with SMTP id j186mr9814556wma.155.1602168008414;
+ Thu, 08 Oct 2020 07:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-References: <1390213149.148810.1602088174847.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+From:   Rohith Surabattula <rohiths.msft@gmail.com>
+Date:   Thu, 8 Oct 2020 20:09:57 +0530
+Message-ID: <CACdtm0YWG1Ni5JnOpnH4OVnF7RpiE_E_WXYrTBEP=K+SL=Yuog@mail.gmail.com>
+Subject: [PATCH] Resolve data corruption of TCP server info fields
+To:     Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Pavel Shilovsky <piastryyy@gmail.com>, sribhat.msa@outlook.com,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000003ca0505b129cfb5"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
-0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
-0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
-INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
-vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
-0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
-tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
-0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
-0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
-0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
-s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
-vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
-gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
-vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
-vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
-0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
-0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
-0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
-vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
-uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
-0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
-0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
-0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
-0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
-0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
-0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
-sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
-v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
-gNC40LvQuNC9INCg0L7QsdC10YDRgg==
+--00000000000003ca0505b129cfb5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi All,
+
+With the "esize" mount option, I observed data corruption and cifs
+reconnects during performance tests.
+
+TCP server info field server->total_read is modified parallely by
+demultiplex thread and decrypt offload worker thread. server->total_read
+is used in calculation to discard the remaining data of PDU which is
+not read into memory.
+
+Because of parallel modification, =E2=80=9Cserver->total_read=E2=80=9D valu=
+e got
+corrupted and instead of discarding the remaining data, it discarded
+some valid data from the next PDU.
+
+server->total_read field is already updated properly during read from
+socket. So, no need to update the same field again after decryption.
+
+Regards,
+Rohith
+
+--00000000000003ca0505b129cfb5
+Content-Type: application/octet-stream; 
+	name="0001-Resolve-data-corruption-of-TCP-server-info-fields.patch"
+Content-Disposition: attachment; 
+	filename="0001-Resolve-data-corruption-of-TCP-server-info-fields.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kg0x30wj0>
+X-Attachment-Id: f_kg0x30wj0
+
+RnJvbSA4YmI5MjQxZjRhZmE0MTQzNjZmMmI2YzdjMWY1OTgxYjllY2UxOTBlIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBSb2hpdGggU3VyYWJhdHR1bGEgPHJvaGl0aHNAbWljcm9zb2Z0
+LmNvbT4KRGF0ZTogVGh1LCA4IE9jdCAyMDIwIDA5OjU4OjQxICswMDAwClN1YmplY3Q6IFtQQVRD
+SF0gUmVzb2x2ZSBkYXRhIGNvcnJ1cHRpb24gb2YgVENQIHNlcnZlciBpbmZvIGZpZWxkcwoKVENQ
+IHNlcnZlciBpbmZvIGZpZWxkIHNlcnZlci0+dG90YWxfcmVhZCBpcyBtb2RpZmllZCBwYXJhbGxl
+bHkgYnkKZGVtdWx0aXBsZXggdGhyZWFkIGFuZCBkZWNyeXB0IG9mZmxvYWQgd29ya2VyIHRocmVh
+ZC4gc2VydmVyLT50b3RhbF9yZWFkCmlzIHVzZWQgaW4gY2FsY3VsYXRpb24gdG8gZGlzY2FyZCB0
+aGUgcmVtYWluaW5nIGRhdGEgb2YgUERVIHdoaWNoIGlzCm5vdCByZWFkIGludG8gbWVtb3J5LgoK
+QmVjYXVzZSBvZiBwYXJhbGxlbCBtb2RpZmljYXRpb24sIHNlcnZlci0+dG90YWxfcmVhZCBjYW4g
+Z2V0IGNvcnJ1cHRlZAphbmQgY2FuIHJlc3VsdCBpbiBkaXNjYXJkaW5nIHRoZSB2YWxpZCBkYXRh
+IG9mIG5leHQgUERVLgoKU2lnbmVkLW9mZi1ieTogUm9oaXRoIFN1cmFiYXR0dWxhIDxyb2hpdGhz
+QG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvY2lmcy9zbWIyb3BzLmMgfCAyIC0tCiAxIGZpbGUgY2hh
+bmdlZCwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy9jaWZzL3NtYjJvcHMuYyBiL2Zz
+L2NpZnMvc21iMm9wcy5jCmluZGV4IDMyZjkwZGM4MmM4NC4uNWExNTMwMWI4MGE4IDEwMDY0NAot
+LS0gYS9mcy9jaWZzL3NtYjJvcHMuYworKysgYi9mcy9jaWZzL3NtYjJvcHMuYwpAQCAtNDEyOSw4
+ICs0MTI5LDYgQEAgZGVjcnlwdF9yYXdfZGF0YShzdHJ1Y3QgVENQX1NlcnZlcl9JbmZvICpzZXJ2
+ZXIsIGNoYXIgKmJ1ZiwKIAogCW1lbW1vdmUoYnVmLCBpb3ZbMV0uaW92X2Jhc2UsIGJ1Zl9kYXRh
+X3NpemUpOwogCi0Jc2VydmVyLT50b3RhbF9yZWFkID0gYnVmX2RhdGFfc2l6ZSArIHBhZ2VfZGF0
+YV9zaXplOwotCiAJcmV0dXJuIHJjOwogfQogCi0tIAoyLjI1LjEKCg==
+--00000000000003ca0505b129cfb5--
