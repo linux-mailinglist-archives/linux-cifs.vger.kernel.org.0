@@ -2,93 +2,53 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB0D287D45
-	for <lists+linux-cifs@lfdr.de>; Thu,  8 Oct 2020 22:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F57287DD3
+	for <lists+linux-cifs@lfdr.de>; Thu,  8 Oct 2020 23:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgJHUgp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 8 Oct 2020 16:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgJHUgp (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Oct 2020 16:36:45 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64258C0613D2
-        for <linux-cifs@vger.kernel.org>; Thu,  8 Oct 2020 13:36:45 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id d24so4228113ljg.10
-        for <linux-cifs@vger.kernel.org>; Thu, 08 Oct 2020 13:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ECsXNM/sNVbauS2/45aLO/xXagdFy92hVzxoISnmMHI=;
-        b=N1Qtjqhp7EtRNbK2Kjrmuc87pXUXu9nRUMFPC2Ct4o19ZI6gFQhuC1eqEU2/PlVdNt
-         0vfsTc5LKhQqwl4WLI6bZiNYzvF3eJqqEPW1X3T4it4/CikctIA82UTyhsKAj9RyVO1Y
-         2Z7EmS0GRwT9EBUsFVCf1VXdelddK5pFDsp4RRbx5g4kMLMfkcEfC9IHhAjfBKJWoORI
-         aGpL70N9n//WKZh/tByb9nzdMzKzXXUd3YiTiHgzgJwE3B/PYrJw7PD0poaSmDuOjYJB
-         xPubk48tptvUHarzOE3OOEvZ/ExMyYEKqja2XbqEA9Por2BlnkuM+HyspD87bdd9Ov6m
-         pKLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ECsXNM/sNVbauS2/45aLO/xXagdFy92hVzxoISnmMHI=;
-        b=DTvt2hx1B1pYfxhZgPkWH8v3N0hveK1hcHWV4lvdwpOonqI9VXt2hGy8RGNHYFLDLp
-         JAxDtuUGRYBYk5zgP1/k4g0nzGM7rSpORMt5kaln9FTBnUQSRTv9jSSDa3nismJ9hwj9
-         51zIwIxlwOIvUXDgIGPEI+spQgnbiSB72D+ousqhbUNsHLv0Kd472utqeelguNoH0WEA
-         bEYOC+I1Xx4zbStZ5Yk+ZaJyIN1eha8XNxm56IJeWLkM0hAGYtpFNpV2JKroEKqtcmeM
-         nEirr8o4IC9MiQIro5GlXsE+8FV6sAMiG+vhL4yE9AFMk77MtIcDvchy1jujaoM3L2uU
-         fMyQ==
-X-Gm-Message-State: AOAM531llA/j8xGc+gXOZjdJxTL0i4v1wqPjEaLlWJjDmLYIYuWNvBiy
-        w7ODrCrA3VT1OTCLOGCs1PMGG4mS1wn2uEAhJkc=
-X-Google-Smtp-Source: ABdhPJwy0qFcOjWTxlyYgTsDAUv7+tkIZvwwLv42nLG+bIVoZBVW8t8CmD6SG1i/z3bECpDJ59/ax5Tz8Wxb9p8teN8=
-X-Received: by 2002:a2e:82cf:: with SMTP id n15mr3674874ljh.394.1602189403779;
- Thu, 08 Oct 2020 13:36:43 -0700 (PDT)
+        id S1729763AbgJHVS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 8 Oct 2020 17:18:28 -0400
+Received: from [58.87.100.240] ([58.87.100.240]:45364 "EHLO
+        mail.hebei-kuixing.com" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726766AbgJHVS1 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Oct 2020 17:18:27 -0400
+X-Greylist: delayed 668 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Oct 2020 17:18:22 EDT
+Received: from localhost (unknown [127.0.0.1])
+        by mail.hebei-kuixing.com (Postfix) with ESMTP id AC1A460E64;
+        Thu,  8 Oct 2020 21:07:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at hebei-kuixing.com
+Received: from mail.hebei-kuixing.com ([127.0.0.1])
+        by localhost (mail.hebei-kuixing.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2baZvT9QzwCy; Fri,  9 Oct 2020 05:07:06 +0800 (CST)
+Received: from User (unknown [185.248.12.71])
+        by mail.hebei-kuixing.com (Postfix) with ESMTPA id 0E9CB60E6A;
+        Fri,  9 Oct 2020 05:06:50 +0800 (CST)
+Reply-To: <kim.leang2011@yahoo.com>
+From:   " Kim Leang" <sales@hebei-kuixing.com>
+Subject: Greeting!
+Date:   Fri, 9 Oct 2020 00:07:05 +0300
 MIME-Version: 1.0
-References: <CACdtm0YWG1Ni5JnOpnH4OVnF7RpiE_E_WXYrTBEP=K+SL=Yuog@mail.gmail.com>
-In-Reply-To: <CACdtm0YWG1Ni5JnOpnH4OVnF7RpiE_E_WXYrTBEP=K+SL=Yuog@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 8 Oct 2020 15:36:33 -0500
-Message-ID: <CAH2r5msodNEQPFO7fwY1wpy=qUNPTH+8iPDxZSvMrjg+SkJHEg@mail.gmail.com>
-Subject: Re: [PATCH] Resolve data corruption of TCP server info fields
-To:     Rohith Surabattula <rohiths.msft@gmail.com>
-Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
-        Pavel Shilovsky <piastryyy@gmail.com>, sribhat.msa@outlook.com,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20201008210707.AC1A460E64@mail.hebei-kuixing.com>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Fixed up 2 small checkpatch warnings and merged into cifs-2.6.git for-next
+Greeting!
 
-On Thu, Oct 8, 2020 at 9:40 AM Rohith Surabattula
-<rohiths.msft@gmail.com> wrote:
->
-> Hi All,
->
-> With the "esize" mount option, I observed data corruption and cifs
-> reconnects during performance tests.
->
-> TCP server info field server->total_read is modified parallely by
-> demultiplex thread and decrypt offload worker thread. server->total_read
-> is used in calculation to discard the remaining data of PDU which is
-> not read into memory.
->
-> Because of parallel modification, =E2=80=9Cserver->total_read=E2=80=9D va=
-lue got
-> corrupted and instead of discarding the remaining data, it discarded
-> some valid data from the next PDU.
->
-> server->total_read field is already updated properly during read from
-> socket. So, no need to update the same field again after decryption.
->
-> Regards,
-> Rohith
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
 
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
 
---=20
-Thanks,
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
 
-Steve
+Thanks and have a nice day,
+Mr. Kim Leang.
