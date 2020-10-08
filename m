@@ -2,53 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F57287DD3
-	for <lists+linux-cifs@lfdr.de>; Thu,  8 Oct 2020 23:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E78287F21
+	for <lists+linux-cifs@lfdr.de>; Fri,  9 Oct 2020 01:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729763AbgJHVS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 8 Oct 2020 17:18:28 -0400
-Received: from [58.87.100.240] ([58.87.100.240]:45364 "EHLO
-        mail.hebei-kuixing.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1726766AbgJHVS1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Oct 2020 17:18:27 -0400
-X-Greylist: delayed 668 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Oct 2020 17:18:22 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mail.hebei-kuixing.com (Postfix) with ESMTP id AC1A460E64;
-        Thu,  8 Oct 2020 21:07:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at hebei-kuixing.com
-Received: from mail.hebei-kuixing.com ([127.0.0.1])
-        by localhost (mail.hebei-kuixing.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2baZvT9QzwCy; Fri,  9 Oct 2020 05:07:06 +0800 (CST)
-Received: from User (unknown [185.248.12.71])
-        by mail.hebei-kuixing.com (Postfix) with ESMTPA id 0E9CB60E6A;
-        Fri,  9 Oct 2020 05:06:50 +0800 (CST)
-Reply-To: <kim.leang2011@yahoo.com>
-From:   " Kim Leang" <sales@hebei-kuixing.com>
-Subject: Greeting!
-Date:   Fri, 9 Oct 2020 00:07:05 +0300
+        id S1730185AbgJHXbN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 8 Oct 2020 19:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725969AbgJHXbN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Oct 2020 19:31:13 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125EAC0613D2
+        for <linux-cifs@vger.kernel.org>; Thu,  8 Oct 2020 16:31:13 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id g7so8211592iov.13
+        for <linux-cifs@vger.kernel.org>; Thu, 08 Oct 2020 16:31:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QPY5AdWgnawEqEy9/lCwyYdAG+08r5KYJtfc0B2WMes=;
+        b=of7SYsZSgvLjETiQcRKRMbcT9JqzBrAcgai3BaiLJ76z7MGr6vRGbZ39HK7KbHcfop
+         mEX9ePCCKVPRi8IVhShtnbxZ/y8Or1el/mortTnhx3SjFewNC5osJ46u7osZmAU29Ber
+         qQs7sfpWqWiCmZBs9ThjYa1aCoPMHMqM6yEidsrt1hCpR96D8xnB4YMvxV4ck0E2AQMy
+         f9KKTTcxEr8/1Z696DrMhMkm7o3O8S594uNkhMG1ANyKIxnHWi+tEqv4cuG2hPG1v0kz
+         RSc6CClhifW6IkPEdZYk1+FKKnTtbyrqPVogRA3mzy7scuc0jOtJ7WuTItVDzmWh2P0r
+         T3kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QPY5AdWgnawEqEy9/lCwyYdAG+08r5KYJtfc0B2WMes=;
+        b=Dfbpw4Zi1Qm0QXdDFpQNfeB5nD+hn/4v9fNbfQv6Bp02Qva8VL2L2vSTbjYiuCFDx+
+         G7T+hJaN+CTfBqu9xMbx11JY/Pjakb3or6eeIAd6tvdPz0aoUmfKebQUqXRDSx1CM7R1
+         HN7ZrAj3Zavnn4xmIgRBrf2V4qH5E9C1bWo4BAYX1j+gmr1DFNrosBl4qA4l4+TLWl1O
+         e9EcxO7DcgILaCcxSkj0axV4YJ1anyfXM4UfUHo2vYBsKzsgm+6CSgOz25LwXxQc54QP
+         H9EG+xHPPgiYyuIaE6xTCxiD2BWDhgJeZsnxcmOukSibS2e46n6hAMQm74fbVZaaMSbk
+         ezJA==
+X-Gm-Message-State: AOAM531xSrgjKYassqwxkzXQO0L2tSVjfJCjUzbBkZxelUZGge235jHf
+        oYOFfZpM2zQ6ni+vBAsEozkv3OGahVU8Aex8qnY=
+X-Google-Smtp-Source: ABdhPJxrkAsSvbREPcI3x3MWosmXRWB7x2be8Pa7qypeXgkLOtOOHzFcCCAO89vB9j3VZqeNSWwFAP31RmMxddu4KZQ=
+X-Received: by 2002:a6b:610c:: with SMTP id v12mr7610642iob.101.1602199872301;
+ Thu, 08 Oct 2020 16:31:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201008210707.AC1A460E64@mail.hebei-kuixing.com>
-To:     unlisted-recipients:; (no To-header on input)
+References: <20201006052643.6298-1-lsahlber@redhat.com> <87ft6ripw9.fsf@suse.com>
+ <CAN05THRzdzc7Xy0fi2pF4jEs=QfsS-GSG_LEz_YwbexesRHvhw@mail.gmail.com> <87d01uiaaz.fsf@suse.com>
+In-Reply-To: <87d01uiaaz.fsf@suse.com>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Fri, 9 Oct 2020 09:31:00 +1000
+Message-ID: <CAN05THR-CrNZBJ99xCuztQd+LGuxb9uyEZDS89zJmxonnyKVOg@mail.gmail.com>
+Subject: Re: [PATCH] cifs: handle -EINTR in cifs_setattr
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        Steve French <smfrench@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Greeting!
+On Wed, Oct 7, 2020 at 8:45 PM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote:
+>
+> ronnie sahlberg <ronniesahlberg@gmail.com> writes:
+> > glibc have handling for EINTR in most places, but not in for example ut=
+imensat()
+> > because this function is not supposed to be able to return this error.
+> > Similarly we have functions like chmod and chown that also come into ci=
+fs.ko
+> > via the same entrypoint: cifs_setattr()
+> > I think all of these "update inode data" are never supposed to be
+> > interruptible since
+> > they were classically just updating the in-memory inode and the thread
+> > would never hit d-state.
+>
+> I see, thanks for the explanation.
+>
+> > Anyway, for these functions EINTR is not a valid return code so I
+> > think we should take care to not
+> > return it. Even if we change glibc adn the very very thin wrapper for
+> > this functions there are applications
+> > that might call the systemcall directly or via a different c-library.
+>
+> Should we use is_retryable_error() to check for the errcode?
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+That is probably a good idea.
+I will resend the patch with that suggestion.
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
-
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
-
-Thanks and have a nice day,
-Mr. Kim Leang.
+Thanks!
+>
+> Cheers,
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
+ DE
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
+=BCnchen)
