@@ -2,97 +2,75 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B5328F86A
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 20:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F3A28F846
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 20:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727684AbgJOSWv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 15 Oct 2020 14:22:51 -0400
-Received: from p3plsmtpa07-05.prod.phx3.secureserver.net ([173.201.192.234]:54762
-        "EHLO p3plsmtpa07-05.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727197AbgJOSWv (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:22:51 -0400
-X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 14:22:51 EDT
-Received: from [192.168.0.116] ([71.184.94.153])
-        by :SMTPAUTH: with ESMTPSA
-        id T7mlk50kils90T7mmkWp2O; Thu, 15 Oct 2020 11:15:32 -0700
-X-CMAE-Analysis: v=2.3 cv=QfEYQfTv c=1 sm=1 tr=0
- a=vbvdVb1zh1xTTaY8rfQfKQ==:117 a=vbvdVb1zh1xTTaY8rfQfKQ==:17
- a=IkcTkHD0fZMA:10 a=iox4zFpeAAAA:8 a=hGzw-44bAAAA:8 a=yMhMjlubAAAA:8
- a=hNOTfydlAAAA:8 a=NA896NxhSAy2TpZPZw8A:9 a=QEXdDO2ut3YA:10
- a=WzC6qhA0u3u7Ye7llzcV:22 a=HvKuF1_PTVFglORKqfwH:22 a=fZunMKNLB757I4m4HZ3M:22
-X-SECURESERVER-ACCT: tom@talpey.com
-Subject: Re: [PATCH][SMB3.1.1] Add defines for new signing context
-To:     =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     samba-technical <samba-technical@lists.samba.org>
-References: <CAH2r5mtwBHTk-Xoeuo+RbgNwiNw-cWTAhdy1YG5y+vXnNDSv4w@mail.gmail.com>
- <bd8f21ed-5fd4-0974-f15a-16d2f3ee607f@samba.org> <87r1q3hixr.fsf@suse.com>
-From:   Tom Talpey <tom@talpey.com>
-Message-ID: <827fd43f-40a9-9480-a6b9-aea1fa69090c@talpey.com>
-Date:   Thu, 15 Oct 2020 14:15:32 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1732889AbgJOSR0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 15 Oct 2020 14:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgJOSR0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Oct 2020 14:17:26 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B786C061755
+        for <linux-cifs@vger.kernel.org>; Thu, 15 Oct 2020 11:17:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id x7so4947937eje.8
+        for <linux-cifs@vger.kernel.org>; Thu, 15 Oct 2020 11:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hBtp0DyG8eFF/S0AqGIqg6ssVhlEsEHSnWa7/gUQAYs=;
+        b=VSHUWrxKdir/ay3gZ4bx5yVI7TX5Iv+YjS9m7DQWym5TJNijSgu0tX0e2tRwTXt54r
+         XvMR6Ky6CjhXfU7mVa9elMReaM0//HctvkJ75d1KS9iVdgXnLcWNhq/6R/iDexYtiJ6Z
+         /pNIsz/urmcZYMKCe0EhQ9PkqF7OI+V86oagUXdp35pxuylxQBs/xiQTadQqgBlcgCVl
+         fOM59HiHs3lYtr8vksOhwEb1A+6jtHhbbfzC1dbz9X437elEKwKUeTBt9tqrPuxAAgTy
+         BM0uJyD5pFbgNVwDrTgS2PFtBXoIQygwfS2CiC85O8TFX7DseigGODJq2uctrGHzFM0H
+         1JUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hBtp0DyG8eFF/S0AqGIqg6ssVhlEsEHSnWa7/gUQAYs=;
+        b=bPt86JDmjDdOECIOTTv8Lug+9PxGmS+xRb2hVad+1Nj6gaGrbCUYaqN9Siyb/hTDrj
+         q51ThIHJ3VflzwfYjnP3gbNeQ133uU6vAF8pWymnyIcVajXkq1nLFVKIpk9yiXtFTDF0
+         qSqqzCAaNUH2bi8vEMtmB6ytHE7E+gIHyv77x6RAwc1bCWlbXKxi93x0K3OC1iXivhiK
+         q8FXdYXDhOELED6sJy4R4m+M7x78aK8oayF4YrnVgS+4piES89Vgg+RWnIga9J4HFrDd
+         eGA5MSN5hsGfuAP3tFR63c546yWX7bjKC5XelufMSUT8FTT475TR8oBiXO6qsOvAX2wK
+         xFiw==
+X-Gm-Message-State: AOAM5300rH9okfc/Qm97LeLcpUvVHUlJZTrEgLT6kmNLS/IqHMRHZQBJ
+        8SwLJBwgqMDVdAE17iGK+4nR78/uHJJh0u3Pcw==
+X-Google-Smtp-Source: ABdhPJxwDC4W/BR9tgWbGzLMSIDVp0tPVKi1EJd3XjJgqQZJE81qjVvxByGiYLWfmTMxGe0klf8K5WWrBSaJCqpgeYY=
+X-Received: by 2002:a17:906:2e0e:: with SMTP id n14mr5707056eji.120.1602785843812;
+ Thu, 15 Oct 2020 11:17:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87r1q3hixr.fsf@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLmTpx9naniZReK859+SV7OpWXmKk90o0qW9Iu8lGA2lvvOTOIOQ+XwLwLRalM3IYh9oay3wogCYDv5OOZy7qcJSI7rd0lc//8EQNhRk5/gPvbJt6H7Y
- iz0P9B3TRA6Yu6gIG/x17OL/9X4WaRVbzV2iOBjOWX3nKu7S9Im0sMEsn07BguCFXjUtwRU/1U03J4aWFxozvYCm9OG7/uyq738uDthRjCXIPrqd8cLCoa8o
- kkusUjwzblO6ohdqFaOGc7ehIh30uFz/JZIbk0OB3NM+54siHMlRvoW/dbe4BkXn
+References: <CANT5p=rkeg0w67RcdKhRzGRD_iHA-eB9cBPOO-6BxZz+iyRp3g@mail.gmail.com>
+In-Reply-To: <CANT5p=rkeg0w67RcdKhRzGRD_iHA-eB9cBPOO-6BxZz+iyRp3g@mail.gmail.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Thu, 15 Oct 2020 11:17:12 -0700
+Message-ID: <CAKywueQuxKPiGs2GDTL3h_Kn2Y0pjuZc=b-g1RV-xgmZo=VAXA@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Return the error from crypt_message when enc/dec
+ key not found.
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On 10/12/2020 5:50 AM, Aurélien Aptel wrote:
-> Patch LGTM
-> 
-> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-> 
-> Stefan Metzmacher via samba-technical <samba-technical@lists.samba.org>
->> This isn't in MS-SMB2 yet.
->>
->> Is this AES_128?
-> 
-> This is returned in latest Windows Server Insider builds but it's not
-> documented yet.
-> 
-> https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver
-> 
-> I've asked dochelp about it during the SDC plugfest and they gave me
-> this:
-> 
->      The new ContextType is:
->      SMB2_SIGNING_CAPABILITIES 0x0008
->      The Data field contains a list of signing algorithms.
->      •    It adds a new negotiate context, which enables SMB to decouple signing algorithms from dialects. E.g. if both client and server supports it, a session may use HMAC-SHA256 with SMB 3.1.1.
->      •    It adds the AES-GMAC algorithm.
->       
->      SigningAlgorithmCount (2 bytes): Count of signing algorithms
->      SigningAlgorithms (variable): An array of SigningAlgorithmCount 16-bit integer IDs specifying the supported signing algorithms.
->       
->      The following IDs are assigned:
->      0 = HMAC-SHA256
->      1 = AES-CMAC
->      2 = AES-GMAC
-> 
-> 
-> I've been CCed in a Microsoft email thread later on and it seems to be
-> unclear why this was missed/wasn't documented. Maybe this is subject to
-> change so take with a grain of salt.
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+--
+Best regards,
+Pavel Shilovsky
 
-Just curious if you've heard back on this. Insider builds will sometimes
-support things that don't make it to the release. Even Preview docs can
-change. However, AES_GMAC has been on the radar since 2015 (*) so
-perhaps the time has come!
-
-I'd suggest wrapping this context and the integrity algs in some kind of
-conditional, in case this is delayed...
-
-Tom.
-
-(*) slide 29+ 
-https://www.snia.org/sites/default/files/SDC15_presentations/smb/GregKramer_%20SMB_3-1-1_rev.pdf
+=D1=87=D1=82, 15 =D0=BE=D0=BA=D1=82. 2020 =D0=B3. =D0=B2 10:56, Shyam Prasa=
+d N <nspmangalore@gmail.com>:
+>
+> Fixes bug:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D209669
+>
+> Please review.
+>
+> --
+> -Shyam
