@@ -2,131 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1163728F862
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 20:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE39028F913
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 21:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732918AbgJOSVl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 15 Oct 2020 14:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S2391266AbgJOTDQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 15 Oct 2020 15:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728997AbgJOSVk (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Oct 2020 14:21:40 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA2CC061755
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Oct 2020 11:21:39 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id cq12so4063834edb.2
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Oct 2020 11:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lrFcfb/9m83T4XSGQBFUK3XxUwBgjTG5OksZkwZIhbE=;
-        b=s5XwH3ciQjsgYDpL3lfKHxYYbAPv8ZEUrXc28YSZNGIGh287VIS0g8bYoI6x/jfSu/
-         YVn+pn2+Bcg9E9TnkVldonsFZSdIUOvydYvk6aU1U8GAFu0uwH7RPRRSQfB8vbTh+E4A
-         Rrvk6tDEymFr1lSxOQEuJbM2alncyyM9unyuZ96OJ6VjMEZChtGJ49bgEMQ4j5NzKNNE
-         CsxGS1DEg3qrBalUoUZnu3markYzhX38fSXAwIOHTxis0z/veDw71fPuLYNnJu1Uyv8q
-         njMTzMk8fJ+hCzQN8m9fF/gWqjFFO3HQM81ithTgq++cQdxSGqWizqKW20vks1gdGlu3
-         PvdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lrFcfb/9m83T4XSGQBFUK3XxUwBgjTG5OksZkwZIhbE=;
-        b=VBkaRr6qMA+gB+2+Cy0zcgvd5SXoBgwKsJH4XKvkNVkpSpPvqxyj3lNup7AueMuk7T
-         yHcHvOupzd+e3PNJyGxuYK+3IQy8BsgJkjyuRbTL2AF5J4+x+7kb64BCE9Fh44Ftkl+p
-         gRZ82Y2ayujvjbaUdERtaG9lmSi2sKEvyG1TNnbDKIr/v4BXdXbaIDi8pJFCLdV9qECN
-         /UhdR1vmvoKrQtuWffOADOz+GvIPC/qBl9klYjl0AeGiJn6VD9rdGzNERwhwNy1hetNt
-         tYBctATVsck9G0F+CcqgxraV4L1rjLZru5ir7A5oMtm6Iok5aCgoOLtBrzeXm93nwWzp
-         2hXQ==
-X-Gm-Message-State: AOAM5331qN9Z5Byv5bvnsioc/jYvb75WH5GHyQKqvfwVfRMujJGY7rbT
-        nUCBHvpcyrrOjvDwg5HdgljduyGuWeG6p/OPZQ==
-X-Google-Smtp-Source: ABdhPJyXghOSoQFJQbf1G2IKkN5UrEQZCjoxjyFZuPxt65uwDfa5LrP7jdRh2pzwHjHVntXnu8zFawqUHR93NrCxAn8=
-X-Received: by 2002:aa7:c68b:: with SMTP id n11mr5557390edq.340.1602786096675;
- Thu, 15 Oct 2020 11:21:36 -0700 (PDT)
+        with ESMTP id S1729674AbgJOTDP (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Oct 2020 15:03:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F31BC061755;
+        Thu, 15 Oct 2020 12:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oNJXIe6ApwnR4LV/FIl4/BNaWNi8NSTj4mgOrmFnzuk=; b=NX+4sGxWbcObdfGwkGyOjAO42I
+        RwmquKATXBHbPE8QSMBRvqg3SOeDdcTChlMCCwoXnLis0DLRnkhZ9SBCeMdxlmrOEU5T31XnSKdna
+        8BJnB9a8evpDeuTlBno2NyNtBFQ3rhK5+DQAIo0aSwxVOlbPXbe1xBNJP+/BLP07zrDu8t86RMeAH
+        /PjljktE1B37EED9rYHkhPumMrgN299CGCffnkM19ZidMR2ViOe3nCfbLb380F9gIBfoc1CJNWBEM
+        pVilSrRr9k6B9lRS2zCnqwquGo2pBX6mLt0eMBFVmNSqr+ihKMHE6zdFkrlbS40ju3J1wa+nt0m9O
+        xHvnTZKg==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kT8Wu-00055X-Dw; Thu, 15 Oct 2020 19:03:12 +0000
+Date:   Thu, 15 Oct 2020 20:03:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
+        Richard Weinberger <richard@nod.at>, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v2 16/16] iomap: Make readpage synchronous
+Message-ID: <20201015190312.GB20115@casper.infradead.org>
+References: <20201009143104.22673-1-willy@infradead.org>
+ <20201009143104.22673-17-willy@infradead.org>
+ <20201015094203.GA21420@infradead.org>
+ <20201015164333.GA20115@casper.infradead.org>
+ <20201015175848.GA4145@infradead.org>
 MIME-Version: 1.0
-References: <CACdtm0YSSsH=MOX6BTimj=uppBDxO66yJWK5ikkyd+knhBXKmw@mail.gmail.com>
- <CAN05THShczOiSTD_bbRfPqHkOfOBLgNiaiibMu6GB+RzXsgK4A@mail.gmail.com>
- <CAH2r5mvZLCMtPVHFu1-Rb5EaP5-1ZiYFaNALm51e5Ui07x9taQ@mail.gmail.com>
- <CACdtm0bKJMuWPUisM8Ogfc8AH052-Y8Cgcdz5gNbVD2nLtJZ_w@mail.gmail.com> <CAH2r5mtO4yDukvQCZ1jS0SGOAsjk5ka9LPbGRd34zV=czSLLNg@mail.gmail.com>
-In-Reply-To: <CAH2r5mtO4yDukvQCZ1jS0SGOAsjk5ka9LPbGRd34zV=czSLLNg@mail.gmail.com>
-From:   Pavel Shilovsky <piastryyy@gmail.com>
-Date:   Thu, 15 Oct 2020 11:21:25 -0700
-Message-ID: <CAKywueR-ngDPXXwMyVy7DtKzeRoXt3z-koqLSnGbOajrtVPCeg@mail.gmail.com>
-Subject: Re: [PATCH][SMB3] Handle STATUS_IO_TIMEOUT gracefully
-To:     Steve French <smfrench@gmail.com>
-Cc:     Rohith Surabattula <rohiths.msft@gmail.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        sribhat.msa@outlook.com, linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201015175848.GA4145@infradead.org>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
---
-Best regards,
-Pavel Shilovsky
+On Thu, Oct 15, 2020 at 06:58:48PM +0100, Christoph Hellwig wrote:
+> On Thu, Oct 15, 2020 at 05:43:33PM +0100, Matthew Wilcox wrote:
+> > I prefer assigning ctx conditionally to propagating the knowledge
+> > that !rac means synchronous.  I've gone with this:
+> 
+> And I really hate these kinds of conditional assignments.  If the
+> ->rac check is too raw please just add an explicit
+> 
+> 	bool synchronous : 1;
+> 
+> flag.
 
-=D0=B2=D1=81, 27 =D1=81=D0=B5=D0=BD=D1=82. 2020 =D0=B3. =D0=B2 20:41, Steve=
- French <smfrench@gmail.com>:
->
-> merged into cifs-2.6.git for-next
->
-> On Fri, Sep 25, 2020 at 2:33 AM Rohith Surabattula
-> <rohiths.msft@gmail.com> wrote:
-> >
-> > As this status code is returned when there is an internal
-> > unavailability. So for any transaction, this status code can be
-> > returned and EJUKEBOX check needs to be added at many places to
-> > support this.
-> >
-> > Respined the patch with signoff flag and attached.
-> >
-> > On Fri, Sep 25, 2020 at 11:42 AM Steve French <smfrench@gmail.com> wrot=
-e:
-> > >
-> > > Ronnie also mentioned EJUKEBOX as a possibly better error mapping to
-> > > return (and then check for).  EJUKEBOX implies waiting and then
-> > > backoff.
-> > >
-> > > On Fri, Sep 18, 2020 at 1:20 AM ronnie sahlberg
-> > > <ronniesahlberg@gmail.com> wrote:
-> > > >
-> > > > On Fri, Sep 18, 2020 at 4:08 PM rohiths msft <rohiths.msft@gmail.co=
-m> wrote:
-> > > > >
-> > > > > Hi All,
-> > > > >
-> > > > > This fix is to handle STATUS_IO_TIMEOUT status code. This status =
-code
-> > > > > is returned by the server in case of unavailability(internal
-> > > > > disconnects,etc) and is not treated by linux clients as retriable=
-. So,
-> > > > > this fix maps the status code as retriable error and also has a c=
-heck
-> > > > > to drop the connection to not overload the server.
-> > > > >
-> > > >
-> > > > Do we need a new method for this? Wouldn't it be enough to just do =
-the
-> > > > remap-to-EAGAIN and have it handled as all other retryable errors?
-> > > >
-> > > >
-> > > > > Regards,
-> > > > > Rohith
-> > >
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > >
-> > > Steve
->
->
->
-> --
-> Thanks,
->
-> Steve
+I honestly don't see the problem.  We have to assign the status
+conditionally anyway so we don't overwrite an error with a subsequent
+success.
+
+> True.  I'd still prefer the AOP_UPDATED_PAGE as the fallthrough case
+> and an explicit goto out_unlock, though.
+
+So this?
+
+        if (ctx.bio) {
+                submit_bio(ctx.bio);
+                wait_for_completion(&ctx.done);
+                if (ret < 0)
+                        goto err;
+                ret = blk_status_to_errno(ctx.status);
+        }
+
+        if (ret < 0)
+                goto err;
+        return AOP_UPDATED_PAGE;
+err:
+        unlock_page(page);
+        return ret;
+
