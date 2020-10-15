@@ -2,95 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD9C28F801
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 19:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B5328F86A
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Oct 2020 20:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732166AbgJOR6u (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 15 Oct 2020 13:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732156AbgJOR6u (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Oct 2020 13:58:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A34C061755;
-        Thu, 15 Oct 2020 10:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=x+XQ7VEyYNfvRvizRGPoAdTEAMGVk8qPQWatjzYSgQw=; b=m21slifxK1bGUo9NkuLnasLmGW
-        W7j1mSzLsl8lqkNcmNBEmyamMl2n/iSza8Fv9vJdGtVQIw2/kDlRcMmM4PWbe5eP6FTvI4xm0WOWP
-        4Adx+LchNEcYX2u8R/hnI8+L4xfRz5R7/ZW9gYaZ59Wva288nDtTL0QGvEDQcyQNBdTqXo87Bl3HW
-        E62GWuauRw2KoIGK3HW5V9LXG8lMy3MQUVaq3gY0yr4/hMeSjIpZfqFbIV5olX2c1do/vAiTNpYlO
-        890vukb4WHYvxnqK7wVoxPPIDsWceSIRHULvymZsZRjmZLVpToKJoS//KCJAy1r/TgDXANhlomCkj
-        PpgfwI1A==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kT7Wa-00018B-31; Thu, 15 Oct 2020 17:58:48 +0000
-Date:   Thu, 15 Oct 2020 18:58:48 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ecryptfs@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
-        Richard Weinberger <richard@nod.at>, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v2 16/16] iomap: Make readpage synchronous
-Message-ID: <20201015175848.GA4145@infradead.org>
-References: <20201009143104.22673-1-willy@infradead.org>
- <20201009143104.22673-17-willy@infradead.org>
- <20201015094203.GA21420@infradead.org>
- <20201015164333.GA20115@casper.infradead.org>
+        id S1727684AbgJOSWv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 15 Oct 2020 14:22:51 -0400
+Received: from p3plsmtpa07-05.prod.phx3.secureserver.net ([173.201.192.234]:54762
+        "EHLO p3plsmtpa07-05.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727197AbgJOSWv (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 15 Oct 2020 14:22:51 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 14:22:51 EDT
+Received: from [192.168.0.116] ([71.184.94.153])
+        by :SMTPAUTH: with ESMTPSA
+        id T7mlk50kils90T7mmkWp2O; Thu, 15 Oct 2020 11:15:32 -0700
+X-CMAE-Analysis: v=2.3 cv=QfEYQfTv c=1 sm=1 tr=0
+ a=vbvdVb1zh1xTTaY8rfQfKQ==:117 a=vbvdVb1zh1xTTaY8rfQfKQ==:17
+ a=IkcTkHD0fZMA:10 a=iox4zFpeAAAA:8 a=hGzw-44bAAAA:8 a=yMhMjlubAAAA:8
+ a=hNOTfydlAAAA:8 a=NA896NxhSAy2TpZPZw8A:9 a=QEXdDO2ut3YA:10
+ a=WzC6qhA0u3u7Ye7llzcV:22 a=HvKuF1_PTVFglORKqfwH:22 a=fZunMKNLB757I4m4HZ3M:22
+X-SECURESERVER-ACCT: tom@talpey.com
+Subject: Re: [PATCH][SMB3.1.1] Add defines for new signing context
+To:     =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     samba-technical <samba-technical@lists.samba.org>
+References: <CAH2r5mtwBHTk-Xoeuo+RbgNwiNw-cWTAhdy1YG5y+vXnNDSv4w@mail.gmail.com>
+ <bd8f21ed-5fd4-0974-f15a-16d2f3ee607f@samba.org> <87r1q3hixr.fsf@suse.com>
+From:   Tom Talpey <tom@talpey.com>
+Message-ID: <827fd43f-40a9-9480-a6b9-aea1fa69090c@talpey.com>
+Date:   Thu, 15 Oct 2020 14:15:32 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201015164333.GA20115@casper.infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <87r1q3hixr.fsf@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfLmTpx9naniZReK859+SV7OpWXmKk90o0qW9Iu8lGA2lvvOTOIOQ+XwLwLRalM3IYh9oay3wogCYDv5OOZy7qcJSI7rd0lc//8EQNhRk5/gPvbJt6H7Y
+ iz0P9B3TRA6Yu6gIG/x17OL/9X4WaRVbzV2iOBjOWX3nKu7S9Im0sMEsn07BguCFXjUtwRU/1U03J4aWFxozvYCm9OG7/uyq738uDthRjCXIPrqd8cLCoa8o
+ kkusUjwzblO6ohdqFaOGc7ehIh30uFz/JZIbk0OB3NM+54siHMlRvoW/dbe4BkXn
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 05:43:33PM +0100, Matthew Wilcox wrote:
-> On Thu, Oct 15, 2020 at 10:42:03AM +0100, Christoph Hellwig wrote:
-> > > +static void iomap_read_page_end_io(struct bio_vec *bvec,
-> > > +		struct completion *done, bool error)
-> > 
-> > I really don't like the parameters here.  Part of the problem is
-> > that ctx is only assigned to bi_private conditionally, which can
-> > easily be fixed.  The other part is the strange bool error when
-> > we can just pass on bi_stats.  See the patch at the end of what
-> > I'd do intead.
+On 10/12/2020 5:50 AM, Aurélien Aptel wrote:
+> Patch LGTM
 > 
-> I prefer assigning ctx conditionally to propagating the knowledge
-> that !rac means synchronous.  I've gone with this:
-
-And I really hate these kinds of conditional assignments.  If the
-->rac check is too raw please just add an explicit
-
-	bool synchronous : 1;
-
-flag.
-
-> @@ -340,16 +335,12 @@ iomap_readpage(struct page *page, const struct iomap_ops *
-> ops)
->  
->         if (ctx.bio) {
->                 submit_bio(ctx.bio);
-> +               if (ret > 0)
-> +                       ret = blk_status_to_errno(ctx.status);
->         }
->  
-> -       wait_for_completion(&ctx.done);
->         if (ret >= 0)
-> -               ret = blk_status_to_errno(ctx.status);
-> -       if (ret == 0)
->                 return AOP_UPDATED_PAGE;
->         unlock_page(page);
->         return ret;
+> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+> 
+> Stefan Metzmacher via samba-technical <samba-technical@lists.samba.org>
+>> This isn't in MS-SMB2 yet.
+>>
+>> Is this AES_128?
+> 
+> This is returned in latest Windows Server Insider builds but it's not
+> documented yet.
+> 
+> https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver
+> 
+> I've asked dochelp about it during the SDC plugfest and they gave me
+> this:
+> 
+>      The new ContextType is:
+>      SMB2_SIGNING_CAPABILITIES 0x0008
+>      The Data field contains a list of signing algorithms.
+>      •    It adds a new negotiate context, which enables SMB to decouple signing algorithms from dialects. E.g. if both client and server supports it, a session may use HMAC-SHA256 with SMB 3.1.1.
+>      •    It adds the AES-GMAC algorithm.
+>       
+>      SigningAlgorithmCount (2 bytes): Count of signing algorithms
+>      SigningAlgorithms (variable): An array of SigningAlgorithmCount 16-bit integer IDs specifying the supported signing algorithms.
+>       
+>      The following IDs are assigned:
+>      0 = HMAC-SHA256
+>      1 = AES-CMAC
+>      2 = AES-GMAC
 > 
 > 
-> ... there's no need to call blk_status_to_errno if we never submitted a bio.
+> I've been CCed in a Microsoft email thread later on and it seems to be
+> unclear why this was missed/wasn't documented. Maybe this is subject to
+> change so take with a grain of salt.
 
-True.  I'd still prefer the AOP_UPDATED_PAGE as the fallthrough case
-and an explicit goto out_unlock, though.
+Just curious if you've heard back on this. Insider builds will sometimes
+support things that don't make it to the release. Even Preview docs can
+change. However, AES_GMAC has been on the radar since 2015 (*) so
+perhaps the time has come!
+
+I'd suggest wrapping this context and the integrity algs in some kind of
+conditional, in case this is delayed...
+
+Tom.
+
+(*) slide 29+ 
+https://www.snia.org/sites/default/files/SDC15_presentations/smb/GregKramer_%20SMB_3-1-1_rev.pdf
