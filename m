@@ -2,176 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4A2290721
-	for <lists+linux-cifs@lfdr.de>; Fri, 16 Oct 2020 16:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BBC290944
+	for <lists+linux-cifs@lfdr.de>; Fri, 16 Oct 2020 18:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407428AbgJPO1u (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 16 Oct 2020 10:27:50 -0400
-Received: from p3plsmtpa06-01.prod.phx3.secureserver.net ([173.201.192.102]:48678
-        "EHLO p3plsmtpa06-01.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407408AbgJPO1u (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 16 Oct 2020 10:27:50 -0400
-Received: from [192.168.0.116] ([71.184.94.153])
-        by :SMTPAUTH: with ESMTPSA
-        id TQhwkPvAWXReoTQhwkYFrS; Fri, 16 Oct 2020 07:27:49 -0700
-X-CMAE-Analysis: v=2.3 cv=DKHxHBFb c=1 sm=1 tr=0
- a=vbvdVb1zh1xTTaY8rfQfKQ==:117 a=vbvdVb1zh1xTTaY8rfQfKQ==:17
- a=IkcTkHD0fZMA:10 a=hGzw-44bAAAA:8 a=pGLkceISAAAA:8 a=SEc3moZ4AAAA:8
- a=iox4zFpeAAAA:8 a=yMhMjlubAAAA:8 a=hNOTfydlAAAA:8 a=ySJjVz2esI22uv7vTAIA:9
- a=QEXdDO2ut3YA:10 a=HvKuF1_PTVFglORKqfwH:22 a=5oRCH6oROnRZc2VpWJZ3:22
- a=WzC6qhA0u3u7Ye7llzcV:22 a=fZunMKNLB757I4m4HZ3M:22
-X-SECURESERVER-ACCT: tom@talpey.com
-Subject: Re: [PATCH][SMB3.1.1] Add defines for new signing context
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Steve French <smfrench@gmail.com>
-Cc:     Stefan Metzmacher <metze@samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>
-References: <CAH2r5mtwBHTk-Xoeuo+RbgNwiNw-cWTAhdy1YG5y+vXnNDSv4w@mail.gmail.com>
- <bd8f21ed-5fd4-0974-f15a-16d2f3ee607f@samba.org> <87r1q3hixr.fsf@suse.com>
- <827fd43f-40a9-9480-a6b9-aea1fa69090c@talpey.com>
- <CAH2r5mt3t=FHVd8RtCyrzY6TUKb+rGENENXbKJBgUdq4T4Qe6Q@mail.gmail.com>
- <CAH2r5mu72VSPFhiLjL3YUtStXc1=B5SBP86+A5vEWFhLFyOJBw@mail.gmail.com>
- <CAN05THRAZnea1NUW7-h5jHsQ+yUpvxO-5KHGaFgKB87JxmWBqg@mail.gmail.com>
-From:   Tom Talpey <tom@talpey.com>
-Message-ID: <55b0a562-b6cc-b6d4-65c7-b642ce08cc4b@talpey.com>
-Date:   Fri, 16 Oct 2020 10:27:49 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S2409183AbgJPQFF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 16 Oct 2020 12:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410556AbgJPQEs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 16 Oct 2020 12:04:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F17C0613D3;
+        Fri, 16 Oct 2020 09:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=1gAdnouxzpGmlXDQWytpWvnXaVVvGdMiUWIOHN43YgI=; b=PHsOXRefPXYbuJLyhWUENQjtiv
+        PvaSV2vCC8WINCdV5AEp+CWhJHRK1p+aNonulN42m466RQIlXw3IHvb/RmNXaOhRzldy1UxbTuDqY
+        NcaDewCnsmzuXcHVpziXWnYI9ue3WklexPhlQxnJI0qP9K+wrBh2T/E3jt7iyKhERHWrykln9HYHU
+        AcuhU7UL2O5ncbuQK7iGexv0LcVyc1NEntKTSG4YYsK1VFL9hLXL98h0ZxzQvFe/4kZJfHEsSaX7C
+        dIWtul+Pv9CexE12o1k6i9W7t8kyhYtguoGau7Kf/zgMdTW5lDReKoy2VvafZqPjD58NOmUCeSSsV
+        Ecb8d3sw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kTSDk-0004s5-Ui; Fri, 16 Oct 2020 16:04:44 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, David Howells <dhowells@redhat.com>,
+        Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Tyler Hicks <code@tyhicks.com>, ecryptfs@vger.kernel.org,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, Miklos Szeredi <miklos@szeredi.hu>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v3 00/18] Allow readpage to return a locked page
+Date:   Fri, 16 Oct 2020 17:04:25 +0100
+Message-Id: <20201016160443.18685-1-willy@infradead.org>
+X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
-In-Reply-To: <CAN05THRAZnea1NUW7-h5jHsQ+yUpvxO-5KHGaFgKB87JxmWBqg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfIxjPAgA97wmOXrhr3HAbnhORhugIuEaA16Agw7hcROM4DjCbRAho1qq2TuemZBcabvIgUEW8dngv6lItCFwLTQstQB0nAwkOeR4UqMQ8MrdsH9SbDVt
- 7lyt0bci0F25I91F1VlLPZC6OPYv0rhPhErkoX8+DUk6+R14zJ0pzrm+FePKw/CSshUie/qv9NtBjymjb6cvIjWWyM2cAaYE3rK7XqkXZzB40cdAX9t4k79d
- v7n3Kilb2A6YZxgBl66lupHN2BuIhm/vTKlmg9bAA1VfBMeHQyh1IOm+sCNaitcM1FpR6V1kzl+x+adAkm2AO8wQ1MWCusJiMWxI/XuX+p4=
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Indeed yes, my point is that until/unless Microsoft indicates
-the new signing context is committed to the protocol, it's
-premature to bake it into Linux, or anywhere else. Speaking
-from experience, things have been changed or removed at some
-very late dates, in fact.
+I've dropped the conversion of readpage implementations to synchronous
+from this patchset.  I realised I'd neglected the requirement for making
+the sleep killable, and that turns out to be more convoluted to fix.
 
-While I have the floor, and just a personal opinion, I feel
-there is a huge and confusing proliferation of module options
-and mount flags creeping into cifs.ko over time here. Is this
-really a good idea?
+So these patches add:
+ - An error-path bugfix for cachefiles.
+ - The ability for the filesystem to tell the caller of ->readpage
+   that the read was successful and the page was not unlocked.  This is
+   a performance improvement for some scenarios that I think are rare.
+ - Mildly improved error handling for ext4.
 
-Tom.
+v2: https://lore.kernel.org/linux-fsdevel/20201009143104.22673-1-willy@infradead.org/
+v1: https://lore.kernel.org/linux-fsdevel/20200917151050.5363-1-willy@infradead.org/
+Matthew Wilcox (Oracle) (18):
+  cachefiles: Handle readpage error correctly
+  swap: Call aops->readahead if appropriate
+  fs: Add AOP_UPDATED_PAGE return value
+  mm/filemap: Inline wait_on_page_read into its one caller
+  9p: Tell the VFS that readpage was synchronous
+  afs: Tell the VFS that readpage was synchronous
+  ceph: Tell the VFS that readpage was synchronous
+  cifs: Tell the VFS that readpage was synchronous
+  cramfs: Tell the VFS that readpage was synchronous
+  ecryptfs: Tell the VFS that readpage was synchronous
+  ext4: Tell the VFS that readpage was synchronous
+  ext4: Return error from ext4_readpage
+  fuse: Tell the VFS that readpage was synchronous
+  hostfs: Tell the VFS that readpage was synchronous
+  jffs2: Tell the VFS that readpage was synchronous
+  ubifs: Tell the VFS that readpage was synchronous
+  udf: Tell the VFS that readpage was synchronous
+  vboxsf: Tell the VFS that readpage was synchronous
 
-On 10/16/2020 2:11 AM, ronnie sahlberg wrote:
-> Looks good, but I think Tom's point is we should not put this in
-> upstream until the feature is officially launched.
-> In  wireshark, we can add these things immediately since any capture
-> files with these parameters will continue to exist forever.
-> See wireshark still supports pre-RFS versions of iSCSI.
-> But for cifs.ko we might want to wait sending to Linus until it is
-> officially released in a consumer version of windows.
-> 
-> Lets just look at SMB2.PDF and all the bitfields/flags that specify a
-> feature with description and then the comment that it is not used,
-> clients should set it to 0 and servers must ignore the flag. Things
-> can change until official release.
-> 
-> 
-> 
-> On Fri, Oct 16, 2020 at 3:50 PM Steve French via samba-technical
-> <samba-technical@lists.samba.org> wrote:
->>
->> Here is a patch to add a module load parm that is turned off by
->> default to allow users to enable it for experimentation
->>
->> # ls /sys/module/cifs/parameters/
->> CIFSMaxBufSize    cifs_min_small           enable_oplocks
->> cifs_max_pending  disable_legacy_dialects  enable_signing_negcontext
->> cifs_min_rcv      enable_gcm_256           require_gcm_256
->>
->> # cat /sys/module/cifs/parameters/enable_signing_negcontext
->> N
->>
->> On Thu, Oct 15, 2020 at 11:50 PM Steve French <smfrench@gmail.com> wrote:
->>>
->>>> suggest wrapping this context and the integrity algs in some kind of conditional
->>>
->>> I have a couple patches to send the context (which I haven't merged
->>> yet, because, similar to what you suggested, I wanted to make sure
->>> they were disabled by default).
->>>
->>> Tentative plan was to have them disabled by default, and sending the
->>> new context can be enabled for testing by a module parameter (e.g.
->>> "echo 1 >  /sys/modules/cifs/parameters/enable_signing_context"  or
->>> some similar config variable name)
->>>
->>> On Thu, Oct 15, 2020 at 1:15 PM Tom Talpey <tom@talpey.com> wrote:
->>>>
->>>> On 10/12/2020 5:50 AM, Aurélien Aptel wrote:
->>>>> Patch LGTM
->>>>>
->>>>> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
->>>>>
->>>>> Stefan Metzmacher via samba-technical <samba-technical@lists.samba.org>
->>>>>> This isn't in MS-SMB2 yet.
->>>>>>
->>>>>> Is this AES_128?
->>>>>
->>>>> This is returned in latest Windows Server Insider builds but it's not
->>>>> documented yet.
->>>>>
->>>>> https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver
->>>>>
->>>>> I've asked dochelp about it during the SDC plugfest and they gave me
->>>>> this:
->>>>>
->>>>>       The new ContextType is:
->>>>>       SMB2_SIGNING_CAPABILITIES 0x0008
->>>>>       The Data field contains a list of signing algorithms.
->>>>>       •    It adds a new negotiate context, which enables SMB to decouple signing algorithms from dialects. E.g. if both client and server supports it, a session may use HMAC-SHA256 with SMB 3.1.1.
->>>>>       •    It adds the AES-GMAC algorithm.
->>>>>
->>>>>       SigningAlgorithmCount (2 bytes): Count of signing algorithms
->>>>>       SigningAlgorithms (variable): An array of SigningAlgorithmCount 16-bit integer IDs specifying the supported signing algorithms.
->>>>>
->>>>>       The following IDs are assigned:
->>>>>       0 = HMAC-SHA256
->>>>>       1 = AES-CMAC
->>>>>       2 = AES-GMAC
->>>>>
->>>>>
->>>>> I've been CCed in a Microsoft email thread later on and it seems to be
->>>>> unclear why this was missed/wasn't documented. Maybe this is subject to
->>>>> change so take with a grain of salt.
->>>>
->>>> Just curious if you've heard back on this. Insider builds will sometimes
->>>> support things that don't make it to the release. Even Preview docs can
->>>> change. However, AES_GMAC has been on the radar since 2015 (*) so
->>>> perhaps the time has come!
->>>>
->>>> I'd suggest wrapping this context and the integrity algs in some kind of
->>>> conditional, in case this is delayed...
->>>>
->>>> Tom.
->>>>
->>>> (*) slide 29+
->>>> https://www.snia.org/sites/default/files/SDC15_presentations/smb/GregKramer_%20SMB_3-1-1_rev.pdf
->>>
->>>
->>>
->>> --
->>> Thanks,
->>>
->>> Steve
->>
->>
->>
->> --
->> Thanks,
->>
->> Steve
-> 
-> 
+ Documentation/filesystems/locking.rst |  7 +++---
+ Documentation/filesystems/vfs.rst     | 21 +++++++++++------
+ fs/9p/vfs_addr.c                      |  6 ++++-
+ fs/afs/file.c                         |  3 ++-
+ fs/buffer.c                           | 15 +++++++-----
+ fs/cachefiles/rdwr.c                  |  9 ++++++++
+ fs/ceph/addr.c                        |  9 ++++----
+ fs/cifs/file.c                        |  8 +++++--
+ fs/cramfs/inode.c                     |  5 ++--
+ fs/ecryptfs/mmap.c                    | 11 +++++----
+ fs/ext4/inline.c                      |  9 +++++---
+ fs/ext4/readpage.c                    | 24 +++++++++++--------
+ fs/fuse/file.c                        |  2 ++
+ fs/hostfs/hostfs_kern.c               |  2 ++
+ fs/jffs2/file.c                       |  6 +++--
+ fs/ubifs/file.c                       | 16 ++++++++-----
+ fs/udf/file.c                         |  3 +--
+ fs/vboxsf/file.c                      |  2 ++
+ include/linux/fs.h                    |  5 ++++
+ mm/filemap.c                          | 33 +++++++++++++--------------
+ mm/page_io.c                          | 27 ++++++++++++++++++++--
+ mm/readahead.c                        |  3 ++-
+ 22 files changed, 151 insertions(+), 75 deletions(-)
+
+-- 
+2.28.0
+
