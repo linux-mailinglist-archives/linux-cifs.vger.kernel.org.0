@@ -2,96 +2,63 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B529A0FE
-	for <lists+linux-cifs@lfdr.de>; Tue, 27 Oct 2020 01:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A4529A922
+	for <lists+linux-cifs@lfdr.de>; Tue, 27 Oct 2020 11:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443535AbgJ0AbK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 26 Oct 2020 20:31:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52928 "EHLO mail.kernel.org"
+        id S2897387AbgJ0KI3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 27 Oct 2020 06:08:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59494 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409504AbgJZXvn (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:51:43 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1A1B320882;
-        Mon, 26 Oct 2020 23:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756302;
-        bh=fbOKK3oj6RLCzwslWtdXpYtuvTduGUnB3rdCifdbUIs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W2DlNiugeajzi+LFJxkw7am2Znyh5RNsM9wtavd2H1acACBoYU9L/HUjJLfDN04fD
-         fQIbOcvhZCT7KsG4zeqsLUSL2Ji5X+qJgFnhWxnFNaDHlXHKuxX5/doK/r4j1sNgL4
-         bw4fBdPtAvzKdKflkBvE8Zc3GhfnmX2kU+f0Zh9M=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.9 128/147] cifs: handle -EINTR in cifs_setattr
-Date:   Mon, 26 Oct 2020 19:48:46 -0400
-Message-Id: <20201026234905.1022767-128-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
-References: <20201026234905.1022767-1-sashal@kernel.org>
+        id S2897380AbgJ0KI3 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 27 Oct 2020 06:08:29 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 102A2AEE6
+        for <linux-cifs@vger.kernel.org>; Tue, 27 Oct 2020 10:08:28 +0000 (UTC)
+From:   Samuel Cabrero <scabrero@suse.de>
+To:     linux-cifs@vger.kernel.org
+Subject: [PATCH v2 00/11] Witness protocol support for transparent failover
+Date:   Tue, 27 Oct 2020 11:07:56 +0100
+Message-Id: <20201027100807.21510-1-scabrero@suse.de>
+X-Mailer: git-send-email 2.29.0
+Reply-To: scabrero@suse.de
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+Changes from v1:
+  * Update SPDX header in user space API files to LGPL-2.1+ with
+    Linux-syscall-note
 
-[ Upstream commit c6cc4c5a72505a0ecefc9b413f16bec512f38078 ]
+[PATCH v2 01/11] cifs: Make extract_hostname function public
+[PATCH v2 02/11] cifs: Make extract_sharename function public
+[PATCH v2 03/11] cifs: Register generic netlink family
+[PATCH v2 04/11] cifs: add witness mount option and data structs
+[PATCH v2 05/11] cifs: Send witness register and unregister commands
+[PATCH v2 06/11] cifs: Set witness notification handler for messages
+[PATCH v2 07/11] cifs: Add witness information to debug data dump
+[PATCH v2 08/11] cifs: Send witness register messages to userspace
+[PATCH v2 09/11] cifs: Simplify reconnect code when dfs upcall is
+[PATCH v2 10/11] cifs: Handle witness client move notification
+[PATCH v2 11/11] cifs: Handle witness share moved notification
 
-RHBZ: 1848178
-
-Some calls that set attributes, like utimensat(), are not supposed to return
--EINTR and thus do not have handlers for this in glibc which causes us
-to leak -EINTR to the applications which are also unprepared to handle it.
-
-For example tar will break if utimensat() return -EINTR and abort unpacking
-the archive. Other applications may break too.
-
-To handle this we add checks, and retry, for -EINTR in cifs_setattr()
-
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/cifs/inode.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index 1f75b25e559a7..daec31be85718 100644
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -2883,13 +2883,18 @@ cifs_setattr(struct dentry *direntry, struct iattr *attrs)
- {
- 	struct cifs_sb_info *cifs_sb = CIFS_SB(direntry->d_sb);
- 	struct cifs_tcon *pTcon = cifs_sb_master_tcon(cifs_sb);
-+	int rc, retries = 0;
- 
--	if (pTcon->unix_ext)
--		return cifs_setattr_unix(direntry, attrs);
--
--	return cifs_setattr_nounix(direntry, attrs);
-+	do {
-+		if (pTcon->unix_ext)
-+			rc = cifs_setattr_unix(direntry, attrs);
-+		else
-+			rc = cifs_setattr_nounix(direntry, attrs);
-+		retries++;
-+	} while (is_retryable_error(rc) && retries < 2);
- 
- 	/* BB: add cifs_setattr_legacy for really old servers */
-+	return rc;
- }
- 
- #if 0
--- 
-2.25.1
+ fs/cifs/Kconfig                        |  11 +
+ fs/cifs/Makefile                       |   2 +
+ fs/cifs/cache.c                        |  24 -
+ fs/cifs/cifs_debug.c                   |  13 +
+ fs/cifs/cifs_swn.c                     | 723 ++++++++++++++++++++++++
+ fs/cifs/cifs_swn.h                     |  25 +
+ fs/cifs/cifsfs.c                       |  22 +-
+ fs/cifs/cifsglob.h                     |   8 +
+ fs/cifs/cifsproto.h                    |   2 +
+ fs/cifs/connect.c                      | 141 +++--
+ fs/cifs/fscache.c                      |   1 +
+ fs/cifs/fscache.h                      |   1 -
+ fs/cifs/misc.c                         |  56 ++
+ fs/cifs/netlink.c                      |  88 +++
+ fs/cifs/netlink.h                      |  16 +
+ include/uapi/linux/cifs/cifs_netlink.h |  63 +++
+ 16 files changed, 1117 insertions(+), 79 deletions(-)
 
