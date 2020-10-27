@@ -2,25 +2,25 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5922529A925
+	by mail.lfdr.de (Postfix) with ESMTP id C727529A926
 	for <lists+linux-cifs@lfdr.de>; Tue, 27 Oct 2020 11:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897393AbgJ0KIb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        id S2897384AbgJ0KIb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
         Tue, 27 Oct 2020 06:08:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59534 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:59544 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897384AbgJ0KIa (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 27 Oct 2020 06:08:30 -0400
+        id S2897386AbgJ0KIb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 27 Oct 2020 06:08:31 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E0D8BAD0D
-        for <linux-cifs@vger.kernel.org>; Tue, 27 Oct 2020 10:08:28 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 4B061B03E
+        for <linux-cifs@vger.kernel.org>; Tue, 27 Oct 2020 10:08:29 +0000 (UTC)
 From:   Samuel Cabrero <scabrero@suse.de>
 To:     linux-cifs@vger.kernel.org
 Cc:     Samuel Cabrero <scabrero@suse.de>
-Subject: [PATCH v2 03/11] cifs: Register generic netlink family
-Date:   Tue, 27 Oct 2020 11:07:59 +0100
-Message-Id: <20201027100807.21510-4-scabrero@suse.de>
+Subject: [PATCH v2 04/11] cifs: add witness mount option and data structs
+Date:   Tue, 27 Oct 2020 11:08:00 +0100
+Message-Id: <20201027100807.21510-5-scabrero@suse.de>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201027100807.21510-1-scabrero@suse.de>
 References: <20201027100807.21510-1-scabrero@suse.de>
@@ -31,243 +31,134 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Register a new generic netlink family to talk to the witness service
-userspace daemon.
+Add 'witness' mount option to register for witness notifications.
 
 Signed-off-by: Samuel Cabrero <scabrero@suse.de>
 ---
- fs/cifs/Kconfig                        | 11 +++++
- fs/cifs/Makefile                       |  2 +
- fs/cifs/cifsfs.c                       | 17 ++++++-
- fs/cifs/netlink.c                      | 68 ++++++++++++++++++++++++++
- fs/cifs/netlink.h                      | 16 ++++++
- include/uapi/linux/cifs/cifs_netlink.h | 31 ++++++++++++
- 6 files changed, 144 insertions(+), 1 deletion(-)
- create mode 100644 fs/cifs/netlink.c
- create mode 100644 fs/cifs/netlink.h
- create mode 100644 include/uapi/linux/cifs/cifs_netlink.h
+ fs/cifs/cifsfs.c   |  5 +++++
+ fs/cifs/cifsglob.h |  4 ++++
+ fs/cifs/connect.c  | 35 ++++++++++++++++++++++++++++++++++-
+ 3 files changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/fs/cifs/Kconfig b/fs/cifs/Kconfig
-index 604f65f4b6c5..664ac5c63d39 100644
---- a/fs/cifs/Kconfig
-+++ b/fs/cifs/Kconfig
-@@ -190,6 +190,17 @@ config CIFS_DFS_UPCALL
- 	  servers if their addresses change or for implicit mounts of
- 	  DFS junction points. If unsure, say Y.
- 
-+config CIFS_SWN_UPCALL
-+	bool "SWN feature support"
-+	depends on CIFS
-+	help
-+	  The Service Witness Protocol (SWN) is used to get notifications
-+	  from a highly available server of resource state changes. This
-+	  feature enables an upcall mechanism for CIFS which contacts an
-+	  userspace daemon to establish the DCE/RPC connection to retrieve
-+	  the cluster available interfaces and resource change notifications.
-+	  If unsure, say Y.
-+
- config CIFS_NFSD_EXPORT
- 	bool "Allow nfsd to export CIFS file system"
- 	depends on CIFS && BROKEN
-diff --git a/fs/cifs/Makefile b/fs/cifs/Makefile
-index cd17d0e50f2a..b88fd46ac597 100644
---- a/fs/cifs/Makefile
-+++ b/fs/cifs/Makefile
-@@ -18,6 +18,8 @@ cifs-$(CONFIG_CIFS_UPCALL) += cifs_spnego.o
- 
- cifs-$(CONFIG_CIFS_DFS_UPCALL) += dns_resolve.o cifs_dfs_ref.o dfs_cache.o
- 
-+cifs-$(CONFIG_CIFS_SWN_UPCALL) += netlink.o
-+
- cifs-$(CONFIG_CIFS_FSCACHE) += fscache.o cache.o
- 
- cifs-$(CONFIG_CIFS_SMB_DIRECT) += smbdirect.o
 diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 472cb7777e3e..8111d0109a2e 100644
+index 8111d0109a2e..c2bbc444b463 100644
 --- a/fs/cifs/cifsfs.c
 +++ b/fs/cifs/cifsfs.c
-@@ -55,6 +55,9 @@
- #ifdef CONFIG_CIFS_DFS_UPCALL
- #include "dfs_cache.h"
+@@ -637,6 +637,11 @@ cifs_show_options(struct seq_file *s, struct dentry *root)
+ 		seq_printf(s, ",multichannel,max_channels=%zu",
+ 			   tcon->ses->chan_max);
+ 
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	if (tcon->use_witness)
++		seq_puts(s, ",witness");
++#endif
++
+ 	return 0;
+ }
+ 
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 484ec2d8c5c9..f45b7c0fbceb 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -619,6 +619,7 @@ struct smb_vol {
+ 	unsigned int max_channels;
+ 	__u16 compression; /* compression algorithm 0xFFFF default 0=disabled */
+ 	bool rootfs:1; /* if it's a SMB root file system */
++	bool witness:1; /* use witness protocol */
+ };
+ 
+ /**
+@@ -1177,6 +1178,9 @@ struct cifs_tcon {
+ 	int remap:2;
+ 	struct list_head ulist; /* cache update list */
  #endif
 +#ifdef CONFIG_CIFS_SWN_UPCALL
-+#include "netlink.h"
++	bool use_witness:1; /* use witness protocol */
 +#endif
+ };
  
  /*
-  * DOS dates from 1980/1/1 through 2107/12/31
-@@ -1617,10 +1620,15 @@ init_cifs(void)
- 	if (rc)
- 		goto out_destroy_dfs_cache;
- #endif /* CONFIG_CIFS_UPCALL */
-+#ifdef CONFIG_CIFS_SWN_UPCALL
-+	rc = cifs_genl_init();
-+	if (rc)
-+		goto out_register_key_type;
-+#endif /* CONFIG_CIFS_SWN_UPCALL */
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 5aadc4632097..ed749e978ad8 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -102,7 +102,7 @@ enum {
+ 	Opt_resilient, Opt_noresilient,
+ 	Opt_domainauto, Opt_rdma, Opt_modesid, Opt_rootfs,
+ 	Opt_multichannel, Opt_nomultichannel,
+-	Opt_compress,
++	Opt_compress, Opt_witness,
  
- 	rc = init_cifs_idmap();
- 	if (rc)
--		goto out_register_key_type;
-+		goto out_cifs_swn_init;
+ 	/* Mount options which take numeric value */
+ 	Opt_backupuid, Opt_backupgid, Opt_uid,
+@@ -276,6 +276,7 @@ static const match_table_t cifs_mount_option_tokens = {
+ 	{ Opt_ignore, "relatime" },
+ 	{ Opt_ignore, "_netdev" },
+ 	{ Opt_rootfs, "rootfs" },
++	{ Opt_witness, "witness" },
  
- 	rc = register_filesystem(&cifs_fs_type);
- 	if (rc)
-@@ -1636,7 +1644,11 @@ init_cifs(void)
- 
- out_init_cifs_idmap:
- 	exit_cifs_idmap();
-+out_cifs_swn_init:
-+#ifdef CONFIG_CIFS_SWN_UPCALL
-+	cifs_genl_exit();
- out_register_key_type:
-+#endif
- #ifdef CONFIG_CIFS_UPCALL
- 	exit_cifs_spnego();
- out_destroy_dfs_cache:
-@@ -1673,6 +1685,9 @@ exit_cifs(void)
- 	unregister_filesystem(&smb3_fs_type);
- 	cifs_dfs_release_automount_timer();
- 	exit_cifs_idmap();
-+#ifdef CONFIG_CIFS_SWN_UPCALL
-+	cifs_genl_exit();
-+#endif
- #ifdef CONFIG_CIFS_UPCALL
- 	exit_cifs_spnego();
+ 	{ Opt_err, NULL }
+ };
+@@ -1538,6 +1539,13 @@ cifs_parse_mount_options(const char *mountdata, const char *devname,
+ 			vol->rootfs = true;
  #endif
-diff --git a/fs/cifs/netlink.c b/fs/cifs/netlink.c
-new file mode 100644
-index 000000000000..5cd5dfee1132
---- /dev/null
-+++ b/fs/cifs/netlink.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Netlink routines for CIFS
-+ *
-+ * Copyright (c) 2020 Samuel Cabrero <scabrero@suse.de>
-+ */
+ 			break;
++		case Opt_witness:
++#ifndef CONFIG_CIFS_SWN_UPCALL
++			cifs_dbg(VFS, "Witness support needs CONFIG_CIFS_SWN_UPCALL kernel config option set\n");
++			goto cifs_parse_mount_err;
++#endif
++			vol->witness = true;
++			break;
+ 		case Opt_posixpaths:
+ 			vol->posix_paths = 1;
+ 			break;
+@@ -3158,6 +3166,8 @@ cifs_put_tcon(struct cifs_tcon *tcon)
+ 		return;
+ 	}
+ 
++	/* TODO witness unregister */
 +
-+#include <net/genetlink.h>
-+#include <uapi/linux/cifs/cifs_netlink.h>
-+
-+#include "cifsglob.h"
-+#include "cifs_debug.h"
-+
-+static const struct nla_policy cifs_genl_policy[CIFS_GENL_ATTR_MAX + 1] = {
-+};
-+
-+static struct genl_ops cifs_genl_ops[] = {
-+};
-+
-+static const struct genl_multicast_group cifs_genl_mcgrps[] = {
-+	[CIFS_GENL_MCGRP_SWN] = { .name = CIFS_GENL_MCGRP_SWN_NAME },
-+};
-+
-+struct genl_family cifs_genl_family = {
-+	.name		= CIFS_GENL_NAME,
-+	.version	= CIFS_GENL_VERSION,
-+	.hdrsize	= 0,
-+	.maxattr	= CIFS_GENL_ATTR_MAX,
-+	.module		= THIS_MODULE,
-+	.policy		= cifs_genl_policy,
-+	.ops		= cifs_genl_ops,
-+	.n_ops		= ARRAY_SIZE(cifs_genl_ops),
-+	.mcgrps		= cifs_genl_mcgrps,
-+	.n_mcgrps	= ARRAY_SIZE(cifs_genl_mcgrps),
-+};
-+
-+/**
-+ * cifs_genl_init - Register generic netlink family
-+ *
-+ * Return zero if initialized successfully, otherwise non-zero.
-+ */
-+int cifs_genl_init(void)
-+{
-+	int ret;
-+
-+	ret = genl_register_family(&cifs_genl_family);
-+	if (ret < 0) {
-+		cifs_dbg(VFS, "%s: failed to register netlink family\n",
-+				__func__);
-+		return ret;
+ 	list_del_init(&tcon->tcon_list);
+ 	spin_unlock(&cifs_tcp_ses_lock);
+ 
+@@ -3319,6 +3329,26 @@ cifs_get_tcon(struct cifs_ses *ses, struct smb_vol *volume_info)
+ 		tcon->use_resilient = true;
+ 	}
+ 
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	tcon->use_witness = false;
++	if (volume_info->witness) {
++		if (ses->server->vals->protocol_id >= SMB30_PROT_ID) {
++			if (tcon->capabilities & SMB2_SHARE_CAP_CLUSTER) {
++				/* TODO witness register */
++				tcon->use_witness = true;
++			} else {
++				cifs_dbg(VFS, "witness requested on mount but no CLUSTER capability on share\n");
++				rc = -EOPNOTSUPP;
++				goto out_fail;
++			}
++		} else {
++			cifs_dbg(VFS, "SMB3 or later required for witness option\n");
++			rc = -EOPNOTSUPP;
++			goto out_fail;
++		}
 +	}
++#endif
 +
-+	return 0;
-+}
-+
-+/**
-+ * cifs_genl_exit - Unregister generic netlink family
-+ */
-+void cifs_genl_exit(void)
-+{
-+	int ret;
-+
-+	ret = genl_unregister_family(&cifs_genl_family);
-+	if (ret < 0) {
-+		cifs_dbg(VFS, "%s: failed to unregister netlink family\n",
-+				__func__);
-+	}
-+}
-diff --git a/fs/cifs/netlink.h b/fs/cifs/netlink.h
-new file mode 100644
-index 000000000000..e2fa8ed24c54
---- /dev/null
-+++ b/fs/cifs/netlink.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Netlink routines for CIFS
-+ *
-+ * Copyright (c) 2020 Samuel Cabrero <scabrero@suse.de>
-+ */
-+
-+#ifndef _CIFS_NETLINK_H
-+#define _CIFS_NETLINK_H
-+
-+extern struct genl_family cifs_genl_family;
-+
-+extern int cifs_genl_init(void);
-+extern void cifs_genl_exit(void);
-+
-+#endif /* _CIFS_NETLINK_H */
-diff --git a/include/uapi/linux/cifs/cifs_netlink.h b/include/uapi/linux/cifs/cifs_netlink.h
-new file mode 100644
-index 000000000000..cdb1bd78fbc7
---- /dev/null
-+++ b/include/uapi/linux/cifs/cifs_netlink.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ WITH Linux-syscall-note */
-+/*
-+ * Netlink routines for CIFS
-+ *
-+ * Copyright (c) 2020 Samuel Cabrero <scabrero@suse.de>
-+ */
-+
-+
-+#ifndef _UAPILINUX_CIFS_NETLINK_H
-+#define _UAPILINUX_CIFS_NETLINK_H
-+
-+#define CIFS_GENL_NAME			"cifs"
-+#define CIFS_GENL_VERSION		0x1
-+
-+#define CIFS_GENL_MCGRP_SWN_NAME	"cifs_mcgrp_swn"
-+
-+enum cifs_genl_multicast_groups {
-+	CIFS_GENL_MCGRP_SWN,
-+};
-+
-+enum cifs_genl_attributes {
-+	__CIFS_GENL_ATTR_MAX,
-+};
-+#define CIFS_GENL_ATTR_MAX (__CIFS_GENL_ATTR_MAX - 1)
-+
-+enum cifs_genl_commands {
-+	__CIFS_GENL_CMD_MAX
-+};
-+#define CIFS_GENL_CMD_MAX (__CIFS_GENL_CMD_MAX - 1)
-+
-+#endif /* _UAPILINUX_CIFS_NETLINK_H */
+ 	/* If the user really knows what they are doing they can override */
+ 	if (tcon->share_flags & SMB2_SHAREFLAG_NO_CACHING) {
+ 		if (volume_info->cache_ro)
+@@ -5070,6 +5100,9 @@ cifs_construct_tcon(struct cifs_sb_info *cifs_sb, kuid_t fsuid)
+ 	vol_info->sectype = master_tcon->ses->sectype;
+ 	vol_info->sign = master_tcon->ses->sign;
+ 	vol_info->seal = master_tcon->seal;
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	vol_info->witness = master_tcon->use_witness;
++#endif
+ 
+ 	rc = cifs_set_vol_auth(vol_info, master_tcon->ses);
+ 	if (rc) {
 -- 
 2.29.0
 
