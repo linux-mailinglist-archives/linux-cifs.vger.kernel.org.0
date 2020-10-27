@@ -2,25 +2,25 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F6629A927
-	for <lists+linux-cifs@lfdr.de>; Tue, 27 Oct 2020 11:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD1429A92A
+	for <lists+linux-cifs@lfdr.de>; Tue, 27 Oct 2020 11:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897395AbgJ0KIc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 27 Oct 2020 06:08:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59564 "EHLO mx2.suse.de"
+        id S2897381AbgJ0KId (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 27 Oct 2020 06:08:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59594 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897388AbgJ0KIb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        id S2897390AbgJ0KIb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
         Tue, 27 Oct 2020 06:08:31 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D7B43AEE6
-        for <linux-cifs@vger.kernel.org>; Tue, 27 Oct 2020 10:08:29 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 29ADAAC3F
+        for <linux-cifs@vger.kernel.org>; Tue, 27 Oct 2020 10:08:30 +0000 (UTC)
 From:   Samuel Cabrero <scabrero@suse.de>
 To:     linux-cifs@vger.kernel.org
 Cc:     Samuel Cabrero <scabrero@suse.de>
-Subject: [PATCH v2 06/11] cifs: Set witness notification handler for messages from userspace daemon
-Date:   Tue, 27 Oct 2020 11:08:02 +0100
-Message-Id: <20201027100807.21510-7-scabrero@suse.de>
+Subject: [PATCH v2 07/11] cifs: Add witness information to debug data dump
+Date:   Tue, 27 Oct 2020 11:08:03 +0100
+Message-Id: <20201027100807.21510-8-scabrero@suse.de>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201027100807.21510-1-scabrero@suse.de>
 References: <20201027100807.21510-1-scabrero@suse.de>
@@ -31,203 +31,119 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-+ Set a handler for the witness notification messages received from the
-  userspace daemon.
-
-+ Handle the resource state change notification. When the resource
-  becomes unavailable or available set the tcp status to
-  CifsNeedReconnect for all channels.
++ Indicate if witness feature is supported
++ Indicate if witness is used when dumping tcons
++ Dumps witness registrations. Example:
+  Witness registrations:
+  Id: 1 Refs: 1 Network name: 'fs.fover.ad'(y) Share name: 'share1'(y) \
+    Ip address: 192.168.103.200(n)
 
 Signed-off-by: Samuel Cabrero <scabrero@suse.de>
 ---
- fs/cifs/cifs_swn.c                     | 86 ++++++++++++++++++++++++++
- fs/cifs/cifs_swn.h                     |  4 ++
- fs/cifs/netlink.c                      |  9 +++
- include/uapi/linux/cifs/cifs_netlink.h | 17 +++++
- 4 files changed, 116 insertions(+)
+ fs/cifs/cifs_debug.c | 13 +++++++++++++
+ fs/cifs/cifs_swn.c   | 35 +++++++++++++++++++++++++++++++++++
+ fs/cifs/cifs_swn.h   |  2 ++
+ 3 files changed, 50 insertions(+)
 
+diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
+index 53588d7517b4..b231dcf1d1f9 100644
+--- a/fs/cifs/cifs_debug.c
++++ b/fs/cifs/cifs_debug.c
+@@ -23,6 +23,9 @@
+ #ifdef CONFIG_CIFS_SMB_DIRECT
+ #include "smbdirect.h"
+ #endif
++#ifdef CONFIG_CIFS_SWN_UPCALL
++#include "cifs_swn.h"
++#endif
+ 
+ void
+ cifs_dump_mem(char *label, void *data, int length)
+@@ -115,6 +118,10 @@ static void cifs_debug_tcon(struct seq_file *m, struct cifs_tcon *tcon)
+ 		seq_printf(m, " POSIX Extensions");
+ 	if (tcon->ses->server->ops->dump_share_caps)
+ 		tcon->ses->server->ops->dump_share_caps(m, tcon);
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	if (tcon->use_witness)
++		seq_puts(m, " Witness");
++#endif
+ 
+ 	if (tcon->need_reconnect)
+ 		seq_puts(m, "\tDISCONNECTED ");
+@@ -262,6 +269,9 @@ static int cifs_debug_data_proc_show(struct seq_file *m, void *v)
+ 	seq_printf(m, ",XATTR");
+ #endif
+ 	seq_printf(m, ",ACL");
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	seq_puts(m, ",WITNESS");
++#endif
+ 	seq_putc(m, '\n');
+ 	seq_printf(m, "CIFSMaxBufSize: %d\n", CIFSMaxBufSize);
+ 	seq_printf(m, "Active VFS Requests: %d\n", GlobalTotalActiveXid);
+@@ -462,6 +472,9 @@ static int cifs_debug_data_proc_show(struct seq_file *m, void *v)
+ 	spin_unlock(&cifs_tcp_ses_lock);
+ 	seq_putc(m, '\n');
+ 
++#ifdef CONFIG_CIFS_SWN_UPCALL
++	cifs_swn_dump(m);
++#endif
+ 	/* BB add code to dump additional info such as TCP session info now */
+ 	return 0;
+ }
 diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
-index c7d70e28341e..501d84893262 100644
+index 501d84893262..4396e21ef228 100644
 --- a/fs/cifs/cifs_swn.c
 +++ b/fs/cifs/cifs_swn.c
-@@ -379,6 +379,92 @@ static void cifs_put_swn_reg(struct cifs_swn_reg *swnreg)
- 	mutex_unlock(&cifs_swnreg_idr_mutex);
- }
+@@ -501,3 +501,38 @@ int cifs_swn_unregister(struct cifs_tcon *tcon)
  
-+static int cifs_swn_resource_state_changed(struct cifs_swn_reg *swnreg, const char *name, int state)
-+{
-+	int i;
+ 	return 0;
+ }
 +
-+	switch (state) {
-+	case CIFS_SWN_RESOURCE_STATE_UNAVAILABLE:
-+		cifs_dbg(FYI, "%s: resource name '%s' become unavailable\n", __func__, name);
-+		for (i = 0; i < swnreg->tcon->ses->chan_count; i++) {
-+			spin_lock(&GlobalMid_Lock);
-+			if (swnreg->tcon->ses->chans[i].server->tcpStatus != CifsExiting)
-+				swnreg->tcon->ses->chans[i].server->tcpStatus = CifsNeedReconnect;
-+			spin_unlock(&GlobalMid_Lock);
-+		}
-+		break;
-+	case CIFS_SWN_RESOURCE_STATE_AVAILABLE:
-+		cifs_dbg(FYI, "%s: resource name '%s' become available\n", __func__, name);
-+		for (i = 0; i < swnreg->tcon->ses->chan_count; i++) {
-+			spin_lock(&GlobalMid_Lock);
-+			if (swnreg->tcon->ses->chans[i].server->tcpStatus != CifsExiting)
-+				swnreg->tcon->ses->chans[i].server->tcpStatus = CifsNeedReconnect;
-+			spin_unlock(&GlobalMid_Lock);
-+		}
-+		break;
-+	case CIFS_SWN_RESOURCE_STATE_UNKNOWN:
-+		cifs_dbg(FYI, "%s: resource name '%s' changed to unknown state\n", __func__, name);
-+		break;
-+	}
-+	return 0;
-+}
-+
-+int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info)
++void cifs_swn_dump(struct seq_file *m)
 +{
 +	struct cifs_swn_reg *swnreg;
-+	char name[256];
-+	int type;
++	struct sockaddr_in *sa;
++	struct sockaddr_in6 *sa6;
++	int id;
 +
-+	if (info->attrs[CIFS_GENL_ATTR_SWN_REGISTRATION_ID]) {
-+		int swnreg_id;
++	seq_puts(m, "Witness registrations:");
 +
-+		swnreg_id = nla_get_u32(info->attrs[CIFS_GENL_ATTR_SWN_REGISTRATION_ID]);
-+		mutex_lock(&cifs_swnreg_idr_mutex);
-+		swnreg = idr_find(&cifs_swnreg_idr, swnreg_id);
-+		mutex_unlock(&cifs_swnreg_idr_mutex);
-+		if (swnreg == NULL) {
-+			cifs_dbg(FYI, "%s: registration id %d not found\n", __func__, swnreg_id);
-+			return -EINVAL;
++	mutex_lock(&cifs_swnreg_idr_mutex);
++	idr_for_each_entry(&cifs_swnreg_idr, swnreg, id) {
++		seq_printf(m, "\nId: %u Refs: %u Network name: '%s'%s Share name: '%s'%s Ip address: ",
++				id, kref_read(&swnreg->ref_count),
++				swnreg->net_name, swnreg->net_name_notify ? "(y)" : "(n)",
++				swnreg->share_name, swnreg->share_name_notify ? "(y)" : "(n)");
++		switch (swnreg->tcon->ses->server->dstaddr.ss_family) {
++		case AF_INET:
++			sa = (struct sockaddr_in *) &swnreg->tcon->ses->server->dstaddr;
++			seq_printf(m, "%pI4", &sa->sin_addr.s_addr);
++			break;
++		case AF_INET6:
++			sa6 = (struct sockaddr_in6 *) &swnreg->tcon->ses->server->dstaddr;
++			seq_printf(m, "%pI6", &sa6->sin6_addr.s6_addr);
++			if (sa6->sin6_scope_id)
++				seq_printf(m, "%%%u", sa6->sin6_scope_id);
++			break;
++		default:
++			seq_puts(m, "(unknown)");
 +		}
-+	} else {
-+		cifs_dbg(FYI, "%s: missing registration id attribute\n", __func__);
-+		return -EINVAL;
++		seq_printf(m, "%s", swnreg->ip_notify ? "(y)" : "(n)");
 +	}
-+
-+	if (info->attrs[CIFS_GENL_ATTR_SWN_NOTIFICATION_TYPE]) {
-+		type = nla_get_u32(info->attrs[CIFS_GENL_ATTR_SWN_NOTIFICATION_TYPE]);
-+	} else {
-+		cifs_dbg(FYI, "%s: missing notification type attribute\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	switch (type) {
-+	case CIFS_SWN_NOTIFICATION_RESOURCE_CHANGE: {
-+		int state;
-+
-+		if (info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME]) {
-+			nla_strlcpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME],
-+					sizeof(name));
-+		} else {
-+			cifs_dbg(FYI, "%s: missing resource name attribute\n", __func__);
-+			return -EINVAL;
-+		}
-+		if (info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_STATE]) {
-+			state = nla_get_u32(info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_STATE]);
-+		} else {
-+			cifs_dbg(FYI, "%s: missing resource state attribute\n", __func__);
-+			return -EINVAL;
-+		}
-+		return cifs_swn_resource_state_changed(swnreg, name, state);
-+	}
-+	default:
-+		cifs_dbg(FYI, "%s: unknown notification type %d\n", __func__, type);
-+		break;
-+	}
-+
-+	return 0;
++	mutex_unlock(&cifs_swnreg_idr_mutex);
++	seq_puts(m, "\n");
 +}
-+
- int cifs_swn_register(struct cifs_tcon *tcon)
- {
- 	struct cifs_swn_reg *swnreg;
 diff --git a/fs/cifs/cifs_swn.h b/fs/cifs/cifs_swn.h
-index 69c7bd1035da..7ef9ecedbd05 100644
+index 7ef9ecedbd05..13b25cdc9295 100644
 --- a/fs/cifs/cifs_swn.h
 +++ b/fs/cifs/cifs_swn.h
-@@ -9,9 +9,13 @@
- #define _CIFS_SWN_H
+@@ -18,4 +18,6 @@ extern int cifs_swn_unregister(struct cifs_tcon *tcon);
  
- struct cifs_tcon;
-+struct sk_buff;
-+struct genl_info;
+ extern int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info);
  
- extern int cifs_swn_register(struct cifs_tcon *tcon);
- 
- extern int cifs_swn_unregister(struct cifs_tcon *tcon);
- 
-+extern int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info);
++extern void cifs_swn_dump(struct seq_file *m);
 +
  #endif /* _CIFS_SWN_H */
-diff --git a/fs/cifs/netlink.c b/fs/cifs/netlink.c
-index 169ac4aacdbb..1b0862ac345b 100644
---- a/fs/cifs/netlink.c
-+++ b/fs/cifs/netlink.c
-@@ -10,6 +10,7 @@
- 
- #include "cifsglob.h"
- #include "cifs_debug.h"
-+#include "cifs_swn.h"
- 
- static const struct nla_policy cifs_genl_policy[CIFS_GENL_ATTR_MAX + 1] = {
- 	[CIFS_GENL_ATTR_SWN_REGISTRATION_ID]	= { .type = NLA_U32 },
-@@ -23,9 +24,17 @@ static const struct nla_policy cifs_genl_policy[CIFS_GENL_ATTR_MAX + 1] = {
- 	[CIFS_GENL_ATTR_SWN_USER_NAME]		= { .type = NLA_STRING },
- 	[CIFS_GENL_ATTR_SWN_PASSWORD]		= { .type = NLA_STRING },
- 	[CIFS_GENL_ATTR_SWN_DOMAIN_NAME]	= { .type = NLA_STRING },
-+	[CIFS_GENL_ATTR_SWN_NOTIFICATION_TYPE]	= { .type = NLA_U32 },
-+	[CIFS_GENL_ATTR_SWN_RESOURCE_STATE]	= { .type = NLA_U32 },
-+	[CIFS_GENL_ATTR_SWN_RESOURCE_NAME]	= { .type = NLA_STRING},
- };
- 
- static struct genl_ops cifs_genl_ops[] = {
-+	{
-+		.cmd = CIFS_GENL_CMD_SWN_NOTIFY,
-+		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-+		.doit = cifs_swn_notify,
-+	},
- };
- 
- static const struct genl_multicast_group cifs_genl_mcgrps[] = {
-diff --git a/include/uapi/linux/cifs/cifs_netlink.h b/include/uapi/linux/cifs/cifs_netlink.h
-index 5662e2774513..da3107582f49 100644
---- a/include/uapi/linux/cifs/cifs_netlink.h
-+++ b/include/uapi/linux/cifs/cifs_netlink.h
-@@ -31,6 +31,9 @@ enum cifs_genl_attributes {
- 	CIFS_GENL_ATTR_SWN_USER_NAME,
- 	CIFS_GENL_ATTR_SWN_PASSWORD,
- 	CIFS_GENL_ATTR_SWN_DOMAIN_NAME,
-+	CIFS_GENL_ATTR_SWN_NOTIFICATION_TYPE,
-+	CIFS_GENL_ATTR_SWN_RESOURCE_STATE,
-+	CIFS_GENL_ATTR_SWN_RESOURCE_NAME,
- 	__CIFS_GENL_ATTR_MAX,
- };
- #define CIFS_GENL_ATTR_MAX (__CIFS_GENL_ATTR_MAX - 1)
-@@ -39,8 +42,22 @@ enum cifs_genl_commands {
- 	CIFS_GENL_CMD_UNSPEC,
- 	CIFS_GENL_CMD_SWN_REGISTER,
- 	CIFS_GENL_CMD_SWN_UNREGISTER,
-+	CIFS_GENL_CMD_SWN_NOTIFY,
- 	__CIFS_GENL_CMD_MAX
- };
- #define CIFS_GENL_CMD_MAX (__CIFS_GENL_CMD_MAX - 1)
- 
-+enum cifs_swn_notification_type {
-+	CIFS_SWN_NOTIFICATION_RESOURCE_CHANGE = 0x01,
-+	CIFS_SWN_NOTIFICATION_CLIENT_MOVE	 = 0x02,
-+	CIFS_SWN_NOTIFICATION_SHARE_MOVE	 = 0x03,
-+	CIFS_SWN_NOTIFICATION_IP_CHANGE	 = 0x04,
-+};
-+
-+enum cifs_swn_resource_state {
-+	CIFS_SWN_RESOURCE_STATE_UNKNOWN     = 0x00,
-+	CIFS_SWN_RESOURCE_STATE_AVAILABLE   = 0x01,
-+	CIFS_SWN_RESOURCE_STATE_UNAVAILABLE = 0xFF
-+};
-+
- #endif /* _UAPILINUX_CIFS_NETLINK_H */
 -- 
 2.29.0
 
