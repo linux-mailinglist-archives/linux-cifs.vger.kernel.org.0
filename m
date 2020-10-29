@@ -2,88 +2,130 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772A329EE65
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Oct 2020 15:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5100329F050
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Oct 2020 16:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgJ2OgN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 29 Oct 2020 10:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbgJ2OgM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 29 Oct 2020 10:36:12 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DF4C0613CF
-        for <linux-cifs@vger.kernel.org>; Thu, 29 Oct 2020 07:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=VPiXMNIDyEa863NEu0OKYvF0krS/eH/qd4NE6XjxR8Q=; b=O0a/33vqVqLQDqK2w8ExIx3yKb
-        g1PA4XurjWcL/BFzHwzLfADfqWn9zVsHnFHMANUPrzGBFjgWyp6oHtMllR/uxMrp4aV7IgxOrJa0v
-        UoR0T94TUuV374RJMVdPJpvgNwwjFQY3AtUmq8Yeo+/5bxe7FotMBImvT4aaLWS50/zsSwMAkSx/G
-        e6b+bvisnTmHxSa94LaRVzuxWbR8fL6OWaP8QPx0ESKE+eV7SorSz3N8XHVj79zZX6BDX8w9P2SCL
-        2g1zuVneXilzqK15QUpjjy/b6rkCqHkjORk5MdxgTwADsCt68ZQXyftQxoDjeVuTZL6R1khZ8KW7F
-        SeBX0/qFLRqvhemzXwPOfBEMQRisiT5o47rf9wqJYaGq1xHLHqDP//eZxWiQNbM7qc/YD6LiH7PdU
-        APmuEPwawdbihBMRa2kSKR0924uOmudc5rtlCLfiMnFQv27bsmSnCJgBQFfT7JEMCApEb+tPcXUEU
-        h3iWTTP8o3VCjGiigDX/k0gq;
-Received: from [2a01:4f8:192:486::6:0] (port=41960 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kY928-0005Tl-V0
-        for cifs-qa@samba.org; Thu, 29 Oct 2020 14:36:09 +0000
-Received: from [::1] (port=38144 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kY928-0007qf-No
-        for cifs-qa@samba.org; Thu, 29 Oct 2020 14:36:08 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 13570] CIFS Mount Used Size descrepancy
-Date:   Thu, 29 Oct 2020 14:36:08 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.6
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kato223@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-13570-10630-FT31bkda1u@https.bugzilla.samba.org/>
-In-Reply-To: <bug-13570-10630@https.bugzilla.samba.org/>
-References: <bug-13570-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S1728112AbgJ2Pnd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 29 Oct 2020 11:43:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49875 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728068AbgJ2Pnd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 29 Oct 2020 11:43:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603986212;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=YaXyyA+3brfqc67uOQpcnXMgyyRvDxRCA0pUcywHw6k=;
+        b=FHfBuD5ZYlQ4yZxYAYrq+4dfrGeu94RFyTOGqHxODq25mefjJqvGsn2Ub2kbTCRpHQXeCG
+        Rryc6m/xe4LaatnmN4iV+Dd+TXfyHV3iCZQ+MT7NTUBmy7MZpwQIEUug+pp0AdNF/1Rxm2
+        wEkxoGg7TdPyYuf5/8ANwnSQaPtv5Ek=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-230-wH1PFSzwNku7SY1hQxDGYw-1; Thu, 29 Oct 2020 11:43:25 -0400
+X-MC-Unique: wH1PFSzwNku7SY1hQxDGYw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B79C21009E47;
+        Thu, 29 Oct 2020 15:43:23 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AF3035E9D0;
+        Thu, 29 Oct 2020 15:43:23 +0000 (UTC)
+Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 7F027181A86E;
+        Thu, 29 Oct 2020 15:43:23 +0000 (UTC)
+Date:   Thu, 29 Oct 2020 11:43:23 -0400 (EDT)
+From:   Xiaoli Feng <xifeng@redhat.com>
+To:     samba-technical <samba-technical@lists.samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     jra@samba.org, Ronnie Sahlberg <lsahlber@redhat.com>
+Message-ID: <1397349053.55438877.1603986203418.JavaMail.zimbra@redhat.com>
+In-Reply-To: <20262379.55437477.1603985286601.JavaMail.zimbra@redhat.com>
+Subject: can't start smbd after install samba posix branch
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.68.5.20, 10.4.195.28]
+Thread-Topic: can't start smbd after install samba posix branch
+Thread-Index: 5T2Pn1PSLXHmz+QEHgU8A/mvgWMIMQ==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D13570
+Hello folks,
 
---- Comment #2 from Terrance <kato223@gmail.com> ---
-Just checked with Ubuntu 20.04 LTS and it too has the exact same issue even
-with a newer version:
+I try to install samba posix branch in RHEL8. But failed to start smbd daemon.
+Does anyone know the reason? or what else do I miss?
 
-apt-cache policy cifs-utils
-cifs-utils:
-  Installed: 2:6.9-1ubuntu0.1
-  Candidate: 2:6.9-1ubuntu0.1
-  Version table:
- *** 2:6.9-1ubuntu0.1 500
-        500 http://us.archive.ubuntu.com/ubuntu focal-updates/main amd64
-Packages
-        100 /var/lib/dpkg/status
-     2:6.9-1 500
-        500 http://us.archive.ubuntu.com/ubuntu focal/main amd64 Packages
+#git clone git://git.samba.org/jra/samba
+#git check -b posix remotes/origin/master-smb2
+#./configure --prefix=/usr --enable-fhs
+#make -j6
+#make install
+#smbd -D
+# echo $?
+1
+# smbd -D -d 10
+INFO: Current debug levels:
+  all: 10
+  tdb: 10
+  printdrivers: 10
+  lanman: 10
+  smb: 10
+  rpc_parse: 10
+  rpc_srv: 10
+  rpc_cli: 10
+  passdb: 10
+  sam: 10
+  auth: 10
+  winbind: 10
+  vfs: 10
+  idmap: 10
+  quota: 10
+  acls: 10
+  locking: 10
+  msdfs: 10
+  dmapi: 10
+  registry: 10
+  scavenger: 10
+  dns: 10
+  ldb: 10
+  tevent: 10
+  auth_audit: 10
+  auth_json_audit: 10
+  kerberos: 10
+  drs_repl: 10
+  smb2: 10
+  smb2_credits: 10
+  dsdb_audit: 10
+  dsdb_json_audit: 10
+  dsdb_password_audit: 10
+  dsdb_password_json_audit: 10
+  dsdb_transaction_audit: 10
+  dsdb_transaction_json_audit: 10
+  dsdb_group_audit: 10
+  dsdb_group_json_audit: 10
+[root@hp-dl360g9-12 ~]# echo $?
+1
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+I don't find any usefull log. Then I use systemd to start smbd services. Show this error:
+-- Unit smb.service has begun starting up.
+Oct 29 11:36:47 hp-dl360g9-12.rhts.eng.pek2.redhat.com systemd[1]: smb.service: Main process exited, code=exited, status=1/FAILURE
+Oct 29 11:36:47 hp-dl360g9-12.rhts.eng.pek2.redhat.com systemd[1]: smb.service: Failed with result 'exit-code'.
+-- Subject: Unit failed
+-- Defined-By: systemd
+-- Support: https://access.redhat.com/support
+-- 
+-- The unit smb.service has entered the 'failed' state with result 'exit-code'.
+Oct 29 11:36:47 hp-dl360g9-12.rhts.eng.pek2.redhat.com systemd[1]: Failed to start Samba SMB Daemon.
+-- Subject: Unit smb.service has failed
+
+
+
+Thanks.
+
+
+
