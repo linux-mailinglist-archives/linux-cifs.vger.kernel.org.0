@@ -2,38 +2,29 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD242B4676
-	for <lists+linux-cifs@lfdr.de>; Mon, 16 Nov 2020 15:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7023D2B7769
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Nov 2020 08:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728396AbgKPOzs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 16 Nov 2020 09:55:48 -0500
-Received: from tigeramira.ro ([88.158.78.30]:46611 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726236AbgKPOzs (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 16 Nov 2020 09:55:48 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id CC257A6B57F
-        for <linux-cifs@vger.kernel.org>; Sat, 14 Nov 2020 07:29:51 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id tp3SrQ5oAc1c for <linux-cifs@vger.kernel.org>;
-        Sat, 14 Nov 2020 07:29:36 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 0B232897ABF
-        for <linux-cifs@vger.kernel.org>; Fri, 13 Nov 2020 10:12:06 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 83136D3FCC5
-        for <linux-cifs@vger.kernel.org>; Tue, 10 Nov 2020 17:09:38 +0200 (EET)
+        id S1726945AbgKRHvf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 18 Nov 2020 02:51:35 -0500
+Received: from sw73-70-41.adsl.seed.net.tw ([203.73.70.41]:42802 "EHLO
+        oa.trendtek.com.tw" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1726948AbgKRHve (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Nov 2020 02:51:34 -0500
+Received: from [156.96.44.214] ([156.96.44.214])
+        (authenticated bits=0)
+        by oa.trendtek.com.tw (8.13.8/8.13.1) with ESMTP id 0AI7pRLv020774
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Nov 2020 15:51:30 +0800
+Message-Id: <202011180751.0AI7pRLv020774@oa.trendtek.com.tw>
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 Content-Description: Mail message body
-Subject: Corporate and Personal Loan/
+Subject: Corporate and Personal Loan *
 To:     linux-cifs@vger.kernel.org
 From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Tue, 10 Nov 2020 06:10:06 -0800
+Date:   Tue, 17 Nov 2020 23:51:21 -0800
 Reply-To: hmurrah39@gmail.com
-Message-Id: <20201110150939.83136D3FCC5@mail.tigeramira.ro>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
