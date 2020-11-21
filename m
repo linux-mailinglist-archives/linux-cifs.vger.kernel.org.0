@@ -2,18 +2,22 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A242BBEA0
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Nov 2020 12:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3D42BBE9E
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Nov 2020 12:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727316AbgKULS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        id S1727445AbgKULS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
         Sat, 21 Nov 2020 06:18:28 -0500
-Received: from mail.archlinux.org ([95.216.189.61]:35416 "EHLO
-        mail.archlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727403AbgKULS1 (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727433AbgKULS1 (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Sat, 21 Nov 2020 06:18:27 -0500
+X-Greylist: delayed 380 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 Nov 2020 03:18:27 PST
+Received: from mail.archlinux.org (mail.archlinux.org [IPv6:2a01:4f9:c010:3052::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D632C0613CF
+        for <linux-cifs@vger.kernel.org>; Sat, 21 Nov 2020 03:18:27 -0800 (PST)
 Received: from mail.archlinux.org (localhost [127.0.0.1])
-        by mail.archlinux.org (Postfix) with ESMTP id B638F23A90B;
-        Sat, 21 Nov 2020 11:12:03 +0000 (UTC)
+        by mail.archlinux.org (Postfix) with ESMTP id 58D6B23A911;
+        Sat, 21 Nov 2020 11:12:06 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.archlinux.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00=-1,
@@ -23,25 +27,25 @@ X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00=-1,
 X-Spam-BL-Results: 
 From:   Jonas Witschel <diabonas@archlinux.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=archlinux.org;
-        s=mail; t=1605957123;
-        bh=6Ez5xiGffkXtY4sphIeiOXlt8trqEHcBIKN3+5R6cSI=;
+        s=mail; t=1605957126;
+        bh=Sc1q0JViwidBv8pj7NcKF86KTr1AD+dIct32kmAbf+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Nia0xPaGQ05DbfQYg9xfH1pbExJHPV2RAvh+A7uTuHwmiMsoL1xYAM4yqgvwudF19
-         apoV8BvkNg+hCtt23iZ0oq1AX49zFB+8NxRMEJ66J+sdgUG6N8PZGMGiBAKlsLE1i0
-         O5Xow8unPRFXy/tBwZEHh7DnkYlVGt72xuHRyFZJ9JbNHaHogRmJ7Yb5ak26DhHNpT
-         z/Yduic0KUSI9oznhS/4SL/vmP3sVFvE1Shs3xh0Gdii3GPKA/Cp7urE0RshJT+kvs
-         06kPf1wQRDOHpTKNjZ+78g4BKJoqxTXfEJ/qH/rC+zikN4xJtb4w8mrCqz42LRn42V
-         ROiifXxEtRM5c8jD8ms2FSSBRjVldSBgLG++fx8Qv25x2fRG/vp+LO93dZ4jMEd2sG
-         vxB+b/LYvRiRA4pvjSbvQwZzSRvK5rlEgQBGCl5PHQsSt1SvnJr32RhIJIVV5524+A
-         expIQdiZcIpRn9dcssWrz/2qzHOmw/bpJc2SiRPhRvpjikrSTOdQWK+APyJMSDyi5K
-         Qj5+SCPySO0PRepURNYYqbNFiu+WyP7yOufkbhta6pitlo+588P5bzHoH3dM7XVLxJ
-         2OFedogPz3UKoX9D4uZD4KKE2Hq9jm75SB5Q0pjoWWTyv6jM69BFkjiAhyHpSx6Tio
-         sdcYkNKm6Q5vq/Ikh6zzpqTQ=
+        b=nP96ONqMyrGXhKxWlGKcwG1fz9hLJXTGEjj3qx4v440IuerDriv2YKSpV0iR9Q5ng
+         q1bzYnsGXlqXpYAgsQLhcWeDBWFilNiqaY2OU3i6te7PZ4TJVIFyuqxtZMRcFwAsI0
+         uVweNqCk2+zGR+aQl4V5nZVx6bgGDxSaEEBN3T2fZqk1+GfAVIJNYQ/yUMRlrxmq6c
+         rbDwUy3PTNhhOsrGVWMCZf7wFAc4/kpur0rGt9kTst8YRP4LKI4WekRJETuRvD5adm
+         8KLlJFVxPoN+joBlxma3aPHTI2tw1JUPxF3LZM/GWL8bQ+0ARmAhp0RaXfU64Oqs1L
+         GonECAOK2GWXukfJhPaWWkdWmb76epYk3DOBGKAviGoJ8WnSBtxVpHMlTflnXcbb9V
+         2MVnJURssBjFQCK7ErejGLfwVaFYK5Vm29T5cbUAOWpzzDIeFsvxIzrM3UOlZObwGS
+         8LX7G+ezViDTbMqguRk5EhaW1AhvtSOxQfowkXdhbwvpZf0zWGQrAaWjfYOOReAs7w
+         +Jj9csl9vHyFs8W6wRH5Tc7QDHlm79QdjHAjlu9PiMhHmm7OObTsTKGKFQLjAX3gDq
+         ysU4GKKTXgki4li0Vbli6EOISmbfRQl4Zd5Ya7S9C90xhB/71HV/jaZE25GQ2ltTYK
+         proJFynWUfwV9moFpo86bjqE=
 To:     linux-cifs@vger.kernel.org
 Cc:     Jonas Witschel <diabonas@archlinux.org>
-Subject: [PATCH 1/2] mount.cifs: update the cap bounding set only when CAP_SETPCAP is given
-Date:   Sat, 21 Nov 2020 12:11:44 +0100
-Message-Id: <20201121111145.24975-2-diabonas@archlinux.org>
+Subject: [PATCH 2/2] cifs.upall: update the cap bounding set only when CAP_SETPCAP is given
+Date:   Sat, 21 Nov 2020 12:11:45 +0100
+Message-Id: <20201121111145.24975-3-diabonas@archlinux.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201121111145.24975-1-diabonas@archlinux.org>
 References: <20201121111145.24975-1-diabonas@archlinux.org>
@@ -64,33 +68,33 @@ trying to update the bounding set to avoid getting an error.
 
 Signed-off-by: Jonas Witschel <diabonas@archlinux.org>
 ---
- mount.cifs.c | 7 ++++++-
+ cifs.upcall.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/mount.cifs.c b/mount.cifs.c
-index 4feb397..88b8b69 100644
---- a/mount.cifs.c
-+++ b/mount.cifs.c
-@@ -338,6 +338,8 @@ static int set_password(struct parsed_mount_info *parsed_info, const char *src)
+diff --git a/cifs.upcall.c b/cifs.upcall.c
+index 1559434..af1a0b0 100644
+--- a/cifs.upcall.c
++++ b/cifs.upcall.c
+@@ -88,6 +88,8 @@ typedef enum _sectype {
  static int
- drop_capabilities(int parent)
+ trim_capabilities(bool need_environ)
  {
 +	capng_select_t set = CAPNG_SELECT_CAPS;
 +
- 	capng_setpid(getpid());
  	capng_clear(CAPNG_SELECT_BOTH);
- 	if (parent) {
-@@ -355,7 +357,10 @@ drop_capabilities(int parent)
- 			return EX_SYSERR;
- 		}
+ 
+ 	/* SETUID and SETGID to change uid, gid, and grouplist */
+@@ -105,7 +107,10 @@ trim_capabilities(bool need_environ)
+ 		return 1;
  	}
+ 
 -	if (capng_apply(CAPNG_SELECT_BOTH)) {
 +	if (capng_have_capability(CAPNG_EFFECTIVE, CAP_SETPCAP)) {
 +		set = CAPNG_SELECT_BOTH;
 +	}
 +	if (capng_apply(set)) {
- 		fprintf(stderr, "Unable to apply new capability set.\n");
- 		return EX_SYSERR;
+ 		syslog(LOG_ERR, "%s: Unable to apply capability set: %m\n", __func__);
+ 		return 1;
  	}
 -- 
 2.29.2
