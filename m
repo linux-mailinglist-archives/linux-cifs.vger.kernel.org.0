@@ -2,99 +2,148 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3D42BBE9E
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Nov 2020 12:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A402BC6E3
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Nov 2020 17:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727445AbgKULS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 21 Nov 2020 06:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S1728148AbgKVQRV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 22 Nov 2020 11:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727433AbgKULS1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 21 Nov 2020 06:18:27 -0500
-X-Greylist: delayed 380 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 Nov 2020 03:18:27 PST
-Received: from mail.archlinux.org (mail.archlinux.org [IPv6:2a01:4f9:c010:3052::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D632C0613CF
-        for <linux-cifs@vger.kernel.org>; Sat, 21 Nov 2020 03:18:27 -0800 (PST)
-Received: from mail.archlinux.org (localhost [127.0.0.1])
-        by mail.archlinux.org (Postfix) with ESMTP id 58D6B23A911;
-        Sat, 21 Nov 2020 11:12:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.archlinux.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00=-1,
-        DKIMWL_WL_HIGH=-0.001,DKIM_SIGNED=0.1,DKIM_VALID=-0.1,
-        DKIM_VALID_AU=-0.1,NO_RECEIVED=-0.001,NO_RELAYS=-0.001,
-        T_DMARC_POLICY_NONE=0.01 autolearn=ham autolearn_force=no version=3.4.4
-X-Spam-BL-Results: 
-From:   Jonas Witschel <diabonas@archlinux.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=archlinux.org;
-        s=mail; t=1605957126;
-        bh=Sc1q0JViwidBv8pj7NcKF86KTr1AD+dIct32kmAbf+g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=nP96ONqMyrGXhKxWlGKcwG1fz9hLJXTGEjj3qx4v440IuerDriv2YKSpV0iR9Q5ng
-         q1bzYnsGXlqXpYAgsQLhcWeDBWFilNiqaY2OU3i6te7PZ4TJVIFyuqxtZMRcFwAsI0
-         uVweNqCk2+zGR+aQl4V5nZVx6bgGDxSaEEBN3T2fZqk1+GfAVIJNYQ/yUMRlrxmq6c
-         rbDwUy3PTNhhOsrGVWMCZf7wFAc4/kpur0rGt9kTst8YRP4LKI4WekRJETuRvD5adm
-         8KLlJFVxPoN+joBlxma3aPHTI2tw1JUPxF3LZM/GWL8bQ+0ARmAhp0RaXfU64Oqs1L
-         GonECAOK2GWXukfJhPaWWkdWmb76epYk3DOBGKAviGoJ8WnSBtxVpHMlTflnXcbb9V
-         2MVnJURssBjFQCK7ErejGLfwVaFYK5Vm29T5cbUAOWpzzDIeFsvxIzrM3UOlZObwGS
-         8LX7G+ezViDTbMqguRk5EhaW1AhvtSOxQfowkXdhbwvpZf0zWGQrAaWjfYOOReAs7w
-         +Jj9csl9vHyFs8W6wRH5Tc7QDHlm79QdjHAjlu9PiMhHmm7OObTsTKGKFQLjAX3gDq
-         ysU4GKKTXgki4li0Vbli6EOISmbfRQl4Zd5Ya7S9C90xhB/71HV/jaZE25GQ2ltTYK
-         proJFynWUfwV9moFpo86bjqE=
-To:     linux-cifs@vger.kernel.org
-Cc:     Jonas Witschel <diabonas@archlinux.org>
-Subject: [PATCH 2/2] cifs.upall: update the cap bounding set only when CAP_SETPCAP is given
-Date:   Sat, 21 Nov 2020 12:11:45 +0100
-Message-Id: <20201121111145.24975-3-diabonas@archlinux.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201121111145.24975-1-diabonas@archlinux.org>
-References: <20201121111145.24975-1-diabonas@archlinux.org>
+        with ESMTP id S1728079AbgKVQRH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 22 Nov 2020 11:17:07 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBCBC08E862
+        for <linux-cifs@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id y7so12553043pfq.11
+        for <linux-cifs@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
+        b=ECdUiFozoGotedNMltHxGvt7ELeQp/og9KGaJat0+erwcdPPWVCrU8KkW+JV4RYPeo
+         GTWUobzmr0s313q/lzhn4jF5RxJP4nhZO/aj20hZaH8d/g/a456RbO+LKniOS4LntN7M
+         GHx9cYZv8xWYKIg8n9C3ZJn+Q+L/6/s35hbx0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
+        b=P7VkQLKkwDgeMSYFgjQaKWwPA0123+jundmglv2RX4hZSLCHbJ5u9e31o6N0ZvO12O
+         jYJyG6PXDNYdAWlnDJ3wJ6/PgQ4eLpI+XcVuuIUgs+LN3sDghwUkynpQW6HAHA+CGIjg
+         sWxtO9Jm0yfIAUG6dKhx4LP1c/ts7Uny8NbH5Q4fPDr5Nm9WgLLLdkdXqpYyrhA8NJ5x
+         tSLRw8P+lhJkQ/2/PKzWwN0e6LP9mdMGJXB7ifptp3jk4Fr7ytgeehaQ9pXl89jgVNxs
+         4fo6F/ySbSpeizb1VN4dH9447egjAOu4ad5wBsIFBrbrI8zo5+JskmeTxe4STuN/P4vi
+         WTrA==
+X-Gm-Message-State: AOAM533xT12yogUbumY/c8ljaecgL+fAiSN+ymkX3MlGADPS1YKlinMT
+        8JXXsPCRl4es8ikTCdbNkZ/CWg==
+X-Google-Smtp-Source: ABdhPJzjrfS3ZVuiz5fqtjIAbZtKQ5pfqPy3q+oKf7VtoFjoXLjA79CcRlXr5vTeWnitsMgA/HY0Vg==
+X-Received: by 2002:a63:1d0b:: with SMTP id d11mr21383404pgd.368.1606061825374;
+        Sun, 22 Nov 2020 08:17:05 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k4sm9841327pfg.130.2020.11.22.08.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2020 08:17:04 -0800 (PST)
+Date:   Sun, 22 Nov 2020 08:17:03 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        amd-gfx@lists.freedesktop.org, bridge@lists.linux-foundation.org,
+        ceph-devel@vger.kernel.org, cluster-devel@redhat.com,
+        coreteam@netfilter.org, devel@driverdev.osuosl.org,
+        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
+        dri-devel@lists.freedesktop.org, GR-everest-linux-l2@marvell.com,
+        GR-Linux-NIC-Dev@marvell.com, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <202011220816.8B6591A@keescook>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-libcap-ng 0.8.1 tightened the error checking on capng_apply, returning an error
-of -4 when trying to update the capability bounding set without having the
-CAP_SETPCAP capability to be able to do so. Previous versions of libcap-ng
-silently skipped updating the bounding set and only updated the normal
-CAPNG_SELECT_CAPS capabilities instead.
+On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
+> On Fri, 20 Nov 2020 11:30:40 -0800 Kees Cook wrote:
+> > On Fri, Nov 20, 2020 at 10:53:44AM -0800, Jakub Kicinski wrote:
+> > > On Fri, 20 Nov 2020 12:21:39 -0600 Gustavo A. R. Silva wrote:  
+> > > > This series aims to fix almost all remaining fall-through warnings in
+> > > > order to enable -Wimplicit-fallthrough for Clang.
+> > > > 
+> > > > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+> > > > add multiple break/goto/return/fallthrough statements instead of just
+> > > > letting the code fall through to the next case.
+> > > > 
+> > > > Notice that in order to enable -Wimplicit-fallthrough for Clang, this
+> > > > change[1] is meant to be reverted at some point. So, this patch helps
+> > > > to move in that direction.
+> > > > 
+> > > > Something important to mention is that there is currently a discrepancy
+> > > > between GCC and Clang when dealing with switch fall-through to empty case
+> > > > statements or to cases that only contain a break/continue/return
+> > > > statement[2][3][4].  
+> > > 
+> > > Are we sure we want to make this change? Was it discussed before?
+> > > 
+> > > Are there any bugs Clangs puritanical definition of fallthrough helped
+> > > find?
+> > > 
+> > > IMVHO compiler warnings are supposed to warn about issues that could
+> > > be bugs. Falling through to default: break; can hardly be a bug?!  
+> > 
+> > It's certainly a place where the intent is not always clear. I think
+> > this makes all the cases unambiguous, and doesn't impact the machine
+> > code, since the compiler will happily optimize away any behavioral
+> > redundancy.
+> 
+> If none of the 140 patches here fix a real bug, and there is no change
+> to machine code then it sounds to me like a W=2 kind of a warning.
 
-Check beforehand whether we have CAP_SETPCAP, in which case we can use
-CAPNG_SELECT_BOTH to update both the normal capabilities and the bounding set.
-Otherwise, we can at least update the normal capabilities, but refrain from
-trying to update the bounding set to avoid getting an error.
+FWIW, this series has found at least one bug so far:
+https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
 
-Signed-off-by: Jonas Witschel <diabonas@archlinux.org>
----
- cifs.upcall.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/cifs.upcall.c b/cifs.upcall.c
-index 1559434..af1a0b0 100644
---- a/cifs.upcall.c
-+++ b/cifs.upcall.c
-@@ -88,6 +88,8 @@ typedef enum _sectype {
- static int
- trim_capabilities(bool need_environ)
- {
-+	capng_select_t set = CAPNG_SELECT_CAPS;
-+
- 	capng_clear(CAPNG_SELECT_BOTH);
- 
- 	/* SETUID and SETGID to change uid, gid, and grouplist */
-@@ -105,7 +107,10 @@ trim_capabilities(bool need_environ)
- 		return 1;
- 	}
- 
--	if (capng_apply(CAPNG_SELECT_BOTH)) {
-+	if (capng_have_capability(CAPNG_EFFECTIVE, CAP_SETPCAP)) {
-+		set = CAPNG_SELECT_BOTH;
-+	}
-+	if (capng_apply(set)) {
- 		syslog(LOG_ERR, "%s: Unable to apply capability set: %m\n", __func__);
- 		return 1;
- 	}
 -- 
-2.29.2
+Kees Cook
