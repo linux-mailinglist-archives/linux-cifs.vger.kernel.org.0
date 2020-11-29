@@ -2,84 +2,54 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F332C71DF
-	for <lists+linux-cifs@lfdr.de>; Sat, 28 Nov 2020 23:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34E32C7A09
+	for <lists+linux-cifs@lfdr.de>; Sun, 29 Nov 2020 17:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390118AbgK1Vuo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:44 -0500
-Received: from mx.cjr.nz ([51.158.111.142]:22016 "EHLO mx.cjr.nz"
+        id S1727973AbgK2Qld (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 29 Nov 2020 11:41:33 -0500
+Received: from mx.cjr.nz ([51.158.111.142]:7282 "EHLO mx.cjr.nz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387611AbgK1Ty6 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 28 Nov 2020 14:54:58 -0500
+        id S1725882AbgK2Qld (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sun, 29 Nov 2020 11:41:33 -0500
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id C06507FD5F;
-        Sat, 28 Nov 2020 19:54:14 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 54B757FD0A;
+        Sun, 29 Nov 2020 16:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1606593256;
+        t=1606668051;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=avdO6UaE0CIg4N5gKGDuIfmF4y8Ebc66cY/54BVmhyc=;
-        b=hydlgyxFLl/5NJnbGr0GEsFx0fr/+wQ4sfy0sgfOnRP1GA2ldC5AlcW57N4/69TJ5gzBlF
-        nkF4bVg3dewrce3eOOEO9DQJk+wHt+p86LoUL8UwrFo5kPim3JSphUyzyaXjvavAeYXzTl
-        lkE7cvX+ZvzBWTCtHe7Q7CiuwQiUY9S6Vl/sq/qUcPHaW2rYh8SMwA7yYZTrgHoNpFb19G
-        e8x48/eJ+ZFE0zqhojwysLP2bHb+ihZIx2t5eHIdlFH6qG21o3/OtD2Cm/UQmRy6i9RcW6
-        AgBrlEtqz86Kan1K0sCvCYkzy//ACshWoYGKB+bAbsMITeEjpP8iTvDglhPMYA==
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q/pFnKkQYbu/h5xtPtgeKh9ofx/CALMoPdgBX9opbnA=;
+        b=XCoDCAkcZnQItk4wRi0yuXc4ozm4/eH5LGNyHwaYiAs+kZp3y3+XKC/hk3AmpmElDXesxw
+        7oYqWNeM9pv7fowjTx7VhJTU05V9h3XYPsAi27L0cerf0KwRpPszAa+FVvHa+oKLaG4NhO
+        MksQTxPqqD5J48pdg8mpEKDhWSvOlgpCOTHqS+xyS3kzVdT5/5b0KW6GyIQ24y1m10alUj
+        lGvSgxcrQG7mO+PVVxnDbN9X7gNZo3xJRYYsZZyKX9svJY+0rNq5S/8jTE6ACs3A02Uswx
+        HXpjAj5JxTs25mnkXOyerjvkbmxwekIDOxcd8N31XaavPZsx/iX5FsiQAOb6Nw==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
-Cc:     Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH] cifs: fix potential use-after-free in cifs_echo_request()
-Date:   Sat, 28 Nov 2020 16:54:02 -0300
-Message-Id: <20201128195402.12233-1-pc@cjr.nz>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [PATCH] cifs: allow syscalls to be restarted in __smb_send_rqst()
+In-Reply-To: <CAH2r5msFYUB7RmWjCxQH8s8Amz4eET8_u8V5qZq3KMhdRFDPrA@mail.gmail.com>
+References: <20201128185706.8968-1-pc@cjr.nz>
+ <CAH2r5msFYUB7RmWjCxQH8s8Amz4eET8_u8V5qZq3KMhdRFDPrA@mail.gmail.com>
+Date:   Sun, 29 Nov 2020 13:40:45 -0300
+Message-ID: <87blfgjeuq.fsf@cjr.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This patch fixes a potential use-after-free bug in
-cifs_echo_request().
+Steve French <smfrench@gmail.com> writes:
 
-For instance,
+> Did it fix the customer application?
 
-  thread 1
-  --------
-  cifs_demultiplex_thread()
-    clean_demultiplex_info()
-      kfree(server)
+Yes, it did.
 
-  thread 2 (workqueue)
-  --------
-  apic_timer_interrupt()
-    smp_apic_timer_interrupt()
-      irq_exit()
-        __do_softirq()
-          run_timer_softirq()
-            call_timer_fn()
-  	      cifs_echo_request() <- use-after-free in server ptr
+> Thoughts on cc:stable?
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/connect.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index c38156f324dd..28c1459fb0fc 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -876,6 +876,8 @@ static void clean_demultiplex_info(struct TCP_Server_Info *server)
- 	list_del_init(&server->tcp_ses_list);
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
-+	cancel_delayed_work_sync(&server->echo);
-+
- 	spin_lock(&GlobalMid_Lock);
- 	server->tcpStatus = CifsExiting;
- 	spin_unlock(&GlobalMid_Lock);
--- 
-2.29.2
-
+Looks like a great candidate, yes.
