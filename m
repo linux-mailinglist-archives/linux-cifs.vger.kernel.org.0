@@ -2,97 +2,110 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0AB2C8C0D
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 Nov 2020 19:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8032C8EC3
+	for <lists+linux-cifs@lfdr.de>; Mon, 30 Nov 2020 21:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387915AbgK3SEf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 30 Nov 2020 13:04:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45790 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387806AbgK3SEe (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 30 Nov 2020 13:04:34 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2C089AF49
-        for <linux-cifs@vger.kernel.org>; Mon, 30 Nov 2020 18:03:13 +0000 (UTC)
-From:   Samuel Cabrero <scabrero@suse.de>
-To:     linux-cifs@vger.kernel.org
-Cc:     Samuel Cabrero <scabrero@suse.de>
-Subject: [PATCH v4 11/11] cifs: Handle witness share moved notification
-Date:   Mon, 30 Nov 2020 19:02:57 +0100
-Message-Id: <20201130180257.31787-12-scabrero@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201130180257.31787-1-scabrero@suse.de>
-References: <20201130180257.31787-1-scabrero@suse.de>
-Reply-To: scabrero@suse.de
+        id S1727375AbgK3UMv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 Nov 2020 15:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbgK3UMv (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Nov 2020 15:12:51 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34281C0613D2
+        for <linux-cifs@vger.kernel.org>; Mon, 30 Nov 2020 12:12:05 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id qw4so14221792ejb.12
+        for <linux-cifs@vger.kernel.org>; Mon, 30 Nov 2020 12:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ggE4bVAaHfAbh8XYFXQbErcK6Amu2EDF91c87FMGw8w=;
+        b=U2s0uF9pY9+bSX6zdiUuuLAzSq3DiB9pM5SU2dwlxVjr+JSxWj5Sb9dZ1wozH/RH5X
+         0VO7Z62ezv3O60WdU7iJB2h51pN1NNar2Kh6ARx98hoO1oY6KuLzd6t0zJIVHQ+ytf4Z
+         hhUBJn10nLxWjDhmkT2WBB+rotjowD1Kw9Sl71wcOQ9z2M87lkb+4ywRzWlcqDwSMxVy
+         3WzEP9dJkzFwBh97IEPjcaHO5ZsZ+VQ7uuO/y0g8ytngocfb8vTTtpIirVirgRjY6fG3
+         DWU9hszzhKwO27oc+qwmqsgXYZWPO7mkApi5bHgKPtcCvmLDsNLZkPOGS/5LSJWnhtFW
+         O5Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ggE4bVAaHfAbh8XYFXQbErcK6Amu2EDF91c87FMGw8w=;
+        b=msZciAynfMUXTZVWEfWWxjLmtqn8SepE8/mGwoE3YwhNcZzn9Wjuzt08XCIetPsYCN
+         wu9H1d4nUbkkj/XCyGmNHMsycpw5i/atO/f7ohYQWwFsbXm3zE15z08Z9yz8131X6sf+
+         VWsKTss/UwhlgH1AlIi7qc36eCDDGIzBnoEK+6fp4qLoldRy2jXyrdZsMRi9hloRPuoa
+         RVmYT24orRUdMDx2QPU2F/7NkI6eF1dScDbUajc9x+x6uowXN3waDI0eqbK0cDHwLzww
+         RMYbOpZ98kkWSraaFnexGRGh2ErXtQbRV9PoH4dJVajMsaPVpbC6Ocv8cY06ZuUEvlnX
+         WgQQ==
+X-Gm-Message-State: AOAM530gOrMMiqWqaoh8RKZoXpZUkA0jb1k9KHvyIzwsoImW1IGR+o3q
+        MAoSWnZKKh3U63jrw6uUCbbNp81nsI6bL+OzSA==
+X-Google-Smtp-Source: ABdhPJy4A0NrPE3PPjiG108U7NWdp/E9P83atB5MIwHJUz4/6/xjXSzTzTOgOlkqTi7THeNqQSb690J22HF5O7ymitw=
+X-Received: by 2002:a17:906:f753:: with SMTP id jp19mr22661812ejb.280.1606767123853;
+ Mon, 30 Nov 2020 12:12:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201128185706.8968-1-pc@cjr.nz> <87sg8rdtoj.fsf@suse.com>
+ <87pn3vhua0.fsf@cjr.nz> <CAH2r5msicAhu-NDzf+JxghVEj8dBRrDnMjGEKkE-DbrW=Dm64A@mail.gmail.com>
+ <87pn3uhkhq.fsf@cjr.nz>
+In-Reply-To: <87pn3uhkhq.fsf@cjr.nz>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Mon, 30 Nov 2020 12:11:52 -0800
+Message-ID: <CAKywueTu_z44CwPnqtZzyB4NwUq_PHypyM+-GTCDmr+Q4TU4dg@mail.gmail.com>
+Subject: Re: [PATCH] cifs: allow syscalls to be restarted in __smb_send_rqst()
+To:     Paulo Alcantara <pc@cjr.nz>
+Cc:     Steve French <smfrench@gmail.com>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Just log a message as it is not clear enough what this notification
-means. It is received for example when a node belonging to a scale-out
-file server dies, but it is also received as soon as a client registers
-for notifications (w2k12r2) when the server is scale-out.
+Agree with the patch. The original change was inspired by the existing
+code returning -EINTR potentially after partially sending an SMB
+packet. Returning -ERESTARTSYS seems like a right thing to do here.
 
-Signed-off-by: Samuel Cabrero <scabrero@suse.de>
----
- fs/cifs/cifs_swn.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
 
-diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
-index a172769c239f..c505d35f5b57 100644
---- a/fs/cifs/cifs_swn.c
-+++ b/fs/cifs/cifs_swn.c
-@@ -538,6 +538,29 @@ static int cifs_swn_client_move(struct cifs_swn_reg *swnreg, struct sockaddr_sto
- 	return cifs_swn_reconnect(swnreg->tcon, addr);
- }
- 
-+static int cifs_swn_share_moved(struct cifs_swn_reg *swnreg, struct sockaddr_storage *addr)
-+{
-+	struct sockaddr_in *ipv4 = (struct sockaddr_in *)addr;
-+	struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)addr;
-+
-+	if (addr->ss_family == AF_INET)
-+		cifs_dbg(FYI, "%s: share '%s' from '%s' moved to %pI4\n",
-+				__func__, swnreg->share_name, swnreg->net_name,
-+				&ipv4->sin_addr);
-+	else if (addr->ss_family == AF_INET6)
-+		cifs_dbg(FYI, "%s: share '%s' from '%s' moved to %pI6\n",
-+				__func__, swnreg->share_name, swnreg->net_name,
-+				&ipv6->sin6_addr);
-+
-+	/*
-+	 * FIXME It is not clear enough how to handle this notification and what does it mean.
-+	 * It is received for example when a node belonging to a scale-out file server dies, but
-+	 * it is also received as soon as a client registers for notifications (w2k12r2) when the
-+	 * share is scale-out and all nodes are working fine. Just log for now.
-+	 */
-+	return 0;
-+}
-+
- int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info)
- {
- 	struct cifs_swn_reg *swnreg;
-@@ -597,6 +620,17 @@ int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info)
- 		}
- 		return cifs_swn_client_move(swnreg, &addr);
- 	}
-+	case CIFS_SWN_NOTIFICATION_SHARE_MOVE: {
-+		struct sockaddr_storage addr;
-+
-+		if (info->attrs[CIFS_GENL_ATTR_SWN_IP]) {
-+			nla_memcpy(&addr, info->attrs[CIFS_GENL_ATTR_SWN_IP], sizeof(addr));
-+		} else {
-+			cifs_dbg(FYI, "%s: missing IP address attribute\n", __func__);
-+			return -EINVAL;
-+		}
-+		return cifs_swn_share_moved(swnreg, &addr);
-+	}
- 	default:
- 		cifs_dbg(FYI, "%s: unknown notification type %d\n", __func__, type);
- 		break;
--- 
-2.29.2
+--
+Best regards,
+Pavel Shilovsky
 
+=D0=BF=D0=BD, 30 =D0=BD=D0=BE=D1=8F=D0=B1. 2020 =D0=B3. =D0=B2 08:35, Paulo=
+ Alcantara <pc@cjr.nz>:
+>
+> Steve French <smfrench@gmail.com> writes:
+>
+> > On Mon, Nov 30, 2020 at 7:02 AM Paulo Alcantara <pc@cjr.nz> wrote:
+> >>
+> >> Aur=C3=A9lien Aptel <aaptel@suse.com> writes:
+> >>
+> >> > Paulo Alcantara <pc@cjr.nz> writes:
+> >> >> diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> >> >> index e27e255d40dd..55853b9ed13d 100644
+> >> >> --- a/fs/cifs/transport.c
+> >> >> +++ b/fs/cifs/transport.c
+> >> >> @@ -338,10 +338,8 @@ __smb_send_rqst(struct TCP_Server_Info *server=
+, int num_rqst,
+> >> >>      if (ssocket =3D=3D NULL)
+> >> >>              return -EAGAIN;
+> >> >>
+> >> >> -    if (signal_pending(current)) {
+> >> >> -            cifs_dbg(FYI, "signal is pending before sending any da=
+ta\n");
+> >> >> -            return -EINTR;
+> >> >> -    }
+> >> >> +    if (signal_pending(current))
+> >> >> +            return -ERESTARTSYS;
+> >> >
+> >> > Can we keep the debug message call?
+> >>
+> >> Yes.
+> >>
+> >> Steve, could you please update for-next with above debug msg?
+> >
+> > Done. Please check to see if my lightly modified debug message text is =
+ok.
+>
+> OK for me.  Thanks!
