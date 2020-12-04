@@ -2,70 +2,54 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4E12CF600
-	for <lists+linux-cifs@lfdr.de>; Fri,  4 Dec 2020 22:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830452CF81F
+	for <lists+linux-cifs@lfdr.de>; Sat,  5 Dec 2020 01:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbgLDVJ5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Dec 2020 16:09:57 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:33832 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726021AbgLDVJ4 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 4 Dec 2020 16:09:56 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1klIJz-0006K8-Lg; Sat, 05 Dec 2020 08:08:56 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 05 Dec 2020 08:08:55 +1100
-Date:   Sat, 5 Dec 2020 08:08:55 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Bruce Fields <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org
-Subject: Re: Why the auxiliary cipher in gss_krb5_crypto.c?
-Message-ID: <20201204210855.GA3412@gondor.apana.org.au>
-References: <20201204154626.GA26255@fieldses.org>
- <2F96670A-58DC-43A6-A20E-696803F0BFBA@oracle.com>
- <160518586534.2277919.14475638653680231924.stgit@warthog.procyon.org.uk>
- <118876.1607093975@warthog.procyon.org.uk>
- <122997.1607097713@warthog.procyon.org.uk>
- <20201204160347.GA26933@fieldses.org>
- <125709.1607100601@warthog.procyon.org.uk>
- <CAMj1kXEOm_yh478i+dqPiz0eoBxp4eag3j2qHm5eBLe+2kihoQ@mail.gmail.com>
- <127458.1607102368@warthog.procyon.org.uk>
- <CAMj1kXFe50HvZLxG6Kh-oYBCf5uu51hhuh7mW5UQ62ZSqmu_xA@mail.gmail.com>
+        id S1730855AbgLEAq6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 4 Dec 2020 19:46:58 -0500
+Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:49526 "EHLO
+        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbgLEAq5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Dec 2020 19:46:57 -0500
+X-Greylist: delayed 14573 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 19:46:41 EST
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
+        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 274A31A5589;
+        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
+        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
+        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFe50HvZLxG6Kh-oYBCf5uu51hhuh7mW5UQ62ZSqmu_xA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
+Date:   Sat, 05 Dec 2020 04:44:54 +0900
+From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
+To:     <infocarferr1@aim.com>
+Reply-To: <infocarfer@aim.com>
+Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
+         Kuo Fung I have Important Matter to Discuss with you concerning
+         my late client. Died without a NEXT OF KIN. Send me your private
+         email for full details information. 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MAILER: Active! mail
+X-TM-AS-MML: disable
+X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
+X-TM-AS-Result: No--4.326-5.0-31-10
+X-imss-scan-details: No--4.326-5.0-31-10
+X-TM-AS-User-Approved-Sender: No
+X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
+        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
+        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
+        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
+        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 06:35:48PM +0100, Ard Biesheuvel wrote:
->
-> Herbert recently made some changes for MSG_MORE support in the AF_ALG
-> code, which permits a skcipher encryption to be split into several
-> invocations of the skcipher layer without the need for this complexity
-> on the side of the caller. Maybe there is a way to reuse that here.
-> Herbert?
+infocarfer@aim.com
 
-Yes this was one of the reasons I was persuing the continuation
-work.  It should allow us to kill the special case for CTS in the
-krb5 code.
 
-Hopefully I can get some time to restart work on this soon.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
