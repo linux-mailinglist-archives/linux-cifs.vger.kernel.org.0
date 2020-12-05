@@ -2,54 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830452CF81F
-	for <lists+linux-cifs@lfdr.de>; Sat,  5 Dec 2020 01:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280DC2CF893
+	for <lists+linux-cifs@lfdr.de>; Sat,  5 Dec 2020 02:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730855AbgLEAq6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Dec 2020 19:46:58 -0500
-Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:49526 "EHLO
-        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgLEAq5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Dec 2020 19:46:57 -0500
-X-Greylist: delayed 14573 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 19:46:41 EST
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
-        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 274A31A5589;
-        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
-        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
-Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
-        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+        id S1726151AbgLEBYH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 4 Dec 2020 20:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725300AbgLEBYH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Dec 2020 20:24:07 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C0AC0613D1;
+        Fri,  4 Dec 2020 17:23:19 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id s30so10205084lfc.4;
+        Fri, 04 Dec 2020 17:23:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=y8ky6Rv6hAa1Gu/ILPlAB7lXWruU4VgldfIMu9D7dag=;
+        b=ux14E9SdZPm99PdnA4kCxD1Zl3RU9x8jcTWPQE/tjHNbNGnsjnZBTj5bcAl6qvUTHl
+         kCDUYoZ4TUoga9xXYOGZLE5SW7aWKJqQFa+Fmo6MAA7DIIfOFNqeKqDdVxGHmfNDhbKR
+         OmpUqGsi3Mi0L5ERBpKr5tgR0Yb1EA7xkfMT7A+6Uaf0GXaIIDn1bkpmXiG/hFoB1ucH
+         oEsMrDSMc951GAIYFd/mSg2wZ0uCdwnG1uFURXvr6TvwirogITqZ8QluqthHqSfWu+mR
+         54jXmtYn/a4QVw9Hh6LJRT8Macno07+Y3t5hGwmrKTSfmx3r0pU9kZ2NwPrgLHWgqGVm
+         dZ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=y8ky6Rv6hAa1Gu/ILPlAB7lXWruU4VgldfIMu9D7dag=;
+        b=W6Mokn3LFhkICy6nK7DoC1y9E0Op6zBsVkddfLBbtPdVUxrUpMnbc2cFzE1ydmTNQo
+         FEZ+GLZdlVuuDPPQE8W5yfWRir8OeSkRtKJHnT2Pr5LhkaCuYSlvaBc+PX7fC8Tp8jW5
+         AR3NjH85Yvhw54ITw23m3fjuupyhJPbB0Gu/5JJnlEiczB6iE8CxXRujpSvhpGAURYBL
+         WLEC55E9lVa8OYPL8pURY0JYQVrJ7frAXtLy9vlNz4OsHI/qGMdovYb0nlJwUizDKcoC
+         cv/tLDjUa1xuZCGyF12VVaqSB47FgSlgvbSSoodthYxgfGA2jXbv0LZkgYi/MDyTV4Yb
+         +EyQ==
+X-Gm-Message-State: AOAM53250HhBrGOo8Jxwc1uFcNeW+oD8TWwhKrD9lxfZN3GTK0fZ0O6l
+        QM6roL44eUK8C4G4S9la7UYMK6SqFHGTgAqnuDqPWeN5X6JEXg==
+X-Google-Smtp-Source: ABdhPJx6/P9fszLhqEC6jBgiZZxNsg864C4scTH89lb4fmkNRwC5/T16jICLAfeC+OoFiWrpwNgw6lvDXHTAUpLdWUw=
+X-Received: by 2002:ac2:4d0c:: with SMTP id r12mr4220790lfi.47.1607131398313;
+ Fri, 04 Dec 2020 17:23:18 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
-Date:   Sat, 05 Dec 2020 04:44:54 +0900
-From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
-To:     <infocarferr1@aim.com>
-Reply-To: <infocarfer@aim.com>
-Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
-         Kuo Fung I have Important Matter to Discuss with you concerning
-         my late client. Died without a NEXT OF KIN. Send me your private
-         email for full details information. 
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MAILER: Active! mail
-X-TM-AS-MML: disable
-X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
-X-TM-AS-Result: No--4.326-5.0-31-10
-X-imss-scan-details: No--4.326-5.0-31-10
-X-TM-AS-User-Approved-Sender: No
-X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
-        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
-        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
-        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
-        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 4 Dec 2020 19:23:07 -0600
+Message-ID: <CAH2r5mso+e44kRcGVf4aQ6qc5iwLp4gr6AsQGpLA06phqRA+ew@mail.gmail.com>
+Subject: [GIT PULL] SMB3 Fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-infocarfer@aim.com
+Please pull the following changes since commit
+509a15421674b9e1a3e1916939d0d0efd3e578da:
 
+  Merge tag '5.10-rc6-smb3-fixes' of
+git://git.samba.org/sfrench/cifs-2.6 (2020-12-01 15:43:53 -0800)
 
+are available in the Git repository at:
 
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.10-rc6-smb3-fixes-part2
+
+for you to fetch changes up to ea64370bcae126a88cd26a16f1abcc23ab2b9a55:
+
+  cifs: refactor create_sd_buf() and and avoid corrupting the buffer
+(2020-12-03 17:12:14 -0600)
+
+----------------------------------------------------------------
+Three smb3 fixes (two for stable) addressing
+- a null pointer issue in a DFS error path
+- a problem with excessive padding when mounted with "idsfromsid"
+causing owner fields to get corrupted
+- a more recent problem with compounded reparse point query found in
+testing to the Linux kernel server
+
+Test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/445
+----------------------------------------------------------------
+Aurelien Aptel (1):
+      cifs: add NULL check for ses->tcon_ipc
+
+Namjae Jeon (1):
+      smb3: set COMPOUND_FID to FileID field of subsequent compound request
+
+Ronnie Sahlberg (1):
+      cifs: refactor create_sd_buf() and and avoid corrupting the buffer
+
+ fs/cifs/connect.c |  3 ++-
+ fs/cifs/smb2ops.c |  4 ++--
+ fs/cifs/smb2pdu.c | 71 +++++++++++++++++++++++++++++--------------------------
+ fs/cifs/smb2pdu.h |  2 --
+ 4 files changed, 42 insertions(+), 38 deletions(-)
+
+-- 
+Thanks,
+
+Steve
