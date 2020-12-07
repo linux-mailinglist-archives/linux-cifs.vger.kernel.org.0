@@ -2,107 +2,324 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1944A2D1E7A
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE4B2D1E6D
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgLGXkR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Dec 2020 18:40:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57741 "EHLO
+        id S1727369AbgLGXik (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Dec 2020 18:38:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49239 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725885AbgLGXkR (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:40:17 -0500
+        by vger.kernel.org with ESMTP id S1727016AbgLGXij (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:38:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607384331;
+        s=mimecast20190719; t=1607384232;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=qELXV7G+b5XhiS8cyqS9gCiwaxzmXy+3EklF9SWC/d0=;
-        b=edMQg/7NJtufqtHEkP/OR/7vtlQSS0IHwnaHKyjv3V66xfznqOPPFvAZV98yR57jLnU0U5
-        SB4JdbzLYam3WbHyCloPZV7bZ4E/0+ws8ugAgi6RP8kBRSFM5MdwC+QYWa8laB3rxVQCrw
-        Ops+/xYFMBTAGT/2U5niv7ROdqlQ+q8=
+        bh=g0eUIybogY4b3kym9KpqfjhVZB4CgPmYav1ks7rECHU=;
+        b=HNofzgcDUjL+72LtU/rHaSqHLkuimlZ/9Z5yIQ6P6bkWKC7fXGVS8ajeIkk7YO+S05++EI
+        722mit2Mj9hVWM5z8hrBn0zqhlCkjPHE3gkzbGrP0xA4f5aRIIcnEqmP4qRYx2T1LPikPc
+        OCU3XClvToLTuLiBFysJ8j9mTOv/5CA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-567-OSDfzITVPm6S2DzzmnRkqQ-1; Mon, 07 Dec 2020 18:38:49 -0500
-X-MC-Unique: OSDfzITVPm6S2DzzmnRkqQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-440-JNThvJORNSCJRfiIVu_pEg-1; Mon, 07 Dec 2020 18:37:10 -0500
+X-MC-Unique: JNThvJORNSCJRfiIVu_pEg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36A3D192D786;
-        Mon,  7 Dec 2020 23:38:48 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7DB0F1005504;
+        Mon,  7 Dec 2020 23:37:09 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-107.bne.redhat.com [10.64.54.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 453055D6AB;
-        Mon,  7 Dec 2020 23:38:46 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B28C19C59;
+        Mon,  7 Dec 2020 23:37:08 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 19/21] cifs: remove ctx argument from cifs_setup_cifs_sb
-Date:   Tue,  8 Dec 2020 09:36:44 +1000
-Message-Id: <20201207233646.29823-19-lsahlber@redhat.com>
+Subject: [PATCH 20/21] cifs: move update of flags into a separate function
+Date:   Tue,  8 Dec 2020 09:36:45 +1000
+Message-Id: <20201207233646.29823-20-lsahlber@redhat.com>
 In-Reply-To: <20201207233646.29823-1-lsahlber@redhat.com>
 References: <20201207233646.29823-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+This funciton will set/clear flags that can be changed during mount or remount
+
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/cifsfs.c    | 2 +-
- fs/cifs/cifsproto.h | 3 +--
- fs/cifs/connect.c   | 7 ++++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ fs/cifs/connect.c    |  74 +-----------------------
+ fs/cifs/fs_context.c | 155 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ fs/cifs/fs_context.h |   1 +
+ 3 files changed, 159 insertions(+), 71 deletions(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 57c61a2bcf73..e98233a16974 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -802,7 +802,7 @@ cifs_smb3_do_mount(struct file_system_type *fs_type,
- 		goto out;
- 	}
- 
--	rc = cifs_setup_cifs_sb(cifs_sb->ctx, cifs_sb);
-+	rc = cifs_setup_cifs_sb(cifs_sb);
- 	if (rc) {
- 		root = ERR_PTR(rc);
- 		goto out;
-diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-index 2b5401e1ce20..8e3db6d7112e 100644
---- a/fs/cifs/cifsproto.h
-+++ b/fs/cifs/cifsproto.h
-@@ -234,8 +234,7 @@ extern int cifs_read_page_from_socket(struct TCP_Server_Info *server,
- 					struct page *page,
- 					unsigned int page_offset,
- 					unsigned int to_read);
--extern int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
--			       struct cifs_sb_info *cifs_sb);
-+extern int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb);
- extern int cifs_match_super(struct super_block *, void *);
- extern int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx);
- extern void cifs_umount(struct cifs_sb_info *);
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 22b5f3544947..3775f049e3ba 100644
+index 3775f049e3ba..d5798bb8028a 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -2658,16 +2658,17 @@ void reset_cifs_unix_caps(unsigned int xid, struct cifs_tcon *tcon,
+@@ -2684,61 +2684,10 @@ int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb)
  	}
- }
+ 	ctx->local_nls = cifs_sb->local_nls;
  
--int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
--			struct cifs_sb_info *cifs_sb)
-+int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb)
- {
+-	if (ctx->nodfs)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_DFS;
+-	if (ctx->noperm)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_PERM;
+-	if (ctx->setuids)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_SET_UID;
+-	if (ctx->setuidfromacl)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_UID_FROM_ACL;
+-	if (ctx->server_ino)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_SERVER_INUM;
+-	if (ctx->remap)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MAP_SFM_CHR;
+-	if (ctx->sfu_remap)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MAP_SPECIAL_CHR;
+-	if (ctx->no_xattr)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_XATTR;
+-	if (ctx->sfu_emul)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_UNX_EMUL;
+-	if (ctx->nobrl)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_BRL;
+-	if (ctx->nohandlecache)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_HANDLE_CACHE;
+-	if (ctx->nostrictsync)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NOSSYNC;
+-	if (ctx->mand_lock)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NOPOSIXBRL;
+-	if (ctx->rwpidforward)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_RWPIDFORWARD;
+-	if (ctx->mode_ace)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MODE_FROM_SID;
+-	if (ctx->cifs_acl)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_ACL;
+-	if (ctx->backupuid_specified) {
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_BACKUPUID;
+-	}
+-	if (ctx->backupgid_specified) {
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_BACKUPGID;
+-	}
+-	if (ctx->override_uid)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_OVERR_UID;
+-	if (ctx->override_gid)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_OVERR_GID;
+-	if (ctx->dynperm)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_DYNPERM;
+-	if (ctx->fsc)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_FSCACHE;
+-	if (ctx->multiuser)
+-		cifs_sb->mnt_cifs_flags |= (CIFS_MOUNT_MULTIUSER |
+-					    CIFS_MOUNT_NO_PERM);
+-	if (ctx->strict_io)
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_STRICT_IO;
+-	if (ctx->direct_io) {
++	smb3_update_mnt_flags(cifs_sb);
++
++	if (ctx->direct_io)
+ 		cifs_dbg(FYI, "mounting share using direct i/o\n");
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_DIRECT_IO;
+-	}
+ 	if (ctx->cache_ro) {
+ 		cifs_dbg(VFS, "mounting share with read only caching. Ensure that the share will not be modified while in use.\n");
+ 		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_RO_CACHE;
+@@ -2747,23 +2696,6 @@ int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb)
+ 		cifs_sb->mnt_cifs_flags |= (CIFS_MOUNT_RO_CACHE |
+ 					    CIFS_MOUNT_RW_CACHE);
+ 	}
+-	if (ctx->mfsymlinks) {
+-		if (ctx->sfu_emul) {
+-			/*
+-			 * Our SFU ("Services for Unix" emulation does not allow
+-			 * creating symlinks but does allow reading existing SFU
+-			 * symlinks (it does allow both creating and reading SFU
+-			 * style mknod and FIFOs though). When "mfsymlinks" and
+-			 * "sfu" are both enabled at the same time, it allows
+-			 * reading both types of symlinks, but will only create
+-			 * them with mfsymlinks format. This allows better
+-			 * Apple compatibility (probably better for Samba too)
+-			 * while still recognizing old Windows style symlinks.
+-			 */
+-			cifs_dbg(VFS, "mount options mfsymlinks and sfu both enabled\n");
+-		}
+-		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MF_SYMLINKS;
+-	}
+ 
+ 	if ((ctx->cifs_acl) && (ctx->dynperm))
+ 		cifs_dbg(VFS, "mount option dynperm ignored if cifsacl mount option supported\n");
+diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+index ee9c1fb666c7..bf5a25b930d5 100644
+--- a/fs/cifs/fs_context.c
++++ b/fs/cifs/fs_context.c
+@@ -1352,3 +1352,158 @@ smb3_cleanup_fs_context(struct smb3_fs_context *ctx)
+ 	smb3_cleanup_fs_context_contents(ctx);
+ 	kfree(ctx);
+ }
++
++void smb3_update_mnt_flags(struct cifs_sb_info *cifs_sb)
++{
 +	struct smb3_fs_context *ctx = cifs_sb->ctx;
 +
- 	INIT_DELAYED_WORK(&cifs_sb->prune_tlinks, cifs_prune_tlinks);
++	if (ctx->nodfs)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_DFS;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NO_DFS;
++
++	if (ctx->noperm)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_PERM;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NO_PERM;
++
++	if (ctx->setuids)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_SET_UID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_SET_UID;
++
++	if (ctx->setuidfromacl)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_UID_FROM_ACL;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_UID_FROM_ACL;
++
++	if (ctx->server_ino)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_SERVER_INUM;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_SERVER_INUM;
++
++	if (ctx->remap)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MAP_SFM_CHR;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_MAP_SFM_CHR;
++
++	if (ctx->sfu_remap)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MAP_SPECIAL_CHR;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_MAP_SPECIAL_CHR;
++
++	if (ctx->no_xattr)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_XATTR;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NO_XATTR;
++
++	if (ctx->sfu_emul)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_UNX_EMUL;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_UNX_EMUL;
++
++	if (ctx->nobrl)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_BRL;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NO_BRL;
++
++	if (ctx->nohandlecache)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NO_HANDLE_CACHE;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NO_HANDLE_CACHE;
++
++	if (ctx->nostrictsync)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NOSSYNC;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NOSSYNC;
++
++	if (ctx->mand_lock)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_NOPOSIXBRL;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_NOPOSIXBRL;
++
++	if (ctx->rwpidforward)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_RWPIDFORWARD;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_RWPIDFORWARD;
++
++	if (ctx->mode_ace)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MODE_FROM_SID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_MODE_FROM_SID;
++
++	if (ctx->cifs_acl)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_ACL;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_CIFS_ACL;
++
++	if (ctx->backupuid_specified)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_BACKUPUID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_CIFS_BACKUPUID;
++
++	if (ctx->backupgid_specified)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_CIFS_BACKUPGID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_CIFS_BACKUPGID;
++
++	if (ctx->override_uid)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_OVERR_UID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_OVERR_UID;
++
++	if (ctx->override_gid)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_OVERR_GID;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_OVERR_GID;
++
++	if (ctx->dynperm)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_DYNPERM;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_DYNPERM;
++
++	if (ctx->fsc)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_FSCACHE;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_FSCACHE;
++
++	if (ctx->multiuser)
++		cifs_sb->mnt_cifs_flags |= (CIFS_MOUNT_MULTIUSER |
++					    CIFS_MOUNT_NO_PERM);
++	else
++		cifs_sb->mnt_cifs_flags &= ~(CIFS_MOUNT_MULTIUSER |
++					     CIFS_MOUNT_NO_PERM);
++
++	if (ctx->strict_io)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_STRICT_IO;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_STRICT_IO;
++
++	if (ctx->direct_io)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_DIRECT_IO;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_DIRECT_IO;
++
++	if (ctx->mfsymlinks)
++		cifs_sb->mnt_cifs_flags |= CIFS_MOUNT_MF_SYMLINKS;
++	else
++		cifs_sb->mnt_cifs_flags &= ~CIFS_MOUNT_MF_SYMLINKS;
++	if (ctx->mfsymlinks) {
++		if (ctx->sfu_emul) {
++			/*
++			 * Our SFU ("Services for Unix" emulation does not allow
++			 * creating symlinks but does allow reading existing SFU
++			 * symlinks (it does allow both creating and reading SFU
++			 * style mknod and FIFOs though). When "mfsymlinks" and
++			 * "sfu" are both enabled at the same time, it allows
++			 * reading both types of symlinks, but will only create
++			 * them with mfsymlinks format. This allows better
++			 * Apple compatibility (probably better for Samba too)
++			 * while still recognizing old Windows style symlinks.
++			 */
++			cifs_dbg(VFS, "mount options mfsymlinks and sfu both enabled\n");
++		}
++	}
++
++	return;
++}
+diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
+index c2aadf3ad091..efc7ac2783fa 100644
+--- a/fs/cifs/fs_context.h
++++ b/fs/cifs/fs_context.h
+@@ -265,5 +265,6 @@ static inline struct smb3_fs_context *smb3_fc2context(const struct fs_context *f
+ }
  
- 	spin_lock_init(&cifs_sb->tlink_tree_lock);
- 	cifs_sb->tlink_tree = RB_ROOT;
+ extern int smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx);
++extern void smb3_update_mnt_flags(struct cifs_sb_info *cifs_sb);
  
- 	cifs_dbg(FYI, "file mode: %04ho  dir mode: %04ho\n",
--		 cifs_sb->ctx->file_mode, cifs_sb->ctx->dir_mode);
-+		 ctx->file_mode, ctx->dir_mode);
- 
- 	/* this is needed for ASCII cp to Unicode converts */
- 	if (ctx->iocharset == NULL) {
+ #endif
 -- 
 2.13.6
 
