@@ -2,68 +2,107 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19472D1E71
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1944A2D1E7A
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbgLGXjL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Dec 2020 18:39:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21231 "EHLO
+        id S1726402AbgLGXkR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Dec 2020 18:40:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57741 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726483AbgLGXjK (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:39:10 -0500
+        by vger.kernel.org with ESMTP id S1725885AbgLGXkR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:40:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607384265;
+        s=mimecast20190719; t=1607384331;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=aUw2VL+eY4mhSRe7ojsIqnqsgjh9qiNHIZ9rofnFaiQ=;
-        b=D6S2zfKB4wvJp3aSX3vUxekCdEqLaUfLzIfXUCFeioYrYJnvvAWwaHsZJz4tJHfhJmivHB
-        a73vlQgJ2hBEvwArxyZn/hXFYIVqhoBsrsJhEbC//8DQK+M9OtNNsoNfhzsfbBHUJ9mwdH
-        MwGv3A99qCFT+E6pnDWs/A8kgkflLGk=
+        bh=qELXV7G+b5XhiS8cyqS9gCiwaxzmXy+3EklF9SWC/d0=;
+        b=edMQg/7NJtufqtHEkP/OR/7vtlQSS0IHwnaHKyjv3V66xfznqOPPFvAZV98yR57jLnU0U5
+        SB4JdbzLYam3WbHyCloPZV7bZ4E/0+ws8ugAgi6RP8kBRSFM5MdwC+QYWa8laB3rxVQCrw
+        Ops+/xYFMBTAGT/2U5niv7ROdqlQ+q8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-574-sFgHFE__NgCwn3jMiieO2A-1; Mon, 07 Dec 2020 18:37:43 -0500
-X-MC-Unique: sFgHFE__NgCwn3jMiieO2A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-567-OSDfzITVPm6S2DzzmnRkqQ-1; Mon, 07 Dec 2020 18:38:49 -0500
+X-MC-Unique: OSDfzITVPm6S2DzzmnRkqQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2BF66192D78E;
-        Mon,  7 Dec 2020 23:37:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36A3D192D786;
+        Mon,  7 Dec 2020 23:38:48 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-107.bne.redhat.com [10.64.54.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 844555C1A1;
-        Mon,  7 Dec 2020 23:37:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 453055D6AB;
+        Mon,  7 Dec 2020 23:38:46 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 18/21] cifs: do not allow changing posix_paths during remount
-Date:   Tue,  8 Dec 2020 09:36:43 +1000
-Message-Id: <20201207233646.29823-18-lsahlber@redhat.com>
+Subject: [PATCH 19/21] cifs: remove ctx argument from cifs_setup_cifs_sb
+Date:   Tue,  8 Dec 2020 09:36:44 +1000
+Message-Id: <20201207233646.29823-19-lsahlber@redhat.com>
 In-Reply-To: <20201207233646.29823-1-lsahlber@redhat.com>
 References: <20201207233646.29823-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/fs_context.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/cifs/cifsfs.c    | 2 +-
+ fs/cifs/cifsproto.h | 3 +--
+ fs/cifs/connect.c   | 7 ++++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-index 00bb11939837..ee9c1fb666c7 100644
---- a/fs/cifs/fs_context.c
-+++ b/fs/cifs/fs_context.c
-@@ -624,6 +624,10 @@ static void smb3_fs_context_free(struct fs_context *fc)
- static int smb3_verify_reconfigure_ctx(struct smb3_fs_context *new_ctx,
- 				       struct smb3_fs_context *old_ctx)
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index 57c61a2bcf73..e98233a16974 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -802,7 +802,7 @@ cifs_smb3_do_mount(struct file_system_type *fs_type,
+ 		goto out;
+ 	}
+ 
+-	rc = cifs_setup_cifs_sb(cifs_sb->ctx, cifs_sb);
++	rc = cifs_setup_cifs_sb(cifs_sb);
+ 	if (rc) {
+ 		root = ERR_PTR(rc);
+ 		goto out;
+diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
+index 2b5401e1ce20..8e3db6d7112e 100644
+--- a/fs/cifs/cifsproto.h
++++ b/fs/cifs/cifsproto.h
+@@ -234,8 +234,7 @@ extern int cifs_read_page_from_socket(struct TCP_Server_Info *server,
+ 					struct page *page,
+ 					unsigned int page_offset,
+ 					unsigned int to_read);
+-extern int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
+-			       struct cifs_sb_info *cifs_sb);
++extern int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb);
+ extern int cifs_match_super(struct super_block *, void *);
+ extern int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx);
+ extern void cifs_umount(struct cifs_sb_info *);
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 22b5f3544947..3775f049e3ba 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -2658,16 +2658,17 @@ void reset_cifs_unix_caps(unsigned int xid, struct cifs_tcon *tcon,
+ 	}
+ }
+ 
+-int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
+-			struct cifs_sb_info *cifs_sb)
++int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb)
  {
-+	if (new_ctx->posix_paths != old_ctx->posix_paths) {
-+		cifs_dbg(VFS, "can not change posixpaths during remount\n");
-+		return -EINVAL;
-+	}
- 	if (new_ctx->sectype != old_ctx->sectype) {
- 		cifs_dbg(VFS, "can not change sec during remount\n");
- 		return -EINVAL;
++	struct smb3_fs_context *ctx = cifs_sb->ctx;
++
+ 	INIT_DELAYED_WORK(&cifs_sb->prune_tlinks, cifs_prune_tlinks);
+ 
+ 	spin_lock_init(&cifs_sb->tlink_tree_lock);
+ 	cifs_sb->tlink_tree = RB_ROOT;
+ 
+ 	cifs_dbg(FYI, "file mode: %04ho  dir mode: %04ho\n",
+-		 cifs_sb->ctx->file_mode, cifs_sb->ctx->dir_mode);
++		 ctx->file_mode, ctx->dir_mode);
+ 
+ 	/* this is needed for ASCII cp to Unicode converts */
+ 	if (ctx->iocharset == NULL) {
 -- 
 2.13.6
 
