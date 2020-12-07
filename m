@@ -2,202 +2,230 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCF12D1E77
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A854B2D1E81
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbgLGXjw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Dec 2020 18:39:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50022 "EHLO
+        id S1728209AbgLGXk7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Dec 2020 18:40:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:41138 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725885AbgLGXjw (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:39:52 -0500
+        by vger.kernel.org with ESMTP id S1726708AbgLGXk7 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:40:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607384305;
+        s=mimecast20190719; t=1607384373;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=IaNO/e1RsHSAeTXR5OIDYuO7B2U8Iof604UUSNl0xr4=;
-        b=TMRi2H9QY0lkFYzEqpjjUuS0UfiIdKtiw9GtSrUryMHnZp+tI0s3iWeTwSTwecFwm6fiyt
-        oQ/kyuqIXWpU1el64HMBDohbeHoIxZfbXHB6Swwq075GAyReV6rSthpSAntA53p9GdDsy3
-        b2byPKX3pRFVOkHd3MrXM3ljhjVxNtk=
+        bh=z8pHPwQGKYhO8aZaybiUT340sSB8Ofs1rPJmX7LrnHk=;
+        b=CW3fpnhreKNrkXwnGAfgj5K000gCD8xI4hkHB9P6Onm8uDAlVmiScvueDAzr8ZS9qNMBJz
+        rPzHgjet5HpD6SlAcboffHX2bP39dtBSZsa+kYTpeH+9hEl6lQWRqb4s7mVhFcHkAwzk2E
+        0YyVnTPfcdJvnzMxr8pGo5w/9dFTU/Q=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-346-9stgjFddNIyAGO2vgL5vnw-1; Mon, 07 Dec 2020 18:38:24 -0500
-X-MC-Unique: 9stgjFddNIyAGO2vgL5vnw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-44-gnZwiW2yO6GwEqCQJQ_sXw-1; Mon, 07 Dec 2020 18:39:31 -0500
+X-MC-Unique: gnZwiW2yO6GwEqCQJQ_sXw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09D7C107ACE3;
-        Mon,  7 Dec 2020 23:38:23 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9A0091935780;
+        Mon,  7 Dec 2020 23:39:30 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-107.bne.redhat.com [10.64.54.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1675E10016DB;
-        Mon,  7 Dec 2020 23:38:21 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A51C75D6D5;
+        Mon,  7 Dec 2020 23:39:29 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 02/21] cifs: rename dup_vol to smb3_fs_context_dup and move it into fs_context.c
-Date:   Tue,  8 Dec 2020 09:36:27 +1000
-Message-Id: <20201207233646.29823-2-lsahlber@redhat.com>
+Subject: [PATCH 03/21] cifs: move the enum for cifs parameters into fs_context.h
+Date:   Tue,  8 Dec 2020 09:36:28 +1000
+Message-Id: <20201207233646.29823-3-lsahlber@redhat.com>
 In-Reply-To: <20201207233646.29823-1-lsahlber@redhat.com>
 References: <20201207233646.29823-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/dfs_cache.c  | 60 +---------------------------------------------------
- fs/cifs/fs_context.c | 41 +++++++++++++++++++++++++++++++++++
- fs/cifs/fs_context.h |  3 ++-
- 3 files changed, 44 insertions(+), 60 deletions(-)
+ fs/cifs/connect.c    | 57 ------------------------------
+ fs/cifs/fs_context.h | 97 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 97 insertions(+), 57 deletions(-)
 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 3860241dcc03..2b77d39d7d22 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -1141,64 +1141,6 @@ int dfs_cache_get_tgt_referral(const char *path,
- 	return rc;
- }
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 35bc1f56f053..17e9e95d54e5 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -73,63 +73,6 @@ extern bool disable_legacy_dialects;
+ /* Drop the connection to not overload the server */
+ #define NUM_STATUS_IO_TIMEOUT   5
  
--static int dup_vol(struct smb3_fs_context *ctx, struct smb3_fs_context *new)
--{
--	memcpy(new, ctx, sizeof(*new));
+-enum {
+-	/* Mount options that take no arguments */
+-	Opt_user_xattr, Opt_nouser_xattr,
+-	Opt_forceuid, Opt_noforceuid,
+-	Opt_forcegid, Opt_noforcegid,
+-	Opt_noblocksend, Opt_noautotune, Opt_nolease,
+-	Opt_hard, Opt_soft, Opt_perm, Opt_noperm, Opt_nodelete,
+-	Opt_mapposix, Opt_nomapposix,
+-	Opt_mapchars, Opt_nomapchars, Opt_sfu,
+-	Opt_nosfu, Opt_nodfs, Opt_posixpaths,
+-	Opt_noposixpaths, Opt_nounix, Opt_unix,
+-	Opt_nocase,
+-	Opt_brl, Opt_nobrl,
+-	Opt_handlecache, Opt_nohandlecache,
+-	Opt_forcemandatorylock, Opt_setuidfromacl, Opt_setuids,
+-	Opt_nosetuids, Opt_dynperm, Opt_nodynperm,
+-	Opt_nohard, Opt_nosoft,
+-	Opt_nointr, Opt_intr,
+-	Opt_nostrictsync, Opt_strictsync,
+-	Opt_serverino, Opt_noserverino,
+-	Opt_rwpidforward, Opt_cifsacl, Opt_nocifsacl,
+-	Opt_acl, Opt_noacl, Opt_locallease,
+-	Opt_sign, Opt_ignore_signature, Opt_seal, Opt_noac,
+-	Opt_fsc, Opt_mfsymlinks,
+-	Opt_multiuser, Opt_sloppy, Opt_nosharesock,
+-	Opt_persistent, Opt_nopersistent,
+-	Opt_resilient, Opt_noresilient,
+-	Opt_domainauto, Opt_rdma, Opt_modesid, Opt_rootfs,
+-	Opt_multichannel, Opt_nomultichannel,
+-	Opt_compress,
 -
--	if (ctx->username) {
--		new->username = kstrndup(ctx->username, strlen(ctx->username),
--					 GFP_KERNEL);
--		if (!new->username)
--			return -ENOMEM;
--	}
--	if (ctx->password) {
--		new->password = kstrndup(ctx->password, strlen(ctx->password),
--					 GFP_KERNEL);
--		if (!new->password)
--			goto err_free_username;
--	}
--	if (ctx->UNC) {
--		cifs_dbg(FYI, "%s: ctx->UNC: %s\n", __func__, ctx->UNC);
--		new->UNC = kstrndup(ctx->UNC, strlen(ctx->UNC), GFP_KERNEL);
--		if (!new->UNC)
--			goto err_free_password;
--	}
--	if (ctx->domainname) {
--		new->domainname = kstrndup(ctx->domainname,
--					   strlen(ctx->domainname), GFP_KERNEL);
--		if (!new->domainname)
--			goto err_free_unc;
--	}
--	if (ctx->iocharset) {
--		new->iocharset = kstrndup(ctx->iocharset,
--					  strlen(ctx->iocharset), GFP_KERNEL);
--		if (!new->iocharset)
--			goto err_free_domainname;
--	}
--	if (ctx->prepath) {
--		cifs_dbg(FYI, "%s: ctx->prepath: %s\n", __func__, ctx->prepath);
--		new->prepath = kstrndup(ctx->prepath, strlen(ctx->prepath),
--					GFP_KERNEL);
--		if (!new->prepath)
--			goto err_free_iocharset;
--	}
+-	/* Mount options which take numeric value */
+-	Opt_backupuid, Opt_backupgid, Opt_uid,
+-	Opt_cruid, Opt_gid, Opt_file_mode,
+-	Opt_dirmode, Opt_port,
+-	Opt_min_enc_offload,
+-	Opt_blocksize, Opt_rsize, Opt_wsize, Opt_actimeo,
+-	Opt_echo_interval, Opt_max_credits, Opt_handletimeout,
+-	Opt_snapshot, Opt_max_channels,
 -
--	return 0;
+-	/* Mount options which take string value */
+-	Opt_user, Opt_pass, Opt_ip,
+-	Opt_domain, Opt_srcaddr, Opt_iocharset,
+-	Opt_netbiosname, Opt_servern,
+-	Opt_ver, Opt_vers, Opt_sec, Opt_cache,
 -
--err_free_iocharset:
--	kfree(new->iocharset);
--err_free_domainname:
--	kfree(new->domainname);
--err_free_unc:
--	kfree(new->UNC);
--err_free_password:
--	kfree_sensitive(new->password);
--err_free_username:
--	kfree(new->username);
--	kfree(new);
--	return -ENOMEM;
--}
+-	/* Mount options to be ignored */
+-	Opt_ignore,
 -
- /**
-  * dfs_cache_add_vol - add a cifs volume during mount() that will be handled by
-  * DFS cache refresh worker.
-@@ -1229,7 +1171,7 @@ int dfs_cache_add_vol(char *mntdata, struct smb3_fs_context *ctx, const char *fu
- 		goto err_free_vi;
- 	}
+-	/* Options which could be blank */
+-	Opt_blank_pass,
+-	Opt_blank_user,
+-	Opt_blank_ip,
+-
+-	Opt_err
+-};
+-
+ static const match_table_t cifs_mount_option_tokens = {
  
--	rc = dup_vol(ctx, &vi->ctx);
-+	rc = smb3_fs_context_dup(&vi->ctx, ctx);
- 	if (rc)
- 		goto err_free_fullpath;
- 
-diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-index aa4b85bd5849..301201903b45 100644
---- a/fs/cifs/fs_context.c
-+++ b/fs/cifs/fs_context.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include "cifsglob.h"
-+#include "cifsproto.h"
- #include "cifs_debug.h"
- #include "fs_context.h"
- 
-@@ -219,3 +220,43 @@ cifs_parse_cache_flavor(char *value, struct smb3_fs_context *ctx)
- 	}
- 	return 0;
- }
-+
-+#define DUP_CTX_STR(field)						\
-+do {									\
-+	if (ctx->field) {						\
-+		new_ctx->field = kstrdup(ctx->field, GFP_ATOMIC);	\
-+		if (new_ctx->field == NULL) {				\
-+			cifs_cleanup_volume_info_contents(new_ctx);	\
-+			return -ENOMEM;					\
-+		}							\
-+	}								\
-+} while (0)
-+
-+int
-+smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx)
-+{
-+	int rc = 0;
-+
-+	memcpy(new_ctx, ctx, sizeof(*ctx));
-+	new_ctx->prepath = NULL;
-+	new_ctx->local_nls = NULL;
-+	new_ctx->nodename = NULL;
-+	new_ctx->username = NULL;
-+	new_ctx->password = NULL;
-+	new_ctx->domainname = NULL;
-+	new_ctx->UNC = NULL;
-+	new_ctx->iocharset = NULL;
-+
-+	/*
-+	 * Make sure to stay in sync with cifs_cleanup_volume_info_contents()
-+	 */
-+	DUP_CTX_STR(prepath);
-+	DUP_CTX_STR(username);
-+	DUP_CTX_STR(password);
-+	DUP_CTX_STR(UNC);
-+	DUP_CTX_STR(domainname);
-+	DUP_CTX_STR(nodename);
-+	DUP_CTX_STR(iocharset);
-+
-+	return rc;
-+}
+ 	{ Opt_user_xattr, "user_xattr" },
 diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
-index f217bd600c1e..1ac5e1d202b6 100644
+index 1ac5e1d202b6..3a66199f3cb7 100644
 --- a/fs/cifs/fs_context.h
 +++ b/fs/cifs/fs_context.h
-@@ -152,6 +152,7 @@ struct smb3_fs_context {
- 	bool rootfs:1; /* if it's a SMB root file system */
+@@ -53,6 +53,103 @@ enum cifs_sec_param {
+ 	Opt_sec_err
  };
  
--int cifs_parse_security_flavors(char *value, struct smb3_fs_context *ctx);
-+extern int cifs_parse_security_flavors(char *value, struct smb3_fs_context *ctx);
-+extern int smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx);
- 
- #endif
++enum cifs_param {
++	/* Mount options that take no arguments */
++	Opt_user_xattr, Opt_nouser_xattr,
++	Opt_forceuid, Opt_noforceuid,
++	Opt_forcegid, Opt_noforcegid,
++	Opt_noblocksend,
++	Opt_noautotune,
++	Opt_nolease,
++	Opt_hard, Opt_nohard,
++	Opt_soft, Opt_nosoft,
++	Opt_perm, Opt_noperm,
++	Opt_nodelete,
++	Opt_mapposix, Opt_nomapposix,
++	Opt_mapchars,
++	Opt_nomapchars,
++	Opt_sfu, Opt_nosfu,
++	Opt_nodfs,
++	Opt_posixpaths, Opt_noposixpaths,
++	Opt_unix, Opt_nounix,
++	Opt_nocase,
++	Opt_brl, Opt_nobrl,
++	Opt_handlecache, Opt_nohandlecache,
++	Opt_forcemandatorylock,
++	Opt_setuidfromacl,
++	Opt_setuids, Opt_nosetuids,
++	Opt_dynperm, Opt_nodynperm,
++	Opt_intr, Opt_nointr,
++	Opt_strictsync, Opt_nostrictsync,
++	Opt_serverino, Opt_noserverino,
++	Opt_rwpidforward,
++	Opt_cifsacl, Opt_nocifsacl,
++	Opt_acl, Opt_noacl,
++	Opt_locallease,
++	Opt_sign,
++	Opt_ignore_signature,
++	Opt_seal,
++	Opt_noac,
++	Opt_fsc,
++	Opt_mfsymlinks,
++	Opt_multiuser,
++	Opt_sloppy,
++	Opt_nosharesock,
++	Opt_persistent, Opt_nopersistent,
++	Opt_resilient, Opt_noresilient,
++	Opt_domainauto,
++	Opt_rdma,
++	Opt_modesid,
++	Opt_rootfs,
++	Opt_multichannel, Opt_nomultichannel,
++	Opt_compress,
++
++	/* Mount options which take numeric value */
++	Opt_backupuid,
++	Opt_backupgid,
++	Opt_uid,
++	Opt_cruid,
++	Opt_gid,
++	Opt_port,
++	Opt_file_mode,
++	Opt_dirmode,
++	Opt_min_enc_offload,
++	Opt_blocksize,
++	Opt_rsize,
++	Opt_wsize,
++	Opt_actimeo,
++	Opt_echo_interval,
++	Opt_max_credits,
++	Opt_snapshot,
++	Opt_max_channels,
++	Opt_handletimeout,
++
++	/* Mount options which take string value */
++	Opt_source,
++	Opt_user,
++	Opt_pass,
++	Opt_ip,
++	Opt_domain,
++	Opt_srcaddr,
++	Opt_iocharset,
++	Opt_netbiosname,
++	Opt_servern,
++	Opt_ver,
++	Opt_vers,
++	Opt_sec,
++	Opt_cache,
++
++	/* Mount options to be ignored */
++	Opt_ignore,
++
++	/* Options which could be blank */
++	Opt_blank_pass,
++	Opt_blank_user,
++	Opt_blank_ip,
++
++	Opt_err
++};
++
+ struct smb3_fs_context {
+ 	bool uid_specified;
+ 	bool gid_specified;
 -- 
 2.13.6
 
