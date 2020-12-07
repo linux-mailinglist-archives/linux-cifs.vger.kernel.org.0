@@ -2,91 +2,91 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 917542D1E74
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218852D1E82
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Dec 2020 00:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728167AbgLGXj1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Dec 2020 18:39:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45712 "EHLO
+        id S1727466AbgLGXlH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Dec 2020 18:41:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56899 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727370AbgLGXj1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:39:27 -0500
+        by vger.kernel.org with ESMTP id S1726708AbgLGXlH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Dec 2020 18:41:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607384281;
+        s=mimecast20190719; t=1607384381;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=nso3ZmLzvLmVThqX0dJy3RvTRrceGcqDwUOafCWGRZw=;
-        b=TE7MI8N+6fSFXcdczxv56HdjNUM0NTYJCoofDY6gytgkh9ESA0yssyFCxVgI0DKCqdP0KD
-        gvQJBRJq+ZvINaXReQfvxcLfv8tQsQ3jSfGOlOHH9Jw/woXrN1FiRUx2C9tFt7Nhv9K/mW
-        Sg5Lii1p5WTODmQxbfIFMiS/mJlC9AM=
+        bh=o68Ji6IHDk7qd5dmVNZISyxgP5ecsMzTMXsRnJTHmXs=;
+        b=YdbRXYkjkpb7cXL9ibB51sK9Od2W2fCJuszkE1bebyB6o1/Eny5EaBQkmCemwC8klj7yqM
+        giH54jM0bTiIsLxh8L/skSHJCv1B0SerJh4FNjUkq1pZrIR7uj8wJVJr5NXgGalXB1o9PS
+        PyJ5fIVydkp5t4BeayA7MKxrXG7Ja+o=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-341-GRwJXl2LP3ejwx2JheyEsw-1; Mon, 07 Dec 2020 18:37:59 -0500
-X-MC-Unique: GRwJXl2LP3ejwx2JheyEsw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-473-tgUCgmOPMiKDhPf8UuGURg-1; Mon, 07 Dec 2020 18:39:39 -0500
+X-MC-Unique: tgUCgmOPMiKDhPf8UuGURg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4BEE9107ACE3;
-        Mon,  7 Dec 2020 23:37:58 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72028427C7;
+        Mon,  7 Dec 2020 23:39:38 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-107.bne.redhat.com [10.64.54.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B006F5D9C6;
-        Mon,  7 Dec 2020 23:37:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D6ACD5C1A1;
+        Mon,  7 Dec 2020 23:39:37 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 16/21] cifs: don't create a temp nls in cifs_setup_ipc
-Date:   Tue,  8 Dec 2020 09:36:41 +1000
-Message-Id: <20201207233646.29823-16-lsahlber@redhat.com>
+Subject: [PATCH 17/21] cifs: uncomplicate printing the iocharset parameter
+Date:   Tue,  8 Dec 2020 09:36:42 +1000
+Message-Id: <20201207233646.29823-17-lsahlber@redhat.com>
 In-Reply-To: <20201207233646.29823-1-lsahlber@redhat.com>
 References: <20201207233646.29823-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-just use the one that is already available in ctx
+There is no need to load the default nls to check if the iocharset argument
+was specified or not since we have it in cifs_sb->ctx
 
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/connect.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ fs/cifs/cifsfs.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index f2698090b39a..22b5f3544947 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -1493,7 +1493,6 @@ cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
- {
- 	int rc = 0, xid;
- 	struct cifs_tcon *tcon;
--	struct nls_table *nls_codepage;
- 	char unc[SERVER_NAME_LENGTH + sizeof("//x/IPC$")] = {0};
- 	bool seal = false;
- 	struct TCP_Server_Info *server = ses->server;
-@@ -1518,14 +1517,11 @@ cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
- 
- 	scnprintf(unc, sizeof(unc), "\\\\%s\\IPC$", server->hostname);
- 
--	/* cannot fail */
--	nls_codepage = load_nls_default();
--
- 	xid = get_xid();
- 	tcon->ses = ses;
- 	tcon->ipc = true;
- 	tcon->seal = seal;
--	rc = server->ops->tree_connect(xid, ses, unc, tcon, nls_codepage);
-+	rc = server->ops->tree_connect(xid, ses, unc, tcon, ctx->local_nls);
- 	free_xid(xid);
- 
- 	if (rc) {
-@@ -1538,7 +1534,6 @@ cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
- 
- 	ses->tcon_ipc = tcon;
- out:
--	unload_nls(nls_codepage);
- 	return rc;
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index 13d7f4a3c836..57c61a2bcf73 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -459,18 +459,6 @@ cifs_show_cache_flavor(struct seq_file *s, struct cifs_sb_info *cifs_sb)
+ 		seq_puts(s, "loose");
  }
  
+-static void
+-cifs_show_nls(struct seq_file *s, struct nls_table *cur)
+-{
+-	struct nls_table *def;
+-
+-	/* Display iocharset= option if it's not default charset */
+-	def = load_nls_default();
+-	if (def != cur)
+-		seq_printf(s, ",iocharset=%s", cur->charset);
+-	unload_nls(def);
+-}
+-
+ /*
+  * cifs_show_options() is for displaying mount options in /proc/mounts.
+  * Not all settable options are displayed but most of the important
+@@ -534,9 +522,8 @@ cifs_show_options(struct seq_file *s, struct dentry *root)
+ 		seq_printf(s, ",file_mode=0%ho,dir_mode=0%ho",
+ 					   cifs_sb->ctx->file_mode,
+ 					   cifs_sb->ctx->dir_mode);
+-
+-	cifs_show_nls(s, cifs_sb->local_nls);
+-
++	if (cifs_sb->ctx->iocharset)
++		seq_printf(s, ",iocharset=%s", cifs_sb->ctx->iocharset);
+ 	if (tcon->seal)
+ 		seq_puts(s, ",seal");
+ 	else if (tcon->ses->server->ignore_signature)
 -- 
 2.13.6
 
