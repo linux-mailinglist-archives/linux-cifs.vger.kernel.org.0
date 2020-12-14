@@ -2,287 +2,284 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45A52D9350
-	for <lists+linux-cifs@lfdr.de>; Mon, 14 Dec 2020 07:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1C12D934D
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Dec 2020 07:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438786AbgLNGmR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 14 Dec 2020 01:42:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28354 "EHLO
+        id S2438783AbgLNGmJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 14 Dec 2020 01:42:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34260 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2438782AbgLNGmQ (ORCPT
+        by vger.kernel.org with ESMTP id S1728023AbgLNGmI (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 14 Dec 2020 01:42:16 -0500
+        Mon, 14 Dec 2020 01:42:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607928049;
+        s=mimecast20190719; t=1607928041;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=8lafd9RsaslFJIafxtB4tBoVDMaTxFwk3hmM3QH3MMg=;
-        b=bIFT4zrM3IObXDiEBPF2yuBCpI8CDt1LUTzJbi2m1We6TUTVbDpay2RuG3Blxx6xRHdWnM
-        rokekffmmylhxxZf0+IdSPOKZDc9WBmkNeQ+PZsXPkxiu/Oda0Xb3bW7BJP5SutFgJzlXt
-        bAsY2qhc8rUuBuTW3BzT72dCa1RzYvM=
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=O8+f8t+EttNDsCr3GtWhJkkS1qfL/xbbqBz3QJZTn9o=;
+        b=EltWQU50R6+gzOeABcCXmc5BLDvOwpZSsCfBAsTPhLreOnO5EiBx+KCwuDSssfPr4mZMCL
+        4iW2YjmoprXihC91TFDE5VZH9RNquShrW9Iq3MlOMFP3112suA5+8DGGiOObIoIDYGylMD
+        +ksgff9n1WFWZmjm6S24XEzirJugrEE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-596-AKIM_X3kPBi3n3N0kJympw-1; Mon, 14 Dec 2020 01:40:47 -0500
-X-MC-Unique: AKIM_X3kPBi3n3N0kJympw-1
+ us-mta-595-VlhqTXT6NZCltbm2FMts0Q-1; Mon, 14 Dec 2020 01:40:38 -0500
+X-MC-Unique: VlhqTXT6NZCltbm2FMts0Q-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BA5BB18C89D9;
-        Mon, 14 Dec 2020 06:40:46 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D146759;
+        Mon, 14 Dec 2020 06:40:37 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-107.bne.redhat.com [10.64.54.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C67DA60BE2;
-        Mon, 14 Dec 2020 06:40:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D184C60BE2;
+        Mon, 14 Dec 2020 06:40:36 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 01/12] cifs: move cifs_cleanup_volume_info[_content] to fs_context.c
-Date:   Mon, 14 Dec 2020 16:40:16 +1000
-Message-Id: <20201214064027.2885-1-lsahlber@redhat.com>
+Subject: [PATCH 02/12] cifs: move [brw]size from cifs_sb to cifs_sb->ctx
+Date:   Mon, 14 Dec 2020 16:40:17 +1000
+Message-Id: <20201214064027.2885-2-lsahlber@redhat.com>
+In-Reply-To: <20201214064027.2885-1-lsahlber@redhat.com>
+References: <20201214064027.2885-1-lsahlber@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-and rename it to smb3_cleanup_fs_context[_content]
-
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/cifsfs.c     |  2 +-
- fs/cifs/cifsproto.h  |  3 ---
- fs/cifs/connect.c    | 47 ++++-------------------------------------------
- fs/cifs/dfs_cache.c  |  4 ++--
- fs/cifs/fs_context.c | 45 ++++++++++++++++++++++++++++++++++++++++++---
- fs/cifs/fs_context.h |  2 ++
- 6 files changed, 51 insertions(+), 52 deletions(-)
+ fs/cifs/cifs_fs_sb.h |  3 ---
+ fs/cifs/cifsfs.c     | 11 +++++++----
+ fs/cifs/connect.c    | 21 +++++++++------------
+ fs/cifs/file.c       | 12 ++++++------
+ fs/cifs/fs_context.c |  3 +++
+ fs/cifs/fs_context.h |  3 +++
+ fs/cifs/inode.c      |  2 +-
+ fs/cifs/smb1ops.c    |  2 +-
+ fs/cifs/smb2ops.c    |  2 +-
+ 9 files changed, 31 insertions(+), 28 deletions(-)
 
+diff --git a/fs/cifs/cifs_fs_sb.h b/fs/cifs/cifs_fs_sb.h
+index 69d26313d350..aa77edc12212 100644
+--- a/fs/cifs/cifs_fs_sb.h
++++ b/fs/cifs/cifs_fs_sb.h
+@@ -62,9 +62,6 @@ struct cifs_sb_info {
+ 	struct tcon_link *master_tlink;
+ 	struct nls_table *local_nls;
+ 	struct smb3_fs_context *ctx;
+-	unsigned int bsize;
+-	unsigned int rsize;
+-	unsigned int wsize;
+ 	atomic_t active;
+ 	unsigned int mnt_cifs_flags;
+ 	struct delayed_work prune_tlinks;
 diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 0932a3b225be..9c2959f552e0 100644
+index 9c2959f552e0..6a3cb192d75a 100644
 --- a/fs/cifs/cifsfs.c
 +++ b/fs/cifs/cifsfs.c
-@@ -874,7 +874,7 @@ cifs_smb3_do_mount(struct file_system_type *fs_type,
- out:
- 	if (cifs_sb) {
- 		kfree(cifs_sb->prepath);
--		cifs_cleanup_volume_info(cifs_sb->ctx);
-+		smb3_cleanup_fs_context(cifs_sb->ctx);
- 		kfree(cifs_sb);
- 	}
- 	return root;
-diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-index b80b57a66804..891c8d8c2bb5 100644
---- a/fs/cifs/cifsproto.h
-+++ b/fs/cifs/cifsproto.h
-@@ -237,7 +237,6 @@ extern int cifs_read_page_from_socket(struct TCP_Server_Info *server,
- extern int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
- 			       struct cifs_sb_info *cifs_sb);
- extern int cifs_match_super(struct super_block *, void *);
--extern void cifs_cleanup_volume_info(struct smb3_fs_context *ctx);
- extern int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx);
- extern void cifs_umount(struct cifs_sb_info *);
- extern void cifs_mark_open_files_invalid(struct cifs_tcon *tcon);
-@@ -552,8 +551,6 @@ extern int SMBencrypt(unsigned char *passwd, const unsigned char *c8,
+@@ -218,7 +218,7 @@ cifs_read_super(struct super_block *sb)
+ 	if (rc)
+ 		goto out_no_root;
+ 	/* tune readahead according to rsize */
+-	sb->s_bdi->ra_pages = cifs_sb->rsize / PAGE_SIZE;
++	sb->s_bdi->ra_pages = cifs_sb->ctx->rsize / PAGE_SIZE;
  
- extern int
- cifs_setup_volume_info(struct smb3_fs_context *ctx);
--extern void
--cifs_cleanup_volume_info_contents(struct smb3_fs_context *ctx);
+ 	sb->s_blocksize = CIFS_MAX_MSGSIZE;
+ 	sb->s_blocksize_bits = 14;	/* default 2**14 = CIFS_MAX_MSGSIZE */
+@@ -615,9 +615,12 @@ cifs_show_options(struct seq_file *s, struct dentry *root)
+ 			   from_kgid_munged(&init_user_ns,
+ 					    cifs_sb->ctx->backupgid));
  
- extern struct TCP_Server_Info *
- cifs_find_tcp_session(struct smb3_fs_context *ctx);
+-	seq_printf(s, ",rsize=%u", cifs_sb->rsize);
+-	seq_printf(s, ",wsize=%u", cifs_sb->wsize);
+-	seq_printf(s, ",bsize=%u", cifs_sb->bsize);
++	if (cifs_sb->ctx->got_rsize)
++		seq_printf(s, ",rsize=%u", cifs_sb->ctx->rsize);
++	if (cifs_sb->ctx->got_wsize)
++		seq_printf(s, ",wsize=%u", cifs_sb->ctx->wsize);
++	if (cifs_sb->ctx->got_bsize)
++		seq_printf(s, ",bsize=%u", cifs_sb->ctx->bsize);
+ 	if (tcon->ses->server->min_offload)
+ 		seq_printf(s, ",esize=%u", tcon->ses->server->min_offload);
+ 	seq_printf(s, ",echo_interval=%lu",
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 1c8b08c06ad7..068b13e1b499 100644
+index 068b13e1b499..ceb660e1b601 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -2806,45 +2806,6 @@ int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
- 	return 0;
- }
+@@ -2234,10 +2234,10 @@ compare_mount_options(struct super_block *sb, struct cifs_mnt_data *mnt_data)
+ 	 * We want to share sb only if we don't specify an r/wsize or
+ 	 * specified r/wsize is greater than or equal to existing one.
+ 	 */
+-	if (new->wsize && new->wsize < old->wsize)
++	if (new->ctx->wsize && new->ctx->wsize < old->ctx->wsize)
+ 		return 0;
  
--void
--cifs_cleanup_volume_info_contents(struct smb3_fs_context *ctx)
--{
--	if (ctx == NULL)
--		return;
--
+-	if (new->rsize && new->rsize < old->rsize)
++	if (new->ctx->rsize && new->ctx->rsize < old->ctx->rsize)
+ 		return 0;
+ 
+ 	if (!uid_eq(old->ctx->linux_uid, new->ctx->linux_uid) ||
+@@ -2700,14 +2700,6 @@ int cifs_setup_cifs_sb(struct smb3_fs_context *ctx,
+ 	spin_lock_init(&cifs_sb->tlink_tree_lock);
+ 	cifs_sb->tlink_tree = RB_ROOT;
+ 
+-	cifs_sb->bsize = ctx->bsize;
 -	/*
--	 * Make sure this stays in sync with smb3_fs_context_dup()
+-	 * Temporarily set r/wsize for matching superblock. If we end up using
+-	 * new sb then client will later negotiate it downward if needed.
 -	 */
--	kfree(ctx->mount_options);
--	ctx->mount_options = NULL;
--	kfree(ctx->username);
--	ctx->username = NULL;
--	kfree_sensitive(ctx->password);
--	ctx->password = NULL;
--	kfree(ctx->UNC);
--	ctx->UNC = NULL;
--	kfree(ctx->domainname);
--	ctx->domainname = NULL;
--	kfree(ctx->nodename);
--	ctx->nodename = NULL;
--	kfree(ctx->iocharset);
--	ctx->iocharset = NULL;
--	kfree(ctx->prepath);
--	ctx->prepath = NULL;
+-	cifs_sb->rsize = ctx->rsize;
+-	cifs_sb->wsize = ctx->wsize;
 -
--	unload_nls(ctx->local_nls);
--	ctx->local_nls = NULL;
--}
--
--void
--cifs_cleanup_volume_info(struct smb3_fs_context *ctx)
--{
--	if (!ctx)
--		return;
--	cifs_cleanup_volume_info_contents(ctx);
--	kfree(ctx);
--}
--
- /* Release all succeed connections */
- static inline void mount_put_conns(struct cifs_sb_info *cifs_sb,
- 				   unsigned int xid,
-@@ -3055,7 +3016,7 @@ expand_dfs_referral(const unsigned int xid, struct cifs_ses *ses,
- 			rc = PTR_ERR(mdata);
- 			mdata = NULL;
- 		} else {
--			cifs_cleanup_volume_info_contents(ctx);
-+			smb3_cleanup_fs_context_contents(ctx);
- 			rc = cifs_setup_volume_info(ctx);
- 		}
- 		kfree(cifs_sb->ctx->mount_options);
-@@ -3147,7 +3108,7 @@ static int setup_dfs_tgt_conn(const char *path, const char *full_path,
- 			rc = update_vol_info(tgt_it, &fake_ctx, ctx);
+ 	cifs_dbg(FYI, "file mode: %04ho  dir mode: %04ho\n",
+ 		 cifs_sb->ctx->file_mode, cifs_sb->ctx->dir_mode);
+ 
+@@ -2911,8 +2903,13 @@ static int mount_get_conns(struct smb3_fs_context *ctx, struct cifs_sb_info *cif
  		}
  	}
--	cifs_cleanup_volume_info_contents(&fake_ctx);
-+	smb3_cleanup_fs_context_contents(&fake_ctx);
- 	return rc;
- }
  
-@@ -3395,7 +3356,7 @@ static int check_dfs_prepath(struct cifs_sb_info *cifs_sb, struct smb3_fs_contex
- 					break;
- 				rc = -EREMOTE;
- 				npath = build_unc_path_to_root(&v, cifs_sb, true);
--				cifs_cleanup_volume_info_contents(&v);
-+				smb3_cleanup_fs_context_contents(&v);
- 			} else {
- 				v.UNC = ctx->UNC;
- 				v.prepath = path + 1;
-@@ -3759,7 +3720,7 @@ static void delayed_free(struct rcu_head *p)
- 	struct cifs_sb_info *cifs_sb = container_of(p, struct cifs_sb_info, rcu);
+-	cifs_sb->wsize = server->ops->negotiate_wsize(tcon, ctx);
+-	cifs_sb->rsize = server->ops->negotiate_rsize(tcon, ctx);
++	/*
++	 * Clamp the rsize/wsize mount arguments if they are too big for the server
++	 */
++	if (cifs_sb->ctx->wsize > server->ops->negotiate_wsize(tcon, ctx))
++		cifs_sb->ctx->wsize = server->ops->negotiate_wsize(tcon, ctx);
++	if (cifs_sb->ctx->rsize > server->ops->negotiate_rsize(tcon, ctx))
++		cifs_sb->ctx->rsize = server->ops->negotiate_rsize(tcon, ctx);
  
- 	unload_nls(cifs_sb->local_nls);
--	cifs_cleanup_volume_info(cifs_sb->ctx);
-+	smb3_cleanup_fs_context(cifs_sb->ctx);
- 	kfree(cifs_sb);
- }
- 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 6bccff4596bf..6ad6ba5f6ebe 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -587,7 +587,7 @@ static void __vol_release(struct vol_info *vi)
- {
- 	kfree(vi->fullpath);
- 	kfree(vi->mntdata);
--	cifs_cleanup_volume_info_contents(&vi->ctx);
-+	smb3_cleanup_fs_context_contents(&vi->ctx);
- 	kfree(vi);
- }
- 
-@@ -1468,7 +1468,7 @@ static struct cifs_ses *find_root_ses(struct vol_info *vi,
- 	ses = cifs_get_smb_ses(server, &ctx);
- 
- out:
--	cifs_cleanup_volume_info_contents(&ctx);
-+	smb3_cleanup_fs_context_contents(&ctx);
- 	kfree(mdata);
- 	kfree(rpath);
- 
-diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-index fe5cc60f4393..4739caa0af97 100644
---- a/fs/cifs/fs_context.c
-+++ b/fs/cifs/fs_context.c
-@@ -289,7 +289,7 @@ do {									\
- 	if (ctx->field) {						\
- 		new_ctx->field = kstrdup(ctx->field, GFP_ATOMIC);	\
- 		if (new_ctx->field == NULL) {				\
--			cifs_cleanup_volume_info_contents(new_ctx);	\
-+			smb3_cleanup_fs_context_contents(new_ctx);	\
- 			return -ENOMEM;					\
- 		}							\
- 	}								\
-@@ -312,7 +312,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
- 	new_ctx->iocharset = NULL;
- 
- 	/*
--	 * Make sure to stay in sync with cifs_cleanup_volume_info_contents()
-+	 * Make sure to stay in sync with smb3_cleanup_fs_context_contents()
- 	 */
- 	DUP_CTX_STR(prepath);
- 	DUP_CTX_STR(mount_options);
-@@ -617,7 +617,7 @@ static void smb3_fs_context_free(struct fs_context *fc)
- {
- 	struct smb3_fs_context *ctx = smb3_fc2context(fc);
- 
--	cifs_cleanup_volume_info(ctx);
-+	smb3_cleanup_fs_context(ctx);
- }
- 
- static int smb3_reconfigure(struct fs_context *fc)
-@@ -1243,3 +1243,42 @@ int smb3_init_fs_context(struct fs_context *fc)
- 	fc->ops = &smb3_fs_context_ops;
  	return 0;
  }
-+
-+void
-+smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx)
-+{
-+	if (ctx == NULL)
-+		return;
-+
-+	/*
-+	 * Make sure this stays in sync with smb3_fs_context_dup()
-+	 */
-+	kfree(ctx->mount_options);
-+	ctx->mount_options = NULL;
-+	kfree(ctx->username);
-+	ctx->username = NULL;
-+	kfree_sensitive(ctx->password);
-+	ctx->password = NULL;
-+	kfree(ctx->UNC);
-+	ctx->UNC = NULL;
-+	kfree(ctx->domainname);
-+	ctx->domainname = NULL;
-+	kfree(ctx->nodename);
-+	ctx->nodename = NULL;
-+	kfree(ctx->iocharset);
-+	ctx->iocharset = NULL;
-+	kfree(ctx->prepath);
-+	ctx->prepath = NULL;
-+
-+	unload_nls(ctx->local_nls);
-+	ctx->local_nls = NULL;
-+}
-+
-+void
-+smb3_cleanup_fs_context(struct smb3_fs_context *ctx)
-+{
-+	if (!ctx)
-+		return;
-+	smb3_cleanup_fs_context_contents(ctx);
-+	kfree(ctx);
-+}
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 583074546e6f..6d001905c8e5 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -2336,7 +2336,7 @@ static int cifs_writepages(struct address_space *mapping,
+ 	 * If wsize is smaller than the page cache size, default to writing
+ 	 * one page at a time via cifs_writepage
+ 	 */
+-	if (cifs_sb->wsize < PAGE_SIZE)
++	if (cifs_sb->ctx->wsize < PAGE_SIZE)
+ 		return generic_writepages(mapping, wbc);
+ 
+ 	xid = get_xid();
+@@ -2369,7 +2369,7 @@ static int cifs_writepages(struct address_space *mapping,
+ 		if (rc)
+ 			get_file_rc = rc;
+ 
+-		rc = server->ops->wait_mtu_credits(server, cifs_sb->wsize,
++		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
+ 						   &wsize, credits);
+ 		if (rc != 0) {
+ 			done = true;
+@@ -2911,7 +2911,7 @@ cifs_write_from_iter(loff_t offset, size_t len, struct iov_iter *from,
+ 				break;
+ 		}
+ 
+-		rc = server->ops->wait_mtu_credits(server, cifs_sb->wsize,
++		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
+ 						   &wsize, credits);
+ 		if (rc)
+ 			break;
+@@ -3642,7 +3642,7 @@ cifs_send_async_read(loff_t offset, size_t len, struct cifsFileInfo *open_file,
+ 				break;
+ 		}
+ 
+-		rc = server->ops->wait_mtu_credits(server, cifs_sb->rsize,
++		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->rsize,
+ 						   &rsize, credits);
+ 		if (rc)
+ 			break;
+@@ -4028,7 +4028,7 @@ cifs_read(struct file *file, char *read_data, size_t read_size, loff_t *offset)
+ 	cifs_sb = CIFS_FILE_SB(file);
+ 
+ 	/* FIXME: set up handlers for larger reads and/or convert to async */
+-	rsize = min_t(unsigned int, cifs_sb->rsize, CIFSMaxBufSize);
++	rsize = min_t(unsigned int, cifs_sb->ctx->rsize, CIFSMaxBufSize);
+ 
+ 	if (file->private_data == NULL) {
+ 		rc = -EBADF;
+@@ -4413,7 +4413,7 @@ static int cifs_readpages(struct file *file, struct address_space *mapping,
+ 				break;
+ 		}
+ 
+-		rc = server->ops->wait_mtu_credits(server, cifs_sb->rsize,
++		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->rsize,
+ 						   &rsize, credits);
+ 		if (rc)
+ 			break;
+diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+index 4739caa0af97..e83bd4382dfa 100644
+--- a/fs/cifs/fs_context.c
++++ b/fs/cifs/fs_context.c
+@@ -783,12 +783,15 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+ 			goto cifs_parse_mount_err;
+ 		}
+ 		ctx->bsize = result.uint_32;
++		ctx->got_bsize = true;
+ 		break;
+ 	case Opt_rsize:
+ 		ctx->rsize = result.uint_32;
++		ctx->got_rsize = true;
+ 		break;
+ 	case Opt_wsize:
+ 		ctx->wsize = result.uint_32;
++		ctx->got_wsize = true;
+ 		break;
+ 	case Opt_actimeo:
+ 		ctx->actimeo = HZ * result.uint_32;
 diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
-index aaec8a819d34..4c4c392b9767 100644
+index 4c4c392b9767..7c794df7a874 100644
 --- a/fs/cifs/fs_context.h
 +++ b/fs/cifs/fs_context.h
-@@ -254,6 +254,8 @@ extern int cifs_parse_cache_flavor(char *value,
- extern int cifs_parse_security_flavors(char *value,
- 				       struct smb3_fs_context *ctx);
- extern int smb3_init_fs_context(struct fs_context *fc);
-+extern void smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx);
-+extern void smb3_cleanup_fs_context(struct smb3_fs_context *ctx);
+@@ -152,6 +152,9 @@ struct smb3_fs_context {
+ 	char *nodename;
+ 	bool got_ip;
+ 	bool got_version;
++	bool got_rsize;
++	bool got_wsize;
++	bool got_bsize;
+ 	unsigned short port;
  
- static inline struct smb3_fs_context *smb3_fc2context(const struct fs_context *fc)
+ 	char *username;
+diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
+index 240d79e3aa14..a83b3a8ffaac 100644
+--- a/fs/cifs/inode.c
++++ b/fs/cifs/inode.c
+@@ -2409,7 +2409,7 @@ int cifs_getattr(const struct path *path, struct kstat *stat,
+ 	}
+ 
+ 	generic_fillattr(inode, stat);
+-	stat->blksize = cifs_sb->bsize;
++	stat->blksize = cifs_sb->ctx->bsize;
+ 	stat->ino = CIFS_I(inode)->uniqueid;
+ 
+ 	/* old CIFS Unix Extensions doesn't return create time */
+diff --git a/fs/cifs/smb1ops.c b/fs/cifs/smb1ops.c
+index 359a0ef796de..e31b939e628c 100644
+--- a/fs/cifs/smb1ops.c
++++ b/fs/cifs/smb1ops.c
+@@ -1006,7 +1006,7 @@ cifs_is_read_op(__u32 oplock)
+ static unsigned int
+ cifs_wp_retry_size(struct inode *inode)
  {
+-	return CIFS_SB(inode->i_sb)->wsize;
++	return CIFS_SB(inode->i_sb)->ctx->wsize;
+ }
+ 
+ static bool
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 940e61e92a8c..a505cc3e58da 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -3951,7 +3951,7 @@ smb3_parse_lease_buf(void *buf, unsigned int *epoch, char *lease_key)
+ static unsigned int
+ smb2_wp_retry_size(struct inode *inode)
+ {
+-	return min_t(unsigned int, CIFS_SB(inode->i_sb)->wsize,
++	return min_t(unsigned int, CIFS_SB(inode->i_sb)->ctx->wsize,
+ 		     SMB2_MAX_BUFFER_SIZE);
+ }
+ 
 -- 
 2.13.6
 
