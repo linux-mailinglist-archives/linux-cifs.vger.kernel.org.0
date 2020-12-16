@@ -2,95 +2,117 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A3E2DBE48
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Dec 2020 11:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C93C2DC247
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Dec 2020 15:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbgLPKIW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 16 Dec 2020 05:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbgLPKIW (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Dec 2020 05:08:22 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FACC061794;
-        Wed, 16 Dec 2020 02:07:41 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726561AbgLPOdN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Dec 2020 09:33:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21750 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726558AbgLPOdN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 16 Dec 2020 09:33:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1608129106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ELcYwcd5+8Wpv1Iv8HJcz0WHlykRwQrTtcj43dV5dsY=;
+        b=hyDtKKXPsnPMqdqQYckAR6pHPam60tZ7yw/FmQ7UeRS75nVAOyiJO9a3MgxdchsDCXwvo9
+        vbpqPa8eWgjM/qbY7JBKdKjt+ROYNLlqgDjd0hToLSCJTfEUxaQpskD9oJ5VnJMZxD0VY4
+        Av1v5EsYIPDmWsdV+iRIns52ld9+KME=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-462-HMNnCmJUNZ2rQSSOmuBLnA-1; Wed, 16 Dec 2020 09:31:43 -0500
+X-MC-Unique: HMNnCmJUNZ2rQSSOmuBLnA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CwrQw3zDXz9sRR;
-        Wed, 16 Dec 2020 21:07:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608113260;
-        bh=eys2iDvQWXhlskfSyu0BqgYMhF4CxnhdAShc/4Mwwjg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fxOqCzC72U5xcvOdVO58UtHgJYvf0kdbaMlI47QcxTGScuSbntwqE1GqtjIjUhSDR
-         y2L0aragUYyrwy3MWj4kiYkSIPGuNqdRn+R11kEIXkGGmr7Zbiad1E4ay6f34uc6aR
-         kkOQYpSNvGzDe2XKcO7JHfSLsg+LK2MpSr0OhSkn+gL3FzyNYYyBI4TA2W1aycfFuo
-         NWT8iFuDmHsDrJo+Urbl8HJnYuo4HvYEAvTuJFIV5bOJXGxkNGKFSg2mD9WeiXxB1f
-         ukJli8LrBZPMXWF5rMHdIaApFx3qRGDMix7CzY175aeR5r7UTewQuXpPPwCqRyAdzM
-         QsFTRwetER4ag==
-Date:   Wed, 16 Dec 2020 21:07:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven French <Steven.French@microsoft.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Samuel Cabrero <scabrero@suse.de>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 30A05107ACF9;
+        Wed, 16 Dec 2020 14:31:42 +0000 (UTC)
+Received: from ovpn-112-247.phx2.redhat.com (ovpn-112-247.phx2.redhat.com [10.3.112.247])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 999445D9C0;
+        Wed, 16 Dec 2020 14:31:41 +0000 (UTC)
+Message-ID: <04d24a21a7a462b3dc316959c3a3b1c8be8caac3.camel@redhat.com>
+Subject: Re: [gssproxy] cifs-utils, Linux cifs kernel client and gssproxy
+From:   Simo Sorce <simo@redhat.com>
+To:     The GSS-Proxy developers and users mailing list 
+        <gss-proxy@lists.fedorahosted.org>,
         "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Subject: Re: [EXTERNAL] Re: linux-next: build failure after merge of the
- net-next tree
-Message-ID: <20201216210735.2893dd92@canb.auug.org.au>
-In-Reply-To: <SN6PR2101MB1069AC2DC98C74F7C2A71EA3E4C59@SN6PR2101MB1069.namprd21.prod.outlook.com>
-References: <SN6PR2101MB1069AC2DC98C74F7C2A71EA3E4C59@SN6PR2101MB1069.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k=SOkQNbulSYBAiBWT9Iq=s";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Cc:     "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>
+Date:   Wed, 16 Dec 2020 09:31:40 -0500
+In-Reply-To: <2e241ceaece6485289b1cddb84ec77ca@atos.net>
+References: <2e241ceaece6485289b1cddb84ec77ca@atos.net>
+Organization: Red Hat, Inc.
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---Sig_/k=SOkQNbulSYBAiBWT9Iq=s
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Michael,
+as you say the best course of action would be for cifs.ko to move to
+use the RPC interface we defined for knfsd (with any extensions that
+may  be needed), and we had discussions in the past with cifs upstream
+developers about it. But nothing really materialized.
 
-Hi Steven,
+If something is needed in the short term, I thjink the quickest course
+of action is indeed to change the userspace helper to use gssapi
+function calls, so that they can be intercepted like we do for rpc.gssd
+(nfs client's userspace helper).
 
-On Wed, 16 Dec 2020 02:21:26 +0000 Steven French <Steven.French@microsoft.c=
-om> wrote:
->
-> I applied your patch to the tip of my tree (cifs-2.6.git for-next) -
-> hopefully that makes it easier when I sent the PR in a day or two for
-> cifs/smb3 changes.
+Unfortunately I do not have the cycles to work on that myself at this
+time :-(
 
-I think you have just made your tree fail to build as nla_strscpy does
-not exist in your tree ... Just remove that commit and tell Linus about
-the necessary change and he can add it to the merge.
+HTH,
+Simo.
 
-And, no, rebasing your tree in Linus', or even doing a merge with
-Linus' tree is not really a reasonable option at this point.
+On Wed, 2020-12-16 at 10:01 +0000, Weiser, Michael wrote:
+> Hello,
+> 
+> I have a use-case for authentication of Linux cifs client mounts without the user being present (e.g. from batch jobs) using gssproxy's impersonation feature with Kerberos Constrained Delegation similar to how it can be done for NFS[1].
+> 
+> My understanding is that currently neither the Linux cifs kernel client nor cifs-utils userland tools support acquiring credentials using gssproxy. The former uses a custom upcall interface to talk to cifs.spnego from cifs-utils. The latter then goes looking for Kerberos ticket caches using libkrb5 functions, not GSSAPI, which prevents gssproxy from interacting with it.[2]
+> 
+> From what I understand, the preferred method would be to switch the Linux kernel client upcall to the RPC protocol defined by gssproxy[3] (as has been done for the Linux kernel NFS server already replacing rpc.svcgssd[4]). The kernel could then, at least optionally, talk to gssproxy directly to try and obtain credentials.
+> 
+> Failing that, cifs-utils' cifs.spnego could be switched to GSSAPI so that gssproxy's interposer plugin could intercept GSSAPI calls and provide them with the required credentials (similar to the NFS client rpc.gssd[5]).
+> 
+> Assuming my understanding is correct so far:
+> 
+> Is anyone doing any work on this and could use some help (testing, coding)?
+> What would be expected complexity and possible roadblocks when trying to make a start at implementing this?
+> Or is the idea moot due to some constraint or recent development I'm not aware of?
+> 
+> I have found a recent discussion of the topic on linux-cifs[6] which provided no definite answer though.
+> 
+> As a crude attempt at an explicit userspace workaround I tried but failed to trick smbclient into initialising a ticket cache using gssproxy for cifs.spnego to find later on.
+> Is this something that could be implemented without too much redundant effort (or should already work, perhaps using a different tool)?
+> 
+> [1] https://github.com/gssapi/gssproxy/blob/main/docs/NFS.md#user-impersonation-via-constrained-delegation
+> [2] https://pagure.io/gssproxy/issue/56
+> [3] https://github.com/gssapi/gssproxy/blob/main/docs/ProtocolDocumentation.md
+> [4] https://github.com/gssapi/gssproxy/blob/main/docs/NFS.md#nfs-server
+> [5] https://github.com/gssapi/gssproxy/blob/main/docs/NFS.md#nfs-client
+> [6] https://www.spinics.net/lists/linux-cifs/msg20182.html
+> -- 
+> Thanks,
+> Michael
+> _______________________________________________
+> gss-proxy mailing list -- gss-proxy@lists.fedorahosted.org
+> To unsubscribe send an email to gss-proxy-leave@lists.fedorahosted.org
+> Fedora Code of Conduct: https://docs.fedoraproject.org/en-US/project/code-of-conduct/
+> List Guidelines: https://fedoraproject.org/wiki/Mailing_list_guidelines
+> List Archives: https://lists.fedorahosted.org/archives/list/gss-proxy@lists.fedorahosted.org
 
---=20
-Cheers,
-Stephen Rothwell
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
 
---Sig_/k=SOkQNbulSYBAiBWT9Iq=s
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/Z3GcACgkQAVBC80lX
-0GyD8AgAoca4Oa1T0GMS3kD+CbviFxAKIdMWbBq3KuREiX0WVk3NM0QoKjN55VNG
-rXRqbyfamtKTJyfbXlY/mIY/kpH1TeM/+2uWxcTSgRN7GLJKdQ8B6u4apwaH7UEz
-/gubxqAtc5nXglLKe29m5xzEMtv3YIpqbM/ghaq7av5nio8ldtxTPCvIzlQhu3v+
-NSsgh1ckrARls/Iik2qqlF2mM+Z+/GPEGsFnVbtz7P4K2NhoH4f1qi7DIdtLH2j8
-/oPFNzLeKenICyKFxKLS7R/va5AcSFK4f89ON4jpkd4xCv83th+fDoqdLsBSxMnt
-pyKH//cAGzTT2W0SYvFRWQ7DDmay6Q==
-=s4Tf
------END PGP SIGNATURE-----
 
---Sig_/k=SOkQNbulSYBAiBWT9Iq=s--
