@@ -2,139 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29D42DEDA2
-	for <lists+linux-cifs@lfdr.de>; Sat, 19 Dec 2020 08:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E012DF04E
+	for <lists+linux-cifs@lfdr.de>; Sat, 19 Dec 2020 16:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgLSHFH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 19 Dec 2020 02:05:07 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13548 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726311AbgLSHFG (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 19 Dec 2020 02:05:06 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fdda5f80000>; Fri, 18 Dec 2020 23:04:24 -0800
-Received: from [10.2.61.104] (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 19 Dec
- 2020 07:04:23 +0000
-Subject: Re: set_page_dirty vs truncate
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <linux-fsdevel@vger.kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        <v9fs-developer@lists.sourceforge.net>,
-        Steve French <sfrench@samba.org>, <linux-cifs@vger.kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        <linux-um@lists.infradead.org>, Dave Kleikamp <shaggy@kernel.org>,
-        <jfs-discussion@lists.sourceforge.net>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        <linux-nfs@vger.kernel.org>, Anton Altaparmakov <anton@tuxera.com>,
-        <linux-ntfs-dev@lists.sourceforge.net>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Martin Brandenburg <martin@omnibond.com>,
-        <devel@lists.orangefs.org>, Hans de Goede <hdegoede@redhat.com>
-References: <20201218160531.GL15600@casper.infradead.org>
- <20201218220316.GO15600@casper.infradead.org>
- <20201219051852.GP15600@casper.infradead.org>
- <7a7c3052-74c7-c63b-5fe3-65d692c1c5d1@nvidia.com>
- <20201219065057.GR15600@casper.infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <43f05a8f-25ce-a400-5825-d8fa159ee7f6@nvidia.com>
-Date:   Fri, 18 Dec 2020 23:04:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:84.0) Gecko/20100101
- Thunderbird/84.0
+        id S1726780AbgLSPyA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 19 Dec 2020 10:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726774AbgLSPx7 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 19 Dec 2020 10:53:59 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D09C0613CF
+        for <linux-cifs@vger.kernel.org>; Sat, 19 Dec 2020 07:53:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=/eBjVgyPM3VUPpwVR5qajNTLQi5jDUPbasjeQZwdWVs=; b=JsSeFFRwRNTFK2Y+UiRAEg7oSo
+        M8nv5iz4JpCcEa6TrqgPe3lyPibU4c0nzJbXyStzdbmxAqhPwugtFMsuAJNma9pp/U6/Xx78cnMFH
+        N97AljxRuhAD4Pqvcu2D3lP+SmsRCdJwpdQMluz6D7pW5rGTWNItQiM3fiW2iVxJMvxHs74Lm7mHt
+        nW1b59K39y2FztyUfsx2tttCrHNqiAD9tH1mtmVU+CO36B7LTlU1bwEWchhoz7rXGKLoJVIzJ4JoJ
+        Z5kilxH841uHoflsRumwvIfw3AqIe8/Tp67ctNJuoLdiSWT7OJWKkBs//C3VfTFf3lwW6bqudnPnf
+        Z5Y285Stu02FJIC6bieNmMf3X7DGD80gpnqHZkrLNutbGnkzwbYWBlZ7YZOf2/sV2vUj+IwouruUy
+        roJHsWqS8HBB3gYpsDKzgXmKZ8qYyV8fCo2FyS5xnOI2HElDDJ+YfiyYM+bNAacX9tzV31KUoei0R
+        qYE1PmerlcRcAgGdD7AeR6uX;
+Received: from [2a01:4f8:192:486::6:0] (port=51366 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1kqeXi-0004kW-Vb
+        for cifs-qa@samba.org; Sat, 19 Dec 2020 15:53:15 +0000
+Received: from [::1] (port=20802 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1kqeXi-001IUa-CI
+        for cifs-qa@samba.org; Sat, 19 Dec 2020 15:53:14 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 9364] BUG: unable to handle kernel NULL pointer dereference at
+ (null); RIP: 0010:[<0000000000000000>] [< (null)>] (null)
+Date:   Sat, 19 Dec 2020 15:53:13 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 2.6
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: WORKSFORME
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-9364-10630-0YUvL0Z8wZ@https.bugzilla.samba.org/>
+In-Reply-To: <bug-9364-10630@https.bugzilla.samba.org/>
+References: <bug-9364-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20201219065057.GR15600@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1608361464; bh=A9fBx0IN5qsLyTEaO2K4aLwibDOVSe+bKLpimCocLwU=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=Bgc3aR4z753YGJlW70WoLrtQ1KN8IbRzq31juKs6PfBN2zkSGHtinWPesncivbs4W
-         VzTsGi5zW6I314mN0sALuVKM7eV85d/U7RnCFRj/tuktF25zg4GPCpkEmzSS3hoUHK
-         PP07gVgvL8A0z77WSBOvwn20T/s6MvL8eDcowYD4Rs6BCV3hJUYhWaiMpxkCZoQAqY
-         RxKeghrOfimP4wXYxSRuO2xATbM6n5/MhNO06xr/el270Y+5EbFgXIlop0FK1iDT07
-         VWPAhXQlelzCRLSGyvDrtBjTpyiR5AjbZTqDfGwl3tId3hrMABj+K1hpMKyp1AXgv6
-         lwMu3rKNfv89A==
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On 12/18/20 10:50 PM, Matthew Wilcox wrote:
-...
->>> Hmmm ... looks like __set_page_dirty_nobuffers() has a similar problem:
->>>
->>> {
->>>           lock_page_memcg(page);
->>>           if (!TestSetPageDirty(page)) {
->>>                   struct address_space *mapping = page_mapping(page);
->>>                   unsigned long flags;
->>>
->>>                   if (!mapping) {
->>>                           unlock_page_memcg(page);
->>>                           return 1;
->>>                   }
->>>
->>>                   xa_lock_irqsave(&mapping->i_pages, flags);
->>>                   BUG_ON(page_mapping(page) != mapping);
->>>
->>> sure, we check that the page wasn't truncated between set_page_dirty()
->>> and the call to TestSetPageDirty(), but we can truncate dirty pages
->>> with no problem.  So between the call to TestSetPageDirty() and
->>> the call to xa_lock_irqsave(), the page can be truncated, and the
->>> BUG_ON should fire.
->>>
->>> I haven't been able to find any examples of this, but maybe it's just a very
->>> narrow race.  Does anyone recognise this signature?  Adding the filesystems
->>> which use __set_page_dirty_nobuffers() directly without extra locking.
->>
->>
->> That sounds like the same *kind* of failure that Jan Kara and I were
->> seeing on live systems[1], that led eventually to the gup-to-pup
->> conversion exercise.
->>
->> That crash happened due to calling set_page_dirty() on pages that had no
->> buffers on them [2]. And that sounds like *exactly* the same thing as
->> calling __set_page_dirty_nobuffers() without extra locking. So I'd
->> expect that it's Just Wrong To Do, for the same reasons as Jan spells
->> out very clearly in [1].
-> 
-> Interesting.  It's a bit different, *but* Jan's race might be what's
-> causing this symptom.  The reason is that the backtrace contains
-> set_page_dirty_lock() which holds the page lock.  So there can't be
-> a truncation race because truncate holds the page lock when calling
-> ->invalidatepage.
-> 
-> That said, the syzbot reproducer doesn't have any O_DIRECT in it
-> either.  So maybe this is some other race?
+https://bugzilla.samba.org/show_bug.cgi?id=3D9364
 
-Jan's race can be also be reproduced *without* O_DIRECT. I first saw
-it via a program that just did these steps on a normal ext4 filesystem:
+Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
 
-a) pin ext4 file-backed pages, via get_user_pages(). Actually the way
-it got here was due to using what *looked* like anonymous RAM to the
-program, but was really file-backed RAM, because the admin had it
-set up to mount ext4 on /tmp, instead of using tmpfs, to "save RAM",
-but I digress. :)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
-b) wait a while, optionally do some DMA on the pages from a GPU, drink
-coffee...
+--- Comment #1 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
+Hello Steve - I assume this 8 year old bug is probably fixed by now?
 
-c) call set_pages_dirty()
-
-d) unpin the pages
-
-e) BUG_ON() in page_buffers().
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
