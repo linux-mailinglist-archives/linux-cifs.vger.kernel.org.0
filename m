@@ -2,81 +2,106 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5F82DF06B
-	for <lists+linux-cifs@lfdr.de>; Sat, 19 Dec 2020 17:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEB72DF83E
+	for <lists+linux-cifs@lfdr.de>; Mon, 21 Dec 2020 05:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbgLSQVk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 19 Dec 2020 11:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S1727079AbgLUEaB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 20 Dec 2020 23:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726752AbgLSQVj (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 19 Dec 2020 11:21:39 -0500
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B38C0613CF
-        for <linux-cifs@vger.kernel.org>; Sat, 19 Dec 2020 08:20:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=DljRb5pgAb3NZs1X4X+k5n5azPt2sMegWuuG42isDYs=; b=vt0A95Zi7q9s3LZu3ChuVXq9zp
-        J2LQpPkTe2kyyY8Sej1pGxEURZHsHopN2oE6UYjxlyQjR7Jnuwx+AfjoExR7E7m7LTS8TQL8mjT1P
-        9r9Z45J336zpWWACQJRShUvfo+2vL/LWKTM6zruIgglTa3afs237VKLwkyIxznI6PpoLPlOUq7Sm1
-        kZZq6Fnb/523bNpagqL88L9DW3RXyZN/fLUiva0QSioLLvjyCbb4wD9rEu9fBnwQeHiQ65EZXUyTI
-        Liex949Lv5/N/UsxxMXd29tFgAILI4cT2YnHgwc+I774OCPBS21OfbG6Iws8XFahLMf+iUj+bqq5T
-        MnJklwIaokbEOiOiFma5CX+tv1+rfuwZ1U3zRkxTInWjcYYHVWl2l6/BicOfQZZfiQYaeAqVD6UZX
-        aHOklMF70CHFAX79skqjrVKbtZmgb8aFmZobiJ/sjwVS7gD7v7faenvzXOMwaFNAbduHIHDZKeir0
-        CYNfr9ikPXYwxwAQq3C6I53w;
-Received: from [2a01:4f8:192:486::6:0] (port=51394 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1kqeyX-0004uY-FO
-        for cifs-qa@samba.org; Sat, 19 Dec 2020 16:20:57 +0000
-Received: from [::1] (port=20824 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1kqeyW-001IYD-Tk
-        for cifs-qa@samba.org; Sat, 19 Dec 2020 16:20:57 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 9346] Directories on CIFS shares shown as ordinary files
-Date:   Sat, 19 Dec 2020 16:20:55 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: product version qa_contact component
-Message-ID: <bug-9346-10630-S2t7G5vJMV@https.bugzilla.samba.org/>
-In-Reply-To: <bug-9346-10630@https.bugzilla.samba.org/>
-References: <bug-9346-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1726999AbgLUEaB (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 20 Dec 2020 23:30:01 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB649C061248;
+        Sun, 20 Dec 2020 20:29:20 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o19so20583617lfo.1;
+        Sun, 20 Dec 2020 20:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=JStI0xuBpGOpI7zOXq96FMvyiG0GeAUhmCc26uKz+8E=;
+        b=nRKQkOkfpm0DSmD7tBUTQ5tj0sg5VPPkCpku0w8AzpGCblQeTcACj9XeFlfaaO/UQR
+         /OXjLBElmt5NJRP9tCpa4h/L7C+hxsSiMH6yEj3IWwUxTtvUxleUri7SQGJoZEAdYtWs
+         vFlawncSBfANYYsMoJwZiL/doP/4pwBPHXGsJJ/4F+/OhamMf+vDa99oPc31FoXsd0BO
+         yW47vtAiIJ9I+EFM1KyEHQTo0O46nyGKW0zati+ddUmDaOh8pVm9VxhrR/gQ+dXghkHV
+         yYhiS0pkkpgbuOcSaV3ZtjPzgcgNXpUozKJPy+w/hAEjm2BcI2h2wZIoGlGTEfhV06rs
+         rpEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JStI0xuBpGOpI7zOXq96FMvyiG0GeAUhmCc26uKz+8E=;
+        b=SVQV2SZ9MUSE510l27LwpbN/nZ+CaIpKvM6FvQWEEVY33x9P2A81kBdBk3n6VKmQjV
+         BhhT/na+79HaT26BsHvzFzOjk+xrlH+jOoh01mNyFn2In+kfJSVujg+P6FdxjXbTWdk+
+         lqjG3JKVKmAaV32LlnKfsVFwk1tNRXDbdA688DDaXVo3cO0U7ESI5tCJUDUcqeNKzf2B
+         AY7fUsXSK3Wdz+NlJvcS8wrcruHX+N6McnNxGBpugE2hfRfI8swDN8b1f9aeloj0DHw8
+         d9zjqNlN7nGodvj1SwTn2p8Wc3gKEIq3bZE80epM6kr206gPbErpFy0CxsGO2RIQFsgp
+         j+Kw==
+X-Gm-Message-State: AOAM530TXt08ihiRzgvKbW0a4cMOAaX6CMWkY9mecPlWMrFOuWcMLtEU
+        3BnHO7FKQ32xevespbZ3gr6pJKJBKncy67gA9bKwr/b/p+iChw==
+X-Google-Smtp-Source: ABdhPJxoeUhcF3LxV/HGTKG2P5NAiDFsKLXfyLHX1HlUizxqRFhem4HsHZaTMLmk/1EKkKcyPvqoBI5T6HTvNxlTwpQ=
+X-Received: by 2002:a2e:8eda:: with SMTP id e26mr5708607ljl.272.1608493663741;
+ Sun, 20 Dec 2020 11:47:43 -0800 (PST)
 MIME-Version: 1.0
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 20 Dec 2020 13:47:32 -0600
+Message-ID: <CAH2r5muaG6M=S-E5xXvTTVUJ4_gXR7MA_aDQfOqLprcWMbBYLw@mail.gmail.com>
+Subject: [GIT PULL] CIFS/SMB3 Fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D9346
+Please pull the following changes since commit
+e13300bdaa68f5487000e66baed1ff69bcb510bf:
 
-Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
+  Merge tag '5.11-rc-smb3' of git://git.samba.org/sfrench/cifs-2.6
+(2020-12-17 17:41:37 -0800)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Product|Samba 3.6                   |CifsVFS
-            Version|unspecified                 |3.x
-         QA Contact|samba-qa@samba.org          |cifs-qa@samba.org
-          Component|File services               |kernel fs
+are available in the Git repository at:
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.11-rc-smb3-part2
+
+for you to fetch changes up to 9541b81322e60120b299222919957becd7a13683:
+
+  Add SMB 2 support for getting and setting SACLs (2020-12-18 23:32:04 -0600)
+
+----------------------------------------------------------------
+Four small CIFS/SMB3 fixes (witness protocol and reconnect related),
+and two that add ability to get and set auditing information in the
+security descriptor (SACL), which can be helpful not just for backup
+scenarios ("smbinfo secdesc" etc.) but also for improving security.
+
+Testing results:
+      http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/466
+----------------------------------------------------------------
+Boris Protopopov (2):
+      SMB3: Add support for getting and setting SACLs
+      Add SMB 2 support for getting and setting SACLs
+
+Dan Carpenter (3):
+      cifs: Delete a stray unlock in cifs_swn_reconnect()
+      cifs: Unlock on errors in cifs_swn_reconnect()
+      cifs: Re-indent cifs_swn_reconnect()
+
+Samuel Cabrero (1):
+      cifs: Avoid error pointer dereference
+
+ fs/cifs/cifs_swn.c  | 73 +++++++++++++++++++++++------------------------
+ fs/cifs/cifsacl.c   | 15 ++++++----
+ fs/cifs/cifsglob.h  |  4 +--
+ fs/cifs/cifspdu.h   |  2 ++
+ fs/cifs/cifsproto.h |  4 +--
+ fs/cifs/connect.c   |  1 +
+ fs/cifs/smb2ops.c   | 35 ++++++++++++++---------
+ fs/cifs/smb2pdu.c   |  7 +++--
+ fs/cifs/smb2proto.h |  4 +--
+ fs/cifs/xattr.c     | 81 +++++++++++++++++++++++++++++++++++++++--------------
+ 10 files changed, 140 insertions(+), 86 deletions(-)
+
+-- 
+Thanks,
+
+Steve
