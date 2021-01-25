@@ -2,757 +2,477 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1554302FB1
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jan 2021 00:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABD73033D7
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jan 2021 06:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732697AbhAYW44 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 25 Jan 2021 17:56:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:29386 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732473AbhAYVei (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 25 Jan 2021 16:34:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611610389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GUq3NxCQKbW43rb4EoGqw5tjdFkhQQi1A321UDQiP7E=;
-        b=IhqZ0V671jjw41oV2UVG4z4q0coNfBovMRCPWmLRXQv+eZhu8x6vKULX9cKS9+nODDvSUP
-        RXv0ELXReJzPdo08I8yzHBwpgLIMKKRaM1VWbauQGf7quduztJmLZxVbw5N7AGmHnzp85x
-        W7zr0bIU29HYh2PC21cC4KWtOU0COLM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-100-DyROMULUO4SGGzZAShlSuA-1; Mon, 25 Jan 2021 16:33:07 -0500
-X-MC-Unique: DyROMULUO4SGGzZAShlSuA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8817ACE64C;
-        Mon, 25 Jan 2021 21:33:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DFFA60938;
-        Mon, 25 Jan 2021 21:32:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 11/32] fscache,
- cachefiles: Add alternate API to use kiocb for read/write to cache
-From:   David Howells <dhowells@redhat.com>
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     dhowells@redhat.com, Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
-        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 25 Jan 2021 21:32:58 +0000
-Message-ID: <161161037850.2537118.8819808229350326503.stgit@warthog.procyon.org.uk>
-In-Reply-To: <161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk>
-References: <161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        id S1726237AbhAZFFr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 26 Jan 2021 00:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729839AbhAYRHp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 25 Jan 2021 12:07:45 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E840EC06174A
+        for <linux-cifs@vger.kernel.org>; Mon, 25 Jan 2021 09:07:02 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id x78so13967320ybe.11
+        for <linux-cifs@vger.kernel.org>; Mon, 25 Jan 2021 09:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=n7qdjUWfO72OgXCekOQt4WJ0mHyeawwL5O0aPRCNzxc=;
+        b=FINWPVKXrPKwGjPKQZMstfT/z584tu4RMAJVAAp2efTh5JoME3uDoIITvPSnUiWgj4
+         Op9Tr7rc+A/kokJxllNVwsiF9bZ5YwfbwywaBm2hVM1uNYxnp5RRMB6Ibl+OGrp+ywpr
+         FX5129fgVSgYix3Y+YP2BC76fo6KVvBGA2eYuuKEmG6UA2FaRFq9t6LLHzw8qChgzalo
+         k82MbLjRdN4VVh6AnxnTIGXPs7ad8wz+taYZ6ZCQ2PHBEUBcjy7FUNC0yoRAfZI4O8N9
+         h9XxL0/2F0/Sm2rJgeDN3RnQ/otVelQIz9XxxuG9ETA6p9b70adw1J5ffSgj0pAi11sC
+         2G8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n7qdjUWfO72OgXCekOQt4WJ0mHyeawwL5O0aPRCNzxc=;
+        b=mY0JZ8YEEy75jHI8GfNbTVTspipvxuDGKlC16MwQ3ky1CLA46CmUEaF5tjpkI3J3D9
+         UDDUqG9HBwX1XZR0fkL7NCSYi0WK4RufN4Yrsju8P6PpMOhZFa6QVP/zkjwy/RmglYq7
+         ib2SBN8xDCIEWhYdOiplp+J0b7K0bIFpET1LvuKZfjkTxqZ4CKu0QeZu8ZU5ffcfHBYW
+         EdsIpR1Dk0Mb6+fsaknZgCzv7Q/8uJKB+nusgyXCxqtokTEg4f7GZqZWzSE0EIONfTEz
+         taG2qsY8X2mzp2xyHbM/01qYbn6kKwTh47kbkmqAojqeZDtoIq3Yf3/GB3yhLb4iuI3G
+         nD7Q==
+X-Gm-Message-State: AOAM5328ZqYTnO6/S+qLLYHHhpHLPdQ/eZVLaLLPqoLWNjNsc/a7sTZz
+        fiH4GvXgb6rIx53y5hMvw/5hGceNNtEKxaCeUdU=
+X-Google-Smtp-Source: ABdhPJwhHl/btC4/N3qF6giE3V9saUngNhu1BElBcBtmG5JR7ALdpS9DQ2rNO3Dwbgs9m5S9jRDwGvBRVfkDnrd9Gaw=
+X-Received: by 2002:a25:dc53:: with SMTP id y80mr2061591ybe.3.1611594421784;
+ Mon, 25 Jan 2021 09:07:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20210120043209.27786-1-lsahlber@redhat.com> <CAH2r5mvmCG2SN0nO8uZftTRMOkN8jgbfYrO1E5_A=5FpK9H0bQ@mail.gmail.com>
+ <CAKywueRWJxk9KuuZe6Ovb7MhxXsbsE-_7WJG05hAPTZ2o5m7mg@mail.gmail.com>
+ <87y2gmk3ap.fsf@suse.com> <877do6zdqp.fsf@cjr.nz> <CAN05THQjj04sQpcjvLqs+fmbdeu=jftM+GdeJnQMg33OEq6xEg@mail.gmail.com>
+ <CAKywueSTX9hq5Vun3V6foQeLJ8Fngye0__U-gj73evKDwNLEKg@mail.gmail.com>
+ <CAN05THQGBvLy6c+DK1eOuj2VKXTXONZkk8Je+iLM2DZFmHsPBA@mail.gmail.com>
+ <CAH2r5mttuSULg0UvKuNRydtkNAP1QRZVXQuNaaHGFLRrvfSnfQ@mail.gmail.com> <CANT5p=o5pjCLUzLv2=i+T+7XE=0Wxcg3p_TSbAeARAWNzmmgEw@mail.gmail.com>
+In-Reply-To: <CANT5p=o5pjCLUzLv2=i+T+7XE=0Wxcg3p_TSbAeARAWNzmmgEw@mail.gmail.com>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Mon, 25 Jan 2021 09:06:50 -0800
+Message-ID: <CANT5p=qrRVaN4yrqHz5fS2fC6_K1XqAiR4Bv9rTX6oxgg3j8gg@mail.gmail.com>
+Subject: Re: [PATCH] cifs: do not fail __smb_send_rqst if non-fatal signals
+ are pending
+To:     Steve French <smfrench@gmail.com>
+Cc:     ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Pavel Shilovsky <piastryyy@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Add an alternate API by which the cache can be accessed through a kiocb,
-doing async DIO, rather than using the current API that tells the cache
-where all the pages are.
+From my readings so far, -ERESTARTSYS assumes that the syscall is idempoten=
+t.
+Can we safely make such assumptions for all VFS file operations? For
+example, what happens if a close gets restarted, and we already
+scheduled a delayed close because the original close failed with
+ERESTARTSYS?
 
-The new API is intended to be used in conjunction with the netfs helper
-library.  A filesystem must pick one or the other and not mix them.
+Also, I ran a quick grep for EINTR, and it looks like __cifs_readv and
+__cifs_writev return EINTR too. Should those be replaced by
+ERESTARTSYS too?
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
+Regards,
+Shyam
 
- fs/cachefiles/Makefile    |    1 
- fs/cachefiles/interface.c |    5 -
- fs/cachefiles/internal.h  |    9 +
- fs/cachefiles/rdwr2.c     |  412 +++++++++++++++++++++++++++++++++++++++++++++
- fs/fscache/Kconfig        |    1 
- fs/fscache/Makefile       |    3 
- fs/fscache/internal.h     |    3 
- fs/fscache/page.c         |    2 
- fs/fscache/page2.c        |  116 +++++++++++++
- fs/fscache/stats.c        |    1 
- 10 files changed, 549 insertions(+), 4 deletions(-)
- create mode 100644 fs/cachefiles/rdwr2.c
- create mode 100644 fs/fscache/page2.c
+Regards,
+Shyam
 
-diff --git a/fs/cachefiles/Makefile b/fs/cachefiles/Makefile
-index 891dedda5905..ea17b169ea5e 100644
---- a/fs/cachefiles/Makefile
-+++ b/fs/cachefiles/Makefile
-@@ -11,6 +11,7 @@ cachefiles-y := \
- 	main.o \
- 	namei.o \
- 	rdwr.o \
-+	rdwr2.o \
- 	security.o \
- 	xattr.o
- 
-diff --git a/fs/cachefiles/interface.c b/fs/cachefiles/interface.c
-index 4cea5fbf695e..eaede2585d07 100644
---- a/fs/cachefiles/interface.c
-+++ b/fs/cachefiles/interface.c
-@@ -319,8 +319,8 @@ static void cachefiles_drop_object(struct fscache_object *_object)
- /*
-  * dispose of a reference to an object
-  */
--static void cachefiles_put_object(struct fscache_object *_object,
--				  enum fscache_obj_ref_trace why)
-+void cachefiles_put_object(struct fscache_object *_object,
-+			   enum fscache_obj_ref_trace why)
- {
- 	struct cachefiles_object *object;
- 	struct fscache_cache *cache;
-@@ -568,4 +568,5 @@ const struct fscache_cache_ops cachefiles_cache_ops = {
- 	.uncache_page		= cachefiles_uncache_page,
- 	.dissociate_pages	= cachefiles_dissociate_pages,
- 	.check_consistency	= cachefiles_check_consistency,
-+	.begin_read_operation	= cachefiles_begin_read_operation,
- };
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index cf9bd6401c2d..896819b80bbc 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -150,6 +150,9 @@ extern int cachefiles_has_space(struct cachefiles_cache *cache,
-  */
- extern const struct fscache_cache_ops cachefiles_cache_ops;
- 
-+extern void cachefiles_put_object(struct fscache_object *_object,
-+				  enum fscache_obj_ref_trace why);
-+
- /*
-  * key.c
-  */
-@@ -217,6 +220,12 @@ extern int cachefiles_allocate_pages(struct fscache_retrieval *,
- extern int cachefiles_write_page(struct fscache_storage *, struct page *);
- extern void cachefiles_uncache_page(struct fscache_object *, struct page *);
- 
-+/*
-+ * rdwr2.c
-+ */
-+extern int cachefiles_begin_read_operation(struct netfs_read_request *,
-+					   struct fscache_retrieval *);
-+
- /*
-  * security.c
-  */
-diff --git a/fs/cachefiles/rdwr2.c b/fs/cachefiles/rdwr2.c
-new file mode 100644
-index 000000000000..4cea5a2a2d6e
---- /dev/null
-+++ b/fs/cachefiles/rdwr2.c
-@@ -0,0 +1,412 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* kiocb-using read/write
-+ *
-+ * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#include <linux/mount.h>
-+#include <linux/slab.h>
-+#include <linux/file.h>
-+#include <linux/uio.h>
-+#include <linux/sched/mm.h>
-+#include <linux/netfs.h>
-+#include "internal.h"
-+
-+struct cachefiles_kiocb {
-+	struct kiocb		iocb;
-+	refcount_t		ki_refcnt;
-+	loff_t			start;
-+	union {
-+		size_t		skipped;
-+		size_t		len;
-+	};
-+	netfs_io_terminated_t	term_func;
-+	void			*term_func_priv;
-+};
-+
-+static inline void cachefiles_put_kiocb(struct cachefiles_kiocb *ki)
-+{
-+	if (refcount_dec_and_test(&ki->ki_refcnt)) {
-+		fput(ki->iocb.ki_filp);
-+		kfree(ki);
-+	}
-+}
-+
-+/*
-+ * Handle completion of a read from the cache.
-+ */
-+static void cachefiles_read_complete(struct kiocb *iocb, long ret, long ret2)
-+{
-+	struct cachefiles_kiocb *ki = container_of(iocb, struct cachefiles_kiocb, iocb);
-+
-+	_enter("%ld,%ld", ret, ret2);
-+
-+	if (ki->term_func) {
-+		if (ret < 0)
-+			ki->term_func(ki->term_func_priv, ret);
-+		else
-+			ki->term_func(ki->term_func_priv, ki->skipped + ret);
-+	}
-+
-+	cachefiles_put_kiocb(ki);
-+}
-+
-+/*
-+ * Initiate a read from the cache.
-+ */
-+static int cachefiles_read(struct netfs_cache_resources *cres,
-+			   loff_t start_pos,
-+			   struct iov_iter *iter,
-+			   bool seek_data,
-+			   netfs_io_terminated_t term_func,
-+			   void *term_func_priv)
-+{
-+	struct cachefiles_kiocb *ki;
-+	struct file *file = cres->cache_priv2;
-+	unsigned int old_nofs;
-+	ssize_t ret = -ENOBUFS;
-+	size_t len = iov_iter_count(iter), skipped = 0;
-+
-+	_enter("%pD,%li,%llx,%zx/%llx",
-+	       file, file_inode(file)->i_ino, start_pos, len,
-+	       i_size_read(file->f_inode));
-+
-+	/* If the caller asked us to seek for data before doing the read, then
-+	 * we should do that now.  If we find a gap, we fill it with zeros.
-+	 */
-+	if (seek_data) {
-+		loff_t off = start_pos, off2;
-+
-+		off2 = vfs_llseek(file, off, SEEK_DATA);
-+		if (off2 < 0 && off2 >= (loff_t)-MAX_ERRNO && off2 != -ENXIO) {
-+			skipped = 0;
-+			ret = off2;
-+			goto presubmission_error;
-+		}
-+
-+		if (off2 == -ENXIO || off2 >= start_pos + len) {
-+			/* The region is beyond the EOF or there's no more data
-+			 * in the region, so clear the rest of the buffer and
-+			 * return success.
-+			 */
-+			iov_iter_zero(len, iter);
-+			skipped = len;
-+			ret = 0;
-+			goto presubmission_error;
-+		}
-+
-+		skipped = off2 - off;
-+		iov_iter_zero(skipped, iter);
-+	}
-+
-+	ret = -ENOBUFS;
-+	ki = kzalloc(sizeof(struct cachefiles_kiocb), GFP_KERNEL);
-+	if (!ki)
-+		goto presubmission_error;
-+
-+	refcount_set(&ki->ki_refcnt, 2);
-+	ki->iocb.ki_filp	= file;
-+	ki->iocb.ki_pos		= start_pos + skipped;
-+	ki->iocb.ki_flags	= IOCB_DIRECT;
-+	ki->iocb.ki_hint	= ki_hint_validate(file_write_hint(file));
-+	ki->iocb.ki_ioprio	= get_current_ioprio();
-+	ki->skipped		= skipped;
-+	ki->term_func		= term_func;
-+	ki->term_func_priv	= term_func_priv;
-+
-+	if (ki->term_func)
-+		ki->iocb.ki_complete = cachefiles_read_complete;
-+
-+	ret = rw_verify_area(READ, file, &ki->iocb.ki_pos, len - skipped);
-+	if (ret < 0)
-+		goto presubmission_error_free;
-+
-+	get_file(ki->iocb.ki_filp);
-+
-+	old_nofs = memalloc_nofs_save();
-+	ret = call_read_iter(file, &ki->iocb, iter);
-+	memalloc_nofs_restore(old_nofs);
-+	switch (ret) {
-+	case -EIOCBQUEUED:
-+		goto in_progress;
-+
-+	case -ERESTARTSYS:
-+	case -ERESTARTNOINTR:
-+	case -ERESTARTNOHAND:
-+	case -ERESTART_RESTARTBLOCK:
-+		/* There's no easy way to restart the syscall since other AIO's
-+		 * may be already running. Just fail this IO with EINTR.
-+		 */
-+		ret = -EINTR;
-+		fallthrough;
-+	default:
-+		cachefiles_read_complete(&ki->iocb, ret, 0);
-+		if (ret > 0)
-+			ret = 0;
-+		break;
-+	}
-+
-+in_progress:
-+	cachefiles_put_kiocb(ki);
-+	_leave(" = %zd", ret);
-+	return ret;
-+
-+presubmission_error_free:
-+	kfree(ki);
-+presubmission_error:
-+	if (term_func)
-+		term_func(term_func_priv, ret < 0 ? ret : skipped);
-+	return ret;
-+}
-+
-+/*
-+ * Handle completion of a write to the cache.
-+ */
-+static void cachefiles_write_complete(struct kiocb *iocb, long ret, long ret2)
-+{
-+	struct cachefiles_kiocb *ki = container_of(iocb, struct cachefiles_kiocb, iocb);
-+	struct inode *inode = file_inode(ki->iocb.ki_filp);
-+
-+	_enter("%ld,%ld", ret, ret2);
-+
-+	/* Tell lockdep we inherited freeze protection from submission thread */
-+	__sb_writers_acquired(inode->i_sb, SB_FREEZE_WRITE);
-+	__sb_end_write(inode->i_sb, SB_FREEZE_WRITE);
-+
-+	if (ki->term_func)
-+		ki->term_func(ki->term_func_priv, ret);
-+
-+	cachefiles_put_kiocb(ki);
-+}
-+
-+/*
-+ * Initiate a write to the cache.
-+ */
-+static int cachefiles_write(struct netfs_cache_resources *cres,
-+			    loff_t start_pos,
-+			    struct iov_iter *iter,
-+			    netfs_io_terminated_t term_func,
-+			    void *term_func_priv)
-+{
-+	struct cachefiles_kiocb *ki;
-+	struct inode *inode;
-+	struct file *file = cres->cache_priv2;
-+	unsigned int old_nofs;
-+	ssize_t ret = -ENOBUFS;
-+	size_t len = iov_iter_count(iter);
-+
-+	_enter("%pD,%li,%llx,%zx/%llx",
-+	       file, file_inode(file)->i_ino, start_pos, len,
-+	       i_size_read(file->f_inode));
-+
-+	ki = kzalloc(sizeof(struct cachefiles_kiocb), GFP_KERNEL);
-+	if (!ki)
-+		goto presubmission_error;
-+
-+	refcount_set(&ki->ki_refcnt, 2);
-+	ki->iocb.ki_filp	= file;
-+	ki->iocb.ki_pos		= start_pos;
-+	ki->iocb.ki_flags	= IOCB_DIRECT | IOCB_WRITE;
-+	ki->iocb.ki_hint	= ki_hint_validate(file_write_hint(file));
-+	ki->iocb.ki_ioprio	= get_current_ioprio();
-+	ki->start		= start_pos;
-+	ki->len			= len;
-+	ki->term_func		= term_func;
-+	ki->term_func_priv	= term_func_priv;
-+
-+	if (ki->term_func)
-+		ki->iocb.ki_complete = cachefiles_write_complete;
-+
-+	ret = rw_verify_area(WRITE, file, &ki->iocb.ki_pos, iov_iter_count(iter));
-+	if (ret < 0)
-+		goto presubmission_error_free;
-+
-+	/* Open-code file_start_write here to grab freeze protection, which
-+	 * will be released by another thread in aio_complete_rw().  Fool
-+	 * lockdep by telling it the lock got released so that it doesn't
-+	 * complain about the held lock when we return to userspace.
-+	 */
-+	inode = file_inode(file);
-+	__sb_start_write(inode->i_sb, SB_FREEZE_WRITE);
-+	__sb_writers_release(inode->i_sb, SB_FREEZE_WRITE);
-+
-+	get_file(ki->iocb.ki_filp);
-+
-+	old_nofs = memalloc_nofs_save();
-+	ret = call_write_iter(file, &ki->iocb, iter);
-+	memalloc_nofs_restore(old_nofs);
-+	switch (ret) {
-+	case -EIOCBQUEUED:
-+		goto in_progress;
-+
-+	case -ERESTARTSYS:
-+	case -ERESTARTNOINTR:
-+	case -ERESTARTNOHAND:
-+	case -ERESTART_RESTARTBLOCK:
-+		/* There's no easy way to restart the syscall since other AIO's
-+		 * may be already running. Just fail this IO with EINTR.
-+		 */
-+		ret = -EINTR;
-+		/* Fall through */
-+	default:
-+		cachefiles_write_complete(&ki->iocb, ret, 0);
-+		if (ret > 0)
-+			ret = 0;
-+		break;
-+	}
-+
-+in_progress:
-+	cachefiles_put_kiocb(ki);
-+	_leave(" = %zd", ret);
-+	return ret;
-+
-+presubmission_error_free:
-+	kfree(ki);
-+presubmission_error:
-+	if (term_func)
-+		term_func(term_func_priv, -ENOMEM);
-+	return -ENOMEM;
-+}
-+
-+/*
-+ * Prepare a read operation, shortening it to a cached/uncached
-+ * boundary as appropriate.
-+ */
-+static enum netfs_read_source cachefiles_prepare_read(struct netfs_read_subrequest *subreq,
-+						      loff_t i_size)
-+{
-+	struct fscache_retrieval *op = subreq->rreq->cache_resources.cache_priv;
-+	struct cachefiles_object *object;
-+	struct cachefiles_cache *cache;
-+	const struct cred *saved_cred;
-+	struct file *file = subreq->rreq->cache_resources.cache_priv2;
-+	loff_t off, to;
-+
-+	_enter("%zx @%llx/%llx", subreq->len, subreq->start, i_size);
-+
-+	object = container_of(op->op.object,
-+			      struct cachefiles_object, fscache);
-+	cache = container_of(object->fscache.cache,
-+			     struct cachefiles_cache, cache);
-+
-+	if (!file)
-+		goto cache_fail_nosec;
-+
-+	if (subreq->start >= i_size)
-+		return NETFS_FILL_WITH_ZEROES;
-+
-+	cachefiles_begin_secure(cache, &saved_cred);
-+
-+	off = vfs_llseek(file, subreq->start, SEEK_DATA);
-+	if (off < 0 && off >= (loff_t)-MAX_ERRNO) {
-+		if (off == (loff_t)-ENXIO)
-+			goto download_and_store;
-+		goto cache_fail;
-+	}
-+
-+	if (off >= subreq->start + subreq->len)
-+		goto download_and_store;
-+
-+	if (off > subreq->start) {
-+		off = round_up(off, cache->bsize);
-+		subreq->len = off - subreq->start;
-+		goto download_and_store;
-+	}
-+
-+	to = vfs_llseek(file, subreq->start, SEEK_HOLE);
-+	if (to < 0 && to >= (loff_t)-MAX_ERRNO)
-+		goto cache_fail;
-+
-+	if (to < subreq->start + subreq->len) {
-+		if (subreq->start + subreq->len >= i_size)
-+			to = round_up(to, cache->bsize);
-+		else
-+			to = round_down(to, cache->bsize);
-+		subreq->len = to - subreq->start;
-+	}
-+
-+	cachefiles_end_secure(cache, saved_cred);
-+	return NETFS_READ_FROM_CACHE;
-+
-+download_and_store:
-+	if (cachefiles_has_space(cache, 0, (subreq->len + PAGE_SIZE - 1) / PAGE_SIZE) == 0)
-+		__set_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags);
-+cache_fail:
-+	cachefiles_end_secure(cache, saved_cred);
-+cache_fail_nosec:
-+	return NETFS_DOWNLOAD_FROM_SERVER;
-+}
-+
-+/*
-+ * Clean up an operation.
-+ */
-+static void cachefiles_end_operation(struct netfs_cache_resources *cres)
-+{
-+	struct fscache_retrieval *op = cres->cache_priv;
-+	struct file *file = cres->cache_priv2;
-+
-+	_enter("");
-+
-+	if (file)
-+		fput(file);
-+	if (op) {
-+		fscache_op_complete(&op->op, false);
-+		fscache_put_retrieval(op);
-+	}
-+
-+	_leave("");
-+}
-+
-+static const struct netfs_cache_ops cachefiles_netfs_cache_ops = {
-+	.end_operation		= cachefiles_end_operation,
-+	.read			= cachefiles_read,
-+	.write			= cachefiles_write,
-+	.expand_readahead	= NULL,
-+	.prepare_read		= cachefiles_prepare_read,
-+};
-+
-+/*
-+ * Open the cache file when beginning a cache operation.
-+ */
-+int cachefiles_begin_read_operation(struct netfs_read_request *rreq,
-+				    struct fscache_retrieval *op)
-+{
-+	struct cachefiles_object *object;
-+	struct cachefiles_cache *cache;
-+	struct path path;
-+	struct file *file;
-+
-+	_enter("");
-+
-+	object = container_of(op->op.object,
-+			      struct cachefiles_object, fscache);
-+	cache = container_of(object->fscache.cache,
-+			     struct cachefiles_cache, cache);
-+
-+	path.mnt = cache->mnt;
-+	path.dentry = object->backer;
-+	file = open_with_fake_path(&path, O_RDWR | O_LARGEFILE | O_DIRECT,
-+				   d_inode(object->backer), cache->cache_cred);
-+	if (IS_ERR(file))
-+		return PTR_ERR(file);
-+	if (!S_ISREG(file_inode(file)->i_mode))
-+		goto error_file;
-+	if (unlikely(!file->f_op->read_iter) ||
-+	    unlikely(!file->f_op->write_iter)) {
-+		pr_notice("Cache does not support read_iter and write_iter\n");
-+		goto error_file;
-+	}
-+
-+	fscache_get_retrieval(op);
-+	rreq->cache_resources.cache_priv = op;
-+	rreq->cache_resources.cache_priv2 = file;
-+	rreq->cache_resources.ops = &cachefiles_netfs_cache_ops;
-+	rreq->cookie_debug_id = object->fscache.debug_id;
-+	_leave("");
-+	return 0;
-+
-+error_file:
-+	fput(file);
-+	return -EIO;
-+}
-diff --git a/fs/fscache/Kconfig b/fs/fscache/Kconfig
-index 5e796e6c38e5..427efa73b9bd 100644
---- a/fs/fscache/Kconfig
-+++ b/fs/fscache/Kconfig
-@@ -2,6 +2,7 @@
- 
- config FSCACHE
- 	tristate "General filesystem local caching manager"
-+	select NETFS_SUPPORT
- 	help
- 	  This option enables a generic filesystem caching manager that can be
- 	  used by various network and other filesystems to cache data locally.
-diff --git a/fs/fscache/Makefile b/fs/fscache/Makefile
-index 79e08e05ef84..38f28fec2aa3 100644
---- a/fs/fscache/Makefile
-+++ b/fs/fscache/Makefile
-@@ -11,7 +11,8 @@ fscache-y := \
- 	netfs.o \
- 	object.o \
- 	operation.o \
--	page.o
-+	page.o \
-+	page2.o
- 
- fscache-$(CONFIG_PROC_FS) += proc.o
- fscache-$(CONFIG_FSCACHE_STATS) += stats.o
-diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
-index 08e91efbce53..c42672cadf2d 100644
---- a/fs/fscache/internal.h
-+++ b/fs/fscache/internal.h
-@@ -142,6 +142,9 @@ extern int fscache_wait_for_operation_activation(struct fscache_object *,
- 						 atomic_t *,
- 						 atomic_t *);
- extern void fscache_invalidate_writes(struct fscache_cookie *);
-+extern struct fscache_retrieval *fscache_alloc_retrieval(struct fscache_cookie *,
-+							 struct address_space *,
-+							 fscache_rw_complete_t, void *);
- 
- /*
-  * proc.c
-diff --git a/fs/fscache/page.c b/fs/fscache/page.c
-index 26af6fdf1538..991b0a871744 100644
---- a/fs/fscache/page.c
-+++ b/fs/fscache/page.c
-@@ -299,7 +299,7 @@ static void fscache_release_retrieval_op(struct fscache_operation *_op)
- /*
-  * allocate a retrieval op
-  */
--static struct fscache_retrieval *fscache_alloc_retrieval(
-+struct fscache_retrieval *fscache_alloc_retrieval(
- 	struct fscache_cookie *cookie,
- 	struct address_space *mapping,
- 	fscache_rw_complete_t end_io_func,
-diff --git a/fs/fscache/page2.c b/fs/fscache/page2.c
-new file mode 100644
-index 000000000000..e3bc7178d99f
---- /dev/null
-+++ b/fs/fscache/page2.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* Cache data I/O routines
-+ *
-+ * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#define FSCACHE_DEBUG_LEVEL PAGE
-+#include <linux/module.h>
-+#include <linux/fscache-cache.h>
-+#include <linux/slab.h>
-+#include <linux/netfs.h>
-+#include "internal.h"
-+
-+/*
-+ * Start a cache read operation.
-+ * - we return:
-+ *   -ENOMEM	- out of memory, some pages may be being read
-+ *   -ERESTARTSYS - interrupted, some pages may be being read
-+ *   -ENOBUFS	- no backing object or space available in which to cache any
-+ *                pages not being read
-+ *   -ENODATA	- no data available in the backing object for some or all of
-+ *                the pages
-+ *   0		- dispatched a read on all pages
-+ */
-+int __fscache_begin_read_operation(struct netfs_read_request *rreq,
-+				   struct fscache_cookie *cookie)
-+{
-+	struct fscache_retrieval *op;
-+	struct fscache_object *object;
-+	bool wake_cookie = false;
-+	int ret;
-+
-+	_enter("rr=%08x", rreq->debug_id);
-+
-+	fscache_stat(&fscache_n_retrievals);
-+
-+	if (hlist_empty(&cookie->backing_objects))
-+		goto nobufs;
-+
-+	if (test_bit(FSCACHE_COOKIE_INVALIDATING, &cookie->flags)) {
-+		_leave(" = -ENOBUFS [invalidating]");
-+		return -ENOBUFS;
-+	}
-+
-+	ASSERTCMP(cookie->def->type, !=, FSCACHE_COOKIE_TYPE_INDEX);
-+
-+	if (fscache_wait_for_deferred_lookup(cookie) < 0)
-+		return -ERESTARTSYS;
-+
-+	op = fscache_alloc_retrieval(cookie, NULL, NULL, NULL);
-+	if (!op)
-+		return -ENOMEM;
-+	//atomic_set(&op->n_pages, 1);
-+	trace_fscache_page_op(cookie, NULL, &op->op, fscache_page_op_retr_multi);
-+
-+	spin_lock(&cookie->lock);
-+
-+	if (!fscache_cookie_enabled(cookie) ||
-+	    hlist_empty(&cookie->backing_objects))
-+		goto nobufs_unlock;
-+	object = hlist_entry(cookie->backing_objects.first,
-+			     struct fscache_object, cookie_link);
-+
-+	__fscache_use_cookie(cookie);
-+	atomic_inc(&object->n_reads);
-+	__set_bit(FSCACHE_OP_DEC_READ_CNT, &op->op.flags);
-+
-+	if (fscache_submit_op(object, &op->op) < 0)
-+		goto nobufs_unlock_dec;
-+	spin_unlock(&cookie->lock);
-+
-+	fscache_stat(&fscache_n_retrieval_ops);
-+
-+	/* we wait for the operation to become active, and then process it
-+	 * *here*, in this thread, and not in the thread pool */
-+	ret = fscache_wait_for_operation_activation(
-+		object, &op->op,
-+		__fscache_stat(&fscache_n_retrieval_op_waits),
-+		__fscache_stat(&fscache_n_retrievals_object_dead));
-+	if (ret < 0)
-+		goto error;
-+
-+	/* ask the cache to honour the operation */
-+	ret = object->cache->ops->begin_read_operation(rreq, op);
-+
-+error:
-+	if (ret == -ENOMEM)
-+		fscache_stat(&fscache_n_retrievals_nomem);
-+	else if (ret == -ERESTARTSYS)
-+		fscache_stat(&fscache_n_retrievals_intr);
-+	else if (ret == -ENODATA)
-+		fscache_stat(&fscache_n_retrievals_nodata);
-+	else if (ret < 0)
-+		fscache_stat(&fscache_n_retrievals_nobufs);
-+	else
-+		fscache_stat(&fscache_n_retrievals_ok);
-+
-+	fscache_put_retrieval(op);
-+	_leave(" = %d", ret);
-+	return ret;
-+
-+nobufs_unlock_dec:
-+	atomic_dec(&object->n_reads);
-+	wake_cookie = __fscache_unuse_cookie(cookie);
-+nobufs_unlock:
-+	spin_unlock(&cookie->lock);
-+	fscache_put_retrieval(op);
-+	if (wake_cookie)
-+		__fscache_wake_unused_cookie(cookie);
-+nobufs:
-+	fscache_stat(&fscache_n_retrievals_nobufs);
-+	_leave(" = -ENOBUFS");
-+	return -ENOBUFS;
-+}
-+EXPORT_SYMBOL(__fscache_begin_read_operation);
-diff --git a/fs/fscache/stats.c b/fs/fscache/stats.c
-index a5aa93ece8c5..a7c3ed89a3e0 100644
---- a/fs/fscache/stats.c
-+++ b/fs/fscache/stats.c
-@@ -278,5 +278,6 @@ int fscache_stats_show(struct seq_file *m, void *v)
- 		   atomic_read(&fscache_n_cache_stale_objects),
- 		   atomic_read(&fscache_n_cache_retired_objects),
- 		   atomic_read(&fscache_n_cache_culled_objects));
-+	netfs_stats_show(m);
- 	return 0;
- }
+On Mon, Jan 25, 2021 at 8:38 AM Shyam Prasad N <nspmangalore@gmail.com> wro=
+te:
+>
+> Hi Pavel,
+>
+> Sorry for the late review on this. A few minor comments on __smb_send_rqs=
+t():
+>
+>     if ((total_len > 0) && (total_len !=3D send_length)) { <<<< what's
+> special about total_len =3D=3D 0? I'm guessing send_length will also be 0
+> in such a case.
+>         cifs_dbg(FYI, "partial send (wanted=3D%u sent=3D%zu): terminating
+> session\n",
+>              send_length, total_len);
+>         /*
+>          * If we have only sent part of an SMB then the next SMB could
+>          * be taken as the remainder of this one. We need to kill the
+>          * socket so the server throws away the partial SMB
+>          */
+>         server->tcpStatus =3D CifsNeedReconnect;
+>         trace_smb3_partial_send_reconnect(server->CurrentMid,
+>                           server->hostname);
+>     }
+>
+> I'm not an expert on kernel socket programming, but if total_len !=3D
+> sent_length, shouldn't we iterate retrying till they become equal (or
+> abort if there's no progress)?
+> I see that we cork the connection before send, and I guess it's
+> unlikely why only a partial write will occur (Since these are just
+> in-memory writes).
+> But what is the reason for reconnecting on partial writes?
+>
+> smbd_done:
+>     if (rc < 0 && rc !=3D -EINTR)   <<<<< Not very critical, but
+> shouldn't we also check for rc !=3D -ERESTARTSYS?
+>         cifs_server_dbg(VFS, "Error %d sending data on socket to server\n=
+",
+>              rc);
+>     else if (rc > 0)
+>         rc =3D 0;
+>
+>     return rc;
+> }
+>
+> Regards,
+> Shyam
+>
+> On Fri, Jan 22, 2021 at 11:34 PM Steve French <smfrench@gmail.com> wrote:
+> >
+> > Patch updated with Pavel's suggestion, and added a commit description
+> > from various comments in this email thread (see attached).
+> >
+> >     cifs: do not fail __smb_send_rqst if non-fatal signals are pending
+> >
+> >     RHBZ 1848178
+> >
+> >     The original intent of returning an error in this function
+> >     in the patch:
+> >       "CIFS: Mask off signals when sending SMB packets"
+> >     was to avoid interrupting packet send in the middle of
+> >     sending the data (and thus breaking an SMB connection),
+> >     but we also don't want to fail the request for non-fatal
+> >     signals even before we have had a chance to try to
+> >     send it (the reported problem could be reproduced e.g.
+> >     by exiting a child process when the parent process was in
+> >     the midst of calling futimens to update a file's timestamps).
+> >
+> >     In addition, since the signal may remain pending when we enter the
+> >     sending loop, we may end up not sending the whole packet before
+> >     TCP buffers become full. In this case the code returns -EINTR
+> >     but what we need here is to return -ERESTARTSYS instead to
+> >     allow system calls to be restarted.
+> >
+> >     Fixes: b30c74c73c78 ("CIFS: Mask off signals when sending SMB packe=
+ts")
+> >     Cc: stable@vger.kernel.org # v5.1+
+> >     Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> >     Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+> >     Signed-off-by: Steve French <stfrench@microsoft.com>
+> >
+> > diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> > index e9abb41aa89b..95ef26b555b9 100644
+> > --- a/fs/cifs/transport.c
+> > +++ b/fs/cifs/transport.c
+> > @@ -338,7 +338,7 @@ __smb_send_rqst(struct TCP_Server_Info *server,
+> > int num_rqst,
+> >         if (ssocket =3D=3D NULL)
+> >                 return -EAGAIN;
+> >
+> > -       if (signal_pending(current)) {
+> > +       if (fatal_signal_pending(current)) {
+> >                 cifs_dbg(FYI, "signal pending before send request\n");
+> >                 return -ERESTARTSYS;
+> >         }
+> > @@ -429,7 +429,7 @@ __smb_send_rqst(struct TCP_Server_Info *server,
+> > int num_rqst,
+> >
+> >         if (signal_pending(current) && (total_len !=3D send_length)) {
+> >                 cifs_dbg(FYI, "signal is pending after attempt to send\=
+n");
+> > -               rc =3D -EINTR;
+> > +               rc =3D -ERESTARTSYS;
+> >         }
+> >
+> >         /* uncork it */
+> >
+> > On Fri, Jan 22, 2021 at 3:46 PM ronnie sahlberg
+> > <ronniesahlberg@gmail.com> wrote:
+> > >
+> > > On Sat, Jan 23, 2021 at 5:47 AM Pavel Shilovsky <piastryyy@gmail.com>=
+ wrote:
+> > > >
+> > > > Ronnie,
+> > > >
+> > > > I still think that your patch needs additional fix here:
+> > > >
+> > > > -----------
+> > > > /*
+> > > > * If signal is pending but we have already sent the whole packet to
+> > > > * the server we need to return success status to allow a correspond=
+ing
+> > > > * mid entry to be kept in the pending requests queue thus allowing
+> > > > * to handle responses from the server by the client.
+> > > > *
+> > > > * If only part of the packet has been sent there is no need to hide
+> > > > * interrupt because the session will be reconnected anyway, so ther=
+e
+> > > > * won't be any response from the server to handle.
+> > > > */
+> > > >
+> > > > if (signal_pending(current) && (total_len !=3D send_length)) {
+> > > > cifs_dbg(FYI, "signal is pending after attempt to send\n");
+> > > > rc =3D -EINTR;
+> > > >         ^^^
+> > > >         This should be changed to -ERESTARTSYS to allow kernel to
+> > > > restart a syscall.
+> > > >
+> > > > }
+> > > > -----------
+> > > >
+> > > > Since the signal may remain pending when we enter the sending loop,=
+ we
+> > > > may end up not sending the whole packet before TCP buffers become
+> > > > full. In this case according to the condition above the code return=
+s
+> > > > -EINTR but what we need here is to return -ERESTARTSYS instead to
+> > > > allow system calls to be restarted.
+> > > >
+> > > > Thoughts?
+> > >
+> > > Yes, that is probably a good idea to change too.
+> > > Steve, can you add this change to my patch?
+> > >
+> > >
+> > > >
+> > > > --
+> > > > Best regards,
+> > > > Pavel Shilovsky
+> > > >
+> > > > =D1=87=D1=82, 21 =D1=8F=D0=BD=D0=B2. 2021 =D0=B3. =D0=B2 14:41, ron=
+nie sahlberg <ronniesahlberg@gmail.com>:
+> > > > >
+> > > > >
+> > > > >
+> > > > > On Thu, Jan 21, 2021 at 10:19 PM Paulo Alcantara <pc@cjr.nz> wrot=
+e:
+> > > > >>
+> > > > >> Aur=C3=A9lien Aptel <aaptel@suse.com> writes:
+> > > > >>
+> > > > >> > Pavel Shilovsky <piastryyy@gmail.com> writes:
+> > > > >> >
+> > > > >> >> =D0=B2=D1=82, 19 =D1=8F=D0=BD=D0=B2. 2021 =D0=B3. =D0=B2 22:3=
+8, Steve French <smfrench@gmail.com>:
+> > > > >> >>>
+> > > > >> >>> The patch won't merge (also has some text corruptions in it)=
+.  This
+> > > > >> >>> line of code is different due to commit 6988a619f5b79
+> > > > >> >>>
+> > > > >> >>> 6988a619f5b79 (Paulo Alcantara 2020-11-28 15:57:06 -0300 342=
+)
+> > > > >> >>>  cifs_dbg(FYI, "signal pending before send request\n");
+> > > > >> >>> 6988a619f5b79 (Paulo Alcantara 2020-11-28 15:57:06 -0300 343=
+)
+> > > > >> >>>  return -ERESTARTSYS;
+> > > > >> >>>
+> > > > >> >>>         if (signal_pending(current)) {
+> > > > >> >>>                 cifs_dbg(FYI, "signal pending before send re=
+quest\n");
+> > > > >> >>>                 return -ERESTARTSYS;
+> > > > >> >>>         }
+> > > > >> >>>
+> > > > >> >>> See:
+> > > > >> >>>
+> > > > >> >>> Author: Paulo Alcantara <pc@cjr.nz>
+> > > > >> >>> Date:   Sat Nov 28 15:57:06 2020 -0300
+> > > > >> >>>
+> > > > >> >>>     cifs: allow syscalls to be restarted in __smb_send_rqst(=
+)
+> > > > >> >>>
+> > > > >> >>>     A customer has reported that several files in their mult=
+i-threaded app
+> > > > >> >>>     were left with size of 0 because most of the read(2) cal=
+ls returned
+> > > > >> >>>     -EINTR and they assumed no bytes were read.  Obviously, =
+they could
+> > > > >> >>>     have fixed it by simply retrying on -EINTR.
+> > > > >> >>>
+> > > > >> >>>     We noticed that most of the -EINTR on read(2) were due t=
+o real-time
+> > > > >> >>>     signals sent by glibc to process wide credential changes=
+ (SIGRT_1),
+> > > > >> >>>     and its signal handler had been established with SA_REST=
+ART, in which
+> > > > >> >>>     case those calls could have been automatically restarted=
+ by the
+> > > > >> >>>     kernel.
+> > > > >> >>>
+> > > > >> >>>     Let the kernel decide to whether or not restart the sysc=
+alls when
+> > > > >> >>>     there is a signal pending in __smb_send_rqst() by return=
+ing
+> > > > >> >>>     -ERESTARTSYS.  If it can't, it will return -EINTR anyway=
+.
+> > > > >> >>>
+> > > > >> >>>     Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> > > > >> >>>     CC: Stable <stable@vger.kernel.org>
+> > > > >> >>>     Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> > > > >> >>>     Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+> > > > >> >>>
+> > > > >> >>> On Tue, Jan 19, 2021 at 10:32 PM Ronnie Sahlberg <lsahlber@r=
+edhat.com> wrote:
+> > > > >> >>> >
+> > > > >> >>> > RHBZ 1848178
+> > > > >> >>> >
+> > > > >> >>> > There is no need to fail this function if non-fatal signal=
+s are
+> > > > >> >>> > pending when we enter it.
+> > > > >> >>> >
+> > > > >> >>> > Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> > > > >> >>> > ---
+> > > > >> >>> >  fs/cifs/transport.c | 2 +-
+> > > > >> >>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >> >>> >
+> > > > >> >>> > diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> > > > >> >>> > index c42bda5a5008..98752f7d2cd2 100644
+> > > > >> >>> > --- a/fs/cifs/transport.c
+> > > > >> >>> > +++ b/fs/cifs/transport.c
+> > > > >> >>> > @@ -339,7 +339,7 @@ __smb_send_rqst(struct TCP_Server_Info=
+ *server, int num_rqst,
+> > > > >> >>> >         if (ssocket =3D=3D NULL)
+> > > > >> >>> >                 return -EAGAIN;
+> > > > >> >>> >
+> > > > >> >>> > -       if (signal_pending(current)) {
+> > > > >> >>> > +       if (fatal_signal_pending(current)) {
+> > > > >> >>> >                 cifs_dbg(FYI, "signal is pending before se=
+nding any data\n");
+> > > > >> >>> >                 return -EINTR;
+> > > > >> >>> >         }
+> > > > >> >
+> > > > >> > I've looked up the difference
+> > > > >> >
+> > > > >> > static inline int __fatal_signal_pending(struct task_struct *p=
+)
+> > > > >> > {
+> > > > >> >       return unlikely(sigismember(&p->pending.signal, SIGKILL)=
+);
+> > > > >> > }
+> > > > >> >
+> > > > >> >
+> > > > >> >> I have been thinking around the same lines. The original inte=
+nt of
+> > > > >> >> failing the function here was to avoid interrupting packet se=
+nd in the
+> > > > >> >> middle of the packet and not breaking an SMB connection.
+> > > > >> >> That's also why signals are blocked around smb_send_kvec() ca=
+lls. I
+> > > > >> >> guess most of the time a socket buffer is not full, so, those
+> > > > >> >> functions immediately return success without waiting internal=
+ly and
+> > > > >> >> checking for pending signals. With this change the code may b=
+reak SMB
+> > > > >> >
+> > > > >> > Ah, interesting.
+> > > > >> >
+> > > > >> > I looked up the difference between fatal/non-fatal and it seem=
+s
+> > > > >> > fatal_signal_pending() really only checks for SIGKILL, but I w=
+ould
+> > > > >> > expect ^C (SIGINT) to return quickly as well.
+> > > > >> >
+> > > > >> > I thought the point of checking for pending signal early was t=
+o return
+> > > > >> > quickly to userspace and not be stuck in some unkillable state=
+.
+> > > > >> >
+> > > > >> > After reading your explanation, you're saying the kernel funcs=
+ to send
+> > > > >> > on socket will check for any signal and err early in any case.
+> > > > >> >
+> > > > >> > some_syscall() {
+> > > > >> >
+> > > > >> >     if (pending_fatal_signal)  <=3D=3D=3D=3D=3D if we ignore n=
+on-fatal here
+> > > > >> >         fail_early();
+> > > > >> >
+> > > > >> >     block_signals();
+> > > > >> >     r =3D kernel_socket_send {
+> > > > >> >         if (pending_signal) <=3D=3D=3D=3D they will be caught =
+here
+> > > > >> >             return error;
+> > > > >> >
+> > > > >> >         ...
+> > > > >> >     }
+> > > > >> >     unblock_signals();
+> > > > >> >     if (r)
+> > > > >> >         fail();
+> > > > >> >     ...
+> > > > >> > }
+> > > > >> >
+> > > > >> > So this patch will (potentially) trigger more reconnect (becau=
+se we
+> > > > >> > actually send the packet as a vector in a loop) but I'm not su=
+re I
+> > > > >> > understand why it returns less errors to userspace?
+> > > > >> >
+> > > > >> > Also, shouldn't we move the pending_fatal_signal check *inside=
+* the blocked
+> > > > >> > signal section?
+> > > > >> >
+> > > > >> > In any case I think we should try to test some of those change=
+s given
+> > > > >> > how we have 3,4 patches trying to tweak it on top of each othe=
+r.
+> > > > >>
+> > > > >> I think it would make sense to have something like
+> > > > >>
+> > > > >> diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> > > > >> index e9abb41aa89b..f7292c14863e 100644
+> > > > >> --- a/fs/cifs/transport.c
+> > > > >> +++ b/fs/cifs/transport.c
+> > > > >> @@ -340,7 +340,7 @@ __smb_send_rqst(struct TCP_Server_Info *serv=
+er, int num_rqst,
+> > > > >>
+> > > > >>         if (signal_pending(current)) {
+> > > > >>                 cifs_dbg(FYI, "signal pending before send reques=
+t\n");
+> > > > >> -               return -ERESTARTSYS;
+> > > > >> +               return __fatal_signal_pending(current) ? -EINTR =
+: -ERESTARTSYS;
+> > > > >>         }
+> > > > >>
+> > > > >
+> > > > > That is not sufficient because there are syscalls that are never =
+supposed to fail with -EINTR or -ERESTARTSYS
+> > > > > and thus will not be restarted by either the kernel or libc.
+> > > > >
+> > > > > For example utimensat(). The change to only fail here with -E* fo=
+r a fatal signal (when the process will be killed anyway)
+> > > > > is to address an issue when IF there are signals pending, any sig=
+nal, during the utimensat() system call then
+> > > > > this will lead to us returning -EINTR back to the application. Wh=
+ich can break some applications such as 'tar'.
+> > > > >
+> > > > >
+> > > > > ronnie s
+> > > > >
+> > > > >
+> > > > >>
+> > > > >>         /* cork the socket */
+> > > > >>
+> > > > >> so that we allow signal handlers to be executed before restartin=
+g
+> > > > >> syscalls when receiving non-fatal signals, otherwise -EINTR.
+> >
+> >
+> >
+> > --
+> > Thanks,
+> >
+> > Steve
+>
+>
+>
+> --
+> -Shyam
 
 
+
+--=20
+-Shyam
