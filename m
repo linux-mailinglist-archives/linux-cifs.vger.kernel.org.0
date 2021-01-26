@@ -2,59 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC47B304289
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jan 2021 16:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03473042C9
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jan 2021 16:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406283AbhAZP2N (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 26 Jan 2021 10:28:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37884 "EHLO
+        id S2403840AbhAZPmV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 26 Jan 2021 10:42:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:41150 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406007AbhAZP1A (ORCPT
+        by vger.kernel.org with ESMTP id S1731086AbhAZPgF (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:27:00 -0500
+        Tue, 26 Jan 2021 10:36:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611674734;
+        s=mimecast20190719; t=1611675278;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VJe0QMue+MrGLDqG9YMY3B8wc1OhQAcndv4QLZtzS5Q=;
-        b=SApIXfmiJfp16WI90qCKdUL8JW4ZnRzX8TFbUl4UWucYz4yhAs4HVN7gFGXCWe7Dnd95n2
-        0eIhGlqMbQChW/qVsDy03wjMd7Z7gdKlxX+BD7VCHR6kaD/nJuPRzv4wferfI95TKTwQgh
-        prp/v9Aw1Zks8+vDPlw2TTD7Q0K8fwg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-304-t2vX2xGsOcqDeXFTKrMIXg-1; Tue, 26 Jan 2021 10:25:33 -0500
-X-MC-Unique: t2vX2xGsOcqDeXFTKrMIXg-1
-Received: by mail-ed1-f71.google.com with SMTP id n8so9532663edo.19
-        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 07:25:32 -0800 (PST)
+        bh=+sg4yNwZrAUtqGjsjAIZF/lC9W6Hi56SguvTv3qRusA=;
+        b=AvAimHzoNnyt6HHce6CcX+chG4tX7GRBMoCQqfIxXhqI8JNTZLdVRQ5eCsiWDp3LoQW+Ll
+        BeRU+iGXcpfeyr40dWf/CDbUTRRooyC2d0rayKu4vV7JNCkHFFE87e7d5qPvPql+tPM8IL
+        LMZSLZtAFSNufeHw3Gm8odSA9k8MABg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-576-k94peZQONReCm_yTmlczLw-1; Tue, 26 Jan 2021 10:34:36 -0500
+X-MC-Unique: k94peZQONReCm_yTmlczLw-1
+Received: by mail-ed1-f70.google.com with SMTP id q12so4734686edr.2
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 07:34:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VJe0QMue+MrGLDqG9YMY3B8wc1OhQAcndv4QLZtzS5Q=;
-        b=iRrL5jxg6EODwtAEy7ejarw0vCgFBLmrx58ifsw1uDgO0RALzKM1glJeREXGPFmRwE
-         APYTdkbW/facNjrBnOXNG0FeIwti9eFVySV+NL6ee6SCFoOyANBdaw7noa43uocahILy
-         WUzeGG72aJ4OiHEYV36IODu9gR0JcTeYc10BoPkC0pl5Pp11vaFhwtHTTto0q+ytO7rc
-         +2cGDhSxfo7M6OkenVoGKUUFXJPdphbBhkhgiuyvldU65mXT31gdl31Xe+yGM5gzdN61
-         Ursd444ufHdvNNEJyXSpjk/2+tUSaZ98tZza5pO1ZoxMCY5nLUOSOpSQqQfYQ+Ym2/KY
-         DLTg==
-X-Gm-Message-State: AOAM5304/z+xJ08lJB9kW25VAkvnWri1zvOsuAzyYAz3VlRRRdZP0N4q
-        wCq9+T3FPaFTDUgdADLFmneCBM5QczMzO+Y0JDjyrBicjiMgH8pDypiwXj1Ra7JJTtDKQUQbP59
-        Z2UV2wLruonX1Et+xnHG5i+AFleCITYwuEFg/rw==
-X-Received: by 2002:a05:6402:3589:: with SMTP id y9mr5114904edc.344.1611674731921;
-        Tue, 26 Jan 2021 07:25:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzlAcqaq8CqekYAOTl5XTKJw4byUxjRunvP1wQKBAqraCVAKiDEx3Vt3nz1iiXtLgQBV8BZqw1Aaq6eAK2Q72M=
-X-Received: by 2002:a05:6402:3589:: with SMTP id y9mr5114888edc.344.1611674731765;
- Tue, 26 Jan 2021 07:25:31 -0800 (PST)
+        bh=+sg4yNwZrAUtqGjsjAIZF/lC9W6Hi56SguvTv3qRusA=;
+        b=rfnbCO91rnRQiQhG7K0cc+DCh3W3UrWJmPN4WtpM/jtXco+M4K0IrtwxiCiUnH8RoX
+         IM8l/5ORYhkeamzW5IHmVO2lWrNrY6gg+EtsvsurWtTcuY6e0gq/O4yp6a4A7jBJMlee
+         PeSBg+NPriKJrmhTjmCt7XOQNtuXmtzuQjUE+7+3bQsW5JiXd2mAEeMB30kM0K0CAKhH
+         AzlT9bC425ibjRzkf+ERHu+mozp5xdlNaWjPEr2wjbLIXBZ6WDDbwOehP+rbEtsq7iw5
+         /1mn1TZzziR7k0N5aK5SQ3RIU1WzRehxhkTCGF0rCrPoB9hMsk8YszMVdCh0SMawaKGT
+         yG0g==
+X-Gm-Message-State: AOAM530hDoixqwuV39V0LReAsTWghAW2K7Am9uV7xCXBAwnN1wtGLuPH
+        dOXwfy9ddwXHXRFMtv5lWmKeiuERcRp8FSksGyWPMtKtsAmhgDfdA49X0Lz5VibPtCOzb1aWPaD
+        rtmreVtQqKM1k5IvXcTNkBsC6eswr6d3cw28rZg==
+X-Received: by 2002:a17:906:4451:: with SMTP id i17mr2289506ejp.436.1611675275260;
+        Tue, 26 Jan 2021 07:34:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzSasZks4PL3NUJQfxg7We8UW4x28G54NbjOgDuCVAFpi7QKXrub9Pz5L3G6Ovg3Un+JLmrv6pQRbddbpD7RMI=
+X-Received: by 2002:a17:906:4451:: with SMTP id i17mr2289493ejp.436.1611675275099;
+ Tue, 26 Jan 2021 07:34:35 -0800 (PST)
 MIME-Version: 1.0
 References: <161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk>
- <161161057357.2537118.6542184374596533032.stgit@warthog.procyon.org.uk> <20210126040540.GK308988@casper.infradead.org>
-In-Reply-To: <20210126040540.GK308988@casper.infradead.org>
+ <161161054970.2537118.5401048451896267742.stgit@warthog.procyon.org.uk> <20210126035928.GJ308988@casper.infradead.org>
+In-Reply-To: <20210126035928.GJ308988@casper.infradead.org>
 From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Tue, 26 Jan 2021 10:24:55 -0500
-Message-ID: <CALF+zOn80NoeaBW8i9djC8qBCEng7riaHgz77uhxipaZ+RJ5ew@mail.gmail.com>
-Subject: Re: [PATCH 27/32] NFS: Refactor nfs_readpage() and
- nfs_readpage_async() to use nfs_readdesc
+Date:   Tue, 26 Jan 2021 10:33:59 -0500
+Message-ID: <CALF+zOkNMHjtH+cZrGQFqbH5dD5gUpV+y3k-Bt31E35d4kn1oA@mail.gmail.com>
+Subject: Re: [PATCH 25/32] NFS: Clean up nfs_readpage() and nfs_readpages()
 To:     Matthew Wilcox <willy@infradead.org>
 Cc:     David Howells <dhowells@redhat.com>,
         Trond Myklebust <trondmy@hammerspace.com>,
@@ -74,27 +73,14 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 11:06 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Mon, Jan 25, 2021 at 11:01 PM Matthew Wilcox <willy@infradead.org> wrote:
 >
-> On Mon, Jan 25, 2021 at 09:36:13PM +0000, David Howells wrote:
-> > +int nfs_readpage_async(void *data, struct inode *inode,
-> >                      struct page *page)
-> >  {
-> > +     struct nfs_readdesc *desc = (struct nfs_readdesc *)data;
+> On Mon, Jan 25, 2021 at 09:35:49PM +0000, David Howells wrote:
+> > -int nfs_readpage(struct file *file, struct page *page)
+> > +int nfs_readpage(struct file *filp, struct page *page)
 >
-> You don't need a cast to cast from void.
+> I appreciate we're inconsistent between file and filp, but we're actually
+> moving more towards file than filp.
 >
-Right, fixing.
-
-> > @@ -440,17 +439,16 @@ int nfs_readpages(struct file *filp, struct address_space *mapping,
-> >       if (ret == 0)
-> >               goto read_complete; /* all pages were read */
-> >
-> > -     desc.pgio = &pgio;
-> > -     nfs_pageio_init_read(&pgio, inode, false,
-> > +     nfs_pageio_init_read(&desc.pgio, inode, false,
->
-> I like what you've done here, embedding the pgio in the desc.
->
-Thanks for the review!
+Got it, easy enough to change.
 
