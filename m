@@ -2,156 +2,145 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EB43054A1
-	for <lists+linux-cifs@lfdr.de>; Wed, 27 Jan 2021 08:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9833054A9
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 Jan 2021 08:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S316969AbhA0Adk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 26 Jan 2021 19:33:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46248 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390499AbhAZTMe (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 26 Jan 2021 14:12:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611688267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dhSDWdgO45oMOw4U14ZD4IpWy4LqGlGQzgyJ+NX3F9s=;
-        b=RV5i8IOr+AD8PVlARWPcj/V3Aef7XJUDwmYp5eA/FXlu1pwjmupvJxXEwK1Uo16ilnfxLn
-        GcXdeVs+2L8BuReRVm+aybpV5CZvGOjSQTbXA2ASq2Q3e+CksGM9aM+gQU8WNiOL0okA5w
-        A4+2vLSlAQ2GZaVbrhEu56Ntl3ONE1M=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-444-5kJ9K7FpMQ6I3-ZUUuv8Iw-1; Tue, 26 Jan 2021 14:11:04 -0500
-X-MC-Unique: 5kJ9K7FpMQ6I3-ZUUuv8Iw-1
-Received: by mail-ej1-f69.google.com with SMTP id n25so5067460ejd.5
-        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 11:11:04 -0800 (PST)
+        id S231575AbhA0HaH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 27 Jan 2021 02:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S317646AbhA0AaI (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Jan 2021 19:30:08 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C56C061573
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 15:17:51 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id f1so64404edr.12
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 15:17:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HMKDp9LAgkueuM1/9yGSm7Oksa/vLtKF4FHbvnepNbc=;
+        b=qC4TIWCHP3wy+B3LnVwVA9XyxqxodpNeu6JzSg5QVcAEQCPknRNyCCY2yBc+sP67YG
+         R4HNNjhbeeGE1ec2aL4CmrVj8INPPCGWzzr/LOuiwzIFY3ouOTW1+ILX8HknA0Dpss+G
+         f64xN4QkM6hOn6XNXKIshPAl8Paf+Nb4LpZSVm//99OkFaOYbb0Vf+LhP/vtn3M3U58e
+         M4dolF5rvuJ2TCKM766Yca2wpaNCqFbuDMunGuLD+5EMgp29VWHP1wXt2qH34VjJOUu4
+         Q2XSuahrX2teCj8PfP4r/il4mQ2s9m4QRhBtJ6wbOdgziQhIblIRal4vZvyv6zKNizOr
+         l6tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dhSDWdgO45oMOw4U14ZD4IpWy4LqGlGQzgyJ+NX3F9s=;
-        b=euC8rB3jlOBdS6BAPynROxcWFIDrvGeEBDg+OrC3uN4MpO4YwvXETed3so8DdThxpy
-         eGkkBGT7sn8194r6JnWpbwvIKhZApReufPPC+tDSY0AvyNlhkPNiE5gbROr1DBIHyoTs
-         YnLPSsonEA5ZeEnr8g0jd/a9nWIX+WacnRuurN+7dEg8LNGqYg8NRzYD3JH5HLBZ84eU
-         xauZTqA2f3yL/eC/6gkjhjAPIDvUmLxiKLSfFCKWP1XG09o1/Bw8h4+sQ54DCJj8FBve
-         kCoVkK9flp4nMuYorQ7uu4GJcXzbzoQAHCtYwAcAoN95d1m6F8NUQdLn3RmAvVeXWZYq
-         tULg==
-X-Gm-Message-State: AOAM53395ubXTb3LBitQVSCp7xg3TaAUL7Q4MYDNZxD+eqXPhp1IbF/H
-        hDnQPSIIqNno26ylULe3KDIz76GNi0lcxaXy93zAULDsslW1RHzNx0VOE3u+Ay/scs7DtXVVWms
-        ml1KsOutqI8I8s03Ik1OZMdyPZaa8m6IkPGuaDw==
-X-Received: by 2002:aa7:ce87:: with SMTP id y7mr5760854edv.211.1611688263259;
-        Tue, 26 Jan 2021 11:11:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw9khL2OyLeDGiHbXxhgFxEoiQEWhWSGq0ZEPFvGyzCXtwZceNpjSLzAw970dmzg8NCnH9M4SKeWZSU2be3AaE=
-X-Received: by 2002:aa7:ce87:: with SMTP id y7mr5760842edv.211.1611688263103;
- Tue, 26 Jan 2021 11:11:03 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HMKDp9LAgkueuM1/9yGSm7Oksa/vLtKF4FHbvnepNbc=;
+        b=kyNTatcxWREXGeTdMDlll86ayFhUV87w6O7b+QGMlVf69ukeKX9cQN4iX9+QAucrsS
+         DpMrFcEcUpBQvlkKSgJbfOV4YxhwzMiw6kT6X/2GJfybcMCsKntSHN4j8xFFX1jlshk6
+         zCSJRf08YManpzUftbQk8jOOwlC7UDZCnFiEw49qyLGIKjovthxxp63+OnpFPPCMYGMZ
+         ABMWVVHedStM4zXNNMvcpj78De2b/TCcg0RvG0f0FPwdjgqbO8IR51wFN1pIjbhQPD8J
+         K7BLp9ymU4H+kQcFsDG7Q3/DEmqOpBF8rewmleTm4RRVP6nr/9cLeVJFpr/enA1NXG5N
+         CltQ==
+X-Gm-Message-State: AOAM531P1P7JHDjqBvkxcv4Qca92U10S12XEV7OXF6YrWPe+NizdXoi2
+        MjEODI7ag5g5zpJ8fl2vtXao9+rYxuxvIBh6ug==
+X-Google-Smtp-Source: ABdhPJyrU27X27s0JMHclBYS8qrq+57RitAZnuo/CxA4JQGLqE4LBd4z3gbUu2yY/M9dNXrSp3X3buETV7B0GU3sxx0=
+X-Received: by 2002:a50:fd84:: with SMTP id o4mr6381864edt.340.1611703070360;
+ Tue, 26 Jan 2021 15:17:50 -0800 (PST)
 MIME-Version: 1.0
-References: <161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk>
- <161161064956.2537118.3354798147866150631.stgit@warthog.procyon.org.uk>
- <20210126013611.GI308988@casper.infradead.org> <D6C85B77-17CA-4BA6-9C2C-C63A8AF613AB@oracle.com>
-In-Reply-To: <D6C85B77-17CA-4BA6-9C2C-C63A8AF613AB@oracle.com>
-From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Tue, 26 Jan 2021 14:10:26 -0500
-Message-ID: <CALF+zOm++OzAebR4wu+Hdf8Aa8GpXZu8Am9eVajVUiDMBJE63w@mail.gmail.com>
-Subject: Re: [PATCH 32/32] NFS: Convert readpage to readahead and use
- netfs_readahead for fscache
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-cachefs <linux-cachefs@redhat.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210120043209.27786-1-lsahlber@redhat.com> <CAH2r5mvmCG2SN0nO8uZftTRMOkN8jgbfYrO1E5_A=5FpK9H0bQ@mail.gmail.com>
+ <CAKywueRWJxk9KuuZe6Ovb7MhxXsbsE-_7WJG05hAPTZ2o5m7mg@mail.gmail.com>
+ <87y2gmk3ap.fsf@suse.com> <877do6zdqp.fsf@cjr.nz> <CAN05THQjj04sQpcjvLqs+fmbdeu=jftM+GdeJnQMg33OEq6xEg@mail.gmail.com>
+ <CAKywueSTX9hq5Vun3V6foQeLJ8Fngye0__U-gj73evKDwNLEKg@mail.gmail.com>
+ <CAN05THQGBvLy6c+DK1eOuj2VKXTXONZkk8Je+iLM2DZFmHsPBA@mail.gmail.com>
+ <CAH2r5mttuSULg0UvKuNRydtkNAP1QRZVXQuNaaHGFLRrvfSnfQ@mail.gmail.com> <CANT5p=o5pjCLUzLv2=i+T+7XE=0Wxcg3p_TSbAeARAWNzmmgEw@mail.gmail.com>
+In-Reply-To: <CANT5p=o5pjCLUzLv2=i+T+7XE=0Wxcg3p_TSbAeARAWNzmmgEw@mail.gmail.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Tue, 26 Jan 2021 15:17:39 -0800
+Message-ID: <CAKywueQiB__NmPqv0Q7OmGLqLRLShoQmoxELyFdBEANJz3GY1Q@mail.gmail.com>
+Subject: Re: [PATCH] cifs: do not fail __smb_send_rqst if non-fatal signals
+ are pending
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 10:25 AM Chuck Lever <chuck.lever@oracle.com> wrote:
+=D0=BF=D0=BD, 25 =D1=8F=D0=BD=D0=B2. 2021 =D0=B3. =D0=B2 08:39, Shyam Prasa=
+d N <nspmangalore@gmail.com>:
 >
+> Hi Pavel,
 >
+> Sorry for the late review on this. A few minor comments on __smb_send_rqs=
+t():
 >
-> > On Jan 25, 2021, at 8:36 PM, Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> >
-> > For Subject: s/readpage/readpages/
-> >
-> > On Mon, Jan 25, 2021 at 09:37:29PM +0000, David Howells wrote:
-> >> +int __nfs_readahead_from_fscache(struct nfs_readdesc *desc,
-> >> +                             struct readahead_control *rac)
-> >
-> > I thought you wanted it called ractl instead of rac?  That's what I've
-> > been using in new code.
-> >
-> >> -    dfprintk(FSCACHE, "NFS: nfs_getpages_from_fscache (0x%p/%u/0x%p)\n",
-> >> -             nfs_i_fscache(inode), npages, inode);
-> >> +    dfprintk(FSCACHE, "NFS: nfs_readahead_from_fscache (0x%p/0x%p)\n",
-> >> +             nfs_i_fscache(inode), inode);
-> >
-> > We do have readahead_count() if this is useful information to be logging.
->
-> As a sidebar, the Linux NFS community is transitioning to tracepoints.
-> It would be helpful (but not completely necessary) to use tracepoints
-> in new code instead of printk.
->
-
-The netfs API has a lot of good tracepoints and to be honest I think we can
-get rid of fscache's rpcdebug, but let me take a closer look to be
-sure.  I didn't use rpcdebug much, if at all, in the latest rounds of debugging.
+>     if ((total_len > 0) && (total_len !=3D send_length)) { <<<< what's
+> special about total_len =3D=3D 0? I'm guessing send_length will also be 0
+> in such a case.
 
 
+Should be. I don't think there should be a case of sending zero-length SMBs=
+.
+
+
+>         cifs_dbg(FYI, "partial send (wanted=3D%u sent=3D%zu): terminating
+> session\n",
+>              send_length, total_len);
+>         /*
+>          * If we have only sent part of an SMB then the next SMB could
+>          * be taken as the remainder of this one. We need to kill the
+>          * socket so the server throws away the partial SMB
+>          */
+>         server->tcpStatus =3D CifsNeedReconnect;
+>         trace_smb3_partial_send_reconnect(server->CurrentMid,
+>                           server->hostname);
+>     }
+>
+> I'm not an expert on kernel socket programming, but if total_len !=3D
+> sent_length, shouldn't we iterate retrying till they become equal (or
+> abort if there's no progress)?
+
+Given that this is a blocking send, total_len !=3D send_length may
+happen for several reasons: tcp buffers are full and signal is pending
+or a connection is reset or closed.
+
+> I see that we cork the connection before send, and I guess it's
+> unlikely why only a partial write will occur (Since these are just
+> in-memory writes).
+
+For the reasons mentioned above partial send may occur any time.
+
+> But what is the reason for reconnecting on partial writes?
+
+partially sent SMBs would mean corrupted packets on the server and the
+server will close the connection anyway.
 
 >
-> >> +static inline int nfs_readahead_from_fscache(struct nfs_readdesc *desc,
-> >> +                                         struct readahead_control *rac)
-> >> {
-> >> -    if (NFS_I(inode)->fscache)
-> >> -            return __nfs_readpages_from_fscache(ctx, inode, mapping, pages,
-> >> -                                                nr_pages);
-> >> +    if (NFS_I(rac->mapping->host)->fscache)
-> >> +            return __nfs_readahead_from_fscache(desc, rac);
-> >>      return -ENOBUFS;
-> >> }
-> >
-> > Not entirely sure that it's worth having the two functions separated any more.
-> >
-> >>      /* attempt to read as many of the pages as possible from the cache
-> >>       * - this returns -ENOBUFS immediately if the cookie is negative
-> >>       */
-> >> -    ret = nfs_readpages_from_fscache(desc.ctx, inode, mapping,
-> >> -                                     pages, &nr_pages);
-> >> +    ret = nfs_readahead_from_fscache(&desc, rac);
-> >>      if (ret == 0)
-> >>              goto read_complete; /* all pages were read */
-> >>
-> >>      nfs_pageio_init_read(&desc.pgio, inode, false,
-> >>                           &nfs_async_read_completion_ops);
-> >>
-> >> -    ret = read_cache_pages(mapping, pages, readpage_async_filler, &desc);
-> >> +    while ((page = readahead_page(rac))) {
-> >> +            ret = readpage_async_filler(&desc, page);
-> >> +            put_page(page);
-> >> +    }
-> >
-> > I thought with the new API we didn't need to do this kind of thing
-> > any more?  ie no matter whether fscache is configured in or not, it'll
-> > submit the I/Os.
->
-> --
-> Chuck Lever
->
->
->
+> smbd_done:
+>     if (rc < 0 && rc !=3D -EINTR)   <<<<< Not very critical, but
+> shouldn't we also check for rc !=3D -ERESTARTSYS?
 
+It doesn't seem like ERESTARTSYS may occur above but not 100% sure
+here - needs investigations.
+
+
+>         cifs_server_dbg(VFS, "Error %d sending data on socket to server\n=
+",
+>              rc);
+>     else if (rc > 0)
+>         rc =3D 0;
+>
+>     return rc;
+> }
+>
+> Regards,
+> Shyam
+
+
+
+--
+Best regards,
+Pavel Shilovsky
