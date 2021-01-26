@@ -2,72 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF43C304A56
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jan 2021 21:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF36304E54
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 Jan 2021 02:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727674AbhAZFGl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 26 Jan 2021 00:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbhAZEHB (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 25 Jan 2021 23:07:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C99C06174A;
-        Mon, 25 Jan 2021 20:06:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jq3N/pNATTXIAMrmJ6obiwvtVc5gjKpBnS3S5QeZ+pY=; b=k5jINKlmfQbKVkIc/QXlhf3x+a
-        KKgGtH3mPaUaM/OfdSzQ+q/lrTQwHicbG/JKAJXzk0VSiUhlqqPvKPVFRLaBTrRuO1/yfo8oXx4H7
-        l5bG5GO4+RnFNJfsM67J/D3YIEbQJo/k3q5HfWbJUgK5sd+tFUMejnRDHyDxk4LZuWyvCQDnB+gjq
-        zOKsiZ2Lv5B5lLMYuuMKn/gA2xwSBl2THbsXjL87EiEHQ8EhQ2ImbIqpEatXX2aFYhUkw9YYNfLrv
-        aarEqm3k+Xt/QvaRlG8bjW49UmSAtOfxlmHpnv165FYQ6iMzlCp2siLkBG/QSBVFjVvAWTbVZmcGv
-        JFMI27LA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l4Fbo-0053Bl-Gu; Tue, 26 Jan 2021 04:05:43 +0000
-Date:   Tue, 26 Jan 2021 04:05:40 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
-        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 27/32] NFS: Refactor nfs_readpage() and
- nfs_readpage_async() to use nfs_readdesc
-Message-ID: <20210126040540.GK308988@casper.infradead.org>
-References: <161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk>
- <161161057357.2537118.6542184374596533032.stgit@warthog.procyon.org.uk>
+        id S1730079AbhA0A0e (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 26 Jan 2021 19:26:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47140 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389045AbhAZF5a (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 26 Jan 2021 00:57:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611640559;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=2zYPmCa9CD1op8Dz6ppj1Qq3baJz0sWPv7iRVNa20dY=;
+        b=iz8dkOpgE/5lzR6QlD9XMdAoVus1fydxeUVXDmEgdL0mU8YTQHkdLiPL1QCbX7VXaQJ7AW
+        wHOk+vuBiHlIG0uNXd6u7ydFkimYCLMUOAmP/2YlFW8Z9OlAfExLPk4k3uoxeB3eRQwtbO
+        e+B9RYaUX6LWNC0Imf5O6zqW+vk7MQM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-158-rDweF2G8P9iWteXa09NUFA-1; Tue, 26 Jan 2021 00:55:57 -0500
+X-MC-Unique: rDweF2G8P9iWteXa09NUFA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4D72E1005504
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 05:55:56 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 46BEC5D9DB
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 05:55:56 +0000 (UTC)
+Received: from zmail23.collab.prod.int.phx2.redhat.com (zmail23.collab.prod.int.phx2.redhat.com [10.5.83.28])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 40A6D4BB7B
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 05:55:56 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 00:55:55 -0500 (EST)
+From:   Xiaoli Feng <xifeng@redhat.com>
+To:     CIFS <linux-cifs@vger.kernel.org>
+Message-ID: <1593727848.66273087.1611640555370.JavaMail.zimbra@redhat.com>
+In-Reply-To: <1415900995.66272053.1611639038067.JavaMail.zimbra@redhat.com>
+Subject: mount dfs share failed becaus e of missing username
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <161161057357.2537118.6542184374596533032.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.72.12.80, 10.4.195.23]
+Thread-Topic: mount dfs share failed becaus e of missing username
+Thread-Index: +2LOR8zqgQeu0i2hn8fXXegFGLM9RA==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 09:36:13PM +0000, David Howells wrote:
-> +int nfs_readpage_async(void *data, struct inode *inode,
->  		       struct page *page)
->  {
-> +	struct nfs_readdesc *desc = (struct nfs_readdesc *)data;
+Hello guys,
 
-You don't need a cast to cast from void.
+I met a bug. Mount dfs root share failed on v5.11.0-rc5. But It's success o=
+n v5.10.
 
-> @@ -440,17 +439,16 @@ int nfs_readpages(struct file *filp, struct address_space *mapping,
->  	if (ret == 0)
->  		goto read_complete; /* all pages were read */
->  
-> -	desc.pgio = &pgio;
-> -	nfs_pageio_init_read(&pgio, inode, false,
-> +	nfs_pageio_init_read(&desc.pgio, inode, false,
+[root@ibm-x3650m4-01-vm-14 ~]# mount -vvv  //localhost/dfsroot cifs -o user=
+=3Droot,password=3Dredhat=20
+mount.cifs kernel mount options: ip=3D::1,unc=3D\\localhost\dfsroot,user=3D=
+root,pass=3D********
+mount error(22): Invalid argument
 
-I like what you've done here, embedding the pgio in the desc.
+dmesg log:
+[ 1648.025424] CIFS: fs/cifs/connect.c: build_unc_path_to_root: full_path=
+=3D\\localhost\dfsroot
+[ 1648.025427] CIFS: fs/cifs/connect.c: build_unc_path_to_root: full_path=
+=3D\\localhost\dfsroot
+[ 1648.025429] CIFS: fs/cifs/connect.c: build_unc_path_to_root: full_path=
+=3D\\localhost\dfsroot
+[ 1648.025434] CIFS: fs/cifs/dfs_cache.c: __dfs_cache_find: search path: \l=
+ocalhost\dfsroot
+[ 1648.025437] CIFS: fs/cifs/dfs_cache.c: setup_referral: set up new ref
+[ 1648.026760] CIFS: fs/cifs/dns_resolve.c: dns_resolve_server_name_to_ip: =
+resolved: localhost to 127.0.0.1
+[ 1648.026773] CIFS: VFS: No username specified
+[ 1648.028008] CIFS: fs/cifs/connect.c: cifs_put_smb_ses: ses_count=3D3
+[ 1648.028012] CIFS: fs/cifs/connect.c: cifs_put_tcon: tc_count=3D1
+[ 1648.028014] CIFS: fs/cifs/connect.c: VFS: in cifs_put_tcon as Xid: 32 wi=
+th uid: 0
+[ 1648.028017] CIFS: fs/cifs/smb2pdu.c: Tree Disconnect
+[ 1648.028385] CIFS: fs/cifs/connect.c: cifs_put_smb_ses: ses_count=3D2
+[ 1648.028390] CIFS: fs/cifs/connect.c: VFS: leaving mount_put_conns (xid =
+=3D 29) rc =3D 0
+[ 1648.028393] CIFS: VFS: cifs_mount failed w/return code =3D -22
+
+
+More info please look https://bugzilla.kernel.org/show_bug.cgi?id=3D211345.
+
+Thanks.
+
+--=20
+Best regards!
+XiaoLi Feng =E5=86=AF=E5=B0=8F=E4=B8=BD
+
+Red Hat Software (Beijing) Co.,Ltd
+filesystem-qe Team
+IRC:xifeng=EF=BC=8C#channel: fs-qe
+Tel:+86-10-8388112
+9/F, Raycom
 
