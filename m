@@ -2,86 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C56A305447
-	for <lists+linux-cifs@lfdr.de>; Wed, 27 Jan 2021 08:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F7F30552B
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 Jan 2021 09:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbhA0HS2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 27 Jan 2021 02:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S229802AbhA0IB7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 27 Jan 2021 03:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbhA0HMS (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 Jan 2021 02:12:18 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112B3C061573
-        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 23:11:38 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id gx1so777083pjb.1
-        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 23:11:38 -0800 (PST)
+        with ESMTP id S317072AbhAZXUa (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Jan 2021 18:20:30 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41896C061756
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 15:19:34 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id f1so68497edr.12
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jan 2021 15:19:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=adamharvey.name; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzgNAxWAFXQXQLx4F173JnptpMxwPuWoS6nBfBndQi0=;
-        b=cUOpYY4H2KllHu8VHdOnH5ELBn6cHINbSscnoJwKBypU1anFHuvOIRc5fvKyVz7K2d
-         IpC08hR7j3JA0k5svYN7t4G7KNgykWALtcBCBux7Yca1K9FL9qiKxBkSrglP50vCnj3o
-         XgrXcwsxjS+Ng2W3ypyBf/BY9ccZWqLCL7aVY=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+ToRPZyvBOx3d0OIHEZRtUJs4AK7hFBChC+h+y1Okqg=;
+        b=hsHSXIvPdqTNAs2LDmYMBX++oCdU6ybJyBFQIzdldW5bNrS2Ivxgd22Ydoa/pZYuV0
+         7oXODSIHliivBjCL52nxSzFR7UDIorcIrLh7UxRR5PmucXhswvizSaxY9K+3XUeA5hfq
+         XsOfaTXv71m7toScxQpLGtRXoY5T06vum2Mh9IwJMho9fTkAqsEidStY102BLSaX8FGi
+         uNsykN6UF8tsTBMpXjgAVEJCBmKtOB3bIWx1+rXKHgSmIhFOzsg0wOfgtPbWm3sx1FyU
+         H+EErH3iLeTzT41aPkNH30vauRydJQHQwGh5gc/3XoDkOmtSWx49H4nfWKGgjHDMnL1K
+         UQNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzgNAxWAFXQXQLx4F173JnptpMxwPuWoS6nBfBndQi0=;
-        b=fCVxVQ4I5QdfL/tBeE+HAeXX8JQyfbnrZJz50GctKtYs4XHl2nC4DMmTepgvxoudaa
-         lIX2IBAOTnu0bn4zMAo50MczWgU4vPqe6cm+ScYA2umYCNdpodZqozzWc7to0rH4B3V3
-         zuhGbl2gKY/5sO6O3/66a093XJjRSC0lG6TFAfRoT9dPFCFmdX90dkbVmkyJ+ieqohRO
-         Xkj9N++D7JtNmM+0beib+wouyJ6Sc44qBbQ7hIkfZdc1QqH2RhgQUhXc8ji9oP7ncnu2
-         z6MGGCMvTtyIeBj4QU9GjmKamq1GPKnjSseamzLLx0qbk7UOBynYU99EXa1V2b3wKdtK
-         SNEg==
-X-Gm-Message-State: AOAM532mrpiC30tR8Na9YuviSQCKEIDLevhUFIw3Liz0ciIK0RRWqgHh
-        43H+TYczWzMvIH8oE7zHKPbTdk2RwU51opMv
-X-Google-Smtp-Source: ABdhPJw8qxW9upFZ9YKxNakjYpgW3nrOxoJVUz7kb4c7bM8aO0PuJEAX0Gm1ozFSMs997yXV8g1I7g==
-X-Received: by 2002:a17:90a:7891:: with SMTP id x17mr4159318pjk.91.1611731497541;
-        Tue, 26 Jan 2021 23:11:37 -0800 (PST)
-Received: from nosecam.localdomain (node-1w7jr9qw9msspx5ewy5tkdyef.ipv6.telus.net. [2001:569:7eea:3500:ca69:1f75:9176:e767])
-        by smtp.gmail.com with ESMTPSA id t6sm1148757pfc.64.2021.01.26.23.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 23:11:36 -0800 (PST)
-From:   Adam Harvey <adam@adamharvey.name>
-To:     sfrench@samba.org, linux-cifs@vger.kernel.org
-Cc:     samba-technical@lists.samba.org, Adam Harvey <adam@adamharvey.name>
-Subject: [PATCH] cifs: ignore the noauto option if it is provided
-Date:   Tue, 26 Jan 2021 23:10:21 -0800
-Message-Id: <20210127071020.18052-1-adam@adamharvey.name>
-X-Mailer: git-send-email 2.30.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+ToRPZyvBOx3d0OIHEZRtUJs4AK7hFBChC+h+y1Okqg=;
+        b=ofJT3JWKMyCMKwWjEsB+gPRCrvXOHFsmCOmdqeumigKeCZqhLryNODC3EAO8iWCaNQ
+         vPSVtDh0Cc2lzz8Ya6AMZi8EMTQgXlVh+DdH9OvrXRNZMY9Pjoj8yAbovAbCIjsUWRks
+         7IIUAcrHCxOrUCqKu5BiFILYS8WOgIATZaXpkWxR/nHY1ZJsr2+HXRrEeyN7x8wpGa8j
+         IxHN+LTSxVDKhwHmFNDQjKS7Mgvg/0dmqsg5ITxwxvJ6GOJWxB8Mi4/9eoXXYVYQeUNU
+         vtWypZI6lV1EW0jSRQHTByW0QybwH6iGMp1t0J0MEJzHPbRj2DkNIrb8VGa+2ZKLOydE
+         MrGg==
+X-Gm-Message-State: AOAM5308JGzP1TA3vSyaD9IQmLE9O20rXRpugzHay8Cq0J2UJ+e4XNO5
+        /qcr2bQ1LWFTTurPf7om053qGVy2PDuV27Hnig==
+X-Google-Smtp-Source: ABdhPJx7rB3S7G+cRo9SFqU0+t1dGOVIAbJShLEjtOppbEDUgdw8L6PK7v4Pq6vbmjzY/mJHfCOitkSk1ygqymIcqQ0=
+X-Received: by 2002:aa7:d78e:: with SMTP id s14mr6353759edq.329.1611703173063;
+ Tue, 26 Jan 2021 15:19:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210120043209.27786-1-lsahlber@redhat.com> <CAH2r5mvmCG2SN0nO8uZftTRMOkN8jgbfYrO1E5_A=5FpK9H0bQ@mail.gmail.com>
+ <CAKywueRWJxk9KuuZe6Ovb7MhxXsbsE-_7WJG05hAPTZ2o5m7mg@mail.gmail.com>
+ <87y2gmk3ap.fsf@suse.com> <877do6zdqp.fsf@cjr.nz> <CAN05THQjj04sQpcjvLqs+fmbdeu=jftM+GdeJnQMg33OEq6xEg@mail.gmail.com>
+ <CAKywueSTX9hq5Vun3V6foQeLJ8Fngye0__U-gj73evKDwNLEKg@mail.gmail.com>
+ <CAN05THQGBvLy6c+DK1eOuj2VKXTXONZkk8Je+iLM2DZFmHsPBA@mail.gmail.com>
+ <CAH2r5mttuSULg0UvKuNRydtkNAP1QRZVXQuNaaHGFLRrvfSnfQ@mail.gmail.com>
+ <CANT5p=o5pjCLUzLv2=i+T+7XE=0Wxcg3p_TSbAeARAWNzmmgEw@mail.gmail.com>
+ <CANT5p=qrRVaN4yrqHz5fS2fC6_K1XqAiR4Bv9rTX6oxgg3j8gg@mail.gmail.com> <CANT5p=oqqTimiNgheGB9ntjpGzCNZrS_CcwkU=zUk4gZ+yD7TA@mail.gmail.com>
+In-Reply-To: <CANT5p=oqqTimiNgheGB9ntjpGzCNZrS_CcwkU=zUk4gZ+yD7TA@mail.gmail.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Tue, 26 Jan 2021 15:19:22 -0800
+Message-ID: <CAKywueQ_VR8W25VAqZXuQWEJH-3Pq5ec0QYcfT_Gngk=b2ti_A@mail.gmail.com>
+Subject: Re: [PATCH] cifs: do not fail __smb_send_rqst if non-fatal signals
+ are pending
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-In 24e0a1eff9e2, the noauto option was missed when migrating to the new
-mount API. As a result, users with noauto in their fstab mount options
-are now unable to mount cifs filesystems, as they'll receive an "Unknown
-parameter" error.
+=D0=BF=D0=BD, 25 =D1=8F=D0=BD=D0=B2. 2021 =D0=B3. =D0=B2 09:21, Shyam Prasa=
+d N <nspmangalore@gmail.com>:
+>
+> One more point:
+>         if (signal_pending(current) && (total_len !=3D send_length)) {
+> <<<<< Shouldn't this be replaced by fatal_signal_pending too?
+>                 cifs_dbg(FYI, "signal is pending after attempt to send\n"=
+);
+> -               rc =3D -EINTR;
+> +               rc =3D -ERESTARTSYS;
+>         }
+>
 
-This restores the old behaviour of ignoring noauto if it's given.
+At this point we are returning from the function anyway and would want
+to return a proper error code if a signal is pending. So, I think
+checking for any signal is correct here.
 
-Fixes: 24e0a1eff9e2 ("cifs: switch to new mount api")
-Signed-off-by: Adam Harvey <adam@adamharvey.name>
----
- fs/cifs/fs_context.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-index 076bcadc756a..0edde5c66985 100644
---- a/fs/cifs/fs_context.c
-+++ b/fs/cifs/fs_context.c
-@@ -171,6 +171,7 @@ const struct fs_parameter_spec smb3_fs_parameters[] = {
- 	fsparam_flag("noatime", Opt_ignore),
- 	fsparam_flag("relatime", Opt_ignore),
- 	fsparam_flag("_netdev", Opt_ignore),
-+	fsparam_flag("noauto", Opt_ignore),
- 	fsparam_flag_no("suid", Opt_ignore),
- 	fsparam_flag_no("exec", Opt_ignore),
- 	fsparam_flag_no("dev", Opt_ignore),
--- 
-2.30.0
-
+--
+Best regards,
+Pavel Shilovsky
