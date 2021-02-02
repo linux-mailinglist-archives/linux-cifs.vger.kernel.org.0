@@ -2,176 +2,135 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED16730C8D0
-	for <lists+linux-cifs@lfdr.de>; Tue,  2 Feb 2021 19:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7382430C985
+	for <lists+linux-cifs@lfdr.de>; Tue,  2 Feb 2021 19:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237949AbhBBSBE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 2 Feb 2021 13:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S238414AbhBBSUf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 2 Feb 2021 13:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238110AbhBBR7K (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 2 Feb 2021 12:59:10 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C5FC061788
-        for <linux-cifs@vger.kernel.org>; Tue,  2 Feb 2021 09:58:30 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id d2so23959335edz.3
-        for <linux-cifs@vger.kernel.org>; Tue, 02 Feb 2021 09:58:30 -0800 (PST)
+        with ESMTP id S238470AbhBBSSs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 2 Feb 2021 13:18:48 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D13C0613ED
+        for <linux-cifs@vger.kernel.org>; Tue,  2 Feb 2021 10:18:08 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g10so5729993eds.2
+        for <linux-cifs@vger.kernel.org>; Tue, 02 Feb 2021 10:18:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=1Fg9Cg1bRF7U4QfGthw1dSAbOWbWjadgBrlqJMHuQ4c=;
-        b=PXU4JXGpfeGWjz162LIQsTXmR2OsYh2/MmdUeccD0188PH2b17KeX7HyA2NigrJsYL
-         Gkz9f1ggvNujtu0fDo9fqmFcMH4arcDAlBQ+ryuWk8ykqgVvmt132MJ+/u/+lAKq3m5i
-         Zfbg+s3rXC6E7/Ugb3mI7ejFpf9lNz82SjBjCkqg+94yiKmz03LdMCRvbHanYZh3t0VL
-         eGTnxYo0xjm6E3wyCws4IptTALeaKQWLnJV0UK0RfPQ6QE6kHBk2+0aiZqxVpidDzZBC
-         ZSAu4wbc1UroiESAT+IsnD4uGFUP14sNh8664dxBtfoTie/oe/vqSpoS4NcEMQ2aesPJ
-         38hg==
+        bh=T9gj7OIrcg4lBNUAaeh50TT0hOOC1PeFaOKk618aYA0=;
+        b=XdKY9wg3RbeHs4QwexiuHUVySSkXEM+9HGt1ry8LylirKDSlwC1gWywqj4Hpv/ZYOc
+         RbrepXaV9lxTAs57cZ/5G84XbevRh9YLrgydx7xWAYD/+iQ5SH2XhXDQm9Wa7bGUftDY
+         gWoar2U1K5ohBoDYKWBlzGbyLfEoa5UyD0DUB3Eepb1q84lnb3yOm0CYeW67MHuqWvQn
+         uREZPBTym5o7LykfjujQAvKb4GtHLBwi5v9cA+2XUs7flelce5ti7kNrZJDim25UjVCc
+         9P2EgeOdfyPrlUfPRN5VsoH9fWJn1OU9UOXo9taux9Im29ETftjuNblp/58lPvOzHvJq
+         nwuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1Fg9Cg1bRF7U4QfGthw1dSAbOWbWjadgBrlqJMHuQ4c=;
-        b=aahe5xKsJGUV+kp+PAFcCl4dwehlilcpm+VTcnYOmpltcaOLSBGCSGQc7DIX+/9oWC
-         xLnMQeVf7TakAIp7U4bYy3Sc5yEwIFOHH+tU/cF4FJBBia0fGBKsTy8YACC7IJXuhGXL
-         R2ZMGC8Ge/MXAEfnrihI65i/uya8zuPJd8ucZK1QZK/UD/bePAn2b3mUz2pbfvjFCb4h
-         ukWT7HZMCEyPvGIuFVcM969iiOLSEC31BfBkUGcfKTwPkQ21/H8o85PWTgOIjAk1l8lC
-         SWCGkjpdwW4mCOIT2reu6F5Yuxj6AMpjdZxupo1RU2j54fFDpX+L+UknpwMfDxfHC0SF
-         lSDQ==
-X-Gm-Message-State: AOAM531tazc/Pof12JQmuFiGwi8013CGA4/bKoV5LtO1zj0W13KayvBd
-        hNDioXiE5nemAqtjVdEf2mYnAL6yKk5mVh4pzA==
-X-Google-Smtp-Source: ABdhPJwIWMLIu7JcHLqXSP830Fx9KJmkrjVxo72YzV1O7VRhIUX/bwn867Ns6cQjQQlzHJViGkw2HPAaBnAwpgtkoXk=
-X-Received: by 2002:a50:8b66:: with SMTP id l93mr123387edl.384.1612288708881;
- Tue, 02 Feb 2021 09:58:28 -0800 (PST)
+        bh=T9gj7OIrcg4lBNUAaeh50TT0hOOC1PeFaOKk618aYA0=;
+        b=Z/VQzpHiHm1fiUzGMzQzdb2B7e5AtMPAF/tjuWhxqpPY+53NoUDwTVGAObxhvrYnUS
+         2ka/8ZUXjU0WHKJR57IQe0Vk+/8ln7/sl8NO8tVXEYYATd7x4o1bwhFCWpjQ/WK1kC7m
+         /SdSwOmKa8s+Elv4+mEDWY5o7OmQ3W0Y7k5zzrvFMCgOFnzTh+Vu9iahNhPfH/XhWpLB
+         ljoG7vn1jL2Ob7dQvqsFw8nTzH8YFExST77L+CTyHmdrAyrEm0ovrffnYgwZ+6ZYTWCY
+         ZwP79XIqXxA/9fpVVVakn2Uow/CLunV94d3ftt9ODJUrT201yei+0RT4q+ZU26oCOKSc
+         dZQw==
+X-Gm-Message-State: AOAM531/X6cUJVpHCpATPEQnY8p6BgMv8hSJZcMp6KzCjFGuEgCqt4f8
+        JZ9qPlCsU4w0RGXmiUbzqmyEQW/11BTQaqUPPw==
+X-Google-Smtp-Source: ABdhPJyCzPC5x/ea1IhmEPFQ6pgabpt+wsz+/oE4HzettxMPaFfoip1Uq1Ilo7nPVx7avbnk5vwkDZZ7IPDIk3yF4Ao=
+X-Received: by 2002:a50:fd84:: with SMTP id o4mr219047edt.340.1612289886924;
+ Tue, 02 Feb 2021 10:18:06 -0800 (PST)
 MIME-Version: 1.0
-References: <CAH2r5mt7Z2wJTLFp1T0qtsrJb95FPKoffBN9WBM=JAi=HcyiOg@mail.gmail.com>
-In-Reply-To: <CAH2r5mt7Z2wJTLFp1T0qtsrJb95FPKoffBN9WBM=JAi=HcyiOg@mail.gmail.com>
+References: <20210202010105.236700-1-pshilov@microsoft.com> <40f473ff-bdd5-059c-36f1-d181eaa71200@talpey.com>
+In-Reply-To: <40f473ff-bdd5-059c-36f1-d181eaa71200@talpey.com>
 From:   Pavel Shilovsky <piastryyy@gmail.com>
-Date:   Tue, 2 Feb 2021 09:58:17 -0800
-Message-ID: <CAKywueTvFL7GA3he21XjX8fig73iT5OCAd=JjBq6OOwOavcehA@mail.gmail.com>
-Subject: Re: PATCH] smb3: include current dialect (SMB3.1.1) when version 3 or
- greater requested on mount
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
+Date:   Tue, 2 Feb 2021 10:17:55 -0800
+Message-ID: <CAKywueRkvEjaZ+u4QhG+aVKFKUf-smWRqLmeeRC-2=4xU=zmDA@mail.gmail.com>
+Subject: Re: [PATCH] CIFS: Wait for credits if at least one request is in flight
+To:     Tom Talpey <tom@talpey.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-=D0=BF=D0=BD, 1 =D1=84=D0=B5=D0=B2=D1=80. 2021 =D0=B3. =D0=B2 22:15, Steve =
-French <smfrench@gmail.com>:
->
-> SMB3.1.1 is the newest, and preferred dialect, and is included in
-> the requested dialect list by default (ie if no vers=3D is specified
-> on mount) but it should also be requested if SMB3 or later is requested
-> (vers=3D3 instead of a specific dialect: vers=3D2.1, vers=3D3.02 or vers=
-=3D3.0).
->
-> Currently specifying "vers=3D3" only requests smb3.0 and smb3.02 but this
-> patch fixes it to also request smb3.1.1 dialect, as it is the newest
-> and most secure dialect and is a "version 3 or later" dialect (the intent
-> of "vers=3D3").
->
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> Suggested-by: Pavel Shilovsky <pshilov@microsoft.com>
-> ---
->  fs/cifs/fs_context.c |  2 +-
->  fs/cifs/smb2pdu.c    | 19 +++++++++++++------
->  2 files changed, 14 insertions(+), 7 deletions(-)
->
-> diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-> index 5111aadfdb6b..479c24695281 100644
-> --- a/fs/cifs/fs_context.c
-> +++ b/fs/cifs/fs_context.c
-> @@ -391,7 +391,7 @@ cifs_parse_smb_version(char *value, struct
-> smb3_fs_context *ctx, bool is_smb3)
->   ctx->vals =3D &smb3any_values;
->   break;
->   case Smb_default:
-> - ctx->ops =3D &smb30_operations; /* currently identical with 3.0 */
-> + ctx->ops =3D &smb30_operations;
->   ctx->vals =3D &smbdefault_values;
->   break;
->   default:
-> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> index 794fc3b68b4f..52625549c3b5 100644
-> --- a/fs/cifs/smb2pdu.c
-> +++ b/fs/cifs/smb2pdu.c
-> @@ -814,8 +814,9 @@ SMB2_negotiate(const unsigned int xid, struct cifs_se=
-s *ses)
->      SMB3ANY_VERSION_STRING) =3D=3D 0) {
->   req->Dialects[0] =3D cpu_to_le16(SMB30_PROT_ID);
->   req->Dialects[1] =3D cpu_to_le16(SMB302_PROT_ID);
-> - req->DialectCount =3D cpu_to_le16(2);
-> - total_len +=3D 4;
-> + req->Dialects[2] =3D cpu_to_le16(SMB311_PROT_ID);
-> + req->DialectCount =3D cpu_to_le16(3);
-> + total_len +=3D 6;
->   } else if (strcmp(server->vals->version_string,
->      SMBDEFAULT_VERSION_STRING) =3D=3D 0) {
->   req->Dialects[0] =3D cpu_to_le16(SMB21_PROT_ID);
-> @@ -848,6 +849,8 @@ SMB2_negotiate(const unsigned int xid, struct cifs_se=
-s *ses)
->   memcpy(req->ClientGUID, server->client_guid,
->   SMB2_CLIENT_GUID_SIZE);
->   if ((server->vals->protocol_id =3D=3D SMB311_PROT_ID) ||
-> +     (strcmp(server->vals->version_string,
-> +      SMB3ANY_VERSION_STRING) =3D=3D 0) ||
->       (strcmp(server->vals->version_string,
->        SMBDEFAULT_VERSION_STRING) =3D=3D 0))
->   assemble_neg_contexts(req, server, &total_len);
-> @@ -883,6 +886,9 @@ SMB2_negotiate(const unsigned int xid, struct cifs_se=
-s *ses)
->   cifs_server_dbg(VFS,
->   "SMB2.1 dialect returned but not requested\n");
->   return -EIO;
-> + } else if (rsp->DialectRevision =3D=3D cpu_to_le16(SMB311_PROT_ID)) {
+I agree that the error code may not be ideal. Shyam has a WIPto
+replace it with EBUSY but EDEADLK may be a good alternative too. For
+this patch I would prefer not to change the error code and only fix
+the bug to allow less ricky backporting.
 
-I think we should include comment "/* ops set to 3.0 by default for
-default so update */" as in smbdefault case to improve readability.
+Yes. If the server is tight on resources or just gives us less credits
+for other reasons (e.g. requests are coming out of order and the
+server delays granting more credits until it receives a missing mid)
+and we exhausted most available credits there may be situations when
+we try to send a compound request but we don't have enough credits. At
+this point the client needs to decide if it should wait for credits or
+fail a request. If at least one request is in flight there is a high
+probability that the server returns enough credits to satisfy the
+compound request (which are usually 3-4 credits long). So, we don't
+want to fail the request in this case.
 
-> + server->ops =3D &smb311_operations;
-> + server->vals =3D &smb311_values;
->   }
->   } else if (strcmp(server->vals->version_string,
->      SMBDEFAULT_VERSION_STRING) =3D=3D 0) {
-> @@ -1042,10 +1048,11 @@ int smb3_validate_negotiate(const unsigned int
-> xid, struct cifs_tcon *tcon)
->   SMB3ANY_VERSION_STRING) =3D=3D 0) {
->   pneg_inbuf->Dialects[0] =3D cpu_to_le16(SMB30_PROT_ID);
->   pneg_inbuf->Dialects[1] =3D cpu_to_le16(SMB302_PROT_ID);
-> - pneg_inbuf->DialectCount =3D cpu_to_le16(2);
-> - /* structure is big enough for 3 dialects, sending only 2 */
-> + pneg_inbuf->Dialects[2] =3D cpu_to_le16(SMB311_PROT_ID);
-> + pneg_inbuf->DialectCount =3D cpu_to_le16(3);
-> + /* SMB 2.1 not included so subtract one dialect from len */
->   inbuflen =3D sizeof(*pneg_inbuf) -
-> - (2 * sizeof(pneg_inbuf->Dialects[0]));
-> + (sizeof(pneg_inbuf->Dialects[0]));
->   } else if (strcmp(server->vals->version_string,
->   SMBDEFAULT_VERSION_STRING) =3D=3D 0) {
->   pneg_inbuf->Dialects[0] =3D cpu_to_le16(SMB21_PROT_ID);
-> @@ -1053,7 +1060,7 @@ int smb3_validate_negotiate(const unsigned int
-> xid, struct cifs_tcon *tcon)
->   pneg_inbuf->Dialects[2] =3D cpu_to_le16(SMB302_PROT_ID);
->   pneg_inbuf->Dialects[3] =3D cpu_to_le16(SMB311_PROT_ID);
->   pneg_inbuf->DialectCount =3D cpu_to_le16(4);
-> - /* structure is big enough for 3 dialects */
-> + /* structure is big enough for 4 dialects */
->   inbuflen =3D sizeof(*pneg_inbuf);
->   } else {
->   /* otherwise specific dialect was requested */
->
-> --
-> Thanks,
->
-> Steve
-
-Looks good overall.
-
-Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
 --
 Best regards,
 Pavel Shilovsky
+
+=D0=BF=D0=BD, 1 =D1=84=D0=B5=D0=B2=D1=80. 2021 =D0=B3. =D0=B2 19:39, Tom Ta=
+lpey <tom@talpey.com>:
+>
+> It's reasonable to fail a request that can never have sufficient
+> credits to send, but EOPNOTSUPP is a really strange error to return.
+> The operation might work if the payload were smaller, right? So,
+> would a resource error such as EDEADLK be more meaningful, and allow
+> the caller to recover, even?
+>
+> Also, can you elaborate on why this is only triggered when no
+> requests at all are in flight? Or is this some kind of corner
+> case for requests that need every credit the server currently
+> is offering?
+>
+> Tom.
+>
+> On 2/1/2021 8:01 PM, Pavel Shilovsky wrote:
+> > Currently we try to guess if a compound request is going to succeed
+> > waiting for credits or not based on the number of requests in flight.
+> > This approach doesn't work correctly all the time because there may
+> > be only one request in flight which is going to bring multiple credits
+> > satisfying the compound request.
+> >
+> > Change the behavior to fail a request only if there are no requests
+> > in flight at all and proceed waiting for credits otherwise.
+> >
+> > Cc: <stable@vger.kernel.org> # 5.1+
+> > Signed-off-by: Pavel Shilovsky <pshilov@microsoft.com>
+> > ---
+> >   fs/cifs/transport.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+> > index 4ffbf8f965814..84f33fdd1f4e0 100644
+> > --- a/fs/cifs/transport.c
+> > +++ b/fs/cifs/transport.c
+> > @@ -659,10 +659,10 @@ wait_for_compound_request(struct TCP_Server_Info =
+*server, int num,
+> >       spin_lock(&server->req_lock);
+> >       if (*credits < num) {
+> >               /*
+> > -              * Return immediately if not too many requests in flight =
+since
+> > -              * we will likely be stuck on waiting for credits.
+> > +              * Return immediately if no requests in flight since
+> > +              * we will be stuck on waiting for credits.
+> >                */
+> > -             if (server->in_flight < num - *credits) {
+> > +             if (server->in_flight =3D=3D 0) {
+> >                       spin_unlock(&server->req_lock);
+> >                       return -ENOTSUPP;
+> >               }
+> >
