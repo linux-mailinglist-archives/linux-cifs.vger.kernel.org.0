@@ -2,124 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7898330D2AC
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Feb 2021 05:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8629D30DB32
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Feb 2021 14:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbhBCEry (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 2 Feb 2021 23:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbhBCEry (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 2 Feb 2021 23:47:54 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7752C061573
-        for <linux-cifs@vger.kernel.org>; Tue,  2 Feb 2021 20:47:13 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id f19so26795665ljn.5
-        for <linux-cifs@vger.kernel.org>; Tue, 02 Feb 2021 20:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3J63keXfr9LZO1hJwDvknldoqsmfc7t5D/MRBTVB2ts=;
-        b=ojx3+BWDd1zTJb8zUTuhTHHCAw3fMD/x/qnAC8U1sRJ1ZKHz3QBt4enfKfWtzWfhMV
-         YiKbRUPE+6JFB2AclZ7cBX4PNjhYTy1tUo+oD5L/aQaO07gTVuug1WPBPGZvnp8lXwbj
-         5G3XMpEqhUFiWSJsHpBH/nq0gkceEh8C0QayRZo9CNPTaMJ7r4VcpdJa41A1QnaMVCdZ
-         Ae2/y2+oONGIIxVwV/T1gA6lN8YlZp9morXBpOr9qPjRWv/Z05iwwaZ53x0zuHO6MRpl
-         z7yFUWlj5I3F65nJTbajW6OUervQG8jQr2/rX+QxHsUWAhg8ZQwKKhUjzY8r9rsEejGN
-         iTIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3J63keXfr9LZO1hJwDvknldoqsmfc7t5D/MRBTVB2ts=;
-        b=hQ9egpZnPsLGj1CCE+7+Pi+DB+gxdIr2DMaUewOJRfRy15U7Z+uDIyUnWiy+L00n9e
-         nlPljHPLEBxrUlQ5ZoYS6QJVJSnHoikOs6y48E13BZn8pbK+FhfCzH7g7DvuE7RYVapQ
-         mBBWR/liCZ39xfvB4mySAcgj8yoyCHpOQssPIpiasfaZA7gHzI6XWbfC7sMhSXkIXPMR
-         s/k2MTY/WQb4fipnB2NO1ZzVZWZ1ES5dL2ATc9NqqSyQFvU4DqVCzPfqlSzkmFZp6JMH
-         sF8v2GW7gYOYHukSCSjGjebLeh7TULzMolxLBl4y+GOmApWN+9JklzA1PXgaIgwun1gy
-         kj8w==
-X-Gm-Message-State: AOAM531EGShEIy3YCSJ2fMDV8t6/AkF4sB40LXvnkTkLy2KeHhGfSKPR
-        qkJgx+M5yn9t/Ie+q3x/gu1t1XGzqU3XDTnyePA=
-X-Google-Smtp-Source: ABdhPJxDK6ZGHGEG0C8kNQYgRf8NFn0U2tVV2WA3HGIfCSiAPVnyTo2vsuFMT0BGTFE+tFnBjQqKS7BxAcvaOMZ/iNE=
-X-Received: by 2002:a2e:8007:: with SMTP id j7mr679136ljg.406.1612327631900;
- Tue, 02 Feb 2021 20:47:11 -0800 (PST)
+        id S231749AbhBCN0l (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 3 Feb 2021 08:26:41 -0500
+Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:49464 "EHLO
+        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231587AbhBCN0j (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 3 Feb 2021 08:26:39 -0500
+X-Greylist: delayed 21638 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 08:26:07 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=kpCxYUDs/Q6wFBgfe0+bmSS68M
+        zcRYWno/roH+XKBInhEBiKEf4sx8y5/VefxhpIs/9qNGv8WOvWRCUN26vxTSG7tj0WdQmOoQFUzGd
+        zFM6BBul3KRpIf0JTZbu6Gc0tILR3OADCzdq2jQpAr+iKaIbhn9Rm18NZ+GP5i3xtzfKEgr4eVlJ0
+        3dgYZqwo3IWhtiIKzeiK2Z56Y1fDICQvb9Zp0KBuIYmQ0tUoaRYeeoyaIyZf2v3dlk5hTiB2kGqOn
+        CMjmGpZsfobBwAkx8N1sOiSN6V0/cWmqmUGnX19FS5LdTSeXjM2y5OQ+CKiYPJhu4jYoICJGCThbx
+        uLC5ik7A==;
+Received: from [127.0.0.1] (port=46362 helo=dot.dotlines.com.sg)
+        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
+        (envelope-from <noreply@carnivalassure.com.bd>)
+        id 1l7CVi-0005Z8-7H; Wed, 03 Feb 2021 01:23:34 -0600
 MIME-Version: 1.0
-References: <20210202195538.243256-1-pshilov@microsoft.com> <a435fcf3-2b6c-1697-5efa-78b3617729a4@talpey.com>
-In-Reply-To: <a435fcf3-2b6c-1697-5efa-78b3617729a4@talpey.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 2 Feb 2021 22:47:00 -0600
-Message-ID: <CAH2r5mvM+vAHphxv4zL4Ubk57YqBo7GoPpPw2=nN9qMFOYwPRQ@mail.gmail.com>
-Subject: Re: [PATCH v2] CIFS: Wait for credits if at least one request is in flight
-To:     Tom Talpey <tom@talpey.com>
-Cc:     Pavel Shilovsky <piastryyy@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Wed, 03 Feb 2021 01:23:33 -0600
+From:   Francois Pinault <noreply@carnivalassure.com.bd>
+To:     undisclosed-recipients:;
+Subject: Hello/Hallo
+Organization: Donation
+Reply-To: francoispinault1936@outlook.com
+Mail-Reply-To: francoispinault1936@outlook.com
+Message-ID: <da06bea50ecb79383d03c55bea3716bf@carnivalassure.com.bd>
+X-Sender: noreply@carnivalassure.com.bd
+User-Agent: Roundcube Webmail/1.3.15
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
+X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
+X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-updated patch (had minor merge conflict) and added the two reviewed-by
-and tentatively merged into cifs-2.6.git
-
-On Tue, Feb 2, 2021 at 3:37 PM Tom Talpey <tom@talpey.com> wrote:
->
-> Updated comment looks good!
->
-> Reviewed-By: Tom Talpey <tom@talpey.com>
->
-> On 2/2/2021 2:55 PM, Pavel Shilovsky wrote:
-> > Currently we try to guess if a compound request is going to succeed
-> > waiting for credits or not based on the number of requests in flight.
-> > This approach doesn't work correctly all the time because there may
-> > be only one request in flight which is going to bring multiple credits
-> > satisfying the compound request.
-> >
-> > Change the behavior to fail a request only if there are no requests
-> > in flight at all and proceed waiting for credits otherwise.
-> >
-> > Cc: <stable@vger.kernel.org> # 5.1+
-> > Signed-off-by: Pavel Shilovsky <pshilov@microsoft.com>
-> > ---
-> >   fs/cifs/transport.c | 18 +++++++++++++++---
-> >   1 file changed, 15 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-> > index 4ffbf8f965814..eab7940bfebef 100644
-> > --- a/fs/cifs/transport.c
-> > +++ b/fs/cifs/transport.c
-> > @@ -659,10 +659,22 @@ wait_for_compound_request(struct TCP_Server_Info *server, int num,
-> >       spin_lock(&server->req_lock);
-> >       if (*credits < num) {
-> >               /*
-> > -              * Return immediately if not too many requests in flight since
-> > -              * we will likely be stuck on waiting for credits.
-> > +              * If the server is tight on resources or just gives us less
-> > +              * credits for other reasons (e.g. requests are coming out of
-> > +              * order and the server delays granting more credits until it
-> > +              * processes a missing mid) and we exhausted most available
-> > +              * credits there may be situations when we try to send
-> > +              * a compound request but we don't have enough credits. At this
-> > +              * point the client needs to decide if it should wait for
-> > +              * additional credits or fail the request. If at least one
-> > +              * request is in flight there is a high probability that the
-> > +              * server will return enough credits to satisfy this compound
-> > +              * request.
-> > +              *
-> > +              * Return immediately if no requests in flight since we will be
-> > +              * stuck on waiting for credits.
-> >                */
-> > -             if (server->in_flight < num - *credits) {
-> > +             if (server->in_flight == 0) {
-> >                       spin_unlock(&server->req_lock);
-> >                       return -ENOTSUPP;
-> >               }
-> >
-
 
 
 -- 
-Thanks,
+Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
+können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
 
-Steve
+Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
+mich umgehend unter francoispinault1936@outlook.com
+
+Mit freundlichen Grüßen,
+Herr Francois Pinault
