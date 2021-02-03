@@ -2,68 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8629D30DB32
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Feb 2021 14:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416C430D806
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Feb 2021 12:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbhBCN0l (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 3 Feb 2021 08:26:41 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:49464 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231587AbhBCN0j (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 3 Feb 2021 08:26:39 -0500
-X-Greylist: delayed 21638 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 08:26:07 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=kpCxYUDs/Q6wFBgfe0+bmSS68M
-        zcRYWno/roH+XKBInhEBiKEf4sx8y5/VefxhpIs/9qNGv8WOvWRCUN26vxTSG7tj0WdQmOoQFUzGd
-        zFM6BBul3KRpIf0JTZbu6Gc0tILR3OADCzdq2jQpAr+iKaIbhn9Rm18NZ+GP5i3xtzfKEgr4eVlJ0
-        3dgYZqwo3IWhtiIKzeiK2Z56Y1fDICQvb9Zp0KBuIYmQ0tUoaRYeeoyaIyZf2v3dlk5hTiB2kGqOn
-        CMjmGpZsfobBwAkx8N1sOiSN6V0/cWmqmUGnX19FS5LdTSeXjM2y5OQ+CKiYPJhu4jYoICJGCThbx
-        uLC5ik7A==;
-Received: from [127.0.0.1] (port=46362 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVi-0005Z8-7H; Wed, 03 Feb 2021 01:23:34 -0600
+        id S233804AbhBCK76 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 3 Feb 2021 05:59:58 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47611 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233575AbhBCK7y (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 3 Feb 2021 05:59:54 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DVzFp3q1Cz9tl5;
+        Wed,  3 Feb 2021 21:59:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1612349950;
+        bh=lL0ZqYRnBF/nBTx0ONSa4yjnKXbiIM0pRBjh+q7JYUA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=caVAH5i27DxQXuKrjuyHFbUc8knic9+nAAU/mW1mr1LAImnPsz7WGUeJISSb/8Fjg
+         KD8A2OpvI2o47X7gZVvNZMWfeoa3VSHf5enT81mMpYs9ECnwUuPxvXco2fkFSaFS+E
+         iUEQiMEIcOnyMp9ooHw9cJtLdbjPjVVaVByflS84H5SVzyo4NBe1Ihz5BhY/Ys3UlN
+         umuczn5GiNdqp23r6grLT/6dUfMt3FLCbXbFTSBu+DOTQVBHi32nRiW2acMcOM51vn
+         9VWyRkt5RXqEkL1qlVLc8Pe/Liyysf603cH/LBiigsdVnv9O5JcBvFlCxbY2yD38qU
+         xec+AY0evsy+Q==
+Date:   Wed, 3 Feb 2021 21:59:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20210203215909.5713dbe6@canb.auug.org.au>
 MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:33 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <da06bea50ecb79383d03c55bea3716bf@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: multipart/signed; boundary="Sig_/g5f46r=fyf1WQL/csWOdZCe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+--Sig_/g5f46r=fyf1WQL/csWOdZCe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
--- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
+Commit
 
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
+  37595a5c8a51 ("smb3: fix crediting for compounding when only one request =
+in flight")
 
-Mit freundlichen Grüßen,
-Herr Francois Pinault
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/g5f46r=fyf1WQL/csWOdZCe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAagf0ACgkQAVBC80lX
+0GzBtwf9FlpWVEdcCGMwGbXL1f7152S0ONqPQv6g8VW8pNsHcuG6JJNwNlAkl/O5
+O2jldGe5j7InGjT/ZadLqFiexVi2IHyBfzG2atUkGpBUNWnWdjYyQLU7aE6xZuLG
+oabtJ2fJRzeCCL9yn6q/N2Wq8KM5KxuNdaQOirDA5HQbuJtYbSXnbhapWGY6ulhP
+a+JfiBktdboCqwREq5XZBIs5HvZHXhZNELvX/yP46tjeiIOS6XTbLP6yYuyC7Zhm
+9KIYdDLvefgPSTAe+fLW3tIJkXkdfdE2ksaoNxO2a2Zkg5gpaRVUJEOQg8xBFLwB
+rtz9gxTrCWOSRo7z2QR1QKY4sN5lrw==
+=1dgi
+-----END PGP SIGNATURE-----
+
+--Sig_/g5f46r=fyf1WQL/csWOdZCe--
