@@ -2,68 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B79311DB8
-	for <lists+linux-cifs@lfdr.de>; Sat,  6 Feb 2021 15:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0610311F56
+	for <lists+linux-cifs@lfdr.de>; Sat,  6 Feb 2021 19:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbhBFOh1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 6 Feb 2021 09:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S230029AbhBFS3Z (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 6 Feb 2021 13:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbhBFOh0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 6 Feb 2021 09:37:26 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA861C061788
-        for <linux-cifs@vger.kernel.org>; Sat,  6 Feb 2021 06:36:46 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id m7so10730816oiw.12
-        for <linux-cifs@vger.kernel.org>; Sat, 06 Feb 2021 06:36:46 -0800 (PST)
+        with ESMTP id S229839AbhBFS3Y (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 6 Feb 2021 13:29:24 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050CC06174A;
+        Sat,  6 Feb 2021 10:28:43 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id v15so11284812ljk.13;
+        Sat, 06 Feb 2021 10:28:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=p+t4/+MvfgaC6xRKtfrE3YLnqtmJg3MOQZR/UItVg1wCiBizAuPimkXqN5AuU5wwkD
-         r6ZVA68dkjDg/IpRldSm6Liq/2eKO3SIPRuWTQGm0PwU2yDNiHtsEcm9dWUFYaX0d4u0
-         LwZl2ooP22M1bDeEz1ehaP/77ipCZZ527sAJgVaT+SyiIJtj8QAzI3JNdp+ABPeGa6vW
-         37LQCKTaO3J5QUsDoA8BqGhGLXdJyApwnici7l/Q1UQMHZrrNr3G10X007ulaHi4A1w/
-         om8WFEwfqgGqpXp94JXWIbsteQaktSSFniiBCOjjL0U1oW4XihLr4SlpbcUrDKxVnmVv
-         ICYg==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=BiidCW4wV5eXIdnRn47SAnhjV05lGSBSg2/37p5Knr0=;
+        b=F6jKLPOSRFDOYdd9ZdBTcA2Xzz4rPVfLdR5PV/BcGk4AatlNUWxmr/U8lhBn60oau7
+         m0iQkb+cF/mkpUjqesUlfstei5nGXE4EwuKYNwiPLE8mMGNRJSc1A7UpS+7sO7zhi6jp
+         GsPcaj6xt3tOSHpBUTMnr6toRFFRZpFrtyLYCQGvcl1XqgYubmSewipo7IkAS1nS8Fg4
+         7ODbZ145M9+HxdazJabirIOOCi6OEAJMmHXUoKo95IkETPR/GJNO2R3rRZFGk7jugMCf
+         chGUmqXfzodOL0rr8yBUNPfXFCv7HZwlZ4Mi8le0TH3ta/wpYbf2fj2Qx9XV1sf79ses
+         tEYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=mIstMWNuRQG+VWltVMqw8ICsJc3d0DBCP+o66hcW5wMkJeWWhGwJGt+fudZgXXnxqd
-         gl//1ekzN4M+q15SQ6rRflIYwGWFfpGrHDFH/n+vJVQt0Tf35YhLBA9IgiEWUtEcXqen
-         Ll+hAG3zK2d6zeMxfTJyl4zBSqRCHBXYADQzPIKSL3DRToY9EkXsJ35JQ5RfVEM3c+JN
-         gTBxN41QgHigNXO5n9Z2MiQL00ecbRdkk2LxDr5DY6XD2cBotmrRo0KcpNyooOxGmZVk
-         c9u7TBiVmPBRiGHh4zKjcj22zLHIov5lYig36VjHLfuq02nXwkqLg4PfEu5xK8qTPzQP
-         bYtg==
-X-Gm-Message-State: AOAM530Dmd6AA8MWAnjMMsGGNIdhPwX5uYQEssQcAO4r/pa3VrHLPdgM
-        i3aIu8f0YQ+E/eycfGh7F8r9N2gCO8j1PvJKK7Q=
-X-Google-Smtp-Source: ABdhPJz55x9yuDty8zfLGT1MaMflxj/xVXVRtic8MCDIPZe12zsMM9AuBm3kFPYfsMCalzegFYLTpWlVqREw+1RLVxo=
-X-Received: by 2002:aca:d4ce:: with SMTP id l197mr6048372oig.36.1612622206208;
- Sat, 06 Feb 2021 06:36:46 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BiidCW4wV5eXIdnRn47SAnhjV05lGSBSg2/37p5Knr0=;
+        b=Uxaax5JwLWVL8cccD8OPCR2pRQ1Q8wt1WTm/BVNburZgABRn5fU52cCU4UD4EZ2hnl
+         Oa6o9Iivv7c7/6FPtPn5pMwsWBcm/xNR+55ynT6KIuZDwJnzn54xIdjjWRTPy/dPG+WX
+         bYudENP+BSuMgAs+GLB3J+sHj3lcYVtTFn9fJ02T+UVHDX//DHnZgIGS8WRcMHf6fams
+         FhEgfSSRgtG4uMeLDMS1vog09wHGwRQmamVvKo29c7sBp3D/HtPGk1APE8MUVt97F3iw
+         1IpK6qjiLqifoiu/KKeZzNOS7EQO6GCcbf2SMeIwCdzkXU8aFvus3kaII8kpH81gcKQZ
+         3DSg==
+X-Gm-Message-State: AOAM533nsaNd4isOM8SVyajhg5AkkRf10h+81YCdOb2RvFT2dUEjrXiF
+        nJLt4NK41Mlwyi5lvJ4E8KHqBE8kyAnhO/TVHxAsqE3ajUAf3g==
+X-Google-Smtp-Source: ABdhPJyHoAF7MXWGPwJnnmKQ9xDlepPowSf2WMQcAm3hhG0dGh6eIhwoyDsxrM65L8+gV2bmGgGsZzHR0KGPJkbqoZM=
+X-Received: by 2002:a2e:9d8e:: with SMTP id c14mr6299753ljj.477.1612636121872;
+ Sat, 06 Feb 2021 10:28:41 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:36:45 -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada@gmail.com>
-Date:   Sat, 6 Feb 2021 15:36:45 +0100
-Message-ID: <CAO_fDi-kuTCDy2D5hsg1mfX_qecK9WsfDoUw4r2HmgfGfBenjw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 6 Feb 2021 12:28:31 -0600
+Message-ID: <CAH2r5ms+1ZYrkBJvd9kuN0-tv1PTLzrHUxeGrhVOcEtHXkbqYQ@mail.gmail.com>
+Subject: [GIT PULL] cifs fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+Please pull the following changes since commit
+1048ba83fb1c00cd24172e23e8263972f6b5d9ac:
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+  Linux 5.11-rc6 (2021-01-31 13:50:09 -0800)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.11-rc6-smb3
+
+for you to fetch changes up to 21b200d091826a83aafc95d847139b2b0582f6d1:
+
+  cifs: report error instead of invalid when revalidating a dentry
+fails (2021-02-05 13:17:48 -0600)
+
+----------------------------------------------------------------
+3 small smb3 bug fixes for stable
+
+Test results: http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/491
+----------------------------------------------------------------
+Aurelien Aptel (1):
+      cifs: report error instead of invalid when revalidating a dentry fails
+
+Gustavo A. R. Silva (1):
+      smb3: Fix out-of-bounds bug in SMB2_negotiate()
+
+Pavel Shilovsky (1):
+      smb3: fix crediting for compounding when only one request in flight
+
+ fs/cifs/dir.c       | 22 ++++++++++++++++++++--
+ fs/cifs/smb2pdu.h   |  2 +-
+ fs/cifs/transport.c | 18 +++++++++++++++---
+ 3 files changed, 36 insertions(+), 6 deletions(-)
+
+-- 
+Thanks,
+
+Steve
