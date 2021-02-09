@@ -2,101 +2,99 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F08BB3158E6
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Feb 2021 22:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF360315956
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Feb 2021 23:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbhBIVpl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 9 Feb 2021 16:45:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47568 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234342AbhBIVM6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Feb 2021 16:12:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612905056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GNTsEzyoPupLf8uFnqlZZbYFAgQKr7S0geejlS5p7yc=;
-        b=AOXN/5SETaDVD0W5CvAYjmnNjWJLxlp5dduarqhlmqt2UG36BO1yOrEHiZvtjh01NJQAEn
-        vQkZLPx174RNcWWJKVpUL4Uc9aCkiTFjyoloke/0ycp3ZZSh6feke11jVqeG/aIJpdGiek
-        ImQ8s0gQgFCrKJX/ubgdkIEpOUDU3Fo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-246-zfMDn4FfM1uj1j28ps60sQ-1; Tue, 09 Feb 2021 16:10:52 -0500
-X-MC-Unique: zfMDn4FfM1uj1j28ps60sQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 199F0107ACC7;
-        Tue,  9 Feb 2021 21:10:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BDE796062F;
-        Tue,  9 Feb 2021 21:10:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wj-k86FOqAVQ4ScnBkX3YEKuMzqTEB2vixdHgovJpHc9w@mail.gmail.com>
-References: <CAHk-=wj-k86FOqAVQ4ScnBkX3YEKuMzqTEB2vixdHgovJpHc9w@mail.gmail.com> <591237.1612886997@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cachefs@redhat.com, CIFS <linux-cifs@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] fscache: I/O API modernisation and netfs helper library
+        id S234303AbhBIWVt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 9 Feb 2021 17:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233500AbhBIWPw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Feb 2021 17:15:52 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF9BC061A2A
+        for <linux-cifs@vger.kernel.org>; Tue,  9 Feb 2021 11:58:32 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id jj19so33872481ejc.4
+        for <linux-cifs@vger.kernel.org>; Tue, 09 Feb 2021 11:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4BZ08gZDuYzKG5eIuFN6xwxS5+LQ5I4Q6MVmw1iqtII=;
+        b=cZUBlsaFoDUSKQLdDTibQVXnOsouvdeXxwCBwARFizbswJeHKShNH1Y2tsxJoecwxv
+         rCjUq5uQn7nHjx7y+dBJpL7mpmRZxAbZDmAgMACrg4XwZrmNGrrLmACjYaVDtwyIxZVj
+         06sC1b0KlA3K0ga0KjcP9emNpz1QJfJ2Xi+lljx2m8/mzxCESoOf+Bc8S8wD6f0igPRb
+         ugdxa7hvYwF7h8Y5tBdXKSLbofxgSyhQpjNBiNtzY1VF4co4W8wuqmFX2+zn4Ncz/Ssi
+         DGH6ADIA6aTz6/En9EDGbPPWaTFx07KBhmvfXmxrQTGIFzQeCLmN7R6muB+VzA/vHXuJ
+         TuuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4BZ08gZDuYzKG5eIuFN6xwxS5+LQ5I4Q6MVmw1iqtII=;
+        b=h/vmopavVMes44KroP/QBHF/wS2RS6ZSDmce3/sPqwZyOUjVS8u5McY/r0jwFSU4ow
+         JeOAAXk4W0UK6Jxn/RqBJ9UXPiYpDRDcQsVOijZGI0SYyAPRhay49fNVz6KnyRV4Mwcl
+         QLc8Rf+FPBkn+2lEX7Y05i2rWnHQyE2L/wp5ZpA3webw/9LKqhfM+DIiM3alOxkquhC0
+         r4ZafkBJsMhto+7FedKvhJzru41utX0BxjZ8DRzZBH4AS117APo3rVz4XkZ5/2FEMFPU
+         tmw6GcYvEa7NhAwCLdsca7gzWCpURjLSyqqKRcCn+DgVfrWHQTnPS66XirOyV+aVeZld
+         5r+Q==
+X-Gm-Message-State: AOAM532q2Agn112JDYygJoG41kYbue9C1w1pNRmK09cFP6BtPLpubdsu
+        u3qBnju9veW52SsHjCX69SN8TgOxejXv3SSWjw==
+X-Google-Smtp-Source: ABdhPJx3wMGsOe6qQld89l1MH0cxzG6FCbwoykTSxxFEauhGgCpbllGMSIplpcZ4frBXM4F4fN8zpAdSovMJoiNFLpw=
+X-Received: by 2002:a17:907:9483:: with SMTP id dm3mr23860738ejc.120.1612900710844;
+ Tue, 09 Feb 2021 11:58:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <617684.1612905042.1@warthog.procyon.org.uk>
-Date:   Tue, 09 Feb 2021 21:10:42 +0000
-Message-ID: <617685.1612905042@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <CANT5p=qrx1bKAcJGG=hGBkvwHjQWLgTH3kJ+g-YdZL0yfBtA9A@mail.gmail.com>
+ <87mtwkno7q.fsf@suse.com> <CANT5p=qeEBwivE_Fc-Y4gj17d9nkU+ROPnZL=0BD3v_yRNBFtA@mail.gmail.com>
+ <87blctmqo0.fsf@suse.com>
+In-Reply-To: <87blctmqo0.fsf@suse.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Tue, 9 Feb 2021 11:58:19 -0800
+Message-ID: <CAKywueRd1u_7F6qRkSRCtg5exPeNBSXANUiFTrUfcigJGMeP3Q@mail.gmail.com>
+Subject: Re: [PATCH 1/4] cifs: New optype for session operations.
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 50fcb65920e8..1a1f9f4ae80a 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -1704,7 +1704,8 @@ static inline bool is_retryable_error(int error)
+ #define   CIFS_ECHO_OP      0x080    /* echo request */
+ #define   CIFS_OBREAK_OP   0x0100    /* oplock break request */
+ #define   CIFS_NEG_OP      0x0200    /* negotiate request */
+-#define   CIFS_OP_MASK     0x0380    /* mask request type */
++#define   CIFS_SESS_OP     0x2000    /* session setup request */
++#define   CIFS_OP_MASK     0x2380    /* mask request type */
 
-> The PG_fscache bit waiting functions are completely crazy. The comment
-> about "this will wake up others" is actively wrong,
+Why skipping 0x400, 0x800 and 0x1000 flags?
 
-You mean this?
+--
+Best regards,
+Pavel Shilovsky
 
-/**
- * unlock_page_fscache - Unlock a page pinned with PG_fscache
- * @page: The page
- *
- * Unlocks the page and wakes up sleepers in wait_on_page_fscache().  Also
- * wakes those waiting for the lock and writeback bits because the wakeup
- * mechanism is shared.  But that's OK - those sleepers will just go back to
- * sleep.
- */
-
-Actually, you're right.  The wakeup check func is evaluated by the
-waker-upper.  I can fix the comment with a patch.
-
-> and the waiting function looks insane, because you're mixing the two names
-> for "fscache" which makes the code look totally incomprehensible. Why would
-> we wait for PF_fscache, when PG_private_2 was set? Yes, I know why, but the
-> code looks entirely nonsensical.
-
-IIRC someone insisted that I should make it a generic name and put the
-accessor functions in the fscache headers (which means they aren't available
-to core code), but I don't remember who (maybe Andrew? it was before mid-2007)
-- kind of like PG_checked is an alias for PG_owner_priv_1.
-
-I'd be quite happy to move the accessors for PG_fscache to the
-linux/page-flags.h as that would simplify things.
-
-David
-
+=D0=B2=D1=82, 9 =D1=84=D0=B5=D0=B2=D1=80. 2021 =D0=B3. =D0=B2 03:22, Aur=C3=
+=A9lien Aptel <aaptel@suse.com>:
+>
+> Shyam Prasad N <nspmangalore@gmail.com> writes:
+>
+> > I had missed one check where CIFS_SESS_OP also had to be checked. Not
+> > doing so would disable echoes and oplocks.
+>
+> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+>
+> --
+> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
+> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
+ DE
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
+=BCnchen)
+>
