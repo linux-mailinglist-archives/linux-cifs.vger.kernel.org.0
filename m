@@ -2,77 +2,89 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B7F315CB2
-	for <lists+linux-cifs@lfdr.de>; Wed, 10 Feb 2021 02:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95B2315CF9
+	for <lists+linux-cifs@lfdr.de>; Wed, 10 Feb 2021 03:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbhBJB6A (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 9 Feb 2021 20:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S234506AbhBJCMe (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 9 Feb 2021 21:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235172AbhBJB5P (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Feb 2021 20:57:15 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25986C06174A
-        for <linux-cifs@vger.kernel.org>; Tue,  9 Feb 2021 17:56:35 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id y15so419560ilj.11
-        for <linux-cifs@vger.kernel.org>; Tue, 09 Feb 2021 17:56:35 -0800 (PST)
+        with ESMTP id S235307AbhBJCKi (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Feb 2021 21:10:38 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CD0C0613D6
+        for <linux-cifs@vger.kernel.org>; Tue,  9 Feb 2021 18:09:57 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id f2so777202ljp.11
+        for <linux-cifs@vger.kernel.org>; Tue, 09 Feb 2021 18:09:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nleXgW17AJHqREXLYFNkwgLH6JyE5ibh8zBSmp+WBHs=;
-        b=OJ7PR10jratWIqpz4in4uZ9k3xYvWG5TeE3Qk9VLVDyvK9JVeSPLsMFjpGPnfgZDlg
-         P10vXDy7AbZyZXnc11WTWF731y89F5H0NLnOOkji72Qtub4MwsCrQCk8+lV9jjop0cnz
-         HpRmpzPrRNI6RN5sOgL165c5jIULiK+XIwoKvrvSn2sfpa+BL2J/yimz2qT1s7MrmydD
-         BqT78vM3qSrBvDsfn93pZ19cZGeA/utTW33PSkbooL/OR2dOy3WjnvopHDKn2EYv2fy4
-         UPQtcJHeziI1owlkZRJWmQ8+eb1R9MyefFuJwxISlaI14zMJHC64Y3bcBpFPsEqrdAJp
-         ZyxA==
+        bh=4q6EwqS7RdfHU6E3rJputlAnWO4HtzmJCGqUpIw98uE=;
+        b=ARnAeXFRLfBi10gTHkzMixt+Wgw7rHn60sS1Y3VgRXqiq5qn8JrlLSj86ZGnYet05H
+         FUNOLBDmfSXUWK1HsXbKKkYOVrT+QA+yQnMD/Yldsoox5HL6jihKle22wHB3EkUySfWy
+         mqgqeSsXUzADK1hUzk+5C5m7WKRDB/mC9hmBTVhDTb1rPfWYpRiozgvlYCg8+wA/9Vcu
+         /QYuip4AncpdQk2OjAmGKhrtGdiMdqp1aLZUHSi7AGY9srQn7EY8697xyAQdc1lvm0Up
+         3jHEBD/2PYSVlQnzSnXoBykLUwNNVfrwh9SbRcj5kpJLU6BHBPxaLMLEQt1T/Fr0Hsqk
+         rFGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nleXgW17AJHqREXLYFNkwgLH6JyE5ibh8zBSmp+WBHs=;
-        b=mo55LoWQqEH79RyN74CbyCfUqFdxo0GoPNuVnXSS5N8XN/gFhulqDOEMz0vqy2imDj
-         uDfLR7zaoddxlkSymUwuvwzZFLcOahkrLaYYXEktKthWVBovAF8tgMzI6wUUMf36IliY
-         fe66AVEh0W/lQHcKitc0q9ZEQIx/dmappovsbZQz5MUcu5735A8PL54jSVkKrKZ6WFW/
-         pOAeOoqX1EAU+oWfQ4V/dYmafPTzzw3phIAFkNiPj6ANqejzuMG6rm6D4NA8EpJeieCj
-         MXcKo6DZgzsCa1hD6dHoli5ZYnY6l2mDm7/NzPzrhefDUJdZkuaNHbE5gNxEcpKN5Uei
-         yo4w==
-X-Gm-Message-State: AOAM531YWz/MPIc3Uf0ye2uAneVzGwoWJ8m2yk6xo2EVz0EBU+g9ODg8
-        rqgOkM9cHouZbuWOM+KDJaj5dceXortvvPya/EA=
-X-Google-Smtp-Source: ABdhPJyevcw+87wgqxAPzgw6fShur3AEGouO8NQNBKAbxP68xcoDdQVhMX23KZou9IbD1Ka7zBJZmnxtOx9H4c0tHo0=
-X-Received: by 2002:a92:ce50:: with SMTP id a16mr757412ilr.219.1612922194629;
- Tue, 09 Feb 2021 17:56:34 -0800 (PST)
+        bh=4q6EwqS7RdfHU6E3rJputlAnWO4HtzmJCGqUpIw98uE=;
+        b=eq7Bc9pAv6dLw9dpj6UplWYexkcK8MBsrnhSd0Ro2dQq7AMnncCE3vidyjIQhbOOnS
+         nTzXAt1Z0vl/3PFoMx1V5Wv0p/0z56RQQXcMXxqMowQ/O5Sxyveqkm1kvUBNVNRwV64y
+         ob+HU8ldqPVQOGvUbPBICFVvQnVHi4VBgvQ/aWSsIhjeEJxiYojHDsKcSTZUAykq9aPf
+         h3bCvHLmlT1hVP0m67aoVapSoFtW/KbNHJ4HoPKebohLPvDa9oQX3OfiIISZaPr9UpDG
+         daWTqVJ1ODmC30kVJbugWvc2xTBlDEm+XSQS958KDrbmrbM9xzVJ6Ggt8jhAuZt6PzOS
+         ZRig==
+X-Gm-Message-State: AOAM532yq1k/Rt2R/aMg+vaAhSkDRVZYM/BN/ldV8PV01YSx5Hvc4xtw
+        xUTpF/n2Nx8bMDJCZTrvhki0dga62szvmg/enHO8ZmrDNco=
+X-Google-Smtp-Source: ABdhPJx/NVrLvfD+jei4Qsp7i62QV+hrh+9EkjYGGfmZ/LjBpm7bDYoe1hXf+6PVH78Y4yX7iM9uLrQ/3VF0VAIjIZ0=
+X-Received: by 2002:a05:651c:3cb:: with SMTP id f11mr475811ljp.272.1612922996205;
+ Tue, 09 Feb 2021 18:09:56 -0800 (PST)
 MIME-Version: 1.0
 References: <CANFS6ba33DORg99OYHwaD9yJ+r6rt8A7v_R36_Uf_hHkw=agyw@mail.gmail.com>
-In-Reply-To: <CANFS6ba33DORg99OYHwaD9yJ+r6rt8A7v_R36_Uf_hHkw=agyw@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Wed, 10 Feb 2021 11:56:22 +1000
-Message-ID: <CAN05THQyVJ_4CN41Ep1Wn93BuFYgqUZ1fqCVnqiUebHtobu1tg@mail.gmail.com>
+ <CAN05THQyVJ_4CN41Ep1Wn93BuFYgqUZ1fqCVnqiUebHtobu1tg@mail.gmail.com>
+In-Reply-To: <CAN05THQyVJ_4CN41Ep1Wn93BuFYgqUZ1fqCVnqiUebHtobu1tg@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 9 Feb 2021 20:09:45 -0600
+Message-ID: <CAH2r5mvRds+QT33zw=3qtfDt4a7jEW-y0H6baP05oUFXVAoEkQ@mail.gmail.com>
 Subject: Re: "noperm" mount option not working
-To:     Hyunchul Lee <hyc.lee@gmail.com>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
+To:     ronnie sahlberg <ronniesahlberg@gmail.com>
+Cc:     Hyunchul Lee <hyc.lee@gmail.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
         CIFS <linux-cifs@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>,
         Namjae Jeon <linkinjeon@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 11:18 AM Hyunchul Lee <hyc.lee@gmail.com> wrote:
->
-> Hello Ronnie,
->
-> from the commit 2d39f50c2b15 ("cifs: move update of flags into a
-> separate function"),
-> "noperm" is disabled if "multiuser" is not given. this happens even if
-> "noperm" is given.
-> Could you explain why this is required?
+merged into cifs-2.6.git for-next
 
-That was a bug. Thanks for spotting this.
-
-I have sent a patch to fix this to the list.
+On Tue, Feb 9, 2021 at 7:56 PM ronnie sahlberg <ronniesahlberg@gmail.com> wrote:
 >
-> Thank you,
-> Hyunchul
+> On Wed, Feb 10, 2021 at 11:18 AM Hyunchul Lee <hyc.lee@gmail.com> wrote:
+> >
+> > Hello Ronnie,
+> >
+> > from the commit 2d39f50c2b15 ("cifs: move update of flags into a
+> > separate function"),
+> > "noperm" is disabled if "multiuser" is not given. this happens even if
+> > "noperm" is given.
+> > Could you explain why this is required?
+>
+> That was a bug. Thanks for spotting this.
+>
+> I have sent a patch to fix this to the list.
+> >
+> > Thank you,
+> > Hyunchul
+
+
+
+-- 
+Thanks,
+
+Steve
