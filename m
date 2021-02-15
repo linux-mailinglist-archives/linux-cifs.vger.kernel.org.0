@@ -2,27 +2,27 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CFD31C1B2
-	for <lists+linux-cifs@lfdr.de>; Mon, 15 Feb 2021 19:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71E531C1CB
+	for <lists+linux-cifs@lfdr.de>; Mon, 15 Feb 2021 19:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbhBOSio (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 15 Feb 2021 13:38:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34142 "EHLO mail.kernel.org"
+        id S231239AbhBOSko (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 15 Feb 2021 13:40:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230502AbhBOSia (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 15 Feb 2021 13:38:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C885C64E36;
-        Mon, 15 Feb 2021 18:37:13 +0000 (UTC)
+        id S231266AbhBOSjU (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 15 Feb 2021 13:39:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A759464E53;
+        Mon, 15 Feb 2021 18:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613414234;
-        bh=QICwwBSsC7RqnYd6o4QdOeB7PUAqLduRYKDUc7RjMpY=;
+        s=k20201202; t=1613414239;
+        bh=1pQvcjsLn1hyuWuG3IYWJqdnk198cx+QlxgmKMLq+pE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lZbxKz3ZG2iskHNgB2paF/OzI+Com7+5YqGwu0dbGIGgsXAD/ruMSDqnu/80+eLxC
-         aUpxljmr58IeUlAQ+IEs4Y6kJi7Nka79tsvhUvr/JwVVB0u6RqSwVwzcU6jRG0fs5f
-         vqZ+XoVhKboASxf3GPO8ez6Zq0J93dQUvkEXhiHcMSsdWpUguC2ilJ5uref17EAEHS
-         HW+8Qk5o7GiQ/Vtnrje9NCWgtJSkTtdnBzcR/JTunPJJpeBQVLLaScxebxoHpNOZ5D
-         Mmp1xWRD5+354mlDEhXRHW+9wHaKHMJNIBf/fBycvZVKNE7f6GtIdn8n8pSOQPeFWg
-         ZFTUuNT8JFG6A==
+        b=t8eHVbs/Jre6vRwAQkmMKSKw2Ht2hJO1kyTtEyPWa7FDps5RjYDxORHUVRqIl6k4l
+         4xaP8uWy0BqFYkn52jMbBwaRYibATSMSDpHYWXs1WeeNFfxRrCNhHxCrKHUZBapYSc
+         xEOhChD/99sUFdJ22ncn48xGwZrPxFvy+vOo4OQ5D44Y6rnS6QPygVtyoQ5vwhdk8z
+         Ok8xuvdy6h0xiEbcD2SYryWTZboYqRCud149t/ypXTCoc8EwmBr4wmT5EHtTgJb4kf
+         10NxtxlSzKo3I5MB7fldFgOR+b8LqHQA3ZrgLtBhQNZH/lByLYfOZhQDdhizlpxzxy
+         2aT+rfMJZB+ug==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Shyam Prasad N <sprasad@microsoft.com>,
@@ -30,12 +30,12 @@ Cc:     Shyam Prasad N <sprasad@microsoft.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.14 2/3] cifs: Set CIFS_MOUNT_USE_PREFIX_PATH flag on setting cifs_sb->prepath.
-Date:   Mon, 15 Feb 2021 13:37:10 -0500
-Message-Id: <20210215183711.122258-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 2/3] cifs: Set CIFS_MOUNT_USE_PREFIX_PATH flag on setting cifs_sb->prepath.
+Date:   Mon, 15 Feb 2021 13:37:15 -0500
+Message-Id: <20210215183716.122333-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210215183711.122258-1-sashal@kernel.org>
-References: <20210215183711.122258-1-sashal@kernel.org>
+In-Reply-To: <20210215183716.122333-1-sashal@kernel.org>
+References: <20210215183716.122333-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 73be08ea135f6..e7c46368cf696 100644
+index af78de9ef036c..8508dc8270593 100644
 --- a/fs/cifs/connect.c
 +++ b/fs/cifs/connect.c
-@@ -3607,6 +3607,7 @@ int cifs_setup_cifs_sb(struct smb_vol *pvolume_info,
+@@ -3488,6 +3488,7 @@ int cifs_setup_cifs_sb(struct smb_vol *pvolume_info,
  		cifs_sb->prepath = kstrdup(pvolume_info->prepath, GFP_KERNEL);
  		if (cifs_sb->prepath == NULL)
  			return -ENOMEM;
