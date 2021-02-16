@@ -2,233 +2,211 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F2D31D050
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Feb 2021 19:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DA131D084
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Feb 2021 19:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbhBPSij (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 16 Feb 2021 13:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S231175AbhBPSy4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 16 Feb 2021 13:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbhBPSie (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 Feb 2021 13:38:34 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E8DC061574
-        for <linux-cifs@vger.kernel.org>; Tue, 16 Feb 2021 10:37:54 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id y26so18093580eju.13
-        for <linux-cifs@vger.kernel.org>; Tue, 16 Feb 2021 10:37:54 -0800 (PST)
+        with ESMTP id S231164AbhBPSyx (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 Feb 2021 13:54:53 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46181C0613D6
+        for <linux-cifs@vger.kernel.org>; Tue, 16 Feb 2021 10:54:13 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id e9so6548754pjj.0
+        for <linux-cifs@vger.kernel.org>; Tue, 16 Feb 2021 10:54:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nzL+phVSDYeQWeVHvoGULeqFMdtTDm6JAuBhnAFEhX4=;
-        b=cvLsjrZ+oZb3ZoAMZD3p8gab24gTW4Lf4uMjhex722KeS/FC+AOOmgT1+D/IeTANXF
-         rNymC7C222vfh3r5AKEcVszLjwHzV/nIBJVhNjQSmpodXDA6mwFoxmShl5vI1IwnNzAq
-         +eaGp4b3x48spugXp6IJuSC184cjMMxhCALOQzc+auYZdmUxKIf0/0W5wtlaesG+FJtc
-         1n62SQOUCh2A2KLi14fJnkEkp45X7OGl4sZTDbCCFvXVmgh3W/U1N6pb3RmNzRcU2vLN
-         Wtno8hnOg2xjFa0CvWZQA0P6Hm6dcnYsQdJL7EBTDN3VTDrOcb+ajpNt9rQymjqTFeUL
-         SsLQ==
+        d=dilger-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
+         :references;
+        bh=LSS7VeTFf1sWhJY5fyJQl0KheTd9K60JF6FeH3GCxrg=;
+        b=bDyDPQV7jxm9AC9Kbej44nUyO7e9ikQAVBWHWuCf6m4SsjoZkV9pWHXIsx06dO+ak6
+         8aSM2SymVDyYuub9YyXC8OmIBO5oFcqGvwGNepwlZ7ccyJfhcO8QIBql9JI3pqiX2Fuw
+         j1klif/eeC82LALv7vbfEOF36jgpMBTsgIysLtIYOy5/V/AMnw+vobQiVIkTJp1UWc9w
+         DBJpDEAjqFxxbKednKjcTl1kcQJ9o42fsCnjttKtraIjnebn0Gpj+GPYsAe4P1dvBQTx
+         +Yu/ej7/HAC1/mff1R/7rpIBIU7G2uz6/1mHBZKRW2iyUUsEXYKiqiR/s+gFdY9x4S4k
+         7DDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nzL+phVSDYeQWeVHvoGULeqFMdtTDm6JAuBhnAFEhX4=;
-        b=K892Dzyn+Ewph0xYKwI+kOHGzWalkHonBNdwqA31iQXN2DbOXbrAtQiJCUx+5i9TLM
-         f6nEeCi5bkgbHIqZE8U8oO1yl3DeJc3Mf1WmCd2IZRNXLtIgQjfWoo5SW5vSHRamZFUQ
-         IS0k8Z2SarctY//Oo8Ce3BfwGsuIp3KYD/WuTBsqHr3BioaYqGsf7V2MOyo613fTE+Tk
-         VWM8ieNtqqtuGQKEGEwGoZN69gx3QMyiRoMKGLM+QmQoZ4/I9QUoiqekVWAXURlNkGJu
-         SGVuWL65oQDGeQ1R0Tse/MT63CKWfC5cmSqZPy5GSlDjZ/P2myHU/pFpKp46uCAWtR5Z
-         G9uQ==
-X-Gm-Message-State: AOAM531cc+9Xv2rvZCdPtI1R36YLKfmj6ddfynb+SbLLTIt3jsdU0t9E
-        ISAbgH9bw/h2JSLVXM/8sIpI7QpjZFt5C3beig==
-X-Google-Smtp-Source: ABdhPJwyaupAYfukKZmvYYtYevwoLHNk0LwCqZRr7A2wVdNB/iEtIt2SRRizTSk/DMd91iHvy8S1FkFHPteGsafC8pw=
-X-Received: by 2002:a17:906:90d9:: with SMTP id v25mr19683125ejw.271.1613500672927;
- Tue, 16 Feb 2021 10:37:52 -0800 (PST)
-MIME-Version: 1.0
-References: <1A318EB9-A257-4A11-B319-EA3F2628C8B7@hxcore.ol>
-In-Reply-To: <1A318EB9-A257-4A11-B319-EA3F2628C8B7@hxcore.ol>
-From:   Pavel Shilovsky <piastryyy@gmail.com>
-Date:   Tue, 16 Feb 2021 10:37:41 -0800
-Message-ID: <CAKywueROT6yAn6Eer4sncxsaZZyih3kApKmLacb3xsxDJfWfMQ@mail.gmail.com>
-Subject: Re: TCON reconnect during STATUS_NETWORK_NAME_DELETED
-To:     Rohith <rohiths.msft@gmail.com>
-Cc:     "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        "sribhat.msa@outlook.com" <sribhat.msa@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:message-id:mime-version:subject:date
+         :in-reply-to:cc:to:references;
+        bh=LSS7VeTFf1sWhJY5fyJQl0KheTd9K60JF6FeH3GCxrg=;
+        b=piFCByJeia4nq7CC0H+W3rSVqVCL7oaSczuoRx52Yus4aJkU/ZkW0Qwa0POwxJiZEG
+         H7M4wA3Zpxp0Sie5bGOyf9PTx/49KcAS7js0vKBOjlp2G6nrM+4U6EoW+r9fvx55X/a2
+         doK17t6wbt2DcI8cpZGDpNksd3Z1WIO+QgDCWYn1gdrnE8cjB5obWHWe9IRpwPnrBkS0
+         Hh53+lpQpmGTU0ftaxrYkoYEfy9OjcpeNSyrlIyuL6aUayJquyAF3JVWh4rSp/vPi2ad
+         VQQ+gcODhb8tXvKHmMsehPq1vVWYwiJCYrY5trn1c5l3KIKqLvDO6DVapU8fP26UHNMa
+         2ggg==
+X-Gm-Message-State: AOAM530P21E7YCdekkiszRv2M14evzl7O5PWkDEC+mEvKw/Dz/UsZC38
+        BbjyrbdFgEJZu7nx59/YkqijFQ==
+X-Google-Smtp-Source: ABdhPJxyRsttVKac8oS/Pd9KoKHSh+xsMkH7Er01IU3KQLXF2h+YHf7b4VIqO16SNNmhxdX/VS2yig==
+X-Received: by 2002:a17:90b:46cd:: with SMTP id jx13mr5383279pjb.217.1613501652606;
+        Tue, 16 Feb 2021 10:54:12 -0800 (PST)
+Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
+        by smtp.gmail.com with ESMTPSA id g8sm3820005pjj.41.2021.02.16.10.54.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Feb 2021 10:54:11 -0800 (PST)
+From:   Andreas Dilger <adilger@dilger.ca>
+Message-Id: <13583117-59D4-4294-BB23-9D4802E4B8A3@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_E4D2691F-0BAD-4906-899A-C3AF7AC4FEB5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH v2] vfs: prevent copy_file_range to copy across devices
+Date:   Tue, 16 Feb 2021 11:54:07 -0700
+In-Reply-To: <CAOQ4uxgucdN8hi=wkcvnFhBoZ=L5=ZDc7-6SwKVHYaRODdcFkg@mail.gmail.com>
+Cc:     Luis Henriques <lhenriques@suse.de>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "drinkcat@chromium.org" <drinkcat@chromium.org>,
+        "iant@google.com" <iant@google.com>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "anna.schumaker@netapp.com" <anna.schumaker@netapp.com>,
+        "llozano@chromium.org" <llozano@chromium.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "miklos@szeredi.hu" <miklos@szeredi.hu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "dchinner@redhat.com" <dchinner@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "sfrench@samba.org" <sfrench@samba.org>,
+        James Simmons <jsimmons@infradead.org>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+To:     Amir Goldstein <amir73il@gmail.com>
+References: <CAOQ4uxiFGjdvX2-zh5o46pn7RZhvbGHH0wpzLPuPOom91FwWeQ@mail.gmail.com>
+ <20210215154317.8590-1-lhenriques@suse.de>
+ <CAOQ4uxgjcCrzDkj-0ukhvHRgQ-D+A3zU5EAe0A=s1Gw2dnTJSA@mail.gmail.com>
+ <73ab4951f48d69f0183548c7a82f7ae37e286d1c.camel@hammerspace.com>
+ <CAOQ4uxgPtqG6eTi2AnAV4jTAaNDbeez+Xi2858mz1KLGMFntfg@mail.gmail.com>
+ <92d27397479984b95883197d90318ee76995b42e.camel@hammerspace.com>
+ <CAOQ4uxjUf15fDjz11pCzT3GkFmw=2ySXR_6XF-Bf-TfUwpj77Q@mail.gmail.com>
+ <87r1lgjm7l.fsf@suse.de>
+ <CAOQ4uxgucdN8hi=wkcvnFhBoZ=L5=ZDc7-6SwKVHYaRODdcFkg@mail.gmail.com>
+X-Mailer: Apple Mail (2.3273)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index 50fcb65920e8..fe99fb7307b2 100644
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -504,6 +504,8 @@ struct smb_version_operations {
-  loff_t (*llseek)(struct file *, struct cifs_tcon *, loff_t, int);
-  /* Check for STATUS_IO_TIMEOUT */
-  bool (*is_status_io_timeout)(char *buf);
-+ /* Check for STATUS_NETWORK_NAME_DELETED */
-+ void (*mark_tcon_reconnect) (char *buf, struct TCP_Server_Info *);
-              ^^^
-Let's follow the above style and name it
 
-is_network_name_deleted()
+--Apple-Mail=_E4D2691F-0BAD-4906-899A-C3AF7AC4FEB5
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
- };
+On Feb 16, 2021, at 6:51 AM, Amir Goldstein <amir73il@gmail.com> wrote:
+>>=20
+>>> This is easy to solve with a flag COPY_FILE_SPLICE (or something) =
+that
+>>> is internal to kernel users.
+>>>=20
+>>> FWIW, you may want to look at the loop in ovl_copy_up_data()
+>>> for improvements to nfsd_copy_file_range().
+>>>=20
+>>> We can move the check out to copy_file_range syscall:
+>>>=20
+>>>        if (flags !=3D 0)
+>>>                return -EINVAL;
+>>>=20
+>>> Leave the fallback from all filesystems and check for the
+>>> COPY_FILE_SPLICE flag inside generic_copy_file_range().
+>>=20
+>> Ok, the diff bellow is just to make sure I understood your =
+suggestion.
+>>=20
+>> The patch will also need to:
+>>=20
+>> - change nfs and overlayfs calls to vfs_copy_file_range() so that =
+they
+>>   use the new flag.
+>>=20
+>> - check flags in generic_copy_file_checks() to make sure only valid =
+flags
+>>   are used (COPY_FILE_SPLICE at the moment).
+>>=20
+>> Also, where should this flag be defined?  include/uapi/linux/fs.h?
+>>=20
+>> Cheers,
+>> --
+>> Luis
+>>=20
+>> diff --git a/fs/read_write.c b/fs/read_write.c
+>> index 75f764b43418..341d315d2a96 100644
+>> --- a/fs/read_write.c
+>> +++ b/fs/read_write.c
+>> @@ -1383,6 +1383,13 @@ ssize_t generic_copy_file_range(struct file =
+*file_in, loff_t pos_in,
+>>                                struct file *file_out, loff_t pos_out,
+>>                                size_t len, unsigned int flags)
+>> {
+>> +       if (!(flags & COPY_FILE_SPLICE)) {
+>> +               if (!file_out->f_op->copy_file_range)
+>> +                       return -EOPNOTSUPP;
+>> +               else if (file_out->f_op->copy_file_range !=3D
+>> +                        file_in->f_op->copy_file_range)
+>> +                       return -EXDEV;
+>> +       }
+>=20
+> That looks strange, because you are duplicating the logic in
+> do_copy_file_range(). Maybe better:
+>=20
+> if (WARN_ON_ONCE(flags & ~COPY_FILE_SPLICE))
+>        return -EINVAL;
+> if (flags & COPY_FILE_SPLICE)
+>       return do_splice_direct(file_in, &pos_in, file_out, &pos_out,
+>                                 len > MAX_RW_COUNT ? MAX_RW_COUNT : =
+len, 0);
+> if (!file_out->f_op->copy_file_range)
+>        return -EOPNOTSUPP;
+> return -EXDEV;
 
- struct smb_version_values {
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 10fe6d6d2dee..d4ffe2564e07 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -993,6 +993,8 @@ cifs_demultiplex_thread(void *p)
-  if (mids[i] !=3D NULL) {
-  mids[i]->resp_buf_size =3D server->pdu_size;
+This shouldn't return -EINVAL to userspace if the flag is not set.
 
-+ server->ops->mark_tcon_reconnect(bufs[i],
-+                  server);
+That implies there *is* some valid way for userspace to call this
+function, which is AFAICS not possible if COPY_FILE_SPLICE is only
+available to in-kernel callers.  Instead, it should continue
+to return -EOPNOTSUPP to userspace if copy_file_range() is not valid
+for this combination of file descriptors, so that applications will
+fall back to the non-CFR implementation.
 
-How about SMB1? It doesn't have the callback, so it may fail here.
-
-Btw, I think is_status_io timeout should be called in this loop for
-every mid not outside the loop (sorry, missed that in the original
-review). Could you please fix that separately?
+The WARN_ON_ONCE(ret =3D=3D -EOPNOTSUPP) in vfs_copy_file_range() would
+also need to be removed if this will be triggered from userspace.
 
 
-  if (!mids[i]->multiRsp || mids[i]->multiEnd)
-  mids[i]->callback(mids[i]);
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index f19274857292..23d238c0017a 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -2418,6 +2418,37 @@ smb2_is_status_io_timeout(char *buf)
-  return false;
- }
-
-+static void
-+smb2_mark_tcon_reconnect(char *buf, struct TCP_Server_Info *server)
-+{
-+ struct smb2_sync_hdr *shdr =3D (struct smb2_sync_hdr *)buf;
-+ struct list_head *tmp, *tmp1;
-+ struct cifs_ses *ses;
-+ struct cifs_tcon *tcon;
-+ bool   find_tcon =3D false;
-+
-+ spin_lock(&cifs_tcp_ses_lock);
-+ list_for_each(tmp, &server->smb_ses_list) {
-
-Why looking for the TCON if in most cases Status is not
-STATUS_NETWORK_NAME_DELETED?
-If it is not, then the function should become a no-op and exit immediately.
-
-+ ses =3D list_entry(tmp, struct cifs_ses, smb_ses_list);
-+ list_for_each(tmp1, &ses->tcon_list) {
-+ tcon =3D list_entry(tmp1, struct cifs_tcon, tcon_list);
-+ if (tcon->tid =3D=3D shdr->TreeId) {
-+ find_tcon =3D true;
-+ spin_unlock(&cifs_tcp_ses_lock);
-+ goto reconnect;
-+ }
-+ }
-+ }
-+ spin_unlock(&cifs_tcp_ses_lock);
-+
-+reconnect:
-+ if (find_tcon && (shdr->Status =3D=3D STATUS_NETWORK_NAME_DELETED)) {
-+ tcon->need_reconnect =3D true;
-
-this should happen under the locks - there is no guarantee that tcon
-is still valid outside the loop unless you take a reference which is
-not needed here.
+Cheers, Andreas
 
 
-+ pr_warn_once("Server share %s deleted.\n",
-+      tcon->treeName);
 
-so, just printing logs should happen outside the locks.
 
-+ }
-+}
-+
- static int
- smb2_oplock_response(struct cifs_tcon *tcon, struct cifs_fid *fid,
-       struct cifsInodeInfo *cinode)
-@@ -4605,6 +4636,8 @@ static void smb2_decrypt_offload(struct work_struct *=
-work)
- #ifdef CONFIG_CIFS_STATS2
-  mid->when_received =3D jiffies;
- #endif
-+ dw->server->ops->mark_tcon_reconnect(dw->buf,
-+                      dw->server);
-  mid->callback(mid);
-  } else {
-  spin_lock(&GlobalMid_Lock);
-@@ -5072,6 +5105,7 @@ struct smb_version_operations smb20_operations =3D {
-  .fiemap =3D smb3_fiemap,
-  .llseek =3D smb3_llseek,
-  .is_status_io_timeout =3D smb2_is_status_io_timeout,
-+ .mark_tcon_reconnect =3D smb2_mark_tcon_reconnect,
- };
 
- struct smb_version_operations smb21_operations =3D {
-@@ -5173,6 +5207,7 @@ struct smb_version_operations smb21_operations =3D {
-  .fiemap =3D smb3_fiemap,
-  .llseek =3D smb3_llseek,
-  .is_status_io_timeout =3D smb2_is_status_io_timeout,
-+ .mark_tcon_reconnect =3D smb2_mark_tcon_reconnect,
- };
 
- struct smb_version_operations smb30_operations =3D {
-@@ -5286,6 +5321,7 @@ struct smb_version_operations smb30_operations =3D {
-  .fiemap =3D smb3_fiemap,
-  .llseek =3D smb3_llseek,
-  .is_status_io_timeout =3D smb2_is_status_io_timeout,
-+ .mark_tcon_reconnect =3D smb2_mark_tcon_reconnect,
- };
+--Apple-Mail=_E4D2691F-0BAD-4906-899A-C3AF7AC4FEB5
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
 
- struct smb_version_operations smb311_operations =3D {
-@@ -5399,6 +5435,7 @@ struct smb_version_operations smb311_operations =3D {
-  .fiemap =3D smb3_fiemap,
-  .llseek =3D smb3_llseek,
-  .is_status_io_timeout =3D smb2_is_status_io_timeout,
-+ .mark_tcon_reconnect =3D smb2_mark_tcon_reconnect,
- };
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
 
- struct smb_version_values smb20_values =3D {
---=20
-2.25.1
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmAsFM8ACgkQcqXauRfM
+H+DISQ//Xk8r1HWGp6aO3uH6f50bZtArBkbhRdX1p7E8ijkTPN+2mMwXY8F8Ac0N
+K7wowllKCKlCS3puz1g22oidllG07sA84OAzYvj+keWgxmcdr8LiT1+FmVrlwAJW
+yl7uwuVty3n0hVX3V1uP6k48l+6kNKHfLgEv0pryuKxsSJwgxK0lU7f/kxw3TBBx
+cLl2b126NjEeWasNilay55SGX6XlbecnhTg6sTqH4aSjYJrCOAeSe0owrB9pC1ks
+g2TyCDarbyGHgTiO9WqSQqF7rCzZ1DWaI9iivJgM7UCUO5WfYHKfNUWteiMr7i/7
+wZF4DYBawPFGYuv1mCbel/PuXN3/HQZ2r2UK3mHazf3jbTAgYEmoG9f4keebeGZb
+llGyvrvH9xKAjExhrmJbk/9ztbmwBlWl5QFpmpQRfUZmp92eXhdBJ1/yleXw9syJ
+SCy60rPj38mFYGpprUDF0j1nP4JJGKFz2uSAzgOHdh+ggXA8gLXWmHuM6eCFG3/j
+2CWcXAhFj4DKWvJxFFlcH1tsNuCjlyxo5I/ITpDDGlFNxUG9ebroVuOP3LWt+7uY
+RWKvH6dr2ImHuiN/9s0iL03HHULOvCPYNvfMIrLw1XWcBENBWZVDyWOOxYUu1a5O
+KHIHuK4OEiDJcKXchTH4pZ0MhzeTBL7dYXsHp21XzPRZMRA0+Kw=
+=ExqG
+-----END PGP SIGNATURE-----
 
---
-Best regards,
-Pavel Shilovsky
-
-=D0=B2=D1=82, 16 =D1=84=D0=B5=D0=B2=D1=80. 2021 =D0=B3. =D0=B2 02:54, Rohit=
-h <rohiths.msft@gmail.com>:
->
-> Hi All,
->
->
->
-> During migration or soft delete/undelete, Application doing recursive IO=
-=E2=80=99s will fail until tcon is reconnected or session is established ag=
-ain.
->
->
->
-> Attached patch addresses above mentioned issue. So, applications will rec=
-over automatically once share is undeleted.
->
->
->
-> Regards,
->
-> Rohith
->
->
->
-> Sent from Mail for Windows 10
->
->
+--Apple-Mail=_E4D2691F-0BAD-4906-899A-C3AF7AC4FEB5--
