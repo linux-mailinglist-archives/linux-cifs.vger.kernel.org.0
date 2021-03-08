@@ -2,103 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A15F3319C5
-	for <lists+linux-cifs@lfdr.de>; Mon,  8 Mar 2021 22:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7DE331A25
+	for <lists+linux-cifs@lfdr.de>; Mon,  8 Mar 2021 23:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhCHV4U (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Mar 2021 16:56:20 -0500
-Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:56725 "EHLO
-        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230047AbhCHVzs (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 16:55:48 -0500
-Received: from dread.disaster.area (pa49-181-239-12.pa.nsw.optusnet.com.au [49.181.239.12])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 29E148289A3;
-        Tue,  9 Mar 2021 08:55:36 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1lJNqh-000HG4-6L; Tue, 09 Mar 2021 08:55:35 +1100
-Date:   Tue, 9 Mar 2021 08:55:35 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Amir Goldstein <amir73il@gmail.com>, linux-cachefs@redhat.com,
-        Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-afs@lists.infradead.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Subject: Re: fscache: Redesigning the on-disk cache
-Message-ID: <20210308215535.GA63242@dread.disaster.area>
-References: <CAOQ4uxhxwKHLT559f8v5aFTheKgPUndzGufg0E58rkEqa9oQ3Q@mail.gmail.com>
- <2653261.1614813611@warthog.procyon.org.uk>
- <517184.1615194835@warthog.procyon.org.uk>
+        id S230327AbhCHWWP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Mar 2021 17:22:15 -0500
+Received: from mx.cjr.nz ([51.158.111.142]:11594 "EHLO mx.cjr.nz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230156AbhCHWVu (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 8 Mar 2021 17:21:50 -0500
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id ED87F7FD3B;
+        Mon,  8 Mar 2021 22:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1615242098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y81cuVzy0QoI0R6om7wCcmnegUKIzYzS0UtYzRV/Oe8=;
+        b=S5bC6tYH0Su6j+N6gLHBN6loHpP8IAaHBqNvSDL7UpKPPb10R09YN+pDNgxTZjurlzy5VV
+        0TLoAF9dIHpQ+fgkqvVVeP/G/XDe46rn0HTc+nKcPzB7BvLuBgB/5S4pzAJ9OuuRRzFPAI
+        f8kWkkoZuBOMc5+KsNmlbBjZWjrdYrMAWkArS8XSxNeIlsGEQP53+4IqbkBk9OFXN5Plm6
+        fi86jjceE7frARa7LFjU9l8vZjLYwJdYI+h10eyi24HZV3BHTwqOiAcAfKyRABMDxtTuQx
+        Bv+Bj+jXKAHKqMTKsx7kXL+YDa3fStu/KhTROMS7nj2dckisDmAPeSgsG2sUdw==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [PATCH 3/4] cifs: return proper error code in statfs(2)
+In-Reply-To: <CAH2r5mt1hF3AjgT0mhjH9wgaoFby9TvnKZ_u+=bLj8LvxKS9hw@mail.gmail.com>
+References: <20210308150050.19902-1-pc@cjr.nz>
+ <20210308150050.19902-3-pc@cjr.nz>
+ <CAH2r5mt1hF3AjgT0mhjH9wgaoFby9TvnKZ_u+=bLj8LvxKS9hw@mail.gmail.com>
+Date:   Mon, 08 Mar 2021 19:21:33 -0300
+Message-ID: <878s6x70cy.fsf@cjr.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <517184.1615194835@warthog.procyon.org.uk>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=YKPhNiOx c=1 sm=1 tr=0 cx=a_idp_d
-        a=gO82wUwQTSpaJfP49aMSow==:117 a=gO82wUwQTSpaJfP49aMSow==:17
-        a=kj9zAlcOel0A:10 a=dESyimp9J3IA:10 a=pGLkceISAAAA:8 a=7-415B0cAAAA:8
-        a=tj5_YPy7viIAn9pg2yAA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 09:13:55AM +0000, David Howells wrote:
-> Amir Goldstein <amir73il@gmail.com> wrote:
-> 
-> > >  (0a) As (0) but using SEEK_DATA/SEEK_HOLE instead of bmap and opening the
-> > >       file for every whole operation (which may combine reads and writes).
-> > 
-> > I read that NFSv4 supports hole punching, so when using ->bmap() or SEEK_DATA
-> > to keep track of present data, it's hard to distinguish between an
-> > invalid cached range and a valid "cached hole".
-> 
-> I wasn't exactly intending to permit caching over NFS.  That leads to fun
-> making sure that the superblock you're caching isn't the one that has the
-> cache in it.
-> 
-> However, we will need to handle hole-punching being done on a cached netfs,
-> even if that's just to completely invalidate the cache for that file.
-> 
-> > With ->fiemap() you can at least make the distinction between a non existing
-> > and an UNWRITTEN extent.
-> 
-> I can't use that for XFS, Ext4 or btrfs, I suspect.  Christoph and Dave's
-> assertion is that the cache can't rely on the backing filesystem's metadata
-> because these can arbitrarily insert or remove blocks of zeros to bridge or
-> split extents.
+Steve French <smfrench@gmail.com> writes:
 
-Well, that's not the big problem. The issue that makes FIEMAP
-unusable for determining if there is user data present in a file is
-that on-disk extent maps aren't exactly coherent with in-memory user
-data state.
+> cc:stable?
 
-That is, we can have a hole on disk with delalloc user data in
-memory.  There's user data in the file, just not on disk. Same goes
-for unwritten extents - there can be dirty data in memory over an
-unwritten extent, and it won't get converted to written until the
-data is written back and the filesystem runs a conversion
-transaction.
-
-So, yeah, if you use FIEMAP to determine where data lies in a file
-that is being actively modified, you're going get corrupt data
-sooner rather than later.  SEEK_HOLE/DATA are coherent with in
-memory user data, so don't have this problem.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Yes, please.
