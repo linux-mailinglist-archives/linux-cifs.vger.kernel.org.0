@@ -2,95 +2,94 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5DE331ABE
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E9C331AC1
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhCHXHx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Mar 2021 18:07:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32463 "EHLO
+        id S231321AbhCHXIY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Mar 2021 18:08:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34654 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229627AbhCHXHt (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:07:49 -0500
+        by vger.kernel.org with ESMTP id S230122AbhCHXHx (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:07:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615244869;
+        s=mimecast20190719; t=1615244872;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=81wsiKfCl4t7ZFP8lVjcPTP/RflB7DvlahVcI2y5ICY=;
-        b=OX5EYfyaZDGz9EwrOp6DIMPKVrHqWpbxMO7eixLDaXXs7sFqgSm3A+rsauIjlaRw3ZkcMK
-        ScjGC4ckNuzEXAC+wct2PqBtmgwg7SlYz4yuUgDbhK8xP8QhgP4ns4gFUc1W32sJipAFyK
-        dpK0hU3wuuWUIA9JVOliB7gP00ZtgyU=
+        bh=5krstQ0Ej+bZU1eaUHAxKsElSoV/U8pvdwM/1u8T+lA=;
+        b=gAH/81X7hB4qt2ZidZt24OQM8tnaBNGp1mrwor9zFG/bcQzBGeNPBQ69L8Q+2e3y6T6qF/
+        aMrxapVEXGa9AHYnHOohqplVPQa1J8X8j2URgZLwt1WpU4IUaL3jm8wcs2soL4hz1mZ0FY
+        sY5SAW8CJ8Hwbp414kzpVolZ+aIzxxU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-WAB-fLZdOpCloNdq2Fwy7Q-1; Mon, 08 Mar 2021 18:07:46 -0500
-X-MC-Unique: WAB-fLZdOpCloNdq2Fwy7Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-307-eaJINqqHOD-KnMWQB5eAVA-1; Mon, 08 Mar 2021 18:07:50 -0500
+X-MC-Unique: eaJINqqHOD-KnMWQB5eAVA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B0D6D26864;
-        Mon,  8 Mar 2021 23:07:45 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ADDA3814313;
+        Mon,  8 Mar 2021 23:07:49 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-42.bne.redhat.com [10.64.54.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D1DC1A8A3;
-        Mon,  8 Mar 2021 23:07:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 194E060C13;
+        Mon,  8 Mar 2021 23:07:48 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 6/9] cifs: add a function to get a cached dir based on its dentry
-Date:   Tue,  9 Mar 2021 09:07:32 +1000
-Message-Id: <20210308230735.337-7-lsahlber@redhat.com>
+Subject: [PATCH 7/9] cifs: add a timestamp to track when the lease of the cached dir was taken
+Date:   Tue,  9 Mar 2021 09:07:33 +1000
+Message-Id: <20210308230735.337-8-lsahlber@redhat.com>
 In-Reply-To: <20210308230735.337-1-lsahlber@redhat.com>
 References: <20210308230735.337-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+and clear the timestamp when we receive a lease break.
+
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/smb2ops.c   | 16 ++++++++++++++++
- fs/cifs/smb2proto.h |  3 +++
- 2 files changed, 19 insertions(+)
+ fs/cifs/cifsglob.h | 1 +
+ fs/cifs/smb2misc.c | 1 +
+ fs/cifs/smb2ops.c  | 2 ++
+ 3 files changed, 4 insertions(+)
 
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 7d9b47f2f04f..f6cebb36a27c 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -988,6 +988,7 @@ struct cached_fid {
+ 	bool is_valid:1;	/* Do we have a useable root fid */
+ 	bool file_all_info_is_valid:1;
+ 	bool has_lease:1;
++	unsigned long time; /* jiffies of when lease was taken */
+ 	struct kref refcount;
+ 	struct cifs_fid *fid;
+ 	struct mutex fid_mutex;
+diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+index 60d4bd1eae2b..e617d2975c99 100644
+--- a/fs/cifs/smb2misc.c
++++ b/fs/cifs/smb2misc.c
+@@ -667,6 +667,7 @@ smb2_is_valid_lease_break(char *buffer)
+ 				    !memcmp(rsp->LeaseKey,
+ 					    tcon->crfid.fid->lease_key,
+ 					    SMB2_LEASE_KEY_SIZE)) {
++					tcon->crfid.time = 0;
+ 					INIT_WORK(&tcon->crfid.lease_break,
+ 						  smb2_cached_lease_break);
+ 					queue_work(cifsiod_wq,
 diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 81eb7f10368b..9e2e1ce915c9 100644
+index 9e2e1ce915c9..34419b2af8e8 100644
 --- a/fs/cifs/smb2ops.c
 +++ b/fs/cifs/smb2ops.c
-@@ -925,6 +925,22 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 	return rc;
- }
- 
-+int open_cached_dir_by_dentry(struct cifs_tcon *tcon,
-+			      struct dentry *dentry,
-+			      struct cached_fid **cfid)
-+{
-+	mutex_lock(&tcon->crfid.fid_mutex);
-+	if (tcon->crfid.dentry == dentry) {
-+		cifs_dbg(FYI, "found a cached root file handle by dentry\n");
-+		*cfid = &tcon->crfid;
-+		kref_get(&tcon->crfid.refcount);
-+		mutex_unlock(&tcon->crfid.fid_mutex);
-+		return 0;
-+	}
-+	mutex_unlock(&tcon->crfid.fid_mutex);
-+	return -ENOENT;
-+}
+@@ -912,6 +912,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 				&rsp_iov[1], sizeof(struct smb2_file_all_info),
+ 				(char *)&tcon->crfid.file_all_info))
+ 		tcon->crfid.file_all_info_is_valid = true;
++	tcon->crfid.time = jiffies;
 +
- static void
- smb3_qfs_tcon(const unsigned int xid, struct cifs_tcon *tcon,
- 	      struct cifs_sb_info *cifs_sb)
-diff --git a/fs/cifs/smb2proto.h b/fs/cifs/smb2proto.h
-index ddbdf9923625..3b1cc27947df 100644
---- a/fs/cifs/smb2proto.h
-+++ b/fs/cifs/smb2proto.h
-@@ -73,6 +73,9 @@ extern int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 			   const char *path,
- 			   struct cifs_sb_info *cifs_sb,
- 			   struct cached_fid **cfid);
-+extern int open_cached_dir_by_dentry(struct cifs_tcon *tcon,
-+				     struct dentry *dentry,
-+				     struct cached_fid **cfid);
- extern void close_cached_dir(struct cached_fid *cfid);
- extern void close_cached_dir_lease(struct cached_fid *cfid);
- extern void close_cached_dir_lease_locked(struct cached_fid *cfid);
+ 
+ oshr_exit:
+ 	mutex_unlock(&tcon->crfid.fid_mutex);
 -- 
 2.13.6
 
