@@ -2,90 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A4331AC6
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACD9331ABF
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhCHXIZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Mar 2021 18:08:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46670 "EHLO
+        id S230327AbhCHXHx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Mar 2021 18:07:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56705 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229704AbhCHXH4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:07:56 -0500
+        by vger.kernel.org with ESMTP id S229488AbhCHXHr (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:07:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615244875;
+        s=mimecast20190719; t=1615244866;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=K5SY4vh5dWvxmic2TwQVghVkdghisbxFUamT5maed74=;
-        b=dymD37/8YymL9HllLb9DETcpjoAZBPcrp5fBfVJ1cp0rKVXoIA07tNN6VfUXaNV8EAKsKs
-        KYiUkLY/S3oB5RkHy6ThwrdTGgwJs6+0Qd3XwOM0mnh3yipCRdxLcadZ0tMVovhRxhL5mm
-        0qDjI3ITqOSDcBfmo2BvsnEEByN+WWY=
+        bh=LOgKLEx8udn89jzrKoGF0NPeq7tNeDwRvj1/u3Rc4Q0=;
+        b=bJbkA9MyZfCfca4y5/0m/FSCp+/tO5DEg4+G8zNkvqsh/IxxSFA9y3j4NkmNA2OwIUJv26
+        6sW7+0YEthRuXJJtUY6en6bFTrJUqzAE4v6Pze+V+Z+UYTCSoI1ne8Q48+s6B+pjtOoOmO
+        oKT9GeD3FvjBGxI7vTRBu2pKfwDGhEk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-109-E4YX-y-5NwKAz4odAGr9CA-1; Mon, 08 Mar 2021 18:07:53 -0500
-X-MC-Unique: E4YX-y-5NwKAz4odAGr9CA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-578-GquZNT9RN-KO-PkirFruNw-1; Mon, 08 Mar 2021 18:07:44 -0500
+X-MC-Unique: GquZNT9RN-KO-PkirFruNw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6F171005D4A;
-        Mon,  8 Mar 2021 23:07:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E93981823DC7;
+        Mon,  8 Mar 2021 23:07:43 +0000 (UTC)
 Received: from test1103.test.redhat.com (vpn2-54-42.bne.redhat.com [10.64.54.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 71C5C6062F;
-        Mon,  8 Mar 2021 23:07:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 832B26085A;
+        Mon,  8 Mar 2021 23:07:43 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 8/9] cifs: pass the dentry instead of the inode down to the revalidation check functions
-Date:   Tue,  9 Mar 2021 09:07:34 +1000
-Message-Id: <20210308230735.337-9-lsahlber@redhat.com>
+Subject: [PATCH 9/9] cifs: check the timestamp for the cached dirent when deciding on revalidate
+Date:   Tue,  9 Mar 2021 09:07:35 +1000
+Message-Id: <20210308230735.337-10-lsahlber@redhat.com>
 In-Reply-To: <20210308230735.337-1-lsahlber@redhat.com>
 References: <20210308230735.337-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/inode.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ fs/cifs/inode.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index 0b0b01ef3ecb..98dc6d70d4fa 100644
+index 98dc6d70d4fa..95326025d77d 100644
 --- a/fs/cifs/inode.c
 +++ b/fs/cifs/inode.c
-@@ -2184,8 +2184,9 @@ cifs_rename2(struct inode *source_dir, struct dentry *source_dentry,
- }
- 
- static bool
--cifs_inode_needs_reval(struct inode *inode)
-+cifs_dentry_needs_reval(struct dentry *dentry)
- {
-+	struct inode *inode = d_inode(dentry);
+@@ -2189,6 +2189,8 @@ cifs_dentry_needs_reval(struct dentry *dentry)
+ 	struct inode *inode = d_inode(dentry);
  	struct cifsInodeInfo *cifs_i = CIFS_I(inode);
  	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
++	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
++	struct cached_fid *cfid = NULL;
  
-@@ -2296,10 +2297,10 @@ cifs_zap_mapping(struct inode *inode)
- int cifs_revalidate_file_attr(struct file *filp)
- {
- 	int rc = 0;
--	struct inode *inode = file_inode(filp);
-+	struct dentry *dentry = file_dentry(filp);
- 	struct cifsFileInfo *cfile = (struct cifsFileInfo *) filp->private_data;
+ 	if (cifs_i->time == 0)
+ 		return true;
+@@ -2199,6 +2201,16 @@ cifs_dentry_needs_reval(struct dentry *dentry)
+ 	if (!lookupCacheEnabled)
+ 		return true;
  
--	if (!cifs_inode_needs_reval(inode))
-+	if (!cifs_dentry_needs_reval(dentry))
- 		return rc;
- 
- 	if (tlink_tcon(cfile->tlink)->unix_ext)
-@@ -2322,7 +2323,7 @@ int cifs_revalidate_dentry_attr(struct dentry *dentry)
- 	if (inode == NULL)
- 		return -ENOENT;
- 
--	if (!cifs_inode_needs_reval(inode))
-+	if (!cifs_dentry_needs_reval(dentry))
- 		return rc;
- 
- 	xid = get_xid();
++	if (!open_cached_dir_by_dentry(tcon, dentry->d_parent, &cfid)) {
++		mutex_lock(&cfid->fid_mutex);
++		if (cfid->time && cifs_i->time > cfid->time) {
++			mutex_unlock(&cfid->fid_mutex);
++			close_cached_dir(cfid);
++			return false;
++		}
++		mutex_unlock(&cfid->fid_mutex);
++		close_cached_dir(cfid);
++	}
+ 	/*
+ 	 * depending on inode type, check if attribute caching disabled for
+ 	 * files or directories
 -- 
 2.13.6
 
