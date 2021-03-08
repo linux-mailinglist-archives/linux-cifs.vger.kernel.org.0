@@ -2,83 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DACD9331ABF
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CCA331AE8
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 00:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbhCHXHx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Mar 2021 18:07:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56705 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229488AbhCHXHr (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:07:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615244866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=LOgKLEx8udn89jzrKoGF0NPeq7tNeDwRvj1/u3Rc4Q0=;
-        b=bJbkA9MyZfCfca4y5/0m/FSCp+/tO5DEg4+G8zNkvqsh/IxxSFA9y3j4NkmNA2OwIUJv26
-        6sW7+0YEthRuXJJtUY6en6bFTrJUqzAE4v6Pze+V+Z+UYTCSoI1ne8Q48+s6B+pjtOoOmO
-        oKT9GeD3FvjBGxI7vTRBu2pKfwDGhEk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-578-GquZNT9RN-KO-PkirFruNw-1; Mon, 08 Mar 2021 18:07:44 -0500
-X-MC-Unique: GquZNT9RN-KO-PkirFruNw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E93981823DC7;
-        Mon,  8 Mar 2021 23:07:43 +0000 (UTC)
-Received: from test1103.test.redhat.com (vpn2-54-42.bne.redhat.com [10.64.54.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 832B26085A;
-        Mon,  8 Mar 2021 23:07:43 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 9/9] cifs: check the timestamp for the cached dirent when deciding on revalidate
-Date:   Tue,  9 Mar 2021 09:07:35 +1000
-Message-Id: <20210308230735.337-10-lsahlber@redhat.com>
-In-Reply-To: <20210308230735.337-1-lsahlber@redhat.com>
-References: <20210308230735.337-1-lsahlber@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        id S229627AbhCHXV2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Mar 2021 18:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbhCHXUw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Mar 2021 18:20:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8EC06174A;
+        Mon,  8 Mar 2021 15:20:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2C5j2UcjDYW9mYgwyHgqIe6Gz5l4DgveyBW595u9faQ=; b=u+am1ZJapiahZOpG2Rwq/AVvg0
+        oMfCYqTuZ4G+EEFNf60psslnnYYQ0bbgF+NILXiFCOjwDyIgbjxuoiEcZQv00o0WYpJH1isO6VRiC
+        xYhhvDFUoAUq9mIBi134gw3MfadH7JZ8AY9yEPnnUaxdK/iPAhg4iMyVH2wp4QF2zZ8pHolQggvnC
+        xkstHI6NejffxlN2RUIbiVQHfFT1cY1WUrPkEUFw5zfKwYkey4uzhSAMgcQE82RxexMMQ0BxHPpoW
+        X5J5LxbtGQdKzueTczFA09whN8xNZpVy9+J6I+M7eNGql2/XixHhZefyZteV2oaZFdcbjk91b7H/G
+        FOm50ufw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lJPAg-00GbJf-5O; Mon, 08 Mar 2021 23:20:22 +0000
+Date:   Mon, 8 Mar 2021 23:20:18 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@redhat.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-afs@lists.infradead.org,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: Metadata writtenback notification? -- was Re: fscache:
+ Redesigning the on-disk cache
+Message-ID: <20210308232018.GG3479805@casper.infradead.org>
+References: <CAOQ4uxjYWprb7trvamCx+DaP2yn8HCaZeZx1dSvPyFH2My303w@mail.gmail.com>
+ <2653261.1614813611@warthog.procyon.org.uk>
+ <CAOQ4uxhxwKHLT559f8v5aFTheKgPUndzGufg0E58rkEqa9oQ3Q@mail.gmail.com>
+ <517184.1615194835@warthog.procyon.org.uk>
+ <584529.1615202921@warthog.procyon.org.uk>
+ <20210308223247.GB63242@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308223247.GB63242@dread.disaster.area>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/inode.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Tue, Mar 09, 2021 at 09:32:47AM +1100, Dave Chinner wrote:
+> On Mon, Mar 08, 2021 at 11:28:41AM +0000, David Howells wrote:
+> >      Possibly it's sufficient to just clear the excess page space before
+> >      writing, but that doesn't necessarily stop a writable mmap from
+> >      scribbling on it.
+> 
+> We can't stop mmap from scribbling in it. All filesystems have this
+> problem, so to prevent data leaks we have to zero the post-eof tail
+> region on every write of the EOF block, anyway.
 
-diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index 98dc6d70d4fa..95326025d77d 100644
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -2189,6 +2189,8 @@ cifs_dentry_needs_reval(struct dentry *dentry)
- 	struct inode *inode = d_inode(dentry);
- 	struct cifsInodeInfo *cifs_i = CIFS_I(inode);
- 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-+	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
-+	struct cached_fid *cfid = NULL;
- 
- 	if (cifs_i->time == 0)
- 		return true;
-@@ -2199,6 +2201,16 @@ cifs_dentry_needs_reval(struct dentry *dentry)
- 	if (!lookupCacheEnabled)
- 		return true;
- 
-+	if (!open_cached_dir_by_dentry(tcon, dentry->d_parent, &cfid)) {
-+		mutex_lock(&cfid->fid_mutex);
-+		if (cfid->time && cifs_i->time > cfid->time) {
-+			mutex_unlock(&cfid->fid_mutex);
-+			close_cached_dir(cfid);
-+			return false;
-+		}
-+		mutex_unlock(&cfid->fid_mutex);
-+		close_cached_dir(cfid);
-+	}
- 	/*
- 	 * depending on inode type, check if attribute caching disabled for
- 	 * files or directories
--- 
-2.13.6
-
+That's certainly one approach.  Another would be to zero it during the I/O
+completion handler.  It depends whether you can trust the last writer or
+not (eg what do we do with an isofs file that happens to contain garbage
+after the last byte in the file?)
