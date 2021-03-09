@@ -2,94 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B22D3329F8
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 16:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82247332D64
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Mar 2021 18:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbhCIPPk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 9 Mar 2021 10:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbhCIPPZ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Mar 2021 10:15:25 -0500
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511A8C061761
-        for <linux-cifs@vger.kernel.org>; Tue,  9 Mar 2021 07:15:25 -0800 (PST)
-Received: by mail-vs1-xe43.google.com with SMTP id a15so6961454vsi.7
-        for <linux-cifs@vger.kernel.org>; Tue, 09 Mar 2021 07:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=oIgMOZORnFpqkLEY4XOkldZ5PI4U4y7tbgltyj4vDmgWQYVEfaC/oOrwpP8nWqOPRA
-         b4lmNkXxmA/dktBzewQGt7+50cmc3Ep2M8YaNg1La+uLUYBnsdlODGpbBrSqMuG1fLu/
-         tnebu6yOS0laGTSO/r2PpKRaP02WaSH+1xvSZSQftCmTo5R9PeWX9DHhonXGuTZrIaSc
-         BDUl5XjuF2kWXKyIYghjMPs1scSrSUcNpIPSGSrWQ3ElYJjXUxuPt50/+usnhZZLRM2W
-         GiRA0lko2x2HsmABW5pfalPFsl8/Bv8XNPHaXb2jti5jgoKsXF62dAmX+50/Vx0v65IZ
-         p2fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=WwJkmplxNi6cf/yVSRULws6V36DWfXVeyXGlGtPRnSpjwObZhfPzSoMA2ncxIvpsYG
-         OpJXrmyNeYWtaJ+AmAfKwf7oT/rcaHswGD9/tl7BEOP8ruSIdzOEykbXF9PTy5ZTLfvP
-         pwGcZ4fgKAePyPH9Y2HjQ+l3bdeZl1e1YxHRmVxdceEKLTLSXXzUqzbCzCRFnGbe+2vp
-         ZAAsDIVgRLOGvFryuf32Bm0fiivGN8QVi4/5gazTFBopK3Iltj7jsLpK6ILchiw5kQHW
-         7vstskQHu+Zp8qknIad/Mzur4HD7WxMguA7K9KamZTqenfDmYtKwd8sZWFajACSWjolj
-         H1WA==
-X-Gm-Message-State: AOAM532y+bRC3461ydTdqIKLHNdD+g9sWnLUqjV+gy5dpyLyrI3EIBmt
-        K5pfZLlRXJPTQJu1IHzWBK/W3973NBVTYj3DpYE=
-X-Google-Smtp-Source: ABdhPJw4sZFls8c0q8hsBLLhB+O1yH/NEyVTactV20Z0sheIE0DhFe5oB24VHMwJ0WozGcoOUNpXB8eBkFPftUE//J8=
-X-Received: by 2002:a67:3212:: with SMTP id y18mr16683199vsy.57.1615302924406;
- Tue, 09 Mar 2021 07:15:24 -0800 (PST)
+        id S230173AbhCIRhX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 9 Mar 2021 12:37:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56182 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229691AbhCIRhP (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 9 Mar 2021 12:37:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615311434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PSiVCHS8WBpF94A9aMAc/wUW/TL9xvRomhWoAvmE9vk=;
+        b=IobHoWAnfxWfmPR5TmtNh8RPMDNIIqp/OnmMQP5kjcTnTegtjod5F8+1Uy7GF9pa+PT/7a
+        AEKwrdtNM6H++pgeoN8xO7pOdQ2B3vcfdMRETlAo24/QkI/gN/DFuM0U/OBom3EGQ4+tn4
+        dsDVTYnNCpJBvZV/lf2FY17ffn9pB3A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-580-eZETMmwONUStF47UaC41wQ-1; Tue, 09 Mar 2021 12:37:11 -0500
+X-MC-Unique: eZETMmwONUStF47UaC41wQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A757319057A1;
+        Tue,  9 Mar 2021 17:37:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-118-152.rdu2.redhat.com [10.10.118.152])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E25671037E81;
+        Tue,  9 Mar 2021 17:37:09 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87k0qoxz7r.fsf@suse.com>
+References: <87k0qoxz7r.fsf@suse.com> <87tupuya6t.fsf@suse.com> <CAN05THRV_Tns4MTO-GFNg0reR+HJKa1BCSQ0m23PTSryGNPCeg@mail.gmail.com>
+To:     =?us-ascii?Q?=3D=3Futf-8=3FQ=3FAur=3DC3=3DA9lien=3F=3D?= Aptel 
+        <aaptel@suse.com>
+Cc:     dhowells@redhat.com, ronnie sahlberg <ronniesahlberg@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Subject: Re: [EXPERIMENT] new mount API verbose errors from userspace
 MIME-Version: 1.0
-Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Tue, 9 Mar 2021 07:15:23 -0800 (PST)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
-Date:   Tue, 9 Mar 2021 07:15:23 -0800
-Message-ID: <CAH16wSOnOTA2KNzVfHX6xcNiOrwFNyr+iWW_vSGiV_bchKYh=Q@mail.gmail.com>
-Subject: From Mrs.E.Glenn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 09 Mar 2021 17:37:09 +0000
+Message-ID: <181014.1615311429@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-Dear Beloved,
+Aur=C3=A9lien Aptel <aaptel@suse.com> wrote:
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.
+> > What I think we should have is a ioctl(),  system-call,
+> > /proc/fs/cifs/options,  where we can query the kernel/file-system
+> > module
+> > for "give me a list of all recognized mount options and their type"
+> > i.e. basically a way to fetch the "struct fs_parameter_spec" to userspa=
+ce.
+> >
+> > This is probably something that would not be specific to cifs, but
+> > would apply to all filesystem modules.
+>=20
+> That sounds like a good idea yes. I wonder if David Howells has
+> considered this.
 
-My guess about you may not be accurate because I came across your
-contact at the humanitarian calendar event of the year but I believe
-in God who divinely directed me to you for this solemn proposal of
-charitable work.
+I had this.  Al disliked it and removed it before the patches got upstream.
+Also Linus hated the fsinfo() syscall that was the way to get this (amongst
+other things).
 
-Therefore I wholeheartedly wish to bequeath my fortune to you as a
-God-fearing person for the continuation of charitable work anywhere
-around the world.
+David
 
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death.
-
-As soon as I receive your quick reply assuring me that you will
-utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
-know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
