@@ -2,37 +2,37 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 089EF33E3E0
-	for <lists+linux-cifs@lfdr.de>; Wed, 17 Mar 2021 01:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C504033E5D6
+	for <lists+linux-cifs@lfdr.de>; Wed, 17 Mar 2021 02:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbhCQA5u (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 16 Mar 2021 20:57:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35236 "EHLO mail.kernel.org"
+        id S229958AbhCQBUT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 16 Mar 2021 21:20:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231500AbhCQA5P (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:57:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84DDA64FB4;
-        Wed, 17 Mar 2021 00:57:14 +0000 (UTC)
+        id S231679AbhCQA5a (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:57:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A3D664FC7;
+        Wed, 17 Mar 2021 00:57:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942635;
-        bh=tA4CK3NAKwUToyZ9AmHKSR6pBb2laXj7OM143GZcISg=;
+        s=k20201202; t=1615942649;
+        bh=v4aQ1C+PHdEewD1wIyzJBQ9dILGTKmpEYaUkaBDltbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=At0V6t0HJxwsDwbMRAkwxxTXacD0AA06GCO5YLr/Y1Bw9ecHOfX0YKf3aUkyXcax7
-         PNPvncMqs3yzGALSf79yIp3E6fc0tonbJ1WytN/LrzNiUrcTloILAsFkm6xIXmjvq1
-         Ro7EtFewZJV59bnaV6fHY2qywEXqinTe8gJZQKiPqRgxoiQLGbwK4F83LyilOC/zWf
-         2ebUfKL+Tima/dnENBs86smigRdVOptyBhWJzeF2U/qiEcAKZA0Jii5WZDAf9xbrK0
-         HlR+uwZIEf12k4pNwN6VKzeJWT2RA9+pf/0LdleOuWNUn55bDmGFjDlCAzBrAiLz4l
-         dHSjyaGs40pvg==
+        b=qWtQYK8xMZttJa6+tsZvRgK+4JlQxCK7ZNKk1llp/dzPAmhfDgH0ZNT9WRe6/xzDR
+         IT9BhFwhz3kc8OiNeT9ipy6lmK4lZKhi7Pm9ZKgc6liWnF1nxzE4X/8VveeOVWvSwo
+         gt5i5L+xr4njE5837nuLnwasyATfjCVubbdkg9hF5wUL1Vh8dG+mtrZOnuUfAozjRL
+         67Zdfse0pHU8/1OVc1FmPvXKVfpjqpm/VRkUCOKv52bLeEXldBDFqHmMQmjmVhCiFb
+         uywSV7E+/a58MRaDtvhIxi//S90gygYMWmVWZl3snhl6JIDg3kEWt2qneg2M8zAl6R
+         XnAmvH3FFlxmg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aurelien Aptel <aaptel@suse.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
+Cc:     Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.10 16/54] cifs: ask for more credit on async read/write code paths
-Date:   Tue, 16 Mar 2021 20:56:15 -0400
-Message-Id: <20210317005654.724862-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 28/54] cifs: change noisy error message to FYI
+Date:   Tue, 16 Mar 2021 20:56:27 -0400
+Message-Id: <20210317005654.724862-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
 References: <20210317005654.724862-1-sashal@kernel.org>
@@ -44,52 +44,45 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Aurelien Aptel <aaptel@suse.com>
+From: Paulo Alcantara <pc@cjr.nz>
 
-[ Upstream commit 88fd98a2306755b965e4f4567f84e73db3b6738c ]
+[ Upstream commit e3d100eae44b42f309c1366efb8397368f1cf8ed ]
 
-When doing a large read or write workload we only
-very gradually increase the number of credits
-which can cause problems with parallelizing large i/o
-(I/O ramps up more slowly than it should for large
-read/write workloads) especially with multichannel
-when the number of credits on the secondary channels
-starts out low (e.g. less than about 130) or when
-recovering after server throttled back the number
-of credit.
+A customer has reported that their dmesg were being flooded by
 
-Signed-off-by: Aurelien Aptel <aaptel@suse.com>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+  CIFS: VFS: \\server Cancelling wait for mid xxx cmd: a
+  CIFS: VFS: \\server Cancelling wait for mid yyy cmd: b
+  CIFS: VFS: \\server Cancelling wait for mid zzz cmd: c
+
+because some processes that were performing statfs(2) on the share had
+been interrupted due to their automount setup when certain users
+logged in and out.
+
+Change it to FYI as they should be mostly informative rather than
+error messages.
+
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/cifs/transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index c6f8bc6729aa..d1d550647cd6 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -4032,8 +4032,7 @@ smb2_async_readv(struct cifs_readdata *rdata)
- 	if (rdata->credits.value > 0) {
- 		shdr->CreditCharge = cpu_to_le16(DIV_ROUND_UP(rdata->bytes,
- 						SMB2_MAX_BUFFER_SIZE));
--		shdr->CreditRequest =
--			cpu_to_le16(le16_to_cpu(shdr->CreditCharge) + 1);
-+		shdr->CreditRequest = cpu_to_le16(le16_to_cpu(shdr->CreditCharge) + 8);
- 
- 		rc = adjust_credits(server, &rdata->credits, rdata->bytes);
- 		if (rc)
-@@ -4339,8 +4338,7 @@ smb2_async_writev(struct cifs_writedata *wdata,
- 	if (wdata->credits.value > 0) {
- 		shdr->CreditCharge = cpu_to_le16(DIV_ROUND_UP(wdata->bytes,
- 						    SMB2_MAX_BUFFER_SIZE));
--		shdr->CreditRequest =
--			cpu_to_le16(le16_to_cpu(shdr->CreditCharge) + 1);
-+		shdr->CreditRequest = cpu_to_le16(le16_to_cpu(shdr->CreditCharge) + 8);
- 
- 		rc = adjust_credits(server, &wdata->credits, wdata->bytes);
- 		if (rc)
+diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+index 9391cd17a2b5..fc9278ca26c0 100644
+--- a/fs/cifs/transport.c
++++ b/fs/cifs/transport.c
+@@ -1167,7 +1167,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
+ 	}
+ 	if (rc != 0) {
+ 		for (; i < num_rqst; i++) {
+-			cifs_server_dbg(VFS, "Cancelling wait for mid %llu cmd: %d\n",
++			cifs_server_dbg(FYI, "Cancelling wait for mid %llu cmd: %d\n",
+ 				 midQ[i]->mid, le16_to_cpu(midQ[i]->command));
+ 			send_cancel(server, &rqst[i], midQ[i]);
+ 			spin_lock(&GlobalMid_Lock);
 -- 
 2.30.1
 
