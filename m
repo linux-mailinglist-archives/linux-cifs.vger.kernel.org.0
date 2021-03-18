@@ -2,108 +2,79 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9BA33FAC7
-	for <lists+linux-cifs@lfdr.de>; Wed, 17 Mar 2021 23:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585F0340039
+	for <lists+linux-cifs@lfdr.de>; Thu, 18 Mar 2021 08:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbhCQWK6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 17 Mar 2021 18:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S229787AbhCRHYm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 18 Mar 2021 03:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbhCQWKY (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 17 Mar 2021 18:10:24 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29287C06174A
-        for <linux-cifs@vger.kernel.org>; Wed, 17 Mar 2021 15:10:23 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 15so5174952ljj.0
-        for <linux-cifs@vger.kernel.org>; Wed, 17 Mar 2021 15:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=05fERVyE54TDxhytiX//TrVT2m/SBW1bWCi76mbIC7g=;
-        b=HfmOzU1k2aUWtpmU/fFTZ5pvoYvHl7p8UbXKTBNRgqWnHykvpfJ8uYK5LZa2oktPwi
-         DLws9q4+tuWGUi84IL/G2NyZEhVuxK1JkYTwkztPPr/w8saAP/ayC/Q3JwYyHSNHp11I
-         Xf8q6TdLroTaLr1KL+EUehLXWKf3j/cxoYFnz+eRin46i+oXThMqxm7lhLfnaNu4+DDE
-         7izJF27hAzx+HzLChKGc3P/HX/3ePwxEMkk+nImcfv7z53ZKT97SxD6cqXcOhgtf+K65
-         SsRSimktYSmbqZX9LskG1RhApNq2WlfFA0lFfLJjA0GTPfxCyjVSrzQpYh7/1B+uy6jH
-         JATQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=05fERVyE54TDxhytiX//TrVT2m/SBW1bWCi76mbIC7g=;
-        b=VRTeKErDeZxkblfR1v90KnlKsk/Wst0t1Hqw30aM8bFI7ChyH5hUT0okQA9TlS+fQ1
-         Kcxf/QKuKwS2bldsZaEOvqkQL7eXJ7QSBJcvwtvm8GXcBAAgNQNb+kNRIsdX5vYWeoHJ
-         CfMnnCn3SoSfI8KGFA0Jpioy0ROZINl2mlZijyNY+5lTQXYQyamgOP86RxsjH0w8rhcT
-         5XV8QALfL4oeHpFmvy5D+QG1hgpNVilAMQ6eBUB5+FtXxgkX75NXEJ55vJ/a7U6SIttt
-         I4x/ReScKfiF8Vm8lsKjd55GE7jhEsQvu+UWJYOu7La7uV7YWeKrB9/pPzjTbvtOkCzy
-         D/HQ==
-X-Gm-Message-State: AOAM533JvqYwuwsSgCbgJj5290xf5zA+ntDEY5psgOGNXX/wb6hUM8Xl
-        f9iB4+sV3CTbFIg238ugdvTgawVETOf30wZozP4HaBvUVLs+vA==
-X-Google-Smtp-Source: ABdhPJxPZX4FQWn/v1Hd8K6SRYHaxDWW2lb0PLgcXAz01vEk2V5kyPakrC/N3bu4AlabD3vAdS750wQGE2epcXXVRkc=
-X-Received: by 2002:a2e:921a:: with SMTP id k26mr3101966ljg.149.1616019021909;
- Wed, 17 Mar 2021 15:10:21 -0700 (PDT)
-MIME-Version: 1.0
-From:   Richard Beare <richard.beare@gmail.com>
-Date:   Thu, 18 Mar 2021 09:10:10 +1100
-Message-ID: <CA+V7QS9gJ+WX6iVsRBaCoHZXwr-zPQSNWbsUqk=N06xAYv1N6g@mail.gmail.com>
-Subject: Query - cifscreds usage
-To:     linux-cifs@vger.kernel.org
+        with ESMTP id S229784AbhCRHYK (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 18 Mar 2021 03:24:10 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577B7C06174A
+        for <linux-cifs@vger.kernel.org>; Thu, 18 Mar 2021 00:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=yM7H0ESbl80aNeiTcgrZ2sN2FYU6bqQ2HcEkrpW144U=; b=hhtChp9UoB3Jzh36aKPTv13fXX
+        p98E8u+tqOfdKYHFHRn4bFN1E2zyRQyx1XnXP8LVJNUlXlvw8RsJBcCPxuX2fORwz3MG1gnSFc8kh
+        dkFV/tcIN59JFL8BALeaiocvVfhlfDMDMmdvaWU1k9Gtzsvw8auglCwO8CIC+HBnWAhJ9O94wyTut
+        k2apLv+W156yxZI6yj9POvlFcLNjmGEUG/Qh0rAq03+jPXZdMOGnUq/XvLYHb/qPcf/F7I9VLPWJN
+        NrmKHIvOafzFYHYB9GZjUZ0tAKf0VWcFn8Uf+94imgHJ+fSnbIRVhgFcNxyI7M5/dIVtwq7ODpDeJ
+        oOdhgdGmO7PZkvNbzjFpPDI2ZZ5h1lseRHUAXxriyuYMNtYJjmTajFgimC4e8bLtd8LI4ZyiHxWnH
+        Z5l5TuI2pDs8uGfyPaXi30M629vz506aZVPhtWCRCR8NiXU2/vfCf96ytXR5tx9MiRK6RMRtrGpKD
+        na48lsgu6wsZTFzXGcxBMBQH;
+Received: from [2a01:4f8:192:486::6:0] (port=38178 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1lMn0j-0005W3-9p
+        for cifs-qa@samba.org; Thu, 18 Mar 2021 07:24:01 +0000
+Received: from [::1] (port=63596 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1lMn0i-002iWF-PS
+        for cifs-qa@samba.org; Thu, 18 Mar 2021 07:24:00 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14476] Cannot set timestamp of Minshall-French symlinks from a
+ CIFS mount
+Date:   Thu, 18 Mar 2021 07:23:59 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: version
+Message-ID: <bug-14476-10630-DvVDRLIoEM@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14476-10630@https.bugzilla.samba.org/>
+References: <bug-14476-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi,
-Apologies in advance if this is the wrong forum. Getting help
-documentation directed me here. I'm setting up a small set of
-workstations with what I hope to be three types of users, and would
-like to clarify whether certain parts of the cifs configuation are
-possible - something I haven't been able to determine from manuals or
-google to date.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14476
 
-The base system is ubuntu 20.04lts:
+Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
 
-uname -r
-5.4.0-67-generic
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Version|3.x                         |5.x
 
-mount.cifs -V
-mount.cifs version: 6.9
-
-The current setup of the machine successfully handles the cifs mount
-via pam_mount. The mount uses ntlmssp credentials, with a command
-like:
-
-MOUNT_OPTIONS="-o
-username=${USER},uid=${_UID},gid=${_GID},domain=DOMAIN,sec=ntlmssp,vers=2.1"
-AD_SHARE="//ad.host/home/user${USER_FOLDER}/${USER}"
-
-mount -t cifs ${AD_SHARE} ${_MNTPT} ${MOUNT_OPTIONS}
-
-There is no kerberos for the cifs share available to linux.
-What I'd like to know is whether it is possible to use kernel key
-credentials, like those stored with cifscreds, to authenticate a mount
-request at other times.
-
-For example, might it be possible to capture those credentials in the
-pam process and then later issue a mount command that does not prompt
-for a password? My interpretation of the docs suggests that it isn't
-possible - the credentials are used to control access to an already
-mounted share, rather than perform the initial mount.
-
-I'd like to be able to have both cifs and nfs mounts happening in the
-same place under autofs control, but without placing credentials in
-files. The cifscreds option seems very close, but not quite right - is
-my interpretation right?
-
-
-More information on why I'm asking this - I'd like a user to be able
-to authenticate against AD,
-get checked against some list, have an nfs mounted home directory
-provided if available and the cifs share mounted elsewhere for
-convenience. A cifs share gets used for home folders if the user isn't
-on the special list. Any user should be able to trigger automounts of
-nfs home folders by accessing them, as in a typical pure linux setup.
-
-The other option I think may be viable is modification of the home
-folder location during the login process, but I can't see how to
-achieve that either.
-Thanks
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
