@@ -2,102 +2,82 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0885341514
-	for <lists+linux-cifs@lfdr.de>; Fri, 19 Mar 2021 06:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F17134172A
+	for <lists+linux-cifs@lfdr.de>; Fri, 19 Mar 2021 09:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbhCSFxI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 19 Mar 2021 01:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbhCSFxH (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 19 Mar 2021 01:53:07 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85563C06174A;
-        Thu, 18 Mar 2021 22:53:06 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id f26so10481203ljp.8;
-        Thu, 18 Mar 2021 22:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ieKEg/I8DWyrNnzM2/enM81rs852gdyY9A7m+JJ808U=;
-        b=iquAE73D+G5vtFjan5O+JlTPfC66rcUGH/5thoAYHxPmC24aRf/jy+PA3N8+BpHx3u
-         g2KmGfunQ6z4ink3IHSgAg1+a+VbCxC5nivZehVhVfMDUa5V0lcH9eHLBAcfktr8HB8c
-         JXd/YLFYA/QBhunWB86TPz8WYOP2qb90C5psmvcS/0gnMmftlZJ6VOwD3mMBLpo+g75Y
-         9/o+y+Lke2U7b2OXIvaj9v29YDqNG4rRkFWPwNSgCPKmsNJj8FW4AcdIfAvLn89O/ldy
-         UlccC/CAB3UN3X1dzXG79XeZn3AByb9CGsFRvnx7RebEg1BJ/cbnVbk/xcJYqH2n8LIF
-         4jRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ieKEg/I8DWyrNnzM2/enM81rs852gdyY9A7m+JJ808U=;
-        b=WqpnTYz9k2syMObDxb92llGYJPr2Bxo4sYM2EIMXZMbKDDMVps3bcnkIDO/mgyYEZL
-         pZ5A+XDb52T5B4Q6d8liyrRQsnprT1wh9V6N4GJsCCGAHiBN45gqkbVFGFM6muHb+dTy
-         bVJWa9iYYVLVpil6LbhS1Tn3Wt0aThAW+ke1QwgE+SLhA5G0CCN3JQma3VKvXybXJbQ6
-         X59qPqnhqVyF158A5bVJH2DZKLlfQaOHEp11vsziKvhCh1yR/uAlw7PCV9bpqb4I+6Yj
-         Af8sg7nGBHUc1MDaM9LSOeH+Bv+2H5jDND6rvrm7/odVley8Jji3zE11ALPcwIxUpiI5
-         p8+w==
-X-Gm-Message-State: AOAM533/zsnMVPNxvY+sOn2AvBjssJCxScKtomI+un3xrAfFpuZOpnxw
-        PwfnNdnM+hqxn4wxaUkQ5KXmjlEEHTo0bgLGMFw=
-X-Google-Smtp-Source: ABdhPJydyF85xrIO4j2aR2Wm5nIVy2epWPKLP+h7WXhkpS3H1B7/f3GVCd/4EXVHM/UTaYywdG+DosSaWPia01x72gk=
-X-Received: by 2002:a2e:9907:: with SMTP id v7mr3584997lji.256.1616133185055;
- Thu, 18 Mar 2021 22:53:05 -0700 (PDT)
+        id S234215AbhCSIM3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 19 Mar 2021 04:12:29 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:50120 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234341AbhCSIMH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 19 Mar 2021 04:12:07 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12J85L1x089246;
+        Fri, 19 Mar 2021 08:12:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=AedUhQRzREzZEC9XIvj2WsnLw7UGWi9pLMZgeRW2fRo=;
+ b=EEXf7j2GKgsB2/6O64xm47rxILnfLbo1ITBm0eRKT73iukBzQ3ace6J83V+SKoxbIypn
+ YzTJou8TKsSRCelnChZqhz4zMDZWZfyMna98bsvUuyPpyNf8oe3zzRrL5tPGMNiK32Sc
+ tjOfhf7Eol2ZinaeQUxeNd6q4yL+CEusewwFTWxOLYl5+hAOZnnOSARXQiR7OTsQ+oTT
+ haIW6Ir6NQjAi1Tv3jOcw3uiHOwhSNE09zXmsfaKHSsKXqQwFkwxnM5F+r4Mswk1p196
+ 3eoa3hukVxmytONNowmOXTY/3fefKxToyoVZcPar0OUXMjsaTDi4I5vALf+sf7bWHhDr Jw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 378nbmj53r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Mar 2021 08:12:03 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12J8ADs3131651;
+        Fri, 19 Mar 2021 08:12:01 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 3797b3y95k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Mar 2021 08:12:01 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 12J8C0TX032202;
+        Fri, 19 Mar 2021 08:12:01 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 19 Mar 2021 01:12:00 -0700
+Date:   Fri, 19 Mar 2021 11:11:53 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Namjae Jeon <namjae.jeon@samsung.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [bug report] cifsd: introduce SMB3 kernel server
+Message-ID: <20210319081153.GD21246@kadam>
+References: <YFNRsYSWw77UMxw1@mwanda>
+ <CAH2r5msOBAho=1W-eY0paj+4P1J+tuw-vFaRGg8oY50dXu6MHQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210319004657.485503-1-liu.xuzhi@zte.com.cn>
-In-Reply-To: <20210319004657.485503-1-liu.xuzhi@zte.com.cn>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 19 Mar 2021 00:52:54 -0500
-Message-ID: <CAH2r5mvXw8mdY1b56O6802NoemXMh70P4MJY0E-dr-rZ6=Cu-A@mail.gmail.com>
-Subject: Re: [PATCH] fs/cifs/: fix misspellings using codespell tool
-To:     menglong8.dong@gmail.com
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Steve French <sfrench@samba.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Liu xuzhi <liu.xuzhi@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH2r5msOBAho=1W-eY0paj+4P1J+tuw-vFaRGg8oY50dXu6MHQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9927 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103190057
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9927 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 clxscore=1011 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103190056
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+On Thu, Mar 18, 2021 at 12:58:11PM -0500, Steve French wrote:
+> Is the maintainers entry he added recently ok?
+> 
+> https://github.com/smfrench/smb3-kernel/blob/ff4a5c2c2732f7b7790a2424e8927f8602e467b5/MAINTAINERS#L4447 
+> 
 
-On Thu, Mar 18, 2021 at 7:50 PM <menglong8.dong@gmail.com> wrote:
->
-> From: Liu xuzhi <liu.xuzhi@zte.com.cn>
->
-> A typo is found out by codespell tool in 251th lines of cifs_swn.c:
->
-> $ codespell ./fs/cifs/
-> ./cifs_swn.c:251: funciton  ==> function
->
-> Fix a typo found by codespell.
->
-> Signed-off-by: Liu xuzhi <liu.xuzhi@zte.com.cn>
-> ---
->  fs/cifs/cifs_swn.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
-> index f2d730fffccb..d829b8bf833e 100644
-> --- a/fs/cifs/cifs_swn.c
-> +++ b/fs/cifs/cifs_swn.c
-> @@ -248,7 +248,7 @@ static int cifs_swn_send_unregister_message(struct cifs_swn_reg *swnreg)
->
->  /*
->   * Try to find a matching registration for the tcon's server name and share name.
-> - * Calls to this funciton must be protected by cifs_swnreg_idr_mutex.
-> + * Calls to this function must be protected by cifs_swnreg_idr_mutex.
->   * TODO Try to avoid memory allocations
->   */
->  static struct cifs_swn_reg *cifs_find_swn_reg(struct cifs_tcon *tcon)
-> --
-> 2.25.1
->
+Ah good.  It hadn't hit linux-next when I wrote these.
 
+regards,
+dan carpenter
 
--- 
-Thanks,
-
-Steve
