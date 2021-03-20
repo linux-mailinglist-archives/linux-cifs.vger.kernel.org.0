@@ -2,164 +2,99 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B0F342A87
-	for <lists+linux-cifs@lfdr.de>; Sat, 20 Mar 2021 05:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F3A342E46
+	for <lists+linux-cifs@lfdr.de>; Sat, 20 Mar 2021 17:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbhCTEfq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 20 Mar 2021 00:35:46 -0400
-Received: from zeniv-ca.linux.org.uk ([142.44.231.140]:58358 "EHLO
-        zeniv-ca.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbhCTEfT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 20 Mar 2021 00:35:19 -0400
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lNTIO-007ZDa-NV; Sat, 20 Mar 2021 04:33:04 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     linux-cifs@vger.kernel.org
-Cc:     Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH 7/7] cifs: switch build_path_from_dentry() to using dentry_path_raw()
-Date:   Sat, 20 Mar 2021 04:33:04 +0000
-Message-Id: <20210320043304.1803623-7-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210320043304.1803623-1-viro@zeniv.linux.org.uk>
-References: <YFV6iexd6YQTybPr@zeniv-ca.linux.org.uk>
- <20210320043304.1803623-1-viro@zeniv.linux.org.uk>
+        id S229840AbhCTQRY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 20 Mar 2021 12:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229821AbhCTQRY (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 20 Mar 2021 12:17:24 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE330C061574;
+        Sat, 20 Mar 2021 09:17:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a198so14698755lfd.7;
+        Sat, 20 Mar 2021 09:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=MjE8p8N6AtPJDpjXiZiJj0taGnUvpDrOn3GR8Bz5Jq0=;
+        b=pdgc8nLLZlAQ+Sh900ZiHpWCImI587k43qprKp7qpwcyqBPEsYDcsRHy4H1s+Gu2OE
+         IYAknTO9G91lsw0antFasThFJcdtjym54WK633zowikjgq+1J1/MxjhIeK01aI0DLuj1
+         oYRuF5OJ04H9BG96F3QsQa2QsymQuJvkMoGyJtYklHy8wzCN/HsWSQ1C1SLyUFhHq2DR
+         RAo3mtEeKx15A753kb0gMxAPjiA5pAcAQzVbvNFlcQjavC+TNT8s2NDOmq7pBPR0qtzY
+         xaLJ8GAtxNgDlvYVM2dvi3AuQAB0Fyn8qnmf+l2i3md2Ik1E1XWQgfITmTdhvEhb/ihT
+         Mlng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=MjE8p8N6AtPJDpjXiZiJj0taGnUvpDrOn3GR8Bz5Jq0=;
+        b=e/cP1i4uUcptGcqaD5hQLf2tv66hecoKuQHDfP4IDhBhi/p8tVRfm3wx16PGLvxvDA
+         rW7AUH+WoETF6Ldq25X5aTJqQN9YG1OAzJYHD6xEh2O8KP31Zn0u29JWv42FDCotVJBv
+         jTuVf3gjouZCRpNwOyLZR2Tp7kA/pu0XUejdPKXYHhMxoiCMjUh05jem8LoqrCeNQGN6
+         ESNdnvZu2fDrr2cD1HGGoVSjVmf1NjlNAkJBziwS5gkKSLi0jpscRX7/3tK9hEj0i3ES
+         4QlmAk7r06626vWZERODivXD2DvW7PsCP+T4BkDH7H2ZzabwaCWp371fpnArcX9Nh47E
+         7alQ==
+X-Gm-Message-State: AOAM5306JOeil1ppJ5vogimeOKOKN4j1dU+4QWWprDkQinKetRXEl89o
+        fdpBUEPoosBsxt4wEB8VIlVcAAdf7pbU6tWJSZ3k5rLoDjL+dw==
+X-Google-Smtp-Source: ABdhPJwFn/b0MVFEepvQaUa9qOAcI7i+QWH0OFcXEM7mh0QqbMKL8AoasqOPlfavWSMaHnD/LroEml12txZ9kDBfO3E=
+X-Received: by 2002:a19:3f04:: with SMTP id m4mr3905483lfa.395.1616257041813;
+ Sat, 20 Mar 2021 09:17:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 20 Mar 2021 11:17:10 -0500
+Message-ID: <CAH2r5msU=QjVKHq_qYNOqwtLFctqU6E6cM9nBUw934Zb7YR9Hw@mail.gmail.com>
+Subject: [GIT PULL] CIFS/SMB3 Fixes
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The cost is that we might need to flip '/' to '\\' in more than
-just the prefix.  Needs profiling, but I suspect that we won't
-get slowdown on that.
+Please pull the following changes since commit
+1e28eed17697bcf343c6743f0028cc3b5dd88bf0:
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/cifs/dir.c | 83 +++++++++++++++--------------------------------------------
- 1 file changed, 21 insertions(+), 62 deletions(-)
+  Linux 5.12-rc3 (2021-03-14 14:41:02 -0700)
 
-diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
-index 6e855f004f50..3febf667d119 100644
---- a/fs/cifs/dir.c
-+++ b/fs/cifs/dir.c
-@@ -93,20 +93,16 @@ char *
- build_path_from_dentry_optional_prefix(struct dentry *direntry, void *page,
- 				       bool prefix)
- {
--	struct dentry *temp;
--	int namelen;
- 	int dfsplen;
- 	int pplen = 0;
--	char *full_path = page;
--	char dirsep;
- 	struct cifs_sb_info *cifs_sb = CIFS_SB(direntry->d_sb);
- 	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
--	unsigned seq;
-+	char dirsep = CIFS_DIR_SEP(cifs_sb);
-+	char *s;
- 
- 	if (unlikely(!page))
- 		return ERR_PTR(-ENOMEM);
- 
--	dirsep = CIFS_DIR_SEP(cifs_sb);
- 	if (prefix)
- 		dfsplen = strnlen(tcon->treeName, MAX_TREE_SIZE + 1);
- 	else
-@@ -115,74 +111,37 @@ build_path_from_dentry_optional_prefix(struct dentry *direntry, void *page,
- 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH)
- 		pplen = cifs_sb->prepath ? strlen(cifs_sb->prepath) + 1 : 0;
- 
--cifs_bp_rename_retry:
--	namelen = dfsplen + pplen;
--	seq = read_seqbegin(&rename_lock);
--	rcu_read_lock();
--	for (temp = direntry; !IS_ROOT(temp);) {
--		namelen += (1 + temp->d_name.len);
--		temp = temp->d_parent;
--	}
--	rcu_read_unlock();
--
--	if (namelen >= PAGE_SIZE)
-+	s = dentry_path_raw(direntry, page, PAGE_SIZE);
-+	if (IS_ERR(s))
-+		return s;
-+	if (s < (char *)page + pplen + dfsplen)
- 		return ERR_PTR(-ENAMETOOLONG);
--
--	full_path[namelen] = 0;	/* trailing null */
--	rcu_read_lock();
--	for (temp = direntry; !IS_ROOT(temp);) {
--		spin_lock(&temp->d_lock);
--		namelen -= 1 + temp->d_name.len;
--		if (namelen < 0) {
--			spin_unlock(&temp->d_lock);
--			break;
--		} else {
--			full_path[namelen] = dirsep;
--			strncpy(full_path + namelen + 1, temp->d_name.name,
--				temp->d_name.len);
--			cifs_dbg(FYI, "name: %s\n", full_path + namelen);
--		}
--		spin_unlock(&temp->d_lock);
--		temp = temp->d_parent;
--	}
--	rcu_read_unlock();
--	if (namelen != dfsplen + pplen || read_seqretry(&rename_lock, seq)) {
--		cifs_dbg(FYI, "did not end path lookup where expected. namelen=%ddfsplen=%d\n",
--			 namelen, dfsplen);
--		/* presumably this is only possible if racing with a rename
--		of one of the parent directories  (we can not lock the dentries
--		above us to prevent this, but retrying should be harmless) */
--		goto cifs_bp_rename_retry;
--	}
--	/* DIR_SEP already set for byte  0 / vs \ but not for
--	   subsequent slashes in prepath which currently must
--	   be entered the right way - not sure if there is an alternative
--	   since the '\' is a valid posix character so we can not switch
--	   those safely to '/' if any are found in the middle of the prepath */
--	/* BB test paths to Windows with '/' in the midst of prepath */
--
- 	if (pplen) {
--		int i;
--
- 		cifs_dbg(FYI, "using cifs_sb prepath <%s>\n", cifs_sb->prepath);
--		memcpy(full_path+dfsplen+1, cifs_sb->prepath, pplen-1);
--		full_path[dfsplen] = dirsep;
--		for (i = 0; i < pplen-1; i++)
--			if (full_path[dfsplen+1+i] == '/')
--				full_path[dfsplen+1+i] = CIFS_DIR_SEP(cifs_sb);
-+		s -= pplen;
-+		memcpy(s + 1, cifs_sb->prepath, pplen - 1);
-+		*s = '/';
- 	}
-+	if (dirsep != '/') {
-+		/* BB test paths to Windows with '/' in the midst of prepath */
-+		char *p;
- 
-+		for (p = s; *p; p++)
-+			if (*p == '/')
-+				*p = dirsep;
-+	}
- 	if (dfsplen) {
--		strncpy(full_path, tcon->treeName, dfsplen);
-+		s -= dfsplen;
-+		memcpy(page, tcon->treeName, dfsplen);
- 		if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_POSIX_PATHS) {
- 			int i;
- 			for (i = 0; i < dfsplen; i++) {
--				if (full_path[i] == '\\')
--					full_path[i] = '/';
-+				if (s[i] == '\\')
-+					s[i] = '/';
- 			}
- 		}
- 	}
--	return full_path;
-+	return s;
- }
- 
- /*
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.12-rc3-smb3
+
+for you to fetch changes up to 65af8f0166f4d15e61c63db498ec7981acdd897f:
+
+  cifs: fix allocation size on newly created files (2021-03-19 11:51:31 -0500)
+
+----------------------------------------------------------------
+5 cifs/smb3 fixes, 3 for stable, including an important ACL fix and
+security signature fix
+
+Test results: http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/530
+----------------------------------------------------------------
+Aurelien Aptel (1):
+      cifs: warn and fail if trying to use rootfs without the config option
+
+Liu xuzhi (1):
+      fs/cifs/: fix misspellings using codespell tool
+
+Shyam Prasad N (1):
+      cifs: update new ACE pointer after populate_new_aces.
+
+Steve French (1):
+      cifs: fix allocation size on newly created files
+
+Vincent Whitchurch (1):
+      cifs: Fix preauth hash corruption
+
+ fs/cifs/cifs_swn.c   |  2 +-
+ fs/cifs/cifsacl.c    |  9 ++++++---
+ fs/cifs/fs_context.c |  6 ++++--
+ fs/cifs/inode.c      | 10 +++++++++-
+ fs/cifs/transport.c  |  7 ++++++-
+ 5 files changed, 26 insertions(+), 8 deletions(-)
+
 -- 
-2.11.0
+Thanks,
 
+Steve
