@@ -2,238 +2,126 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8B8342544
-	for <lists+linux-cifs@lfdr.de>; Fri, 19 Mar 2021 19:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A938342A7C
+	for <lists+linux-cifs@lfdr.de>; Sat, 20 Mar 2021 05:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbhCSStN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 19 Mar 2021 14:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhCSStH (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 19 Mar 2021 14:49:07 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF7EC06174A
-        for <linux-cifs@vger.kernel.org>; Fri, 19 Mar 2021 11:49:06 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o126so2032801lfa.0
-        for <linux-cifs@vger.kernel.org>; Fri, 19 Mar 2021 11:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3qt5YbNKbHS2c2l3xh7sL7UsRmdCKIRfyB+qQfZY+Gw=;
-        b=X1QMqNGN4G/vddcAPMqZavTZPQTJjMabm3jNVd9FEJ/cIPAdqyYGQmgGxgeRswCUjr
-         Bh0wYOTsCF2V4sLfh3WHZ50mNXuQSXLOQJRSm9CRR7AW7eveFa2P8S3Ma5xETzJ4367/
-         hTm1BDgvX/MXQDQQYQdpXPoEnJH/ttGsAythFtUznqc4NM8tI7UgA1hs5dvwl5z37t3h
-         cUKPYhBV/stZN8HIACXBEyPJZt4p6KnMbRvDMLe2I52z2Fd2RDBJiYY3Pj0vM2kSUFv5
-         sJ2ihfGnhNWm7mce5TW95bOSu3z84fTgsIAiZTrUrOkJ5SwHLO1AE3PEdhbvpI0+BgDG
-         Rcxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3qt5YbNKbHS2c2l3xh7sL7UsRmdCKIRfyB+qQfZY+Gw=;
-        b=l7K1fyA0XsvSsEYEFWxxsBOSRo6uAid6Hxvclr/QrlNzqd9aYB2fIL2Vdb0oEHTw9b
-         lbEtoAfrTpO0qAew6pdVYBLAiuDHgKhWlUU7mQrLwveQjNYNd07DtcuvIxtvuf+Q/LEj
-         rh2XKMSpYKIFP8TICr2RmashTZvgMKs8GwwuH8XSSGbEe4Th7aoUrv/xo+mwzidKLOVm
-         XJOAdXtvk1Nhx3ZSUmw85Bb2eHJO7/6GZYCUzEYeLw+u/82VzLacUlL0RNB9jg7rC5O8
-         B4QYA1d2gktSrsRhJdSAmB8JnL1YtV8gQlAm4z5z97H2Y/i8FUYL3Rm+urJ9rEEJmygc
-         wLBQ==
-X-Gm-Message-State: AOAM53384K7sabrAnySPHAinZxkuNKIoxfl47K7jFxesnp2nwYW11qbd
-        4XgvigIdbC3xXy3pDihxxAG3pDLxZLId2uk6d5a0KM0j9T0=
-X-Google-Smtp-Source: ABdhPJzJcC2zy9DCcDBp6BV45z/PgKy6zuUocUbx1QuqwncDeOivL/FcUHHF6/PLlHNDngdVW2DZq8lgIUjOk8sa0v4=
-X-Received: by 2002:a19:8c0a:: with SMTP id o10mr1665018lfd.175.1616179745206;
- Fri, 19 Mar 2021 11:49:05 -0700 (PDT)
+        id S229818AbhCTEd3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 20 Mar 2021 00:33:29 -0400
+Received: from zeniv-ca.linux.org.uk ([142.44.231.140]:58334 "EHLO
+        zeniv-ca.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhCTEdU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 20 Mar 2021 00:33:20 -0400
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lNTGT-007Z9g-2U; Sat, 20 Mar 2021 04:31:05 +0000
+Date:   Sat, 20 Mar 2021 04:31:05 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     linux-cifs@vger.kernel.org
+Cc:     Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org
+Subject: [RFC][PATCHSET] hopefully saner handling of pathnames in cifs
+Message-ID: <YFV6iexd6YQTybPr@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-References: <CAH2r5mv0kMa__3-KvRRE20OZ3R=cnOFVbrAzVyRA0zpXsbaBiw@mail.gmail.com>
- <750943d3-9717-fcd8-71ec-986a07e7eca0@talpey.com> <CAH2r5muawhYVa7a=TEmaDgH1t6fvubEJvaUP1-XscNq9Qjy4rw@mail.gmail.com>
- <CAH2r5muLbbyhPzjD_Uk_XPd=A4dsuf4uT8X-YjrN616g=ENDBQ@mail.gmail.com>
- <0537089f-edd6-1c75-8695-055f37e022f8@talpey.com> <CAH2r5mujRuk6RhoHXJk0BkqCKTY36X2BDutydzWf1zZNP=yC5Q@mail.gmail.com>
- <a4bbf093-39b7-e724-b835-d5ebc2e82d04@talpey.com> <CAH2r5mu2S1DbfQCqgzx-edZN8qWSpD20xVDoC05ZEs4LeOaYgg@mail.gmail.com>
-In-Reply-To: <CAH2r5mu2S1DbfQCqgzx-edZN8qWSpD20xVDoC05ZEs4LeOaYgg@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 19 Mar 2021 13:48:54 -0500
-Message-ID: <CAH2r5mvJ2AtLuMaWDA1pt664gTSsJ5F2OjnNVU+EtS3rw4tVcw@mail.gmail.com>
-Subject: Re: [PATCH] cifs: fix allocation size on newly created files
-To:     Tom Talpey <tom@talpey.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-(ie even if there is a Windows bug on close with delayed updates to
-allocation size)
+	Patch series (#work.cifs in vfs.git) tries to clean the things
+up in and around build_path_from_dentry().  Part of that is constifying
+the pointers around that stuff, then it lifts the allocations into
+callers and finally switches build_path_from_dentry() to using
+dentry_path_raw() instead of open-coding it.  Handling of ->d_name
+and friends is subtle enough, and it would be better to have fewer
+places besides fs/d_path.c that need to mess with those...
 
-On Fri, Mar 19, 2021 at 1:48 PM Steve French <smfrench@gmail.com> wrote:
->
-> Well ... it is a little complicated to query it on close in the
-> current cifs.ko compounding code and allocation size can change on the
-> server so returning a 'plausible' allocation size rather than an
-> impossible one is progress.
->
-> On Fri, Mar 19, 2021 at 1:26 PM Tom Talpey <tom@talpey.com> wrote:
-> >
-> > Hrm. I am still uneasy about making up a number. It could break
-> > an application. And the issue isn't even in the client!
-> >
-> > Did you ping Neal, or contact dochelp about the Windows server
-> > behavior? I'd be happy to but I don't have any context, including
-> > which filesystem is doing this.
-> >
-> > On 3/19/2021 2:08 PM, Steve French wrote:
-> > > Yes - the Linux terminology is confusing.  Quoting from Ubuntu docs
-> > > e.g. about stat output
-> > >
-> > >             "IO Block" in stat's output is the preferred number of
-> > >             bytes that the file system uses for reading and writing files...
-> > >             "Blocks", on the other hand, counts how many 512-bytes blocks
-> > >             are allocated on disk for the file.
-> > >
-> > > So for NFS and SMB3 mounts they return 1MB for "IO Block" size.
-> > >
-> > > statfs on the other hand shows what the server thinks the block size
-> > > is (often 4K) but
-> > > that is a different field.
-> > >
-> > > And of course number of "blocks" in stat output is meant to return
-> > > allocation size
-> > > (in 512 byte units for historical reasons, even if most file systems
-> > > don't use 512
-> > > byte blocks anymore)
-> > >
-> > >
-> > > On Fri, Mar 19, 2021 at 12:52 PM Tom Talpey <tom@talpey.com> wrote:
-> > >>
-> > >> But it's not the block size here, it's the cluster size. Block
-> > >> size is the per-io hunk, allocation size is the number of blocks
-> > >> lined up to receive it.
-> > >>
-> > >> Perhaps the safest number is the file size itself, unrounded.
-> > >>
-> > >> On 3/19/2021 1:46 PM, Steve French wrote:
-> > >>> e.g. stat reports much larger than 512 byte block size over SMB3
-> > >>>
-> > >>> # stat /mnt2/foo
-> > >>>     File: /mnt2/foo
-> > >>>     Size: 65536      Blocks: 128        IO Block: 1048576 regular file
-> > >>> Device: 34h/52d Inode: 88946092640651991  Links: 1
-> > >>>
-> > >>> and local file systems do the same ie "blocks" is unrelated to block size
-> > >>> the fs reports.  Here is an example to XFS locally
-> > >>>
-> > >>> # stat Makefile
-> > >>>     File: Makefile
-> > >>>     Size: 66247      Blocks: 136        IO Block: 4096   regular file
-> > >>> Device: 10302h/66306d Inode: 1076242180  Links: 1
-> > >>>
-> > >>> On Fri, Mar 19, 2021 at 12:42 PM Steve French <smfrench@gmail.com> wrote:
-> > >>>>
-> > >>>> We report the block size properly (typically much larger) - but the
-> > >>>> kernel API returns allocation size in 512 byte units no matter what the
-> > >>>> block size is.   Number of blocks returned for the kernel API
-> > >>>>        inode->i_blocks
-> > >>>> is unrelated to the block size (simply allocation_size/512 rounded up by 1).
-> > >>>>
-> > >>>> On Fri, Mar 19, 2021 at 12:38 PM Tom Talpey <tom@talpey.com> wrote:
-> > >>>>>
-> > >>>>> On 3/19/2021 1:25 AM, Steve French wrote:
-> > >>>>>> Applications that create and extend and write to a file do not
-> > >>>>>> expect to see 0 allocation size.  When file is extended,
-> > >>>>>> set its allocation size to a plausible value until we have a
-> > >>>>>> chance to query the server for it.  When the file is cached
-> > >>>>>> this will prevent showing an impossible number of allocated
-> > >>>>>> blocks (like 0).  This fixes e.g. xfstests 614 which does
-> > >>>>>>
-> > >>>>>>        1) create a file and set its size to 64K
-> > >>>>>>        2) mmap write 64K to the file
-> > >>>>>>        3) stat -c %b for the file (to query the number of allocated blocks)
-> > >>>>>>
-> > >>>>>> It was failing because we returned 0 blocks.  Even though we would
-> > >>>>>> return the correct cached file size, we returned an impossible
-> > >>>>>> allocation size.
-> > >>>>>>
-> > >>>>>> Signed-off-by: Steve French <stfrench@microsoft.com>
-> > >>>>>> CC: <stable@vger.kernel.org>
-> > >>>>>> ---
-> > >>>>>>     fs/cifs/inode.c | 12 ++++++++++--
-> > >>>>>>     1 file changed, 10 insertions(+), 2 deletions(-)
-> > >>>>>>
-> > >>>>>> diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-> > >>>>>> index 7c61bc9573c0..17a2c87b811c 100644
-> > >>>>>> --- a/fs/cifs/inode.c
-> > >>>>>> +++ b/fs/cifs/inode.c
-> > >>>>>> @@ -2395,7 +2395,7 @@ int cifs_getattr(struct user_namespace
-> > >>>>>> *mnt_userns, const struct path *path,
-> > >>>>>>      * We need to be sure that all dirty pages are written and the server
-> > >>>>>>      * has actual ctime, mtime and file length.
-> > >>>>>>      */
-> > >>>>>> - if ((request_mask & (STATX_CTIME | STATX_MTIME | STATX_SIZE)) &&
-> > >>>>>> + if ((request_mask & (STATX_CTIME | STATX_MTIME | STATX_SIZE |
-> > >>>>>> STATX_BLOCKS)) &&
-> > >>>>>>          !CIFS_CACHE_READ(CIFS_I(inode)) &&
-> > >>>>>>          inode->i_mapping && inode->i_mapping->nrpages != 0) {
-> > >>>>>>      rc = filemap_fdatawait(inode->i_mapping);
-> > >>>>>> @@ -2585,6 +2585,14 @@ cifs_set_file_size(struct inode *inode, struct
-> > >>>>>> iattr *attrs,
-> > >>>>>>      if (rc == 0) {
-> > >>>>>>      cifsInode->server_eof = attrs->ia_size;
-> > >>>>>>      cifs_setsize(inode, attrs->ia_size);
-> > >>>>>> + /*
-> > >>>>>> + * i_blocks is not related to (i_size / i_blksize),
-> > >>>>>> + * but instead 512 byte (2**9) size is required for
-> > >>>>>> + * calculating num blocks. Until we can query the
-> > >>>>>> + * server for actual allocation size, this is best estimate
-> > >>>>>> + * we have for the blocks allocated for this file
-> > >>>>>> + */
-> > >>>>>> + inode->i_blocks = (512 - 1 + attrs->ia_size) >> 9;
-> > >>>>>
-> > >>>>> I don't think 512 is a very robust choice, no server uses anything
-> > >>>>> so small any more. MS-FSA requires the allocation quantum to be the
-> > >>>>> volume cluster size. Is that value available locally?
-> > >>>>>
-> > >>>>> Tom.
-> > >>>>>
-> > >>>>>>      /*
-> > >>>>>>      * The man page of truncate says if the size changed,
-> > >>>>>> @@ -2912,7 +2920,7 @@ cifs_setattr_nounix(struct dentry *direntry,
-> > >>>>>> struct iattr *attrs)
-> > >>>>>>      sys_utimes in which case we ought to fail the call back to
-> > >>>>>>      the user when the server rejects the call */
-> > >>>>>>      if ((rc) && (attrs->ia_valid &
-> > >>>>>> - (ATTR_MODE | ATTR_GID | ATTR_UID | ATTR_SIZE)))
-> > >>>>>> +     (ATTR_MODE | ATTR_GID | ATTR_UID | ATTR_SIZE)))
-> > >>>>>>      rc = 0;
-> > >>>>>>      }
-> > >>>>>>
-> > >>>>
-> > >>>>
-> > >>>>
-> > >>>> --
-> > >>>> Thanks,
-> > >>>>
-> > >>>> Steve
-> > >>>
-> > >>>
-> > >>>
-> > >
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > >
-> > > Steve
-> > >
->
->
->
-> --
-> Thanks,
->
-> Steve
+	Help with review and testing would be very much appreciated -
+there's a plenty of mount options/server combinations ;-/
 
+	For those who prefer to look at it in git, it lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.cifs;
+individual patches go in followups.
 
+Shortlog:
+Al Viro (7):
+      cifs: don't cargo-cult strndup()
+      cifs: constify get_normalized_path() properly
+      cifs: constify path argument of ->make_node()
+      cifs: constify pathname arguments in a bunch of helpers
+      cifs: make build_path_from_dentry() return const char *
+      cifs: allocate buffer in the caller of build_path_from_dentry()
+      cifs: switch build_path_from_dentry() to using dentry_path_raw()
 
--- 
-Thanks,
+1) a bunch of kstrdup() calls got cargo-culted as kstrndup().
+This is unidiomatic *and* pointless - it's not any "safer"
+that way (pass it a non-NUL-terminated array, and strlen()
+will barf same as kstrdup()) and it's actually a pessimization.
+Converted to plain kstrdup() calls.
 
-Steve
+2) constifying pathnames: get_normalized_path() gets a
+constant string and, on success, returns either that string
+or its modified copy.  It is declared with the wrong prototype -
+int get_normalized_path(const char *path, char **npath)
+so the caller might get a non-const alias of the original const
+string.  Fortunately, none of the callers actually use that
+alias to modify the string, so it's not an active bug - just
+the wrong typization.
+
+3) constifying pathnames: ->make_node().  Unlike the rest of
+methods that take pathname as an argument, it has that argument
+declared as char *, not const char *.  Pure misannotation,
+since all instances never modify that actual string (or pass it 
+to anything that might do the same).
+
+4) constifying pathnames: a bunch of helpers.  Several functions
+have pathname argument declared as char *, when const char *
+would be fine - they neither modify the string nor pass it to
+anything that might.
+
+5) constifying pathnames: build_path_from_dentry().
+That's the main source of pathnames; all callers are actually
+treating the string it returns as constant one.  Declare it
+to return const char * and adjust the callers.
+
+6) take buffer allocation out of build_path_from_dentry().
+Trying to do exact-sized allocation is pointless - allocated
+object are short-lived anyway (the caller is always the one
+to free the string it gets from build_path_from_dentry()).
+As the matter of fact, we are in the same situation as with
+pathname arguments of syscalls - short-lived allocations
+limited to 4Kb and freed before the caller returns to userland.
+So we can just do allocations from names_cachep and do that
+in the caller; that way we don't need to bother with GFP_ATOMIC
+allocations.  Moreover, having the caller do allocations will
+permit us to switch build_path_from_dentry() to use of dentry_path_raw()
+(in the next commit).
+
+7) build_path_from_dentry() essentially open-codes dentry_path_raw();
+the difference is that it wants to put the result in the beginning
+of the buffer (which we don't need anymore, since the caller knows
+what to free anyway) _and_ we might want '\\' for component separator
+instead of the normal '/'.  It's easier to use dentry_path_raw()
+and (optionally) post-process the result, replacing all '/' with
+'\\'.  Note that the last part needs profiling - I would expect it
+to be noise (we have just formed the string and it's all in hot cache),
+but that needs to be verified.
+
+Diffstat:
+ fs/cifs/cifs_dfs_ref.c |  14 +++--
+ fs/cifs/cifsglob.h     |   2 +-
+ fs/cifs/cifsproto.h    |  19 +++++--
+ fs/cifs/connect.c      |   9 +--
+ fs/cifs/dfs_cache.c    |  41 +++++++-------
+ fs/cifs/dir.c          | 148 ++++++++++++++++++-------------------------------
+ fs/cifs/file.c         |  79 +++++++++++++-------------
+ fs/cifs/fs_context.c   |   2 +-
+ fs/cifs/inode.c        | 110 ++++++++++++++++++------------------
+ fs/cifs/ioctl.c        |  13 +++--
+ fs/cifs/link.c         |  46 +++++++++------
+ fs/cifs/misc.c         |   2 +-
+ fs/cifs/readdir.c      |  15 ++---
+ fs/cifs/smb1ops.c      |   6 +-
+ fs/cifs/smb2ops.c      |  19 ++++---
+ fs/cifs/unc.c          |   4 +-
+ fs/cifs/xattr.c        |  40 +++++++------
+ 17 files changed, 278 insertions(+), 291 deletions(-)
