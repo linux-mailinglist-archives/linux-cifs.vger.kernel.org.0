@@ -2,61 +2,115 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F6234AC55
-	for <lists+linux-cifs@lfdr.de>; Fri, 26 Mar 2021 17:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1896834AF9F
+	for <lists+linux-cifs@lfdr.de>; Fri, 26 Mar 2021 20:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhCZQLd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 26 Mar 2021 12:11:33 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:16520 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230080AbhCZQLB (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 26 Mar 2021 12:11:01 -0400
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 274087FD53;
-        Fri, 26 Mar 2021 16:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1616775060;
+        id S229986AbhCZTwp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 26 Mar 2021 15:52:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20424 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230298AbhCZTwm (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 26 Mar 2021 15:52:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616788361;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+nJBUEP+3wKnuu4vHPTqV290re8sqt6YSUE9Cona93Y=;
-        b=dhEfZ6ixLvROGvkzd3Nr61BkPBI8naI9q6OVcq+KZZJn/pSBx1dQOJF1Mi4IDu0Gc2MLFA
-        z6byjMfJTx/U2PvXqXZewXw9MtEbVNzNaYvLFoL10Ul71gCmvHtLD/3Jc3JdPjfMySoR57
-        7O2Xg0TAAvi6zuLQRn99CNPuzTShzb8cHuQCNUv9r4C4BxnAAx2nqNSEvI3032/a8Jvlrr
-        QMNvZtFlays6IzPObbzwajm8i/PzTOA1NuixnDgo72TnETRlXoDvK5J4qAt48dT66CATi6
-        rBRBGOTLRq1EArqA7gWmwTaIfH09O/Lgl1A4VpnOI5/fJzi+Yb2JjSfDS1gCcw==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: cifs: Fix chmod with modefromsid when an older ACE already exists.
-In-Reply-To: <87a6qprk06.fsf@suse.com>
-References: <CANT5p=rr-rDZ1Jo_rzM0_63-pHOKPcRSnML0ucOVkSBVWrSc4A@mail.gmail.com>
- <87a6qprk06.fsf@suse.com>
-Date:   Fri, 26 Mar 2021 13:10:54 -0300
-Message-ID: <875z1devzl.fsf@cjr.nz>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pRMd6weXBtSfjzrJVOVqZD2RntUBFIaT97mCoFYt+1M=;
+        b=NUEXYQYX7hz4gtDSdQIXMX8GpUbelIHn8jWGHvIkfSM9o8/LwzTTipDlLaCJGD9xvsvNFo
+        3IbKS41PJSff9qDsIXFkOpIq1yJgJbOlI/OkccyZgRG+8iZ4B3bEQnmJulsnmRAeWPlCs3
+        brtlapnblb6KuXmWd8PbGwUokoZFz88=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-497-CSzxyfxMPq6ykcZl706CZQ-1; Fri, 26 Mar 2021 15:52:38 -0400
+X-MC-Unique: CSzxyfxMPq6ykcZl706CZQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D42671005D7B;
+        Fri, 26 Mar 2021 19:52:37 +0000 (UTC)
+Received: from localhost.localdomain (vpn2-54-17.bne.redhat.com [10.64.54.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 065D91B5C3;
+        Fri, 26 Mar 2021 19:52:36 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: [PATCH] cifs: add support for FALLOC_FL_COLLAPSE_RANGE
+Date:   Sat, 27 Mar 2021 05:52:29 +1000
+Message-Id: <20210326195229.114110-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Aur=C3=A9lien Aptel <aaptel@suse.com> writes:
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+---
+ fs/cifs/smb2ops.c | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-> Shyam Prasad N <nspmangalore@gmail.com> writes:
->> Found a regression in modefromsid with my last fix in cifsacl.
->> Tested against mode check tests for both cifsacl and modefromsid this ti=
-me.
->
-> Can you put a Fixes tag?
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 9bae7e8deb09..3bb18944aaa4 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -3640,6 +3640,44 @@ static long smb3_simple_falloc(struct file *file, struct cifs_tcon *tcon,
+ 	return rc;
+ }
+ 
++static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
++			    loff_t off, loff_t len)
++{
++	int rc;
++	unsigned int xid;
++	struct cifsFileInfo *cfile = file->private_data;
++	__le64 eof;
++
++	xid = get_xid();
++
++	if (off + len < off) {
++		rc = -EFBIG;
++		goto out;
++	}
++
++	if (off >= i_size_read(file->f_inode) ||
++	    off + len >= i_size_read(file->f_inode)) {
++		rc = -EINVAL;
++		goto out;
++	}
++
++	rc = smb2_copychunk_range(xid, cfile, cfile, off + len,
++				  i_size_read(file->f_inode) - off - len, off);
++	if (rc < 0)
++		goto out;
++
++	eof = i_size_read(file->f_inode) - len;
++	rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
++			  cfile->fid.volatile_fid, cfile->pid, &eof);
++	if (rc < 0)
++		goto out;
++
++	rc = 0;
++ out:
++	free_xid(xid);
++	return rc;
++}
++
+ static loff_t smb3_llseek(struct file *file, struct cifs_tcon *tcon, loff_t offset, int whence)
+ {
+ 	struct cifsFileInfo *wrcfile, *cfile = file->private_data;
+@@ -3811,6 +3849,8 @@ static long smb3_fallocate(struct file *file, struct cifs_tcon *tcon, int mode,
+ 		return smb3_zero_range(file, tcon, off, len, false);
+ 	} else if (mode == FALLOC_FL_KEEP_SIZE)
+ 		return smb3_simple_falloc(file, tcon, off, len, true);
++	else if (mode == FALLOC_FL_COLLAPSE_RANGE)
++		return smb3_collapse_range(file, tcon, off, len);
+ 	else if (mode == 0)
+ 		return smb3_simple_falloc(file, tcon, off, len, false);
+ 
+-- 
+2.29.2
 
-Agreed.  With that,
-
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
