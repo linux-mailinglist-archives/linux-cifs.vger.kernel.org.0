@@ -2,96 +2,96 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F0834A6EA
-	for <lists+linux-cifs@lfdr.de>; Fri, 26 Mar 2021 13:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A0A34AD09
+	for <lists+linux-cifs@lfdr.de>; Fri, 26 Mar 2021 18:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhCZMML (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 26 Mar 2021 08:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbhCZMLj (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 26 Mar 2021 08:11:39 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68169C0613AA
-        for <linux-cifs@vger.kernel.org>; Fri, 26 Mar 2021 05:11:39 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id o66so5602736ybg.10
-        for <linux-cifs@vger.kernel.org>; Fri, 26 Mar 2021 05:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=sNVwtGw7Krw8xGvbdtMZu7SCnduU+UsXfRy+PPDBJK8=;
-        b=MKV2Ffgsh/fFT58pxq4Nkhl5aI0e0PD4ipa5cp2lkV/3S2cYSKg6iAABfCYCpKmahy
-         +4tJlnrG1h/3yaOZReY0triyy5YayxrsAtPjQyPlD0gCxbUNqCwS+bMRjHq+A4VuD/Ng
-         QJcrf6XC8NBdYFVrMvu5aFH2/fCucl/6Tvf3tP6OgnEZV/IBBIFVwU6tA7vshBlgxkQb
-         LyUdpl3M8/yI3gDlQJeUf49PT1FlvvJYHpdmK5px2NB28oUET9zyHeqCHOXCNsGskrgO
-         cwzDPptvMOoVWmyYO7L2LQXhmIHS/Mpw4jsmjsJsMofk6yye6bKsDSvr7yfN6UiYoXUg
-         gckg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=sNVwtGw7Krw8xGvbdtMZu7SCnduU+UsXfRy+PPDBJK8=;
-        b=AxEEkbFbAbLSOSi6DV/BCHUR+C/bKKylxdYjNYBbDvJaqV0APnPCYWkIE0QQOafLCL
-         0ZC89a3xHncTKwxv8zMJczBCtIEeunPJ0lwdOIT1ZP/+AcAAuYrVfIgWDVwclOOlw8rk
-         EkppV6E9yPs5fYgXbwL9dTwSwXqvDVx7kDQFDWtuzeciI0eVClSQ8WAhONXYPXjfyeAa
-         G3yn4044pa3B5rhjmCowX131nwG3u9iIZ7g9FameRN+NFEVZMFYytGTvpGVuwauukxe5
-         yzsuSyVypo5S+ykqgsz4TIA0T6kLrz8IAPGTW77SSgIDWTOKtOVJQuHg4Rcaa1RIsyIA
-         HDkg==
-X-Gm-Message-State: AOAM532ajKyVIggU6L2A64ujdYyG85Xb9Glki9O4dKEkIpxQ6oEuU7Op
-        8on0B/Ob9ZdE1iUp3QfNtLy2GeCBsPEYNzKO1fNsA4vh0Q8=
-X-Google-Smtp-Source: ABdhPJwUlofmzlYkE3tN+QAA0y2/oltkuQD2svWNgSYnF386DebOy7V+52yKM+CxLPdsm4Y39ClufL3E25fuPNB7XSk=
-X-Received: by 2002:a25:dd06:: with SMTP id u6mr19619032ybg.97.1616760698660;
- Fri, 26 Mar 2021 05:11:38 -0700 (PDT)
+        id S230350AbhCZRBZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 26 Mar 2021 13:01:25 -0400
+Received: from gateway33.websitewelcome.com ([192.185.145.23]:34992 "EHLO
+        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230381AbhCZRBR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Fri, 26 Mar 2021 13:01:17 -0400
+X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Mar 2021 13:01:17 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 41A98857A4E
+        for <linux-cifs@vger.kernel.org>; Fri, 26 Mar 2021 11:13:18 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id Pp5Kl91KAMGeEPp5KlogLi; Fri, 26 Mar 2021 11:13:18 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sXBjgLTu76uTaWX0R7809lCSyGgsc8Sygcl8kzPa31g=; b=E5CtBqHdRp4mzdp86hktOocKt8
+        WY9zbVHvS5zhockEiVBSkSbs4iEkzjA60vDhqa6SML2weLBlfRjnJYaIects8zHLUZit820pDFxGe
+        eKlHU3+92pJ8zn/8Im0NU7WPtSTWFTx5UMIrkmIY/iyUW0nwPBEUyKzv7xc5NwCE4V9V5DuDrcKxz
+        yZ0HMrrYoby8V/wuHopk+wwUg36od/0PpXJ1LV5mOOfQoV6bcc9ucRGMoBJwSOxwmZ1uqAUJ9u0Tw
+        0OePSMB/Ytcpm2FqJzXG2VRv+1l6NShDEiBNDLGvS6VijYEh97T/M0wWRMFAMxDtv8g9zHusHnb41
+        crH73K6w==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:35424 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1lPp5J-004Js4-TR; Fri, 26 Mar 2021 11:13:17 -0500
+Subject: Re: [PATCH][next] cifs: cifspdu.h: Replace one-element array with
+ flexible-array member
+To:     =?UTF-8?Q?Aur=c3=a9lien_Aptel?= <aaptel@suse.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Steve French <sfrench@samba.org>
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20210326011117.GA46303@embeddedor> <877dltrjue.fsf@suse.com>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <4def044f-4529-9e73-6d01-1a9751f6b09a@embeddedor.com>
+Date:   Fri, 26 Mar 2021 10:13:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Fri, 26 Mar 2021 17:41:27 +0530
-Message-ID: <CANT5p=rr-rDZ1Jo_rzM0_63-pHOKPcRSnML0ucOVkSBVWrSc4A@mail.gmail.com>
-Subject: cifs: Fix chmod with modefromsid when an older ACE already exists.
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000002190f205be6f6f5d"
+In-Reply-To: <877dltrjue.fsf@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1lPp5J-004Js4-TR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:35424
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---0000000000002190f205be6f6f5d
-Content-Type: text/plain; charset="UTF-8"
 
-Found a regression in modefromsid with my last fix in cifsacl.
-Tested against mode check tests for both cifsacl and modefromsid this time.
 
--- 
-Regards,
-Shyam
+On 3/26/21 10:54, Aurélien Aptel wrote:
+> "Gustavo A. R. Silva" <gustavoars@kernel.org> writes:
+>> There is a regular need in the kernel to provide a way to declare having
+>> a dynamically sized set of trailing elements in a structure. Kernel code
+>> should always use “flexible array members”[1] for these cases. The older
+>> style of one-element or zero-length arrays should no longer be used[2].
+> 
+> I've checked the usages of the struct, looks OK (we don't allocate it
+> directly, we use memory from the small/big buff pools).
 
---0000000000002190f205be6f6f5d
-Content-Type: application/octet-stream; 
-	name="0001-cifs-Fix-chmod-with-modefromsid-when-an-older-ACE-al.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-Fix-chmod-with-modefromsid-when-an-older-ACE-al.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kmq8019v0>
-X-Attachment-Id: f_kmq8019v0
+Awesome. :)
 
-RnJvbSBkZjEyZjg2NmQ1N2VjNTdkOGUyNGVlOTIxN2Q4NzhiOTc1MTI4YWE1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
-PgpEYXRlOiBGcmksIDI2IE1hciAyMDIxIDEwOjI4OjE2ICswMDAwClN1YmplY3Q6IFtQQVRDSF0g
-Y2lmczogRml4IGNobW9kIHdpdGggbW9kZWZyb21zaWQgd2hlbiBhbiBvbGRlciBBQ0UgYWxyZWFk
-eQogZXhpc3RzLgoKTXkgcmVjZW50IGZpeGVzIHRvIGNpZnNhY2wgdG8gbWFpbnRhaW4gaW5oZXJp
-dGVkIEFDRXMgaGFkCnJlZ3Jlc3NlZCBtb2RlZnJvbXNpZCB3aGVuIGFuIG9sZGVyIEFDTCBhbHJl
-YWR5IGV4aXN0cy4KClRoZSBjaWZzYWNsIGZpeCB0aGF0IGNhdXNlZCB0aGlzIHJlZ3Jlc3Npb246
-CmNpZnM6IFJldGFpbiBvbGQgQUNFcyB3aGVuIGNvbnZlcnRpbmcgYmV0d2VlbiBtb2RlIGJpdHMg
-YW5kIEFDTC4KCkZpeGluZyBpdCBoZXJlLgoKU2lnbmVkLW9mZi1ieTogU2h5YW0gUHJhc2FkIE4g
-PHNwcmFzYWRAbWljcm9zb2Z0LmNvbT4KLS0tCiBmcy9jaWZzL2NpZnNhY2wuYyB8IDMgKy0tCiAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
-IGEvZnMvY2lmcy9jaWZzYWNsLmMgYi9mcy9jaWZzL2NpZnNhY2wuYwppbmRleCAyYmUyMmE1YzY5
-MGYuLmQxNzhjZjg1ZTkyNiAxMDA2NDQKLS0tIGEvZnMvY2lmcy9jaWZzYWNsLmMKKysrIGIvZnMv
-Y2lmcy9jaWZzYWNsLmMKQEAgLTExMzAsOCArMTEzMCw3IEBAIHN0YXRpYyBpbnQgc2V0X2NobW9k
-X2RhY2woc3RydWN0IGNpZnNfYWNsICpwZGFjbCwgc3RydWN0IGNpZnNfYWNsICpwbmRhY2wsCiAJ
-CX0KIAogCQkvKiBJZiBpdCdzIGFueSBvbmUgb2YgdGhlIEFDRSB3ZSdyZSByZXBsYWNpbmcsIHNr
-aXAhICovCi0JCWlmICghbW9kZV9mcm9tX3NpZCAmJgotCQkJCSgoY29tcGFyZV9zaWRzKCZwbnRh
-Y2UtPnNpZCwgJnNpZF91bml4X05GU19tb2RlKSA9PSAwKSB8fAorCQlpZiAoKChjb21wYXJlX3Np
-ZHMoJnBudGFjZS0+c2lkLCAmc2lkX3VuaXhfTkZTX21vZGUpID09IDApIHx8CiAJCQkJKGNvbXBh
-cmVfc2lkcygmcG50YWNlLT5zaWQsIHBvd25lcnNpZCkgPT0gMCkgfHwKIAkJCQkoY29tcGFyZV9z
-aWRzKCZwbnRhY2UtPnNpZCwgcGdycHNpZCkgPT0gMCkgfHwKIAkJCQkoY29tcGFyZV9zaWRzKCZw
-bnRhY2UtPnNpZCwgJnNpZF9ldmVyeW9uZSkgPT0gMCkgfHwKLS0gCjIuMjUuMQoK
---0000000000002190f205be6f6f5d--
+> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
+
+Thank you, Aurelien.
+--
+Gustavo
