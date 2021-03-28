@@ -2,103 +2,62 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B04334BA3E
-	for <lists+linux-cifs@lfdr.de>; Sun, 28 Mar 2021 01:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F3134BDEB
+	for <lists+linux-cifs@lfdr.de>; Sun, 28 Mar 2021 20:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhC1AHz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 27 Mar 2021 20:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhC1AHX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 27 Mar 2021 20:07:23 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C7CC0613B1;
-        Sat, 27 Mar 2021 17:07:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s17so11706580ljc.5;
-        Sat, 27 Mar 2021 17:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=R4sPls4WqyaT0nGux32T28YvbCaupL+g+Q7P0/FqKzs=;
-        b=oGkHyRoXWUxLpCWJ60KEpmucPGlKS4Mxn7BznMDhHGlTuGnoytw/er4fa7JMe9YsOX
-         /OpKCesGAnwweCVO+LI8TVMbmNPZGyMm6dtXjXPwuV00ISrhVrQbtKjCROoFLfphBVMA
-         Ph9keiahCOWgjoX0F7V/1ohoWrkifPitVIzKwXqUPL9VKlYZOSLsMee+eS6WmGEB/iEW
-         MkZ+NaMqBPNAjwsZtwWDj9iRZbVg2boOsZhT6Ue7PZZGjoYk1LgSqOwAl4IxfUNIGsSx
-         XhCI6mrCTpmU6rXSn+OHjUyftbOp/fi2oj87+T5worsGcfei7lNxHIDiNjnSa2i6z9pp
-         UO2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=R4sPls4WqyaT0nGux32T28YvbCaupL+g+Q7P0/FqKzs=;
-        b=n/KcGdk1ieeqRdtazPMC5dcKFVtomnIEZaKRMHnd4NC8HqfoMBUBSfLnYpzeSiCKut
-         m151aidwkY9TPPcCPCB1JZcMHM85VMFiQPWpa6fNWr33Li1cIJtUAv74PUY2AG57/s7l
-         e3zmICoqjsNCMNYsOH12Iqu/mTb2tVObuXe/mSkqYi0JnjhpheJCQRgOEhSnMn8kZpUs
-         Lm6L9m6p6D5ZV/vFNCVoS5SwFACRurK8oveSor+59YvBNexbLtGcw9Ze+3XbtwA/hpxe
-         EObzAtXQBXH32Kc7ZyL4R1cYPDiOcCCHJ6WKAxjVX6meunFKugxJss22MA3rfk/wlHcL
-         7SmQ==
-X-Gm-Message-State: AOAM531ygcQICvNKA+f2uAA028oBgfEG+FDelfNmiJcEzyJp7kYh6Fx/
-        Hp+VYHkcQoB8N8QWciNkpJlix1IdsfJ0GBwexNEBAkavUEvWcg==
-X-Google-Smtp-Source: ABdhPJz+Pvqa3gsFbNbJw3Md4SZ71S0AbwQFNlVTm4InIwbGbuovA5ieM2jyDBynst8gzMZ7sfoLdgRfEGXfzvdm+Yo=
-X-Received: by 2002:a2e:1612:: with SMTP id w18mr13800401ljd.6.1616890041534;
- Sat, 27 Mar 2021 17:07:21 -0700 (PDT)
+        id S231443AbhC1SHa (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 28 Mar 2021 14:07:30 -0400
+Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
+        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229647AbhC1SHR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
+X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
+        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
+        s=default; t=1616954272;
+        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
+        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
+         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
+         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
+X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
+        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
+        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
+Received: from mail.hanoi.gov.vn ([127.0.0.1])
+        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
+        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
+Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
+From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
+Reply-To: Mackenzie Scott <propack@propck.net>
+Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
+Subject: Congratulations ($ 100,800,000.00)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 27 Mar 2021 19:07:10 -0500
-Message-ID: <CAH2r5muJ0vRicetgiFOaMecoqGYZw7p+LAEYSs5OLADyzewFiw@mail.gmail.com>
-Subject: [GIT PULL] CIFS/SMB3 Fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [185.107.80.217]
+X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
+Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
+Thread-Topic: Congratulations ($ 100,800,000.00)
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Please pull the following changes since commit
-0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b:
 
-  Linux 5.12-rc4 (2021-03-21 14:56:43 -0700)
 
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.12-rc4-smb3
-
-for you to fetch changes up to cfc63fc8126a93cbf95379bc4cad79a7b15b6ece:
-
-  smb3: fix cached file size problems in duplicate extents (reflink)
-(2021-03-26 18:41:55 -0500)
-
-----------------------------------------------------------------
-5 cifs/smb3 fixes, 2 for stable, includes an important fix for
-encryption and an ACL fix, as well as two fixes for possible data
-corruptions (one for reflink and one for SMB1)
-
-Test results: http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/543
-----------------------------------------------------------------
-Ronnie Sahlberg (1):
-      cifs: revalidate mapping when we open files for SMB1 POSIX
-
-Shyam Prasad N (2):
-      cifs: Adjust key sizes and key generation routines for AES256 encryption
-      cifs: Fix chmod with modefromsid when an older ACE already exists.
-
-Steve French (1):
-      smb3: fix cached file size problems in duplicate extents (reflink)
-
-Vincent Whitchurch (1):
-      cifs: Silently ignore unknown oplock break handle
-
- fs/cifs/cifsacl.c       |  3 +--
- fs/cifs/cifsglob.h      |  4 ++--
- fs/cifs/cifspdu.h       |  5 +++++
- fs/cifs/file.c          |  1 +
- fs/cifs/smb2glob.h      |  1 +
- fs/cifs/smb2misc.c      |  4 ++--
- fs/cifs/smb2ops.c       | 27 ++++++++++++++++++++-------
- fs/cifs/smb2transport.c | 37 ++++++++++++++++++++++++++++---------
- 8 files changed, 60 insertions(+), 22 deletions(-)
-
--- 
-Thanks,
-
-Steve
+Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
