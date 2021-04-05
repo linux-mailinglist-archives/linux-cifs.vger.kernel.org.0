@@ -2,34 +2,27 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A23C4353BBA
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Apr 2021 07:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338A2354266
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 Apr 2021 15:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbhDEFYy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 5 Apr 2021 01:24:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57808 "EHLO mail.kernel.org"
+        id S235885AbhDENl3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 5 Apr 2021 09:41:29 -0400
+Received: from verein.lst.de ([213.95.11.211]:50764 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232296AbhDEFYt (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 5 Apr 2021 01:24:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98D37613A5;
-        Mon,  5 Apr 2021 05:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617600283;
-        bh=dMWjVf2aUxdb7ZrnGVveey6nby3LeCk61fbfNTM9fl4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gTxgWIVArORnsJVcmrlN8d/R5yi5c6bOrNBzElohC5vaA3tthZxAmBXekzQxLPZt1
-         znzexk81BrDTA5rsNCCVYOvwwlFDnzS86wc5yRwGWJWRt2aJNEqlhMh8X3Yin5MnUg
-         egYUxDlxiP5r1F4WaDRJYqPSPkYbHdcFvkPU39s/4JSgSFdlIFeQGgL/MD/zmAqfpV
-         quoKIMb/Ra/cj5B4Sy7YeCi7JhHJGHVrBLPV05lfGEptIVl6j3TYWFL1RzMBwdrQlr
-         KEGiPPxsxY/9/6wsL1nkOvjaFxpOYMEgu7CPBdfRPgPfo6Fuhy9FxKi4vnWqOGX83B
-         98mrg+Kp01FKw==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Avihai Horon <avihaih@nvidia.com>,
+        id S235826AbhDENl3 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 5 Apr 2021 09:41:29 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C3BD068BEB; Mon,  5 Apr 2021 15:41:15 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 15:41:15 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
         Adit Ranadive <aditr@vmware.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
         Ariel Elior <aelior@marvell.com>,
+        Avihai Horon <avihaih@nvidia.com>,
         Bart Van Assche <bvanassche@acm.org>,
         Bernard Metzler <bmt@zurich.ibm.com>,
         Christoph Hellwig <hch@lst.de>,
@@ -68,60 +61,38 @@ Cc:     Avihai Horon <avihaih@nvidia.com>,
         Weihang Li <liweihang@huawei.com>,
         Yishai Hadas <yishaih@nvidia.com>,
         Zhu Yanjun <zyjzyj2000@gmail.com>
-Subject: [PATCH rdma-next 10/10] xprtrdma: Enable Relaxed Ordering
-Date:   Mon,  5 Apr 2021 08:24:04 +0300
-Message-Id: <20210405052404.213889-11-leon@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210405052404.213889-1-leon@kernel.org>
+Subject: Re: [PATCH rdma-next 00/10] Enable relaxed ordering for ULPs
+Message-ID: <20210405134115.GA22346@lst.de>
 References: <20210405052404.213889-1-leon@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210405052404.213889-1-leon@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Avihai Horon <avihaih@nvidia.com>
+On Mon, Apr 05, 2021 at 08:23:54AM +0300, Leon Romanovsky wrote:
+> From: Leon Romanovsky <leonro@nvidia.com>
+> 
+> >From Avihai,
+> 
+> Relaxed Ordering is a PCIe mechanism that relaxes the strict ordering
+> imposed on PCI transactions, and thus, can improve performance.
+> 
+> Until now, relaxed ordering could be set only by user space applications
+> for user MRs. The following patch series enables relaxed ordering for the
+> kernel ULPs as well. Relaxed ordering is an optional capability, and as
+> such, it is ignored by vendors that don't support it.
+> 
+> The following test results show the performance improvement achieved
+> with relaxed ordering. The test was performed on a NVIDIA A100 in order
+> to check performance of storage infrastructure over xprtrdma:
 
-Enable Relaxed Ordering for xprtrdma.
+Isn't the Nvidia A100 a GPU not actually supported by Linux at all?
+What does that have to do with storage protocols?
 
-Relaxed Ordering is an optional access flag and as such, it is ignored
-by vendors that don't support it.
-
-Signed-off-by: Avihai Horon <avihaih@nvidia.com>
-Reviewed-by: Michael Guralnik <michaelgur@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- net/sunrpc/xprtrdma/frwr_ops.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/net/sunrpc/xprtrdma/frwr_ops.c b/net/sunrpc/xprtrdma/frwr_ops.c
-index cfbdd197cdfe..f9334c0a1a13 100644
---- a/net/sunrpc/xprtrdma/frwr_ops.c
-+++ b/net/sunrpc/xprtrdma/frwr_ops.c
-@@ -135,7 +135,8 @@ int frwr_mr_init(struct rpcrdma_xprt *r_xprt, struct rpcrdma_mr *mr)
- 	struct ib_mr *frmr;
- 	int rc;
- 
--	frmr = ib_alloc_mr(ep->re_pd, ep->re_mrtype, depth, 0);
-+	frmr = ib_alloc_mr(ep->re_pd, ep->re_mrtype, depth,
-+			   IB_ACCESS_RELAXED_ORDERING);
- 	if (IS_ERR(frmr))
- 		goto out_mr_err;
- 
-@@ -339,9 +340,10 @@ struct rpcrdma_mr_seg *frwr_map(struct rpcrdma_xprt *r_xprt,
- 	reg_wr = &mr->frwr.fr_regwr;
- 	reg_wr->mr = ibmr;
- 	reg_wr->key = ibmr->rkey;
--	reg_wr->access = writing ?
--			 IB_ACCESS_REMOTE_WRITE | IB_ACCESS_LOCAL_WRITE :
--			 IB_ACCESS_REMOTE_READ;
-+	reg_wr->access =
-+		(writing ? IB_ACCESS_REMOTE_WRITE | IB_ACCESS_LOCAL_WRITE :
-+			   IB_ACCESS_REMOTE_READ) |
-+		IB_ACCESS_RELAXED_ORDERING;
- 
- 	mr->mr_handle = ibmr->rkey;
- 	mr->mr_length = ibmr->length;
--- 
-2.30.2
-
+Also if you enable this for basically all kernel ULPs, why not have
+an opt-out into strict ordering for the cases that need it (if there are
+any).
