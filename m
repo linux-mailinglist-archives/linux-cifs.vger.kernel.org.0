@@ -2,81 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 530FB355F20
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Apr 2021 00:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A41355FBE
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Apr 2021 01:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbhDFW4I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 6 Apr 2021 18:56:08 -0400
-Received: from ishtar.tlinx.org ([173.164.175.65]:49460 "EHLO
-        Ishtar.sc.tlinx.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbhDFW4H (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Apr 2021 18:56:07 -0400
-Received: from [192.168.3.12] (Athenae [192.168.3.12])
-        by Ishtar.sc.tlinx.org (8.14.7/8.14.4/SuSE Linux 0.8) with ESMTP id 136MtltV095407;
-        Tue, 6 Apr 2021 15:55:50 -0700
-Message-ID: <606CE6F3.3010701@tlinx.org>
-Date:   Tue, 06 Apr 2021 15:55:47 -0700
-From:   "L. A. Walsh" <linux-cifs@tlinx.org>
-User-Agent: Thunderbird 2.0.0.24 (Windows/20100228)
+        id S242789AbhDFXvu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Apr 2021 19:51:50 -0400
+Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:51853 "EHLO
+        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233629AbhDFXvs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Apr 2021 19:51:48 -0400
+X-Greylist: delayed 1932 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Apr 2021 19:51:48 EDT
+Received: from dread.disaster.area (pa49-181-239-12.pa.nsw.optusnet.com.au [49.181.239.12])
+        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id D446C1AEB59;
+        Wed,  7 Apr 2021 09:19:25 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1lTuyj-00DXI3-4m; Wed, 07 Apr 2021 09:19:25 +1000
+Date:   Wed, 7 Apr 2021 09:19:25 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH][CIFS] Insert and Collapse range
+Message-ID: <20210406231925.GE1990290@dread.disaster.area>
+References: <CAH2r5mvhUQEqXQmrz5KKbTCFaeS5ejZBGysaeQVC_ESSc-snuw@mail.gmail.com>
 MIME-Version: 1.0
-To:     =?UTF-8?B?QXVyw6lsaWVuIEFwdGVs?= <aaptel@suse.com>
-CC:     Dan Carpenter <dan.carpenter@oracle.com>, namjae.jeon@samsung.com,
-        linux-cifs@vger.kernel.org
-Subject: Re: cifsd: introduce <SMB2n3> kernel server
-References: <YFNRsYSWw77UMxw1@mwanda> <606C1DD6.80606@tlinx.org> <87h7kj4t4c.fsf@suse.com>
-In-Reply-To: <87h7kj4t4c.fsf@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH2r5mvhUQEqXQmrz5KKbTCFaeS5ejZBGysaeQVC_ESSc-snuw@mail.gmail.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.3 cv=YKPhNiOx c=1 sm=1 tr=0 cx=a_idp_x
+        a=gO82wUwQTSpaJfP49aMSow==:117 a=gO82wUwQTSpaJfP49aMSow==:17
+        a=kj9zAlcOel0A:10 a=3YhXtTcJ-WEA:10 a=7-415B0cAAAA:8
+        a=mhv_l09cUW-47tK0WSYA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On 2021/04/06 03:14, Aurélien Aptel wrote:
-> "L. A. Walsh" <linux-cifs@tlinx.org> writes:
->   
->> On 2021/03/18 06:12, Dan Carpenter wrote:
->>     
->>> [ cifsd: introduce SMB3 kernel server"
->>>       
->> Is it to be Linux policy that it will give in-kernel
->> support for only for smb3, or is it planned to move the rest of the proto
->> into the kernel as well?  It sorta seems like earlier parts of the protocol,
->> still dominant on home networks, though it seems linux not supporting
->> all of linux's smb devices, from smb2.1 and before.
->>     
->
-> smb1 (aka cifs) is unsecure, out of support and being actively
-> deprecated for over 10 years. Microsoft is uninstalling the smb1 server
-> on Windows updates. That's how hard they want to kill it. Samba is
-> planning to drop smb1 too eventually.
->   
-Dropping Smb1 support for linux-serving would seem to be a reasonable
-step, since I would be hard-pressed to find a client that still
-only talked Smb1 (clients from XP-era).
+On Thu, Apr 01, 2021 at 01:30:28PM -0500, Steve French wrote:
+> Updated version of Ronnie's patch for FALLOC_FL_INSERT_RANGE and
+> FALLOC_FL_COLLAPSE_RANGE attached (cleaned up the two redundant length
+> checks noticed out by Aurelien, and fixed the endian check warnings
+> pointed out by sparse).
+> 
+> They fix at least six xfstests (but still more xfstests to work
+> through that seem to have other new feature dependencies beyond
+> fcollapse)
+> 
+> # ./check -cifs generic/072 generic/145 generic/147 generic/153
+> generic/351 generic/458
+> FSTYP         -- cifs
+> PLATFORM      -- Linux/x86_64 smfrench-Virtual-Machine
+> 5.12.0-051200rc4-generic #202103212230 SMP Sun Mar 21 22:33:27 UTC
+> 2021
+> 
+> generic/072 7s ...  6s
+> generic/145 0s ...  1s
+> generic/147 1s ...  0s
+> generic/153 0s ...  1s
+> generic/351 5s ...  3s
+> generic/458 1s ...  1s
+> Ran: generic/072 generic/145 generic/147 generic/153 generic/351 generic/458
+> Passed all 6 tests
 
-I am more concerned about the more secure smb2 & smb2.1 dialects. 
-I have heard there is a security difference even between 2 & 2.1,
-though, I don't often see a breakout between 2.0(only)+2.1, with both
-seeming to be lumped in under Smb2. 
+FWIW, I think you need to also run all the fsstress and fsx tests as
+well. fsx, especially, as that will do data integrity checking on
+insert/collapse operations.
 
-So lets say dropping smb1 isn't an issue...
->
->   
->> Isn't the base of an smb3 server the same functions
->> of an smb2.x server with the new smb3 extensions?
->>     
->
-> AFAICT Namjae's ksmbd support smb2 and above.
->   
----
-    Then would it be a problem if it is called something like
-"smb2n3" so it can be readily understood to support both?
+`git grep -iwl fsx tests/` will give you an idea of the extra fsx
+based tests to run....
 
-    It's just a small comfort issue, since 'smb3' really doesn't
-seem to be very convincing about its smb2-support.
+Cheers,
 
-> Cheers,
->   
-Likewise!
-
-
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
