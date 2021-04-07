@@ -2,68 +2,153 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D26D356166
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Apr 2021 04:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539AB35620B
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Apr 2021 05:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbhDGC2I (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 6 Apr 2021 22:28:08 -0400
-Received: from m12-12.163.com ([220.181.12.12]:50950 "EHLO m12-12.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233994AbhDGC2H (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 6 Apr 2021 22:28:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Me5hN
-        OF2h0y0yS3J/7We7nlIRtQIvPxa/0EyPfwDP70=; b=C97c5CQVvlZsRxAslaMhN
-        PerQbr22PMUP1usdZznfcKqb7pt805Szboi+O7RafrOlGdAKu3K14FwNpSEYA4Mn
-        L5HW1N8mEMrkux1RxbIzJrvUI7pStjcfMtl2XM0XnS87+XsCXLGhK2L1fh5CJuEt
-        lF9i7CkkLGC8sRqwoWfz4Q=
-Received: from COOL-20201222LC.ccdomain.com (unknown [218.94.48.178])
-        by smtp8 (Coremail) with SMTP id DMCowABHieSTGG1gTazQYA--.7038S2;
-        Wed, 07 Apr 2021 10:27:34 +0800 (CST)
-From:   liliu_096@163.com
-To:     sfrench@samba.org, samba-technical@lists.samba.org
-Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "jack1.li_cp" <liliu1@yulong.com>
-Subject: [PATCH] fs: cifs: Fix spelling of 'security'
-Date:   Wed,  7 Apr 2021 10:26:55 +0800
-Message-Id: <20210407022655.21124-1-liliu_096@163.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S1344472AbhDGDnn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Apr 2021 23:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234337AbhDGDnn (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Apr 2021 23:43:43 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22397C06174A
+        for <linux-cifs@vger.kernel.org>; Tue,  6 Apr 2021 20:43:34 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id n138so26194422lfa.3
+        for <linux-cifs@vger.kernel.org>; Tue, 06 Apr 2021 20:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Nn1k1rY/+aywFe1Iz9i2zxKnVrNP1we7BtCEYHeHRRk=;
+        b=uwnUWkmAuETe+NrKs/nKi3Ql5USdVdqTNuljU4U3/h2LLDsnDejBmLFcbKElfsZ2Cf
+         /YgIvIOucKrtnOe0fW0cyYxiv+KuThH/sTiuE+ASpCLSmJfyHsXoqFHvnGG9wRmIQxo/
+         ytRxcQC5QBaC+oaW3uBivazEIJ9CdRKpOM66TfBd3cK6gRwgJBazNMSHs3E0cFjADDsX
+         CRE/tIGpjmOoqw9v7oSDa/BJvbdGNrbT9JD2E7jTEbBc3YV31N6V+BhGFIGiaZ0ZKjh2
+         d28yZJaiyBI8OOUrHui4SA8srOEsl8ZdAjBAFklx68j5N9VvGcEUrogGjddhiZHvdUiC
+         1vhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Nn1k1rY/+aywFe1Iz9i2zxKnVrNP1we7BtCEYHeHRRk=;
+        b=Mg/X94pjoIIXE8F+w1LkV2ECkAcVy6L5AsJL8WauTI8cArO+XIKILvznTBZ8bZB7K6
+         9/obPdJWiji5wOF4w6yEgfSbeMGnvZ9q+0K6Hr1DUzFWpe0z3ZECsuKoo48OvBwREJri
+         rhF/113I27bCNdjZC/IcEmoCh1aHelaqc1M3jmYEvFkF+lCFuSfybD64vw9UYbe40q9q
+         jw99wv10NDdPqgCPZSaN9nimUBz9vycO+BL++pprJtcNI30WXyMTkf2rF2KoMI4P+mx6
+         ronmyRmEz0/UW1/EpQgxcSlIyF1B4SE+QNbpCOc75MrtfXXJN+xP4xwrWkSCRzWgXhhO
+         JAAw==
+X-Gm-Message-State: AOAM531N9kQQN7v8sXsCCJptc6Dvm3g4eeAf8wfv1D+sHjjFg6oRS+56
+        w/tC9b9JEn66eeyaX+K/o+HIYktLzYUfQBn2DzDibq6cueE=
+X-Google-Smtp-Source: ABdhPJzzOvI3GlhDxKojHgt9+Dq9bhm5wP0u4Xif9hAltLT05P91eE10FRW6MdzdXZjYOIPAxvi1U4XoYPG8/UgsGd4=
+X-Received: by 2002:ac2:5f07:: with SMTP id 7mr1043846lfq.313.1617767012459;
+ Tue, 06 Apr 2021 20:43:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowABHieSTGG1gTazQYA--.7038S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZw15tF1rKFWxWr43KryUWrg_yoWfXrg_GF
-        4vkw1kW345AF43Xw13CrZ5Wrs29a4IyFWSk3ZxWF1UGasxGFW8Ga4Dtrn3ZF48CrsrCryq
-        vrnFqFyUCr1fJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1D5rDUUUUU==
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: 5olox3bbqzlqqrwthudrp/1tbiRRZtx1l914Vv0QAAsx
+References: <CANT5p=qWyYCD_gSw-AzvxOgzTzWkBK1uUz-16YougX5No8jjgQ@mail.gmail.com>
+ <87im50vi9v.fsf@cjr.nz> <CANT5p=pHPPwf8H1ZbBT+yr4CP17+BB2evDBxPVjYrvr+kdF1FQ@mail.gmail.com>
+ <CAKywueSCF-ZgmJZif=kkspk_b8Xp3ARUGHD64nnc5ZbVk3EcxA@mail.gmail.com>
+In-Reply-To: <CAKywueSCF-ZgmJZif=kkspk_b8Xp3ARUGHD64nnc5ZbVk3EcxA@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 6 Apr 2021 22:43:21 -0500
+Message-ID: <CAH2r5mv1=tpjPOZhq97t+X99dfSDtzWepp5bpqPqjf9Z1t6+sg@mail.gmail.com>
+Subject: Re: [PATCH] cifs: On cifs_reconnect, resolve the hostname again.
+To:     Pavel Shilovsky <piastryyy@gmail.com>
+Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: "jack1.li_cp" <liliu1@yulong.com>
+merged into cifs-2.6.git for-next
 
-secuirty -> security
+On Tue, Apr 6, 2021 at 11:34 AM Pavel Shilovsky <piastryyy@gmail.com> wrote=
+:
+>
+> Looks good!
+>
+> Reviewed-by: Pavel Shilovsky <pshilov@microsoft.com>
+>
+> CC: <stable@vger.kernel.org> # 5.11+
+>
+> --
+> Best regards,
+> Pavel Shilovsky
+>
+> =D0=BF=D0=BD, 5 =D0=B0=D0=BF=D1=80. 2021 =D0=B3. =D0=B2 19:07, Shyam Pras=
+ad N <nspmangalore@gmail.com>:
+> >
+> > Hi Paulo,
+> >
+> > Thanks for the quick review. And nice catch about CONFIG_CIFS_DFS_UPCAL=
+L.
+> > Fixed it, added CC for stable.
+> > Attached updated patch.
+> >
+> > Regards,
+> > Shyam
+> >
+> > On Mon, Apr 5, 2021 at 9:24 PM Paulo Alcantara <pc@cjr.nz> wrote:
+> > >
+> > > Shyam Prasad N <nspmangalore@gmail.com> writes:
+> > >
+> > > > Please consider the attached patch for performing the DNS query aga=
+in
+> > > > on reconnect.
+> > > > This is important when connecting to Azure file shares. The UNC
+> > > > generally contains the server name as a FQDN, and the IP address wh=
+ich
+> > > > the name resolves to can change over time.
+> > > >
+> > > > After our last conversation about this, I discovered that for the
+> > > > non-DFS scenario, we never do DNS resolutions in cifs.ko, since
+> > > > mount.cifs already resolves the name and passes the "addr=3D" arg d=
+uring
+> > > > mount.
+> > >
+> > > Yeah, this should happen for both cases.  Good catch!
+> > >
+> > > > I noticed that you had a patch for this long back. But I don't see
+> > > > that call happening in the latest code. Any idea why that was done?
+> > >
+> > > I don't know.  Maybe some other patch broke it.
+> > >
+> > > We should probably mark it for stable as well.
+> > >
+> > > > From 289f7f0fa229ea181094821c309a2ba9358791a3 Mon Sep 17 00:00:00 2=
+001
+> > > > From: Shyam Prasad N <sprasad@microsoft.com>
+> > > > Date: Wed, 31 Mar 2021 14:35:24 +0000
+> > > > Subject: [PATCH] cifs: On cifs_reconnect, resolve the hostname agai=
+n.
+> > > >
+> > > > On cifs_reconnect, make sure that DNS resolution happens again.
+> > > > It could be the cause of connection to go dead in the first place.
+> > > >
+> > > > Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+> > > > ---
+> > > >  fs/cifs/connect.c | 15 +++++++++++++++
+> > > >  1 file changed, 15 insertions(+)
+> > >
+> > > This patch breaks when CONFIG_CIFS_DFS_UPCALL isn't set.
+> > >
+> > > Please declare reconn_set_ipaddr_from_hostname() outside the "#ifdef
+> > > CONFIG_CIFS_DFS_UPCALL" in connect.c.
+> > >
+> > > Otherwise,
+> > >
+> > > Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> >
+> >
+> >
+> > --
+> > Regards,
+> > Shyam
 
-Signed-off-by: jack1.li_cp <liliu1@yulong.com>
----
- fs/cifs/cifsacl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-index 562913e..d2d8e26 100644
---- a/fs/cifs/cifsacl.c
-+++ b/fs/cifs/cifsacl.c
-@@ -1418,7 +1418,7 @@ int set_cifs_acl(struct cifs_ntsd *pnntsd, __u32 acllen,
- 	 * Add three ACEs for owner, group, everyone getting rid of other ACEs
- 	 * as chmod disables ACEs and set the security descriptor. Allocate
- 	 * memory for the smb header, set security descriptor request security
--	 * descriptor parameters, and secuirty descriptor itself
-+	 * descriptor parameters, and security descriptor itself
- 	 */
- 	secdesclen = max_t(u32, secdesclen, DEFAULT_SEC_DESC_LEN);
- 	pnntsd = kmalloc(secdesclen, GFP_KERNEL);
--- 
-1.9.1
 
 
+--=20
+Thanks,
+
+Steve
