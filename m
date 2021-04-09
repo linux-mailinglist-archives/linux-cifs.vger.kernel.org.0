@@ -2,54 +2,62 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2E23591D7
-	for <lists+linux-cifs@lfdr.de>; Fri,  9 Apr 2021 04:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7748359221
+	for <lists+linux-cifs@lfdr.de>; Fri,  9 Apr 2021 04:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbhDICEp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 8 Apr 2021 22:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbhDICEo (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Apr 2021 22:04:44 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BD3C061760
-        for <linux-cifs@vger.kernel.org>; Thu,  8 Apr 2021 19:04:31 -0700 (PDT)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lUgVT-003sc1-Ve; Fri, 09 Apr 2021 02:04:24 +0000
-Date:   Fri, 9 Apr 2021 02:04:23 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: [CFT] vfs.git #work.cifs
-Message-ID: <YG+2J/JAD06Wj3MJ@zeniv-ca.linux.org.uk>
-References: <YG+yK97KkSTkhwx7@zeniv-ca.linux.org.uk>
- <CAH2r5msLHRQT5dT5KpT-41ScvhYt-23=KbYNQTfmp_DPX+R1EQ@mail.gmail.com>
+        id S232662AbhDICr2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 8 Apr 2021 22:47:28 -0400
+Received: from mail-m17635.qiye.163.com ([59.111.176.35]:9312 "EHLO
+        mail-m17635.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232616AbhDICr1 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 8 Apr 2021 22:47:27 -0400
+Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
+        by mail-m17635.qiye.163.com (Hmail) with ESMTPA id 6D4E7400208;
+        Fri,  9 Apr 2021 10:46:48 +0800 (CST)
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] fs: cifs: Remove repeated struct declaration
+Date:   Fri,  9 Apr 2021 10:46:39 +0800
+Message-Id: <20210409024639.1092204-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH2r5msLHRQT5dT5KpT-41ScvhYt-23=KbYNQTfmp_DPX+R1EQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGk5KSFZNGEpIT0tCQhgZHklVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKQ1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PBA6Njo*LT8TOCEoNCsIOBA0
+        DhcaCwlVSlVKTUpMQkhNT0tCS0tKVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
+        TVVKTklVSk9OVUpDSVlXWQgBWUFKTktKNwY+
+X-HM-Tid: 0a78b4866026d991kuws6d4e7400208
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 08:54:35PM -0500, Steve French wrote:
-> I can put the patches back into the automated test bucket tomorrow.
-> There was a problem with the last patch of the series breaking, but
-> all the rest looked fine before.  I wanted to add onto those the
-> change (and earlier WIP patch of mine) to move the conversion of path
-> separators (depending on dialect) '/' to '\' to later (not in
-> build_path_from_dentry ... but rather later (where it is safer to do
-> the conversion) e.g. when the pathname is translated (usually from
-> UTF8 to UCS2 Unicode).
-> 
-> Setting up Samba server is pretty easy for testing - some of the
-> instructions are on the Samba xfstesting wiki page
-> 
-> Also interesting that it could even be a bit easier (setting up
-> automated testing on localhost) for some soon by testing to the kernel
-> server (ksmbd) but that is currently in linux-next not mainline (yet)
-> pending working through various code review comments, patches etc.
+struct cifs_writedata is declared twice.
+One is declared at 209th line.
+And struct cifs_writedata is defined blew.
+The declaration hear is not needed. Remove the duplicate.
 
-Umm... the failing tests tended to be the ones with "azure" in names;
-"samba" counterparts passed, IIRC...
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ fs/cifs/cifsglob.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index ec824ab8c5ca..5ec60745034e 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -1316,8 +1316,6 @@ struct cifs_readdata {
+ 	struct page			**pages;
+ };
+ 
+-struct cifs_writedata;
+-
+ /* asynchronous write support */
+ struct cifs_writedata {
+ 	struct kref			refcount;
+-- 
+2.25.1
+
