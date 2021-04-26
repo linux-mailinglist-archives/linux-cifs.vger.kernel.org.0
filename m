@@ -2,68 +2,161 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD0336B52A
-	for <lists+linux-cifs@lfdr.de>; Mon, 26 Apr 2021 16:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1189F36B613
+	for <lists+linux-cifs@lfdr.de>; Mon, 26 Apr 2021 17:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbhDZOnb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 26 Apr 2021 10:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbhDZOnb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 26 Apr 2021 10:43:31 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A49AC061756
-        for <linux-cifs@vger.kernel.org>; Mon, 26 Apr 2021 07:42:49 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id b23so6078460lfv.8
-        for <linux-cifs@vger.kernel.org>; Mon, 26 Apr 2021 07:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sldeoUHN+XKV/25qdr8o1yS1uyCAwpn/8BNmGuwP1dE=;
-        b=epk4rI07w7nQud2a6bqFGOskvp+Cvxzw+P0TeS/VETuX2X2rlmkyjMOJItu5kDzbBM
-         yDFAAJoyoBi2yQboFhkO43H+uu1IhEKXcAh/0E91/1VqsNcbNfUbQW84BcBirLtjCMs5
-         jcFVJ7WK6C8asTQFZ2XGO3EWWK/B++H+qHQxRGIDcjFjehD0zlwDEFRQ6g51tu/YWcRU
-         IncfBS9fHeLU+L59lgZUOyoZ9UapYAlJ14QO3lVPwFaUvP6Rff83f0H4p6aDIHis2Qxe
-         rGXVzk9p+jL/RHSexdwnzwBeeyR+nSj/p42s6wXXHbwzJNd3F5Ce0RlobxNxpvmXxeQ0
-         hhmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sldeoUHN+XKV/25qdr8o1yS1uyCAwpn/8BNmGuwP1dE=;
-        b=dk7aD+k1y3rNI0Eo6xKMdiksRNBmVwK4KZPDDDIdwc3Arsc/NHu/cYkJLZ2XhJZseP
-         w+GAIt9VuZW9r424R9mqA/ivlqXTK8atIX13JpofkJXppjAWG5yFTRAzjGHU29N98+3R
-         MGZD1udFE4K0zQp/JXl919oRTH4Oi9XsuQ6JwWIOhFIVEe2fSlidPIzG714qNpMajAll
-         cJ/nFOvj2aCOpLeASb5SmR+9D55G4RvaMEIB/Eb7wbwD9d4fEnyRfKNjVBW6zZc7iajx
-         XWV+17dqZ6FMkDfzc0GCUP2Lb8cCXxz3+4k/gOLN9C3/tLkfCfdh6ykz6kvVpcxjzHKG
-         fycA==
-X-Gm-Message-State: AOAM533cJ1LxnCjK0QSU7biyQzeaZco4ny31eHoZr5RXay3jPpwYuFBs
-        iBvbWrLh9PvCGINxr5gdW0YGH8zIqAOQPvRMtGwfRVv2mchWPEbG
-X-Google-Smtp-Source: ABdhPJxub+mW+KyOl8DtKyqoPFBrLV1wJ6tuijSlkYmLd5jqEjm8htJL0tLSC3sqVaIMWx4GSWHA3k8AlHHUScuQ2Lo=
-X-Received: by 2002:a17:906:2b05:: with SMTP id a5mr18947944ejg.446.1619446329803;
- Mon, 26 Apr 2021 07:12:09 -0700 (PDT)
+        id S234160AbhDZPrY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 26 Apr 2021 11:47:24 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38026 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234090AbhDZPrX (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 26 Apr 2021 11:47:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 55725ABB1;
+        Mon, 26 Apr 2021 15:46:40 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id C7AF41E0CB7; Mon, 26 Apr 2021 17:46:39 +0200 (CEST)
+Date:   Mon, 26 Apr 2021 17:46:39 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Amir Goldstein <amir73il@gmail.com>, Ted Tso <tytso@mit.edu>,
+        ceph-devel@vger.kernel.org, Chao Yu <yuchao0@huawei.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Johannes Thumshirn <jth@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-xfs@vger.kernel.org, Miklos Szeredi <miklos@szeredi.hu>,
+        Steve French <sfrench@samba.org>
+Subject: Re: [PATCH 02/12] mm: Protect operations adding pages to page cache
+ with invalidate_lock
+Message-ID: <20210426154639.GB23895@quack2.suse.cz>
+References: <20210423171010.12-1-jack@suse.cz>
+ <20210423173018.23133-2-jack@suse.cz>
+ <20210423230449.GC1990290@dread.disaster.area>
 MIME-Version: 1.0
-Received: by 2002:a17:906:c287:0:0:0:0 with HTTP; Mon, 26 Apr 2021 07:12:09
- -0700 (PDT)
-Reply-To: manuelfranco4love@gmail.com
-From:   eze chikwudi <chikwudieze4real@gmail.com>
-Date:   Mon, 26 Apr 2021 07:12:09 -0700
-Message-ID: <CADN6q1B_AOaaTCCfKzC5KAAtLhXJc6rU9H1HgWZDidEWb_XasA@mail.gmail.com>
-Subject: Der Betrag von 500.000,00 Euro wurde Ihnen gespendet. Kontakt: manuelfranco4love@gmail.com
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210423230449.GC1990290@dread.disaster.area>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Ich bin Manuel Franco und habe am 23. April 2019 den Power Ball
-Jackpot im Wert von 758,7 Millionen Dollar gewonnen. Ich gew=C3=A4hre 5
-Personen jeweils 500.000,00 Euro und Sie geh=C3=B6ren zu den 5 gl=C3=BCckli=
-chen
-Gewinnern, die ausgew=C3=A4hlt wurden, um meine Spende von 500.000,00 Euro
-zu erhalten.
+On Sat 24-04-21 09:04:49, Dave Chinner wrote:
+> On Fri, Apr 23, 2021 at 07:29:31PM +0200, Jan Kara wrote:
+> > Currently, serializing operations such as page fault, read, or readahead
+> > against hole punching is rather difficult. The basic race scheme is
+> > like:
+> > 
+> > fallocate(FALLOC_FL_PUNCH_HOLE)			read / fault / ..
+> >   truncate_inode_pages_range()
+> > 						  <create pages in page
+> > 						   cache here>
+> >   <update fs block mapping and free blocks>
+> > 
+> > Now the problem is in this way read / page fault / readahead can
+> > instantiate pages in page cache with potentially stale data (if blocks
+> > get quickly reused). Avoiding this race is not simple - page locks do
+> > not work because we want to make sure there are *no* pages in given
+> > range. inode->i_rwsem does not work because page fault happens under
+> > mmap_sem which ranks below inode->i_rwsem. Also using it for reads makes
+> > the performance for mixed read-write workloads suffer.
+> > 
+> > So create a new rw_semaphore in the address_space - invalidate_lock -
+> > that protects adding of pages to page cache for page faults / reads /
+> > readahead.
+> .....
+> > diff --git a/fs/inode.c b/fs/inode.c
+> > index a047ab306f9a..43596dd8b61e 100644
+> > --- a/fs/inode.c
+> > +++ b/fs/inode.c
+> > @@ -191,6 +191,9 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
+> >  	mapping_set_gfp_mask(mapping, GFP_HIGHUSER_MOVABLE);
+> >  	mapping->private_data = NULL;
+> >  	mapping->writeback_index = 0;
+> > +	init_rwsem(&mapping->invalidate_lock);
+> > +	lockdep_set_class(&mapping->invalidate_lock,
+> > +			  &sb->s_type->invalidate_lock_key);
+> >  	inode->i_private = NULL;
+> >  	inode->i_mapping = mapping;
+> >  	INIT_HLIST_HEAD(&inode->i_dentry);	/* buggered by rcu freeing */
+> 
+> Oh, lockdep. That might be a problem here.
+> 
+> The XFS_MMAPLOCK has non-trivial lockdep annotations so that it is
+> tracked as nesting properly against the IOLOCK and the ILOCK. When
+> you end up using xfs_ilock(XFS_MMAPLOCK..) to lock this, XFS will
+> add subclass annotations to the lock and they are going to be
+> different to the locking that the VFS does.
+> 
+> We'll see this from xfs_lock_two_inodes() (e.g. in
+> xfs_swap_extents()) and xfs_ilock2_io_mmap() during reflink
+> oper.....
 
-Kontaktieren Sie mich f=C3=BCr weitere Informationen unter:
-manuelfranco4love@gmail.com
+Thanks for the pointer. I was kind of wondering what lockdep nesting games
+XFS plays but then forgot to look into details. Anyway, I've preserved the
+nesting annotations in XFS and fstests run on XFS passed without lockdep
+complaining so there isn't at least an obvious breakage. Also as far as I'm
+checking the code XFS usage in and lock nesting of MMAPLOCK should be
+compatible with the nesting VFS enforces (also see below)...
+ 
+> Oooooh. The page cache copy done when breaking a shared extent needs
+> to lock out page faults on both the source and destination, but it
+> still needs to be able to populate the page cache of both the source
+> and destination file.....
+> 
+> .... and vfs_dedupe_file_range_compare() has to be able to read
+> pages from both the source and destination file to determine that
+> the contents are identical and that's done while we hold the
+> XFS_MMAPLOCK exclusively so the compare is atomic w.r.t. all other
+> user data modification operations being run....
+
+So I started wondering why fstests passed when reading this :) The reason
+is that vfs_dedupe_get_page() does not use standard page cache filling path
+(neither readahead API nor filemap_read()), instead it uses
+read_mapping_page() and so gets into page cache filling path below the
+level at which we get invalidate_lock and thus everything works as it
+should. So read_mapping_page() is similar to places like e.g.
+block_truncate_page() or block_write_begin() which may end up filling in
+page cache contents but they rely on upper layers to already hold
+appropriate locks. I'll add a comment to read_mapping_page() about this.
+Once all filesystems are converted to use invalidate_lock, I also want to
+add WARN_ON_ONCE() to various places verifying that invalidate_lock is held
+as it should...
+ 
+> I now have many doubts that this "serialise page faults by locking
+> out page cache instantiation" method actually works as a generic
+> mechanism. It's not just page cache invalidation that relies on
+> being able to lock out page faults: copy-on-write and deduplication
+> both require the ability to populate the page cache with source data
+> while page faults are locked out so the data can be compared/copied
+> atomically with the extent level manipulations and so user data
+> modifications cannot occur until the physical extent manipulation
+> operation has completed.
+
+Hum, that is a good point. So there are actually two different things you
+want to block at different places:
+
+1) You really want to block page cache instantiation for operations such as
+hole punch as that operation mutates data and thus contents would become
+stale.
+
+2) You want to block page cache *modification* for operations such as
+dedupe while keeping page cache in place. This is somewhat different
+requirement but invalidate_lock can, in principle, cover it as well.
+Basically we just need to keep invalidate_lock usage in .page_mkwrite
+helpers. The question remains whether invalidate_lock is still a good name
+with this usage in mind and I probably need to update a documentation to
+reflect this usage.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
