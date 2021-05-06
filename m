@@ -2,66 +2,101 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C123757FE
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 May 2021 17:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C849375BAC
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 May 2021 21:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbhEFP6H (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 6 May 2021 11:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbhEFP6H (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 May 2021 11:58:07 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189BBC061574
-        for <linux-cifs@vger.kernel.org>; Thu,  6 May 2021 08:57:09 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id m9so6186463wrx.3
-        for <linux-cifs@vger.kernel.org>; Thu, 06 May 2021 08:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6a1SUskVhFi6Iixxtt5Alifh0wGhhUTSko+pYbCC5ug=;
-        b=lpJR5chvboMy6sX+Pk64TcwhmEpxd1juE5VrWkm6LrDdjIT6ycJhuOitTcpx6JzmB4
-         ZkNg22ORLOlQ/3kVjr99FZc1HiyUvfBsaz6yRbBX48+YrqLq+jLCpTUCIPpyBWFsmd/s
-         /Ce74tbmaxXEE318VJ+cG9clJmJ8qYERAGyXcrG8Nq0vsNbGXvZsanW/wB3PA3V2r2fU
-         4coYSRkBgRht/Mk1X7CUhsGz0aaTu+qb/JxNbK4X8yQqSOYykqsuNCdLBy79oJbSXTno
-         TQcL7XZE3ZAxlGzf31ToJEdz9JO7MzjeLVuM43OoX/IPcx0Maq+cxWBiZmO11R6pBFfr
-         MLPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6a1SUskVhFi6Iixxtt5Alifh0wGhhUTSko+pYbCC5ug=;
-        b=SwBUuBI6ncH1cqppf6Mdr8QdwxIc6PE+oJ7gKe4iVqOcsSC0Awwd1d9+CRHOfJAxkB
-         yE2soXQzAytkIMJExbB+3TALR/pf0e5lyro5e2ajCcH8/ACQu2NW0M1jFrK+9b8YpSzR
-         zHc7A1l2YO/ZyooKZQhCEDBpz04gJx+L1DRlqMJmyeXXjKk1mqeA7XgNaRltp2mBTsiF
-         GQlAF6sURyE4GJm9PcIz7fnJLdlymYeko1xtAqEdcGdhYkuMDteCYq8Uqu7VK1pKE7K6
-         GsJ+g6W0JdxO7tBTZOoGxeU0Q/QuVBc/eNv251DtIhlWOhUTs1FDtola7mz2vDUyPfMO
-         lUjQ==
-X-Gm-Message-State: AOAM5329AKaLn7cySCxVMeWtq5B0Jw/XRMZxTtoBl7FFFDwMMwdoljUS
-        fxYmuKYCSy7MIHyQGm9YcEaP9dYgqdhw29GW578=
-X-Google-Smtp-Source: ABdhPJzbFNcGAelguves+vnUQLrdM8YJUFScykbJWlzpxMjPfVDjyWVO5ofv11SnDL0vJkfPuSzh6+9c3JHPZi3dYHk=
-X-Received: by 2002:a5d:5263:: with SMTP id l3mr6250990wrc.263.1620316627832;
- Thu, 06 May 2021 08:57:07 -0700 (PDT)
+        id S233074AbhEFT00 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 6 May 2021 15:26:26 -0400
+Received: from mx.cjr.nz ([51.158.111.142]:15104 "EHLO mx.cjr.nz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230375AbhEFT00 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 6 May 2021 15:26:26 -0400
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id AB05480BA9;
+        Thu,  6 May 2021 19:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1620329126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LwlzlGhHguvp+LEUJpUx9fmTufYmsXoW0IMzDqKrK6U=;
+        b=MC8UbA6lR88lQkltqlvaXADHCbIsx1jOKwblXuEbWIXbsYzUxku6eira9lZlxeUeofu2Hq
+        cRGHiL3x7+biQbn0c9JClrSSJqkgzJaV+47kbK7GOh4yR6bfuFKW0coU57G4smWUJTQKgl
+        kcAzt1iKJbwW21+cfnRUnkZP+e+F0oWM5CnQd2nhH8A1uwmivDVlI1WONVhpWlXK/Yi7oX
+        +REqpa2PywlfLqqCspXJlklGnp6H5MAQkJaW59ik9jRd5YF/ypWAc8cMVFSsEUI4gkicpc
+        +HJCnutfRxNiGp2HXmwnKS6zNn6opp/yIU4iyzp4aFn5vLBwnjOfaSJuymQWbQ==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     linux-cifs@vger.kernel.org, piastryyy@gmail.com
+Cc:     Paulo Alcantara <pc@cjr.nz>
+Subject: [PATCH] mount.cifs: fix crash when mount point does not exist
+Date:   Thu,  6 May 2021 16:25:13 -0300
+Message-Id: <20210506192513.2935-1-pc@cjr.nz>
 MIME-Version: 1.0
-Received: by 2002:a5d:4d8c:0:0:0:0:0 with HTTP; Thu, 6 May 2021 08:57:07 -0700 (PDT)
-Reply-To: jacobwilliams777@e1.ru
-From:   "Engr. Jacob Williams" <iwantesther@gmail.com>
-Date:   Thu, 6 May 2021 08:57:07 -0700
-Message-ID: <CALmzkYv1PNpEMpwVbZJT7_+CTeWU8s2Boq6V8Rcuyaiv_BPEEA@mail.gmail.com>
-Subject: foreign investment
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+@mountpointp is initially set to a statically allocated string in
+main(), and if we fail to update it in acquire_mountpoint(), make sure
+to set it to NULL and avoid freeing it at mount_exit.
+
+This fixes the following crash
+
+	$ mount.cifs //srv/share /mnt/foo/bar -o ...
+	Couldn't chdir to /mnt/foo/bar: No such file or directory
+	munmap_chunk(): invalid pointer
+	Aborted
+
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+---
+ mount.cifs.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/mount.cifs.c b/mount.cifs.c
+index 7f898bbd215a..84274c98ddf5 100644
+--- a/mount.cifs.c
++++ b/mount.cifs.c
+@@ -1996,9 +1996,9 @@ acquire_mountpoint(char **mountpointp)
+ 	 */
+ 	realuid = getuid();
+ 	if (realuid == 0) {
+-		dacrc = toggle_dac_capability(0, 1);
+-		if (dacrc)
+-			return dacrc;
++		rc = toggle_dac_capability(0, 1);
++		if (rc)
++			goto out;
+ 	} else {
+ 		oldfsuid = setfsuid(realuid);
+ 		oldfsgid = setfsgid(getgid());
+@@ -2019,7 +2019,6 @@ acquire_mountpoint(char **mountpointp)
+ 		rc = EX_SYSERR;
+ 	}
+ 
+-	*mountpointp = mountpoint;
+ restore_privs:
+ 	if (realuid == 0) {
+ 		dacrc = toggle_dac_capability(0, 0);
+@@ -2030,9 +2029,13 @@ restore_privs:
+ 		gid_t __attribute__((unused)) gignore = setfsgid(oldfsgid);
+ 	}
+ 
+-	if (rc)
++out:
++	if (rc) {
+ 		free(mountpoint);
++		mountpoint = NULL;
++	}
+ 
++	*mountpointp = mountpoint;
+ 	return rc;
+ }
+ 
 -- 
-Hello!.
+2.31.1
 
-we are looking for a good trustee who would help receive funds for
-viable project(s) in a vibrant locations around the world.  Kindly get
-back to me for details..
-
-Have a nice day.
-
-Engr. Jacob Williams
