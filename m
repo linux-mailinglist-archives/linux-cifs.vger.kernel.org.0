@@ -2,162 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E55390BAD
+	by mail.lfdr.de (Postfix) with ESMTP id 89AF6390BAC
 	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 23:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbhEYVmV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 25 May 2021 17:42:21 -0400
-Received: from mail109.syd.optusnet.com.au ([211.29.132.80]:56346 "EHLO
-        mail109.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231801AbhEYVmU (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
+        id S232119AbhEYVmU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
         Tue, 25 May 2021 17:42:20 -0400
-Received: from dread.disaster.area (pa49-180-230-185.pa.nsw.optusnet.com.au [49.180.230.185])
-        by mail109.syd.optusnet.com.au (Postfix) with ESMTPS id F04E9671F3;
-        Wed, 26 May 2021 07:40:43 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1llen3-005CSi-MJ; Wed, 26 May 2021 07:40:41 +1000
-Date:   Wed, 26 May 2021 07:40:41 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        ceph-devel@vger.kernel.org, Chao Yu <yuchao0@huawei.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, Miklos Szeredi <miklos@szeredi.hu>,
-        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 07/13] xfs: Convert to use invalidate_lock
-Message-ID: <20210525214041.GJ664593@dread.disaster.area>
-References: <20210525125652.20457-1-jack@suse.cz>
- <20210525135100.11221-7-jack@suse.cz>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232122AbhEYVmU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 May 2021 17:42:20 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B33C061756
+        for <linux-cifs@vger.kernel.org>; Tue, 25 May 2021 14:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=qTzEMwO2c6Dp96c7BPOLJI/HesDhy6WgRmHIVN/4pnk=; b=3k0twgb8bLiFHsgv3HbBGrC9Ka
+        BEMxQpk6bxmUsnsZIa4fI2C6I5IZxBmLPMswKVdXvwnU9MMPj7zsI+kzeS9GUubvMyqY5aDimQG4y
+        R9vawoJ9glO3kmXgbnaJ1rGLH3bbt2r2m0HY1XgMNfc3J6CV7I9xwsu/8wBuDXLSrvBMPvbl7hkRB
+        he6O3gHlczdh/IdipVtZvQou5W1yAaui4u9/UtZ1If8k574yIRBLLYUEnc7Kx2SWq857tf+2JELsg
+        tO66xA3v0Mf6tw6xU8paG5LCGIHdCGNWRnZ+tBr+JrRbGWkPZNBP1FPW6NQ8zvHlpIE+bgbZKXenL
+        FX8XSl2w+Xa5szXkY23vCN7vQv7jZ2rrRpIadGdKwKgkDbb5sl7/VhFklDtNkvx6+Swq1lZs0HoiG
+        wgDMVV7Z3p7TaEtzAZUcoE29mEiFbGPgeaQZrxiH+iyuOy0l3tevOLwEGyzFExNZ1e8Gi6VlpFGvu
+        WlYGyIOy55L9Iirxh0k9hsFk;
+Received: from [2a01:4f8:192:486::6:0] (port=56014 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1llen9-0007ft-E8
+        for cifs-qa@samba.org; Tue, 25 May 2021 21:40:47 +0000
+Received: from [::1] (port=33900 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1llen8-008k66-G5
+        for cifs-qa@samba.org; Tue, 25 May 2021 21:40:46 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
+Date:   Tue, 25 May 2021 21:40:46 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: richard.flint@gmail.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14713-10630-KGMiTMJHcv@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
+References: <bug-14713-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210525135100.11221-7-jack@suse.cz>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=Tu+Yewfh c=1 sm=1 tr=0
-        a=dUIOjvib2kB+GiIc1vUx8g==:117 a=dUIOjvib2kB+GiIc1vUx8g==:17
-        a=kj9zAlcOel0A:10 a=5FLXtPjwQuUA:10 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
-        a=7-415B0cAAAA:8 a=YRNIVghP3Sa-aXUPf-oA:9 a=CjuIK1q_8ugA:10
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, May 25, 2021 at 03:50:44PM +0200, Jan Kara wrote:
-> Use invalidate_lock instead of XFS internal i_mmap_lock. The intended
-> purpose of invalidate_lock is exactly the same. Note that the locking in
-> __xfs_filemap_fault() slightly changes as filemap_fault() already takes
-> invalidate_lock.
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> CC: <linux-xfs@vger.kernel.org>
-> CC: "Darrick J. Wong" <darrick.wong@oracle.com>
-> Signed-off-by: Jan Kara <jack@suse.cz>
-> ---
->  fs/xfs/xfs_file.c  | 12 ++++++-----
->  fs/xfs/xfs_inode.c | 52 ++++++++++++++++++++++++++--------------------
->  fs/xfs/xfs_inode.h |  1 -
->  fs/xfs/xfs_super.c |  2 --
->  4 files changed, 36 insertions(+), 31 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-> index 396ef36dcd0a..dc9cb5c20549 100644
-> --- a/fs/xfs/xfs_file.c
-> +++ b/fs/xfs/xfs_file.c
-> @@ -1282,7 +1282,7 @@ xfs_file_llseek(
->   *
->   * mmap_lock (MM)
->   *   sb_start_pagefault(vfs, freeze)
-> - *     i_mmaplock (XFS - truncate serialisation)
-> + *     invalidate_lock (vfs/XFS_MMAPLOCK - truncate serialisation)
->   *       page_lock (MM)
->   *         i_lock (XFS - extent map serialisation)
->   */
-> @@ -1303,24 +1303,26 @@ __xfs_filemap_fault(
->  		file_update_time(vmf->vma->vm_file);
->  	}
->  
-> -	xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
->  	if (IS_DAX(inode)) {
->  		pfn_t pfn;
->  
-> +		xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
->  		ret = dax_iomap_fault(vmf, pe_size, &pfn, NULL,
->  				(write_fault && !vmf->cow_page) ?
->  				 &xfs_direct_write_iomap_ops :
->  				 &xfs_read_iomap_ops);
->  		if (ret & VM_FAULT_NEEDDSYNC)
->  			ret = dax_finish_sync_fault(vmf, pe_size, pfn);
-> +		xfs_iunlock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
->  	} else {
-> -		if (write_fault)
-> +		if (write_fault) {
-> +			xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
->  			ret = iomap_page_mkwrite(vmf,
->  					&xfs_buffered_write_iomap_ops);
-> -		else
-> +			xfs_iunlock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
-> +		} else
->  			ret = filemap_fault(vmf);
->  	}
-> -	xfs_iunlock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+https://bugzilla.samba.org/show_bug.cgi?id=3D14713
 
-This seems kinda messy. filemap_fault() basically takes the
-invalidate lock around the entire operation, it runs, so maybe it
-would be cleaner to implement it as:
+--- Comment #23 from Richard Flint <richard.flint@gmail.com> ---
+I am going to see if I can rebuild cifs.ko with the right options to dump t=
+he
+keys. But this is a lot of work - is it likely to lead to anything useful?
 
-filemap_fault_locked(vmf)
-{
-	/* does the filemap fault work */
-}
-
-filemap_fault(vmf)
-{
-	filemap_invalidate_down_read(...)
-	ret = filemap_fault_locked(vmf)
-	filemap_invalidate_up_read(...)
-	return ret;
-}
-
-And that means XFS could just call filemap_fault_locked() and not 
-have to do all this messy locking just to avoid holding the lock
-that filemap_fault has now internalised.
-
-> @@ -355,8 +358,11 @@ xfs_isilocked(
->  
->  	if (lock_flags & (XFS_MMAPLOCK_EXCL|XFS_MMAPLOCK_SHARED)) {
->  		if (!(lock_flags & XFS_MMAPLOCK_SHARED))
-> -			return !!ip->i_mmaplock.mr_writer;
-> -		return rwsem_is_locked(&ip->i_mmaplock.mr_lock);
-> +			return !debug_locks ||
-> +				lockdep_is_held_type(
-> +					&VFS_I(ip)->i_mapping->invalidate_lock,
-> +					0);
-> +		return rwsem_is_locked(&VFS_I(ip)->i_mapping->invalidate_lock);
->  	}
-
-<sigh>
-
-And so here we are again, losing more of our read vs write debug
-checks on debug kernels when lockdep is not enabled....
-
-Can we please add rwsem_is_locked_read() and rwsem_is_locked_write()
-wrappers that just look at the rwsem counter value to determine how
-the lock is held? Then the mrlock_t can go away entirely....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
