@@ -2,102 +2,114 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFC2390A98
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 22:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36F3390A9C
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 22:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbhEYUk0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 25 May 2021 16:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbhEYUk0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 May 2021 16:40:26 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D424BC061574
-        for <linux-cifs@vger.kernel.org>; Tue, 25 May 2021 13:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=gZ5+CnenhT65UZDkTF3+O7O7Gxbw69kADBWustogCU0=; b=mFVYFnXQ9oWb2NY9GGz3JcUdk8
-        69LHLJxvOdWxNjF1FtDoRy+dWhgKsdUFIJ7/7wPt0T+OtUtHPj+7TvU0rjneTuViVVdsZQWSvmuK/
-        k1nz+bwD4S68yroZlJ9mJpTLrB78IwKrhquARzSql/NJXIUfNFyjXyvJ9UbV1n5L79c5zsKwAGHDC
-        tjQkEoB/KUZ9dy/r28mEW+B/xkSxbkMBHZYcNT2kGQDFvmcs+FGosRG4KcFAR32DA0EZn29hzmiU0
-        RnI4fK6URS31XF+YscO0d4cBuhBnQQyktcfSwvgxX/5+jPvqB5lCXCHvHeTu/mFQA++RIVWhzFNO0
-        FF0z7lUwYZ5sxGK6wSc7j++XgenZZzwTmhwBiKD3fKGV88O3oRt0NpWvP7/6jVJuxUZuXPqcumT6b
-        ddjbBSJerQmqjJLpawSot2RLM8VdXckZMZ6z0KP4DfMYDO8zpCbSv6yzhGZDhUOFoyZFU9HC5KklL
-        UrRFkSy6FJSQ+cJF44lrfvmI;
-Received: from [2a01:4f8:192:486::6:0] (port=55996 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1lldpF-0007Dk-QL
-        for cifs-qa@samba.org; Tue, 25 May 2021 20:38:53 +0000
-Received: from [::1] (port=33880 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1lldpF-008k0Z-8e
-        for cifs-qa@samba.org; Tue, 25 May 2021 20:38:53 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Tue, 25 May 2021 20:38:52 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: sfrench@samba.org
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-W36GW7zTC5@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S231504AbhEYUoo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 May 2021 16:44:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35618 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231182AbhEYUoo (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 25 May 2021 16:44:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A400061409;
+        Tue, 25 May 2021 20:43:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621975393;
+        bh=D9/lkDf7/4G2MsG+84gaDXO7v7xhTSSqmHMTWi1xl5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gWt3V53WTHyJPdEqHJaiSjzFKDoxv0siITj6vkwlqJXoCFCv3a3exQZokq6Tonv30
+         gMlbZf5iUa/Tplf7dwGeETBsjwgLMAEfIxdlTKGU+qc54RBD6xX/YQQvQ5ekFgP4qd
+         2+r05F69dPROmTIFIVRPzEBOiSjcvk4cl99FWfRWeS/2hUrt1iSElUvXsOhXbbeYrI
+         3Jy9OORfYg3TKBLlS3Bi54A4zCiGK6t5PZVWbNrjze/xPOo+5rBtv4rgxsNNeh02E1
+         Whjvii7J/mMCnawZPlrhtapQheVSwKVYf3ytpEB2b4316qWTYa5vsbWoW7/muPlCfX
+         GhrzuzD+2ASMw==
+Date:   Tue, 25 May 2021 13:43:13 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>, ceph-devel@vger.kernel.org,
+        Chao Yu <yuchao0@huawei.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Johannes Thumshirn <jth@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-xfs@vger.kernel.org, Miklos Szeredi <miklos@szeredi.hu>,
+        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH 02/13] documentation: Sync file_operations members with
+ reality
+Message-ID: <20210525204313.GL202121@locust>
+References: <20210525125652.20457-1-jack@suse.cz>
+ <20210525135100.11221-2-jack@suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210525135100.11221-2-jack@suse.cz>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+On Tue, May 25, 2021 at 03:50:39PM +0200, Jan Kara wrote:
+> Sync listing of struct file_operations members with the real one in
+> fs.h.
+> 
+> Signed-off-by: Jan Kara <jack@suse.cz>
+> ---
+>  Documentation/filesystems/locking.rst | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+> index 1e894480115b..4ed2b22bd0a8 100644
+> --- a/Documentation/filesystems/locking.rst
+> +++ b/Documentation/filesystems/locking.rst
+> @@ -506,6 +506,7 @@ prototypes::
+>  	ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+>  	ssize_t (*read_iter) (struct kiocb *, struct iov_iter *);
+>  	ssize_t (*write_iter) (struct kiocb *, struct iov_iter *);
+> +	int (*iopoll) (struct kiocb *kiocb, bool spin);
+>  	int (*iterate) (struct file *, struct dir_context *);
+>  	int (*iterate_shared) (struct file *, struct dir_context *);
+>  	__poll_t (*poll) (struct file *, struct poll_table_struct *);
+> @@ -518,12 +519,6 @@ prototypes::
+>  	int (*fsync) (struct file *, loff_t start, loff_t end, int datasync);
+>  	int (*fasync) (int, struct file *, int);
+>  	int (*lock) (struct file *, int, struct file_lock *);
+> -	ssize_t (*readv) (struct file *, const struct iovec *, unsigned long,
+> -			loff_t *);
+> -	ssize_t (*writev) (struct file *, const struct iovec *, unsigned long,
+> -			loff_t *);
+> -	ssize_t (*sendfile) (struct file *, loff_t *, size_t, read_actor_t,
+> -			void __user *);
+>  	ssize_t (*sendpage) (struct file *, struct page *, int, size_t,
+>  			loff_t *, int);
+>  	unsigned long (*get_unmapped_area)(struct file *, unsigned long,
+> @@ -536,6 +531,14 @@ prototypes::
+>  			size_t, unsigned int);
+>  	int (*setlease)(struct file *, long, struct file_lock **, void **);
+>  	long (*fallocate)(struct file *, int, loff_t, loff_t);
+> +	void (*show_fdinfo)(struct seq_file *m, struct file *f);
+> +	unsigned (*mmap_capabilities)(struct file *);
+> +	ssize_t (*copy_file_range)(struct file *, loff_t, struct file *,
+> +			loff_t, size_t, unsigned int);
+> +	loff_t (*remap_file_range)(struct file *file_in, loff_t pos_in,
+> +			struct file *file_out, loff_t pos_out,
+> +			loff_t len, unsigned int remap_flags);
 
---- Comment #21 from Steve French <sfrench@samba.org> ---
-Key next steps:
-1) seeing if it is possible to decrypt the wireshark trace (see link provid=
-ed
-earlier for instructions) although this may require rebuilding the cifs.ko =
-to
-dump keys (does Solaris have a way to view encrypted traces taken on the se=
-rver
-side?)
-2) looking in more detail at the server.  It doesn't indicate why it was
-rejected:
-./../common/fs/smbsrv/smb2_dispatch.c:smb2_dispatch_message:134:Decryption
-failure (71)!
-May 25 19:44:21 nonsuch smbcmn: [ID 997540 kern.warning] WARNING:
-../../common/fs/smbsrv/smb2_dispatch.c:smb2_dispatch_message:134:Decryption
-failure (72)!
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 
-Do you have any contacts with Solaris support to see if they can see if they
-can provide more information?  My guess is that they don't like the format =
-or
-the flags of something specified in the tree connect (since this works to e=
-very
-other server type) - but they may also have some subtle rounding error with
-decryption on their server side.
+The remap_file_range part looks correct to me.  At a glance the others
+seem fine too, but I'm not as familiar with them...
 
-Googling for the error I do see one other report of similar sounding proble=
-m to
-Solaris so it has been around a long time (see
-https://bugs.centos.org/view.php?id=3D16531)
+--D
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+> +	int (*fadvise)(struct file *, loff_t, loff_t, int);
+>  
+>  locking rules:
+>  	All may block.
+> -- 
+> 2.26.2
+> 
