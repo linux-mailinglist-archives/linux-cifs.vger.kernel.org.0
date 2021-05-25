@@ -2,108 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E01C390305
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 15:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066BA3903A5
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 16:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbhEYNw6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 25 May 2021 09:52:58 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42784 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233438AbhEYNwj (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Tue, 25 May 2021 09:52:39 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1621950662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jZlfk4vwF2p32yW05HQcA1IZqYim5+F109uIplXVw+8=;
-        b=DRHNjtVyi2P6ez+bSS1jJfysTJfmXmuAc7XaBIitSzh1v+NvVKFi/bS6NgZ9EQnzxGxZLQ
-        RQYD2oowFxeZBnkgdxqt5tTtXVYuiKBPC0w8egFh1kAA8P1jUsRdS9alqol2+nMZqEXqey
-        Kl+tANswz9b7fD0NioVdMnX5SE2EAf4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1621950662;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jZlfk4vwF2p32yW05HQcA1IZqYim5+F109uIplXVw+8=;
-        b=9rURY4pla4pmyo+OPI1H2/hqtWG7wnDmBHyn2VRduoODR8GrNGuKuKRNMWAy3XEbVdDMtd
-        l2WgpuM9iITZKtAA==
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 47E04AF27;
-        Tue, 25 May 2021 13:51:02 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 45E1F1F2CBE; Tue, 25 May 2021 15:51:00 +0200 (CEST)
-From:   Jan Kara <jack@suse.cz>
-To:     <linux-fsdevel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>, ceph-devel@vger.kernel.org,
-        Chao Yu <yuchao0@huawei.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        linux-cifs@vger.kernel.org, <linux-ext4@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net, <linux-mm@kvack.org>,
-        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 13/13] cifs: Fix race between hole punch and page fault
-Date:   Tue, 25 May 2021 15:50:50 +0200
-Message-Id: <20210525135100.11221-13-jack@suse.cz>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210525125652.20457-1-jack@suse.cz>
-References: <20210525125652.20457-1-jack@suse.cz>
+        id S233441AbhEYOQX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 May 2021 10:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233406AbhEYOQX (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 May 2021 10:16:23 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48492C061574
+        for <linux-cifs@vger.kernel.org>; Tue, 25 May 2021 07:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=IrXp2CFpAmur8eT2/pkQ1V6di+yOyFslG0qgWCW/4aQ=; b=DP2hEmTiMxPuIVXLBi4oh71PNs
+        hbj9+ccoO94m/K9gT61CkxRz4nH9Ez944hmsu7JdOn02ReaTbc992T2OC6QHdFjJx4DqlOmRa2/Tu
+        jnY1J7f5Feu0ssWx6rCY3AtXzLOMw698nXAXH97JDZx7OW7MTApZbgWa/3r7IyO3ID3Z7LCuVS4Qi
+        pTiJ8xcXWhNzR1/Dr2Tg44KMGf7Z4wO/5yO5FRxgwkteficUFXrAEMKhgiGC7zIHCcvWTmo1AgV5w
+        pb69D5RPNg+zpKc+esSe3CzNWTb+oZt7CY4vxvIFZqBg3jtNb062DymEc1gEWqEgYXF+QA4yESeLS
+        t2WtBWipUWrZN7xHT4gZyyASS6+3ZBH1SkbsY+ZLQnGZIcqkRIeLqWsC+wMmXz+CMe7ULuohgmeE0
+        fWDIVC3YE3CyXiGxAgN1haxOsHVBQZ5aHy5FMoQjpSSYGYlaYTCQSROTj0+Bo9KaV4YtydYbm+NQU
+        tBoiR6oiWVQNAH7ZDyqOx3M4;
+Received: from [2a01:4f8:192:486::6:0] (port=55738 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1llXpY-00031u-A9
+        for cifs-qa@samba.org; Tue, 25 May 2021 14:14:48 +0000
+Received: from [::1] (port=33622 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1llXpU-008jaG-Js
+        for cifs-qa@samba.org; Tue, 25 May 2021 14:14:44 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
+Date:   Tue, 25 May 2021 14:14:44 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: qa_contact version product component
+Message-ID: <bug-14713-10630-BeDgleW74g@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
+References: <bug-14713-10630@https.bugzilla.samba.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Cifs has a following race between hole punching and page fault:
+https://bugzilla.samba.org/show_bug.cgi?id=3D14713
 
-CPU1                                            CPU2
-smb3_fallocate()
-  smb3_punch_hole()
-    truncate_pagecache_range()
-                                                filemap_fault()
-                                                  - loads old data into the
-                                                    page cache
-    SMB2_ioctl(..., FSCTL_SET_ZERO_DATA, ...)
+Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
 
-And now we have stale data in the page cache. Fix the problem by locking
-out faults (as well as reads) using mapping->invalidate_lock while hole
-punch is running.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         QA Contact|samba-qa@samba.org          |cifs-qa@samba.org
+            Version|4.13.3                      |5.x
+            Product|Samba 4.1 and newer         |CifsVFS
+          Component|libsmbclient                |kernel fs
 
-CC: Steve French <sfrench@samba.org>
-CC: linux-cifs@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
----
- fs/cifs/smb2ops.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index dd0eb665b680..b0a0f8b34add 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -3579,6 +3579,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 		return rc;
- 	}
- 
-+	down_write(&inode->i_mapping->invalidate_lock);
- 	/*
- 	 * We implement the punch hole through ioctl, so we need remove the page
- 	 * caches first, otherwise the data may be inconsistent with the server.
-@@ -3596,6 +3597,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 			sizeof(struct file_zero_data_information),
- 			CIFSMaxBufSize, NULL, NULL);
- 	free_xid(xid);
-+	up_write(&inode->i_mapping->invalidate_lock);
- 	return rc;
- }
- 
--- 
-2.26.2
-
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
