@@ -2,81 +2,64 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066BA3903A5
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 16:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8AFC3907DE
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 May 2021 19:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbhEYOQX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 25 May 2021 10:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbhEYOQX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 May 2021 10:16:23 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48492C061574
-        for <linux-cifs@vger.kernel.org>; Tue, 25 May 2021 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=IrXp2CFpAmur8eT2/pkQ1V6di+yOyFslG0qgWCW/4aQ=; b=DP2hEmTiMxPuIVXLBi4oh71PNs
-        hbj9+ccoO94m/K9gT61CkxRz4nH9Ez944hmsu7JdOn02ReaTbc992T2OC6QHdFjJx4DqlOmRa2/Tu
-        jnY1J7f5Feu0ssWx6rCY3AtXzLOMw698nXAXH97JDZx7OW7MTApZbgWa/3r7IyO3ID3Z7LCuVS4Qi
-        pTiJ8xcXWhNzR1/Dr2Tg44KMGf7Z4wO/5yO5FRxgwkteficUFXrAEMKhgiGC7zIHCcvWTmo1AgV5w
-        pb69D5RPNg+zpKc+esSe3CzNWTb+oZt7CY4vxvIFZqBg3jtNb062DymEc1gEWqEgYXF+QA4yESeLS
-        t2WtBWipUWrZN7xHT4gZyyASS6+3ZBH1SkbsY+ZLQnGZIcqkRIeLqWsC+wMmXz+CMe7ULuohgmeE0
-        fWDIVC3YE3CyXiGxAgN1haxOsHVBQZ5aHy5FMoQjpSSYGYlaYTCQSROTj0+Bo9KaV4YtydYbm+NQU
-        tBoiR6oiWVQNAH7ZDyqOx3M4;
-Received: from [2a01:4f8:192:486::6:0] (port=55738 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1llXpY-00031u-A9
-        for cifs-qa@samba.org; Tue, 25 May 2021 14:14:48 +0000
-Received: from [::1] (port=33622 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1llXpU-008jaG-Js
-        for cifs-qa@samba.org; Tue, 25 May 2021 14:14:44 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Tue, 25 May 2021 14:14:44 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: qa_contact version product component
-Message-ID: <bug-14713-10630-BeDgleW74g@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S232849AbhEYRiC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 May 2021 13:38:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59956 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234125AbhEYRhx (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 25 May 2021 13:37:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id D808E61157;
+        Tue, 25 May 2021 17:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621964182;
+        bh=LskCapKtyB8RvSvFDfob6jRHdNLRDzxTgT9OF4bwRiI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ny9MBHfnFRBWDZ5MaAeHH23HUW1HtoA9ZG0uLesxIxrOzDxzq5Gadxv2HQz/Yhqh0
+         pusvJG8wsNSJq0TglpUrg1uQbQmSGfZ4dnLomTqhchJRsIYOQF7LMUGyvDx71bWGa5
+         PETGfYUjgVBZiAog9xmPRfGhn/0IDwEYA4LEisITlNPo9vN/0Mp/RI/nqE/Ejxzkcm
+         oCK0BqSAQr6i5ety5eL3kWRNgq7DGhnSgtra3Sch8HOHDbBeAc31ruhd1S+rOyx9/N
+         cX/pi3MeCA4BSGwcfwDcjuUA+DiO9bvQkVYAqCGHHYtkzymrl8QwzqKS7x/rDi+whW
+         vGZhk8ikkDIww==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C8A19608B8;
+        Tue, 25 May 2021 17:36:22 +0000 (UTC)
+Subject: Re: [GIT PULL] netfs: Fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <4007708.1621947662@warthog.procyon.org.uk>
+References: <4007708.1621947662@warthog.procyon.org.uk>
+X-PR-Tracked-List-Id: <ceph-devel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <4007708.1621947662@warthog.procyon.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-lib-fixes-20200525
+X-PR-Tracked-Commit-Id: b71c791254ff5e78a124c8949585dccd9e225e06
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ad9f25d338605d26acedcaf3ba5fab5ca26f1c10
+Message-Id: <162196418275.15660.9511112826045891745.pr-tracker-bot@kernel.org>
+Date:   Tue, 25 May 2021 17:36:22 +0000
+To:     David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org, dhowells@redhat.com,
+        geert@linux-m68k.org, willy@infradead.org,
+        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+The pull request you sent on Tue, 25 May 2021 14:01:02 +0100:
 
-Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
+> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-lib-fixes-20200525
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         QA Contact|samba-qa@samba.org          |cifs-qa@samba.org
-            Version|4.13.3                      |5.x
-            Product|Samba 4.1 and newer         |CifsVFS
-          Component|libsmbclient                |kernel fs
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ad9f25d338605d26acedcaf3ba5fab5ca26f1c10
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
