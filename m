@@ -2,101 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20850391FDF
-	for <lists+linux-cifs@lfdr.de>; Wed, 26 May 2021 21:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7D139218C
+	for <lists+linux-cifs@lfdr.de>; Wed, 26 May 2021 22:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbhEZTBg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 26 May 2021 15:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S232507AbhEZUhp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 26 May 2021 16:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbhEZTBc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 26 May 2021 15:01:32 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA7EC06175F
-        for <linux-cifs@vger.kernel.org>; Wed, 26 May 2021 11:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=35RvJkl5xngRjdqy9CUn8GXeJkD9RaGXHscumDCEmus=; b=r6TjzZysy4THkl/AYqN4Fw265K
-        LlURbCd8ejqMs3IX6euEUIRFKQc3M2snKErhdJX4ctDb8qHzw8dSExVHl2MDTP8mciO1CMSmK6SaT
-        i4nXyKkjL0qgtGXTHZXsiwizuTlpmCxiDfF2keV7R4CC8HiAwQacKUWGLH6EtVxpzds6FD1ARuWsF
-        cSUlsXys9N/yknbi478RhyDc+MLqcoqWMLfcJt8nZ50nzRwjCU+zoRvh4k2nnaCrgd2ccQeCGGpXy
-        l4/ZwuDZbMpzAvb5i0ctuqOjFF4HNeAprQsAkyIOCvxKRw2Q5jCgs4cTJcBk4hn2gcydORL6TN4YT
-        JOVeOg/eg81rC6LjcU3+VhRSXBrI+xyAU3E3ZGaPkklxj0ABVBBNxIJeYL9Re1a8Tb7xJwzOEHlsS
-        qXCXuX3za/Z6iAnBeMibY0w5bdxg3Yb7AN7Kd7ZBuswWVmQC5SJnpRsGSfrtc/ns9cKhz8EtRaU/k
-        sfqGo1f9eDhmWAbt0ykwQ1Mu;
-Received: from [2a01:4f8:192:486::6:0] (port=56346 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1llyl2-0002s8-Sl
-        for cifs-qa@samba.org; Wed, 26 May 2021 18:59:56 +0000
-Received: from [::1] (port=34230 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1llyl2-008pAC-HB
-        for cifs-qa@samba.org; Wed, 26 May 2021 18:59:56 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Wed, 26 May 2021 18:59:56 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: richard.flint@gmail.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-PO8Nql0Izy@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231377AbhEZUhm (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 26 May 2021 16:37:42 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A30BC061574;
+        Wed, 26 May 2021 13:36:09 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id q7so4545604lfr.6;
+        Wed, 26 May 2021 13:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlfHDai4ONn60e6TNReFwPChDr2UAYYMQAwfbWWymqo=;
+        b=BiinMcC1tfG7D9B/MpBArh8RezrXAapNkwzZvVu9gpy8O0veUTGhyyYdosbVKvSPkZ
+         1TOxiyh9nKQ8lrkja+Vaq8SRebFOoJdYUd1YlqG6lRwe1VzbuZ6Hds2N8t8shzZX9bLL
+         qwkAat3gCIKqQVJixG0svWA7Sj/43V8Xpx4chL0g3gmKvSzpuHu6yagUSruINFFcuGfw
+         +GKz5n3V7wALXRcCmlt7E+e4K+kuf0veLOGj8yVUTkfjUd7MFfIhMfjL3jXRo6bxjcEr
+         5Ox72GCiJm6E0YvTQ6V6eXs3ItfqidR/3Y3eIGABzJ/9FFCPDxX/FVa0Hys2jcNQUqOr
+         MQgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlfHDai4ONn60e6TNReFwPChDr2UAYYMQAwfbWWymqo=;
+        b=N2AFIploHGp9ew/PEffd/5nkw1HH2FgV1zd+h89C6YVF8pyxXUoC02iKuuNIwdtXT9
+         naWoFrPY0ups5LoMXSsjkAQGujalwXfu7N4mK2EacCfi9U5Tji+k4I0oWzrO6rsmHjX5
+         QHm1t7kpwsJcZML6N9bsXRvN8MjKbUafo8G9J3eE48j2yLRMXD1qcRf0fumNLnosS053
+         Oh+6nZ+p1z2K+dvNxk8sJ2g21ph3RxrGvy11H8+1whyqFwVr9GGax+aJCGnZRJjqmqIV
+         Uh6OHeMBoY12oHVwP4K/G/G/iJ/QBgmh8VR5Ne8xwEl23TxnVcR156s0qc5jazTtCbjG
+         G+mA==
+X-Gm-Message-State: AOAM531rPNxUECr2P00SZqEw9NJWLo673UEdnwvXTN+NcnjJKCbcMnhu
+        K1KQDTyRXDpE0ugZ/HdNWaE=
+X-Google-Smtp-Source: ABdhPJwZjC/TUOd8aDc/+Ao3iaOCp7q1cSGq8xzn3GGkUc2a8mh2GEnzNZH2vXXl1rQ+iOhClTL3Lg==
+X-Received: by 2002:a05:6512:ac8:: with SMTP id n8mr3324320lfu.100.1622061367812;
+        Wed, 26 May 2021 13:36:07 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-228-193.NA.cust.bahnhof.se. [98.128.228.193])
+        by smtp.gmail.com with ESMTPSA id c4sm7721lfc.258.2021.05.26.13.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 May 2021 13:36:07 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Steve French <sfrench@samba.org>
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] cifs: Constify static struct genl_ops
+Date:   Wed, 26 May 2021 22:35:45 +0200
+Message-Id: <20210526203545.13160-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+The only usage of cifs_genl_ops[] is to assign its address to the ops
+field in the genl_family struct, which is a pointer to const. Make it
+const to allow the compiler to put it in read-only memory.
 
---- Comment #29 from Richard Flint <richard.flint@gmail.com> ---
-Unfortunately, as I mentioned by email. The connection does indeed also fail
-with server_encrypt_data=3Dfalse.
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ fs/cifs/netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-After setting server_encrypt_data=3Dfalse I try to mount with vers=3D3.1.1 =
-and
-without the seal option (since encryption is off on the server). This resul=
-ts
-in the following mysterious error:
+diff --git a/fs/cifs/netlink.c b/fs/cifs/netlink.c
+index 5aaabe4cc0a7..291cb606f149 100644
+--- a/fs/cifs/netlink.c
++++ b/fs/cifs/netlink.c
+@@ -30,7 +30,7 @@ static const struct nla_policy cifs_genl_policy[CIFS_GENL_ATTR_MAX + 1] = {
+ 	[CIFS_GENL_ATTR_SWN_RESOURCE_NAME]	= { .type = NLA_STRING},
+ };
+ 
+-static struct genl_ops cifs_genl_ops[] = {
++static const struct genl_ops cifs_genl_ops[] = {
+ 	{
+ 		.cmd = CIFS_GENL_CMD_SWN_NOTIFY,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-- 
+2.31.1
 
-mount error(13): Permission denied
-Refer to the mount.cifs(8) manual page (e.g. man mount.cifs) and kernel log
-messages (dmesg)
-
-[249955.014343] CIFS: Attempting to mount //nonsuch/myshare
-[249955.020762] CIFS: VFS: \\nonsuch failed to connect to IPC (rc=3D-13)
-[249955.023383] CIFS: VFS: cifs_mount failed w/return code =3D -13
-
-see wireshark trace in your email "3.1.1_encryptionoff.pcap".
-
-Trying with smbclient on the same share with the same user and same password
-with server_encrypt_data=3Dfalse on the server and no --encrypt option resu=
-lts in
-success:
-
-smbclient //nonsuch/myshare --debuglevel=3D10 --user=3Dmyuser
-
-see wireshark trace in your email "3.1.1_smbclient.pcap".
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
