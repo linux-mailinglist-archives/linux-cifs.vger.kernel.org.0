@@ -2,84 +2,72 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E039140D
-	for <lists+linux-cifs@lfdr.de>; Wed, 26 May 2021 11:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20064391426
+	for <lists+linux-cifs@lfdr.de>; Wed, 26 May 2021 11:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbhEZJt1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 26 May 2021 05:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbhEZJt1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 26 May 2021 05:49:27 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53599C061574
-        for <linux-cifs@vger.kernel.org>; Wed, 26 May 2021 02:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=IAUIXew+ZQ/LwCwwsOKQDZpWtrBZFK3mJfBy8olTYWo=; b=Kfhd7Y5CMYjYWCYP5HD0rAxhUr
-        L8wxbecFl1BOOGkF9Ql3W4jsfkP16dPEhEu4FYzSLsgm3GxjyKO0b41inAaJAYrPxlsB9wXltgk22
-        7eQi2F1ADL3xV25uARTCIDCGcZ0Y3j3WdfV5wZwio8QR8zq86MDU49RBwtzeZ3BxaVeIYSithPsyH
-        j9oiDLYDY6GSQBZTW1gbPYjLLMnKALkVw4ir1U4C9Jg9ndz8ptRQTvselbsEfcdEXZ5SLF9Hpg3Ek
-        U3Z3TXomWg/CwuxDBKiXDxRbS2xaw2TS8wPZkWCgoyUL6SrziWeTEN6UOpTreH5Ia+vZaOQGq4JvY
-        wq8EFwggbwsDRDO1lBtJK9tyQkKMAyZ11wMQjUoTefEl5OguHChQvVsWxF89+h+WPtx7pAg1YpJML
-        +gU8tEKO/bT4rtSe54BhBy+Fnk6GVc/3FyESiVgBqahQIqgKUf+tMIIzCH7icfO3mxFgqfZcCqYW3
-        0pevgMGiIphcDkYTSlZR9xfA;
-Received: from [2a01:4f8:192:486::6:0] (port=56172 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1llq8n-0005yw-MW
-        for cifs-qa@samba.org; Wed, 26 May 2021 09:47:53 +0000
-Received: from [::1] (port=34056 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1llq8n-008oi6-3L
-        for cifs-qa@samba.org; Wed, 26 May 2021 09:47:53 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Wed, 26 May 2021 09:47:52 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: richard.flint@gmail.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-lh4eqiHpl0@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S233615AbhEZJ4q (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 26 May 2021 05:56:46 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:4011 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233753AbhEZJ4j (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 26 May 2021 05:56:39 -0400
+Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FqmTT4mh4zmb9x;
+        Wed, 26 May 2021 17:52:45 +0800 (CST)
+Received: from dggemx753-chm.china.huawei.com (10.0.44.37) by
+ dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Wed, 26 May 2021 17:55:06 +0800
+Received: from [10.136.110.154] (10.136.110.154) by
+ dggemx753-chm.china.huawei.com (10.0.44.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Wed, 26 May 2021 17:55:05 +0800
+Subject: Re: [PATCH 10/13] f2fs: Convert to using invalidate_lock
+To:     Jan Kara <jack@suse.cz>, <linux-fsdevel@vger.kernel.org>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        <ceph-devel@vger.kernel.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Johannes Thumshirn <jth@kernel.org>,
+        <linux-cifs@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>, <linux-mm@kvack.org>,
+        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20210525125652.20457-1-jack@suse.cz>
+ <20210525135100.11221-10-jack@suse.cz>
+From:   Chao Yu <yuchao0@huawei.com>
+Message-ID: <eec8bd42-d874-93cf-23e2-b6c3997814ad@huawei.com>
+Date:   Wed, 26 May 2021 17:55:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
+In-Reply-To: <20210525135100.11221-10-jack@suse.cz>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.136.110.154]
+X-ClientProxiedBy: dggemx702-chm.china.huawei.com (10.1.199.49) To
+ dggemx753-chm.china.huawei.com (10.0.44.37)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+On 2021/5/25 21:50, Jan Kara wrote:
+> Use invalidate_lock instead of f2fs' private i_mmap_sem. The intended
+> purpose is exactly the same. By this conversion we fix a long standing
+> race between hole punching and read(2) / readahead(2) paths that can
+> lead to stale page cache contents.
+> 
+> CC: Jaegeuk Kim <jaegeuk@kernel.org>
+> CC: Chao Yu <yuchao0@huawei.com>
+> CC: linux-f2fs-devel@lists.sourceforge.net
+> Signed-off-by: Jan Kara <jack@suse.cz>
 
---- Comment #27 from Richard Flint <richard.flint@gmail.com> ---
-I will look into getting the decryption keys. I thought maybe I could dump =
-the
-TreeConnect on the Solaris side using the Dtrace capability but if it's
-possible I haven't figured it out yet.=20
+Acked-by: Chao Yu <yuchao0@huawei.com>
 
-I'm baffled as to how MacOS and smbclient work fine but Linux kernel mounts
-don't.
-I guess my fear is that some flag is set wrong, maybe during negotiation, a=
-nd
-there is no simple knob we can turn to set it just to test.
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Thanks,
