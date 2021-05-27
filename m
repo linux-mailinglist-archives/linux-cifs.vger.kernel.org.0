@@ -2,76 +2,119 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DA13934E3
-	for <lists+linux-cifs@lfdr.de>; Thu, 27 May 2021 19:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD96393722
+	for <lists+linux-cifs@lfdr.de>; Thu, 27 May 2021 22:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhE0RfQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 27 May 2021 13:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S236895AbhE0U0Q (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 27 May 2021 16:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbhE0RfP (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 27 May 2021 13:35:15 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEBEC061574
-        for <linux-cifs@vger.kernel.org>; Thu, 27 May 2021 10:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=GMlcKAEpYJmrrvhtXn5rJzK29HpRTeVoaDT4n2GIZUo=; b=Bacngo1dxFnBFyGF5GOwa0zu7y
-        JUB8e2xwLdS396yAf1hNlOZaxk4okBtOYdFseewx5VpGYsQFHzgMrCmMjTBLqYQaOctcUXjDHCkWM
-        VkmuPJpIILKTzX8ExQ7Cn8HoHMQlT8OuF1Cp26kB7XcnCG5YZgp7H9OA1OVHSc2NSGmVg35wwnb8w
-        ddyM8NsBFyFo9GShPFa0xG1uBImq/hv5e7RlTdYOzFnOutTsdklQn313033oAUqmLFr53gTu/5fWD
-        aBRsAqgLhtoB8MuTIWYGBHpuhw0TeL3WVJ343fetklplOvX9OC812Hpv1RoEIrp3OhJToFU1B5Cyj
-        R1eA/PIjjqoYsSVi+d08V4oY9HxXhivNROLBg5OAYgpr36oyOrEVmbKc0OuSIBOW1FTkUie5q3pOw
-        QSWS6vL08N31J5xD18uxCE0W81bJYuJzrKAzgYsPCyvSzzEo4O9yPS3hI2r3BK4gu7jJZCWoi31tE
-        /VpTRbnBdUpm00NjxiiAgx4B;
-Received: from [2a01:4f8:192:486::6:0] (port=56658 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1lmJt1-0006eF-3D
-        for cifs-qa@samba.org; Thu, 27 May 2021 17:33:35 +0000
-Received: from [::1] (port=34544 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1lmJt0-008uHy-8a
-        for cifs-qa@samba.org; Thu, 27 May 2021 17:33:34 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Thu, 27 May 2021 17:33:33 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: richard.flint@gmail.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-elT4Jp3Iez@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
+        with ESMTP id S235524AbhE0UZl (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 27 May 2021 16:25:41 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F91C0613CE
+        for <linux-cifs@vger.kernel.org>; Thu, 27 May 2021 13:24:07 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m18so946874wmq.0
+        for <linux-cifs@vger.kernel.org>; Thu, 27 May 2021 13:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YWhEsxvNv4qY267geWNN/rHe3apoNcbIU88MrIw09IY=;
+        b=gQaxUZDjg1UZ+9YcFcS96sdmtIdOKMike+on8kA9BuI99M4+eF2rU48RBQSKEuOF8D
+         tlpZ3b27wdwFIhlj66IujKC874QrbpxRiGHYqJjS/snfJVf0zypYWZacZ3gXZKV5j80K
+         WBQbwpENlBF4bHIVeU/6153aLF0yL00CcL5SPlqWlVlJ3VdpKBkwjXAnI3+dBQaDDXdP
+         n4pGr6dbwDaDIA5dsMddBgV+5R39c4xBbPzGv1+po17NUEEWGa/9ynOb9gRSulKnrcKu
+         +SEC46s0iTu/7Bc/BQw9//F0jejz9H/XiOQ3tvxPo0APU/OZ2ALOIg/QJofzV5dknknL
+         TqJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YWhEsxvNv4qY267geWNN/rHe3apoNcbIU88MrIw09IY=;
+        b=cylibTbtj83PE0hSXAfVS3fE4jWhyiSx6ITzGViwadBee9F2QR3SGG+69F5xFGjkhi
+         xVoz5sTYf/fbj4YrlhL5XKTinURIQ+6yc3SLVzGwY+RZSZfXyTKKrJFY0beovMPNi0xm
+         Tn+hzLL9+OwgxBjEdq7ZCfIp1kswfQajU570qvWEoh33VrD0c6AOOm4MpaSjfyJ3fzns
+         bbwWDYiU9zO8Gax7COlHoUHkb0Fy+8TbkUplaCLhD3wnHb1uVsURi4Quf3ZFhAKrb11C
+         F9PUg536LEeTOvn5/auxGx7bPB8JEhvlZ2TaWZ915j4qQfhLO1qo4svVHBYj2i2jHX5B
+         36/w==
+X-Gm-Message-State: AOAM530aC96znAgm/vQ6T5NQTQN0MRDES5yZdPGBec/67rFOQyUTnFz9
+        dAG1355FJY6qwYxHFw0yQK9Zu0e0QE5h4DkBQh6PcmulK8Q=
+X-Google-Smtp-Source: ABdhPJz0zWo9wue/1lOdEvv8YCCT/Sc0xWI/N183E6xExKXIJTQLicXZ0EpJLD/Wn+zRG1o6lYjGpXRq+osK5TFTEXo=
+X-Received: by 2002:a7b:ce8d:: with SMTP id q13mr4229434wmj.67.1622147045973;
+ Thu, 27 May 2021 13:24:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210521151928.17730-1-aaptel@suse.com> <20210521151928.17730-2-aaptel@suse.com>
+In-Reply-To: <20210521151928.17730-2-aaptel@suse.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 27 May 2021 15:23:55 -0500
+Message-ID: <CAH2r5mv3CfzEdWFrGzA2JYuW4dgHcXU7CDuZ6X=sqcjx6fH3mA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] cifs: set server->cipher_type to AES-128-CCM for SMB3.0
+To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        "Stefan (metze) Metzmacher" <metze@samba.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+Added cc:stable
 
---- Comment #35 from Richard Flint <richard.flint@gmail.com> ---
-Thanks for your help it - does seem that you've narrowed down the cause a
-little. Is it still required for me to dump those keys?
+On Fri, May 21, 2021 at 10:19 AM Aur=C3=A9lien Aptel <aaptel@suse.com> wrot=
+e:
+>
+> From: Aurelien Aptel <aaptel@suse.com>
+>
+> SMB3.0 doesn't have encryption negotiate context but simply uses
+> the SMB2_GLOBAL_CAP_ENCRYPTION flag.
+>
+> When that flag is present in the neg response cifs.ko uses AES-128-CCM
+> which is the only cipher available in this context.
+>
+> cipher_type was set to the server cipher only when parsing encryption
+> negotiate context (SMB3.1.1).
+>
+> For SMB3.0 it was set to 0. This means cipher_type value can be 0 or 1
+> for AES-128-CCM.
+>
+> Fix this by checking for SMB3.0 and encryption capability and setting
+> cipher_type appropriately.
+>
+> Signed-off-by: Aurelien Aptel <aaptel@suse.com>
+> ---
+>  fs/cifs/smb2pdu.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> index 9f24eb88297a..c205f93e0a10 100644
+> --- a/fs/cifs/smb2pdu.c
+> +++ b/fs/cifs/smb2pdu.c
+> @@ -958,6 +958,13 @@ SMB2_negotiate(const unsigned int xid, struct cifs_s=
+es *ses)
+>         /* Internal types */
+>         server->capabilities |=3D SMB2_NT_FIND | SMB2_LARGE_FILES;
+>
+> +       /*
+> +        * SMB3.0 supports only 1 cipher and doesn't have a encryption ne=
+g context
+> +        * Set the cipher type manually.
+> +        */
+> +       if (server->dialect =3D=3D SMB30_PROT_ID && (server->capabilities=
+ & SMB2_GLOBAL_CAP_ENCRYPTION))
+> +               server->cipher_type =3D SMB2_ENCRYPTION_AES128_CCM;
+> +
+>         security_blob =3D smb2_get_data_area_len(&blob_offset, &blob_leng=
+th,
+>                                                (struct smb2_sync_hdr *)rs=
+p);
+>         /*
+> --
+> 2.31.1
+>
+
 
 --=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Thanks,
+
+Steve
