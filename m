@@ -2,131 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAA4394C69
-	for <lists+linux-cifs@lfdr.de>; Sat, 29 May 2021 16:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82057395118
+	for <lists+linux-cifs@lfdr.de>; Sun, 30 May 2021 15:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbhE2OOv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 29 May 2021 10:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S229580AbhE3Nw7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 30 May 2021 09:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbhE2OOu (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 29 May 2021 10:14:50 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D10FC061574;
-        Sat, 29 May 2021 07:13:13 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id f11so3702285vst.0;
-        Sat, 29 May 2021 07:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L2BlukILXONRQJcclTGh7GA2Qfr+L6d986kgRYUf/Ws=;
-        b=lbrqNq0uEAew5n0pLs6zfKEUdjlz+WISW0Ok7SWpREczZQzFfAhbmhny6bTB9zwAR9
-         fiSbdsKRRPQ36nnRT2YDNiEmqVKU8H3/FTRSoLh1ALQSWYlgCgF+68e++RWnRnf6PNW3
-         39KuASfdF7zkxDJNi4xRvukcCrwStY3ywYwpQy1JORYO3flk+RiU/lr8jEL+wL7pez0K
-         8DuaekToFufi+g3pv+kWkfYBK1+hMgChZjsHv83z7PU+nsFijLZA71RN7Y5PjPFR8VEH
-         m2Ajsw8T6rN+lESstwrTwxlUgjRwEhbIScO+d8JEzzruhK20IcYcf/6ANdD5WITI76Bp
-         UDWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L2BlukILXONRQJcclTGh7GA2Qfr+L6d986kgRYUf/Ws=;
-        b=uXo3JEMXSRi8zuKkph9U/zi5R1S51tZUohswF2iprU0TMcghH2BfOIZOTlekqR3vlc
-         3Mk26MxFWEwoFahw6oIApgXRyzBBsJITwNDveslsPtHoZ2i7ch+E9e3eJaVQ9R4jOyYm
-         FpYzvQGUuDyveVFZptb/b24cZYtrzMXD/bUB/+vWFwsvCy7NwH/tnZksXzGL1Ih1vSun
-         0Ki33jGPfWh98dz1v5R8s3d2UVNCTAZpmry4Qie1ES1ZrreO8PM+s7bb2Y6vuKdn0G26
-         Dy1R8pp1yPDXdMn+wjQgW+wAaL+wrVnvTL7NfqcpCSMtV+MchKfog5QrNwn613jOcThg
-         3gmA==
-X-Gm-Message-State: AOAM532T3wn0gKVfH33+NRMjq4ntSZQPSo9NU6GiA+pFGPmgI74omR39
-        9scjqGCgBnLO7OgtirpZnppu8p0doZ2XI8JFg7I=
-X-Google-Smtp-Source: ABdhPJxDAViTVR8Z4Bq2yEXQKABk64nreqW75JIfEKNXn7UHMF8Ml1UzCfBPNAnEbTbvJ3u7GQBZnBmC8nA1Hnr1tb0=
-X-Received: by 2002:a67:d017:: with SMTP id r23mr10749055vsi.12.1622297592646;
- Sat, 29 May 2021 07:13:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210529082058.3012233-1-yangyingliang@huawei.com> <20210529082058.3012233-3-yangyingliang@huawei.com>
-In-Reply-To: <20210529082058.3012233-3-yangyingliang@huawei.com>
-From:   Hyunchul Lee <hyc.lee@gmail.com>
-Date:   Sat, 29 May 2021 23:13:01 +0900
-Message-ID: <CANFS6bYGp0CsdjovHxpaxbYVq72U3EY8C-oSphHDUSrwLmxCOA@mail.gmail.com>
-Subject: Re: [PATCH -next 3/3] cifsd: check return value of
- ksmbd_vfs_getcasexattr() correctly
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-cifsd-devel <linux-cifsd-devel@lists.sourceforge.net>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Namjae Jeon <namjae.jeon@samsung.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steve French <sfrench@samba.org>
+        with ESMTP id S229500AbhE3Nw6 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 30 May 2021 09:52:58 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B9FC061574
+        for <linux-cifs@vger.kernel.org>; Sun, 30 May 2021 06:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=X+tvL+rOaY/tHgEDwksGrbRsvHd1Gz7PyibXoulrvSM=; b=uplo1LrJhXtmvQqnJbUUV92iKz
+        Tq1gW7o5cnvPHmSnfhT81TL5jALtz/r0vodZ/SGIEsJ4jE/t7DPrsvDW/WfZLVz8jAyjHQtTx0duG
+        vUkZd7ejBd1RNRI2ou9xNfrZzKpqGhyCZbDc2z5LVzEWDz7oxtS6OLz/KiBN9pxJFrd6IZK6Ihq5r
+        zCmHwXdPhi6sRNzzcAQUnjc5jmOvmWtH67AZS+fGxbYgLx0cCIn79RWchcajsLhi3730hvOmfc+EV
+        1y3oaNhwY2Gxpz00tgg2JQhTdkzpDrMP82iLZ2pGiqKGi3IbdvLKFMMjIgsgx5veMcB6EpBU8QtBU
+        mmflR+lujC9Dt+SwwEQj1qt3dsc2VKyBq6lf4/mModDNyoUGmHTt8unCzjQ57KEH0zdt9/HrdPaiL
+        ZcXqFRSRoYIU0O43pPiC2AeseH9Djj7J9vEixkERAkmBDdd4HPSz568RQWOF2qd8WfvAM8WPviFN+
+        Ddf3dPND4pxZuaS+YpXJU4n/;
+Received: from [2a01:4f8:192:486::6:0] (port=57216 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1lnLqW-0004gp-W1
+        for cifs-qa@samba.org; Sun, 30 May 2021 13:51:17 +0000
+Received: from [::1] (port=35102 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1lnLqW-0099h3-2Z
+        for cifs-qa@samba.org; Sun, 30 May 2021 13:51:16 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
+Date:   Sun, 30 May 2021 13:51:15 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: richard.flint@gmail.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14713-10630-YfXLMo3WiI@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
+References: <bug-14713-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Yang,
+https://bugzilla.samba.org/show_bug.cgi?id=3D14713
 
-2021=EB=85=84 5=EC=9B=94 29=EC=9D=BC (=ED=86=A0) =EC=98=A4=ED=9B=84 5:16, Y=
-ang Yingliang <yangyingliang@huawei.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
-=B1:
->
-> If ksmbd_vfs_getcasexattr() returns -ENOMEM, stream_buf is NULL,
-> it will cause null-ptr-deref when using it to copy memory. So we
-> need check the return value of ksmbd_vfs_getcasexattr() by comparing
-> with 0.
->
-> Fixes: f44158485826 ("cifsd: add file operations")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  fs/cifsd/vfs.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/fs/cifsd/vfs.c b/fs/cifsd/vfs.c
-> index 97d5584ec870..45ba30f1f2d2 100644
-> --- a/fs/cifsd/vfs.c
-> +++ b/fs/cifsd/vfs.c
-> @@ -274,7 +274,6 @@ static int ksmbd_vfs_stream_read(struct ksmbd_file *f=
-p, char *buf, loff_t *pos,
->  {
->         ssize_t v_len;
->         char *stream_buf =3D NULL;
-> -       int err;
->
->         ksmbd_debug(VFS, "read stream data pos : %llu, count : %zd\n",
->                     *pos, count);
-> @@ -283,10 +282,9 @@ static int ksmbd_vfs_stream_read(struct ksmbd_file *=
-fp, char *buf, loff_t *pos,
->                                        fp->stream.name,
->                                        fp->stream.size,
->                                        &stream_buf);
-> -       if (v_len =3D=3D -ENOENT) {
-> +       if ((int)v_len < 0) {
+--- Comment #36 from Richard Flint <richard.flint@gmail.com> ---
+As requested I am emailing you details of the successful SMB2.1 negotiation
+using both smbclient:
 
-because ksmbd_vfs_getcasexattr can return 0, 0 has to be handled.
+smbclient //nonsuch/myshare -m SMB2 --user=3Dmyuser
 
-Thanks,
-Hyunchul
+and the CIFS mount command (with vers=3D2.1 and without seal).
 
->                 ksmbd_err("not found stream in xattr : %zd\n", v_len);
-> -               err =3D -ENOENT;
-> -               return err;
-> +               return (int)v_len;
->         }
->
->         memcpy(buf, &stream_buf[*pos], count);
-> @@ -415,9 +413,9 @@ static int ksmbd_vfs_stream_write(struct ksmbd_file *=
-fp, char *buf, loff_t *pos,
->                                        fp->stream.name,
->                                        fp->stream.size,
->                                        &stream_buf);
-> -       if (v_len =3D=3D -ENOENT) {
-> +       if ((int)v_len < 0) {
->                 ksmbd_err("not found stream in xattr : %zd\n", v_len);
-> -               err =3D -ENOENT;
-> +               err =3D (int)v_len;
->                 goto out;
->         }
->
-> --
-> 2.25.1
->
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
