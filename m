@@ -2,80 +2,118 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82057395118
-	for <lists+linux-cifs@lfdr.de>; Sun, 30 May 2021 15:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E954395391
+	for <lists+linux-cifs@lfdr.de>; Mon, 31 May 2021 03:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhE3Nw7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 30 May 2021 09:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbhE3Nw6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 30 May 2021 09:52:58 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B9FC061574
-        for <linux-cifs@vger.kernel.org>; Sun, 30 May 2021 06:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=X+tvL+rOaY/tHgEDwksGrbRsvHd1Gz7PyibXoulrvSM=; b=uplo1LrJhXtmvQqnJbUUV92iKz
-        Tq1gW7o5cnvPHmSnfhT81TL5jALtz/r0vodZ/SGIEsJ4jE/t7DPrsvDW/WfZLVz8jAyjHQtTx0duG
-        vUkZd7ejBd1RNRI2ou9xNfrZzKpqGhyCZbDc2z5LVzEWDz7oxtS6OLz/KiBN9pxJFrd6IZK6Ihq5r
-        zCmHwXdPhi6sRNzzcAQUnjc5jmOvmWtH67AZS+fGxbYgLx0cCIn79RWchcajsLhi3730hvOmfc+EV
-        1y3oaNhwY2Gxpz00tgg2JQhTdkzpDrMP82iLZ2pGiqKGi3IbdvLKFMMjIgsgx5veMcB6EpBU8QtBU
-        mmflR+lujC9Dt+SwwEQj1qt3dsc2VKyBq6lf4/mModDNyoUGmHTt8unCzjQ57KEH0zdt9/HrdPaiL
-        ZcXqFRSRoYIU0O43pPiC2AeseH9Djj7J9vEixkERAkmBDdd4HPSz568RQWOF2qd8WfvAM8WPviFN+
-        Ddf3dPND4pxZuaS+YpXJU4n/;
-Received: from [2a01:4f8:192:486::6:0] (port=57216 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1lnLqW-0004gp-W1
-        for cifs-qa@samba.org; Sun, 30 May 2021 13:51:17 +0000
-Received: from [::1] (port=35102 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1lnLqW-0099h3-2Z
-        for cifs-qa@samba.org; Sun, 30 May 2021 13:51:16 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Sun, 30 May 2021 13:51:15 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: richard.flint@gmail.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-YfXLMo3WiI@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        id S229941AbhEaBK4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 30 May 2021 21:10:56 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:58376 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229897AbhEaBKz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 30 May 2021 21:10:55 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210531010915epoutp023ac81a926552459a2d333b0c4c38d369~EAXIKyBCU2430224302epoutp02z
+        for <linux-cifs@vger.kernel.org>; Mon, 31 May 2021 01:09:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210531010915epoutp023ac81a926552459a2d333b0c4c38d369~EAXIKyBCU2430224302epoutp02z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1622423355;
+        bh=564Sd01tVo5cveiCmJa5+UV0p3NF2/OhL+Hln/gw1oU=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=hmoS5BNKcCJNJ+G6qaczMyXQuVLr6xmKeGwUFx0LUpGtsdmaPZ6Ubu8zj2TjMyoRc
+         tqhcQTvotV5XOKgL3tuyXT3MvburaF9plaSYX1X9EFHnEkUnFHlkFS5dTvnQm0spI5
+         UZIFrigpGtYVylLRQQFX7dD3rS3VsU90oWXBieTE=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20210531010914epcas1p1874f3a1bdab08b43432cbd426f54b3e0~EAXH1XhQr2242322423epcas1p1w;
+        Mon, 31 May 2021 01:09:14 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.166]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Ftcd500NWz4x9QB; Mon, 31 May
+        2021 01:09:13 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B9.3B.09824.73734B06; Mon, 31 May 2021 10:09:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20210531010910epcas1p33002ec0dba10896e6d63178a08eab385~EAXEVH1UM3235632356epcas1p3R;
+        Mon, 31 May 2021 01:09:10 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210531010910epsmtrp26bf6bec867517521de820fe00a36da9f~EAXEUal8e2033320333epsmtrp2h;
+        Mon, 31 May 2021 01:09:10 +0000 (GMT)
+X-AuditID: b6c32a37-04bff70000002660-e3-60b43737267d
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1A.AC.08637.63734B06; Mon, 31 May 2021 10:09:10 +0900 (KST)
+Received: from namjaejeon01 (unknown [10.89.31.77]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210531010910epsmtip1b5e985d2ae77a07792a185db8a6a209d~EAXEDFk8L2990229902epsmtip1S;
+        Mon, 31 May 2021 01:09:10 +0000 (GMT)
+From:   "Namjae Jeon" <namjae.jeon@samsung.com>
+To:     "'Yang Yingliang'" <yangyingliang@huawei.com>
+Cc:     <sergey.senozhatsky@gmail.com>, <sfrench@samba.org>,
+        <hyc.lee@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-cifsd-devel@lists.sourceforge.net>,
+        <linux-cifs@vger.kernel.org>
+In-Reply-To: <20210529082058.3012233-1-yangyingliang@huawei.com>
+Subject: RE: [PATCH -next 1/3] cifsd: fix memleak in
+ ksmbd_vfs_stream_write()
+Date:   Mon, 31 May 2021 10:09:10 +0900
+Message-ID: <001001d755b9$90306380$b0912a80$@samsung.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHGFJ2WtWYoeA5H1K6a0pImPZRtFQJmwAWLqwwTmjA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmrq65+ZYEg9N3xS2u3X/PbvHi/y5m
+        i5//vzNaXN41h81i7efH7BYdL48yW2z5dI3Jgd1j56y77B4tR96yeuxe8JnJY+6uPkaPz5vk
+        AlijcmwyUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgM5Q
+        UihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BQYGhToFSfmFpfmpesl5+daGRoYGJkC
+        VSbkZEz9/o25oIWp4tznDtYGxpuMXYwcHBICJhI92xO7GLk4hAR2MEosbHjBDOF8YpR4dGwZ
+        E4TzjVFi2fwvQBlOsI4nG/cwgthCAnsZJRbN0YQoesEo8en2OxaQBJuArsS/P/vZQGwRAUOJ
+        lRNuMYIUMQvsZJTYubUTrIhTwEHi7LIbYJOEBfwlZt3tZwWxWQRUJbq2TwPbxitgKXHl6CQm
+        CFtQ4uTMJ2C9zALyEtvfzoG6SEHi59NlrBDLrCSO/7vPDFEjIjG7sw3sHwmBuRwS/683skA0
+        uEjM+d/NCmELS7w6voUdwpaS+PxuLxuEXS5x4uQvJgi7RmLDvH3skAAzluh5UQJiMgtoSqzf
+        pQ9RoSix8/dcRoi1fBLvvvawQlTzSnS0CUGUqEr0XToMNVBaoqv9A/sERqVZSB6bheSxWUge
+        mIWwbAEjyypGsdSC4tz01GLDAmPkuN7ECE6hWuY7GKe9/aB3iJGJg/EQowQHs5II75mKjQlC
+        vCmJlVWpRfnxRaU5qcWHGE2BQT2RWUo0OR+YxPNK4g1NjYyNjS1MzMzNTI2VxHnTnasThATS
+        E0tSs1NTC1KLYPqYODilGphEaxerPxSX8Xe8HMCeEc18VXhHzPSvvL9uPG1Qdans8Lj1e6qH
+        xCPrKbc0t6mknftSuiP0d96MWT2rtIWf33gR9TJKTG7XDftb3ontvr9n1K9unSHQzht1l32i
+        +IUtP/J2Mucal081ur4iKJx/kVTzB9GrEdudi54aH+iIz2i7f2Sm7I2bAd/2Chj/WxEnIvvy
+        ykv+fI9TFtOY1TXF+K4kc86emuE7gWNXX9UdjlM876dttvnLX2UXxvDoEdP0a7xbr+gFWyZq
+        2mxpy9WYc595Dde/hnmvD7WwrwjrfXbSJFkqQFpDP+qUaUKNQGawx25HiaWTrxw6N2PPLeP6
+        zaudXjJMX//ukOrP645PpGSVWIozEg21mIuKEwGK976MKgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJTtfMfEuCwYKnhhbX7r9nt3jxfxez
+        xc//3xktLu+aw2ax9vNjdouOl0eZLbZ8usbkwO6xc9Zddo+WI29ZPXYv+MzkMXdXH6PH501y
+        AaxRXDYpqTmZZalF+nYJXBlTv39jLmhhqjj3uYO1gfEmYxcjJ4eEgInEk417gGwuDiGB3YwS
+        f/dNZ4JISEscO3GGuYuRA8gWljh8uBgkLCTwjFGiZRk/iM0moCvx789+NhBbRMBQYuWEW2Bz
+        mAX2M0pMODOZBWLoREaJTX0dzCBVnAIOEmeX3QDbLCzgK3Fs8VUWEJtFQFWia/s0sBpeAUuJ
+        K0cnMUHYghInZz5hATmCWUBPom0jWCuzgLzE9rdzmCHuVJD4+XQZK8QRVhLH/91nhqgRkZjd
+        2cY8gVF4FpJJsxAmzUIyaRaSjgWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYJj
+        SUtzB+P2VR/0DjEycTAeYpTgYFYS4T1TsTFBiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPx
+        QgLpiSWp2ampBalFMFkmDk6pBqaaaWF2E8xWFSYq/+9ePL/b+zXPomxj5ftvmEs3ugRskcjb
+        fWjC2n2dbeukje/WyS3/X1e0Qd1uV4pP9bfpfEsXVxTvz1nFuuMVQ+nNcz8nlL4K5LLICZb7
+        phmod6ld8g/HHoblidfWKzNd8ztm8+BNQ7Vj6+KNB3g+JbosMrjN4CVTsu/UAuH9Wyx3CS4q
+        Ppcyd8bSIqcfmYkhb7s8J664+nQpI/9LXfGi1WvyHbx/aEon5IV8dZp4ecd9Uz4JuT07hDzm
+        1Pg1st6/W309333qpaQ17l8kbx6+l6T+Z2+75OekrBcmq+uzMq1S7VUMtd9bqM6p/xg5weHx
+        UhtLsbyj4narVog5Sh1eylx1vVuJpTgj0VCLuag4EQBIHMrgFAMAAA==
+X-CMS-MailID: 20210531010910epcas1p33002ec0dba10896e6d63178a08eab385
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210529081635epcas1p130adfff1e044c7749f059e413ad4e8b8
+References: <CGME20210529081635epcas1p130adfff1e044c7749f059e413ad4e8b8@epcas1p1.samsung.com>
+        <20210529082058.3012233-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+> Before assigning wbuf to stream_buf, memory allocate in
+> ksmbd_vfs_getcasexattr() need be freed.
+> 
+> Fixes: f44158485826 ("cifsd: add file operations")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+I will apply, Thanks for your patch!
 
---- Comment #36 from Richard Flint <richard.flint@gmail.com> ---
-As requested I am emailing you details of the successful SMB2.1 negotiation
-using both smbclient:
-
-smbclient //nonsuch/myshare -m SMB2 --user=3Dmyuser
-
-and the CIFS mount command (with vers=3D2.1 and without seal).
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
