@@ -2,158 +2,90 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1B397FE3
-	for <lists+linux-cifs@lfdr.de>; Wed,  2 Jun 2021 05:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7428B3989ED
+	for <lists+linux-cifs@lfdr.de>; Wed,  2 Jun 2021 14:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbhFBEAf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 2 Jun 2021 00:00:35 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:63553 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbhFBEAH (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 2 Jun 2021 00:00:07 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210602035824epoutp0255c445a591790605306d8ab651f98a93~Ep9Y798hL1708017080epoutp02P
-        for <linux-cifs@vger.kernel.org>; Wed,  2 Jun 2021 03:58:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210602035824epoutp0255c445a591790605306d8ab651f98a93~Ep9Y798hL1708017080epoutp02P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1622606304;
-        bh=NfjgntiD4sGCoAPG4JlvSSWt9gvjIna27xSVO3rg/y8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vE7DdzqHjdGmgMQQ9FZbJona+j6V+kp4t5uH49g4ci2kdeJRgCdZwURcx9JOvkl/D
-         adc4WzEe8qjnSdPJIvXjTQwHyrc98wbnxJHdV/TseK3W0AsiQIjv+4sAv2WDaQjUqg
-         ZedBANVAopsqAjtafT/IyFDu8GZv1g1YEK3pxc5E=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210602035823epcas1p146438700afc722e3dbfeefc60892c8be~Ep9YaMGnI0553805538epcas1p1v;
-        Wed,  2 Jun 2021 03:58:23 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.165]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4FvwHL5rRyz4x9Pv; Wed,  2 Jun
-        2021 03:58:22 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5F.77.09824.ED107B06; Wed,  2 Jun 2021 12:58:22 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210602035822epcas1p4013fc24d42e1ea13ef5d4f4b50751168~Ep9W91xMb2804328043epcas1p4e;
-        Wed,  2 Jun 2021 03:58:22 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210602035822epsmtrp2e9ce81a41842e44de0355a008111af7b~Ep9W8wTNO1341613416epsmtrp2K;
-        Wed,  2 Jun 2021 03:58:22 +0000 (GMT)
-X-AuditID: b6c32a37-04bff70000002660-ce-60b701dec5c1
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0B.B3.08163.ED107B06; Wed,  2 Jun 2021 12:58:22 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.89.31.111]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210602035821epsmtip25068a8cdca3582994c5310c39ac83601~Ep9Wurq6N0079200792epsmtip2e;
-        Wed,  2 Jun 2021 03:58:21 +0000 (GMT)
-From:   Namjae Jeon <namjae.jeon@samsung.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, stfrench@microsoft.com, willy@infradead.org,
-        aurelien.aptel@gmail.com, linux-cifsd-devel@lists.sourceforge.net,
-        senozhatsky@chromium.org, sandeen@sandeen.net, aaptel@suse.com,
-        hch@infradead.org, viro@zeniv.linux.org.uk,
-        ronniesahlberg@gmail.com, hch@lst.de, dan.carpenter@oracle.com,
-        Namjae Jeon <namjae.jeon@samsung.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Hyunchul Lee <hyc.lee@gmail.com>
-Subject: [PATCH v4 10/10] MAINTAINERS: add cifsd kernel server
-Date:   Wed,  2 Jun 2021 12:48:47 +0900
-Message-Id: <20210602034847.5371-11-namjae.jeon@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210602034847.5371-1-namjae.jeon@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmge49xu0JBpd/6Vg0vj3NYnH89V92
-        i9f/prNYnJ6wiMli5eqjTBbX7r9nt3jxfxezxc//3xkt9uw9yWJxedccNosf0+stevs+sVq0
-        XtGy2L1xEZvF2s+P2S3evDjMZnFr4nw2i/N/j7Na/P4xh81B2GN2w0UWj52z7rJ7bF6h5bF7
-        wWcmj903G9g8Wnf8Zff4+PQWi0ffllWMHlsWP2TyWL/lKovH501yHpuevGUK4InKsclITUxJ
-        LVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBelFJoSwxpxQoFJBY
-        XKykb2dTlF9akqqQkV9cYquUWpCSU2BoUKBXnJhbXJqXrpecn2tlaGBgZApUmZCTsauji61g
-        A3fFiTnT2RoYH3N2MXJySAiYSJzf+4+pi5GLQ0hgB6PE/g8rWCCcT4wSdz49ZQWpEhL4zCix
-        rV8apuPN5X9QRbsYJRZ9fssI13Hh6T+2LkYODjYBbYk/W0RBGkQEYiVu7HjNDFLDLLCLWWLr
-        /U1sIAlhATuJs0+PgW1gEVCVaF5yGizOK2AjMffofFaIbfISqzccYAaxOYHiq69NYYOIX+GQ
-        WPVBAMJ2kdizbgtUvbDEq+Nb2CFsKYnP7/ZC1ZdLnDj5iwnCrpHYMG8fO8idEgLGEj0vSkBM
-        ZgFNifW79CEqFCV2/p7LCGIzC/BJvPvawwpRzSvR0SYEUaIq0XfpMNRAaYmu9g9QSz0kXj2e
-        zw4JkX5Gifft59gnMMrNQtiwgJFxFaNYakFxbnpqsWGBMXJ8bWIEp2At8x2M095+0DvEyMTB
-        eIhRgoNZSYTXPW9rghBvSmJlVWpRfnxRaU5q8SFGU2DQTWSWEk3OB2aBvJJ4Q1MjY2NjCxMz
-        czNTYyVx3nTn6gQhgfTEktTs1NSC1CKYPiYOTqkGppMW2ToucsIT5t6wbL6/UL3QdcnxFLvv
-        E/h//vlpc/PGxkyn5smrn/ZmXjZaU3nusfjNZbLuM53ehVm22EoJx/AbL3s6821dRvHsDLEH
-        h/rPcX0wEVfpUhOVXhncqOLWkr++MFJVsvmH5vmIzDki0pLsRRs/S2ra7D7YnbnlSqrlHmNu
-        z9VHBPdZMxswrvPluP9LhiNLk0/mo7TZh+Ip1/JPzX0qpez+7OTDabw5CVWLQ2bbX3//9s7S
-        JzE1Ugz8fQd5Yx7V/ZlcMPNEk0Qqz6aFB/WOimzoUImetf1N5tacAzufHytmPi5QV7TRiUkw
-        6fY5vlT5bRr1GW3l/TtPMn7u3mD/yuL/+wP304wLlViKMxINtZiLihMB2QGMM0oEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWy7bCSvO49xu0JBhMmsVk0vj3NYnH89V92
-        i9f/prNYnJ6wiMli5eqjTBbX7r9nt3jxfxezxc//3xkt9uw9yWJxedccNosf0+stevs+sVq0
-        XtGy2L1xEZvF2s+P2S3evDjMZnFr4nw2i/N/j7Na/P4xh81B2GN2w0UWj52z7rJ7bF6h5bF7
-        wWcmj903G9g8Wnf8Zff4+PQWi0ffllWMHlsWP2TyWL/lKovH501yHpuevGUK4InisklJzcks
-        Sy3St0vgytjV0cVWsIG74sSc6WwNjI85uxg5OSQETCTeXP7H0sXIxSEksINRYm7rfVaIhLTE
-        sRNnmLsYOYBsYYnDh4shaj4wSmyY+IcNJM4moC3xZ4soSLmIQLzEzYbbYHOYBc4wSzx9cpUd
-        JCEsYCdx9ukxsJksAqoSzUtOs4HYvAI2EnOPzofaJS+xesMBZhCbEyi++toUsBohAWuJpfP3
-        sU9g5FvAyLCKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4WrS0djDuWfVB7xAjEwfj
-        IUYJDmYlEV73vK0JQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgsky
-        cXBKNTAdde115bFSC595op9H/kj/mbJ3d0qffFpot2pX9PIHO/8zTVj1RW5zNJ9dbH0ip9uZ
-        pxeeV7Mt5PMyjlymH3LMteSn2GQRt19huezTF2/omTrhSGxjxqEqt8LD619/umgyM13owa1c
-        ByWh5x3aBn+urd4d5jllodGi4OymiS1tq4p998s0vnhya6GUQ2Kw4NO3R3x59T+fUOgriQ79
-        XCnh8/uwavHCpukC6+9edWGT6W0KfPjnT2rRyrrOwNWOy7ebiiVsKLu01fXibM3fzgnmt5r9
-        avsU8lLTTLY+upi+UzFI/fHMp7fM4oK4vG/kvvCa5D3pboSuUkmdwPLWH0V2N1YK/pJYKZMv
-        vJq/gFGJpTgj0VCLuag4EQDbtM/CBQMAAA==
-X-CMS-MailID: 20210602035822epcas1p4013fc24d42e1ea13ef5d4f4b50751168
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210602035822epcas1p4013fc24d42e1ea13ef5d4f4b50751168
-References: <20210602034847.5371-1-namjae.jeon@samsung.com>
-        <CGME20210602035822epcas1p4013fc24d42e1ea13ef5d4f4b50751168@epcas1p4.samsung.com>
+        id S230104AbhFBMqb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 2 Jun 2021 08:46:31 -0400
+Received: from mail-yb1-f182.google.com ([209.85.219.182]:46014 "EHLO
+        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229916AbhFBMqa (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 2 Jun 2021 08:46:30 -0400
+Received: by mail-yb1-f182.google.com with SMTP id g38so3582103ybi.12
+        for <linux-cifs@vger.kernel.org>; Wed, 02 Jun 2021 05:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=qHVbnrRtKO9AZhpB3zXIQWgc1oKDDN66E5Zre0bVh1U=;
+        b=W227I9vA5vG3QJNOKPsHgYS6yLHOX8SL7pUu6PvBklZF16R0nTtWvophU2vl6AvbZE
+         CyMTPV3nx9/zWEOw90cylpYj7w2CmdX29bVpb4znupWET0aBgnOqqc/PD8YA8dtlWB2I
+         ljsQHNtpFbXKY/Vjl45URSw+428Glhymch094ajyRQx0jLK2V1Ab5qP+F5F+hQFCHAcN
+         TTy2FqfF1m2sWzhPYV5vPOJo7xe2BXIsDue/B++XbSjPfiUnFbMI8thalCHUjXbB7YYd
+         WvoCAbq2jNwJLhELO/34ZJZnX2Cf/L5ibUlPakqZHv26q2AMojD95+X9Z3BJZivoBnhA
+         iXFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=qHVbnrRtKO9AZhpB3zXIQWgc1oKDDN66E5Zre0bVh1U=;
+        b=LqAVbrSqUbdKYP9P6LdLxcTHfvUSkZ8DVPbYPoIVHwxU5X+Wq4mQ6lWoSFnvxi0Awy
+         L1X2ed4JjciG6vSVYYQxauoPFO2Tty3+bU6aq6+DLjFC/C+0TvoCgVdX30s2SuX8/NMn
+         2qld4rpRopKDIId5u9xHn9uqcoAVbY8ZSO7R+kttfYHs4CSbUPtJzbAKU5bUThg619qo
+         CgY5nwIUqhMHczo12lU5HIzrFsQVj3O8eyGU21i/UXRwqR5kkJWdCPav9ZRGs9ddMREU
+         uFakn8wkXfuP3/WlNGNPs/K05bn6uLORgTGYg5iW/jut0xchEN++FGKgtWg0EmwiZeSd
+         DiRg==
+X-Gm-Message-State: AOAM5308pN76w6gEWV3DegyFs3ClP8bXUpQZKDXBSaNTjP+We/PiyX2S
+        6inU0GnvVN2VCJSfa+7ZlEk+PpVvDiGi+z1cZc4=
+X-Google-Smtp-Source: ABdhPJwTOhYDLyneZ89XrQZ6oUDRYXKLJ76qardibmhiQE1BdlXh1Jyb7O8A+DLhatE1NYSmTJMTmcfk68L9B4Bdu3A=
+X-Received: by 2002:a25:ef42:: with SMTP id w2mr42583113ybm.34.1622637817022;
+ Wed, 02 Jun 2021 05:43:37 -0700 (PDT)
+MIME-Version: 1.0
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Wed, 2 Jun 2021 18:13:26 +0530
+Message-ID: <CANT5p=oMLZei+OhXZ-8Hr2NCx=pRYWF1zQ0vRQ5D_NkvLGwJDg@mail.gmail.com>
+Subject: Multichannel patches
+To:     Steve French <smfrench@gmail.com>,
+        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
+        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com,
+        rohiths msft <rohiths.msft@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Add myself, Steve French, Sergey Senozhatsky and Hyunchul Lee
-as cifsd maintainer.
+Made a bunch of fixes in mchan reconnect scenarios with these patches.
+The reconnect codepath did not play well with mchan. Making it work
+involved several changes described in the commits.
 
-Signed-off-by: Namjae Jeon <namjae.jeon@samsung.com>
-Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
-Acked-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
----
- MAINTAINERS | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+https://github.com/sprasad-microsoft/smb-kernel-client/commit/03059a751fa7315ecd44ad61342200d20ab3f0cb.patch
+A trivial ref-counting fix in session find codepath.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..f23bb5cbfd70 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4530,7 +4530,7 @@ F:	include/linux/clk/
- F:	include/linux/of_clk.h
- X:	drivers/clk/clkdev.c
- 
--COMMON INTERNET FILE SYSTEM (CIFS)
-+COMMON INTERNET FILE SYSTEM CLIENT (CIFS)
- M:	Steve French <sfrench@samba.org>
- L:	linux-cifs@vger.kernel.org
- L:	samba-technical@lists.samba.org (moderated for non-subscribers)
-@@ -4540,6 +4540,16 @@ T:	git git://git.samba.org/sfrench/cifs-2.6.git
- F:	Documentation/admin-guide/cifs/
- F:	fs/cifs/
- 
-+COMMON INTERNET FILE SYSTEM SERVER (CIFSD)
-+M:	Namjae Jeon <namjae.jeon@samsung.com>
-+M:	Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-+M:	Steve French <sfrench@samba.org>
-+M:	Hyunchul Lee <hyc.lee@gmail.com>
-+L:	linux-cifs@vger.kernel.org
-+L:	linux-cifsd-devel@lists.sourceforge.net
-+S:	Maintained
-+F:	fs/cifsd/
-+
- COMPACTPCI HOTPLUG CORE
- M:	Scott Murray <scott@spiteful.org>
- L:	linux-pci@vger.kernel.org
+https://github.com/sprasad-microsoft/smb-kernel-client/commit/2615c7300f93a7ae2d9350da25ed117492f8edbf.patch
+Fixes in reconnect codepath, involving changes to introduce a
+per-channel bitmask for a session, instead of a boolean, and to
+reconnect the session only when we have all channels marked for
+reconnect. This makes sessions more resilient in mchan scenarios.
+
+https://github.com/sprasad-microsoft/smb-kernel-client/commit/5bcce1741beea482e770f1c25f4ff285a1505ca4.patch
+Fix to get rid of the serialization of requests during channel
+binding. This involved passing the channel server pointer to all
+negotiate and session setup related functions. This has increased the
+diff size, otherwise the changes are quite minimal.
+
+https://github.com/sprasad-microsoft/smb-kernel-client/pull/4
+
+P.S. There is a logic in cifs_reconnect to switch between the targets
+for the server. I don't think these changes will break the DFS
+scenario. The code will likely take effect only for when the primary
+channel reconnects (as DFS server entries are cached with super block
+as the key). Perhaps more changes will be needed there to also switch
+between the targets for individual channels (maybe use superblock +
+channel num as the key for caching entries?). Folks with better
+knowledge than me with this code may want to check on this?
+
+@Steve French It'll be good to let a few cycles of buildbot to run
+with this code, before submitting to upstream. I have run a bunch of
+tests with this. However, more soak time will be safer.
+
 -- 
-2.17.1
-
+Regards,
+Shyam
