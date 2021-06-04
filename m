@@ -2,126 +2,91 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1161939B5D2
-	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 11:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790B339B6E0
+	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 12:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbhFDJXP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Jun 2021 05:23:15 -0400
-Received: from mail-ej1-f46.google.com ([209.85.218.46]:44904 "EHLO
-        mail-ej1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbhFDJXP (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Jun 2021 05:23:15 -0400
-Received: by mail-ej1-f46.google.com with SMTP id c10so13400759eja.11
-        for <linux-cifs@vger.kernel.org>; Fri, 04 Jun 2021 02:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=hy/qFdBqxnuvliwIjp97UN0D29BYkAVb7TMvJfgcgs0=;
-        b=QeWMrNbKywBFEOv7REdQjtOA11T9a4l+Go6fuCCYNNrMLtH8qzH3JyR763YM9BXDlV
-         Rkvp9FVhrH4XQ8vmyD7SOv/nwSa8tglOsz4hTkkaoLv3r8WtIU0NbhDO/r0t3dCsizGX
-         NtaO1sLKVSS54+UUv3RyCxhRu2MBloCMHahVb3LqhiZPe8UUGz2MgbWfa6uX6ddvFXjf
-         B3Q2smzYEKAsCMK4Lf1kbFV9fDxOuYmRPsgupPV+x35pu3D/CMwSFmeavi9aFPqSLG3T
-         YY/mlqv53Vy1BVGzffrup+S50mxeGBbQBjtEXpyOm8gP3+XKwhzH40n6i7yErt2np8/E
-         WMJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=hy/qFdBqxnuvliwIjp97UN0D29BYkAVb7TMvJfgcgs0=;
-        b=WH5Ta2MVgRCCWl+gkadkvDDpkvERb63u9Hry3s9J12Dy6klEe0Och8w3R6jBcmSysT
-         O4OOGtStHGIbfUinXyVPNjKRIZdwafRHGz1HwyLbzdRBPOm2sWYA2/wIED6zlSQUeNTK
-         hx069hovFP/W2rhbns9FC1ipU0z9Y2PZcNQIsE/e/RNWY0EHAyC9z1mb8Cx9li6gJdLC
-         uzfCfACb1z8eToCalis05IWLW61+9CjVJEND6JJQKRk43EOdX/rnGMuRJk5QUOV+POwR
-         hQeX0sA+aVB8T4upLO6R5vCmdTAs27nxg8nj9S3Hy+FsfKw0Ybd0EscHcU7pmUVj47I8
-         /v5A==
-X-Gm-Message-State: AOAM532qaTYPk8K/59Ii5OAD5T6NZ+VfvAYvgoywbRfNPoUB8/h5H+9J
-        TXQBgiaKOwVbopu0ogFcnMblo52vxlBFLOowJj2eafep1fvIOf/z
-X-Google-Smtp-Source: ABdhPJwkGJjRjKIcmJirI7Y6tIxR9hgQPaSiTRjT1j1NsCCJNsKTajl1oRrxbpDpDy2+lhQRgv0f9CB3LE9YFl7PsMI=
-X-Received: by 2002:a17:906:9d05:: with SMTP id fn5mr3247466ejc.133.1622798427976;
- Fri, 04 Jun 2021 02:20:27 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 4 Jun 2021 14:50:16 +0530
-Message-ID: <CA+G9fYsnWUYuahxv3+vQx3UQ_CvJ5caiQwb7BXEuDGxPjmrM1w@mail.gmail.com>
-Subject: [next] fs: cifsglob.h:955:20: error: passing argument 2 of 'test_bit'
- from incompatible pointer type
-To:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Steve French <sfrench@samba.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        id S229667AbhFDKTs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 4 Jun 2021 06:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhFDKTs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Jun 2021 06:19:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF666C06174A
+        for <linux-cifs@vger.kernel.org>; Fri,  4 Jun 2021 03:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+         s=42; h=Message-ID:Date:To:From:CC;
+        bh=k5irnM/U4fy7mugAOrsd+JmNsHeMZv50cMGxxlAth8c=; b=Bx0H3UBRLywbqdQ5nMpHI3lI6G
+        5i83a+F1G8xAgqBDSzT3zQB4YYLALkQ1Eiy6d4Wto1SfBoTqoQmRsyMoJH9mhWPqD50zt3efm2Nvo
+        MEMZ7TGlu9gZLVGAvwMQopSJ/N5Aik06SJDtBj7t4SmIK3wYw9H4jjlW80XklMcMJfdL/gS9PrGXU
+        RW61tFHc2ufvCn2vqZzkFqWOt0Dzd19o0w9LKX7Le30jl8fGdYl2BsDOnD+bmvBRO+vKVp9R/e2qO
+        9gHmCQgw2df/HPRAQ6RD5JwsyRTKWTJTGk21Wi6wjr3Rw85SjuM/RJHW8EeDjNjHXj0mlU5O3BSdI
+        39oaXQQR/3A47NXKiSSyQLgnZMIjJgAcXe8T8qtpO7x0VL2yXuKmnbc/JkupsdxZRBk7zP83Ev9bW
+        MWuP5U31oHM19IdR+zOHP34Iav+x1fAsPH5VrKNYwIwsM9PSIcxy4YoRKrlVchfWkjD19ovjCkOhi
+        rG1+wCOFVnVXo1pFa57o15S7;
+Received: from [2a01:4f8:192:486::6:0] (port=58386 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
+        (Exim)
+        id 1lp6tr-00021l-6J
+        for cifs-qa@samba.org; Fri, 04 Jun 2021 10:17:59 +0000
+Received: from [::1] (port=18642 helo=bugzilla.samba.org)
+        by hr6.samba.org with esmtp (Exim 4.93)
+        (envelope-from <samba-bugs@samba.org>)
+        id 1lp6tp-000S9U-P1
+        for cifs-qa@samba.org; Fri, 04 Jun 2021 10:17:57 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
+Date:   Fri, 04 Jun 2021 10:17:57 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: richard.flint@gmail.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14713-10630-9QFeyMWk5M@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
+References: <bug-14713-10630@https.bugzilla.samba.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The following builds failed on Linux next-20210604 due to warnings / errors.
+https://bugzilla.samba.org/show_bug.cgi?id=3D14713
 
-  - arm (s3c2410_defconfig) with gcc- 8 / 9 / 10
-  - parisc (defconfig) with gcc-8 / 9 / 10
-  - powerpc (ppc6xx_defconfig) with gcc- 8 / 9 /10
+--- Comment #38 from Richard Flint <richard.flint@gmail.com> ---
+Thanks for the correction, you are quite right, the comparison file should =
+have
+been done with -m SMB3_00 not -m SMB3.
 
-In file included from fs/cifs/transport.c:38:
-fs/cifs/transport.c: In function 'cifs_pick_channel':
-fs/cifs/cifsglob.h:955:20: error: passing argument 2 of 'test_bit'
-from incompatible pointer type [-Werror=incompatible-pointer-types]
-  955 |  test_bit((index), &(ses)->chans_need_reconnect)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-           |
-           size_t * {aka unsigned int *}
-fs/cifs/transport.c:1065:7: note: in expansion of macro
-'CIFS_CHAN_NEEDS_RECONNECT'
- 1065 |   if (CIFS_CHAN_NEEDS_RECONNECT(ses, index))
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from arch/powerpc/include/asm/bitops.h:193,
-                 from include/linux/bitops.h:32,
-                 from include/linux/kernel.h:12,
-                 from include/linux/list.h:9,
-                 from include/linux/wait.h:7,
-                 from include/linux/wait_bit.h:8,
-                 from include/linux/fs.h:6,
-                 from fs/cifs/transport.c:23:
-include/asm-generic/bitops/non-atomic.h:104:66: note: expected 'const
-volatile long unsigned int *' but argument is of type 'size_t *' {aka
-'unsigned int *'}
-  104 | static inline int test_bit(int nr, const volatile unsigned long *addr)
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-cc1: some warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:272: fs/cifs/transport.o] Error 1
-fs/cifs/sess.c: In function 'cifs_chan_set_need_reconnect':
-fs/cifs/sess.c:98:22: error: passing argument 2 of 'set_bit' from
-incompatible pointer type [-Werror=incompatible-pointer-types]
-   98 |  set_bit(chan_index, &ses->chans_need_reconnect);
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-             |
-             size_t * {aka unsigned int *}
+I have created two new files:
 
+SMB3_00_smbclient.pcap created with command:
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+smbclient //nonsuch/myshare -m SMB3_00 --user=3Dmyuser
 
-Full build log:
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1317929765#L247
+and
 
-Steps to reproduce:
------------------------------
+SMB3_00_encrypt_smbclient.pcap created with command:
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+smbclient //nonsuch/myshare -m SMB3_00 --encrypt --user=3Dmyuser
 
-tuxmake --runtime podman --target-arch arm --toolchain gcc-8 --kconfig
-s3c2410_defconfig
+I am emailing the traces to Steve French's gmail.
 
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
