@@ -2,91 +2,148 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 790B339B6E0
-	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 12:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE39439B734
+	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 12:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhFDKTs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Jun 2021 06:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S229962AbhFDKhn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 4 Jun 2021 06:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhFDKTs (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Jun 2021 06:19:48 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF666C06174A
-        for <linux-cifs@vger.kernel.org>; Fri,  4 Jun 2021 03:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Date:To:From:CC;
-        bh=k5irnM/U4fy7mugAOrsd+JmNsHeMZv50cMGxxlAth8c=; b=Bx0H3UBRLywbqdQ5nMpHI3lI6G
-        5i83a+F1G8xAgqBDSzT3zQB4YYLALkQ1Eiy6d4Wto1SfBoTqoQmRsyMoJH9mhWPqD50zt3efm2Nvo
-        MEMZ7TGlu9gZLVGAvwMQopSJ/N5Aik06SJDtBj7t4SmIK3wYw9H4jjlW80XklMcMJfdL/gS9PrGXU
-        RW61tFHc2ufvCn2vqZzkFqWOt0Dzd19o0w9LKX7Le30jl8fGdYl2BsDOnD+bmvBRO+vKVp9R/e2qO
-        9gHmCQgw2df/HPRAQ6RD5JwsyRTKWTJTGk21Wi6wjr3Rw85SjuM/RJHW8EeDjNjHXj0mlU5O3BSdI
-        39oaXQQR/3A47NXKiSSyQLgnZMIjJgAcXe8T8qtpO7x0VL2yXuKmnbc/JkupsdxZRBk7zP83Ev9bW
-        MWuP5U31oHM19IdR+zOHP34Iav+x1fAsPH5VrKNYwIwsM9PSIcxy4YoRKrlVchfWkjD19ovjCkOhi
-        rG1+wCOFVnVXo1pFa57o15S7;
-Received: from [2a01:4f8:192:486::6:0] (port=58386 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1lp6tr-00021l-6J
-        for cifs-qa@samba.org; Fri, 04 Jun 2021 10:17:59 +0000
-Received: from [::1] (port=18642 helo=bugzilla.samba.org)
-        by hr6.samba.org with esmtp (Exim 4.93)
-        (envelope-from <samba-bugs@samba.org>)
-        id 1lp6tp-000S9U-P1
-        for cifs-qa@samba.org; Fri, 04 Jun 2021 10:17:57 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
-Date:   Fri, 04 Jun 2021 10:17:57 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: richard.flint@gmail.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14713-10630-9QFeyMWk5M@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
-References: <bug-14713-10630@https.bugzilla.samba.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229674AbhFDKhn (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Jun 2021 06:37:43 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEADC061761
+        for <linux-cifs@vger.kernel.org>; Fri,  4 Jun 2021 03:35:56 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:f130:bbcb:eb08:8a92])
+        by laurent.telenet-ops.be with bizsmtp
+        id Cybt250012NEgeT01ybtHG; Fri, 04 Jun 2021 12:35:53 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lp7BA-00Cc2O-MU; Fri, 04 Jun 2021 12:35:52 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lp5id-001cIZ-N9; Fri, 04 Jun 2021 11:02:19 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Steve French <sfrench@samba.org>,
+        Shyam Prasad N <sprasad@microsoft.com>
+Cc:     linux-cifs@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cifs: Change cifs_ses.chans_need_reconnect and chan_index to "unsigned long"
+Date:   Fri,  4 Jun 2021 11:02:19 +0200
+Message-Id: <20210604090219.385504-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14713
+On 32-bit (e.g. m68k):
 
---- Comment #38 from Richard Flint <richard.flint@gmail.com> ---
-Thanks for the correction, you are quite right, the comparison file should =
-have
-been done with -m SMB3_00 not -m SMB3.
+    fs/cifs/cifssmb.c: In function ‘cifs_reconnect_tcon’:
+    ./include/linux/kern_levels.h:5:18: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘size_t’ {aka ‘unsigned int’} [-Wformat=]
+    fs/cifs/cifssmb.c:201:42: note: format string is defined here
+      201 |  cifs_dbg(FYI, "sess reconnect mask: 0x%lx, tcon reconnect: %d",
+	  |                                        ~~^
+	  |                                          |
+	  |                                          long unsigned int
+	  |                                        %x
 
-I have created two new files:
+    fs/cifs/transport.c: In function ‘cifs_pick_channel’:
+    fs/cifs/cifsglob.h:955:20: error: passing argument 2 of ‘test_bit’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+      955 |  test_bit((index), &(ses)->chans_need_reconnect)
+	  |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	  |                    |
+	  |                    size_t * {aka unsigned int *}
+    ./arch/m68k/include/asm/bitops.h:151:66: note: expected ‘const volatile long unsigned int *’ but argument is of type ‘size_t *’ {aka ‘unsigned int *’}
+      151 | static inline int test_bit(int nr, const volatile unsigned long *vaddr)
+	  |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
 
-SMB3_00_smbclient.pcap created with command:
+    fs/cifs/sess.c: In function ‘cifs_chan_set_need_reconnect’:
+    fs/cifs/sess.c:98:22: error: passing argument 2 of ‘bset_mem_set_bit’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+       98 |  set_bit(chan_index, &ses->chans_need_reconnect);
+	  |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+	  |                      |
+	  |                      size_t * {aka unsigned int *}
+    ./arch/m68k/include/asm/bitops.h:41:69: note: expected ‘volatile long unsigned int *’ but argument is of type ‘size_t *’ {aka ‘unsigned int *’}
+       41 | static inline void bset_mem_set_bit(int nr, volatile unsigned long *vaddr)
+	  |                                             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+    fs/cifs/sess.c:98:22: error: passing argument 2 of ‘bfset_mem_set_bit’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+       98 |  set_bit(chan_index, &ses->chans_need_reconnect);
+	  |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+	  |                      |
+	  |                      size_t * {aka unsigned int *}
+    ./arch/m68k/include/asm/bitops.h:50:70: note: expected ‘volatile long unsigned int *’ but argument is of type ‘size_t *’ {aka ‘unsigned int *’}
+       50 | static inline void bfset_mem_set_bit(int nr, volatile unsigned long *vaddr)
+	  |                                              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
 
-smbclient //nonsuch/myshare -m SMB3_00 --user=3Dmyuser
+   [...]
 
-and
+As bitops can only operate on long objects, and
+cifs_ses_get_chan_index() already returns "unsigned long", fix this by
+changing cifs_ses.chans_need_reconnect and chan_index from "size_t" to
+"unsigned long".
 
-SMB3_00_encrypt_smbclient.pcap created with command:
+Fixes: 374c6c7bba3cbaa1 ("cifs: changes to support multichannel during channel reconnect")
+Reported-by: noreply@ellerman.id.au
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+Can you please add Link: headers when committing patches?
+I could not find this patch in the lore archives of linux-cifs or
+linux-fsdevel, presumably it was posted elsewhere?
+Thanks!
+---
+ fs/cifs/cifsglob.h | 2 +-
+ fs/cifs/sess.c     | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-smbclient //nonsuch/myshare -m SMB3_00 --encrypt --user=3Dmyuser
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 8fea2ddd2bd7af26..a9c026af21e1e9d1 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+@@ -968,7 +968,7 @@ struct cifs_ses {
+ 	 * enable the sessions on top to continue to live till any
+ 	 * of the channels below are active.
+ 	 */
+-	size_t chans_need_reconnect;
++	unsigned long chans_need_reconnect;
+ };
+ 
+ static inline bool
+diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
+index 1721a3b246942266..1a17ddd6abbe5778 100644
+--- a/fs/cifs/sess.c
++++ b/fs/cifs/sess.c
+@@ -94,7 +94,7 @@ void
+ cifs_chan_set_need_reconnect(struct cifs_ses *ses,
+ 			     struct TCP_Server_Info *server)
+ {
+-	size_t chan_index = cifs_ses_get_chan_index(ses, server);
++	unsigned long chan_index = cifs_ses_get_chan_index(ses, server);
+ 	set_bit(chan_index, &ses->chans_need_reconnect);
+ 	cifs_dbg(FYI, "Set reconnect bitmask for chan %lu; now 0x%lx\n",
+ 		 chan_index, ses->chans_need_reconnect);
+@@ -104,7 +104,7 @@ void
+ cifs_chan_clear_need_reconnect(struct cifs_ses *ses,
+ 			       struct TCP_Server_Info *server)
+ {
+-	size_t chan_index = cifs_ses_get_chan_index(ses, server);
++	unsigned long chan_index = cifs_ses_get_chan_index(ses, server);
+ 	clear_bit(chan_index, &ses->chans_need_reconnect);
+ 	cifs_dbg(FYI, "Cleared reconnect bitmask for chan %lu; now 0x%lx\n",
+ 		 chan_index, ses->chans_need_reconnect);
+@@ -114,7 +114,7 @@ bool
+ cifs_chan_needs_reconnect(struct cifs_ses *ses,
+ 			    struct TCP_Server_Info *server)
+ {
+-	size_t chan_index = cifs_ses_get_chan_index(ses, server);
++	unsigned long chan_index = cifs_ses_get_chan_index(ses, server);
+ 	return CIFS_CHAN_NEEDS_RECONNECT(ses, chan_index);
+ }
+ 
+-- 
+2.25.1
 
-I am emailing the traces to Steve French's gmail.
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
