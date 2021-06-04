@@ -2,77 +2,124 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3665739BBC8
-	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 17:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6F139BEFF
+	for <lists+linux-cifs@lfdr.de>; Fri,  4 Jun 2021 19:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhFDP12 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 4 Jun 2021 11:27:28 -0400
-Received: from mx.cjr.nz ([51.158.111.142]:21990 "EHLO mx.cjr.nz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229675AbhFDP12 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 4 Jun 2021 11:27:28 -0400
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 1F89F7FC02;
-        Fri,  4 Jun 2021 15:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1622820340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oOxmSNZCPWeZDQdiSOSqEVY+DJjrSsroiEI4mEB5+qE=;
-        b=CRdRs9bm2eQ8sWBJx/KKVJk6hiDw2mKEj0Mta4pXZdbiMlzIm9O/1papdblx3KTnDaEW+7
-        QBT9nR6BxbZ6zyNLpOYknQ1w5JX5nU0cZxjvXDzYZfXvksyDQMznt8GUO9bK4Bcdlve3rN
-        4jSAimYdDEaTwJLnQ/tv3ZkgZcVqs2pEI6QmBvoAZWC8ifwR+XSCZGF8VHgODHO9nT1EKY
-        +83GlWc9DfhKeqBKsunVk0cMykkkRLjQnwH/27M6tzsgGcwH62lkj/vTb6p42A7XOe0aBv
-        BGejbZ4nvVsWIkZg24EwcJS5glvKd+HlTPNcUW5MSy0VnQpiJO3YCLYbav2h3A==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        =?utf-8?Q?Aur=C3=A9lien?= Aptel <aaptel@suse.com>,
-        CIFS <linux-cifs@vger.kernel.org>, sribhat.msa@outlook.com,
-        rohiths msft <rohiths.msft@gmail.com>
-Subject: Re: Multichannel patches
-In-Reply-To: <CANT5p=o6Oq-27Xj4Z6-XzXKL45Dwg7JjGw2HA9jv5+YFQKpHUg@mail.gmail.com>
-References: <CANT5p=oMLZei+OhXZ-8Hr2NCx=pRYWF1zQ0vRQ5D_NkvLGwJDg@mail.gmail.com>
- <875yywp64t.fsf@cjr.nz>
- <CANT5p=o6Oq-27Xj4Z6-XzXKL45Dwg7JjGw2HA9jv5+YFQKpHUg@mail.gmail.com>
-Date:   Fri, 04 Jun 2021 12:25:33 -0300
-Message-ID: <87y2bpk5xu.fsf@cjr.nz>
+        id S229778AbhFDRmz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 4 Jun 2021 13:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229675AbhFDRmz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 4 Jun 2021 13:42:55 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42D3C061766
+        for <linux-cifs@vger.kernel.org>; Fri,  4 Jun 2021 10:41:08 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id k19so7610664qta.2
+        for <linux-cifs@vger.kernel.org>; Fri, 04 Jun 2021 10:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=9iYgp/1wqToLbqfMR78Wid/TsRaatMV/NMkFIxUtEis=;
+        b=MalPPmRmM6xZ+635Pgzsabmjl6cVHVdkP8zDqR0NGhw86cv5/ImD23Qs23fw4vfmoZ
+         klIfFeJ1FepBFQrl8RoV8g6QkdRTTmaopXhb4Mo5l16ioz+GClmYls3+85piI/RHCeU+
+         9DNnuB5Uq7nC28RQF0JD4AAclH9n2qfqowOw4auWj18tiffIOKbuC9wuStPFdNhWvU8y
+         11YYvDIXn1FBCsn1eHOeCZf0rc2gfZsUHHIWTTgSszVQXFUYsWzYNuRh3sb0gvVIxskT
+         2TW2tvVsoLYq3D4+zuEMe0bFths8JAleyJlE/TZoMhKIYpsktNDpn8XcEhmpRR4HLq3r
+         PuTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=9iYgp/1wqToLbqfMR78Wid/TsRaatMV/NMkFIxUtEis=;
+        b=ccSCDf0r2909Kg1iqgHqQS3QYvtMXLRAac6hAd98Gvkz08QyNIr90yLs08EhgL30Lq
+         9zFNm2PuoKZTXbZBLOQXtJcOMAZtMoR001RJqHzrCZSdbcV88MxyFOo30paDtMa++N8P
+         5zRlzPrGlXNfwXWLKRZcQ90WK6TBUQeq4oKCRYJtDGLjHzuNIQkO3Dpyr9zQDqq8b/co
+         a5Mr5UBuTuJ3DUwkHzcdGD26VZk5P8Q9zpLmw+7ivbRFnDTLvmICUnk0/eoG6Ubhkexr
+         2AFRgUpZubgs01xNI+bDx0C9Wy/789sUtVtExrliZm59A6J1Jd1fdo9LBnxXQSyCWmT7
+         3nIA==
+X-Gm-Message-State: AOAM5327WO9Vi/tdYUvyyOHdbjBFH6tR8Bowzwh2mxB5m/Iric+RmXEd
+        jqxHPuNpLYOggnG22Prn+ER4trM1E1wExUnr
+X-Google-Smtp-Source: ABdhPJxYrf0TTgtNPy4ra3RZ7pNhuD1UkFRZ3nvaIsmo0ER3SVX4Slhy+GH9nnZnGCV8tcnt4K+l1Q==
+X-Received: by 2002:a05:622a:4a:: with SMTP id y10mr5738142qtw.230.1622828467669;
+        Fri, 04 Jun 2021 10:41:07 -0700 (PDT)
+Received: from nyarly.rlyeh.local ([179.233.244.167])
+        by smtp.gmail.com with ESMTPSA id 2sm3937115qtb.28.2021.06.04.10.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jun 2021 10:41:07 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 14:41:02 -0300
+From:   Thiago Rafael Becker <trbecker@gmail.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     sfrench@samba.org, samba-technical@lists.samba.org,
+        tbecker@redhat.com, jshivers@redhat.com
+Subject: [RFC PATCH] cifs: retry lookup and readdir when EAGAIN is returned.
+Message-ID: <YLplrk3FQiUtVoWi@nyarly.rlyeh.local>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Shyam Prasad N <nspmangalore@gmail.com> writes:
+According to the investigation performed by Jacob Shivers at Red Hat,
+cifs_lookup and cifs_readdir leak EAGAIN when the user session is
+deleted on the server. Fix this issue by implementing a retry with
+limits, as is implemented in cifs_revalidate_dentry_attr.
 
-> @Paulo Alcantara That would be great if you can help testing my
-> changes. Please test with these new changes.
+Signed-off-by: Thiago Rafael Becker <trbecker@gmail.com>
+---
+ fs/cifs/dir.c     | 4 ++++
+ fs/cifs/readdir.c | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-OK.
+diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
+index 6bcd3e8f7cda..7c641f9a3dac 100644
+--- a/fs/cifs/dir.c
++++ b/fs/cifs/dir.c
+@@ -630,6 +630,7 @@ cifs_lookup(struct inode *parent_dir_inode, struct dentry *direntry,
+ 	struct inode *newInode = NULL;
+ 	const char *full_path;
+ 	void *page;
++	int retry_count = 0;
+ 
+ 	xid = get_xid();
+ 
+@@ -673,6 +674,7 @@ cifs_lookup(struct inode *parent_dir_inode, struct dentry *direntry,
+ 	cifs_dbg(FYI, "Full path: %s inode = 0x%p\n",
+ 		 full_path, d_inode(direntry));
+ 
++again:
+ 	if (pTcon->posix_extensions)
+ 		rc = smb311_posix_get_inode_info(&newInode, full_path, parent_dir_inode->i_sb, xid);
+ 	else if (pTcon->unix_ext) {
+@@ -687,6 +689,8 @@ cifs_lookup(struct inode *parent_dir_inode, struct dentry *direntry,
+ 		/* since paths are not looked up by component - the parent
+ 		   directories are presumed to be good here */
+ 		renew_parental_timestamps(direntry);
++	} else if (rc == -EAGAIN && retry_count++ < 10) {
++		goto again;
+ 	} else if (rc == -ENOENT) {
+ 		cifs_set_time(direntry, jiffies);
+ 		newInode = NULL;
+diff --git a/fs/cifs/readdir.c b/fs/cifs/readdir.c
+index 63bfc533c9fb..01e6d41e387f 100644
+--- a/fs/cifs/readdir.c
++++ b/fs/cifs/readdir.c
+@@ -844,9 +844,15 @@ static int cifs_filldir(char *find_entry, struct file *file,
+ 	struct qstr name;
+ 	int rc = 0;
+ 	ino_t ino;
++	int retry_count = 0;
+ 
++again:
+ 	rc = cifs_fill_dirent(&de, find_entry, file_info->srch_inf.info_level,
+ 			      file_info->srch_inf.unicode);
++
++	if (rc == -EAGAIN && retry_count++ < 10)
++		goto again;
++
+ 	if (rc)
+ 		return rc;
+ 
+-- 
+2.31.1
 
->> The super is only used for providing cifs_sb_info::origin_fullpath as key to find the corresponding failover targets in referral cache.
-> I'm wondering what would happen if there are multiple tcons to the
-> same origin_fullpath (possibly in different sessions)?
-
-That is certainly a problem, indeed.  I'm waiting for the DFS tests to
-finish and then send a series that contains a potential fix for that --
-e.g. not sharing TCP servers when mounting DFS shares.  We used to not
-share tcons with DFS mounts because they might contain different prefix
-paths but connected to same share, however that wasn't enough because
-multiple DFS mounts may connect to same target servers, although they
-might failover to completely different servers.
-
-> Also, doesn't failover targets apply to each channel under a session?
-> Shouldn't we switch targets on reconnect of secondary channels too?
-
-That's a interesting question.  I recall discussing this with Aurelien
-some time ago while running a few DFS + multichannel tests.
-
-So yes, I agree with you that when we successfully reconnect to failover
-target (primary channel), then we should also update all secondary
-channels with the new server's ip address and reconnect them.
