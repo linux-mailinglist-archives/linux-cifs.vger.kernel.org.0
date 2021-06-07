@@ -2,112 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A3639DF5D
-	for <lists+linux-cifs@lfdr.de>; Mon,  7 Jun 2021 16:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F9C39E046
+	for <lists+linux-cifs@lfdr.de>; Mon,  7 Jun 2021 17:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhFGOyg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Jun 2021 10:54:36 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:34746 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbhFGOyb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Jun 2021 10:54:31 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0464C21A9F;
-        Mon,  7 Jun 2021 14:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1623077558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vl6h8io6lSoWK7OIrnD7E7ya5J3bdZJ7HzP2D9qWuTI=;
-        b=pKfvrYrcy1xAVtKNmw9VHwTemgYio9dqCCXj2qp2s2JWUKyLBGbU0ymRIUsFMTnem07EFP
-        Rdc/QIuzF2BthdMO2sBS/L4z/rA/917Pf9sTft9oGj3xqIWDaTmw14BY3oBHj9U9ZUA7P4
-        3CsHFNGPY7rieEn/jaNNM+eG7j7qPGM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1623077558;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vl6h8io6lSoWK7OIrnD7E7ya5J3bdZJ7HzP2D9qWuTI=;
-        b=3pUZCLZilKHDEtXnzJoG6nngWw0wNgbZHlnJxu0cudCyLBIYO1DwS4rc3i5Vx4QUQ3xDzz
-        VUH9U7p0kK3UXkCw==
-Received: from quack2.suse.cz (unknown [10.100.200.198])
-        by relay2.suse.de (Postfix) with ESMTP id DA79EA3B99;
-        Mon,  7 Jun 2021 14:52:37 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id C41211F2CC0; Mon,  7 Jun 2021 16:52:36 +0200 (CEST)
-From:   Jan Kara <jack@suse.cz>
-To:     <linux-fsdevel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>, ceph-devel@vger.kernel.org,
-        Chao Yu <yuchao0@huawei.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        linux-cifs@vger.kernel.org, <linux-ext4@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net, <linux-mm@kvack.org>,
-        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 14/14] cifs: Fix race between hole punch and page fault
-Date:   Mon,  7 Jun 2021 16:52:24 +0200
-Message-Id: <20210607145236.31852-14-jack@suse.cz>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210607144631.8717-1-jack@suse.cz>
-References: <20210607144631.8717-1-jack@suse.cz>
+        id S230212AbhFGP1f (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Jun 2021 11:27:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38419 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230409AbhFGP1e (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Jun 2021 11:27:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623079542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=KSxFuzdvnaSD/hQDMG5nZuMDfjyv6JLJ1uBuMDxyf4w=;
+        b=BVA+rkg6q3zZvveARTy3b5nE1jOivm6TeeuT/yrLutEgJsv3CFPBNVzAebH3mQK8yp99za
+        RCKrCw6rQzxrRfutE615ekmoU928j55LoOlFS3rGcuKwZkMvajNVynXMxG1nWwmCIo9r63
+        Yd+23MjPGm9GIMc9sWt3ZKpFA9TzOh4=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-216-voUYxbCrN7aW9A44TBlGtw-1; Mon, 07 Jun 2021 11:25:41 -0400
+X-MC-Unique: voUYxbCrN7aW9A44TBlGtw-1
+Received: by mail-io1-f69.google.com with SMTP id l15-20020a5e820f0000b02904bd1794d00eso2790403iom.7
+        for <linux-cifs@vger.kernel.org>; Mon, 07 Jun 2021 08:25:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=KSxFuzdvnaSD/hQDMG5nZuMDfjyv6JLJ1uBuMDxyf4w=;
+        b=jYF63gB0hI1m90DSyuTGZmS+9uAqHQzCHh7zfp6yp2ybHAQuD8+7gOMQGkL7t9fg/y
+         M3m3rCPsLLknXOjcsfEJaibtdOGIKZr6gCk8CGTSOKp78BCKsuf/wOWITL24LTRF+P44
+         STZZsXNlILcOYP8Qpl50LdcS+c4X8zNkYltMEWC9h6bVzYFapjlwVnyPOIYozUa8VP8d
+         MkybinIAxoPCsdMitUrEVBFfiAQzl08qWcWUx9EfXYX3j8jXGrlVcJBfc5xrmkYZxsQB
+         5aGQDJ4mybSI00lJ1/NqyeqVNILDH3AYkgzXQ7G7AHkg+7PzmiT1Jvl+mC+/JY9iAEif
+         wUxA==
+X-Gm-Message-State: AOAM531Uqd3pxCfgBSeXTTYa09Rcxh/J6vtAFQC3aOJI3s6/JqwMHV3D
+        emh3YQFhezWWgucI2BriGknhiG6jYg5ULK51ams8Gdly3/aTiCpZ+7oHmtFnNsiebmrb1vHIBlq
+        TJuhF3fpQNwq0dtHuHKFZSYCiy+o/rbVrt7Gz0A==
+X-Received: by 2002:a5d:914f:: with SMTP id y15mr15048615ioq.196.1623079540933;
+        Mon, 07 Jun 2021 08:25:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/M3bz/PQUDGYbDG+aY0xrQFE30oh++RR0qeAAsrGmKMF4B+tsXTrhjQM/a17+qcHJYmHtq1gZlqV7aQlUGzo=
+X-Received: by 2002:a5d:914f:: with SMTP id y15mr15048603ioq.196.1623079540738;
+ Mon, 07 Jun 2021 08:25:40 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1533; h=from:subject; bh=yLMJejfXbe3cEmy2dQFvIvX02RxXlz2mOO0L4SMl8Co=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBgvjKnJxY3aOf0Uh04RpHAOh/EZgichtc+O2fd+Y+C czFMeL2JATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCYL4ypwAKCRCcnaoHP2RA2Ue3B/ 9exfyIQAzlGqcG2osnZCouldM63nI3uW0xQ2C9f5oG2IPFvR9kW48iWOZvY8IeVLn/hDfPcumyTE3S rVE5Wb8HloLQVQrPKhUTw8U7QuIJVnxEWeBrOQRkcJm2p/i8DGH/tJK6Iw/z6QFn3oEoOyOT96u/HQ XvMcq+lNmKNSfUE9n6xOQJOdvYt2bMCS7UF3V1ONE8X1HkyUHJxDYBL+zW7gTkfxuBg+Ym0QIiNQzi zBwKLs2btjQxoUfPsSpa6AqqbGrmx+OjASJLWob322k8teI7Y8mEDXc6smlXTSonPzIEcQRXKvJoIG PzUylz0kA5utwu4PimVcuV48+9RTJg
-X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
-Content-Transfer-Encoding: 8bit
+From:   Alexander Ahring Oder Aring <aahringo@redhat.com>
+Date:   Mon, 7 Jun 2021 11:25:30 -0400
+Message-ID: <CAK-6q+hS29yoTF4tKq+Xt3G=_PPDi9vmFVwGPmutbsQyD2i=CA@mail.gmail.com>
+Subject: quic in-kernel implementation?
+To:     netdev@vger.kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        smfrench@gmail.com, Leif Sahlberg <lsahlber@redhat.com>,
+        Steven Whitehouse <swhiteho@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Cifs has a following race between hole punching and page fault:
+Hi,
 
-CPU1                                            CPU2
-smb3_fallocate()
-  smb3_punch_hole()
-    truncate_pagecache_range()
-                                                filemap_fault()
-                                                  - loads old data into the
-                                                    page cache
-    SMB2_ioctl(..., FSCTL_SET_ZERO_DATA, ...)
+as I notice there exists several quic user space implementations, is
+there any interest or process of doing an in-kernel implementation? I
+am asking because I would like to try out quic with an in-kernel
+application protocol like DLM. Besides DLM I've heard that the SMB
+community is also interested into such implementation.
 
-And now we have stale data in the page cache. Fix the problem by locking
-out faults (as well as reads) using mapping->invalidate_lock while hole
-punch is running.
-
-CC: Steve French <sfrench@samba.org>
-CC: linux-cifs@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
----
- fs/cifs/smb2ops.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index dd0eb665b680..e41ea254beaa 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -3579,6 +3579,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 		return rc;
- 	}
- 
-+	filemap_invalidate_lock(inode->i_mapping);
- 	/*
- 	 * We implement the punch hole through ioctl, so we need remove the page
- 	 * caches first, otherwise the data may be inconsistent with the server.
-@@ -3596,6 +3597,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 			sizeof(struct file_zero_data_information),
- 			CIFSMaxBufSize, NULL, NULL);
- 	free_xid(xid);
-+	filemap_invalidate_unlock(inode->i_mapping);
- 	return rc;
- }
- 
--- 
-2.26.2
+- Alex
 
