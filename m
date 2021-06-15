@@ -2,437 +2,164 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D3A3A7953
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jun 2021 10:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441533A7A01
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jun 2021 11:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbhFOIuF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 15 Jun 2021 04:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbhFOIuF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Jun 2021 04:50:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE181C061574;
-        Tue, 15 Jun 2021 01:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ewaQ0uVDHyF24zdop2deubSxXdGfzaIXdpCh01W+00g=; b=jpJR3X0+Gm7ws+kDjkHlqoT4Za
-        lQjBOdiOv3theTd9xclOXr0+zRsCpF6btI8d2vfaPeTDKCxMB98tN6OkyeZ5LziIZUSfllQSIBkrM
-        hYXjCm2yB/SD6kfHwMiwtfiLyrs3ayYVeJjWEeaTmM8ccW8mHkG5iS2eHTB0nYJukBnTbKIKqoxD+
-        hFmXMrP1UwA+vqSRyAtwk/hPV04fACwT+7OBSfsgp0eMdPj9F7tfjnGor5v9Ydbk0lcYX7vxGEZC1
-        ibfxKV9fricZQ/WdsAdszhqwSIUtXoLI6uY4Zl9c/DxeYFO1CenhFcKkK8QVQHAikF7DWb0Yd+Ic6
-        La2j3dHw==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lt4jD-006Fl8-ET; Tue, 15 Jun 2021 08:47:28 +0000
-Date:   Tue, 15 Jun 2021 09:47:23 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Namjae Jeon <namjae.jeon@samsung.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, smfrench@gmail.com,
-        stfrench@microsoft.com, willy@infradead.org,
-        aurelien.aptel@gmail.com, linux-cifsd-devel@lists.sourceforge.net,
-        senozhatsky@chromium.org, sandeen@sandeen.net, aaptel@suse.com,
-        hch@infradead.org, viro@zeniv.linux.org.uk,
-        ronniesahlberg@gmail.com, hch@lst.de, dan.carpenter@oracle.com,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Hyunchul Lee <hyc.lee@gmail.com>
-Subject: Re: [PATCH v4 08/10] cifsd: add file operations
-Message-ID: <YMhpG/sAjO3WKKc3@infradead.org>
-References: <20210602034847.5371-1-namjae.jeon@samsung.com>
- <CGME20210602035820epcas1p3c444b34a6b6a4252c9091e0bf6c0c167@epcas1p3.samsung.com>
- <20210602034847.5371-9-namjae.jeon@samsung.com>
+        id S231365AbhFOJUW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 15 Jun 2021 05:20:22 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:54410 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231217AbhFOJUU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Jun 2021 05:20:20 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0B0F4219C1;
+        Tue, 15 Jun 2021 09:18:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1623748695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Ve/8VdV5ATCd8gDlWB7j+8DY7mnfOpAFlUgroZwDEto=;
+        b=pEvfs+MIdWGiL+79/LBEcUwyB/vGR9T8fYilFMpzFILeKheCjSOdm7S5Ui148U1KoQoQSy
+        3T/4yyzdeFSRyZPYoqzzSdelLmgiENiW8IdiyNqDxWQrPyvdeYH/zxgq65AnECabWZEs0m
+        Af2AoV2NiFrKRGYikCTbpuHeUChdhCo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1623748695;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Ve/8VdV5ATCd8gDlWB7j+8DY7mnfOpAFlUgroZwDEto=;
+        b=ZMzjwv+y2ToAmcAxn3/BkX9H6OfYOU63RLwcSgZ661rESH7ekChXILZ5Zb+pJ62mhbgRpM
+        PY0tCz+eWLSO9rAg==
+Received: from quack2.suse.cz (unknown [10.100.200.198])
+        by relay2.suse.de (Postfix) with ESMTP id 58572A3B8A;
+        Tue, 15 Jun 2021 09:18:14 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 20C051F2C88; Tue, 15 Jun 2021 11:18:14 +0200 (CEST)
+From:   Jan Kara <jack@suse.cz>
+To:     <linux-fsdevel@vger.kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>, ceph-devel@vger.kernel.org,
+        Chao Yu <yuchao0@huawei.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Johannes Thumshirn <jth@kernel.org>,
+        linux-cifs@vger.kernel.org, <linux-ext4@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net, <linux-mm@kvack.org>,
+        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>
+Subject: [PATCH 0/14 v8] fs: Hole punch vs page cache filling races
+Date:   Tue, 15 Jun 2021 11:17:50 +0200
+Message-Id: <20210615090844.6045-1-jack@suse.cz>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210602034847.5371-9-namjae.jeon@samsung.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4970; h=from:subject:message-id; bh=/sZ++c9xXAJeTuglXbv8ruz7LbfqLjU56wvnbCZ/6L0=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBgyHAdwkkXwSe7Dkt5sFq/HRSB1n3MRmc0+2hDWMSQ DQ6tVSOJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCYMhwHQAKCRCcnaoHP2RA2cgjB/ 92jqyXQZM9KaCgyXyl8ApDRJrJsxEZuAA1O2qua0wRVhnMBEiAhpMUKJG7cboL5Nvr1cNenxVTalp3 /dq1p168pS/8bkPlnsaldwKfpCAZq5fC8QdNz+/u5oK9U+i32NVPHfSZd3cQDPDdzLEovoPq4jaU9r 0ilefBWCXh5B317cK5JYIrG1okBRWTncncXjrIqYCqoK+EMpnPQrP7FiQIvc8HbrRPY/eI9BqGh4DF JjIIOvf58NezRRf3o8yXPHcrOCwdA6GZB5D5aFM+z2LttELmYw5W4WCMbwcDzhnSqMJTkJHOezSm70 mE7r1Fq3rNj/RFLT+IXZh+mdYlIgsY
+X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 12:48:45PM +0900, Namjae Jeon wrote:
-> +#include <linux/rwlock.h>
-> +
-> +#include "glob.h"
-> +#include "buffer_pool.h"
-> +#include "connection.h"
-> +#include "mgmt/ksmbd_ida.h"
-> +
-> +static struct kmem_cache *filp_cache;
-> +
-> +struct wm {
-> +	struct list_head	list;
-> +	unsigned int		sz;
-> +	char			buffer[0];
+Hello,
 
-This should use buffer[];
+here is another version of my patches to address races between hole punching
+and page cache filling functions for ext4 and other filesystems. The only
+significant change since last time is simplification in xfs_isilocked()
+suggested by Dave Chinner. So that needs final review and I'd also like to
+have another pair of eyes on the mm changes in patch 3/14. Otherwise I think
+the series is ready - Darrick agreed to take it through his tree.
 
-> +};
-> +
-> +struct wm_list {
-> +	struct list_head	list;
-> +	unsigned int		sz;
-> +
-> +	spinlock_t		wm_lock;
-> +	int			avail_wm;
-> +	struct list_head	idle_wm;
-> +	wait_queue_head_t	wm_wait;
-> +};
+Out of all filesystem supporting hole punching, only GFS2 and OCFS2 remain
+unresolved. GFS2 people are working on their own solution (cluster locking is
+involved), OCFS2 has even bigger issues (maintainers informed, looking into
+it).
 
-What does wm stand for?
+Once this series lands, I'd like to actually make sure all calls to
+truncate_inode_pages() happen under mapping->invalidate_lock, add the assert
+and then we can also get rid of i_size checks in some places (truncate can
+use the same serialization scheme as hole punch). But that step is mostly
+a cleanup so I'd like to get these functional fixes in first.
 
-This looks like arbitrary caching of vmalloc buffers.  I thought we
-decided to just make vmalloc suck less rather than papering over that?
+Note that the first patch of the series is already in mm tree but I'm
+submitting it here so that the series applies to Linus' tree cleanly.
 
-> +static LIST_HEAD(wm_lists);
-> +static DEFINE_RWLOCK(wm_lists_lock);
+Changes since v7:
+* Rebased on top of 5.13-rc6
+* Added some reviewed-by tags
+* Simplified xfs_isilocked() changes as Dave Chinner suggested
+* Minor documentation formulation improvements
 
-Especially as this isn't going to scale at all using global loists and
-locks.
+Changes since v6:
+* Added some reviewed-by tags
+* Added wrapper for taking invalidate_lock similar to inode_lock
+* Renamed wrappers for taking invalidate_lock for two inodes
+* Added xfs patch to make xfs_isilocked() work better even without lockdep
+* Some minor documentation fixes
 
-> +void ksmbd_free_file_struct(void *filp)
-> +{
-> +	kmem_cache_free(filp_cache, filp);
-> +}
-> +
-> +void *ksmbd_alloc_file_struct(void)
-> +{
-> +	return kmem_cache_zalloc(filp_cache, GFP_KERNEL);
-> +}
+Changes since v5:
+* Added some reviewed-by tags
+* Added functions for locking two mappings and using them from XFS where needed
+* Some minor code style & comment fixes
 
-These are only ued in vfs_cache.c . So I'd suggest to just move
-filp_cache there and drop these wrappers.
+Changes since v4:
+* Rebased onto 5.13-rc1
+* Removed shmfs conversion patches
+* Fixed up zonefs changelog
+* Fixed up XFS comments
+* Added patch fixing up definition of file_operations in Documentation/vfs/
+* Updated documentation and comments to explain invalidate_lock is used also
+  to prevent changes through memory mappings to existing pages for some VFS
+  operations.
 
-> +}
-> +
-> +static void ksmbd_vfs_inherit_owner(struct ksmbd_work *work,
-> +				    struct inode *parent_inode,
-> +				    struct inode *inode)
-> +{
-> +	if (!test_share_config_flag(work->tcon->share_conf,
-> +				    KSMBD_SHARE_FLAG_INHERIT_OWNER))
-> +		return;
-> +
-> +	i_uid_write(inode, i_uid_read(parent_inode));
-> +}
+Changes since v3:
+* Renamed and moved lock to struct address_space
+* Added conversions of tmpfs, ceph, cifs, fuse, f2fs
+* Fixed error handling path in filemap_read()
+* Removed .page_mkwrite() cleanup from the series for now
 
-Can you explain this a little more?  When do the normal create/mdir
-fail to inherit the owner?
+Changes since v2:
+* Added documentation and comments regarding lock ordering and how the lock is
+  supposed to be used
+* Added conversions of ext2, xfs, zonefs
+* Added patch removing i_mapping_sem protection from .page_mkwrite handlers
 
-int ksmbd_vfs_inode_permission(struct dentry *dentry, int acc_mode, bool delete)
-> +{
-> +	int mask, ret = 0;
-> +
-> +	mask = 0;
-> +	acc_mode &= O_ACCMODE;
-> +
-> +	if (acc_mode == O_RDONLY)
-> +		mask = MAY_READ;
-> +	else if (acc_mode == O_WRONLY)
-> +		mask = MAY_WRITE;
-> +	else if (acc_mode == O_RDWR)
-> +		mask = MAY_READ | MAY_WRITE;
+Changes since v1:
+* Moved to using inode->i_mapping_sem instead of aops handler to acquire
+  appropriate lock
 
-How about already setting up the MAY_ flags in smb2_create_open_flags
-and returning them in extra argument?  That keeps the sm to Linux
-translation in a single place.
+---
+Motivation:
 
-> +
-> +	if (inode_permission(&init_user_ns, d_inode(dentry), mask | MAY_OPEN))
-> +		return -EACCES;
+Amir has reported [1] a that ext4 has a potential issues when reads can race
+with hole punching possibly exposing stale data from freed blocks or even
+corrupting filesystem when stale mapping data gets used for writeout. The
+problem is that during hole punching, new page cache pages can get instantiated
+and block mapping from the looked up in a punched range after
+truncate_inode_pages() has run but before the filesystem removes blocks from
+the file. In principle any filesystem implementing hole punching thus needs to
+implement a mechanism to block instantiating page cache pages during hole
+punching to avoid this race. This is further complicated by the fact that there
+are multiple places that can instantiate pages in page cache.  We can have
+regular read(2) or page fault doing this but fadvise(2) or madvise(2) can also
+result in reading in page cache pages through force_page_cache_readahead().
 
-And this call can be open coded in the only caller.
+There are couple of ways how to fix this. First way (currently implemented by
+XFS) is to protect read(2) and *advise(2) calls with i_rwsem so that they are
+serialized with hole punching. This is easy to do but as a result all reads
+would then be serialized with writes and thus mixed read-write workloads suffer
+heavily on ext4. Thus this series introduces inode->i_mapping_sem and uses it
+when creating new pages in the page cache and looking up their corresponding
+block mapping. We also replace EXT4_I(inode)->i_mmap_sem with this new rwsem
+which provides necessary serialization with hole punching for ext4.
 
-> +	if (delete) {
+								Honza
 
-And this block could be split into a nice self-contained helper.
+[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxjQNmxqmtA_VbYW0Su9rKRk2zobJmahcyeaEVOFKVQ5dw@mail.gmail.com/
 
-> +		struct dentry *child, *parent;
-> +
-> +		parent = dget_parent(dentry);
-> +		inode_lock_nested(d_inode(parent), I_MUTEX_PARENT);
-> +		child = lookup_one_len(dentry->d_name.name, parent,
-> +				       dentry->d_name.len);
-> +		if (IS_ERR(child)) {
-> +			ret = PTR_ERR(child);
-> +			goto out_lock;
-> +		}
-> +
-> +		if (child != dentry) {
-> +			ret = -ESTALE;
-> +			dput(child);
-> +			goto out_lock;
-> +		}
-> +		dput(child);
-
-That being said I do not understand the need for this re-lookup at all.
-
-> +	if (!inode_permission(&init_user_ns, d_inode(dentry), MAY_OPEN | MAY_WRITE))
-
-All these inode_permission lines have overly long lines.  It might be
-worth to pass the user_namespace to this function, not only to shorten
-the code, but also to prepare for user namespace support.
-
-> +	parent = dget_parent(dentry);
-> +	inode_lock_nested(d_inode(parent), I_MUTEX_PARENT);
-> +	child = lookup_one_len(dentry->d_name.name, parent,
-> +			       dentry->d_name.len);
-> +	if (IS_ERR(child)) {
-> +		ret = PTR_ERR(child);
-> +		goto out_lock;
-> +	}
-> +
-> +	if (child != dentry) {
-> +		ret = -ESTALE;
-> +		dput(child);
-> +		goto out_lock;
-> +	}
-> +	dput(child);
-
-This is the same weird re-lookup dance as above.  IFF there is a good
-rationale for it it needs to go into a self-contained and well
-documented helper.
-
-> +int ksmbd_vfs_create(struct ksmbd_work *work, const char *name, umode_t mode)
-> +{
-> +	struct path path;
-> +	struct dentry *dentry;
-> +	int err;
-> +
-> +	dentry = kern_path_create(AT_FDCWD, name, &path, 0);
-
-Curious:  why is this using absolute or CWD based path instead of
-doing lookups based off the parent as done by e.g. nfsd?  Same also
-for mkdir and co.
-
-> +{
-> +	struct file *filp;
-> +	ssize_t nbytes = 0;
-> +	char *rbuf;
-> +	struct inode *inode;
-> +
-> +	rbuf = work->aux_payload_buf;
-> +	filp = fp->filp;
-> +	inode = file_inode(filp);
-
-These can be initialized on the declaration lines to make the code a
-little easier to read.
-
-> +	if (!work->tcon->posix_extensions) {
-> +		spin_lock(&src_dent->d_lock);
-> +		list_for_each_entry(dst_dent, &src_dent->d_subdirs, d_child) {
-> +			struct ksmbd_file *child_fp;
-> +
-> +			if (d_really_is_negative(dst_dent))
-> +				continue;
-> +
-> +			child_fp = ksmbd_lookup_fd_inode(d_inode(dst_dent));
-> +			if (child_fp) {
-> +				spin_unlock(&src_dent->d_lock);
-> +				ksmbd_debug(VFS, "Forbid rename, sub file/dir is in use\n");
-> +				return -EACCES;
-> +			}
-> +		}
-> +		spin_unlock(&src_dent->d_lock);
-> +	}
-
-This begs for being split into a self-contained helper.
-
-> +int ksmbd_vfs_lock(struct file *filp, int cmd, struct file_lock *flock)
-> +{
-> +	ksmbd_debug(VFS, "calling vfs_lock_file\n");
-> +	return vfs_lock_file(filp, cmd, flock, NULL);
-> +}
-> +
-> +int ksmbd_vfs_readdir(struct file *file, struct ksmbd_readdir_data *rdata)
-> +{
-> +	return iterate_dir(file, &rdata->ctx);
-> +}
-> +
-> +int ksmbd_vfs_alloc_size(struct ksmbd_work *work, struct ksmbd_file *fp,
-> +			 loff_t len)
-> +{
-> +	smb_break_all_levII_oplock(work, fp, 1);
-> +	return vfs_fallocate(fp->filp, FALLOC_FL_KEEP_SIZE, 0, len);
-> +}
-
-Please avoid such trivial wrappers that just make the code hard to
-follow.
-
-> +int ksmbd_vfs_fqar_lseek(struct ksmbd_file *fp, loff_t start, loff_t length,
-> +			 struct file_allocated_range_buffer *ranges,
-> +			 int in_count, int *out_count)
-
-What is fqar?
-
-> +
-> +/*
-> + * ksmbd_vfs_get_logical_sector_size() - get logical sector size from inode
-> + * @inode: inode
-> + *
-> + * Return: logical sector size
-> + */
-> +unsigned short ksmbd_vfs_logical_sector_size(struct inode *inode)
-> +{
-> +	struct request_queue *q;
-> +	unsigned short ret_val = 512;
-> +
-> +	if (!inode->i_sb->s_bdev)
-> +		return ret_val;
-> +
-> +	q = inode->i_sb->s_bdev->bd_disk->queue;
-> +
-> +	if (q && q->limits.logical_block_size)
-> +		ret_val = q->limits.logical_block_size;
-> +
-> +	return ret_val;
-
-I don't think a CIFS server has any business poking into the block
-layer.  What is this trying to do?
-
-> +struct posix_acl *ksmbd_vfs_posix_acl_alloc(int count, gfp_t flags)
-> +{
-> +#if IS_ENABLED(CONFIG_FS_POSIX_ACL)
-> +	return posix_acl_alloc(count, flags);
-> +#else
-> +	return NULL;
-> +#endif
-> +}
-> +
-> +struct posix_acl *ksmbd_vfs_get_acl(struct inode *inode, int type)
-> +{
-> +#if IS_ENABLED(CONFIG_FS_POSIX_ACL)
-> +	return get_acl(inode, type);
-> +#else
-> +	return NULL;
-> +#endif
-> +}
-> +
-> +int ksmbd_vfs_set_posix_acl(struct inode *inode, int type,
-> +			    struct posix_acl *acl)
-> +{
-> +#if IS_ENABLED(CONFIG_FS_POSIX_ACL)
-> +	return set_posix_acl(&init_user_ns, inode, type, acl);
-> +#else
-> +	return -EOPNOTSUPP;
-> +#endif
-> +}
-
-Please avoid these pointless wrappers and just use large code block
-ifdefs or IS_ENABLED checks.
-
-> +int ksmbd_vfs_copy_file_range(struct file *file_in, loff_t pos_in,
-> +			      struct file *file_out, loff_t pos_out, size_t len)
-> +{
-> +	struct inode *inode_in = file_inode(file_in);
-> +	struct inode *inode_out = file_inode(file_out);
-> +	int ret;
-> +
-> +	ret = vfs_copy_file_range(file_in, pos_in, file_out, pos_out, len, 0);
-> +	/* do splice for the copy between different file systems */
-> +	if (ret != -EXDEV)
-> +		return ret;
-> +
-> +	if (S_ISDIR(inode_in->i_mode) || S_ISDIR(inode_out->i_mode))
-> +		return -EISDIR;
-> +	if (!S_ISREG(inode_in->i_mode) || !S_ISREG(inode_out->i_mode))
-> +		return -EINVAL;
-> +
-> +	if (!(file_in->f_mode & FMODE_READ) ||
-> +	    !(file_out->f_mode & FMODE_WRITE))
-> +		return -EBADF;
-> +
-> +	if (len == 0)
-> +		return 0;
-> +
-> +	file_start_write(file_out);
-> +
-> +	/*
-> +	 * skip the verification of the range of data. it will be done
-> +	 * in do_splice_direct
-> +	 */
-> +	ret = do_splice_direct(file_in, &pos_in, file_out, &pos_out,
-> +			       len > MAX_RW_COUNT ? MAX_RW_COUNT : len, 0);
-
-vfs_copy_file_range already does this type of fallback, so this is dead
-code.
-
-> +#define XATTR_NAME_STREAM_LEN		(sizeof(XATTR_NAME_STREAM) - 1)
-> +
-> +enum {
-> +	XATTR_DOSINFO_ATTRIB		= 0x00000001,
-> +	XATTR_DOSINFO_EA_SIZE		= 0x00000002,
-> +	XATTR_DOSINFO_SIZE		= 0x00000004,
-> +	XATTR_DOSINFO_ALLOC_SIZE	= 0x00000008,
-> +	XATTR_DOSINFO_CREATE_TIME	= 0x00000010,
-> +	XATTR_DOSINFO_CHANGE_TIME	= 0x00000020,
-> +	XATTR_DOSINFO_ITIME		= 0x00000040
-> +};
-> +
-> +struct xattr_dos_attrib {
-> +	__u16	version;
-> +	__u32	flags;
-> +	__u32	attr;
-> +	__u32	ea_size;
-> +	__u64	size;
-> +	__u64	alloc_size;
-> +	__u64	create_time;
-> +	__u64	change_time;
-> +	__u64	itime;
-> +};
-
-These looks like on-disk structures.  Any chance you could re-order
-the headers so that things like on-disk, on the wire and netlink uapi
-structures all have a dedicated and well documented header for
-themselves?
-
-> +	read_lock(&ci->m_lock);
-> +	list_for_each(cur, &ci->m_fp_list) {
-> +		lfp = list_entry(cur, struct ksmbd_file, node);
-
-Please use list_for_each_entry.  There are very few places left where
-using list_for_each makes sense.
-
-> +		if (inode == FP_INODE(lfp)) {
-> +			atomic_dec(&ci->m_count);
-> +			read_unlock(&ci->m_lock);
-> +			return lfp;
-> +		}
-> +	}
-> +	atomic_dec(&ci->m_count);
-> +	read_unlock(&ci->m_lock);
-
-So a successful find increments m_count, but a miss decreases it?
-Isn't this going to create an underflow?
-
-> +	if (!fp->f_ci) {
-> +		ksmbd_free_file_struct(fp);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	ret = __open_id(&work->sess->file_table, fp, OPEN_ID_TYPE_VOLATILE_ID);
-> +	if (ret) {
-> +		ksmbd_inode_put(fp->f_ci);
-> +		ksmbd_free_file_struct(fp);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	atomic_inc(&work->conn->stats.open_files_count);
-> +	return fp;
-
-Please use goto based unwinding instead of duplicating the resoure
-cleanup.
-
-> +static bool tree_conn_fd_check(struct ksmbd_tree_connect *tcon, struct ksmbd_file *fp)
-
-Overly long line.
-
-> +{
-> +	return fp->tcon != tcon;
-> +}
-> +
-> +static bool session_fd_check(struct ksmbd_tree_connect *tcon, struct ksmbd_file *fp)
-
-Same.
+Previous versions:
+Link: https://lore.kernel.org/linux-fsdevel/20210208163918.7871-1-jack@suse.cz/
+Link: https://lore.kernel.org/r/20210413105205.3093-1-jack@suse.cz
+Link: https://lore.kernel.org/r/20210423171010.12-1-jack@suse.cz
+Link: https://lore.kernel.org/r/20210512101639.22278-1-jack@suse.cz
+Link: https://lore.kernel.org/r/20210525125652.20457-1-jack@suse.cz
+Link: https://lore.kernel.org/r/20210607144631.8717-1-jack@suse.cz
