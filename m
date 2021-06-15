@@ -2,112 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ED43A7A1A
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jun 2021 11:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C612B3A8432
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jun 2021 17:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbhFOJU2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 15 Jun 2021 05:20:28 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:54754 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbhFOJUX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Jun 2021 05:20:23 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4DD37219DB;
-        Tue, 15 Jun 2021 09:18:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1623748695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2y4ATobPVnEcMEJhABd7mhzgYGQRV2///C8khknCrDI=;
-        b=jkrSgf91dMSZKGLpwFnVzcX+RniA5lrBYoOpTKdscfVANjpzuygwReWX45ijFTqHWI/oP5
-        6SIc40rlo9wSEueoc+eqxwrP39o9wT6pJo8bu1eWvP00C5ncP2WlrT27Hw1Zb0tWoxQpYR
-        LvbV9V92glyJeD13FUgXPPVcUCYib8A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1623748695;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2y4ATobPVnEcMEJhABd7mhzgYGQRV2///C8khknCrDI=;
-        b=8JAptZxj9cSPv7QkSZ+GkFGANKcsiSwNgVsiI14DugpGsIS+68yIl+moQjnMjZBiYkk9h+
-        Z1VMWYbCuGHWBYAw==
-Received: from quack2.suse.cz (unknown [10.100.200.198])
-        by relay2.suse.de (Postfix) with ESMTP id 36F8FA3BA4;
-        Tue, 15 Jun 2021 09:18:15 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 5BFB01F2CC7; Tue, 15 Jun 2021 11:18:14 +0200 (CEST)
-From:   Jan Kara <jack@suse.cz>
-To:     <linux-fsdevel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>, ceph-devel@vger.kernel.org,
-        Chao Yu <yuchao0@huawei.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        linux-cifs@vger.kernel.org, <linux-ext4@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net, <linux-mm@kvack.org>,
-        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Steve French <sfrench@samba.org>, Ted Tso <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 14/14] cifs: Fix race between hole punch and page fault
-Date:   Tue, 15 Jun 2021 11:18:04 +0200
-Message-Id: <20210615091814.28626-14-jack@suse.cz>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210615090844.6045-1-jack@suse.cz>
-References: <20210615090844.6045-1-jack@suse.cz>
+        id S231749AbhFOPnK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 15 Jun 2021 11:43:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20483 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231674AbhFOPnK (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:43:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623771665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+FBbMlPbm2yEsz/fG8YH2jekqKDOwBTLfpao5h+P4iE=;
+        b=achTvUJCk9CTMJom2MVNv10T8by8FZE7TDSUvrxFA6Kp6a7Cj9NE+dnURCVVyVVtBR4ouw
+        K8iqTe3mf9SKwT8UOenBNGfsJwhEH7D4Y9k7NlL2QG8LZj2z1ZSATCArVrtmgj3fDGHFs5
+        g1r2ErTgHmIyYWRNfsQpcHy6LOsS+Gw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-123-HYLFvtjLPVmsp_FlL6GAug-1; Tue, 15 Jun 2021 11:41:04 -0400
+X-MC-Unique: HYLFvtjLPVmsp_FlL6GAug-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D3941936B79;
+        Tue, 15 Jun 2021 15:41:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-118-65.rdu2.redhat.com [10.10.118.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EC15160C13;
+        Tue, 15 Jun 2021 15:40:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] netfs: Add MAINTAINERS record
+From:   David Howells <dhowells@redhat.com>
+To:     jlayton@kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-cachefs@redhat.com,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, dhowells@redhat.com,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 15 Jun 2021 16:40:59 +0100
+Message-ID: <162377165897.729347.292567369593752239.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1533; h=from:subject; bh=ZCABbWCWKurwj2pIQo6pZPjhdXQ595KGSFP8UTIZMfk=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBgyHBM5bKiu8eYGM3Nz8nWQKIiVrKQrT6ftatfT6be 2XeiCXeJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCYMhwTAAKCRCcnaoHP2RA2di6B/ 45mhRVQnW7UEq8suFiCGDgISonzDUeQNVWEgcLjdXBZEIDbjCB7lYGsbJf/2IQcCDyAp1zJtKbAA97 LKvEdr6VjgcXgV5+oiI4V26Eg4SeicN83dDn0lmsYHvEt32v8FDDtMnb3ANMlKSUEqBQNhPBKvF0Hu 7oan61Xlt9SjuKtR2DNIo6BnoW+d3ctXdP54jBT2o81yaKbIQNLQF1CkZsz+XDP8ihnmg7st97ymKU TPRJSfingbG2ZM2Sp63ozFihnFywZI3GwOjoVYCxmX8taZ69x0x3a1KarULQ8O4uuVOhr+9KDsEgoq Py6BTeucaRFVJYzpQRsDWUnDh/IZou
-X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Cifs has a following race between hole punching and page fault:
+Add a MAINTAINERS record for the new netfs helper library.
 
-CPU1                                            CPU2
-smb3_fallocate()
-  smb3_punch_hole()
-    truncate_pagecache_range()
-                                                filemap_fault()
-                                                  - loads old data into the
-                                                    page cache
-    SMB2_ioctl(..., FSCTL_SET_ZERO_DATA, ...)
-
-And now we have stale data in the page cache. Fix the problem by locking
-out faults (as well as reads) using mapping->invalidate_lock while hole
-punch is running.
-
-CC: Steve French <sfrench@samba.org>
-CC: linux-cifs@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+cc: linux-mm@kvack.org
+cc: linux-cachefs@redhat.com
+cc: linux-afs@lists.infradead.org
+cc: linux-nfs@vger.kernel.org
+cc: linux-cifs@vger.kernel.org
+cc: ceph-devel@vger.kernel.org
+cc: v9fs-developer@lists.sourceforge.net
+cc: linux-fsdevel@vger.kernel.org
 ---
- fs/cifs/smb2ops.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 21ef51d338e0..07c9ec047020 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -3581,6 +3581,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 		return rc;
- 	}
+ MAINTAINERS |    9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bc0ceef87b73..364465f20e81 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12878,6 +12878,15 @@ NETWORKING [WIRELESS]
+ L:	linux-wireless@vger.kernel.org
+ Q:	http://patchwork.kernel.org/project/linux-wireless/list/
  
-+	filemap_invalidate_lock(inode->i_mapping);
- 	/*
- 	 * We implement the punch hole through ioctl, so we need remove the page
- 	 * caches first, otherwise the data may be inconsistent with the server.
-@@ -3598,6 +3599,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 			sizeof(struct file_zero_data_information),
- 			CIFSMaxBufSize, NULL, NULL);
- 	free_xid(xid);
-+	filemap_invalidate_unlock(inode->i_mapping);
- 	return rc;
- }
- 
--- 
-2.26.2
++NETWORK FILESYSTEM HELPER LIBRARY
++M:	David Howells <dhowells@redhat.com>
++M:	Jeff Layton <jlayton@kernel.org>
++L:	linux-cachefs@redhat.com (moderated for non-subscribers)
++S:	Supported
++F:	Documentation/filesystems/netfs_library.rst
++F:	fs/netfs/
++F:	include/linux/netfs.h
++
+ NETXEN (1/10) GbE SUPPORT
+ M:	Manish Chopra <manishc@marvell.com>
+ M:	Rahul Verma <rahulv@marvell.com>
+
 
