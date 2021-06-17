@@ -2,59 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6938C3AB477
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Jun 2021 15:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC283AB466
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Jun 2021 15:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbhFQNUS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 17 Jun 2021 09:20:18 -0400
-Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:41047 "EHLO
-        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232258AbhFQNUR (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:20:17 -0400
-Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
-        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
-        (envelope-from <robertnellsona@citromail.hu>)
-        id 1ltkuA-00013U-KE
-        for linux-cifs@vger.kernel.org; Thu, 17 Jun 2021 02:49:30 -0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S231911AbhFQNPl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Jun 2021 09:15:41 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:7474 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231466AbhFQNPj (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Jun 2021 09:15:39 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G5MqY3RW1zZj6j;
+        Thu, 17 Jun 2021 21:10:33 +0800 (CST)
+Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 17 Jun 2021 21:13:29 +0800
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 17 Jun
+ 2021 21:13:29 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <libaokun1@huawei.com>, Namjae Jeon <namjae.jeon@samsung.com>,
+        "Sergey Senozhatsky" <sergey.senozhatsky@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>
+CC:     <linux-cifs@vger.kernel.org>,
+        <linux-cifsd-devel@lists.sourceforge.net>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] cifsd: convert list_for_each to entry variant in smb_common.c
+Date:   Thu, 17 Jun 2021 21:22:28 +0800
+Message-ID: <20210617132228.689945-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: CAN YOU INVEST WITH ME?...6
-To:     linux-cifs@vger.kernel.org
-From:   "Mr.  Robert" <robertnellsona@citromail.hu>
-Date:   Thu, 17 Jun 2021 08:49:22 +0300
-Reply-To: robertnellsona@citromail.hu
-Message-Id: <E1ltkuA-00013U-KE@srv01.rpnnetprovedor.com.br>
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+convert list_for_each() to list_for_each_entry() where
+applicable.
 
-ATTENTION; linux-cifs@vger.kernel.org,
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/cifsd/smb_common.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-IMPORTANT INVESTMENT INFORMATION
+diff --git a/fs/cifsd/smb_common.c b/fs/cifsd/smb_common.c
+index 039030968b50..d74b2ce08187 100644
+--- a/fs/cifsd/smb_common.c
++++ b/fs/cifsd/smb_common.c
+@@ -481,15 +481,13 @@ int ksmbd_smb_check_shared_mode(struct file *filp, struct ksmbd_file *curr_fp)
+ {
+ 	int rc = 0;
+ 	struct ksmbd_file *prev_fp;
+-	struct list_head *cur;
+ 
+ 	/*
+ 	 * Lookup fp in master fp list, and check desired access and
+ 	 * shared mode between previous open and current open.
+ 	 */
+ 	read_lock(&curr_fp->f_ci->m_lock);
+-	list_for_each(cur, &curr_fp->f_ci->m_fp_list) {
+-		prev_fp = list_entry(cur, struct ksmbd_file, node);
++	list_for_each_entry(prev_fp, &curr_fp->f_ci->m_fp_list, node) {
+ 		if (file_inode(filp) != FP_INODE(prev_fp))
+ 			continue;
+ 
 
-We have a good investment program going on now.
-We have $95m USD for Investment in your Country.
-We use this opportunity to invest you to join the investment program and you will never regret it.
-Please kindly invest with us and you will be receiving monthly income/return/profit every month.
-We can also give you Loan, 
-
-We have: 
-
-1. Short Term Loan, 
-
-2. Medium Term Loan 
-
-3. and Long Term Loan, 
-
-There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
-
-Reply for more detail.
-
-Thank you Sir.
-
-Robert Nellson.
-INVESTMENT MANAGER.
