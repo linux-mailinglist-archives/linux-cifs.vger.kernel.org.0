@@ -2,97 +2,155 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81413AC097
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Jun 2021 03:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BF43AC1AA
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Jun 2021 05:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbhFRBqt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Jun 2021 21:46:49 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:8264 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbhFRBqs (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Jun 2021 21:46:48 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G5hRq33JKz1BNgv;
-        Fri, 18 Jun 2021 09:39:35 +0800 (CST)
-Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 18 Jun 2021 09:44:38 +0800
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 18 Jun 2021 09:44:38 +0800
-Subject: Re: [PATCH -next] cifsd: fix WARNING: convert list_for_each to entry
- variant in smb2pdu.c
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     Namjae Jeon <namjae.jeon@samsung.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        "Hyunchul Lee" <hyc.lee@gmail.com>, <linux-cifs@vger.kernel.org>,
-        <linux-cifsd-devel@lists.sourceforge.net>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-References: <20210617064653.3193618-1-libaokun1@huawei.com>
- <20210617092639.GD1861@kadam>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-Message-ID: <fa589904-ac16-fb97-bb7a-df081954d363@huawei.com>
-Date:   Fri, 18 Jun 2021 09:44:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S231289AbhFRD5V (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Jun 2021 23:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231282AbhFRD5U (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Jun 2021 23:57:20 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8B9C061574
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Jun 2021 20:55:12 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a21so7107715ljj.1
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Jun 2021 20:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gD0ENR2WFkgQ8MRu5JeRKMW0kM+a+UL7D/5SRU2dL9o=;
+        b=uNCbmkB29jIzgrhqk0VOBCGEG412UGXuAIMhfJNbSjYv2e6z8g+OFw4yZjAdjNqFf2
+         wGqYfTfnljcXrjI9dfiKFBjJLZ+xs1t5X163kj2JwaKCM1llUi+2wljpBz0dEs0U4dg6
+         jZFR53hhxTfZR0FT0WAvxyQ0ft/JrmtLQztG5H9DAemRUflXm4un37f9ZU10qn2BoG0U
+         uxQG8E71HnDfNRwR19uZWiRkI+9m3kHqpkgUlBkGLI/abpJFV8LtZneZooRpbe0gnkVP
+         J7qwBbXhb+16IF0rLSSw121UXZ76yyEE8vPBZ+Vw25D0TUkXQHem+u6QKpzV/JYl8XQ0
+         DidQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gD0ENR2WFkgQ8MRu5JeRKMW0kM+a+UL7D/5SRU2dL9o=;
+        b=jcZeBPF5pS92I4ujGk0vscc1fBQAmHxv/WjBDCxJ713clH3gAKRXZ6ZI2+uzXUkAFh
+         0wMcZ86E4GhctDgwMj5iQls7gbaCKlm2rufGwSagJaT/8ZMaeDSILKjX9BMtgQhkLSJ7
+         TyCptDQG/dirgHsO/l27jVkLoSH5FUJTWPFC+zXtdsRerm2tyjA9C3cxbqx9Y0E9i8GK
+         Bm6S3aqS17p4XoMuwhLuQK5w9NwKTIP6qhm6QL2iMw2B5djoPhTxsz35tFVJsLIUUOlp
+         2xP2ttm+hSleBONvQRt9nkcuJxut6POGpVvlGkW3RQa8JE6ZCifmdt9iXckroW+zih3B
+         RMnw==
+X-Gm-Message-State: AOAM531rcVta2v7imOdCb/sQhIqoiBYGn7YmEIm5r6n/5Ine6Tw73yFi
+        gohnZkdQSpXbF4zL1AfhRP787AwTzokw7505gUenS7yyGufx1w==
+X-Google-Smtp-Source: ABdhPJwfK5IbgVhCn/xIgGuj5cbvhNO+09farhjKoAKnUQ+kfFY5N+e5Qs17K6FoZD8oDCz3K6NJzTw13OMZsNjx2HA=
+X-Received: by 2002:a2e:86d7:: with SMTP id n23mr7641370ljj.406.1623988510338;
+ Thu, 17 Jun 2021 20:55:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210617092639.GD1861@kadam>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+References: <20210618005830.1819887-1-lsahlber@redhat.com>
+In-Reply-To: <20210618005830.1819887-1-lsahlber@redhat.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 17 Jun 2021 22:54:59 -0500
+Message-ID: <CAH2r5mss4WEBCF945jZFOGRCB6J+Jxd6LEYEx7f9eFjycXLcTA@mail.gmail.com>
+Subject: Re: [PATCH] cifs: avoid extra calls in posix_info_parse
+To:     Ronnie Sahlberg <lsahlber@redhat.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-I don't know what the difference is between
+Don't we have a secondary problem (have you been able to pull up a
+more complete coverity explanation of the warning - I just see minimal
+info on the line numbers of the two functions returning -1)?
 
-list_for_each_entry() and list_for_each() for 'struct channel *chann',
+e.g. if posix_info_sid_size returns -1, posix_info_parse returns -1
+... but we don't check for the rc in one of the callers
+cifs_posix_to_fattr
 
-but I don't think there's any difference here.
+/* Fill a cifs_fattr struct with info from SMB_FIND_FILE_POSIX_INFO. */
+static void
+cifs_posix_to_fattr(struct cifs_fattr *fattr, struct smb2_posix_info *info,
+                    struct cifs_sb_info *cifs_sb)
+{
+        struct smb2_posix_info_parsed parsed;
 
-Would you give me more detial about this, please?
+        posix_info_parse(info, NULL, &parsed);
+... NEED TO CHECK RC HERE ...
+        memset(fattr, 0, sizeof(*fattr));
+...
 
-Thank you.
-
-Best Regards.
-
-
-ÔÚ 2021/6/17 17:26, Dan Carpenter Ð´µÀ:
-> On Thu, Jun 17, 2021 at 02:46:53PM +0800, Baokun Li wrote:
->> convert list_for_each() to list_for_each_entry() where
->> applicable.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->> ---
->>   fs/cifsd/smb2pdu.c | 15 ++++-----------
->>   1 file changed, 4 insertions(+), 11 deletions(-)
->>
->> diff --git a/fs/cifsd/smb2pdu.c b/fs/cifsd/smb2pdu.c
->> index ac15a9287310..22ef1d9eed1b 100644
->> --- a/fs/cifsd/smb2pdu.c
->> +++ b/fs/cifsd/smb2pdu.c
->> @@ -74,10 +74,7 @@ static inline int check_session_id(struct ksmbd_conn *conn, u64 id)
->>   struct channel *lookup_chann_list(struct ksmbd_session *sess)
->>   {
->>   	struct channel *chann;
->> -	struct list_head *t;
->> -
->> -	list_for_each(t, &sess->ksmbd_chann_list) {
->> -		chann = list_entry(t, struct channel, chann_list);
->> +	list_for_each_entry(chann, &sess->ksmbd_chann_list, chann_list) {
->>   		if (chann && chann->conn == sess->conn)
-> "chan" is the list iterator and it can't be NULL.
+On Thu, Jun 17, 2021 at 7:58 PM Ronnie Sahlberg <lsahlber@redhat.com> wrote:
 >
->>   			return chann;
->>   	}
-> regards,
-> dan carpenter
+> In posix_info_parse() we call posix_info_sid_size twice for each of the owner and the group
+> sid. The first time to check that it is valid, i.e. >= 0 and the second time
+> to just pass it in as a length to memcpy().
+> As this is a pure function we know that it can not be negative the second time and this
+> is technically a false warning in coverity.
+> However, as it is a pure function we are just wasting cycles by calling it a second time.
+> Record the length from the first time we call it and save some cycles as well as make
+> Coverity happy.
 >
-> .
+> Addresses-Coverity-ID: 1491379 ("Argument can not be negative")
+>
+> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> ---
+>  fs/cifs/smb2pdu.c | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+>
+> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> index c205f93e0a10..4a244cc4e902 100644
+> --- a/fs/cifs/smb2pdu.c
+> +++ b/fs/cifs/smb2pdu.c
+> @@ -4498,7 +4498,7 @@ int posix_info_parse(const void *beg, const void *end,
+>
+>  {
+>         int total_len = 0;
+> -       int sid_len;
+> +       int owner_len, group_len;
+>         int name_len;
+>         const void *owner_sid;
+>         const void *group_sid;
+> @@ -4521,17 +4521,17 @@ int posix_info_parse(const void *beg, const void *end,
+>
+>         /* check owner sid */
+>         owner_sid = beg + total_len;
+> -       sid_len = posix_info_sid_size(owner_sid, end);
+> -       if (sid_len < 0)
+> +       owner_len = posix_info_sid_size(owner_sid, end);
+> +       if (owner_len < 0)
+>                 return -1;
+> -       total_len += sid_len;
+> +       total_len += owner_len;
+>
+>         /* check group sid */
+>         group_sid = beg + total_len;
+> -       sid_len = posix_info_sid_size(group_sid, end);
+> -       if (sid_len < 0)
+> +       group_len = posix_info_sid_size(group_sid, end);
+> +       if (group_len < 0)
+>                 return -1;
+> -       total_len += sid_len;
+> +       total_len += group_len;
+>
+>         /* check name len */
+>         if (beg + total_len + 4 > end)
+> @@ -4552,10 +4552,8 @@ int posix_info_parse(const void *beg, const void *end,
+>                 out->size = total_len;
+>                 out->name_len = name_len;
+>                 out->name = name;
+> -               memcpy(&out->owner, owner_sid,
+> -                      posix_info_sid_size(owner_sid, end));
+> -               memcpy(&out->group, group_sid,
+> -                      posix_info_sid_size(group_sid, end));
+> +               memcpy(&out->owner, owner_sid, owner_len);
+> +               memcpy(&out->group, group_sid, group_len);
+>         }
+>         return total_len;
+>  }
+> --
+> 2.30.2
+>
+
+
+-- 
+Thanks,
+
+Steve
