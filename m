@@ -2,41 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225833ACA2E
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Jun 2021 13:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AEA3ADB09
+	for <lists+linux-cifs@lfdr.de>; Sat, 19 Jun 2021 19:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbhFRLqT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 18 Jun 2021 07:46:19 -0400
-Received: from [210.180.118.67] ([210.180.118.67]:34672 "EHLO blank.cafe24.com"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233845AbhFRLqS (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Fri, 18 Jun 2021 07:46:18 -0400
-Received: from IP-130-143.dataclub.eu (ip-130-143.dataclub.info [84.38.130.143] (may be forged))
-        (authenticated bits=0)
-        by blank.cafe24.com (8.14.7/8.14.7) with ESMTP id 15IBhv8f011314
-        for <linux-cifs@vger.kernel.org>; Fri, 18 Jun 2021 20:44:05 +0900
-Message-Id: <202106181144.15IBhv8f011314@blank.cafe24.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S234881AbhFSRLL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 19 Jun 2021 13:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234871AbhFSRLK (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 19 Jun 2021 13:11:10 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AEFC061574
+        for <linux-cifs@vger.kernel.org>; Sat, 19 Jun 2021 10:08:58 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id k8so18515571lja.4
+        for <linux-cifs@vger.kernel.org>; Sat, 19 Jun 2021 10:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Ije9hIIW14I2rhdmQdSmC/4A92zmkuJmZTCYTGAlzEw=;
+        b=JHHGi8rTTmpxjRs00hdFm+x+JCYeAXWLVIBgtkUWi+78aqoPri7yM/7dhvINFF/DBg
+         yiZMv2qyrhK08NpNeJCR3iVS0WfmIhQSMLJ5Wei67NwATUW86HvJ46VHJ4UQeSCRbsr9
+         pTQUicy4HcQtPs1OSfVto7HdPKNfUzHDp6FYfYo3M82EXSlaz6ejNOoB/1itox7Z4Icl
+         EROfRy3EDJS8Z4iK5S/Qbts232WKqABI8+Q8kH3ds7Xeg+NSq+YF7yNP3Pyy+x0qPCBP
+         28P+3TRqDJUsGcZhVCGYTiz0IExG2bZDF8LU3GHgIP1WcahgwOp40DVLOXh9bhiV3Sg/
+         eENw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Ije9hIIW14I2rhdmQdSmC/4A92zmkuJmZTCYTGAlzEw=;
+        b=tnAMxIDwBjW8j4rr/i9dtBpsxseVidvUm53eKNcesb9kOasKk2jiap4LRe985NyGHZ
+         mTSXBiKCxGsKjQVkMitU8ZYsSWP8xiZ86MMUDSnP1LPD1n5PzZU6POCE1oy6LNGnJAPJ
+         5haSkt0Cgl3vt3L2r/4F2pKWANk4L9ybLcIOGmNTG2FrwiZ2it27clOYI0+wTaYZeYi+
+         Cb/8z+Px4R+uKg1b6NBVj0VXC7kXZZ/gh4uwHNcmJUVAdgmFkknETeft7XMrTEXlSq3t
+         Y7q2Bs/z1Cw5NRl+ofqRLen9MOwuc3zSfmD8OD59U9qUm4eOjSZctmdABl/3N8mJYOf3
+         kgiw==
+X-Gm-Message-State: AOAM531ON0f0MpcVlFMRYUh4RPiHTZkJFon0Iy20o68JH1SLqn+xEB+S
+        aLkv19Vs6qv+7fH0m+/uHkbF2EggesB+fPyhWSVk/Tx5zZsaXw==
+X-Google-Smtp-Source: ABdhPJy3F2vFlKacaG3RFpLxRdPx92QzpSWRYgTkqpvRLYEl8e2Hwuy6w0uXO/tqtIEvR6foRo29G5BJp1OudDgbzeg=
+X-Received: by 2002:a05:651c:1697:: with SMTP id bd23mr14245916ljb.148.1624122536464;
+ Sat, 19 Jun 2021 10:08:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: BUSINESS LOAN/PROJECT FUNDING...67
-To:     linux-cifs@vger.kernel.org
-From:   "Smith Green" <ssbinvestmentsllc@citromail.hu>
-Date:   Fri, 18 Jun 2021 14:44:43 +0300
-Reply-To: ssbinvestmentsllc@citromail.hu
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 19 Jun 2021 12:08:45 -0500
+Message-ID: <CAH2r5msRpe-d5p9fNgiiUqoON1tvS_YfSuDH2jEepn=Q+0LM-g@mail.gmail.com>
+Subject: [CIFS][PATCH] fix unneeded null check
+To:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000dbc11105c5217e93"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Sir/Madam,
+--000000000000dbc11105c5217e93
+Content-Type: text/plain; charset="UTF-8"
 
-Our Investors are based in the middle east with a profound track record. We invite you to take advantage of our investment loan program to fund your existing or intending projects. We offer a straight or convertible loan investment program for projects with high-returns and payback prospects without the usual rigid procedures of conventional lenders.
- 
-Kindly forward a copy of your Executive business summary for our review: info@ssbinvestmentsllc.us
+tcon can not be null in SMB2_tcon function so the check
+is not relevant and removing it makes Coverity happy.
 
- 
-Best Regards.
-Smith Green
-E:info@ssbinvestmentsllc.us
-International investment broker
+
+
+-- 
+Thanks,
+
+Steve
+
+--000000000000dbc11105c5217e93
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-fix-unneeded-null-check.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-fix-unneeded-null-check.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kq40m6t00>
+X-Attachment-Id: f_kq40m6t00
+
+RnJvbSBkMmQ2ZTg2NTdkN2VhZWQxNGNmZjg2OWFlYzkwMmNlYjIzMjBhNjY4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IFNhdCwgMTkgSnVuIDIwMjEgMTI6MDE6MzcgLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
+aWZzOiBmaXggdW5uZWVkZWQgbnVsbCBjaGVjawoKdGNvbiBjYW4gbm90IGJlIG51bGwgaW4gU01C
+Ml90Y29uIGZ1bmN0aW9uIHNvIHRoZSBjaGVjawppcyBub3QgcmVsZXZhbnQgYW5kIHJlbW92aW5n
+IGl0IG1ha2VzIENvdmVyaXR5IGhhcHB5LgoKQWNrZWQtYnk6IFJvbm5pZSBTYWhsYmVyZyA8bHNh
+aGxiZXJAcmVkaGF0LmNvbT4KQWRkcmVzc2VzLUNvdmVyaXR5OiAxMzI1MDEzMSAoIkRlcmVmZXJl
+bmNlIGJlZm9yZSBudWxsIGNoZWNrIikKU2lnbmVkLW9mZi1ieTogU3RldmUgRnJlbmNoIDxzdGZy
+ZW5jaEBtaWNyb3NvZnQuY29tPgotLS0KIGZzL2NpZnMvc21iMnBkdS5jIHwgNiArKy0tLS0KIDEg
+ZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
+IGEvZnMvY2lmcy9zbWIycGR1LmMgYi9mcy9jaWZzL3NtYjJwZHUuYwppbmRleCAwN2MzOGVlYzM5
+MjkuLjQ1NDU4NmQ0YzBmYiAxMDA2NDQKLS0tIGEvZnMvY2lmcy9zbWIycGR1LmMKKysrIGIvZnMv
+Y2lmcy9zbWIycGR1LmMKQEAgLTE3OTMsMTAgKzE3OTMsOCBAQCBTTUIyX3Rjb24oY29uc3QgdW5z
+aWduZWQgaW50IHhpZCwgc3RydWN0IGNpZnNfc2VzICpzZXMsIGNvbnN0IGNoYXIgKnRyZWUsCiAJ
+cnNwID0gKHN0cnVjdCBzbWIyX3RyZWVfY29ubmVjdF9yc3AgKilyc3BfaW92Lmlvdl9iYXNlOwog
+CXRyYWNlX3NtYjNfdGNvbih4aWQsIHRjb24tPnRpZCwgc2VzLT5TdWlkLCB0cmVlLCByYyk7CiAJ
+aWYgKHJjICE9IDApIHsKLQkJaWYgKHRjb24pIHsKLQkJCWNpZnNfc3RhdHNfZmFpbF9pbmModGNv
+biwgU01CMl9UUkVFX0NPTk5FQ1RfSEUpOwotCQkJdGNvbi0+bmVlZF9yZWNvbm5lY3QgPSB0cnVl
+OwotCQl9CisJCWNpZnNfc3RhdHNfZmFpbF9pbmModGNvbiwgU01CMl9UUkVFX0NPTk5FQ1RfSEUp
+OworCQl0Y29uLT5uZWVkX3JlY29ubmVjdCA9IHRydWU7CiAJCWdvdG8gdGNvbl9lcnJvcl9leGl0
+OwogCX0KIAotLSAKMi4zMC4yCgo=
+--000000000000dbc11105c5217e93--
