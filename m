@@ -2,103 +2,99 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0860F3ADE81
-	for <lists+linux-cifs@lfdr.de>; Sun, 20 Jun 2021 15:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303B53ADEF6
+	for <lists+linux-cifs@lfdr.de>; Sun, 20 Jun 2021 16:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhFTNcK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 20 Jun 2021 09:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+        id S229604AbhFTOJD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 20 Jun 2021 10:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbhFTNcJ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 20 Jun 2021 09:32:09 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5B9C061766
-        for <linux-cifs@vger.kernel.org>; Sun, 20 Jun 2021 06:29:56 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id m15-20020a17090a5a4fb029016f385ffad0so5820362pji.0
-        for <linux-cifs@vger.kernel.org>; Sun, 20 Jun 2021 06:29:56 -0700 (PDT)
+        with ESMTP id S229593AbhFTOJC (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 20 Jun 2021 10:09:02 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C1EC061574
+        for <linux-cifs@vger.kernel.org>; Sun, 20 Jun 2021 07:06:48 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id m15-20020a17090a5a4fb029016f385ffad0so5853369pji.0
+        for <linux-cifs@vger.kernel.org>; Sun, 20 Jun 2021 07:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=RMwvA+fx8yuBcbVHWSzLn2T8DJx/nm2zPa3ftW7g9Za2Rg/qcnGzbKxOIk01B0ct8J
-         A2DXDDtUl77oRF1jlp+UqZV3QkQWqK73gQnJIBFIZh8a0JY8h3Wd17attDMmaE9Eektt
-         dbYWFfWf5cl05f4gP6uMT4yAzlLz/0pOHTpHVkC4owmE193/nw/D/cZVbgRk6/osy3s1
-         DnGQFecC0XvEkZZkg6LrX5GcMSopSKtDGJD00+K0CUvUgLoPOa4nDOFTb4RfTUBJWjOm
-         u9k/aQdXe/n1UgGqdsl74mwqb1PrBCtQjehO40uXXX9Ck6N2T+Xlf2wSdnMJ3kf6n1Yz
-         rffg==
+        d=ipimp-at.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=MIZ4IrXwklzlgHap85uS8XNy6DOxw0AKw1+AJlAIzmg=;
+        b=d5XebYlxy5kTvPeITKsr52Ctmig5wUd/mM2bBppI33toL96BZMv2jXvfoQdhQxQ/RY
+         G7wI6Hgyc6KtDUZunQ3kW0+SS38bIIkNKU9NYJtPj1VKaV9Rf5sWsQGyeKRS0jNibNDR
+         armNYr2svM2unbn8SmKi0ZSotwfSxz/1qkQNCMhy2V/ZjbMEmlpqGdg2ypLTQN2xB5dO
+         vM+REfNSb+1YV86sPiCI7KrLIQr86IF9scrractSTfPP7CxJAcF21WWAuXYBFwr2JHje
+         ouGRxv/azRMoCpjHYYpGfEccsayfoT4/OeZS7xx/MND7y6q6AjL9otEqtTfwD7Auo+xx
+         qtHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=YUgF+j0dji3VKtEtmWsaI+yxDPGgGxaDNb6AIbf0qIYeS42tjM5bW6Jv5S7bD9Afgi
-         xkqUReewaixNGKooxprl5Xixq/MIuOKD9U7htIfZ+Ygr8dFSb6hEBNpaGrnHZIfWtlIg
-         8p6GShc2ZbIRlhYsQhUdr1fmIhbMB1SGG2fPWVHo9qRTqUBWqpTof1zPuTsP8Az1sjfV
-         DckNS4cSyct7wLjFRj5+ji/ss80HCsZfEwUS0Kc21xVPgdgt+dmYkGMyfRgtu9o754Vp
-         2ZSlAZYg0/gb0X3N+hExtdrqRnepGJTMzJlbQLD4R4cTfn+6jlV6SQWYv0tUzb94thkq
-         EKCg==
-X-Gm-Message-State: AOAM532LcTMKwElQbF4/oscsCDk+DAjx3NCmoZiTv2yfs8BHOP5uFRIE
-        XwP49LOk9IdFyRcmZE5+VdvRzeSAaCambVybfG0=
-X-Google-Smtp-Source: ABdhPJzgDrNg1DyUylXnidEBopNlsbArXjkRcY8wb5NnP9kfhEmzqLJgKwQYVCOss+XLPiqKGQvsKQh595VG0LwJsuQ=
-X-Received: by 2002:a17:90b:3842:: with SMTP id nl2mr32179442pjb.227.1624195795850;
- Sun, 20 Jun 2021 06:29:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=MIZ4IrXwklzlgHap85uS8XNy6DOxw0AKw1+AJlAIzmg=;
+        b=jFPXRzNIdDSzixSGGatJoJVRIOQGsLrrPdqB8IG1glGU5XF32TffS3i1+p4GZZ0elt
+         ZBQKYSGRsp+P7yMru8ZRNQp0zQcWOv0B3q5CsRw4HK52n5zj5Zf8gN2w3Cy+2FNVtYNB
+         EA/hfkI5w6pQPM8x6hBeYiB/Y9yvMA1vCput+jDocNCiBGfX8QO3AqGhg67WW3hGLdp2
+         qhhXXd2NLv4cHlyL98mihKehutbKW1JLKWWgadw2d35nTzIBV2CA7OuAUZq2sE011sOc
+         zPL4loncryOrnJdsoRFXX++PiRmgHVfIF/8x45xc6DynyzpOjaMgetmlAWZv2dfDgQ0T
+         TTyg==
+X-Gm-Message-State: AOAM533UqhiVQXDFUKB+UL+wtrvZzmgcnYXhdhuq1oKa5NqfnrEiNqLW
+        f6yQ5xsa0/JgKT10wNeS7nstfVAxsWNZsPi1cy0Ja3FQRWJcngjs
+X-Google-Smtp-Source: ABdhPJznwJYkKLJYVY1xVEmaupB4VFudefFritGGDIWZy1bVgU6NmWPeDjsTFgs19Md0TXcKywiax6f48Bpn+xYeRgY=
+X-Received: by 2002:a17:90a:8407:: with SMTP id j7mr3030319pjn.13.1624198008257;
+ Sun, 20 Jun 2021 07:06:48 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:90b:38c4:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:29:55
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <william.p15179@gmail.com>
-Date:   Sun, 20 Jun 2021 15:29:55 +0200
-Message-ID: <CAGDeiXG8WBVXJqvFe9cEXbPzs3H0OWzxYsQ+6tVqsOpuD-B29Q@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
+From:   Kim Henriksen <kh@ipimp.at>
+Date:   Sun, 20 Jun 2021 16:06:37 +0200
+Message-ID: <CAC3UJ6mbUA1Q2wDKgjoXuyp3GuCHWMv7vfhypX9az5KtX-_z+w@mail.gmail.com>
+Subject: Problem storing credentials with pam_cifscreds on desktop systems
+To:     linux-cifs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+I wish to store CIFS credentials during login on a desktop, but I've
+hit a brick wall, and my google foo has failed me.
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+When I login via the desktop environment no CIFS credentials are
+available, but it works fine using SSH.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+I have tried with Ubuntu 20.04 and Fedora 34, but same result.
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+This is how my Fedora installation is configured:
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
+pam_cifscreds.x86_64      6.11-3.fc34
 
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
+I have added these lines to: /etc/pam.d/{gdm-password,login,sshd}
 
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
+auth          optional      pam_cifscreds.so debug
+session     optional      pam_keyinit.so force revoke
+session     optional      pam_cifscreds.so host=<myserver> debug
 
-I will wait to hear from you so as to give you details.With love from
+From the journal log when logging in can see the credentials gets stored:
 
- i need you to contact me here sarahkoffi389@yahoo.co.jp
+gdm-password][3362]: pam_cifscreds(gdm-password:session): credential
+key for \\<myserver>\<myuser> added
+sshd[2835]: pam_cifscreds(sshd:session): credential key for
+\\<myserver>\<myuser added
 
-Mrs. Sarah Koffi
+But I can't see the CIFS credentials in my desktop session:
+
+$ keyctl show
+Session Keyring
+ 882498672 --alswrv   1000  1000  keyring: _ses
+1026128626 --alswrv   1000 65534   \_ keyring: _uid.1000
+
+But when I login using SSH they are there:
+
+$ keyctl show
+Session Keyring
+ 145928652 --alswrv   1000  1000  keyring: _ses
+1026128626 --alswrv   1000 65534   \_ keyring: _uid.1000
+ 802829928 ----sw-v      0     0   \_ logon: cifs:a:<myserver>
+
+I'm not totally sure, but I think the problem in general is related to
+this: https://github.com/systemd/systemd/issues/1299
+
+-- 
+Mvh.
+Kim Henriksen
