@@ -2,140 +2,146 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 172A23AF769
-	for <lists+linux-cifs@lfdr.de>; Mon, 21 Jun 2021 23:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031BE3AF7A1
+	for <lists+linux-cifs@lfdr.de>; Mon, 21 Jun 2021 23:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbhFUVe2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 21 Jun 2021 17:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbhFUVe1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 21 Jun 2021 17:34:27 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CDEC061574;
-        Mon, 21 Jun 2021 14:32:13 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id f13so72590ljp.10;
-        Mon, 21 Jun 2021 14:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=XttW2DB5Vb9m+WTM2zdPl5AyA493GBkpUm0PN3ByhPM=;
-        b=rUfqdcYZammBUrDpi4PoGjfb31cugOE7LvirnXnv+GIxcaUnG3w9zOJ604Ixzfs2SG
-         y399ErsivItDWV57S32AzLmX6zCzi7EasoNbN0Fe8pKy5JIwSGuOXhsY6XIfIPQ6woSl
-         ReKQa4oQ+2eo0epISX/RoA3y0QlXIPk//drUdgAnbgKxq2fKNO+eBZSZgiebDe1TkrKI
-         vccM4wy515ts297PVue+3KEjhO/21oPCudUKI5WL4OPHXBO5nlpViyh+opnwQR3S5mSC
-         ETWkid5bbudJ9Ak1TzgsOy6AFN2+LkkZptm0OahiILvNM4O/3THH2LjL1NgJm2bf0wod
-         7/qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=XttW2DB5Vb9m+WTM2zdPl5AyA493GBkpUm0PN3ByhPM=;
-        b=NqLfWpzGZK7VLqgL90FGQVqEZWyUgu8YJ8n6ORKmaondeBeZ9BJlQlIyHYQTNElX0L
-         ER4XV3ra8lIU49SIreA3yP0cUBN8NlWkcLbvAv0LieCv6gpA8DCGf7qaoKA4c6cIlmv7
-         W5Vpjbn9MXr8nUIwszTDo77/VoPk6vmcdm1kt2mfQvvHWdN6XBiRvAGoJNEsb8KRLoi1
-         efNUNVy62k6SJ39OOrbppIxvjx2RX8mS1hkfLBTwqY5qzPDji4xhfutgidZrSit4+Bvl
-         MTyS+Vnu9VthepYNIBa/IuELdtNqJ2f0XWjp8q2GphHDTHJY7xfFOmoOq8nB68vIHfn+
-         Q46Q==
-X-Gm-Message-State: AOAM533Hl6eYfhzWilu7TZYvhgU0vHQ1XwV5hGv7tsDzibFfX/NNh9k4
-        27PUf56ffdyZygRI0FzrnGp3mzpfDfYxMUNhsJg=
-X-Google-Smtp-Source: ABdhPJzQYy8Zv2CoT4+5jf+Ljt9HmhtwZp1c4bIUyBIO+4vf8Ela55EiC0s0gJecmfdGTLXQhmsvO2O/+kTDAQ0FLDA=
-X-Received: by 2002:a05:651c:10b9:: with SMTP id k25mr227755ljn.256.1624311131260;
- Mon, 21 Jun 2021 14:32:11 -0700 (PDT)
+        id S231127AbhFUVrJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 21 Jun 2021 17:47:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48060 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231653AbhFUVrJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 21 Jun 2021 17:47:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624311894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XKLiDuUsmC1WPdGyRvFLYwM86yQUshQp3xSKfy6+l3A=;
+        b=X2q1VU6ZSTFDSLVT6d9vPlt9VmKlMfKcgtBjwgtW7jyalK4mPkf6vytWJlyjxZbQQHq/ik
+        rzlHfMTOQZTrxJvgThX03hdai4N7buAx6ePFfDeaT8TKKRybsFgtj8wQVCL0YKx2ldrQ8S
+        GgtjGzhK0jdAs9oFaoEz7HKXlY/fItE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-174-BaiXqo66MB-HZt-EMIdxbw-1; Mon, 21 Jun 2021 17:44:52 -0400
+X-MC-Unique: BaiXqo66MB-HZt-EMIdxbw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11073804141;
+        Mon, 21 Jun 2021 21:44:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-118-65.rdu2.redhat.com [10.10.118.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 34A51608BA;
+        Mon, 21 Jun 2021 21:44:45 +0000 (UTC)
+Subject: [PATCH 00/12] fscache: Some prep work for fscache rewrite
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@redhat.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 21 Jun 2021 22:44:44 +0100
+Message-ID: <162431188431.2908479.14031376932042135080.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 21 Jun 2021 16:32:00 -0500
-Message-ID: <CAH2r5msOSLaZT42-jFMjJrB1YiYTZBzdM18ieqQY2v=YwXzcrA@mail.gmail.com>
-Subject: [SMBDIRECT][PATCH] missing rc checks while waiting for SMB3 over RDMA events
-To:     Long Li <longli@microsoft.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000fbdd3d05c54d677d"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---000000000000fbdd3d05c54d677d
-Content-Type: text/plain; charset="UTF-8"
 
-    There were two places where we weren't checking for error
-    (e.g. ERESTARTSYS) while waiting for rdma resolution.
+Here are some patches that perform some preparatory work for the fscache
+rewrite that's being worked on.  These include:
 
-    Addresses-Coverity: 1462165 ("Unchecked return value")
-   Signed-off-by: Steve French <stfrench@microsoft.com>
+ (1) Always select netfs stats when enabling fscache stats since they're
+     displayed through the same procfile.
 
-diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
-index 10dfe5006792..ae07732f750f 100644
---- a/fs/cifs/smbdirect.c
-+++ b/fs/cifs/smbdirect.c
-@@ -572,8 +572,11 @@ static struct rdma_cm_id *smbd_create_id(
-                log_rdma_event(ERR, "rdma_resolve_addr() failed %i\n", rc);
-                goto out;
-        }
--       wait_for_completion_interruptible_timeout(
-+       rc = wait_for_completion_interruptible_timeout(
-                &info->ri_done, msecs_to_jiffies(RDMA_RESOLVE_TIMEOUT));
-+       /* -ERESTARTSYS, returned when interrupted, is the only rc mentioned */
-+       if (rc < 0)
-+               goto out;
-        rc = info->ri_rc;
-        if (rc) {
-                log_rdma_event(ERR, "rdma_resolve_addr() completed %i\n", rc);
-@@ -586,8 +589,10 @@ static struct rdma_cm_id *smbd_create_id(
-                log_rdma_event(ERR, "rdma_resolve_route() failed %i\n", rc);
-                goto out;
-        }
--       wait_for_completion_interruptible_timeout(
-+       rc = wait_for_completion_interruptible_timeout(
-                &info->ri_done, msecs_to_jiffies(RDMA_RESOLVE_TIMEOUT));
-+       if (rc < 0)  /* e.g. if interrupted and returns -ERESTARTSYS */
-+               goto out
-        rc = info->ri_rc;
-        if (rc) {
-                log_rdma_event(ERR, "rdma_resolve_route() completed %i\n", rc);
+ (2) Add a cookie debug ID that can be used in tracepoints instead of a
+     pointer and cache it in the netfs_cache_resources struct rather than
+     in the netfs_read_request struct to make it more available.
+
+ (3) Use file_inode() in cachefiles rather than dereferencing file->f_inode
+     directly.
+
+ (4) Provide a procfile to display fscache cookies.
+
+ (5) Remove the fscache and cachefiles histogram procfiles.
+
+ (6) Remove the fscache object list procfile.
+
+ (7) Avoid using %p in fscache and cachefiles as the value is hashed and
+     not comparable to the register dump in an oops trace.
+
+ (8) Fix the cookie hash function to actually achieve useful dispersion.
+
+ (9) Fix fscache_cookie_put() so that it doesn't dereference the cookie
+     pointer in the tracepoint after the refcount has been decremented
+     (we're only allowed to do that if we decremented it to zero).
+
+(10) Use refcount_t rather than atomic_t for the fscache_cookie refcount.
+
+The patches can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
+
+David
+---
+David Howells (12):
+      fscache: Select netfs stats if fscache stats are enabled
+      netfs: Move cookie debug ID to struct netfs_cache_resources
+      cachefiles: Use file_inode() rather than accessing ->f_inode
+      fscache: Add a cookie debug ID and use that in traces
+      fscache: Procfile to display cookies
+      fscache, cachefiles: Remove the histogram stuff
+      fscache: Remove the object list procfile
+      fscache: Change %p in format strings to something else
+      cachefiles: Change %p in format strings to something else
+      fscache: Fix cookie key hashing
+      fscache: Fix fscache_cookie_put() to not deref after dec
+      fscache: Use refcount_t for the cookie refcount instead of atomic_t
 
 
--- 
-Thanks,
+ fs/cachefiles/Kconfig             |  19 --
+ fs/cachefiles/Makefile            |   2 -
+ fs/cachefiles/bind.c              |   2 -
+ fs/cachefiles/interface.c         |   6 +-
+ fs/cachefiles/internal.h          |  25 --
+ fs/cachefiles/io.c                |   6 +-
+ fs/cachefiles/key.c               |   2 +-
+ fs/cachefiles/main.c              |   7 -
+ fs/cachefiles/namei.c             |  61 ++---
+ fs/cachefiles/proc.c              | 114 --------
+ fs/cachefiles/xattr.c             |   4 +-
+ fs/fscache/Kconfig                |  24 --
+ fs/fscache/Makefile               |   2 -
+ fs/fscache/cache.c                |  11 +-
+ fs/fscache/cookie.c               | 201 +++++++++++----
+ fs/fscache/fsdef.c                |   3 +-
+ fs/fscache/histogram.c            |  87 -------
+ fs/fscache/internal.h             |  57 +---
+ fs/fscache/main.c                 |  39 +++
+ fs/fscache/netfs.c                |   2 +-
+ fs/fscache/object-list.c          | 414 ------------------------------
+ fs/fscache/object.c               |   8 -
+ fs/fscache/operation.c            |   3 -
+ fs/fscache/page.c                 |   6 -
+ fs/fscache/proc.c                 |  20 +-
+ include/linux/fscache-cache.h     |   4 -
+ include/linux/fscache.h           |   4 +-
+ include/linux/netfs.h             |   2 +-
+ include/trace/events/cachefiles.h |  68 ++---
+ include/trace/events/fscache.h    | 160 ++++++------
+ include/trace/events/netfs.h      |   2 +-
+ 31 files changed, 367 insertions(+), 998 deletions(-)
+ delete mode 100644 fs/cachefiles/proc.c
+ delete mode 100644 fs/fscache/histogram.c
+ delete mode 100644 fs/fscache/object-list.c
 
-Steve
 
---000000000000fbdd3d05c54d677d
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smbdirect-missing-rc-checks-while-waiting-for-rdma-e.patch"
-Content-Disposition: attachment; 
-	filename="0001-smbdirect-missing-rc-checks-while-waiting-for-rdma-e.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kq74wddw0>
-X-Attachment-Id: f_kq74wddw0
-
-RnJvbSA5YmY0MmNhZWI5NWQ4YTViZjY3MjM0OGU1ZGViYTU4M2Y4MjMzNzEzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IE1vbiwgMjEgSnVuIDIwMjEgMTY6MjU6MjAgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
-bWJkaXJlY3Q6IG1pc3NpbmcgcmMgY2hlY2tzIHdoaWxlIHdhaXRpbmcgZm9yIHJkbWEgZXZlbnRz
-CgpUaGVyZSB3ZXJlIHR3byBwbGFjZXMgd2hlcmUgd2Ugd2VyZW4ndCBjaGVja2luZyBmb3IgZXJy
-b3IKKGUuZy4gRVJFU1RBUlRTWVMpIHdoaWxlIHdhaXRpbmcgZm9yIHJkbWEgcmVzb2x1dGlvbi4K
-CkFkZHJlc3Nlcy1Db3Zlcml0eTogMTQ2MjE2NSAoIlVuY2hlY2tlZCByZXR1cm4gdmFsdWUiKQpT
-aWduZWQtb2ZmLWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQog
-ZnMvY2lmcy9zbWJkaXJlY3QuYyB8IDkgKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNl
-cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NpZnMvc21iZGlyZWN0
-LmMgYi9mcy9jaWZzL3NtYmRpcmVjdC5jCmluZGV4IDEwZGZlNTAwNjc5Mi4uYWUwNzczMmY3NTBm
-IDEwMDY0NAotLS0gYS9mcy9jaWZzL3NtYmRpcmVjdC5jCisrKyBiL2ZzL2NpZnMvc21iZGlyZWN0
-LmMKQEAgLTU3Miw4ICs1NzIsMTEgQEAgc3RhdGljIHN0cnVjdCByZG1hX2NtX2lkICpzbWJkX2Ny
-ZWF0ZV9pZCgKIAkJbG9nX3JkbWFfZXZlbnQoRVJSLCAicmRtYV9yZXNvbHZlX2FkZHIoKSBmYWls
-ZWQgJWlcbiIsIHJjKTsKIAkJZ290byBvdXQ7CiAJfQotCXdhaXRfZm9yX2NvbXBsZXRpb25faW50
-ZXJydXB0aWJsZV90aW1lb3V0KAorCXJjID0gd2FpdF9mb3JfY29tcGxldGlvbl9pbnRlcnJ1cHRp
-YmxlX3RpbWVvdXQoCiAJCSZpbmZvLT5yaV9kb25lLCBtc2Vjc190b19qaWZmaWVzKFJETUFfUkVT
-T0xWRV9USU1FT1VUKSk7CisJLyogLUVSRVNUQVJUU1lTLCByZXR1cm5lZCB3aGVuIGludGVycnVw
-dGVkLCBpcyB0aGUgb25seSByYyBtZW50aW9uZWQgKi8KKwlpZiAocmMgPCAwKQorCQlnb3RvIG91
-dDsKIAlyYyA9IGluZm8tPnJpX3JjOwogCWlmIChyYykgewogCQlsb2dfcmRtYV9ldmVudChFUlIs
-ICJyZG1hX3Jlc29sdmVfYWRkcigpIGNvbXBsZXRlZCAlaVxuIiwgcmMpOwpAQCAtNTg2LDggKzU4
-OSwxMCBAQCBzdGF0aWMgc3RydWN0IHJkbWFfY21faWQgKnNtYmRfY3JlYXRlX2lkKAogCQlsb2df
-cmRtYV9ldmVudChFUlIsICJyZG1hX3Jlc29sdmVfcm91dGUoKSBmYWlsZWQgJWlcbiIsIHJjKTsK
-IAkJZ290byBvdXQ7CiAJfQotCXdhaXRfZm9yX2NvbXBsZXRpb25faW50ZXJydXB0aWJsZV90aW1l
-b3V0KAorCXJjID0gd2FpdF9mb3JfY29tcGxldGlvbl9pbnRlcnJ1cHRpYmxlX3RpbWVvdXQoCiAJ
-CSZpbmZvLT5yaV9kb25lLCBtc2Vjc190b19qaWZmaWVzKFJETUFfUkVTT0xWRV9USU1FT1VUKSk7
-CisJaWYgKHJjIDwgMCkgIC8qIGUuZy4gaWYgaW50ZXJydXB0ZWQgYW5kIHJldHVybnMgLUVSRVNU
-QVJUU1lTICovCisJCWdvdG8gb3V0CiAJcmMgPSBpbmZvLT5yaV9yYzsKIAlpZiAocmMpIHsKIAkJ
-bG9nX3JkbWFfZXZlbnQoRVJSLCAicmRtYV9yZXNvbHZlX3JvdXRlKCkgY29tcGxldGVkICVpXG4i
-LCByYyk7Ci0tIAoyLjMwLjIKCg==
---000000000000fbdd3d05c54d677d--
