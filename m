@@ -2,66 +2,135 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4C63B1DEC
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Jun 2021 17:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9F63B22DE
+	for <lists+linux-cifs@lfdr.de>; Thu, 24 Jun 2021 00:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbhFWP42 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 23 Jun 2021 11:56:28 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:51586 "EHLO ns1.zackeruz.tk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231434AbhFWP42 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:56:28 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id B7015846328
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Jun 2021 23:54:08 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     linux-cifs@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 15:54:08 +0000
-Message-ID: <20210623094114.A65B5DD1E8B320FD@johnlewis.com>
+        id S229796AbhFWWCk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 23 Jun 2021 18:02:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26470 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229759AbhFWWCk (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 23 Jun 2021 18:02:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624485621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=st93nk7bExRhIYWWqHd5DNGrLxEMhY9zER7Q1FDXsBU=;
+        b=N6Xsscd8CbRE07JPOCQOG9ad+K8uhpYzSuC5IM57B60sryPDeLCQc4IlTn8j6b83z/GYsD
+        zs0IGm2vEVRcK9mIl4jj03ODWnOPv89grg/5E0l2m7p/uGbqes4D7LOs8w8Dx705i9rEW3
+        s5asAHNxaZHd+WGe9qS9G5g9+vETepw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-12-1QV0W8JSOomw20eq-NuRng-1; Wed, 23 Jun 2021 18:00:20 -0400
+X-MC-Unique: 1QV0W8JSOomw20eq-NuRng-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4007E1926DA1;
+        Wed, 23 Jun 2021 22:00:19 +0000 (UTC)
+Received: from localhost.localdomain (vpn2-54-47.bne.redhat.com [10.64.54.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9ED3B60871;
+        Wed, 23 Jun 2021 22:00:18 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: [PATCH] cifs: set the cred_uid/linux_uid/linux_gid when duplicating contexts
+Date:   Thu, 24 Jun 2021 08:00:11 +1000
+Message-Id: <20210623220011.2074922-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear linux-cifs
+Use the nice helpers to initialize and the uid/gid/cred_uid when passed as mount
+arguments.
+Also, when we duplicate a context, for example in multiuser,cruid=xxx we need to
+re-set these uid/gids to the current user or else we may get a crash.
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+Fixes: 24e0a1eff9e2 ("cifs: switch to new mount api")
+Cc: stable@vger.kernel.org # 5.11
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+---
+ fs/cifs/fs_context.c | 27 ++++++++++++++++++++++-----
+ fs/cifs/fs_context.h |  1 +
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
+diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+index 92d4ab029c91..39bebe298387 100644
+--- a/fs/cifs/fs_context.c
++++ b/fs/cifs/fs_context.c
+@@ -322,7 +322,9 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
+ 	new_ctx->UNC = NULL;
+ 	new_ctx->source = NULL;
+ 	new_ctx->iocharset = NULL;
+-
++	new_ctx->linux_uid = current_fsuid();
++	new_ctx->cred_uid = current_fsuid();
++	new_ctx->linux_gid = current_fsgid();
+ 	/*
+ 	 * Make sure to stay in sync with smb3_cleanup_fs_context_contents()
+ 	 */
+@@ -792,6 +794,8 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+ 	int i, opt;
+ 	bool is_smb3 = !strcmp(fc->fs_type->name, "smb3");
+ 	bool skip_parsing = false;
++	kuid_t uid;
++	kgid_t gid;
+ 
+ 	cifs_dbg(FYI, "CIFS: parsing cifs mount option '%s'\n", param->key);
+ 
+@@ -904,18 +908,31 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+ 		}
+ 		break;
+ 	case Opt_uid:
+-		ctx->linux_uid.val = result.uint_32;
++		uid = make_kuid(current_user_ns(), result.uint_32);
++		if (!uid_valid(uid))
++			goto cifs_parse_mount_err;
++		ctx->linux_uid = uid;
+ 		ctx->uid_specified = true;
+ 		break;
+ 	case Opt_cruid:
+-		ctx->cred_uid.val = result.uint_32;
++		uid = make_kuid(current_user_ns(), result.uint_32);
++		if (!uid_valid(uid))
++			goto cifs_parse_mount_err;
++		ctx->cred_uid = uid;
++		ctx->cruid_specified = true;
+ 		break;
+ 	case Opt_backupgid:
+-		ctx->backupgid.val = result.uint_32;
++		gid = make_kgid(current_user_ns(), result.uint_32);
++		if (!gid_valid(gid))
++			goto cifs_parse_mount_err;
++		ctx->backupgid = gid;
+ 		ctx->backupgid_specified = true;
+ 		break;
+ 	case Opt_gid:
+-		ctx->linux_gid.val = result.uint_32;
++		gid = make_kgid(current_user_ns(), result.uint_32);
++		if (!gid_valid(gid))
++			goto cifs_parse_mount_err;
++		ctx->linux_gid = gid;
+ 		ctx->gid_specified = true;
+ 		break;
+ 	case Opt_port:
+diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
+index 2a71c8e411ac..b6243972edf3 100644
+--- a/fs/cifs/fs_context.h
++++ b/fs/cifs/fs_context.h
+@@ -155,6 +155,7 @@ enum cifs_param {
+ 
+ struct smb3_fs_context {
+ 	bool uid_specified;
++	bool cruid_specified;
+ 	bool gid_specified;
+ 	bool sloppy;
+ 	bool got_ip;
+-- 
+2.30.2
 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
-
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
-
-
-Best Regards
-
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
