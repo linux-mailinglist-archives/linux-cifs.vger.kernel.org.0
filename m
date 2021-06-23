@@ -2,143 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 224BC3B1C3B
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Jun 2021 16:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4C63B1DEC
+	for <lists+linux-cifs@lfdr.de>; Wed, 23 Jun 2021 17:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhFWOU1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 23 Jun 2021 10:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbhFWOUU (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 23 Jun 2021 10:20:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA12C061574
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Jun 2021 07:18:01 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id h15so4309219lfv.12
-        for <linux-cifs@vger.kernel.org>; Wed, 23 Jun 2021 07:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QgTNCq6SO6GhkfqYgn9S0tUYxSMqVkTJ/5LDnIzUxDw=;
-        b=E909bW1pSYPO+HYqMkMc/7HpwDx+wk+YAYsAy9+7dKl6skel6bgGEFHPEzoc3f3tX1
-         7UUA7YOvg38tjYB6pJt+K76as5oQX+k0PsqQ5ccb5cdQOY9T/qQ3wzb0O9optZgX+4K0
-         WKMnkgEnHS9b1mVGgeC/BVhVfPmNHRLg68ff7YeT9yYTKpeGTsvmRTqBwDH6hPfLWiPe
-         66Ib8uzXXydGY4dJKc0Rat2/xdHDGTDdq8iRV41Ud2TpCFwgYosMj3JoDaeFXJ6jgDyx
-         mRxo/NMGSVAlPzTzLcPrhIB1I/CBRfedEnakSjqp6Jky8aDr6zpEgKu8FTST+Mua5L1c
-         SP6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QgTNCq6SO6GhkfqYgn9S0tUYxSMqVkTJ/5LDnIzUxDw=;
-        b=LnEVWOufPDrHzeUJ9F1z+kOzJ1Bh3uAtppWrPq8acnqF9+VE3GOxbuRoRgiXeZkdas
-         ak2M33kUHsYBQzIrbdQztGJqvomPRblNggJX5i+bTNPY9JRwMHuOCwwSfNm/oHoK4z8M
-         HhwoQ/1LPY7KIHz0PLHtJffZ7t6c+wjj4doXn6xMsG6tv1vCuoTwD1pIE7sFpVrAAQ7+
-         y7lpe3+Dg7WpLL10Y2L3rMcGhnQY0SCT7uDE8RFiEdnw8jMSmRaAyvdMTSCFyWa/4/zX
-         0tDARfhXiAGPBeaeTnQnG3guJgRoO28TBeWOab5ux5sBqSvZk6AmZ5NVlROJ6wkSQ/S6
-         L6LA==
-X-Gm-Message-State: AOAM530TX5Xf96Nh8Db7m7xYQfehRw5R5TvlmdRMgSIDjEEdcIjOTvx+
-        THRTu+eqxkjp/t5MZ5d/vl6BwB5dNaRL4FEZu6w=
-X-Google-Smtp-Source: ABdhPJxA/d46RE9H4GQTXzF/TNX3u/kTmlIGcqbnPxa9ZdfsrPMGrHdSkjFe5TbP4CLzJMh6fWtkTMMP/NlorTYdmQM=
-X-Received: by 2002:a19:f705:: with SMTP id z5mr7122987lfe.395.1624457880054;
- Wed, 23 Jun 2021 07:18:00 -0700 (PDT)
+        id S231438AbhFWP42 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Wed, 23 Jun 2021 11:56:28 -0400
+Received: from [183.90.58.236] ([183.90.58.236]:51586 "EHLO ns1.zackeruz.tk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231434AbhFWP42 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 23 Jun 2021 11:56:28 -0400
+Received: from johnlewis.com (unknown [192.168.20.1])
+        by ns1.zackeruz.tk (Postfix) with ESMTPSA id B7015846328
+        for <linux-cifs@vger.kernel.org>; Wed, 23 Jun 2021 23:54:08 +0800 (+08)
+Reply-To: robert_turner@johnlewis-trading.com,
+          pippawicks.sales@johnlewis-trading.com
+From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
+To:     linux-cifs@vger.kernel.org
+Subject: 6/23/2021 Product Inquiry 
+Date:   23 Jun 2021 15:54:08 +0000
+Message-ID: <20210623094114.A65B5DD1E8B320FD@johnlewis.com>
 MIME-Version: 1.0
-References: <CAH2r5ms_paV2a7KZwWkmz25pn4iS2kEDErGpNapOWZ5Kd_bUNw@mail.gmail.com>
- <87bl7wreou.fsf@suse.com>
-In-Reply-To: <87bl7wreou.fsf@suse.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 23 Jun 2021 09:17:49 -0500
-Message-ID: <CAH2r5msXgL5PZB8k99MJW-u5bNbHY9QxS8hKUasRqYTYR-z0bQ@mail.gmail.com>
-Subject: Re: [PATCH][CIFS] Fix uninitialized pointer access to dacl_ptr in build_sec_desc
-To:     =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 6:41 AM Aur=C3=A9lien Aptel <aaptel@suse.com> wrote=
-:
->
-> Steve French <smfrench@gmail.com> writes:
->
-> >     smb3: fix possible access to uninitialized pointer to DACL
-> >
-> >     dacl_ptr can be null so we must check for it (ie if dacloffset is
-> > set) everywhere dacl_ptr is
-> >     used in build_sec_desc - and we were missing one check
-> >
-> >     Addresses-Coverity: 1475598 ("Explicit null dereference")
->
-> Looks OK since dacl_ptr is only set if dacloffset is set but it would
-> be clearer if you check for dacl_ptr directly no? Any reason you are
-> checking this way?
->
-> I think this is clearer, unless I'm missing something:
->
-> ndacl_ptr->num_aces =3D dacl_ptr ? dacl_ptr->num_aces : 0;
+Dear linux-cifs
 
-I agree that your suggestion is clearer but I was trying to match the
-existing checks in the same code.
-Will change both to your suggestion which is clearer.
+The famous brand John Lewis Partnership, is UK's largest multi-
+channel retailer with over 126 shops and multiple expansion in 
+Africa furnished by European/Asian/American products. We are 
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
 
+Your company's products are of interest to our market as we have 
+an amazing market for your products.
 
-> >
-> >
-> > --
-> > Thanks,
-> >
-> > Steve
-> > From ec06cb04376e5abc927a9b85dd768ce8728965bb Mon Sep 17 00:00:00 2001
-> > From: Steve French <stfrench@microsoft.com>
-> > Date: Tue, 22 Jun 2021 17:54:50 -0500
-> > Subject: [PATCH] smb3: fix possible access to uninitialized pointer to =
-DACL
-> >
-> > dacl_ptr can be null so we must check for it everywhere it is
-> > used in build_sec_desc.
-> >
-> > Addresses-Coverity: 1475598 ("Explicit null dereference")
-> > Signed-off-by: Steve French <stfrench@microsoft.com>
-> > ---
-> >  fs/cifs/cifsacl.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-> > index 784407f9280f..25a8139336fa 100644
-> > --- a/fs/cifs/cifsacl.c
-> > +++ b/fs/cifs/cifsacl.c
-> > @@ -1308,7 +1308,7 @@ static int build_sec_desc(struct cifs_ntsd *pntsd=
-, struct cifs_ntsd *pnntsd,
-> >               ndacl_ptr =3D (struct cifs_acl *)((char *)pnntsd + ndaclo=
-ffset);
-> >               ndacl_ptr->revision =3D
-> >                       dacloffset ? dacl_ptr->revision : cpu_to_le16(ACL=
-_REVISION);
-> > -             ndacl_ptr->num_aces =3D dacl_ptr->num_aces;
-> > +             ndacl_ptr->num_aces =3D dacloffset ? dacl_ptr->num_aces :=
- 0;
-> >
-> >               if (uid_valid(uid)) { /* chown */
-> >                       uid_t id;
-> > --
-> > 2.30.2
-> >
->
-> --
-> Aur=C3=A9lien Aptel / SUSE Labs Samba Team
-> GPG: 1839 CB5F 9F5B FB9B AA97  8C99 03C8 A49B 521B D5D3
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg,=
- DE
-> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah HRB 247165 (AG M=C3=
-=BCnchen)
->
+Provide us your current catalog through email to review more. We 
+hope to be able to order with you and start a long-term friendly,
+respectable and solid business partnership. Please we would 
+appreciate it if you could send us your stock availability via 
+email if any.
+
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we operate with over 5297 
+suppliers around the globe for the past 50 years now. For 
+immediate response Send your reply to robert_turner@johnlewis-
+trading.com for us to be able to 
+treat with care and urgency.
 
 
---=20
-Thanks,
+Best Regards
 
-Steve
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trading.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
