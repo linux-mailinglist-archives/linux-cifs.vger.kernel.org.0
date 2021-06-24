@@ -2,62 +2,178 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F40A33B3454
-	for <lists+linux-cifs@lfdr.de>; Thu, 24 Jun 2021 19:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCED53B358C
+	for <lists+linux-cifs@lfdr.de>; Thu, 24 Jun 2021 20:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbhFXRLp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 24 Jun 2021 13:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S232573AbhFXSXa (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 24 Jun 2021 14:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbhFXRLm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 24 Jun 2021 13:11:42 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD78C061760
-        for <linux-cifs@vger.kernel.org>; Thu, 24 Jun 2021 10:09:21 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id h3so7060293ilc.9
-        for <linux-cifs@vger.kernel.org>; Thu, 24 Jun 2021 10:09:21 -0700 (PDT)
+        with ESMTP id S232515AbhFXSXa (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 24 Jun 2021 14:23:30 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5534C061574
+        for <linux-cifs@vger.kernel.org>; Thu, 24 Jun 2021 11:21:09 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id hc16so10823361ejc.12
+        for <linux-cifs@vger.kernel.org>; Thu, 24 Jun 2021 11:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
-        b=p95plxgcKdT8+TUJCmcKdAyJL6L8C+j3muAeTI6tbvEOMwKUFZvBH22Z3GEGxdnUZH
-         d9XkDasjcz/bUj2n1PkWxPPQL/Sxtf1a7ckN43IkWwU4a9v6DYeOi9Tg8DPYHl700hH/
-         xlmv54Ir2NUVB8zwaX1UsxTzP5GUW3mdywmszCeflzWKbXzDgkMNhx+qVsi3FklHnD5x
-         fSDWvxz3POXOJ/0yZM+F2G99rPMTFJK+bPA5TWYu0VJpvpEjmQwRSgXLB6dx+kXpC0Uz
-         JX+JhI0lSB7VkwJTdkbApCrUx6TGzp99N5mAm/d0lil4hmexz93RFAPSpMzmwkjNchKB
-         rXTQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kR2bEq25iayABNzer0UnuSwP8khPR3/Fg6DdPD7/2MM=;
+        b=ebh6OLEody+YFSnBnP5jtDxXDQ+W8VNZoHupkDg83L0siqYH1fWGThZ1tTO9Lo/S1j
+         UOmkirHTzVTCakZiYdcKoHVEUcq2+OhBi824/drHL/K53qvAutvdAq1D+nJ71Zh4uOaS
+         Kc7awNrp2MpWaA3SxDafbulnLboggY4yYfDP2WfVROYolCCmVebn6297ZZwnPsq3sg4m
+         PosIAvJEXjtk3QLP4+tSTbrT3CzFLl1vzoIjsJuD/3XuLPlhxcDdq86P+i/osan5OeXI
+         zZgUV7XJ1CW2o9TmX/wfZWGt5IybaOMIGr7en+INwMhpSsBnZ4pGKtllVtDv5DRM39Yf
+         t8mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
-        b=H7Tij4hS66OPAGIoB2rybmyIGAaZLvrsB0I30pVcJh8XWFCXwXqNL45d/TBGCQsl1y
-         BZSGyDbpr8MnQvLcR8C9fgRHUhJqR1T6uvDNeVuCKBn4rhHAYAH4KD3/pRHwHG/KL/cd
-         /RwnhE0odOAPZ4ZkEZu8ssR3JK/0+ROJAf7b63xwmabJPqKvF5HMLs98W1rs2pb9JirT
-         d6BB2U1pv+Lpz57u46tNNOT9cfH34TAEBScC6vDCwYZtVRz7blaf6b55Ln+/J12cCjO/
-         3BJaLCroDpiMkO6QXefR7pwIL2Py2hing6veENLmSy3ITuuB8rjlawbG5yGVVc9wsdA5
-         NpHg==
-X-Gm-Message-State: AOAM5310vHNE7J4ngoHOJCYN5PM4gYImWBpV1WejtJwxG47HfEtEvxAP
-        lAvbIeAltZef7u9tWQOtdwpUDOUhh/xO0iF0sZE=
-X-Google-Smtp-Source: ABdhPJzkYUuO368jts0QgMQyJe9SHzg0U698qd8KdfojEfYsXnHtwMfPGxVHmw7fwQ64+IhHRhAEJH5nusdeW4BWzcA=
-X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr4098121ils.255.1624554560853;
- Thu, 24 Jun 2021 10:09:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kR2bEq25iayABNzer0UnuSwP8khPR3/Fg6DdPD7/2MM=;
+        b=V3WV+mN4UAROpRei8FdBOFGA+RSsvi7Cw/St/NqtjRRqNd60JEEz0V0stNQK8eoPWI
+         ea5uMjUTKYIEwUqIkwQKj8GD2MRaIRJYGtuI6XqqK4/XDsaeUxeB3nOv9xE3FmhXIemH
+         mlXcRnoP7plIYBLur4N4h/kfakyHry5zdqbuiLA3lsYVb1wXZWYl2O62syAXS1pe1zab
+         Ukvui0tBmHNDi9w1otxqxEX41Zcj0wEi/b668tU7LZtR7iPrqRALcbskiMRYA4qV5Jvl
+         U/Ws/vyXqO3i6M2rB915TP6LxTtKXq3+9Ch5otwtEYAwQHrUaObnZZKWumA0YP983f3x
+         u7Ww==
+X-Gm-Message-State: AOAM532fkpOLHVqtrm8Jn+i7bjFGnKhQeT8dwvf3w8IUTurUdu/meEUf
+        c9ev98KpONdwxmsL3ivaPLMM+UMtnn+HR4il4A==
+X-Google-Smtp-Source: ABdhPJx91W31h+sYb7wfb/54Xkg4bl26KrSb84NvWak1L0QmJ4VTAef78iFBvPVJPo26gIVFu5LGtYoNz8WddnLCS98=
+X-Received: by 2002:a17:907:7b82:: with SMTP id ne2mr6441571ejc.271.1624558868110;
+ Thu, 24 Jun 2021 11:21:08 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6638:3aa:0:0:0:0 with HTTP; Thu, 24 Jun 2021 10:09:20
- -0700 (PDT)
-Reply-To: tutywoolgar021@gmail.com
-In-Reply-To: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
-References: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
-From:   tuty woolgar <faridaamadoubas@gmail.com>
-Date:   Thu, 24 Jun 2021 17:09:20 +0000
-Message-ID: <CADB47+607zNBfYFb4bj0nUhuuYgAdwT=G_wJ9-EeV0ESHe56Jg@mail.gmail.com>
-Subject: greetings,
-To:     undisclosed-recipients:;
+References: <80F3362B-C817-4C16-A890-78ED3C6E0347@gnarbox.com>
+In-Reply-To: <80F3362B-C817-4C16-A890-78ED3C6E0347@gnarbox.com>
+From:   Pavel Shilovsky <piastryyy@gmail.com>
+Date:   Thu, 24 Jun 2021 11:20:57 -0700
+Message-ID: <CAKywueQ29aD9vc0nQFdBW6sEWtyzJo5Se8g5YDGSnHFVWfEnYA@mail.gmail.com>
+Subject: Re: SMB Partial Send Causes CIFS VFS Reconnection and File Copy Failure
+To:     David Manpearl <david@gnarbox.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-My greetings to you my friend i hope you are fine and good please respond
-back to me thanks,
+Hi David,
+
+Some issues with partial sends were fixed in the 5.1 kernel. I don't
+think the patches were backported to 4.9.
+
+In particular the following patches are needed:
+
+https://www.spinics.net/lists/linux-cifs/msg16569.html
+https://www.spinics.net/lists/linux-cifs/msg20496.html
+
+The errors may occur if an application accessing a share uses signals
+that may be triggered during system calls. Such errors should be
+handled by retrying in the userspace if getting -EINTR.
+
+--
+Best regards,
+Pavel Shilovsky
+
+=D0=B2=D1=82, 22 =D0=B8=D1=8E=D0=BD. 2021 =D0=B3. =D0=B2 20:42, David Manpe=
+arl <david@gnarbox.com>:
+
+>
+> During file copy operations from our local file system to a Synology Samb=
+a server file system from within our app, we are seeing numerous partial da=
+ta sends which appear to cause CIFS reconnections, which in turn cause the =
+copies to fail.
+> We see these errors logged by our Golang application on the following ope=
+rations:
+> os.Create
+> - tbd|ERROR [tbd/daemon] (tbd_copy_file.go:333#openWriters) Failed create=
+ file [open /media/smb_192_168_86_40_GBXShare/SHAREBOX/100MEDIA/DJI_0114.JP=
+G: no such file or directory]
+> write
+> - tbd|ERROR [tbd/daemon] (tbd_copy_file.go:440#finishFile) writer [write =
+/media/smb_192_168_86_40_GBXShare/SHAREBOX2/100MEDIA_01/DJI_0002.JPG: bad f=
+ile descriptor]
+> - tbd|ERROR [tbd/daemon] (tbd_copy_file.go:294#openWriters) Failed create=
+ file [open /media/smb_192_168_86_40_GBXShare/SHAREBOX2/100MEDIA_01/DJI_007=
+3.JPG: resource temporarily unavailable]
+> - tbd|ERROR [tbd/daemon] (tbd_copy_file.go:393#finishFile) writer [write =
+/media/smb_192_168_86_40_GBXShare/SHAREBOX2/100MEDIA_01/DJI_0072.JPG: broke=
+n pipe]
+> file.Sync
+> - tbd|ERROR [tbd/daemon] (tbd_copy_file.go:395#finishFile) sync [sync /me=
+dia/smb_192_168_86_40_GBXShare/SMBSHARE/100MEDIA_02/DJI_0014(1).JPG: input/=
+output error]
+> file.Close
+> - tbd|WARN  [tbd/daemon] (tbd_copy_file.go:435#finishFile) close [close /=
+media/smb_192_168_86_40_GBXShare/SHAREBOX2/100MEDIA_02/DJI_0097.JPG: input/=
+output error]
+>
+> Partial send log example:
+> [196361.832049] /usr/src/kernel/fs/cifs/transport.c: partial send (wanted=
+=3D65652 sent=3D116): terminating session
+>
+> Usually followed by:
+> [196361.868197] CIFS VFS: Free previous auth_key.response =3D ffff8801174=
+8b000
+>
+> - What are the scenarios in which a partial send will occur, because this=
+ does not appear to be a network issue on our side?
+>
+> - If this is expected behavior, how are we supposed to be handling the pa=
+rtial sends in userspace?
+>
+> - Are there other errors you see in the attached logs?
+>
+> Linux Kernel version: 4.9.115-yocto-standard
+> We are using the "fs/cifs/" directory from the "linux-4.9-full-backports"=
+ branch from this repo: https://github.com/smfrench/smb3-cifs-linux-stable-=
+backports
+>
+> Mount.cifs version: 6.7
+> Samba version:
+> http://192.168.86.40:5000
+> Control Panel > File Services > Max SMB3, Min SMB2.
+> Appliance: Synology:
+> Model name: DS1618
+> CPU: INTEL Atom C3538
+>
+> DebugData:
+> # cat /proc/fs/cifs/DebugData
+> Display Internal CIFS Data Structures for Debugging
+> ---------------------------------------------------
+> CIFS Version 2.11
+> Features: posix xattr
+> Active VFS Requests: 0
+> Servers:
+> Number of credits: 512 Dialect 0x202
+> 1) Name: 192.168.86.40 Uses: 1 Capability: 0x300001 Session Status: 1 TCP=
+ status: 1
+> Local Users To Server: 1 SecMode: 0x1 Req On Wire: 0
+> Shares:
+> 0) IPC: \\192.168.86.40\IPC$ Mounts: 1 DevInfo: 0x0 Attributes: 0x0
+> PathComponentMax: 0 Status: 1 type: 0
+> 1) \\192.168.86.40\GBXShare Mounts: 4 DevInfo: 0x20 Attributes: 0x5006f
+> PathComponentMax: 255 Status: 1 type: DISK
+> MIDs:
+> Number of credits: 528 Dialect 0x302
+> 2) Name: 192.168.86.40 Uses: 1 Capability: 0x300005 Session Status: 1 TCP=
+ status: 1
+> Local Users To Server: 1 SecMode: 0x1 Req On Wire: 0
+> Shares:
+> 0) IPC: \\192.168.86.40\IPC$ Mounts: 1 DevInfo: 0x0 Attributes: 0x0
+> PathComponentMax: 0 Status: 1 type: 0
+> Share Capabilities: None Share Flags: 0x0
+>
+> 1) \\192.168.86.40\GBXShare Mounts: 1 DevInfo: 0x20 Attributes: 0x5006f
+> PathComponentMax: 255 Status: 1 type: DISK
+> Share Capabilities: None Aligned, Partition Aligned, Share Flags: 0x0 Opt=
+imal sector size: 0x200
+> MIDs:
+>
+> Logs: dmesgCIFS-h.log: https://drive.google.com/file/d/1_fWpvSs5zeOFaV-Yl=
+GfW2ej3LGwFZSns/view?usp=3Dsharing
+>
+> - Thank you, David
+>
+>
