@@ -2,84 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738083B516C
-	for <lists+linux-cifs@lfdr.de>; Sun, 27 Jun 2021 05:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF01E3B5460
+	for <lists+linux-cifs@lfdr.de>; Sun, 27 Jun 2021 18:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbhF0EA7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 27 Jun 2021 00:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S230309AbhF0QjK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 27 Jun 2021 12:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhF0EA6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 27 Jun 2021 00:00:58 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F37C061574
-        for <linux-cifs@vger.kernel.org>; Sat, 26 Jun 2021 20:58:34 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a16so19234247ljq.3
-        for <linux-cifs@vger.kernel.org>; Sat, 26 Jun 2021 20:58:34 -0700 (PDT)
+        with ESMTP id S231219AbhF0QjH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 27 Jun 2021 12:39:07 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3393CC061766
+        for <linux-cifs@vger.kernel.org>; Sun, 27 Jun 2021 09:36:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id w13so15620107edc.0
+        for <linux-cifs@vger.kernel.org>; Sun, 27 Jun 2021 09:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=4ABtkD1s9mAEhA4NtrP4gst8wve3z0WbTksMxezz37k=;
-        b=iDGDari5aZDe+ofldE9/HMedBGvwLAdNvqjIPPRhLg7ei/GqNHNYCPqnMKkkbQ5kVi
-         nmAYYgRX6N/Wp/01nZnrsdf3UycTnt40fzPNje/MYrJDPkrxKEIZ/3bnSYjNNCz0k4YJ
-         aVmHZ9RW8rOwGkOFFkZSV0DH7Wv/G0zifSu5z2MlYy7/xaSaB8PryEPfKreKv82ujFLv
-         2smE+SjWH+2XLnsnFVAF73c1EfklI+o8JeEubz0hBSbuK9xEXaoL1ZS99MSKPydI79bU
-         7WNp1B7c92fHjdNaeCtIGadXmB+jO0d4AsBUuUXSLOeEN3ziOLuo41tDZ7osd0k2O0e9
-         /eEg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
+        b=TRzVylrRNx9iFuuXsJwS+vIe/9I32MEUVqszGII8D3CWeBjA0DB4W2fRTcmb3/zzMd
+         86aZhZxiPJNboe7y4bsh66XFS1uDlQEczrHcRt3XLbQzcaYlaN/2k9nNwF27CKQYkBeO
+         rf1XtHYsoM1XO0wyzH5A40eCAkQnuUACcoARFhWlEV1HEG4Nk5oDD1F+Q/0HV480aqVV
+         Ciie4m4VGu5vl1eWigwzaf8i2N0nWDyydG8qqp7p0VIqm2EMhUpdWeTU8RXKEdJiAM+C
+         od+3EmG5yJ3/2/wl+oqkqclt3YIVsMsIp6Q+/FlZU7ISgVCfgqIAX/MlBwPnOyaAWewS
+         74uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=4ABtkD1s9mAEhA4NtrP4gst8wve3z0WbTksMxezz37k=;
-        b=giMXVZPzrIo4oZcQRDlTubB4q4pRlJotZxwoR+Npo98rjbhttfc13SPK3IsLx6pQyb
-         OXTtdVc/RZl2iny/J/qTR2lPbOMHG8k53yQDqq5PiXdMMfk7mP+4LVkVsbToxWebqPVs
-         PsFuX4/oyLOjLNT4thzFIS4NIiK+IJ3Pvg2Ah7ZDh1fxmkosggY/faa91RjIwro/wZhk
-         rtQ13RzLXT06BUrCyu3ZIQmQDWbPKxdE3PwhUca01Ci9PlUFLgYGsphZJTX29Y5PiA8h
-         gJcA6gWyJd9crDrOWaG8S92Y1sVgb6lrbjVxiqpqm5Qy3w6H0+eAWWpZeHCPKr+BOkUY
-         BkfQ==
-X-Gm-Message-State: AOAM531quc5iRaEYB1Kj7eoeMihJqwQKYdOKFqfl7NHEksDHOOkPJaCM
-        kf5IYp9CfTy3PrEPw8JfcmCtXPiX3L48yLZ9Pzo=
-X-Google-Smtp-Source: ABdhPJyXFFm4c+x9ws7IHF3jOqekc3Yvrx5bdS7TgIqYaI1tkzK5xnIdgaN+eUXwFi2mRd/XHkocKpfy7OvmK6Q7CAs=
-X-Received: by 2002:a2e:a7cd:: with SMTP id x13mr14401178ljp.218.1624766311810;
- Sat, 26 Jun 2021 20:58:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
+        b=rm9vYEUbaKPpx536CL32JVzYttCKZLC5VcScvzU34imsMQBWzTygJxaSxy0qMqbLDt
+         8c5kY2ejzNUVs6Z7Y1Yv1SgDyT7aZw39vC6dFzXllNaCnGRwyOWQ4uXh9wefwYMPzN4Q
+         ZYVKmeFylLEtvtHhkLG9031wpCh7O/ogTK30qaeatbidj1dGI2U9p7DgLkrGfm2z0IiQ
+         K9Za3VMzGPLfDygmQHWR2fpL0v4fu4AdeiPICBJMA0rdCOsDIyl1mDphMCqTB1MbjJO9
+         WF+WHwcsD9R3J7vh3SHAPoHprrsN/d9icVBArk38kwoyyLOLXAlkA9PDoTtaCZhDqmZ3
+         GCLg==
+X-Gm-Message-State: AOAM531WmpMQXfhC0zHTyEvljF81lVME3ChpkDS2E5sFXvtcinG8lhL0
+        Xfb0uZ3PwnNHPOoQJuj+PDt/QuNP2EDznVwQcrY=
+X-Google-Smtp-Source: ABdhPJxtJ7Bfx1hKsVrAbwfjueJM6Ea3A1tgQJh0DbsamPsUUOmcBmrsQYjcDzDGkeMWdB8PGfzfbzC3RtyTQHbH4P0=
+X-Received: by 2002:a05:6402:2551:: with SMTP id l17mr27643970edb.15.1624811800790;
+ Sun, 27 Jun 2021 09:36:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAH2r5ms9kX=kzHneUkRXOQ-McbRxEck4uBVOQmjHq6q0rhGTCg@mail.gmail.com>
-In-Reply-To: <CAH2r5ms9kX=kzHneUkRXOQ-McbRxEck4uBVOQmjHq6q0rhGTCg@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 26 Jun 2021 22:58:21 -0500
-Message-ID: <CAH2r5muDsZJ+VVuBWEfdtSCn8-ryn-A3B_XqEMQVqS0n8D=iLg@mail.gmail.com>
-Subject: Re: Signing negotiate context
-To:     samba-technical <samba-technical@lists.samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+Received: by 2002:a17:907:2626:b029:49f:88b9:f1e4 with HTTP; Sun, 27 Jun 2021
+ 09:36:40 -0700 (PDT)
+Reply-To: Bill.Chantal.Lawrence20@europe.com
+From:   "Mrs. bill Chantal" <zasdeghyuik@gmail.com>
+Date:   Sun, 27 Jun 2021 16:36:40 +0000
+Message-ID: <CAN3i71h0KCvzjw4Xx6fAOOqpUFQS8j5k-B41xrhMJSBJJ7MYcg@mail.gmail.com>
+Subject: ATM VISA CARD COMPENSATED
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The problem turned out to be that Samba was stricter than Azure server
-in alignment - I changed it to 8 byte alignment for the new signing
-negotiate context and Samba did not error out (although ignored the
-context).   Azure was ok either way.
+Dear Friend
 
-On Sat, Jun 26, 2021 at 11:48 AM Steve French <smfrench@gmail.com> wrote:
->
-> I tried an experiment to Samba 4.13.3 and also to Azure sending the
-> new signing negotiate context during negprot.   Azure ignored it as
-> expected, but Samba server rejected it with "STATUS_INVALID_PARAMETER"
-> (it wasn't obvious at first glance what was invalid about it but
-> perhaps Samba wants different rounding than Azure).
->
-> Has anyone tested the signing negotiate context (e.g. newer Windows)
-> to Samba server?
->
-> --
-> Thanks,
->
-> Steve
+You have been compensated with the sum of 4.4 million dollars in this
+united nation the payment will be Issue into atm visa card and send to
+you from the Santander bank we need your address passport and your
+whatsapp number.
+Thanks
 
-
-
--- 
-Thanks,
-
-Steve
+Mrs. bill Chantal
