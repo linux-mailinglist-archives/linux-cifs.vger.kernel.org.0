@@ -2,62 +2,51 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E4F3BF175
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jul 2021 23:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0A53BF267
+	for <lists+linux-cifs@lfdr.de>; Thu,  8 Jul 2021 01:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbhGGVl4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 7 Jul 2021 17:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbhGGVl4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 7 Jul 2021 17:41:56 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB2FC061574
-        for <linux-cifs@vger.kernel.org>; Wed,  7 Jul 2021 14:39:15 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id i20so5681293ejw.4
-        for <linux-cifs@vger.kernel.org>; Wed, 07 Jul 2021 14:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=g1vae1LG3FtwFOOixlY8qORrKvBAmcy0KxE/TDC1jC8=;
-        b=k6GlaBGZFtLaspd2Yl/ab0P7fBh5zlwMPermxEKJ4CLJT5z9y5I7Iv31PqyzCfN/Bx
-         aiTWtD1VNSXN45b1aCbcd/9YtHb2dWVrnoSU5szGsf8s+9WbXjajck36jFSDHKYMyIy1
-         MwSJWUcnm12POrMlLTaNG3R0xKAEs4qU96yKnQjKO9rttTHjM88LDIb6hbJOMKqb3bC+
-         wAFCHpdboyLFgZTxaNmrpUqLwO43Q/zDlIYyIVnp6Z0OGic20L0bLCPsquUsNZuxPjMz
-         forOaJdqef6loHD6x2wgYTMWohN8Swath+DPHbaIqyxWQY3HGzCyxKlstEdL7g/1+Slc
-         J+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=g1vae1LG3FtwFOOixlY8qORrKvBAmcy0KxE/TDC1jC8=;
-        b=hjhjp56K2ZW2p05MUnDa49iSwYku1Fjmcj9G+ovC4dd/paGosdOyZHx259Adow6A9b
-         kVWhQYY7M/YN+ooGxeRVfhGUwsUYS9qEGqBEsO0gGBP8BNXa4kiA+cTJDRaQUYE9ap4F
-         2yNDW48LkJPXWdUFMGC4xNtzZWsqBDro8HP1TNDGXSUWE9f4aao+5/WaGr6gs0+VBGjl
-         9anrOAFLi+Xiayec8DPlBMHyh6r1W5IX/QueIdDuvCGXzyXvN7KUEJ4dWfvLnoUqbH3Q
-         XscPLRZHGJD+86ojU882L/kV+cBRhhmtAzKUbSDqQ61qRn+i4ixd+j9fXlGlFAYvERnm
-         ySAg==
-X-Gm-Message-State: AOAM533FPBHqWqMNpMDHfMq4JZ5KE8esAvXBAzPg7BVRJ1lR/xn+0ieN
-        ZZAt98ktAMngMw/joj9nRSVmqVsTASEkzNvTnSd+PWBgg3g=
-X-Google-Smtp-Source: ABdhPJxrIy4scqPm/dIjxCrAXKhbDoj6r5AJXbeKIT39cQ/BXSn1lC/q4I3FjNz5VZkYJpMDKS/qCvVr4aFhhTdwiMc=
-X-Received: by 2002:a17:907:94d5:: with SMTP id dn21mr25662856ejc.124.1625693954218;
- Wed, 07 Jul 2021 14:39:14 -0700 (PDT)
+        id S230305AbhGGX1M (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 7 Jul 2021 19:27:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25890 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230029AbhGGX1M (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 7 Jul 2021 19:27:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625700271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LmeLc7lPc5g61T/IShcxLm46LpZlNbYzG90EfaMDnvM=;
+        b=VvA37XJdL5K3e1Jzqa8QFTps8tONHmTVKOAi+nJpiKVDwWsPfdCWQwkD+yJs9iSl3ubwnr
+        qjrSsScP1Gp4lwAPjJYUjAyEZcjH7gNY3UxBh4O+WTVVukbU8jDXG4srxqp3flM0iLF2Hu
+        DjJk29iRPCwDPOumc/V6Oew6MaWPtXc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-526-hbsyB785PYuWipPwKZ2bYg-1; Wed, 07 Jul 2021 19:24:29 -0400
+X-MC-Unique: hbsyB785PYuWipPwKZ2bYg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D85B936254;
+        Wed,  7 Jul 2021 23:24:28 +0000 (UTC)
+Received: from localhost.localdomain (vpn2-54-39.bne.redhat.com [10.64.54.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 69B7A19C45;
+        Wed,  7 Jul 2021 23:24:28 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: [PATCH 0/1] cifs: use helpers when parsing uid/gid mount options and
+Date:   Thu,  8 Jul 2021 09:24:15 +1000
+Message-Id: <20210707232416.2694911-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Thu, 8 Jul 2021 07:39:02 +1000
-Message-ID: <CAN05THRJwQkqNQEZ5L8Bb070kJgFqxDxxc73w_eUk4QVr-RYog@mail.gmail.com>
-Subject: Summer of code
-To:     Stelios Malamas <smalamas02@gmail.com>,
-        =?UTF-8?Q?Aur=C3=A9lien_Aptel?= <aaptel@suse.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Stelios,
+Steve,
+This is a small patch to use the existing helpers to validate the uid/gid
+values that can be passed as mount arguments.
 
-How is the project going?
 
-
-regards
-ronnie sahlberg
