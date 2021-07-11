@@ -2,60 +2,56 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A193C364B
-	for <lists+linux-cifs@lfdr.de>; Sat, 10 Jul 2021 21:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697E33C3D14
+	for <lists+linux-cifs@lfdr.de>; Sun, 11 Jul 2021 15:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhGJTLb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 10 Jul 2021 15:11:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229771AbhGJTLb (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 10 Jul 2021 15:11:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9D3376135E;
-        Sat, 10 Jul 2021 19:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625944125;
-        bh=J62tnOvFlZ3NzEUiCOfvsPM1qImrW4OuLGRHbCiqZso=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=IsHNIVTIClVilD8vd9xU9f471MogTX9mnS5m1CSZjKhqsN+EjaGwpTUPMwdq2Yy0z
-         4L5if6RTkpvIIIkdXmK5qAuqVeJTOzxZGf0yQhvd8J5DY/m6kgZuvfKsKscGiICTv2
-         ekkCueTIGKpP2zK1b9D9QUn/i2idI7+DSJg37MvAGDtralUtnfq6tACqAyN4y8Nv3Q
-         i0EDOdAFM404yVi4ae+yyZnutG9tK/tAQihd2elnqoS+uIlZgxnhpXToMmOq892K40
-         7vnU8YRfGAm/JaAbHu2OV/6t3P+S2PJG9pw2Yn9ZXjekwjNEPlUdG94flhzxxnTu/2
-         wKyhc0PS9o6mA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9759460986;
-        Sat, 10 Jul 2021 19:08:45 +0000 (UTC)
-Subject: Re: [GIT PULL] CIFS Fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mvVySsTqqQfzZ0q9kR5qmYvmCTf_sybHLWw2UtnPAKpSA@mail.gmail.com>
-References: <CAH2r5mvVySsTqqQfzZ0q9kR5qmYvmCTf_sybHLWw2UtnPAKpSA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mvVySsTqqQfzZ0q9kR5qmYvmCTf_sybHLWw2UtnPAKpSA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.14-rc-smb3-fixes-part2
-X-PR-Tracked-Commit-Id: 4d069f6022e938bc51667da637f2483a37a77e19
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1e16624d7b4376797ede36e3c955375cf0f23298
-Message-Id: <162594412561.8052.6915530198063263616.pr-tracker-bot@kernel.org>
-Date:   Sat, 10 Jul 2021 19:08:45 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        id S232544AbhGKNsk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Sun, 11 Jul 2021 09:48:40 -0400
+Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:41900 "EHLO
+        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231658AbhGKNsk (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 11 Jul 2021 09:48:40 -0400
+X-Greylist: delayed 1808 seconds by postgrey-1.27 at vger.kernel.org; Sun, 11 Jul 2021 09:48:40 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 63A2B18454B9;
+        Sun, 11 Jul 2021 08:03:20 -0500 (-05)
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id U4vWmpV9vjsU; Sun, 11 Jul 2021 08:03:20 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 319A618454A6;
+        Sun, 11 Jul 2021 08:03:17 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id X6VVIoS17t7S; Sun, 11 Jul 2021 08:03:17 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.79.139])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 90DB418454B3;
+        Sun, 11 Jul 2021 08:03:08 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
+From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
+Date:   Sun, 11 Jul 2021 15:02:58 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210711130308.90DB418454B3@mail.07d05.mspz7.gob.ec>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Sat, 10 Jul 2021 12:22:09 -0500:
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.14-rc-smb3-fixes-part2
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1e16624d7b4376797ede36e3c955375cf0f23298
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Thank you!
+Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
