@@ -2,56 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 697E33C3D14
-	for <lists+linux-cifs@lfdr.de>; Sun, 11 Jul 2021 15:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084E43C5B23
+	for <lists+linux-cifs@lfdr.de>; Mon, 12 Jul 2021 13:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbhGKNsk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Sun, 11 Jul 2021 09:48:40 -0400
-Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:41900 "EHLO
-        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbhGKNsk (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 11 Jul 2021 09:48:40 -0400
-X-Greylist: delayed 1808 seconds by postgrey-1.27 at vger.kernel.org; Sun, 11 Jul 2021 09:48:40 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 63A2B18454B9;
-        Sun, 11 Jul 2021 08:03:20 -0500 (-05)
-Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id U4vWmpV9vjsU; Sun, 11 Jul 2021 08:03:20 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 319A618454A6;
-        Sun, 11 Jul 2021 08:03:17 -0500 (-05)
-X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
-Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id X6VVIoS17t7S; Sun, 11 Jul 2021 08:03:17 -0500 (-05)
-Received: from cris-PC.wifi (unknown [105.9.79.139])
-        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 90DB418454B3;
-        Sun, 11 Jul 2021 08:03:08 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: spende von 2,000,000 euro
-To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
-From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
-Date:   Sun, 11 Jul 2021 15:02:58 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20210711130308.90DB418454B3@mail.07d05.mspz7.gob.ec>
+        id S235437AbhGLLGh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 12 Jul 2021 07:06:37 -0400
+Received: from lgeamrelo13.lge.com ([156.147.23.53]:52930 "EHLO
+        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235410AbhGLLGg (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 12 Jul 2021 07:06:36 -0400
+X-Greylist: delayed 1799 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Jul 2021 07:06:36 EDT
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.53 with ESMTP; 12 Jul 2021 19:33:46 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: hyc.lee@gmail.com
+Received: from unknown (HELO localhost.localdomain) (10.177.225.35)
+        by 156.147.1.126 with ESMTP; 12 Jul 2021 19:33:46 +0900
+X-Original-SENDERIP: 10.177.225.35
+X-Original-MAILFROM: hyc.lee@gmail.com
+From:   Hyunchul Lee <hyc.lee@gmail.com>
+To:     Steve French <sfrench@samba.org>
+Cc:     kernel-team@lge.com, Namjae Jeon <linkinjeon@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH] cifs: fix the out of range assignment to bit fields in parse_server_interfaces
+Date:   Mon, 12 Jul 2021 19:34:02 +0900
+Message-Id: <20210712103402.15457-1-hyc.lee@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hallo mein lieber Freund
-Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
+Because the out of range assignment to bit fields
+are compiler-dependant, the fields could have wrong
+value.
 
+Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
+---
+ fs/cifs/smb2ops.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index e4c8f603dd58..232d528df230 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -557,8 +557,8 @@ parse_server_interfaces(struct network_interface_info_ioctl_rsp *buf,
+ 	p = buf;
+ 	while (bytes_left >= sizeof(*p)) {
+ 		info->speed = le64_to_cpu(p->LinkSpeed);
+-		info->rdma_capable = le32_to_cpu(p->Capability & RDMA_CAPABLE);
+-		info->rss_capable = le32_to_cpu(p->Capability & RSS_CAPABLE);
++		info->rdma_capable = le32_to_cpu(p->Capability & RDMA_CAPABLE) ? 1 : 0;
++		info->rss_capable = le32_to_cpu(p->Capability & RSS_CAPABLE) ? 1 : 0;
+ 
+ 		cifs_dbg(FYI, "%s: adding iface %zu\n", __func__, *iface_count);
+ 		cifs_dbg(FYI, "%s: speed %zu bps\n", __func__, info->speed);
+-- 
+2.17.1
 
-Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-Herr Tayeb Souami
