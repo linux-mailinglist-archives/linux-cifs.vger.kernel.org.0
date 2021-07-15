@@ -2,604 +2,606 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D46C3CAFC0
-	for <lists+linux-cifs@lfdr.de>; Fri, 16 Jul 2021 01:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC6B3CAFD8
+	for <lists+linux-cifs@lfdr.de>; Fri, 16 Jul 2021 02:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbhGOXuL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 15 Jul 2021 19:50:11 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:1258 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229783AbhGOXuK (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 15 Jul 2021 19:50:10 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FNfGGi027264;
-        Thu, 15 Jul 2021 23:47:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
- cc : references : message-id : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=nJju39mBtPu/SZQpHnthZMHF5IC1MWmytoEuSM+jd9Q=;
- b=oHjOjlr7wutKm3SjP/BXvy4WlyTB8mF+8wQnRNWrUPb94VO5ISOJxQzfR3nJS2uh5mUa
- OeYgC99i1aj7kzeVZmrZyPh56fSRPQOOZ3ukJkj+JXbPcyCEdQ1koIFbP91a0GMXawyF
- p4VP0y3u2pUb9+rnIjbxccWVFFjlJ5H8xYUxG474pcRDFNWeOwHy1doiHo0IULtIvBsi
- 6ozSmQk3h5beSsiFFVE11zeLZ/zG6UYajsq/svn+R1jrdgOOTniA/PNLoNHEsUrqaQmP
- ChPGMtihGh5xk8gMx0kPjnRAJ6387TCsMEmkHIZfE2fmpcKhWFG2UW38Gln9aMdCGXdj fQ== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
- cc : references : message-id : date : in-reply-to : content-type :
- mime-version; s=corp-2020-01-29;
- bh=nJju39mBtPu/SZQpHnthZMHF5IC1MWmytoEuSM+jd9Q=;
- b=CJqIkzDMZQ/H77cQKlqCg4Q0jvqsMuwER7sSr2/U/b7ChumsCb3J8WAskZ8UPs3WtNz+
- ydoGO1K2Pp3/UZKgADagfgMbsvqEqHsgGprAS7me5OpHFf3ibAnwF27VsKtYcI9IYyJN
- 9BFaX6ahZ5ColRojnoNrGkI3t8c44qgnjC/DPLrKGaQTNxaQzISlr03yfUXvnTQfnyMO
- m72cJmUWmFCkpxPp/vSwGcWlSk16dc4xpPSw7WPSdH8sqC9hKB0tJbYA4UUNwYh7pVYW
- BLTf3urXTV//dGj1pflIAC/G4KX8esuElkrMBnOal1vEEM1XLwx0D0Xeeva+tpc7PgGV uQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39tw3pr4ny-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jul 2021 23:47:15 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16FNenkZ181975;
-        Thu, 15 Jul 2021 23:47:14 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
-        by aserp3020.oracle.com with ESMTP id 39twnf4kps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jul 2021 23:47:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ew9Th2NBsmS9tZ+9Q8WGknl59QWUbzcjzeuhI3KVkQfNU8yVly8B0UGr4fznNAqqJaYVk1yGfAAKEdGxBBA4/0QfSBufDweG+ovnnNGmAZdDXc6sy7iIIwWqDLtVH852Y9JCHBMjm1aFKg6mosfOTQ/EzASEKW9ZbswCMWXR6eIaKdmzHb4Ycqt6c2SJ3VOopdmYV/RjZhfiZZBNiBc+xnp44+EYhKwBozX6yJx/LifBSE9h6tsccQRx9r0GaOp6bqI05AQxNVAur2z80eqv5acqY0+FBlQ2MUFHR7RiWEILDkwdB3zs0JI4pRWE+NqEKXPw5q1jv8L8fkMx82y+OA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nJju39mBtPu/SZQpHnthZMHF5IC1MWmytoEuSM+jd9Q=;
- b=f2tohy3Bd0WXn9XTnwEw8weWJ2CozZdkN/V/U6xmhrlmPHN0wAqAWG+OfY1Qh7D45k2iu6w9DO7thAqGxoN4IfnteOWRsmETDKs4tTGX4dlhp+ItuiwemJuC098DMFH/B2PI8a0qknYgkDHK5RmpVuXKWI6oN5iiB+O4RscDPSxEbPC/JrUwxZvmqzVMZkPNXO2Ks/xpxsgXXILUbbUXom7/haG1InThuU5qqXTBXTJaZ2mE2SXgKp4oWA6G92WhYctecno+WA0UtD8LbH90kIT/94aOZzVA4c1Vdi+dbTW2vUflL/C5+zsYKQmTvnnccVunP0KqByWOEU3tdq8AcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nJju39mBtPu/SZQpHnthZMHF5IC1MWmytoEuSM+jd9Q=;
- b=jF2S7EAd770MpE20eNbgPvOpnim+avh5KgVlnucNPoPN8RoliJVwoIXUFO/Ix/g+PipXzQredGMBFIhWIAj56lssbPVup2ml4GS+oMtCj7eiOZDBzVxRyk+EHlon4OdPw4rhHoRUj4YuQk44abmaDQVYQwnjBpLqP8y5H7sWVxQ=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from BY5PR10MB4257.namprd10.prod.outlook.com (2603:10b6:a03:211::21)
- by BY5PR10MB4131.namprd10.prod.outlook.com (2603:10b6:a03:206::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.23; Thu, 15 Jul
- 2021 23:47:12 +0000
-Received: from BY5PR10MB4257.namprd10.prod.outlook.com
- ([fe80::b5de:87d0:75cb:bb9e]) by BY5PR10MB4257.namprd10.prod.outlook.com
- ([fe80::b5de:87d0:75cb:bb9e%5]) with mapi id 15.20.4331.021; Thu, 15 Jul 2021
- 23:47:12 +0000
-Subject: Re: Locking issue between NFSv4 and SMB client
-From:   dai.ngo@oracle.com
-To:     Bruce Fields <bfields@fieldses.org>
-Cc:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-References: <5b7be2c0-95a6-048c-581f-17e5e3750daa@oracle.com>
-Message-ID: <777c4ec9-6dbe-503c-1295-322f9dc8a531@oracle.com>
-Date:   Thu, 15 Jul 2021 16:47:09 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
-In-Reply-To: <5b7be2c0-95a6-048c-581f-17e5e3750daa@oracle.com>
-Content-Type: multipart/mixed;
- boundary="------------03F37B337EE450A249E8E3E0"
-Content-Language: en-US
-X-ClientProxiedBy: SN7P220CA0029.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:806:123::34) To BY5PR10MB4257.namprd10.prod.outlook.com
- (2603:10b6:a03:211::21)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from dhcp-10-159-159-205.vpn.oracle.com (72.219.112.78) by SN7P220CA0029.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22 via Frontend Transport; Thu, 15 Jul 2021 23:47:11 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f966a56-2ef9-4929-1ba5-08d947eade12
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4131:
-X-Microsoft-Antispam-PRVS: <BY5PR10MB413103AACE5902D3F63B051A87129@BY5PR10MB4131.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KGSvfpLh4cm+lT7GEDuk3CO59U7tu6beTUJC0kfBr3nJzk6sczqrzV1pa9gobLZCTfDhKdAhCh7a6lEDy7ttpsWyMgG3seFWln2nmzdSphkapZpCMyKOkluPnWvZaIVTe+leEcoxRqLzlEiGsrIkkt4nAdYuq14FWvuJ4s3CgN80dqkZzeD3tus4sLRnXOZz+tBSohfm+tVTCx8JaMHfP7BwVejCUEFc5aYYODZKpALtCRn0w6Kb3QtCDLa99tbk6/SLL9rReyjgE0xp1JV9QM0nOVkMRk2UmReIjr0drVcifyvShliuTTr9fdj+Ct57b4v0Qx+8iF6Q4oqXKGyKLVxpJO1s82gKO0O1rG1YBj3DqqGxmQL26Yl5+dhWMd2uV6h/Rf9LINJenEbuso0mXAVHq1JOJ9+ZjVfXPW5AcBqWqLzWebGoL6mqXlGWAZqXjUIT7I7zFba5d0ymBnWgQOzLe2w981zdV4stUFloeyzJ+FmZaD0rCmBUJXpWMxq0EHxFMlaByzOoePQXRD8YYtKul+VE8s2vWelZSmKBkGeiunn1PFaSSHsBFOGOEUlzY5B9DHtnZszw8kNfNipJFWER2hMeG4lntleQvs3zAx/bK02LdlSbL+nKS7/Is5UsuyAH71h9JrhhA/KzbfGEN6IdH99RB/nizkCsFlnqbX+xnpKtDsd0YcNn+egco2/6F4W74c87FGCElMGmJBTatg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4257.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(366004)(396003)(39860400002)(136003)(376002)(5660300002)(2906002)(31686004)(7696005)(4326008)(956004)(316002)(8936002)(26005)(53546011)(2616005)(31696002)(33964004)(9686003)(478600001)(235185007)(83380400001)(66476007)(6916009)(36756003)(186003)(66556008)(54906003)(66576008)(86362001)(6486002)(66946007)(8676002)(21490400003)(38100700002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YmNBYUhHR1V6Z3FNejNSa2RGZlBCWG9ITDZrMVpwM1dpcmVXbXZ6R3RLRUlT?=
- =?utf-8?B?RFlGK2RSVW9ST3hSamszdnpNNXlFYzU4ZzcwMnAzN1hXVDFuYnZDWEdZUFdX?=
- =?utf-8?B?NVpNQmtOVXNHLzcxcVVLREY0L012SVUvdzQ5THdVd2JVVEFZcFU3NXZXWG5F?=
- =?utf-8?B?dEVLd3RGeW1ibW9JOTc3b0RqN1hsdFFEbjBXQjZJanVPMzBnRlk2elpjSWlY?=
- =?utf-8?B?MlBSK2ZrM3N5a0RuZ3lQWGdvQVJFQThWYkpkYlM0c3Yyd0FUSGVqaERxRHhz?=
- =?utf-8?B?WWVENVkxcHZ0T1FWRTRPS1ZMY0JDRVFhTEZHZGIxcS9ud0psa21POGp3NGlY?=
- =?utf-8?B?MWcrZlpNYUZGUUt2T2dHbDUrcWhrM1k0VmVlQjM1TFNubUd2NHAwWTRHUk5B?=
- =?utf-8?B?OWR1Q2RUTk80clEvL2lJZ3paUmw1Rlcxa2I0cXVyT2htTXVqSm8rQzlOR0NU?=
- =?utf-8?B?dDh2bEVPKy9OdmpLZTFhdUVGTUM0dGROSFFSaExxQjRHWHdWaFBSN1ROZTBS?=
- =?utf-8?B?NTE5a1VxYlRWa2ZwaTQvQUcwd1EvZjJXb0R2dGJrL25QbVFqaE00YVN5cmpU?=
- =?utf-8?B?Ly9oVVgySjROZys1VzJPeDNOMjM0RUEvdUxSRlgxNHJLaXRmREdmcklxTHo5?=
- =?utf-8?B?UjZmcGhYUll3ZTRLRnQwcTc5QWc0ZVlSaTJ4TnNPWnpHWWlManRXVDJjdXNK?=
- =?utf-8?B?eUFxYzVDOHpVMGViYzVJV2R5bmtlN2E4UG5hdnBhSE1vRXB3Yzh0bGtVWVJJ?=
- =?utf-8?B?bmRpb2JkQktuTHhTZ3ZVeGN2S2lZY1dCWkN6MXBCR3EwYUM3Vko1VktoYWFB?=
- =?utf-8?B?Uk5Yd3FVOEFtMEdsQWkrUElRTXJoWHhOaFo3VnFKTTkxUnNLVVEwMTBoMHVj?=
- =?utf-8?B?SmZDTGJDMG9zMEd0enROWE1VdTdLUWVBR0g2TEVLZnh6cWNDVHU2aE1OL3FY?=
- =?utf-8?B?Vk03dzBWTjlrR21MaGtvUDBwRVdKaE9zSkFHNHBoMVIvL1RmWkM1T1Q2cW05?=
- =?utf-8?B?M2pZMnZPSzgyOUU2ZjFvUzRPY00xdTJPZGdCaWlJdWppcmVTSTNDd1llRG12?=
- =?utf-8?B?bGs3TXpEQjJtejlzbXJlZm9EeGxRbEhwYlFNY2lxWDF4VHV0TnF6TkI3UUgr?=
- =?utf-8?B?eklMelhTeUk1dGtiNnNQMmNWOCtMdHZSNGlDakZCY255cTBVcHpxaVBNZktE?=
- =?utf-8?B?UkhqV1BTTUU3YjFpUnFVeXJuTG5oTWpwUlJnRXMvc0dBYkZ1TGxQaGN6Zlgr?=
- =?utf-8?B?K1drT2NOL3EySDhkdm90VlEraEw1cll1QmV4dXhQdys0L296N2RqMSs1Nmp4?=
- =?utf-8?B?cFpxRU5kdzFIeUdwK1d6TklmTy9talhOa05palJIZGQvQy9RMngrUFJxRE9L?=
- =?utf-8?B?RHVuTDlrb2pJTFFOYkwybkFSRnViWGN1WUJGcTdORG8vdkpDNGY0TVBTYjFU?=
- =?utf-8?B?Wmw4RDc3WllFdW55N1VhS1EzajNXZWRUQ3JCSGw5ODRvOTg2RFhUOG9qN1N1?=
- =?utf-8?B?RGJKQnN0UDJqTXRTT1pMOEo4VnJ5UXM5Zll5dDdhVTk5M0RLTjlTM2JmQkEy?=
- =?utf-8?B?L2tweHh6NTB4b0QzSEpKZTVBdnN1QjJWUTcxZmZnUlcvd3RCL2VDRmdPYmpI?=
- =?utf-8?B?UjhXc1VjRmlFSTdiODAzNC95Y3llbnFxbkhnRmNwamNHa2hRTTFHdW9HbHlh?=
- =?utf-8?B?NU1TUjNpSDlTSnBYNEk1Q0F3Qjd6aVFWNlFiYUp3b0I2UGJ6Mm8xQlhFYjJk?=
- =?utf-8?Q?TVc8u7uJOnVQjP66QdqoK00JhP+eJFpSgtbvV/m?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f966a56-2ef9-4929-1ba5-08d947eade12
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4257.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2021 23:47:12.5374
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2FeEFCGiiFpLMoYfd/idiYA/658713YN/mEd5B8nkaJHEhR7ksc37xwCkg3gkvB0pAy/RAR1nad6NSq9/dBgxw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4131
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10046 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107150154
-X-Proofpoint-GUID: BOfxrtJyWvIAthxmVvaK2OQJi9ZLmO5r
-X-Proofpoint-ORIG-GUID: BOfxrtJyWvIAthxmVvaK2OQJi9ZLmO5r
+        id S230480AbhGPAGy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 15 Jul 2021 20:06:54 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:33820 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232425AbhGPAGx (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Jul 2021 20:06:53 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210716000357epoutp041c14c2526a18059a8bdf38920c3523b1~SHJP0hlQB1788017880epoutp04K
+        for <linux-cifs@vger.kernel.org>; Fri, 16 Jul 2021 00:03:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210716000357epoutp041c14c2526a18059a8bdf38920c3523b1~SHJP0hlQB1788017880epoutp04K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1626393837;
+        bh=yU3KZyXTrzgxqE0Q8hBmkykbASOAQEMtl9FFmpC1S5I=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=T/Hp87FbhdByu7kmKdjR/8GoF2z0JVmT0Ipgpv9Zi83oGi8S2MClm1ZxnlDtRpHZ/
+         nxlL8r7RyCfU1uCiPtDbaT7J7j0ewwKQsY4QUL7dW1lnmXMLSFXpVv8vqY1vPjmDlh
+         DhjLhotaqs2XTtZXaG9VdaR4wg9cFmlEJdaYIZJA=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20210716000354epcas1p3ea28cc7239bb470593c590c9ddc13f92~SHJNh1ZXm2936229362epcas1p3P;
+        Fri, 16 Jul 2021 00:03:54 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.166]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4GQs0T4RBSz4x9QB; Fri, 16 Jul
+        2021 00:03:53 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        35.0E.13454.9ECC0F06; Fri, 16 Jul 2021 09:03:53 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20210716000346epcas1p4fecf8bdde87dd76457b739fc3c1812a3~SHJGN35cC1090310903epcas1p4D;
+        Fri, 16 Jul 2021 00:03:46 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210716000346epsmtrp18bc7a1f3dd729240c0657b008f2154ac~SHJGMt-f82064220642epsmtrp1g;
+        Fri, 16 Jul 2021 00:03:46 +0000 (GMT)
+X-AuditID: b6c32a39-16fff7000002348e-cd-60f0cce9de05
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        69.8E.08289.2ECC0F06; Fri, 16 Jul 2021 09:03:46 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.89.31.111]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210716000346epsmtip265460fcf29e1ed1aeac9ac6f46a44b60~SHJF5jsuP1664016640epsmtip2P;
+        Fri, 16 Jul 2021 00:03:46 +0000 (GMT)
+From:   Namjae Jeon <namjae.jeon@samsung.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Cc:     linux-cifsd-devel@lists.sourceforge.net, aurelien.aptel@gmail.com,
+        senozhatsky@chromium.org, sandeen@sandeen.net, willy@infradead.org,
+        hch@infradead.org, viro@zeniv.linux.org.uk,
+        ronniesahlberg@gmail.com, dan.carpenter@oracle.com, hch@lst.de,
+        christian@brauner.io, smfrench@gmail.com, hyc.lee@gmail.com,
+        Namjae Jeon <namjae.jeon@samsung.com>
+Subject: [PATCH v6 00/13] ksmbd: introduce new SMB3 kernel server
+Date:   Fri, 16 Jul 2021 08:53:43 +0900
+Message-Id: <20210715235356.3191-1-namjae.jeon@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmvu7LMx8SDH4fEbM4/vovu0XjO2WL
+        1/+ms1icnrCIyWLl6qNMFtfuv2e3ePF/F7PFz//fGS327D3JYnF51xw2ix/T6y16+z6xWrRe
+        0bLYvXERm8WbF4fZLM7/Pc5q8fvHHDYHQY+/cz8ye8xuuMjisXPWXXaPzSu0PHYv+Mzksftm
+        A5vHx6e3WDz6tqxi9Niy+CGTx+dNch6bnrxlCuCOyrHJSE1MSS1SSM1Lzk/JzEu3VfIOjneO
+        NzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAXpJSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKr
+        lFqQklNgaFCgV5yYW1yal66XnJ9rZWhgYGQKVJmQk7Fo7yumgk2HGCve/7zF2MC4cgJjFyMn
+        h4SAiUTb+gbmLkYuDiGBHYwSu65OZoNwPjFKTHzUzQjhfGaUeLRrJTNMy8bry1ghErsYJZp+
+        T2OBa7l9rIW9i5GDg01AW+LPFlGQBhGBWIkbO16D7WAWeMgkcWTyI2aQGmEBR4nmOREgNSwC
+        qhK3H/1jAbF5Bawl3n9/wQSxTF5i9YYDYL0SAks5JNZMfcUI0ish4CKx8bYVRI2wxKvjW9gh
+        bCmJl/1tUHa5xImTv6Dm1EhsmLePHaLVWKLnRQmIySygKbF+lz5EhaLEzt9zwaHCLMAn8e5r
+        DytENa9ER5sQRImqRN+lw1ADpSW62j9ALfKQ2PznGZgtBPTswd7PTBMYZWchLFjAyLiKUSy1
+        oDg3PbXYsMAUOZI2MYKTqZblDsbpbz/oHWJk4mA8xCjBwawkwrvU6G2CEG9KYmVValF+fFFp
+        TmrxIUZTYGhNZJYSTc4HpvO8knhDUyNjY2MLEzNzM1NjJXHenWyHEoQE0hNLUrNTUwtSi2D6
+        mDg4pRqYQqqlW+ZvqrxWKsK2feqbC/HFDxZ3MFUeYlqbMmvGtoW9WmbtxbHtnyY+Ebz/6riA
+        5nwW5rnrFHT6+eSvHPim6bh94YMZk16y6Lhyqe5L/qDwsfh7m5KO1AariOUv/eYFm+8y2+Gj
+        31e4a25jkvjd9LWW+5rP91fL8UTFSvHw9F792N9ZtFA1/sgtruzv/ayBc9P7HPn21Uw8+Kq5
+        01rFYt0B1t9mYQv2Gq9/tuiU6y8F/T9rnuzfldmjtDtkdr702xn3xP+Wv1cz27tPfu2C4y0t
+        6m/2f5qyf/m9M0JvJ3hnmf+/ozjP6kmd4q/srtXiNYX7vq/MmZ8gbMg962aohFj1mSnpYhoi
+        WyV/v2PIVGIpzkg01GIuKk4EALknsscvBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNLMWRmVeSWpSXmKPExsWy7bCSvO6jMx8SDOY91LE4/vovu0XjO2WL
+        1/+ms1icnrCIyWLl6qNMFtfuv2e3ePF/F7PFz//fGS327D3JYnF51xw2ix/T6y16+z6xWrRe
+        0bLYvXERm8WbF4fZLM7/Pc5q8fvHHDYHQY+/cz8ye8xuuMjisXPWXXaPzSu0PHYv+Mzksftm
+        A5vHx6e3WDz6tqxi9Niy+CGTx+dNch6bnrxlCuCO4rJJSc3JLEst0rdL4MpYtPcVU8GmQ4wV
+        73/eYmxgXDmBsYuRk0NCwERi4/VlrF2MXBxCAjsYJZZ9vcEMkZCWOHbiDJDNAWQLSxw+XAxR
+        84FR4uaCw2wgcTYBbYk/W0RBykUE4iVuNtxmAalhFvjMJLH62gYmkBphAUeJ5jkRIDUsAqoS
+        tx/9YwGxeQWsJd5/f8EEsUpeYvWGA8wTGHkWMDKsYpRMLSjOTc8tNiwwykst1ytOzC0uzUvX
+        S87P3cQIDm8trR2Me1Z90DvEyMTBeIhRgoNZSYR3qdHbBCHelMTKqtSi/Pii0pzU4kOM0hws
+        SuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY7F0aUiNOGe7nyt7rrBZ5JOmdiGzSct7nB1Jn
+        TC+rWn6Bc++KuTarF1ev2Rix52pStZfG9zfTLZ6+2LdGIrl6spPE4nveL/aYFLi2GK36mr1y
+        WUHgEm6Wt8+X6Iqwd6rxWe44XndcPvOJgLaP4oer3Z/7ih5Wib1odpF4mJO4V9MlfNmkT23m
+        OtUuued2mX3uW3/X5l2oneuqxH+8zQ0SZ0VXaOtvVtp/iYF3oujrOW0TppjM7tlnfoKhvKBu
+        e5bjnNlxv9uCvWdfDP2s9EtAZMMEJvZznDz7/2mI/Pth+1WB9U6M30zmiJs9fhz7//V9Opxu
+        dGXm3P2PhB/qm035yT1/m4b76t5recWrr724qMRSnJFoqMVcVJwIAOo1AfLeAgAA
+X-CMS-MailID: 20210716000346epcas1p4fecf8bdde87dd76457b739fc3c1812a3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210716000346epcas1p4fecf8bdde87dd76457b739fc3c1812a3
+References: <CGME20210716000346epcas1p4fecf8bdde87dd76457b739fc3c1812a3@epcas1p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---------------03F37B337EE450A249E8E3E0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+This is the patch series for ksmbd kernel server.
 
-Oops I forgot the pcap files
+What is ksmbd ?
+===============
 
--Dai
+The SMB family of protocols is the most widely deployed
+network filesystem protocol, the default on Windows and Macs (and even
+on many phones and tablets), with clients and servers on all major
+operating systems, but lacked a kernel server for Linux. For many
+cases the current userspace server choices were suboptimal
+either due to memory footprint, performance or difficulty integrating
+well with advanced Linux features.
 
-On 7/15/21 4:45 PM, dai.ngo@oracle.com wrote:
-> Hi Bruce,
->
-> I'm doing some locking testing between NFSv4 and SMB client and
-> think there are some issues on the server that allows both clients
-> to lock the same file at the same time.
->
-> Here is what I did:
->
-> NOTE: lck is a simple program that use lockf(3) to lock a file from
-> offset 0 to the length specified by '-l'.
->
-> On NFSv4 client
-> ---------------
->
-> [root@nfsvmd07 ~]# nfsstat -m
-> /tmp/mnt from nfsvmf24:/root/smb_share
-> Flags: rw,relatime,vers=4.1,rsize=1048576,wsize=1048576,namlen=255,hard,
-> proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=10.80.62.47,
->        local_lock=none,addr=10.80.111.94
-> [root@nfsvmd07 ~]#
->
->
-> [root@nfsvmd07 ~]# ./lck -p /tmp/mnt/messages -W -l 100000000
-> Lck/file: 1, Maxlocks: 10000000
-> Locking[/tmp/mnt/messages] Offset[0] Len[100000000] N[0]...doing F_LOCK..
-> LOCKED...
->
-> Locks[1] files[1] took[2.000s] sleep waiting...Hit Control-C to stop
->
-> [NFS client successfully locks the file]
->
-> On SMB client
-> -------------
->
-> [root@nfsvme24 ~]# mount |grep cifs
-> //nfsvmf24/smb_share on /tmp/mnt type cifs 
-> (rw,relatime,vers=3.1.1,cache=strict,username=root,uid=0,noforceuid,gid=0,noforcegid,addr=10.80.111.94,file_mode=0755,dir_mode=0755,soft,nounix,serverino,mapposix,rsize=4194304,wsize=4194304,bsize=1048576,echo_interval=60,actimeo=1)
-> [root@nfsvme24 ~]#
->
-> [root@nfsvme24 ~]# smbclient -L nfsvmf24
-> Enter SAMBA\root's password:
->
->     Sharename       Type      Comment
->     ---------       ----      -------
->     print$          Disk      Printer Drivers
->     smb_share       Disk      Test Samba Share       <<===== share to 
-> mount
->     IPC$            IPC       IPC Service (Samba 4.10.16)
->     root            Disk      Home Directories
-> Reconnecting with SMB1 for workgroup listing.
->
->     Server               Comment
->     ---------            -------
->
->     Workgroup            Master
->     ---------            -------
-> [root@nfsvme24 ~]#
->
-> [root@nfsvme24 ~]# ./lck -p /tmp/mnt/messages -W -l 100000000
-> Lck/file: 1, Maxlocks: 10000000
-> Locking[/tmp/mnt/messages] Offset[0] Len[100000000] N[0]...doing F_LOCK..
-> LOCKED...
->
-> Locks[1] files[1] took[2.000s] sleep waiting...Hit Control-C to stop
->
-> [SMB client successfully locks the file]
->
-> The same issue happens when either client locks the file first.
-> I think this is what has happened:
->
-> 1. NFSv4 client opens and locks the file first
->
->     . NFSv4 client send OPEN and LOCK to server, server replies
->       OK on both requests.
->
->     . SMB client sends create request with Oplock==Lease for
->       the same file.
->
->     . server holds off on replying to SMB client's create request,
->       recalls delegation from NFSv4 client, waits for NFSv4 client
->       to return the delegation then replies success to SMB client's
->       create request with lease granted (Oplock==Lease).
->
->       NOTE: I think SMB server should replies the create request
->       with Oplock==None to force the SMB client to sends the
->       lock request.
->
->     . Once SMB client receives the reply of the create with
->       'Oplock==Lease', it assumes it has full control of the file
->       therefor it does not need to send the lock request.
->
->     . both NFSv4 and SMB client now think they have locked the file.
->
-> pcap:  nfs_lock_smb_lock.pcap
->
-> 2. SMB client creates the file with 'Oplock==Lease' first
->
->     . SMB sends create request with 'Oplock==Lease' to server,
->       server replies OK with 'Oplock==Lease'. SMB client skips
->       sending lock request since it assumes it has full control
->       of the file with the lease.
->
->     . NFSv4 client sends OPEN to server, server replies OK with
->       delagation is none. NFSv4 client sends LOCK request, since
->       no lock was created in the kernel for the SMB client, the
->       lock was granted to the NFSv4 client.
->
->      NOTE: I think the SMB server should send lease break
->      notification to the SMB client, wait for the lease break
->      acknowledgment from SMB client before replying to the
->      OPEN of the NFSv4 client. This will force the SMB client
->      to send the lock request to the server.
->
->     . both NFSv4 and SMB client now think they have locked the file.
->
-> Your thought?
->
-> Thanks,
->
-> -Dai
->
+ksmbd is a new kernel module which implements the server-side of the SMB3 protocol.
+The target is to provide optimized performance, GPLv2 SMB server, better
+lease handling (distributed caching). The bigger goal is to add new
+features more rapidly (e.g. RDMA aka "smbdirect", and recent encryption
+and signing improvements to the protocol) which are easier to develop
+on a smaller, more tightly optimized kernel server than for example
+in Samba.  The Samba project is much broader in scope (tools, security services,
+LDAP, Active Directory Domain Controller, and a cross platform file server
+for a wider variety of purposes) but the user space file server portion
+of Samba has proved hard to optimize for some Linux workloads, including
+for smaller devices. This is not meant to replace Samba, but rather be
+an extension to allow better optimizing for Linux, and will continue to
+integrate well with Samba user space tools and libraries where appropriate.
+Working with the Samba team we have already made sure that the configuration
+files and xattrs are in a compatible format between the kernel and
+user space server.
 
---------------03F37B337EE450A249E8E3E0
-Content-Type: application/octet-stream; x-mac-type="0"; x-mac-creator="0";
- name="nfs_lock_smb_lock.pcap"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="nfs_lock_smb_lock.pcap"
 
-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
+Architecture
+============
 
---------------03F37B337EE450A249E8E3E0
-Content-Type: application/octet-stream; x-mac-type="0"; x-mac-creator="0";
- name="smb_lock_nfs_lock.pcap"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="smb_lock_nfs_lock.pcap"
+               |--- ...
+       --------|--- ksmbd/3 - Client 3
+       |-------|--- ksmbd/2 - Client 2
+       |       |         ____________________________________________________
+       |       |        |- Client 1                                          |
+<--- Socket ---|--- ksmbd/1   <<= Authentication : NTLM/NTLM2, Kerberos      |
+       |       |      | |     <<= SMB engine : SMB2, SMB2.1, SMB3, SMB3.0.2, |
+       |       |      | |                SMB3.1.1                            |
+       |       |      | |____________________________________________________|
+       |       |      |
+       |       |      |--- VFS --- Local Filesystem
+       |       |
+KERNEL |--- ksmbd/0(forker kthread)
+---------------||---------------------------------------------------------------
+USER           ||
+               || communication using NETLINK
+               ||  ______________________________________________
+               || |                                              |
+        ksmbd.mountd <<= DCE/RPC(srvsvc, wkssvc, samr, lsarpc)   |
+               ^  |  <<= configure shares setting, user accounts |
+               |  |______________________________________________|
+               |
+               |------ smb.conf(config file)
+               |
+               |------ ksmbdpwd.db(user account/password file)
+                            ^
+  ksmbd.adduser ------------|
 
-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
+The subset of performance related operations(open/read/write/close etc.) belong
+in kernelspace(ksmbd) and the other subset which belong to operations(DCE/RPC,
+user account/share database) which are not really related with performance are
+handled in userspace(ksmbd.mountd).
 
---------------03F37B337EE450A249E8E3E0--
+When the ksmbd.mountd is started, It starts up a forker thread at initialization
+time and opens a dedicated port 445 for listening to SMB requests. Whenever new
+clients make request, Forker thread will accept the client connection and fork
+a new thread for dedicated communication channel between the client and
+the server.
+
+
+ksmbd feature status
+====================
+
+============================== =================================================
+Feature name                   Status
+============================== =================================================
+Dialects                       Supported. SMB2.1 SMB3.0, SMB3.1.1 dialects
+                               (intentionally excludes security vulnerable SMB1 dialect).
+Auto Negotiation               Supported.
+Compound Request               Supported.
+Oplock Cache Mechanism         Supported.
+SMB2 leases(v1 lease)          Supported.
+Directory leases(v2 lease)     Planned for future.
+Multi-credits                  Supported.
+NTLM/NTLMv2                    Supported.
+HMAC-SHA256 Signing            Supported.
+Secure negotiate               Supported.
+Signing Update                 Supported.
+Pre-authentication integrity   Supported.
+SMB3 encryption(CCM, GCM)      Supported. (CCM and GCM128 supported, GCM256 in progress)
+SMB direct(RDMA)               Partially Supported. SMB3 Multi-channel is required
+                               to connect to Windows client.
+SMB3 Multi-channel             In Progress.
+SMB3.1.1 POSIX extension       Supported.
+ACLs                           Partially Supported. only DACLs available, SACLs
+                               (auditing) is planned for the future. For
+                               ownership (SIDs) ksmbd generates random subauth
+                               values(then store it to disk) and use uid/gid
+                               get from inode as RID for local domain SID.
+                               The current acl implementation is limited to
+                               standalone server, not a domain member.
+                               Integration with Samba tools is being worked on to
+                               allow future support for running as a domain member.
+Kerberos                       Supported.
+Durable handle v1,v2           Planned for future.
+Persistent handle              Planned for future.
+SMB2 notify                    Planned for future.
+Sparse file support            Supported.
+DCE/RPC support                Partially Supported. a few calls(NetShareEnumAll,
+                               NetServerGetInfo, SAMR, LSARPC) that are needed 
+                               for file server handled via netlink interface from
+                               ksmbd.mountd. Additional integration with Samba
+                               tools and libraries via upcall is being investigated
+                               to allow support for additional DCE/RPC management
+                               calls (and future support for Witness protocol e.g.)
+ksmbd/nfsd interoperability    Planned for future. The features that ksmbd
+                               support are Leases, Notify, ACLs and Share modes.
+============================== =================================================
+
+All features required as file server are currently implemented in ksmbd.
+In particular, the implementation of SMB Direct(RDMA) is only currently
+possible with ksmbd (among Linux servers)
+
+
+Stability
+=========
+
+It has been proved to be stable. A significant amount of xfstests pass and
+are run regularly from Linux to Linux:
+
+  http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/53
+
+In addition regression tests using the broadest SMB3 functional test suite
+(Samba's "smbtorture") are run on every checkin. 
+It has already been used by many other open source toolkits and commercial companies
+that need NAS functionality. Their issues have been fixed and contributions are
+applied into ksmbd. Ksmbd has been well tested and verified in the field and market.
+
+
+Mailing list and repositories
+=============================
+ - linux-cifsd-devel@lists.sourceforge.net
+ - https://github.com/smfrench/smb3-kernel/tree/cifsd-for-next
+ - https://github.com/cifsd-team/ksmbd (out-of-tree)
+ - https://github.com/cifsd-team/ksmbd-tools
+
+
+How to run ksmbd 
+================
+
+   a. Download ksmbd-tools and compile them.
+	- https://github.com/cifsd-team/ksmbd-tools
+
+   b. Create user/password for SMB share.
+
+	# mkdir /etc/ksmbd/
+	# ksmbd.adduser -a <Enter USERNAME for SMB share access>
+
+   c. Create /etc/ksmbd/smb.conf file, add SMB share in smb.conf file
+	- Refer smb.conf.example and Documentation/configuration.txt
+	  in ksmbd-tools
+
+   d. Insert ksmbd.ko module
+
+	# insmod ksmbd.ko
+
+   e. Start ksmbd user space daemon
+	# ksmbd.mountd
+
+   f. Access share from Windows or Linux using SMB 
+       e.g. "mount -t cifs //server/share /mnt ..."
+
+v6:
+ - Fix read on the uninitialized pointer sess. (Colin Ian King)
+ - call mnt_user_ns once in a function.
+ - remove unneeded NULL check in for_each_netdev. (Coverity Scan)
+ - fix read on the uninitialized send_ctx. (Coverity Scan)
+ - fix memory leak smb2_populate_readdir_entry(). (Coverity Scan)
+ - fix memory leak in smb_inherit_dacl(). (Coverity Scan)
+ - change data type of volatile/persistent id to u64. (Dan Carpenter)
+ - delete some stray tabs. (Dan Carpenter)
+ - use kasprintf() in ksmbd_vfs_xattr_stream_name(). (Dan Carpenter)
+ - fix the running request count decrement.
+ - free ksmbd_lock when file is closed.
+ - make smb2_find_context_vals return NULL if not found. (Dan Carpenter)
+ - handle error cases first in smb2_create_sd_buffers (Dan Carpenter)
+ - remove unneeded check_context_err. (Coverity Scan)
+ - fix memory leak in ksmbd_vfs_get_sd_xattr(). (Coverity Scan)
+ - fix unused err value in smb2_lock. (Coverity Scan)
+ - set RDMA capability for FSCTL_QUERY_NETWORK_INTERFACE_INFO.
+ - fix an error message in ksmbd_conn_trasnport_init.
+ - fix typo in comment.
+
+v5:
+ - fix list_add double add BUG_ON trap in setup_async_work().
+ - set epoch in smb2_lease_break response.
+ - fix possible compile error for asn1.c.
+ - remove duplicated argument. (Wan Jiabing)
+ - append ksmbd prefix into names for asn1 decoder.
+ - fix kfree of uninitialized pointer oid. (Colin Ian King)
+ - add support for SMB3 multichannel.
+ - remove cache read/trans buffer support. (Christoph Hellwig)
+ - initialize variables on the declaration. (Christoph Hellwig)
+ - remove ksmbd_vfs_copy_file_range. (Christoph Hellwig)
+ - use list_for_each_entry instead of list_for_each. (Christoph Hellwig)
+ - use goto instead of duplicating the resoure cleanup in ksmbd_open_fd. (Christoph Hellwig)
+ - fix overly long line. (Christoph Hellwig)
+ - remove unneeded FIXME comment. (Christoph Hellwig)
+ - remove ____ksmbd_align in ksmbd_server.h. (Christoph Hellwig)
+ - replace KSMBD_SHARE_CONFIG_PATH with inline function. (Christoph Hellwig)
+ - remove ksmbd_err/info. (Christoph Hellwig)
+ - opencode to avoid trivial wrappers. (Christoph Hellwig)
+ - factor out a ksmbd_validate_entry_in_use helper from __ksmbd_vfs_rename. (Christoph Hellwig)
+ - opencode posix acl functions instead of wrappers. (Christoph Hellwig)
+ - change stream type macro to enumeration. (Christoph Hellwig)
+ - use f_bsize instead of q->limits.logical_block_size. (Christoph Hellwig)
+ - remove unneeded NULL check in the list iterator. (Dan Carpenter)
+ - use f_bsize in FS_SECTOR_SIZE_INFORMATION. (Christoph Hellwig)
+ - move fs/cifsd to fs/ksmbd. (Christoph Hellwig)
+ - factor out a ksmbd_vfs_lock_parent helper. (Christoph Hellwig)
+ - set MAY_* flags together with open flags. (Christoph Hellwig)
+ - reorder and document on-disk strctures and netlink structure in headers. (Christoph Hellwig)
+ - remove macros in transport_ipc.c.
+ - replace BUFFER_NR_PAGES with inline function.
+ - replace KSMBD_ALIGN with kernel ALIGN macro.
+ - replace PAYLOAD_HEAD with inline function.
+ - remove getting worker state macros.
+ - remove and replace macros with inline functions in smb_common.h. (Christoph Hellwig)
+ - replace SMB_DIRECT_TRANS macro with inline function. (Christoph Hellwig)
+ - replace request and respone buffer macro with inline functions. (Christoph Hellwig)
+ - allow PROTECTED_DACL_SECINFO and UNPROTECTED_DACL_SECINFO addition information.
+ - replace fp macros with inline functions.
+ - relax credit_charge check in smb2_validate_credit_charge(). (Marios Makassikis).
+ - add user namespace support. (Christoph Hellwig)
+
+v4:
+ - add goto fail in asn1_oid_decode() (Dan Carpenter)
+ - use memcmp instead of for loop check in oid_eq(). (Dan Carpenter)
+ - add goto fail in neg_token_init_mech_type(). (Dan Carpenter)
+ - move fips_enabled check before the str_to_key(). (Dan Carpenter)
+ - just return smbhash() instead of using rc return value. (Dan Carpenter)
+ - move ret check before the out label. (Dan Carpenter)
+ - simplify error handling in ksmbd_auth_ntlm(). (Dan Carpenter)
+ - remove unneeded type casting. (Dan Carpenter)
+ - set error return value for memcmp() difference. (Dan Carpenter)
+ - return zero in always success case. (Dan Carpenter)
+ - never return 1 on failure. (Dan Carpenter)
+ - add the check if nvec is zero. (Dan Carpenter)
+ - len can never be negative in ksmbd_init_sg(). (Dan Carpenter)
+ - remove unneeded initialization of rc variable in ksmbd_crypt_message(). (Dan Carpenter)
+ - fix wrong return value in ksmbd_crypt_message(). (Dan Carpenter)
+ - change success handling to failure handling. (Dan Carpenter)
+ - add default case in switch statment in alloc_shash_desc().(Dan Carpenter)
+ - call kzalloc() directly instead of wrapper. (Dan Carpenter)
+ - simplify error handling in ksmbd_gen_preauth_integrity_hash(). (Dan Carpenter)
+ - return -ENOMEM about error from ksmbd_crypto_ctx_find_xxx calls. (Dan Carpenter)
+ - alignment match open parenthesis. (Dan Carpenter)
+ - add the check to prevent potential overflow with smb_strtoUTF16() and
+   UNICODE_LEN(). (Dan Carpenter)
+ - braces {} should be used on all arms of this statement.
+ - spaces preferred around that '/'.
+ - don't use multiple blank lines.
+ - No space is necessary after a cast.
+ - Blank lines aren't necessary after an open brace '{'.
+ - remove unnecessary parentheses around.
+ - Prefer kernel type 'u16' over 'uint16_t'.
+ - lookup a file with LOOKUP_FOLLOW only if 'follow symlinks = yes'.
+ - fix Control flow issues in ksmbd_build_ntlmssp_challenge_blob().
+ - fix memleak in ksmbd_vfs_stream_write(). (Yang Yingliang)
+ - fix memleak in ksmbd_vfs_stream_read(). (Yang Yingliang)
+ - check return value of ksmbd_vfs_getcasexattr() correctly.
+ - fix potential read overflow in ksmbd_vfs_stream_read().
+
+v3:
+ - fix boolreturn.cocci warnings. (kernel test robot)
+ - fix xfstests generic/504 test failure.
+ - do not use 0 or 0xFFFFFFFF for TreeID. (Marios Makassikis)
+ - add support for FSCTL_DUPLICATE_EXTENTS_TO_FILE.
+ - fix build error without CONFIG_OID_REGISTRY. (Wei Yongjun)
+ - fix invalid memory access in smb2_write(). (Coverity Scan)
+ - add support for AES256 encryption.
+ - fix potential null-ptr-deref in destroy_previous_session(). (Marios Makassikis).
+ - update out_buf_len in smb2_populate_readdir_entry(). (Marios Makassikis)
+ - handle ksmbd_session_rpc_open() failure in create_smb2_pipe(). (Marios Makassikis)
+ - call smb2_set_err_rsp() in smb2_read/smb2_write error path. (Marios Makassikis)
+ - add ksmbd/nfsd interoperability to feature table. (Amir Goldstein)
+ - fix regression in smb2_get_info. (Sebastian Gottschall)
+ - remove is_attributes_write_allowed() wrapper. (Marios Makassikis)
+ - update access check in set_file_allocation_info/set_end_of_file_info. (Marios Makassikis)
+
+v2:
+ - fix an error code in smb2_read(). (Dan Carpenter)
+ - fix error handling in ksmbd_server_init() (Dan Carpenter)
+ - remove redundant assignment to variable err. (Colin Ian King)
+ - remove unneeded macros.
+ - fix wrong use of rw semaphore in __session_create().
+ - use kmalloc() for small allocations.
+ - add the check to work file lock and rename behaviors like Windows
+   unless POSIX extensions are negotiated.
+ - clean-up codes using chechpatch.pl --strict.
+ - merge time_wrappers.h into smb_common.h.
+ - fix wrong prototype in comment (kernel test robot).
+ - fix implicit declaration of function 'groups_alloc' (kernel test robot).
+ - fix implicit declaration of function 'locks_alloc_lock' (kernel test robot).
+ - remove smack inherit leftovers.
+ - remove calling d_path in error paths.
+ - handle unhashed dentry in ksmbd_vfs_mkdir.
+ - use file_inode() instead of d_inode().
+ - remove useless error handling in ksmbd_vfs_read.
+ - use xarray instead of linked list for tree connect list.
+ - remove stale prototype and variables.
+ - fix memory leak when loop ends (coverity-bot, Muhammad Usama Anjum).
+ - use kfree to free memory allocated by kmalloc or kzalloc (Muhammad Usama Anjum).
+ - fix memdup.cocci warnings (kernel test robot)
+ - remove wrappers of kvmalloc/kvfree.
+ - change the reference to configuration.txt (Mauro Carvalho Chehab).
+ - prevent a integer overflow in wm_alloc().
+ - select SG_POOL for SMB_SERVER_SMBDIRECT. (Zhang Xiaoxu).
+ - remove unused including <linux/version.h> (Tian Tao).
+ - declare ida statically.
+ - add the check if parent is stable by unexpected rename.
+ - get parent dentry from child in ksmbd_vfs_remove_file().
+ - re-implement ksmbd_vfs_kern_path.
+ - fix reference count decrement of unclaimed file in __ksmbd_lookup_fd.
+ - remove smb2_put_name(). (Marios Makassikis).
+ - remove unused smberr.h, nterr.c and netmisc.c.
+ - fix potential null-ptr-deref in smb2_open() (Marios Makassikis).
+ - use d_inode().
+ - remove the dead code of unimplemented durable handle.
+ - use the generic one in lib/asn1_decoder.c
+
+v1:
+ - fix a handful of spelling mistakes (Colin Ian King)
+ - fix a precedence bug in parse_dacl() (Dan Carpenter)
+ - fix a IS_ERR() vs NULL bug (Dan Carpenter)
+ - fix a use after free on error path  (Dan Carpenter)
+ - update cifsd.rst Documentation
+ - remove unneeded FIXME comments
+ - fix static checker warnings (Dan Carpenter)
+ - fix WARNING: unmet direct dependencies detected for CRYPTO_ARC4 (Randy Dunlap)
+ - uniquify extract_sharename() (Stephen Rothwell)
+ - fix WARNING: document isn't included in any toctree (Stephen Rothwell)
+ - fix WARNING: Title overline too short (Stephen Rothwell)
+ - fix warning: variable 'total_ace_size' and 'posix_ccontext'set but not used (kernel test rotbot)
+ - fix incorrect function comments (kernel test robot)
+
+Namjae Jeon (13):
+  ksmbd: add document
+  ksmbd: add server handler
+  ksmbd: add tcp transport layer
+  ksmbd: add ipc transport layer
+  ksmbd: add rdma transport layer
+  ksmbd: add a utility code that tracks (and caches) sessions data
+  ksmbd: add authentication
+  ksmbd: add smb3 engine part 1
+  ksmbd: add smb3 engine part 2
+  ksmbd: add oplock/lease cache mechanism
+  ksmbd: add file operations
+  ksmbd: add Kconfig and Makefile
+  MAINTAINERS: add ksmbd kernel server
+
+ Documentation/filesystems/cifs/index.rst |   10 +
+ Documentation/filesystems/cifs/ksmbd.rst |  164 +
+ Documentation/filesystems/index.rst      |    2 +-
+ MAINTAINERS                              |    9 +
+ fs/Kconfig                               |    1 +
+ fs/Makefile                              |    1 +
+ fs/ksmbd/Kconfig                         |   69 +
+ fs/ksmbd/Makefile                        |   20 +
+ fs/ksmbd/asn1.c                          |  343 +
+ fs/ksmbd/asn1.h                          |   21 +
+ fs/ksmbd/auth.c                          | 1364 ++++
+ fs/ksmbd/auth.h                          |   67 +
+ fs/ksmbd/connection.c                    |  413 ++
+ fs/ksmbd/connection.h                    |  211 +
+ fs/ksmbd/crypto_ctx.c                    |  282 +
+ fs/ksmbd/crypto_ctx.h                    |   74 +
+ fs/ksmbd/glob.h                          |   49 +
+ fs/ksmbd/ksmbd_netlink.h                 |  395 +
+ fs/ksmbd/ksmbd_spnego_negtokeninit.asn1  |   31 +
+ fs/ksmbd/ksmbd_spnego_negtokentarg.asn1  |   19 +
+ fs/ksmbd/ksmbd_work.c                    |   80 +
+ fs/ksmbd/ksmbd_work.h                    |  117 +
+ fs/ksmbd/mgmt/ksmbd_ida.c                |   46 +
+ fs/ksmbd/mgmt/ksmbd_ida.h                |   34 +
+ fs/ksmbd/mgmt/share_config.c             |  238 +
+ fs/ksmbd/mgmt/share_config.h             |   81 +
+ fs/ksmbd/mgmt/tree_connect.c             |  121 +
+ fs/ksmbd/mgmt/tree_connect.h             |   56 +
+ fs/ksmbd/mgmt/user_config.c              |   69 +
+ fs/ksmbd/mgmt/user_config.h              |   66 +
+ fs/ksmbd/mgmt/user_session.c             |  369 +
+ fs/ksmbd/mgmt/user_session.h             |  106 +
+ fs/ksmbd/misc.c                          |  338 +
+ fs/ksmbd/misc.h                          |   35 +
+ fs/ksmbd/ndr.c                           |  338 +
+ fs/ksmbd/ndr.h                           |   22 +
+ fs/ksmbd/nterr.h                         |  543 ++
+ fs/ksmbd/ntlmssp.h                       |  169 +
+ fs/ksmbd/oplock.c                        | 1709 +++++
+ fs/ksmbd/oplock.h                        |  131 +
+ fs/ksmbd/server.c                        |  633 ++
+ fs/ksmbd/server.h                        |   70 +
+ fs/ksmbd/smb2misc.c                      |  433 ++
+ fs/ksmbd/smb2ops.c                       |  308 +
+ fs/ksmbd/smb2pdu.c                       | 8299 ++++++++++++++++++++++
+ fs/ksmbd/smb2pdu.h                       | 1684 +++++
+ fs/ksmbd/smb_common.c                    |  655 ++
+ fs/ksmbd/smb_common.h                    |  543 ++
+ fs/ksmbd/smbacl.c                        | 1344 ++++
+ fs/ksmbd/smbacl.h                        |  212 +
+ fs/ksmbd/smbfsctl.h                      |   91 +
+ fs/ksmbd/smbstatus.h                     | 1822 +++++
+ fs/ksmbd/transport_ipc.c                 |  874 +++
+ fs/ksmbd/transport_ipc.h                 |   47 +
+ fs/ksmbd/transport_rdma.c                | 2057 ++++++
+ fs/ksmbd/transport_rdma.h                |   63 +
+ fs/ksmbd/transport_tcp.c                 |  619 ++
+ fs/ksmbd/transport_tcp.h                 |   13 +
+ fs/ksmbd/unicode.c                       |  384 +
+ fs/ksmbd/unicode.h                       |  357 +
+ fs/ksmbd/uniupr.h                        |  268 +
+ fs/ksmbd/vfs.c                           | 1886 +++++
+ fs/ksmbd/vfs.h                           |  197 +
+ fs/ksmbd/vfs_cache.c                     |  725 ++
+ fs/ksmbd/vfs_cache.h                     |  178 +
+ fs/ksmbd/xattr.h                         |  122 +
+ 66 files changed, 32096 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/filesystems/cifs/index.rst
+ create mode 100644 Documentation/filesystems/cifs/ksmbd.rst
+ create mode 100644 fs/ksmbd/Kconfig
+ create mode 100644 fs/ksmbd/Makefile
+ create mode 100644 fs/ksmbd/asn1.c
+ create mode 100644 fs/ksmbd/asn1.h
+ create mode 100644 fs/ksmbd/auth.c
+ create mode 100644 fs/ksmbd/auth.h
+ create mode 100644 fs/ksmbd/connection.c
+ create mode 100644 fs/ksmbd/connection.h
+ create mode 100644 fs/ksmbd/crypto_ctx.c
+ create mode 100644 fs/ksmbd/crypto_ctx.h
+ create mode 100644 fs/ksmbd/glob.h
+ create mode 100644 fs/ksmbd/ksmbd_netlink.h
+ create mode 100644 fs/ksmbd/ksmbd_spnego_negtokeninit.asn1
+ create mode 100644 fs/ksmbd/ksmbd_spnego_negtokentarg.asn1
+ create mode 100644 fs/ksmbd/ksmbd_work.c
+ create mode 100644 fs/ksmbd/ksmbd_work.h
+ create mode 100644 fs/ksmbd/mgmt/ksmbd_ida.c
+ create mode 100644 fs/ksmbd/mgmt/ksmbd_ida.h
+ create mode 100644 fs/ksmbd/mgmt/share_config.c
+ create mode 100644 fs/ksmbd/mgmt/share_config.h
+ create mode 100644 fs/ksmbd/mgmt/tree_connect.c
+ create mode 100644 fs/ksmbd/mgmt/tree_connect.h
+ create mode 100644 fs/ksmbd/mgmt/user_config.c
+ create mode 100644 fs/ksmbd/mgmt/user_config.h
+ create mode 100644 fs/ksmbd/mgmt/user_session.c
+ create mode 100644 fs/ksmbd/mgmt/user_session.h
+ create mode 100644 fs/ksmbd/misc.c
+ create mode 100644 fs/ksmbd/misc.h
+ create mode 100644 fs/ksmbd/ndr.c
+ create mode 100644 fs/ksmbd/ndr.h
+ create mode 100644 fs/ksmbd/nterr.h
+ create mode 100644 fs/ksmbd/ntlmssp.h
+ create mode 100644 fs/ksmbd/oplock.c
+ create mode 100644 fs/ksmbd/oplock.h
+ create mode 100644 fs/ksmbd/server.c
+ create mode 100644 fs/ksmbd/server.h
+ create mode 100644 fs/ksmbd/smb2misc.c
+ create mode 100644 fs/ksmbd/smb2ops.c
+ create mode 100644 fs/ksmbd/smb2pdu.c
+ create mode 100644 fs/ksmbd/smb2pdu.h
+ create mode 100644 fs/ksmbd/smb_common.c
+ create mode 100644 fs/ksmbd/smb_common.h
+ create mode 100644 fs/ksmbd/smbacl.c
+ create mode 100644 fs/ksmbd/smbacl.h
+ create mode 100644 fs/ksmbd/smbfsctl.h
+ create mode 100644 fs/ksmbd/smbstatus.h
+ create mode 100644 fs/ksmbd/transport_ipc.c
+ create mode 100644 fs/ksmbd/transport_ipc.h
+ create mode 100644 fs/ksmbd/transport_rdma.c
+ create mode 100644 fs/ksmbd/transport_rdma.h
+ create mode 100644 fs/ksmbd/transport_tcp.c
+ create mode 100644 fs/ksmbd/transport_tcp.h
+ create mode 100644 fs/ksmbd/unicode.c
+ create mode 100644 fs/ksmbd/unicode.h
+ create mode 100644 fs/ksmbd/uniupr.h
+ create mode 100644 fs/ksmbd/vfs.c
+ create mode 100644 fs/ksmbd/vfs.h
+ create mode 100644 fs/ksmbd/vfs_cache.c
+ create mode 100644 fs/ksmbd/vfs_cache.h
+ create mode 100644 fs/ksmbd/xattr.h
+
+-- 
+2.17.1
+
