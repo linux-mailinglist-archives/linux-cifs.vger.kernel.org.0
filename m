@@ -2,80 +2,98 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D263D4340
-	for <lists+linux-cifs@lfdr.de>; Sat, 24 Jul 2021 01:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE99B3D4A79
+	for <lists+linux-cifs@lfdr.de>; Sun, 25 Jul 2021 00:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbhGWWZF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 23 Jul 2021 18:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S229573AbhGXVkN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 24 Jul 2021 17:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbhGWWZD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 23 Jul 2021 18:25:03 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D71C061575
-        for <linux-cifs@vger.kernel.org>; Fri, 23 Jul 2021 16:05:35 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id c2-20020a0568303482b029048bcf4c6bd9so2240020otu.8
-        for <linux-cifs@vger.kernel.org>; Fri, 23 Jul 2021 16:05:35 -0700 (PDT)
+        with ESMTP id S229549AbhGXVkN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 24 Jul 2021 17:40:13 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57031C061575
+        for <linux-cifs@vger.kernel.org>; Sat, 24 Jul 2021 15:20:43 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h11so6369355ljo.12
+        for <linux-cifs@vger.kernel.org>; Sat, 24 Jul 2021 15:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=zhc4sNO4YwZX3YH/Z2Pm1GDok8umxrWhReSIgmRsWUw=;
-        b=EFl8iTPeoLFBHgAW935SonsiIyrnMA+UHEFaj6nLxCAbkGp7PCUJ0af2ItoQQdAlzq
-         c7416qi8PDM5IsxUrW84IdRqlr3QiwJekm+CnfANvI0jzJ8G/41BPvxgyh/W90qAC41g
-         6zDDFZglbJ2T/NLhPYefsVM7IOSloyUR1eTechedrHPCJHixFxtb4pTVZxtq/n8OQZT4
-         W+j9jfLkFey72wTrETkbFk0ifnW7O6IjQe7p2PxZau4l9ligd0qBpXRu7gZnjTIHgj/O
-         3i7OL2Keg6jF2WwfdaDSNNs02Nsn8m2cWVlt8xVQB0lxfGcsaphc+LCjKsz9ZesGGryB
-         MDag==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=H4v++YduS8gJqiMebiwgJ3AmJHjUrroyJ/ncZ81sqpk=;
+        b=pqj3o4qij23vCtFhkqDTgBoZxOUZneYHm69TWyVGl0/h6pY0Y/eCi+qxZiuSk9WE9m
+         Mb3UUQeySEG6VWtlT5Ui1jHT6JevKCJh+Oup+ah836tupstYEE3SybdwKwec/meKZxJY
+         9+sygGKbo+CGWXF2LUJw67zJwpqdfQHS/RZxGx/cEqcaLmMvm9y5geIoYg5QZgSNx9lR
+         uYIxZPGofQgqaJkYF1xv4z5wPTmXJO74edoWSn49yG4vnisM1Evra4niFPG6GzOd8AKy
+         ehXwPFeLTIdNmYhUD3ACBzQAV9pY06p07jC8zBnYG03NLolw31euZyM9dGyMQ8wyHIAY
+         brQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=zhc4sNO4YwZX3YH/Z2Pm1GDok8umxrWhReSIgmRsWUw=;
-        b=NJ+eCaxwIRMPh/7wIkUnSgXqSTBzjC1BUGPXdLf/XHB3/ndkVRYs5aswHp4jo4eLZz
-         lXzhIWsKmrIW84d07ik1hBH+nLp2z4ZOLQ5pU/F+oXfjHkNGtw6YjqA6JZwNwb9kAEJN
-         SZMBQFNCKgBRNjQC7kGxRByWSnlIoPF6pg6SEx07op7yHDf3Uvr9BdPYH+fKGic9FA5V
-         Q8H/8c47+S9vBCM4rLGZpEW7HFmNExZYrrEHJpMlnKvFKKqynoQzM8y9Udo/MVUfGgIN
-         NoY0SCKQFgN0SpDz+a/Yg1CUHZ4VFZL+GtCGyN4gSjO5khht2M1Ed8Kh5rvLaCB3FCEQ
-         e8AA==
-X-Gm-Message-State: AOAM532YrkC13eUxcr/DCxVXy4GyY5BK84JLTFRZXesH2uizXO+z0p4p
-        u1NkCLGosafQ+EJFGRQvDsIbHEr5rzB2ZqlnHsQ=
-X-Google-Smtp-Source: ABdhPJxesA05fgtdVydBOC1ikx1QPkzG99Le+X1yabi+z1066nkBF9IdmKSK17wfX/JbNZsX30xidzLF5DpD5zz33vA=
-X-Received: by 2002:a9d:640e:: with SMTP id h14mr794274otl.119.1627081535194;
- Fri, 23 Jul 2021 16:05:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=H4v++YduS8gJqiMebiwgJ3AmJHjUrroyJ/ncZ81sqpk=;
+        b=L72eNq3DSstFVGG1jBhyHOcxflaD8QqLkRLnxY8zpOYBDd0CcZJxm/y3WlIxacvDcl
+         lTDMFTDNHPrtVRYA4I0ovvmVJu+nhQAYl+y6XwcvxTGu+lwF7qLPefIcVpKFYuIhiHm3
+         IiYxqH20bNVdw0Z5zdL0M996NfTFMlUBSQoxTtOnuxwfArp3Arn305gVgT5dd+kcO/sE
+         CJBIqpj04KzipoS+jgQkyohqV5yetEHY8YAGCLreCqTni70FLG3SiJUhx5GAPuT0afth
+         chgJ2U3ak0AeseW0mdZX5V2j972RIVsuTJ07lIQlklq0Z8L3C+ZRcPOuJzyasXDlHxuD
+         fQrw==
+X-Gm-Message-State: AOAM533EeUqAeC31+ZxniED0GwNetmZcF+/DEGQ6SMDnpWuA2cWPKmTJ
+        huu5PFz1xeCcAEfeRpzA+V+4+U0R0+dubKhXz2AAeo52F00GIQ==
+X-Google-Smtp-Source: ABdhPJxnXlE9CdWAfLo+f5wWAHqOVsj/s8xUwAI32zy8LlQCqf9GJrnTTklELPA3q8T1s1+VGNeYitXLv2tEb6LY92Y=
+X-Received: by 2002:a2e:8813:: with SMTP id x19mr7505927ljh.272.1627165241139;
+ Sat, 24 Jul 2021 15:20:41 -0700 (PDT)
 MIME-Version: 1.0
-Sender: davidscott0989@gmail.com
-Received: by 2002:ac9:1103:0:0:0:0:0 with HTTP; Fri, 23 Jul 2021 16:05:34
- -0700 (PDT)
-From:   "Mr. Mustafa Ali." <mustafaliali85@gmail.com>
-Date:   Sat, 24 Jul 2021 00:05:34 +0100
-X-Google-Sender-Auth: X9apjDogJRDvkO-iLOFYP_oY8eg
-Message-ID: <CAKvOKyCXOD7+MiZXWw0LMhEyYZrcGxb8c=kHRz=zYzTQTeeVeg@mail.gmail.com>
-Subject: Greetings Dear Friend.
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 24 Jul 2021 17:20:30 -0500
+Message-ID: <CAH2r5mtnAgJo_C_=NRVU_Z6hZByLyv5EKedhr7NY7AcT7-KBXA@mail.gmail.com>
+Subject: [GIT PULL] CIFS/SMB3 Fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello Friend,
+Please pull the following changes since commit
+2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
 
-This message might meet you in utmost surprise. However, It's just my
-urgent needed for a foreign partner that made me contact you for this
-transaction. I assured you of honesty and reliability to champion this
-business opportunity. I am a banker by profession in Turkey, and
-currently holding the post of Auditor in Standard Chartered Bank.
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
 
+are available in the Git repository at:
 
-I have the opportunity of transferring the leftover funds ($15 Million
-Dollars) of one of my clients who died along with his entire family in
-crisis in Myanmar Asia. I am inviting you for a business deal where
-this money can be shared between us if you agree to my business
-proposal.
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.14-rc2-smb3-fixes
 
+for you to fetch changes up to 488968a8945c119859d91bb6a8dc13bf50002f15:
 
-Further details of the transfer will be forwarded to you immediately
-after I receive your return letter.
+  cifs: fix fallocate when trying to allocate a hole. (2021-07-22
+21:24:22 -0500)
 
+----------------------------------------------------------------
+5 cifs/smb3 fixes, including a DFS failover fix, 2 fallocate fixes,
+and 2 trivial Coverity cleanups
 
-Best Regards,
-Mr. Mustafa Ali.
+Regression test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/734
+----------------------------------------------------------------
+Paulo Alcantara (1):
+      cifs: support share failover when remounting
+
+Ronnie Sahlberg (2):
+      cifs: only write 64kb at a time when fallocating a small region of a file
+      cifs: fix fallocate when trying to allocate a hole.
+
+Steve French (2):
+      CIFS: Clarify SMB1 code for POSIX Create
+      CIFS: Clarify SMB1 code for POSIX delete file
+
+ fs/cifs/cifssmb.c    |  10 ++-
+ fs/cifs/connect.c    |   4 +-
+ fs/cifs/dfs_cache.c  | 229 ++++++++++++++++++++++++++++++++++++++++++---------
+ fs/cifs/dfs_cache.h  |   3 +
+ fs/cifs/fs_context.c |   7 ++
+ fs/cifs/smb2ops.c    |  49 ++++++++---
+ 6 files changed, 247 insertions(+), 55 deletions(-)
+
+-- 
+Thanks,
+
+Steve
