@@ -2,74 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDD13DCF4A
-	for <lists+linux-cifs@lfdr.de>; Mon,  2 Aug 2021 06:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941F93DECA5
+	for <lists+linux-cifs@lfdr.de>; Tue,  3 Aug 2021 13:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhHBEYO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbhHBEYM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 2 Aug 2021 00:24:12 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0FCC0617A0
-        for <linux-cifs@vger.kernel.org>; Sun,  1 Aug 2021 21:23:58 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id x14so22644300edr.12
-        for <linux-cifs@vger.kernel.org>; Sun, 01 Aug 2021 21:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=czeOQMYeZau4ejaBbgDdCuklRCyHoHRlo6xUfJcAj3bciaGtFBitiUib5a5MwOumE9
-         w7/Jn7bBNsLcP1+CHZ7cIXH8h+QOe2ioJtROZD2bqhS/lqEvaNcrldVE+LZBhK9CNKw9
-         GasUZeZx/Kcocc9jX4O3VqyeOrpbJXFle0t9OXPFTLvjA0ffc0WpqgkYu8CQSXrFRLzD
-         Yc8UR7mKpLCqpwn4ZFojN5x09EwrnOTDpyVyuL9REZStwkguR4uL/4srDE+vjWW4JCu8
-         Sy5z9ei3l3c7g9TC5s6E8Wj1tuL0hGAP5lkkVvlHQCNnMoccEAC8Z+koQ2tbRnEruEUY
-         O8Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=dbjNDk7kKdzXJTv+Uk8t+2y3i3Nvgt5bCmFSUiLmdtnE6UPMXhPIvuxHkeshbNvFWx
-         oP9FwA44Nscwm09/7WbbNt8ONv8l0fKHVvx4y8Zhnu2qOMQIbU+Ga4rJJs3J4R5WY5eU
-         0mckexKhr0u7qiPqTIX8vtFNELmDuDtSORRyCxmesgU2+iSCjuT/zvJzOsHWzvOq+AAh
-         +OZ08ZvOscJx5a8Qju25jORP1LBpC7aBgenN4BUd4szSC0HvdAMriR8gpoBvG1tQUghf
-         JOR3pT7h1Cy/wtkHzSpvDYLexIIJ5n1yNo/iH8+cJD0qnYhlnyYXd+dh9IUIvOyA48Vr
-         L3XQ==
-X-Gm-Message-State: AOAM530FbcoKIKdazjHHmzr97KjrYXR0CuhRKv7GtsE//xhhkzdMtPS9
-        HVKhfmpLNkGjogR8GlSVi0p3CysvHWf4Za+K178=
-X-Google-Smtp-Source: ABdhPJxItSnYdNOJr/eCcDJG9Ed81FEJCtux30e3VMRN30hf/TzQyuXNRWDf+H2IgaMscJY+xnmH/x8e0HLuRnwx6WI=
-X-Received: by 2002:a50:d70a:: with SMTP id t10mr16749153edi.253.1627878237019;
- Sun, 01 Aug 2021 21:23:57 -0700 (PDT)
+        id S236102AbhHCLox (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 Aug 2021 07:44:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35066 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235946AbhHCLoO (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 3 Aug 2021 07:44:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA1B360EE9;
+        Tue,  3 Aug 2021 11:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627991043;
+        bh=q4kLnBUtg70BAak9qRJZeHe9ng5xHLv4QKUDSg6mxrc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bxOj/7iB2Oj8hiS/e/RsLfwfj7783S4P5f4yL7nlH6Gqc5C7tOzFJM4Yf/W116a4U
+         qvKzlZhthEwK1KNK/osUXDQ22QLutGYJfPJh2MGrmvRvyJ1Lv0G92t0pn5ZynRTg4H
+         +4uay/Hpa+WG7YaH2GM6xGipc8BYHP2I0nSqlQiOYKxaoklogeP3gwaQe8HaVUPxLy
+         S87m7C4dCcG34NGSHrow9q+60RIsc0BZCRE4oCjO2MlGIFalp+WU4AcpaRyrOAY4zL
+         NYMr5DZcDmOsujKiJqpyEaPTGGo2d4agIc9Kc5BZhYsTYmSjLqb3C9w0SHX7jNxzSS
+         hNBUXIldapPXA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Steve French <stfrench@microsoft.com>,
+        kernel test robot <lkp@intel.com>,
+        Paulo Alcantara <pc@cjr.nz>, Sasha Levin <sashal@kernel.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.13 08/11] smb3: rc uninitialized in one fallocate path
+Date:   Tue,  3 Aug 2021 07:43:49 -0400
+Message-Id: <20210803114352.2252544-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210803114352.2252544-1-sashal@kernel.org>
+References: <20210803114352.2252544-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:23:56
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:23:56 +0100
-Message-ID: <CAKwBCXvLzgfEHCKMKUxki4k1yYap9oH1ox=muoK9koBZXish5g@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+From: Steve French <stfrench@microsoft.com>
+
+[ Upstream commit 5ad4df56cd2158965f73416d41fce37906724822 ]
+
+Clang detected a problem with rc possibly being unitialized
+(when length is zero) in a recently added fallocate code path.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/smb2ops.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 398c941e3897..f77156187a0a 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -3613,7 +3613,8 @@ static int smb3_simple_fallocate_write_range(unsigned int xid,
+ 					     char *buf)
+ {
+ 	struct cifs_io_parms io_parms = {0};
+-	int rc, nbytes;
++	int nbytes;
++	int rc = 0;
+ 	struct kvec iov[2];
+ 
+ 	io_parms.netfid = cfile->fid.netfid;
 -- 
-Dear Partner,
+2.30.2
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
-
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
-
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
-
-
-Regards :  Abdoulahi Kazim
