@@ -2,74 +2,67 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D0B3E5115
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Aug 2021 04:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54253E514F
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 Aug 2021 05:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbhHJCgm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 9 Aug 2021 22:36:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22705 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230048AbhHJCgm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 9 Aug 2021 22:36:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628562980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0nWhh5SSpoqlqMD+xY2IVz2KjKvPehpZDlTpX+Nh9m0=;
-        b=AQLs60A5g/npQmrRlC5xyrbGBqjBLxgvSRE+c3swnozzXBN0nscgX/M9/AhrWHb+tAf5pd
-        rqo0v/XFdDCtx79Y1xaTCD6GIwu+BFFiUQWEAA2NderDt0cUcjtjQpB869Nsgx1bD+HHw7
-        e+BfF/NNA23tBONYKp+YkS/rHafClhg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-210-KWq51lILP-uV70f28GnJfA-1; Mon, 09 Aug 2021 22:36:18 -0400
-X-MC-Unique: KWq51lILP-uV70f28GnJfA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 123EF1084F40;
-        Tue, 10 Aug 2021 02:36:18 +0000 (UTC)
-Received: from localhost.localdomain (vpn2-54-105.bne.redhat.com [10.64.54.105])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 395965B4BC;
-        Tue, 10 Aug 2021 02:36:16 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH] cifs: use the correct max-length for dentry_path_raw()
-Date:   Tue, 10 Aug 2021 12:36:09 +1000
-Message-Id: <20210810023609.710993-1-lsahlber@redhat.com>
+        id S235202AbhHJDHR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 9 Aug 2021 23:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232897AbhHJDHQ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 9 Aug 2021 23:07:16 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511F4C0613D3;
+        Mon,  9 Aug 2021 20:06:55 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q10so900725wro.2;
+        Mon, 09 Aug 2021 20:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=uMRymxsurZx/L8Ui0/TfQ9P/gUvadlYT9VnrFW3stSyam7yYDouO4Tx6EewcNaVtyg
+         NjY5Jf2tNI+84PJl1wkW9xk5K7WyJXh3dcp3UomKTVLIx0GK4kqYIz2J0mpJMlu2hRJO
+         sdzKUgcb6ooW/ELQWvXte1N4RP+6QBtB5rS0ihLAU7CPoz4izCQTGw0Ycx5ABt6XB9FT
+         GvbsZMHYHNUj9irb6uLe7D3qEimlZgkgYLePQWiVMUX7HnRAbqaDJsMxYis3Vv8ylp2o
+         nNmMcIXMC+mHaxRrBCdsLsYax13u1/SEacSpM5c4oIBR7IszNeh8FnpGDfB51TDHRyq2
+         2eGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=fLdFoegI1ThFx+JVyDE249vfWA9ej5wpzE7NBFO+Q5pKpC66TOh1Ep9RF7nZ3ZkR39
+         ZyOZAz8B0iSFrcZNbkkqR3YG0AHR1XXKfmgYvXk3WpKsVq2XuUz4/pWma6JhHE+e3Lxo
+         n/YyTe1VlLOIStu1ueHKp/pmDKJq2606mnxT28zoX4oL0o9xxW8nY6mhY89r0aaTtBf9
+         2DrUVB4tsEDxcKnQH9qMVwl+5WHWkegmjT/NHub5dLekVW7sc8wAatjIqmue1vXoawqv
+         VTsL/zEyGbQyNFtD85sUTdmWiXzpp6n2rdKbmCEQDgPxgYF5l1yG6fYsfUbkIcAUHUBa
+         XmBQ==
+X-Gm-Message-State: AOAM533A8Kk7cFbsZ1vQvFQo+aa8xyMG/eMuvc7SgB0yjxVRPOa1ucIu
+        8K7NqvDdzxX7mw+zzJ1hnQ==
+X-Google-Smtp-Source: ABdhPJzLbpWMVdr6uroG/5nf11QdQ/bHYBj3g8NatZvLb5CioBISIPxB86pIvW9YCHexpqkzENhfCA==
+X-Received: by 2002:adf:bb85:: with SMTP id q5mr5163494wrg.186.1628564813978;
+        Mon, 09 Aug 2021 20:06:53 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.223.208])
+        by smtp.gmail.com with ESMTPSA id 129sm19535021wmz.26.2021.08.09.20.06.48
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 09 Aug 2021 20:06:53 -0700 (PDT)
+Message-ID: <6111ed4d.1c69fb81.977c5.b100@mx.google.com>
+From:   Vanina curth <curtisvani0023@gmail.com>
+X-Google-Original-From: Vanina  curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Dear
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Tue, 10 Aug 2021 03:06:42 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-RHBZ: 1972502
-
-PATH_MAX is 4096 but PAGE_SIZE can be >4096 on some architectures
-such as ppc and would thus write beyond the end of the actual object.
-
-CC: Stable <stable@vger.kernel.org>
-Suggested-by: Brian foster <bfoster@redhat.com>
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/dir.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
-index 79402ca0ddfa..5f8a302ffcb2 100644
---- a/fs/cifs/dir.c
-+++ b/fs/cifs/dir.c
-@@ -100,7 +100,7 @@ build_path_from_dentry_optional_prefix(struct dentry *direntry, void *page,
- 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_USE_PREFIX_PATH)
- 		pplen = cifs_sb->prepath ? strlen(cifs_sb->prepath) + 1 : 0;
- 
--	s = dentry_path_raw(direntry, page, PAGE_SIZE);
-+	s = dentry_path_raw(direntry, page, PATH_MAX);
- 	if (IS_ERR(s))
- 		return s;
- 	if (!s[1])	// for root we want "", not "/"
--- 
-2.30.2
-
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
