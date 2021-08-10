@@ -2,190 +2,63 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E657A3E5B52
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Aug 2021 15:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AB33E5AE8
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 Aug 2021 15:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241391AbhHJNYs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 10 Aug 2021 09:24:48 -0400
-Received: from smtp3.skymail.com.br ([168.0.132.13]:48932 "EHLO
-        smtp3.skymail.com.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241326AbhHJNYp (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 10 Aug 2021 09:24:45 -0400
-X-Greylist: delayed 595 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Aug 2021 09:24:44 EDT
-Received: from webmail.multidadosti.com.br (unknown [10.1.3.23])
-        by smtp3.smtp.skymail.prv (Postfix) with ESMTPA id 4GkYLp22GSz22BM
-        for <linux-cifs@vger.kernel.org>; Tue, 10 Aug 2021 10:14:10 -0300 (-03)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skymail.net.br;
-        s=skymail; t=1628601250;
-        bh=8s5FILJTIviVGwXlU+voD5nvgMGWcR4+h1ByAgZKRFc=;
-        h=Date:From:To:Subject:Reply-To;
-        b=33QyLvsVFqAaGnRwVnJXT04rEUbWTLImQTA/FAVsynWsFWOJbyRueOFmMc3aT3W+c
-         Nl7ROZGTb50vEFLuxnIH5a5I6CR7Ph7NQxOGRxL08HxmWZ6K6CPDzFa7gF2LCkwp2U
-         q3gwRQFz0OQOkVrc67hq80eMsVOublEeN2cqtOss=
-Received: from 200-100-243-211.dial-up.telesp.net.br ([200.100.243.211])
- by webmail.multidadosti.com.br
- with HTTP (HTTP/2.0 POST); Tue, 10 Aug 2021 10:14:10 -0300
+        id S241170AbhHJNSs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 10 Aug 2021 09:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241167AbhHJNSr (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 10 Aug 2021 09:18:47 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E003FC061798
+        for <linux-cifs@vger.kernel.org>; Tue, 10 Aug 2021 06:18:25 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id y1so12321906vsc.1
+        for <linux-cifs@vger.kernel.org>; Tue, 10 Aug 2021 06:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=W6uEEzlhhJusubOOOojMdAAbHYmj8wxlJWNzcKBoWc2yBYdYzEhY1uWM21FOZk7spS
+         Q7aBPYstSV+mkYqRdKjUiEyjI/uBt1+FXJwNOSbMpQvPe/kS29ihENOFTaSS72wg+AE9
+         ZwO+Y6WJVRJgnLYWf0zSKKOklMM8NDPmqzXFoclZ9aDBZU4hyZ7E8OoIeOKexqmaPzVm
+         Bi5qRqQc1HS2WWeb5f+Qfulv2lgJgxvEySTI2XwzoidYM+6z/b+tnZf4MlXNpfcm026X
+         3Zp57Y/FIVwkLjVaMgj30KisjKAfLubBcLb8DoR0WqO6bD3Z+CtIwDU3+CIT/d1THlV2
+         ZANA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=JTjejy1BxUSmkZxikx5jDcoF1FYhUGbXDoS6ZFAbJMbLoI5y7EugaVnxgMaOXgFCwI
+         oqViANf6pH1XXwJvrx1s1cvisCdrbJy4oXXKHYDQowPF6OjkUdK/nGq4g+ri4oQ6umf3
+         XdK5lvxLymUkzstBrjAoCRygyVpJ+JXFfcxywHZ++LNA5LXDg4FtNSQpcBELwc8pABUD
+         5NaTg7ZAVly33qdbL2vPrWCZJQ6tT2geDd0lo2U7KYhSIJkHe+B/ZXjcWqJmQXNjTQ6c
+         M+4kY/o17cCqAhaQUJ/KYhojBpaK6JDMQpwsGYGE6IR17Abe0k90YO9kUEzBjL72zIu8
+         /uOA==
+X-Gm-Message-State: AOAM531uwM9Kg7NdV3a8GHmhRH1Ny4DQ4i9+vc4lYOAJy/T6ga5Y8963
+        m3SVC0uXRBMZp+bD6ORcfrcbvskWl2+JOYwYhuQ=
+X-Google-Smtp-Source: ABdhPJyFp2mwIaIBrlrbgsS0Nv+4YO3eDx4OJW62VXgaEjwMz1/5iNap+6MO2C/memA04XZ8x34/wP9/QViyqhDirpw=
+X-Received: by 2002:a67:1c05:: with SMTP id c5mr21474605vsc.25.1628601505137;
+ Tue, 10 Aug 2021 06:18:25 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 10 Aug 2021 10:14:10 -0300
-From:   =?UTF-8?Q?Rudi_Feij=C3=B3?= <rudi.feijo@multidadosti.com.br>
-To:     linux-cifs@vger.kernel.org
-Subject: Cifs erros in kern.log (CIFS VFS: No task to wake, unknown frame
- received! )
-Reply-To: rudi.feijo@multidadosti.com.br
-User-Agent: Webmail/1.4.10
-Message-ID: <f107f53b9fe88517d84ab970dd40e7e6@multidadosti.com.br>
-X-Sender: rudi.feijo@multidadosti.com.br
-Organization: MultidadosTI
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Skymail-Auth: z7FAtTQ8SpGDjgo8KeGKWjKkAA+kcVt06InFLhIjWNEDD3msrDTRBppiyTyWHDtW7JxtlAul2oyUUzEPm8GE3ijKmSompFdO
+Sender: immeublesourou@gmail.com
+Received: by 2002:ab0:3903:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 06:18:24
+ -0700 (PDT)
+From:   John Kumor <owo219901@gmail.com>
+Date:   Wed, 11 Aug 2021 01:18:24 +1200
+X-Google-Sender-Auth: jaUFPl2AMN_3obLd2nETAK2DzDA
+Message-ID: <CAHdg_cSvbCAnTwhmVZuonS8rmuJg3b5oZyDLUjyp=C5CwAEVOA@mail.gmail.com>
+Subject: Urgent
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello
-
-Recently we upgraded the linux/cifs part of our stack on our google 
-cloud VM's.
-Some new errors began popping up on kern.log, and our overall knowledge 
-of both linux and cifs is very basic, so here it goes.
-
-uname -r = 4.19.0-17-cloud-amd64
-mount.cifs version: 6.8
-
-The mount command is using mostly defaults,
-mount.cifs -v -o user=x,password=y,uid=11,gid=11 //hostdir /mntdir
-
-The host is a windows server 2012 R2 Datacenter, and the host path is on 
-a NTFS drive
-We have done no aditional configuration on windows, we just shared the 
-directory
-
-The windows servers as a file server to hold our php/js/other system 
-files, while the linux VMs are the apache servers in a load balancer 
-environment.
-The host path also servers to store cache files from these same 
-applications running on apache.
-
-The kern.log have been showing a lot of messages. I can't tell the 
-severity of them. Apparently the system is running normaly and without 
-crashes.
-Here is the example from yesterday, since the mount started. This is 
-happening to all VMs using this linux image.
-
-Aug  9 00:43:16 vmapphostname kernel: [    5.050322] FS-Cache: Loaded
-Aug  9 00:43:16 vmapphostname kernel: [    5.052899] Key type 
-dns_resolver registered
-Aug  9 00:43:16 vmapphostname kernel: [    5.082320] FS-Cache: Netfs 
-'cifs' registered for caching
-Aug  9 00:43:16 vmapphostname kernel: [    5.083350] Key type 
-cifs.spnego registered
-Aug  9 00:43:16 vmapphostname kernel: [    5.084135] Key type cifs.idmap 
-registered
-Aug  9 00:43:16 vmapphostname kernel: [    5.085057] No dialect 
-specified on mount. Default has changed to a more secure dialect, SMB2.1 
-or later (e.g. SMB3), from CIFS (SMB1). To use the less secure SMB1 
-dialect to access old servers which do not support SMB3 (or SMB2.1) 
-specify vers=1.0 on mount.
-Aug  9 00:43:16 vmapphostname kernel: [    5.130312] No dialect 
-specified on mount. Default has changed to a more secure dialect, SMB2.1 
-or later (e.g. SMB3), from CIFS (SMB1). To use the less secure SMB1 
-dialect to access old servers which do not support SMB3 (or SMB2.1) 
-specify vers=1.0 on mount.
-Aug  9 02:45:00 vmapphostname kernel: [ 7308.426124] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 0
-Aug  9 02:45:00 vmapphostname kernel: [ 7308.432985] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 02:45:00 vmapphostname kernel: [ 7308.432991] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 02:45:00 vmapphostname kernel: [ 7308.432992] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 02:45:00 vmapphostname kernel: [ 7308.432993] 00000030: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 08:11:55 vmapphostname kernel: [37720.063969] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 0
-Aug  9 08:11:55 vmapphostname kernel: [37720.070858] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 08:11:55 vmapphostname kernel: [37720.070859] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 08:11:55 vmapphostname kernel: [37720.070860] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 08:11:55 vmapphostname kernel: [37720.070861] 00000030: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 09:35:31 vmapphostname kernel: [42736.024112] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 0
-Aug  9 09:35:31 vmapphostname kernel: [42736.030971] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 09:35:31 vmapphostname kernel: [42736.030972] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 09:35:31 vmapphostname kernel: [42736.030973] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 09:35:31 vmapphostname kernel: [42736.030974] 00000030: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 10:25:11 vmapphostname kernel: [45715.372317] CIFS VFS: 
-Autodisabling the use of server inode numbers on \\hostdir. This server 
-doesn't seem to support them properly. Hardlinks will not be recognized 
-on this mount. Consider mounting with the "noserverino" option to 
-silence this message.
-Aug  9 10:27:23 vmapphostname kernel: [45847.429760] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 0
-Aug  9 10:27:23 vmapphostname kernel: [45847.436646] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 10:27:23 vmapphostname kernel: [45847.436648] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 10:27:23 vmapphostname kernel: [45847.436649] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 10:27:23 vmapphostname kernel: [45847.436650] 00000030: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 12:10:01 vmapphostname kernel: [52005.258451] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 2
-Aug  9 12:10:01 vmapphostname kernel: [52005.265299] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 12:10:01 vmapphostname kernel: [52005.265300] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 12:10:01 vmapphostname kernel: [52005.265301] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 12:10:01 vmapphostname kernel: [52005.265302] 00000030: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 13:33:38 vmapphostname kernel: [57021.694822] CIFS VFS: No task 
-to wake, unknown frame received! NumMids 3
-Aug  9 13:33:38 vmapphostname kernel: [57021.701711] 00000000: 424d53fe 
-00000040 00000000 00000012  .SMB@...........
-Aug  9 13:33:38 vmapphostname kernel: [57021.701713] 00000010: 00000001 
-00000000 ffffffff ffffffff  ................
-Aug  9 13:33:38 vmapphostname kernel: [57021.701714] 00000020: 00000000 
-00000000 00000000 00000000  ................
-Aug  9 13:33:38 vmapphostname kernel: [57021.701715] 00000030: 00000000 
-00000000 00000000 00000000  ................
-
-from this point on, the "CIFS VFS: No task to wake, unknown frame 
-received!" message will happen regularly troughout the day.
-
-Looking in /proc/fs/cifs/Stats, I see a lot of creates and oplockbreaks 
-are failing, altho I can't seem to find the detailed log of each of 
-these :
-
-SMBs: 123331155
-Bytes read: 75399636858  Bytes written: 4347610634
-TreeConnects: 63003 total 0 failed
-TreeDisconnects: 0 total 0 failed
-Creates: 35596756 total 2534986 failed
-Closes: 33061769 total 0 failed
-Flushes: 0 total 0 failed
-Reads: 20429224 total 0 failed
-Writes: 321116 total 0 failed
-Locks: 0 total 0 failed
-IOCTLs: 3 total 0 failed
-QueryDirectories: 1467549 total 0 failed
-ChangeNotifies: 0 total 0 failed
-QueryInfos: 32099007 total 0 failed
-SetInfos: 314551 total 0 failed
-OplockBreaks: 41179 sent 12371 failed
-
-I'm tasked with making this as error free as possible. Any suggestions 
-and help is highly appreciated.
-
-Thanks for your time,
-
-Regards, Rudi
+My dear,
+Greetings! I trust that all is well with you and your family. Did you
+receive my previous email?
+Regards
+John Kumor.
