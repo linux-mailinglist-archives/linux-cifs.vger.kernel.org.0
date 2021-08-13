@@ -2,99 +2,67 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66B3EBE00
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Aug 2021 23:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AAB3EBE95
+	for <lists+linux-cifs@lfdr.de>; Sat, 14 Aug 2021 01:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbhHMVl4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 13 Aug 2021 17:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S235368AbhHMXQF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 13 Aug 2021 19:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbhHMVl4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Aug 2021 17:41:56 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A3BC061756;
-        Fri, 13 Aug 2021 14:41:29 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id x7so17604982ljn.10;
-        Fri, 13 Aug 2021 14:41:28 -0700 (PDT)
+        with ESMTP id S235029AbhHMXQE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Aug 2021 19:16:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39093C061756;
+        Fri, 13 Aug 2021 16:15:37 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h13so15344653wrp.1;
+        Fri, 13 Aug 2021 16:15:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=sYYIdI6NGktMgOa0nVbGx0tN6+SA51z6DngMRqcu1Zs=;
-        b=BxjVkDS0Bsca6HzNPUcAA51px+6+RJ/W748R0JRZi0IomNy6JzukeY+qjdoumYcqlO
-         GtPb5IJ7ztvAb2eBCJ73tX2h95kdCmVnV8fmYKtgig70TsHWb24c3ke/DGaYdjpqfriG
-         DCy+p6T0aGIDAFngFI+TFoGv6psKpp36n+8NMKGrvtbPoSt+zrIp02YdlIi0vjzB2Sg9
-         WYlIDgR0tlOBD9VCwToQb2gzbyB6ptFVpM+3RRHOQsiviWsHqgADhlXwpOt4GfAgmx5o
-         4eXqmAYGGdHfuPb3efONfCJ6tbWSp/IcFjp9Rv/Nv2RnD7wq6Jy2+We5OBNFEHvaiv6x
-         J5gQ==
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=m3kaznv5RSK1BWuewGhPniRCVZRVtmLhiMQc82NPgV1lbpig4IpWDqLHfRFQWep4uV
+         u9USJqn0i117kVuZbpQRiaKoPduf5vBv+5n2XCJ1Zi/PiOCPtxBqSNRCAQP5kaQ2mAsU
+         Y5bZ9l/Ywh28JmGvLJoxqM6Ul1ffDV3u/hGNUkAkuLBi6/5lvfo3cx5uV4E7YqFcrVoD
+         P473X5jZVfA8ng+UmAQBhFJnNm0tghQFe9GY6EPJCAtfH7J6uWDWXNiLZGtU9MevCUW5
+         DRowXfKzl2fu1GqCIZqK9osnArGXXSweMNTjsEvEIs/LZ9N5qS/xKejKJQ4am+tM4765
+         6D3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=sYYIdI6NGktMgOa0nVbGx0tN6+SA51z6DngMRqcu1Zs=;
-        b=iH6VSAFXmEuvRjbwOs6At3VoEQlKJOtCiBfHMr3g4H2uFIrQLP4s8gQpnzSoeD3+tW
-         thcA6qwEXeAJiXzeM2C+EV5RDZC+95J/F+6iQK/FvzCXqrzd0bf1WdXhr9qBBmg4HjkM
-         ZEaYtsBtJ3EAB6nBV++5I15mp84nv0t/ui4aI3hfvowMa7letwKzh3usG+g7GaUg7jkH
-         6avK6BX2RWmh3RCxp6MPqfKeYebJRaA3YDFiFBgFVDroVQz6w+fxMzFIgJnd3/QsVtlf
-         bSdDFVHp0AC3ObRo4ZgQ5MDK7yLZTQHf9GervJFg8MsnFmx9tNFd6j9Y4hXH7PP5Q/GN
-         YLXg==
-X-Gm-Message-State: AOAM5332m0N0Jz6hJIvvsL3K6I5Wk/i3wAuUTWZG1TgCyVtOs39R9GsS
-        JrhoSCrcfRa2naukpSL8y2qH3gC1Pf0xQybL9jI=
-X-Google-Smtp-Source: ABdhPJxFvh2hlY2UKYwo1noB2XP0kM8X0yeE73R9IY0JE9I9E+yERVVab6ALhP1OOrr4uykn1gzNtfuzNMnhLzmam7o=
-X-Received: by 2002:a2e:a884:: with SMTP id m4mr3264976ljq.406.1628890886140;
- Fri, 13 Aug 2021 14:41:26 -0700 (PDT)
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=kY2WU6JKkqW14/hBfsBCO7KzhB6k0DCzrPgFmhWabjMHMoS/ln/38s8LS3Mdv8KAuy
+         kzWZOK1ARLp6s5mstu+MsdF9HlSqkhthDUBjLpmH67OIjnBrMPiyKW5xawtISRBhgZEB
+         pMZzDP/6QFuOpd/MeuLg6QCUCqcCsGRdTh2K9eqgm0Ii+U1TnmkgYN36leSoWdOEsGCz
+         SD7gBL3LFRPdgtrx5BsxErDq4uAt1ywl5PF5jlVRoCVo9Xh9EWVdxiY7jA/TDizkO53y
+         jTxBxjQt27OeiODaL9uhzzIZwE+YNmAMUFp0gMzxjte/OYqzCZ7w/leIEHdi2pFL0vwC
+         CxPQ==
+X-Gm-Message-State: AOAM531e/pX1DNTNWQnXBiHUtkds4/4E7wKbDpuVn+KyVouNLjCyJymD
+        2nvav++5bEmW+kzUx6qnx84=
+X-Google-Smtp-Source: ABdhPJzo+/68/RbgwmMkWN69xSAJ9ge9jJs+Ht3ETckBqMN9U4gb0ZjAmsERXteo+OUcF7kI6kbhSQ==
+X-Received: by 2002:a5d:45c2:: with SMTP id b2mr5463075wrs.188.1628896535899;
+        Fri, 13 Aug 2021 16:15:35 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.163.193])
+        by smtp.gmail.com with ESMTPSA id a18sm2566962wmg.43.2021.08.13.16.15.31
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Fri, 13 Aug 2021 16:15:35 -0700 (PDT)
+Message-ID: <6116fd17.1c69fb81.4edbd.f5df@mx.google.com>
+From:   Vanina curth <akoelekouevidjin95@gmail.com>
+X-Google-Original-From: Vanina  curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 13 Aug 2021 16:41:15 -0500
-Message-ID: <CAH2r5muFb-0+8EXCqBZ=sHCkrsna4+cQ9R1xVWEFHZd1Hogmhw@mail.gmail.com>
-Subject: [GIT PULL] CIFS/SMB3 Fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Dear
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Fri, 13 Aug 2021 23:15:10 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Please pull the following changes since commit
-c500bee1c5b2f1d59b1081ac879d73268ab0ff17:
-
-  Linux 5.14-rc4 (2021-08-01 17:04:17 -0700)
-
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.14-rc5-smb3-fixes
-
-for you to fetch changes up to 9e992755be8f2d458a0bcbefd19e493483c1dba2:
-
-  cifs: Call close synchronously during unlink/rename/lease break.
-(2021-08-12 11:29:58 -0500)
-
-----------------------------------------------------------------
-4 CIFS/SMB3 Fixes, all for stable,
-- 2 relating to deferred close
-- 1 for modefromsid mount option (when idsfromsid not specified)
-
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/769
-----------------------------------------------------------------
-Rohith Surabattula (2):
-      cifs: Handle race conditions during rename
-      cifs: Call close synchronously during unlink/rename/lease break.
-
-Ronnie Sahlberg (1):
-      cifs: use the correct max-length for dentry_path_raw()
-
-Shyam Prasad N (1):
-      cifs: create sd context must be a multiple of 8
-
- fs/cifs/cifsglob.h |  5 +++++
- fs/cifs/dir.c      |  2 +-
- fs/cifs/file.c     | 35 +++++++++++++++++------------------
- fs/cifs/inode.c    | 19 +++++++++++++++++--
- fs/cifs/misc.c     | 50 +++++++++++++++++++++++++++++++++++++++-----------
- fs/cifs/smb2pdu.c  |  2 +-
- 6 files changed, 80 insertions(+), 33 deletions(-)
-
--- 
-Thanks,
-
-Steve
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
