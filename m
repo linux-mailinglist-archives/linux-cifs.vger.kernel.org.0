@@ -2,58 +2,126 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B10153EF8FF
-	for <lists+linux-cifs@lfdr.de>; Wed, 18 Aug 2021 06:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721513EF8FE
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Aug 2021 06:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbhHRELM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 Aug 2021 00:11:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31474 "EHLO
+        id S229454AbhHRELJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 Aug 2021 00:11:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56183 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229449AbhHRELL (ORCPT
+        by vger.kernel.org with ESMTP id S229449AbhHRELI (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 18 Aug 2021 00:11:11 -0400
+        Wed, 18 Aug 2021 00:11:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629259837;
+        s=mimecast20190719; t=1629259834;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+TrIREaDZVESBxlXP/bXI4ogvUI9xdhcpK1/pkbCUzU=;
-        b=Z7H0YKtdQ4oQp8VJUWw2obEMPwIcKIQVLQeaWYZ6IdtDTf79JD55pZQB2YqlXOmDjv3wIE
-        kENyMSoPKoftFOhZk3IVm9+c/M32jZBParEL83iCC2sBfqPR/VjUFBtfUqG5Db/eE/yIy0
-        vDlnEQ3/AVwCDVQzPlp8oG5YKYyTkyk=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hM7huVPnUx+3EmOk1XfIZeQI7nSHhBlU+w887TpQ4wg=;
+        b=RPmiPK178zHBHQjAgGFzv5qfOf4NFOK26SlkWxznxNg1Jl+l1fVrQU0OPvdBqXzJNnd5hX
+        gMcEfqdVwn3Mea/lkGfvpCQFxC9FQIVoyV0B4uQic5G0TcDUkeobIsvj+6n7XvQooRvy6B
+        NkbqqOybwli5a8bP9D9mRFs4+66Y2qQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-42-Nbht_rIRNwWPvRaWAcmcYw-1; Wed, 18 Aug 2021 00:10:35 -0400
-X-MC-Unique: Nbht_rIRNwWPvRaWAcmcYw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-188-Jf8dzhArPKWkXFi0xuAMMQ-1; Wed, 18 Aug 2021 00:10:32 -0400
+X-MC-Unique: Jf8dzhArPKWkXFi0xuAMMQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D19A871807;
-        Wed, 18 Aug 2021 04:10:34 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33BFF1007C83;
+        Wed, 18 Aug 2021 04:10:31 +0000 (UTC)
 Received: from localhost.localdomain (vpn2-54-114.bne.redhat.com [10.64.54.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 84ACF5DA60;
-        Wed, 18 Aug 2021 04:10:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 058561B5C0;
+        Wed, 18 Aug 2021 04:10:29 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: Disable key exchange if ARC4 is not available
-Date:   Wed, 18 Aug 2021 14:10:20 +1000
-Message-Id: <20210818041021.1210797-1-lsahlber@redhat.com>
+Subject: [PATCH] cifs: disable ntlmssp key exchange if ARC4 is not available
+Date:   Wed, 18 Aug 2021 14:10:21 +1000
+Message-Id: <20210818041021.1210797-2-lsahlber@redhat.com>
+In-Reply-To: <20210818041021.1210797-1-lsahlber@redhat.com>
+References: <20210818041021.1210797-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Steve,
+This allows to build cifs.ko when ARC4 is not available.
+It comes with the drawback that key-exchange is no longer negotiated.
 
-We depend on ARC4 for generating the encrypted session key in key exchange.
-This patch disables the key exchange/encrypted session key for ntlmssp
-IF the kernel does not have any ARC4 support.
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+---
+ fs/cifs/cifsencrypt.c | 10 ++++++++++
+ fs/cifs/sess.c        |  6 ++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-This allows to build the cifs module even if ARC4 has been removed
-though with a weaker type of NTLMSSP support.
-
-
+diff --git a/fs/cifs/cifsencrypt.c b/fs/cifs/cifsencrypt.c
+index 7680e0a9bea3..a5cf604f1864 100644
+--- a/fs/cifs/cifsencrypt.c
++++ b/fs/cifs/cifsencrypt.c
+@@ -22,7 +22,9 @@
+ #include <linux/random.h>
+ #include <linux/highmem.h>
+ #include <linux/fips.h>
++#ifdef CRYPTO_ARC4
+ #include <crypto/arc4.h>
++#endif
+ #include <crypto/aead.h>
+ 
+ int __cifs_calc_signature(struct smb_rqst *rqst,
+@@ -682,6 +684,13 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
+ 	return rc;
+ }
+ 
++#ifndef CRYPTO_ARC4
++int
++calc_seckey(struct cifs_ses *ses)
++{
++	return -ENODEV;
++}
++#else
+ int
+ calc_seckey(struct cifs_ses *ses)
+ {
+@@ -712,6 +721,7 @@ calc_seckey(struct cifs_ses *ses)
+ 	kfree_sensitive(ctx_arc4);
+ 	return 0;
+ }
++#endif
+ 
+ void
+ cifs_crypto_secmech_release(struct TCP_Server_Info *server)
+diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
+index 34a990e1ae44..a05ef87b0560 100644
+--- a/fs/cifs/sess.c
++++ b/fs/cifs/sess.c
+@@ -622,9 +622,10 @@ void build_ntlmssp_negotiate_blob(unsigned char *pbuffer,
+ 		NTLMSSP_NEGOTIATE_SEAL;
+ 	if (server->sign)
+ 		flags |= NTLMSSP_NEGOTIATE_SIGN;
++#ifdef CRYPTO_ARC4		
+ 	if (!server->session_estab || ses->ntlmssp->sesskey_per_smbsess)
+ 		flags |= NTLMSSP_NEGOTIATE_KEY_XCH;
+-
++#endif
+ 	sec_blob->NegotiateFlags = cpu_to_le32(flags);
+ 
+ 	sec_blob->WorkstationName.BufferOffset = 0;
+@@ -690,9 +691,10 @@ int build_ntlmssp_auth_blob(unsigned char **pbuffer,
+ 		NTLMSSP_NEGOTIATE_SEAL;
+ 	if (ses->server->sign)
+ 		flags |= NTLMSSP_NEGOTIATE_SIGN;
++#ifdef CRYPTO_ARC4		
+ 	if (!ses->server->session_estab || ses->ntlmssp->sesskey_per_smbsess)
+ 		flags |= NTLMSSP_NEGOTIATE_KEY_XCH;
+-
++#endif
+ 	tmp = *pbuffer + sizeof(AUTHENTICATE_MESSAGE);
+ 	sec_blob->NegotiateFlags = cpu_to_le32(flags);
+ 
+-- 
+2.30.2
 
