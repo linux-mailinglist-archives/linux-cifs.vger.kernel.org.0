@@ -2,68 +2,132 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB073F2CC6
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 Aug 2021 15:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659883F3740
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Aug 2021 01:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbhHTNI1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 20 Aug 2021 09:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
+        id S231767AbhHTXTq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 20 Aug 2021 19:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbhHTNI0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 Aug 2021 09:08:26 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DFCC061575
-        for <linux-cifs@vger.kernel.org>; Fri, 20 Aug 2021 06:07:49 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id d16so6110287vsf.12
-        for <linux-cifs@vger.kernel.org>; Fri, 20 Aug 2021 06:07:49 -0700 (PDT)
+        with ESMTP id S230211AbhHTXTm (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 Aug 2021 19:19:42 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A12C061575;
+        Fri, 20 Aug 2021 16:19:03 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id n7so19786231ljq.0;
+        Fri, 20 Aug 2021 16:19:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h3aZTrCb62DNYhpJGTvZ4Kku5N7BEorxuPyN/PlVL+8=;
-        b=rhh9qSkdk7gZodsu01Bu6nmdLxZnx5rrhdB/838q7KoMG/ByUj6xX27btZWCSKP8lf
-         AT4U3ZPhmRq7mlHif9JtyYhyHR/D/G20b/75U/asytEznTAZyVh1AyGYR+uqzjxWdeaN
-         jMc8h79j1rIeBMlSK6gYxrZip2OyyIFB5rgyPPBHu31zORICZknnSuKpFFt3sF9KcTMM
-         bosF1a8qbXILTu3rjFsleXZww/mP8XCTzRweoZy+I+lNKOi40SRVvMAYnPEidXUctrj1
-         09ejyMxvJWCaMnujzgGVbBSPVvEeTQDcjvbJhPKb7MrhCGktc4jGkTZEyx0co84Mhb8O
-         9EGw==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=injNyqk0O05AWAjdLiK5Yd2rg5V8yrPBZJK/UIJi/0o=;
+        b=OhxktmJd+PAjFzfrGtZaXuFU/maWnJT19lhfCcPO/L8J8X+Oo/ESSzcDGrn4sYcoMk
+         kPS4N3xChJi2pDtasRzktUbuMMqZXEAJPH8gLv6BXeGnRaW7cJjI0LMtaezF1G9bH6lU
+         WzkRpPRR6a7udCiBtXnRy/ybXzqlb65uC3/GWpQA/G+d4DsX4AFUmkxAtyWV9iaVkSzj
+         CcGrhkBuVfsY4013/Bft+F+a4d3+G6z0bkGvNKhmeFdCMacMv7WTHpC/zfDTgyF/6PXk
+         DwUdQcy3j3prh7pR1+s7zLIyIPMDjfC8htOkA5m+1sHQV4Rvdea7qOOnjpTGzTXt8lzE
+         RaYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h3aZTrCb62DNYhpJGTvZ4Kku5N7BEorxuPyN/PlVL+8=;
-        b=WnueWKZJ+rqW06+IoVQu02jHfYGa7/Sn9zFNHOkx1EO/ZRrH2WuPn7xvFpIv38kRTf
-         4UdAZ5L4VWDJkANbrhymEJkUwLxibevxyqrOeYshId/g6FFvwtnJQMSmGWQ1qypNSC27
-         zaNfG5uS79D6v7780heJIwqIp4aWkXxIPT/5wIK7Loh2PauuEKg5Hag6Fj1NrRJRpxcO
-         1uf3beUTNjNfSJOiIpVeNt+Dg/8htIxSNvKxt9N4oded77sThEN1Ai7VCZJfU2X0bhkP
-         sXK3xi4Mm9ZNiFJsMy6Iib0xVZQGOlGB1iqIVD41Vt8WebV2mStYUvzHNZFRu+dLA15z
-         UbFQ==
-X-Gm-Message-State: AOAM533TUUbypofHrSP4lTb9tBiswOD5R7zZIlXsTJ8fxcGCgVpVuD0/
-        FoLsLIFy0bAHpcU4Btd8lr4xfOaWU+XaNOpdZWE=
-X-Google-Smtp-Source: ABdhPJw6lijZkNSyus91iV7e46IwyJEkTCLrzMdKhg9wan8kMnDH09ocordq598XTJfujC0HL+KTM346gU0ohiIFcL8=
-X-Received: by 2002:a67:3352:: with SMTP id z79mr16210350vsz.27.1629464868335;
- Fri, 20 Aug 2021 06:07:48 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=injNyqk0O05AWAjdLiK5Yd2rg5V8yrPBZJK/UIJi/0o=;
+        b=RpHWOi17CSHdGAH+pG0gAiEB8CJNRg1WMqdVEmrnYtpolNqElBfFVHcHvrKFrBaLJs
+         as4b210f1MOazaKUkw4OlsCPnlNpfAborqiHx6iTEz5DOI+r2k3x5MJtKZi7nITFsObK
+         GoxMI/pQ4v94nkYUnKsnLNhDmHF60Uxdw4wXXHYymr/RJZyOA/wiFO9wbKJdNq61VS1i
+         /kKecMJPXzx/lSBX2pV5MSPCZvB6lmdPd8l0hHze7IxrQXYFgM9XlfrJ8ojSX+xI2Ogy
+         mA6ZRYb4GkwepSLk78W8IpXd9HS6L+yVj9sUbiND/9iqsjGH24CcOm1mwMPIerGhf/sy
+         UTdQ==
+X-Gm-Message-State: AOAM533oP8AbwDxERndFxh3CSAqYv8j5nym6Vj0K+8O5S4yOMVB8g6pQ
+        WfeMF9AR05qIAN+R3WQJokxR191wBZarMlShTi9AJXCiNWp/fw==
+X-Google-Smtp-Source: ABdhPJzyeII4XBwTu1jh+7vIYJxM4YYTmKb9f2YNy+vDAz9XkX6KruBe+a/aKqw7IhEh0xoyZPVueZ3V2sNx4Y8AX0k=
+X-Received: by 2002:a2e:2417:: with SMTP id k23mr17886463ljk.256.1629501541700;
+ Fri, 20 Aug 2021 16:19:01 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab0:608b:0:0:0:0:0 with HTTP; Fri, 20 Aug 2021 06:07:48
- -0700 (PDT)
-Reply-To: manuelfranco4love@gmail.com
-From:   nasiru ibrahim <nasiruibrahim342@gmail.com>
-Date:   Fri, 20 Aug 2021 06:07:48 -0700
-Message-ID: <CAJGiSzm-iikyEW12vyXzZ_5xRURVkJAJw=3-epy2nYoV8RbOyw@mail.gmail.com>
-Subject: Der Betrag von 500.000,00 Euro wurde Ihnen gespendet. Kontakt: manuelfranco4love@gmail.com
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 20 Aug 2021 18:18:50 -0500
+Message-ID: <CAH2r5mvxX6BqLvgWO18QE+rQsAZoAzopvu5S3fyy45a+Y-w_MQ@mail.gmail.com>
+Subject: [PATCH] oid_registry: Add OIDs for missing Spnego auth mechanisms to Macs
+To:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     samba-technical <samba-technical@lists.samba.org>
+Content-Type: multipart/mixed; boundary="0000000000008def7405ca05e408"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Ich bin Manuel Franco und habe am 5th. June 2021 den Power Ball
-Jackpot im Wert von 758,7 Millionen Dollar gewonnen. Ich gew=C3=A4hre 5
-Personen jeweils 500.000,00 Euro und Sie geh=C3=B6ren zu den 5 gl=C3=BCckli=
-chen
-Gewinnern, die ausgew=C3=A4hlt wurden, um meine Spende von 500.000,00 Euro
-zu erhalten.
+--0000000000008def7405ca05e408
+Content-Type: text/plain; charset="UTF-8"
 
-Kontaktieren Sie mich f=C3=BCr weitere Informationen unter:
-manuelfranco4love@gmail.com
+ In testing mounts to Macs, noticed that the OIDS for some
+ GSSAPI/SPNEGO auth mechanisms sent by the server were not
+ recognized and were missing from the header.
+
+ Signed-off-by: Steve French <stfrench@microsoft.com>
+
+diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+index 3d8db1f6a5db..2728842721bc 100644
+--- a/include/linux/oid_registry.h
++++ b/include/linux/oid_registry.h
+@@ -70,6 +70,9 @@ enum OID {
+
+        OID_spnego,                     /* 1.3.6.1.5.5.2 */
+
++       OID_IAKerb,                     /* 1.3.6.1.5.2.5 */
++       OID_PKU2U                       /* 1.3.5.1.5.2.7 */
++       OID_Scram,                      /* 1.3.6.1.5.5.14 */
+        OID_certAuthInfoAccess,         /* 1.3.6.1.5.5.7.1.1 */
+        OID_sha1,                       /* 1.3.14.3.2.26 */
+        OID_id_ansip384r1,              /* 1.3.132.0.34 */
+@@ -104,6 +107,10 @@ enum OID {
+        OID_authorityKeyIdentifier,     /* 2.5.29.35 */
+        OID_extKeyUsage,                /* 2.5.29.37 */
+
++       /* Heimdal mechanisms */
++       OID_NetlogonMechanism,          /* 1.2.752.43.14.2 */
++       OID_appleLocalKdcSupported,     /* 1.2.752.43.14.3 */
++
+        /* EC-RDSA */
+        OID_gostCPSignA,                /* 1.2.643.2.2.35.1 */
+        OID_gostCPSignB,                /* 1.2.643.2.2.35.2 */
+
+
+-- 
+Thanks,
+
+Steve
+
+--0000000000008def7405ca05e408
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-oid_registry-Add-OIDs-for-missing-Spnego-auth-mechan.patch"
+Content-Disposition: attachment; 
+	filename="0001-oid_registry-Add-OIDs-for-missing-Spnego-auth-mechan.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kskz4e7j0>
+X-Attachment-Id: f_kskz4e7j0
+
+RnJvbSBmNDRlODEzYmVlNDdhOTA3YTA2MmE4NjNiMWYwMWZmZTJhOGY5ODY1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IEZyaSwgMjAgQXVnIDIwMjEgMTg6MTA6MzYgLTA1MDAKU3ViamVjdDogW1BBVENIXSBv
+aWRfcmVnaXN0cnk6IEFkZCBPSURzIGZvciBtaXNzaW5nIFNwbmVnbyBhdXRoIG1lY2hhbmlzbXMg
+dG8KIE1hY3MKCkluIHRlc3RpbmcgbW91bnRzIHRvIE1hY3MsIG5vdGljZWQgdGhhdCB0aGUgT0lE
+UyBmb3Igc29tZQpHU1NBUEkvU1BORUdPIGF1dGggbWVjaGFuaXNtcyBzZW50IGJ5IHRoZSBzZXJ2
+ZXIgd2VyZSBub3QKcmVjb2duaXplZCBhbmQgd2VyZSBtaXNzaW5nIGZyb20gdGhlIGhlYWRlci4K
+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0LmNvbT4KLS0t
+CiBpbmNsdWRlL2xpbnV4L29pZF9yZWdpc3RyeS5oIHwgNyArKysrKysrCiAxIGZpbGUgY2hhbmdl
+ZCwgNyBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9vaWRfcmVnaXN0
+cnkuaCBiL2luY2x1ZGUvbGludXgvb2lkX3JlZ2lzdHJ5LmgKaW5kZXggM2Q4ZGIxZjZhNWRiLi4y
+NzI4ODQyNzIxYmMgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvb2lkX3JlZ2lzdHJ5LmgKKysr
+IGIvaW5jbHVkZS9saW51eC9vaWRfcmVnaXN0cnkuaApAQCAtNzAsNiArNzAsOSBAQCBlbnVtIE9J
+RCB7CiAKIAlPSURfc3BuZWdvLAkJCS8qIDEuMy42LjEuNS41LjIgKi8KIAorCU9JRF9JQUtlcmIs
+CQkJLyogMS4zLjYuMS41LjIuNSAqLworCU9JRF9QS1UyVQkJCS8qIDEuMy41LjEuNS4yLjcgKi8K
+KwlPSURfU2NyYW0sCQkJLyogMS4zLjYuMS41LjUuMTQgKi8KIAlPSURfY2VydEF1dGhJbmZvQWNj
+ZXNzLAkJLyogMS4zLjYuMS41LjUuNy4xLjEgKi8KIAlPSURfc2hhMSwJCQkvKiAxLjMuMTQuMy4y
+LjI2ICovCiAJT0lEX2lkX2Fuc2lwMzg0cjEsCQkvKiAxLjMuMTMyLjAuMzQgKi8KQEAgLTEwNCw2
+ICsxMDcsMTAgQEAgZW51bSBPSUQgewogCU9JRF9hdXRob3JpdHlLZXlJZGVudGlmaWVyLAkvKiAy
+LjUuMjkuMzUgKi8KIAlPSURfZXh0S2V5VXNhZ2UsCQkvKiAyLjUuMjkuMzcgKi8KIAorCS8qIEhl
+aW1kYWwgbWVjaGFuaXNtcyAqLworCU9JRF9OZXRsb2dvbk1lY2hhbmlzbSwJCS8qIDEuMi43NTIu
+NDMuMTQuMiAqLworCU9JRF9hcHBsZUxvY2FsS2RjU3VwcG9ydGVkLAkvKiAxLjIuNzUyLjQzLjE0
+LjMgKi8KKwogCS8qIEVDLVJEU0EgKi8KIAlPSURfZ29zdENQU2lnbkEsCQkvKiAxLjIuNjQzLjIu
+Mi4zNS4xICovCiAJT0lEX2dvc3RDUFNpZ25CLAkJLyogMS4yLjY0My4yLjIuMzUuMiAqLwotLSAK
+Mi4zMC4yCgo=
+--0000000000008def7405ca05e408--
