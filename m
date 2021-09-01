@@ -2,102 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7FA3FD06A
-	for <lists+linux-cifs@lfdr.de>; Wed,  1 Sep 2021 02:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4003FD708
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Sep 2021 11:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbhIAAq4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 31 Aug 2021 20:46:56 -0400
-Received: from mail-pg1-f176.google.com ([209.85.215.176]:34734 "EHLO
-        mail-pg1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241505AbhIAAqz (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 31 Aug 2021 20:46:55 -0400
-Received: by mail-pg1-f176.google.com with SMTP id x4so1050816pgh.1
-        for <linux-cifs@vger.kernel.org>; Tue, 31 Aug 2021 17:46:00 -0700 (PDT)
+        id S243739AbhIAJmX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 1 Sep 2021 05:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243738AbhIAJmS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Sep 2021 05:42:18 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D7C061764
+        for <linux-cifs@vger.kernel.org>; Wed,  1 Sep 2021 02:41:22 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id s12so3928266ljg.0
+        for <linux-cifs@vger.kernel.org>; Wed, 01 Sep 2021 02:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=NWKMZ//AyFWFbpFk6FF66OtPadVuan7a1ybZS8hGNR8=;
+        b=G3KkUrrmqO06r/liv5lUmu/Fps0kX7KmbX6DroTzNz5xO+5e058rLKR6VlfJpFLIKO
+         0yqvc7Paxo5HKwUbWt1WMB8Nr2T7IzuU8WooUUclMaibJCNc+R6uruT9QHW++8uoOJ7R
+         GviI283XFB/EUQFqQn8NWmFhzNIfyQqnjPXc+aGXtCbiDYc7eAuKr47YUO0ixJOOtANR
+         QCfQEEiCxEI0QmIrtueZM7a2ECgcx7gPHkn2+8qJqA9sr7ojIUIok9Sq9T2GRG0J5UVE
+         TD0W7cohV7clUkQsFEefTH64pEwBLsYE9xT8eq7v19+Xvc4/rtkLEtIzPerLcR2yG+wb
+         xSfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZJucjIXNMkSXo11UYB7gpFsoKqdvQdeqSLHQsJ2D7+o=;
-        b=QV9XuHW6v51jSYr8j+vRSi/p1BcLCdacxlbGAg6NJJA0GgDSEq2hx1bJJf4wBIQtZJ
-         wVpErmRBlvBXjRVEKer3aQqynUDHrxB0M19m0Y4/ewuiuhhWOJL6RuwtpBN2aFpxECVA
-         AQNBrMgdrpzin/EzPYdsqQpqW4fW8Tu3hBfJlN4NTXvo4XxHNQtlTZNXpJOrZ5f0V0x0
-         S+ndT6dI4cvkmT2zoJo2JdDo+vS0s+uQuNln8lXGrb2ELohebBFg1XJpXpReQ+T6hq5V
-         9D5B7nZ/GZ0bM+U1+js/sjDNNllnYswnc3WGrgMhfkARuN2gqs+8QnmKgsTpBLNJhPqW
-         +wUg==
-X-Gm-Message-State: AOAM532EvoczyhbgZ3HfV3fLNBBDQA3k78zb2swJ8uzeH62hkHF0Ge2+
-        z+zuy67+1+C5Mo0kvLtLB1dyeCpOUU9u/Q==
-X-Google-Smtp-Source: ABdhPJzqERQxqsJS8qCugobqwq5YRFj8zd6rpqPp7wfiF2vp20frNaSkzv+HgBXyo2Cg549b4qkK8g==
-X-Received: by 2002:a63:5a64:: with SMTP id k36mr28728668pgm.378.1630457159538;
-        Tue, 31 Aug 2021 17:45:59 -0700 (PDT)
-Received: from localhost.localdomain ([61.74.27.164])
-        by smtp.gmail.com with ESMTPSA id gg22sm3849024pjb.19.2021.08.31.17.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 17:45:59 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-cifs@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 4/4] ksmbd: remove unused ksmbd_file_table_flush function
-Date:   Wed,  1 Sep 2021 09:45:37 +0900
-Message-Id: <20210901004537.45511-4-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210901004537.45511-1-linkinjeon@kernel.org>
-References: <20210901004537.45511-1-linkinjeon@kernel.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=NWKMZ//AyFWFbpFk6FF66OtPadVuan7a1ybZS8hGNR8=;
+        b=Vj4Oo175CpCVDoCJrPsJXcZ3HY43+ANOJCS47w1lUVpR/UDN7ZT/8eaNVZWi/6luYc
+         FI7mfXhyGcBUSLLOCRWrjGyxQPRZRZDI5cw0zjzZ6QcSmdoVLcdgk8la6M/6mP0f3vfe
+         SqGJneti5y7RT3SO47z1fPA4ikGuB4BNHJ84/1xiq7TDD1SJ9OcnEpXffHYbbjnZq5pR
+         hMccJB/M9MvF47JkDp/PqvfY7fB4Jgkq7RW3cH62a0DK9yt1oBAbwlAXy4uGALgnaUqP
+         b94lfh5Le5kscTFI3jhJEPsZIElsgxS5HcFKtwEcayKD67GLGar5MzxsxyFd9f8aKDjP
+         6Snw==
+X-Gm-Message-State: AOAM532EAd0OHkIQscXmqdSjvJj6CciylcG2q0d6bXdXfFXAWprGOcaD
+        0AjszS5yao1+G5UOg8JuD6OFNCaE72hpdggtQbQ=
+X-Google-Smtp-Source: ABdhPJz64SiWvSKt1tAjoKMVvVHpcKjfstydnwkF9WMtEkllEwUEFDu023Z8iKOCGIwqqES/c2E6iOAo1nWPw6BjoFE=
+X-Received: by 2002:a2e:9ac7:: with SMTP id p7mr29179541ljj.72.1630489280100;
+ Wed, 01 Sep 2021 02:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:651c:1193:0:0:0:0 with HTTP; Wed, 1 Sep 2021 02:41:19
+ -0700 (PDT)
+Reply-To: uchennailobitenone@gmail.com
+From:   uchenna <robertandersonhappy2@gmail.com>
+Date:   Wed, 1 Sep 2021 02:41:19 -0700
+Message-ID: <CABzJeR-iEumJJNw6Df9v9VtyoNKcdcVCnTQd4fyXdr=4Xoxzug@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-ksmbd_file_table_flush is a leftover from SMB1. This function is no longer
-needed as SMB1 has been removed from ksmbd.
+Attention Please,
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- fs/ksmbd/vfs_cache.c | 16 ----------------
- fs/ksmbd/vfs_cache.h |  1 -
- 2 files changed, 17 deletions(-)
+I am Bar. uchenna ilobi ,  How are you, I hope you are fine and
+healthy? This is to inform you that i have concluded the transaction
+successfully with the help of a new partner from Venezuela and now the
+fund has been transferred to Venezuela into the bank account of the
+new partner.
 
-diff --git a/fs/ksmbd/vfs_cache.c b/fs/ksmbd/vfs_cache.c
-index 92d8c61ffd2a..29c1db66bd0f 100644
---- a/fs/ksmbd/vfs_cache.c
-+++ b/fs/ksmbd/vfs_cache.c
-@@ -666,22 +666,6 @@ void ksmbd_free_global_file_table(void)
- 	ksmbd_destroy_file_table(&global_ft);
- }
- 
--int ksmbd_file_table_flush(struct ksmbd_work *work)
--{
--	struct ksmbd_file	*fp = NULL;
--	unsigned int		id;
--	int			ret;
--
--	read_lock(&work->sess->file_table.lock);
--	idr_for_each_entry(work->sess->file_table.idr, fp, id) {
--		ret = ksmbd_vfs_fsync(work, fp->volatile_id, KSMBD_NO_FID);
--		if (ret)
--			break;
--	}
--	read_unlock(&work->sess->file_table.lock);
--	return ret;
--}
--
- int ksmbd_init_file_table(struct ksmbd_file_table *ft)
- {
- 	ft->idr = kzalloc(sizeof(struct idr), GFP_KERNEL);
-diff --git a/fs/ksmbd/vfs_cache.h b/fs/ksmbd/vfs_cache.h
-index 70dfe6a99f13..448576fbe4b7 100644
---- a/fs/ksmbd/vfs_cache.h
-+++ b/fs/ksmbd/vfs_cache.h
-@@ -152,7 +152,6 @@ void ksmbd_close_session_fds(struct ksmbd_work *work);
- int ksmbd_close_inode_fds(struct ksmbd_work *work, struct inode *inode);
- int ksmbd_init_global_file_table(void);
- void ksmbd_free_global_file_table(void);
--int ksmbd_file_table_flush(struct ksmbd_work *work);
- void ksmbd_set_fd_limit(unsigned long limit);
- 
- /*
--- 
-2.25.1
+Meanwhile, I have decided to compensate you with the sum of
+US$350,000.00 (thiree Hundred and Fifty Thousand United States
+Dollars) due to your past effort, though you disappointed me along the
+line. But nevertheless I am very happy for the successful ending of
+the transaction without any problem and that is the reason why i have
+decided to compensate you with the sum of US$350,000.00 so that you
+will share the joy with me.
 
+I advise you to contact my secretary for Atm Card of US$350.000.00,
+which I kept for you. Contact him now without any delay.
+
+Name: solomon brandy
+
+Email:solomonbrandyfiveone@gmail.com
+
+Kindly reconfirm to him the following below information:
+
+Your full name_________________________
+Your address__________________________
+Your country___________________________
+Your age______________________________
+Your occupation________________________
+Your cell Phone number______________________
+
+Note that if you did not send him the above information complete, he
+will not release the Atm card to you because he has to be sure that it
+is you. Ask him to send you the total sum of ($350.000.00 ) Atm card,
+which I kept for you.
+
+Best regards,
+
+Mr. uchenna ilobi
