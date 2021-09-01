@@ -2,98 +2,73 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3E63FF8FC
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Sep 2021 05:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF023FFFA1
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Sep 2021 14:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbhICDCw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 2 Sep 2021 23:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbhICDCv (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 2 Sep 2021 23:02:51 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E589C061575
-        for <linux-cifs@vger.kernel.org>; Thu,  2 Sep 2021 20:01:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id jg16so5926014ejc.1
-        for <linux-cifs@vger.kernel.org>; Thu, 02 Sep 2021 20:01:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y/OVXvDuDAR0okjyfNr/JnNdFq/R9G4ZWHtYk19cX+U=;
-        b=mYzPb8cC66a6GpkVa2Qa9Tc1x/Jhmz3YmL4Nc07rt4G3mit2xJZIJ9Lqrbkls56++7
-         uNMrTpjGGuT4SlKmOQV0CqpxCAtifDygUDBgj6LM2g5M8Mo8gOl0nH6T36keqwP0gAQ9
-         Nayiub1DbWxydYAthfbFQSJCnjfnIAzrnV0qegMhAk9R/dREX8LOIKRSr+4C31gPqFAQ
-         iiwWudXHrO8KkvhLb8tlTRTjQ925aNsPoVW5E0Ejpk68u6F+S68s7+XgSRhf70OpbsG6
-         56ya9t1lf5hMDQ06c6AapQngXbdbPvuo9FgwFFE/+DZB4f6y6eahigp+uCMvM/nkcmEz
-         iKoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y/OVXvDuDAR0okjyfNr/JnNdFq/R9G4ZWHtYk19cX+U=;
-        b=a6tlKjst3GDbBDSqurChxNcy9AzHGcSx3d8t1evwojhnlmsf46GVADTYTLr+WZl5q6
-         APGWgBVoEV1FCCSW2x9fbsuAKA0a6Q6ihe8WqfhcT5HXN5UIH/MRu66ugzT9QJR9Porm
-         qxsOsId8D2rgt98aafpWfsnUIADKxZkZ9xMQ4/bok6RswcXIp9ML9u4o/wfwZv3/yOrK
-         kpiJxTfnbOFbz7nS0AucCNwD6tWdrAj/5itlYzkdz0lFK7mq89g0kaaUwXHCSXheBnq/
-         w+tJs+kL378+Q9aMasco2+wI8fPQgK/pgV9jZ/Bjs63xPEnb8sv/y6VijhYErZ5etiNk
-         ZKsw==
-X-Gm-Message-State: AOAM532Da77VdK3ftwbt5uehEikFQfktlSRKHGrSMu2S4ZPZT75lEwvH
-        5h36UZU3KAFWrVaBd56hFqXpzjE2H3MZI7vN7/1nLsw7
-X-Google-Smtp-Source: ABdhPJwbDBYG47PmrLebrx9VCqNdsJ17iqE2mKqv2OxyvTlaNGHOKolUGOZQwuhcXLyahMJ0LEyKiR1OUpuXQSdx0rw=
-X-Received: by 2002:a17:906:d52:: with SMTP id r18mr1596694ejh.47.1630638109946;
- Thu, 02 Sep 2021 20:01:49 -0700 (PDT)
+        id S235119AbhICMPr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 3 Sep 2021 08:15:47 -0400
+Received: from mail.repatriados.gov.py ([168.90.176.63]:41912 "EHLO
+        mail.repatriados.gov.py" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235065AbhICMPr (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Sep 2021 08:15:47 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.repatriados.gov.py (Postfix) with ESMTP id 09582A81BB;
+        Wed,  1 Sep 2021 09:04:48 -0400 (-04)
+Received: from mail.repatriados.gov.py ([127.0.0.1])
+        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 08J5aQ0H-AD5; Wed,  1 Sep 2021 09:04:45 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.repatriados.gov.py (Postfix) with ESMTP id C040162EBC;
+        Wed,  1 Sep 2021 00:21:34 -0400 (-04)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.repatriados.gov.py C040162EBC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=repatriados.gov.py;
+        s=66AB3A4C-4957-11E8-AF15-073A956E488A; t=1630470095;
+        bh=re+Bi7IjhFEavKutGVOnSLzHkgr9hnVuewhYSbG4AUw=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=K0cdMkD7dq9w1zqHA1dSYzAI4V9hDfcYoT6SyvKS7O1aDGwmSYykBvgClOrRCkBkM
+         snJI/bF9radTHgHy3c9UwXq45SfUyaHm1bQaNMea7BtiNapxbHM4wVNbJAX6MAIJ6I
+         6FPOgsV+bUymP0yQSFSLx7Y8gwMY33f4EIP0+BHoSQfm7jC1BgTOLIXXvR6Gz6kN0j
+         +NQN92Iv3JNUT73ALKJTLtxv4Lk43ZxY36XfJpCPMwQGn5YZe/8coBq0fPBrNoOchg
+         zP9a29obwSAbHlXDFeQCjc2MpWKx86acmcACWhLphslyQzWDDZiz06WCUa2L2io4rc
+         UmMLeiPDUDjmA==
+X-Virus-Scanned: amavisd-new at repatriados.gov.py
+Received: from mail.repatriados.gov.py ([127.0.0.1])
+        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id A_4FM_itwUSh; Wed,  1 Sep 2021 00:21:34 -0400 (-04)
+Received: from cris-PC.www.huaweimobilewifi.com (unknown [105.4.4.195])
+        by mail.repatriados.gov.py (Postfix) with ESMTPSA id 2FE9B6848C;
+        Tue, 31 Aug 2021 22:05:53 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20210902233716.1923306-1-lsahlber@redhat.com> <CAH2r5muXpRLNFPisye2NVHa1_G3U6BacZz75P9=kDmZH1Z9n7Q@mail.gmail.com>
-In-Reply-To: <CAH2r5muXpRLNFPisye2NVHa1_G3U6BacZz75P9=kDmZH1Z9n7Q@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Fri, 3 Sep 2021 13:01:38 +1000
-Message-ID: <CAN05THREpo31vmCJB0y2pmDv-Cac3F3igeDxVVFktEOhYfrJkA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] cifs: create a common smb2pdu.h for client and server
-To:     Steve French <smfrench@gmail.com>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Euro?=
+To:     Recipients <mdominguez@repatriados.gov.py>
+From:   ''Charles jackon'' <mdominguez@repatriados.gov.py>
+Date:   Wed, 01 Sep 2021 04:06:28 +0200
+Reply-To: charlesjacksonjr001@gmail.com
+Message-Id: <20210901020555.2FE9B6848C@mail.repatriados.gov.py>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Sep 3, 2021 at 12:16 PM Steve French <smfrench@gmail.com> wrote:
->
-> The smbfsctl.h should also be easy to move ... but the obvious
-> question is whether "common" headers belong in "fs/cifs_common" or in
-> include/linux ...
-> (as e.g. nfs does with common headers between server and client)
+Hallo
 
-Maybe. I think things that should never be used by any other,
-non-cifs, modules might be better in cifs-common than make
-them world visible in include/linux.
-Especially things like pdu structures that should never be used by any
-other modules.
+Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Ameri=
+ka, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen =
+US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der H=
+ilfsgelder f=FCr das Corona-Virus.
 
-But I do not feel strongly about it  so feel free to git mv the file over there.
+Dies ist Ihr Spendencode: [CJ530342019]
+
+www.youtube.com/watch?v=3DBSr8myiLPMQ
 
 
+Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
+
+charlesjacksonjr001@gmail.com
+
+Ich hoffe, dass Sie und Ihre Familie dies durchkommen
 
 
->
-> On Thu, Sep 2, 2021 at 6:37 PM Ronnie Sahlberg <lsahlber@redhat.com> wrote:
-> >
-> > Steve,
-> >
-> > Here is an initial set of patches that starts moving SMB2 PDU definitions
-> > from the client/server into a shared smb2pd.h file.
-> >
-> > It moves the command opcode values into cifs_common,
-> > it renames cifs smb2_sync_hdr to smb2_hdr to harmonize with ksmbd naming
-> > and it moves the tree connect and disconnect PDU definitions to the shared
-> > file.
-> >
-> >
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+Herr Charles Jackson
