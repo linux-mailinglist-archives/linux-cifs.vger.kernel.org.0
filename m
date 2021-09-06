@@ -2,391 +2,1835 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178F40160B
-	for <lists+linux-cifs@lfdr.de>; Mon,  6 Sep 2021 07:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1105401A66
+	for <lists+linux-cifs@lfdr.de>; Mon,  6 Sep 2021 13:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238676AbhIFFoN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 6 Sep 2021 01:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbhIFFoM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 6 Sep 2021 01:44:12 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C36CC061575
-        for <linux-cifs@vger.kernel.org>; Sun,  5 Sep 2021 22:43:08 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id mw10-20020a17090b4d0a00b0017b59213831so3608511pjb.0
-        for <linux-cifs@vger.kernel.org>; Sun, 05 Sep 2021 22:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=stD+27V/yXOLtXxW7DmjjZCLgsBCy8q6e93PaiYYG4E=;
-        b=O0Ys6OAFNYL0DRGpmvxaPErl/r4VAs+SjsGkbs7/c/2J8BRSg0v01S69tskz4VYuNt
-         xr7+K5YR2hE+sl8bMefcN5VMzh0Ts9mPx3L9E5GdEi6ZojNFezmYvh9vB6FiXT5QmXoL
-         VietiLAcBxjcqDrbbL77d/v/muFF3N43GKrkriDuOAp6okSclldMFnCfHXMvwu5deVJL
-         4i4KDbtceuaw4NcdsQziqWzS6euVcHFDxsUxoNdR17+cOeqiWtMW1THX0iMkmL6IAern
-         9C8hCiRwTyoVheTQNrwX1Wsql7DAQUgszPSpKt20pGz5APl+3tBiAcNgkLqn3UWlPUYF
-         rczQ==
+        id S235072AbhIFLOv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 6 Sep 2021 07:14:51 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:52898 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232819AbhIFLOu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 6 Sep 2021 07:14:50 -0400
+Received: by mail-pj1-f44.google.com with SMTP id d5so4104388pjx.2
+        for <linux-cifs@vger.kernel.org>; Mon, 06 Sep 2021 04:13:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=stD+27V/yXOLtXxW7DmjjZCLgsBCy8q6e93PaiYYG4E=;
-        b=fAKkAIF1342SyvO/nhhtfzCHTnHKok+dCAcPdwIN2ViEMB3iihWxHOqquNWmPEI/e+
-         9n9OYF+DkTqWP/tfaGD6fdE9cOlYEpfhclgQis8F7vMdeVilTX7AEqNAMb0eEM1tAnjA
-         HlbRG9zc147XQZwr+BmwTNAxcpx+RJtcf8gnNCV6gI6N4aU8t1bkJI9LtLWzWAH8qiYI
-         HbVOhWWhtOToTUSK6WBiz7YEO6gpURFAbiMzdmo9C7aSeEM0tUpK2GDrDSIUWpkX/tGz
-         S3+5S1tsnLjFa6WQhNAoIFgPCKJY7FPiyAc0vAC/ehsTG++DCsNNiuJYs+zZjzCg0ClB
-         oXnw==
-X-Gm-Message-State: AOAM532geomS9iVBa0tVrnBWkPflu3k6au66UCGBGmKTbaQI/N9Mavgp
-        CzMrRzHAaVzxLYmxvyqyAN9eIpu3fjc=
-X-Google-Smtp-Source: ABdhPJwsk9J78FBgHpKpcNhO0Od7CErHvKYRmwdvA3fGlPv2Yn49vBzEIeioFa93W7XpAH1R1JBbhA==
-X-Received: by 2002:a17:90b:3742:: with SMTP id ne2mr12292321pjb.218.1630906987333;
-        Sun, 05 Sep 2021 22:43:07 -0700 (PDT)
-Received: from xzhoux.usersys.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id q20sm7638041pgu.31.2021.09.05.22.43.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p99aG++D8PKAZTVpb3aSxOuP1EwZdyXziD9kHMQGYUM=;
+        b=eczFy3FMzUJMdji8AzRkx934f60QcmhOgd+4tVdLmDW3EQg2jSIyb6LIPfFF4XHz1r
+         tCSpOXX/BaSg4uIDCtvaVSRz9QjHTRe7LuS0x5DVbltAhexUr3Q2hp5cBiP+NgBYMYpb
+         AJ3LkWdQIJasYYAnc8QfkwxgQW2XEDugmy1GUQcpqyBmIWFIBTnl04Ng6QpPdKjVZU9k
+         R+L7gk8Qk/C2fPlQaF7fCSlo5MtQrYMOXAcYdAtJL3rGs83Tl2OcWfI4C0J3vcs2HmqN
+         BGuYvNhWXMs4Y9AY2fCINRGavBRHFPALEm0ErFwb5wWI6HvRww8RcGYWZtp1lZiXiKgM
+         xQvA==
+X-Gm-Message-State: AOAM530H1mc/KuTww/2aXvXyJU4ijLuHux+NKSU7D3i38BDu28IzWJ8A
+        Qv9Lx2TfPpaGd4V8LM72sYmdUS87F9V7Cg==
+X-Google-Smtp-Source: ABdhPJwIFjxUzFB87go1yE7IkC2o+QEB5VqVmSBvvFXbE5lufMo3WqQbP3oAgxmjdFQ/QkWkQeZv9w==
+X-Received: by 2002:a17:902:7e88:b0:138:f5b2:2df9 with SMTP id z8-20020a1709027e8800b00138f5b22df9mr10349840pla.48.1630926824522;
+        Mon, 06 Sep 2021 04:13:44 -0700 (PDT)
+Received: from localhost.localdomain ([61.74.27.164])
+        by smtp.gmail.com with ESMTPSA id m26sm7724054pfo.146.2021.09.06.04.13.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Sep 2021 22:43:06 -0700 (PDT)
-Date:   Mon, 6 Sep 2021 13:42:58 +0800
-From:   Murphy Zhou <jencce.kernel@gmail.com>
+        Mon, 06 Sep 2021 04:13:44 -0700 (PDT)
+From:   Namjae Jeon <linkinjeon@kernel.org>
 To:     linux-cifs@vger.kernel.org
-Cc:     Rohith Surabattula <rohiths@microsoft.com>, bgoncalv@redhat.com
-Subject: [regression] fsstress hung since 5.14-rc5-smb3-fixes
-Message-ID: <20210906054258.si3itgafckvfpsdc@xzhoux.usersys.redhat.com>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Subject: [PATCH v2 1/2] ksmbd: remove smb2_buf_length in smb2_hdr
+Date:   Mon,  6 Sep 2021 20:13:36 +0900
+Message-Id: <20210906111337.12716-1-linkinjeon@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi,
+To move smb2_hdr to cifs_common, This patch remove smb2_buf_length
+variable in smb2_hdr. Also, declare smb2_get_msg function to get smb2
+request/response from ->request/response_buf.
 
-Since this commit:
-
-commit 9e992755be8f2d458a0bcbefd19e493483c1dba2
-Author: Rohith Surabattula <rohiths@microsoft.com>
-Date:   Mon Aug 9 09:32:46 2021 +0000
-
-    cifs: Call close synchronously during unlink/rename/lease break.
-
-
-CIFS can't finish a basic fsstress testcase. The kernel is soft locked up and
-never returns. You can't stop these IO process but restarting the server.
-For example, xfstests generic/051. The server is samba-4.14 and it's always
-reproducible. See call traces in the end of this email.
-
-Reverting this commit can fix this.
-
-Other xfstest fsstress testcase like generic/461 can also hit this issue.
-
-
-Thanks,
-Murphy
-
-
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
-Soft lock up call trace from fsstress test:
+v2:
+  - fix build error reported by kernel test robot.
 
-[  130.698396] watchdog: BUG: soft lockup - CPU#6 stuck for 26s! [xfs_fsr:6618]
-[  130.705489] Modules linked in: nls_utf8 cifs cifs_arc4 rdma_cm iw_cm ib_cm ib_core cifs_md4 dns_resolver fscache netfs rfkill intel_rapl_msr intel_rapl_common sunrpc isst_if_common nfit x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm ipmi_ssif mgag200 i2c_algo_bit drm_kms_helper irqbypass acpi_ipmi syscopyarea sysfillrect ipmi_si rapl ses sysimgblt intel_cstate fb_sys_fops enclosure intel_uncore cec ipmi_devintf mei_me mei acpi_tad ipmi_msghandler pcspkr lpc_ich ioatdma hpilo acpi_power_meter dca drm fuse xfs libcrc32c sd_mod t10_pi sg crct10dif_pclmul uas crc32_pclmul crc32c_intel smartpqi serio_raw usb_storage tg3 ghash_clmulni_intel scsi_transport_sas hpwdt wmi
-[  130.765809] CPU: 6 PID: 6618 Comm: xfs_fsr Kdump: loaded Tainted: G          I       5.14.0-master-27151f177827+ #32
-[  130.776391] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  130.784960] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x44/0x190
-[  130.791706] Code: 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 8b 02 <84> c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00 81 fe
-[  130.795394] watchdog: BUG: soft lockup - CPU#22 stuck for 26s! [cifsd:6084]
-[  130.810583] RSP: 0018:ffffaedb4abcbb88 EFLAGS: 00000202
-[  130.817582] Modules linked in:
-[  130.817582]
-[  130.817583] RAX: 0000000000000101 RBX: ffffa016a569fec0 RCX: 0000000000000000
-[  130.822833]  nls_utf8
-[  130.825902] RDX: ffffffffc0deb2b4 RSI: 0000000000000000 RDI: ffffffffc0deb2b4
-[  130.827396]  cifs
-[  130.834569] RBP: ffffa01dc2a8c000 R08: 0000000000000001 R09: 0000000000000064
-[  130.836851]  cifs_arc4
-[  130.844023] R10: ffffa016a569fec0 R11: 0000000074736574 R12: ffffa016a569fec0
-[  130.845956]  rdma_cm
-[  130.853129] R13: ffffaedb4abcbcf0 R14: ffffaedb4abcbc6c R15: 0000000000000000
-[  130.855497]  iw_cm
-[  130.862669] FS:  00007fa1ece9d740(0000) GS:ffffa01d9fd80000(0000) knlGS:0000000000000000
-[  130.864861]  ib_cm
-[  130.872034] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  130.874053]  ib_core
-[  130.882186] CR2: 00007ffc4ea8bf40 CR3: 000000015448c002 CR4: 00000000007706e0
-[  130.884205]  cifs_md4
-[  130.889980] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  130.892172]  dns_resolver
-[  130.899346] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  130.901628]  fscache
-[  130.908801] PKRU: 55555554
-[  130.911432]  netfs
-[  130.918604] Call Trace:
-[  130.920796]  rfkill
-[  130.923515]  _raw_spin_lock+0x1a/0x20
-[  130.925533]  intel_rapl_msr
-[  130.927989]  _get_xid+0x11/0xa0 [cifs]
-[  130.930093]  intel_rapl_common
-[  130.933773]  cifs_revalidate_dentry_attr+0x70/0x360 [cifs]
-[  130.936577]  sunrpc
-[  130.940344]  cifs_revalidate_dentry+0xf/0x20 [cifs]
-[  130.943408]  isst_if_common
-[  130.948922]  cifs_d_revalidate+0x51/0x150 [cifs]
-[  130.951028]  nfit
-[  130.955931]  lookup_fast+0xd2/0x160
-[  130.958735]  x86_pkg_temp_thermal
-[  130.963376]  walk_component+0x41/0x1d0
-[  130.965308]  intel_powerclamp
-[  130.968813]  path_lookupat+0x6e/0x1b0
-[  130.972141]  coretemp kvm_intel
-[  130.975908]  __filename_lookup+0xcf/0x1d0
-[  130.978887]  kvm
-[  130.982566]  ? path_openat+0x21d/0x2b0
-[  130.985721]  ipmi_ssif
-[  130.989749]  ? __virt_addr_valid+0x45/0x70
-[  130.991593]  mgag200
-[  130.995360]  ? __check_object_size.part.0+0x11f/0x140
-[  130.997729]  i2c_algo_bit
-[  131.001843]  user_path_at_empty+0x3a/0x60
-[  131.004036]  drm_kms_helper
-[  13[  158.698098] watchdog: BUG: soft lockup - CPU#6 stuck for 52s! [xfs_fsr:6618]
-[  158.705188] Modules linked in: nls_utf8 cifs cifs_arc4 rdma_cm iw_cm ib_cm ib_core cifs_md4 dns_resolver fscache netfs rfkill intel_rapl_msr intel_rapl_common sunrpc isst_if_common nfit x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm ipmi_ssif mgag200 i2c_algo_bit drm_kms_helper irqbypass acpi_ipmi syscopyarea sysfillrect ipmi_si rapl ses sysimgblt intel_cstate fb_sys_fops enclosure intel_uncore cec ipmi_devintf mei_me mei acpi_tad ipmi_msghandler pcspkr lpc_ich ioatdma hpilo acpi_power_meter dca drm fuse xfs libcrc32c sd_mod t10_pi sg crct10dif_pclmul uas crc32_pclmul crc32c_intel smartpqi serio_raw usb_storage tg3 ghash_clmulni_intel scsi_transport_sas hpwdt wmi
-[  158.765499] CPU: 6 PID: 6618 Comm: xfs_fsr Kdump: loaded Tainted: G          I  L    5.14.0-master-27151f177827+ #32
-[  158.776079] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  158.784648] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x42/0x190
-[  158.791390] Code: 0f ba 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 <8b> 02 84 c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00
-[  158.795096] watchdog: BUG: soft lockup - CPU#22 stuck for 52s! [cifsd:6084]
-[  158.810268] RSP: 0018:ffffaedb4abcbb88 EFLAGS: 00000202
-[  158.817266] Modules linked in: nls_utf8
-[  158.822517]
-[  158.822518] RAX: 0000000000000101 RBX: ffffa016a569fec0 RCX: 0000000000000000
-[  158.826369]  cifs
-[  158.827864] RDX: ffffffffc0deb2b4 RSI: 0000000000000000 RDI: ffffffffc0deb2b4
-[  158.835036]  cifs_arc4
-[  158.836969] RBP: ffffa01dc2a8c000 R08: 0000000000000001 R09: 0000000000000064
-[  158.844140]  rdma_cm
-[  158.846508] R10: ffffa016a569fec0 R11: 0000000074736574 R12: ffffa016a569fec0
-[  158.853680]  iw_cm
-[  158.855873] R13: ffffaedb4abcbcf0 R14: ffffaedb4abcbc6c R15: 0000000000000000
-[  158.863046]  ib_cm
-[  158.865064] FS:  00007fa1ece9d740(0000) GS:ffffa01d9fd80000(0000) knlGS:0000000000000000
-[  158.872237]  ib_core
-[  158.874255] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  158.882388]  cifs_md4
-[  158.884581] CR2: 00007ffc4ea8bf40 CR3: 000000015448c002 CR4: 00000000007706e0
-[  158.890357]  dns_resolver
-[  158.892639] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  158.899812]  fscache
-[  158.902443] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  158.909615]  netfs
-[  158.911808] PKRU: 55555554
-[  158.918982]  rfkill
-[  158.921000] Call Trace:
-[  158.923718]  intel_rapl_msr
-[  158.925824]  _raw_spin_lock+0x1a/0x20
-[  158.928279]  intel_rapl_common
-[  158.931084]  _get_xid+0x11/0xa0 [cifs]
-[  158.934763]  sunrpc isst_if_common
-[  158.937831]  cifs_revalidate_dentry_attr+0x70/0x360 [cifs]
-[  158.941597]  nfit
-[  158.945015]  cifs_revalidate_dentry+0xf/0x20 [cifs]
-[  158.950527]  x86_pkg_temp_thermal
-[  158.952460]  cifs_d_revalidate+0x51/0x150 [cifs]
-[  158.957361]  intel_powerclamp
-[  158.960691]  lookup_fast+0xd2/0x160
-[  158.965329]  coretemp
-[  158.968310]  walk_component+0x41/0x1d0
-[  158.971813]  kvm_intel
-[  158.974096]  path_lookupat+0x6e/0x1b0
-[  158.977861]  kvm
-[  158.980231]  __filename_lookup+0xcf/0x1d0
-[  158.983908]  ipmi_ssif
-[  158.985754]  ? path_openat+0x21d/0x2b0
-[  158.989780]  mgag200
-[  158.992149]  ? __virt_addr_valid+0x45/0x70
-[  158.995914]  i2c_algo_bit
-[  158.998109]  ? __check_object_size.part.0+0x11f/0x140
-[  159.002223]  drm_kms_helper
-[  159.004855]  user_path_at_empty+0x3a/0x60
-[  159.009930]  irqbypass
-[  159.012736]  vfs_statx+0x74/0x130
-[  159.016762]  acpi_ipmi
-[  159.019131]  ? rcu_nocb_try_bypass+0x4a/0x3f0
-[  159.022461]  syscopyarea
-[  159.024831]  __do_sys_newfstatat+0x31/0x70
-[  159.029209]  sysfillrect
-[  159.031752]  ? syscall_trace_enter.constprop.0+0x13d/0x1b0
-[  159.035867]  ipmi_si
-[  159.038412]  do_syscall_64+0x38/0x90
-[  159.043925]  rapl
-[  159.046120]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  159.049711]  ses
-[  159.051644] RIP: 0033:0x7fa1ecfa0dee
-[  159.056719]  sysimgblt
-[  159.058565] Code: 48 89 f2 b9 00 01 00 00 48 89 fe bf 9c ff ff ff e9 07 00 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 41 89 ca b8 06 01 00 00 0f 05 <3d> 00 f0 ff ff 77 0b 31 c0 c3 0f 1f 84 00 00 00 00 00 48 8b 15 01
-[  159.062157]  intel_cstate
-[  159.064527] RSP: 002b:00007ffc4ea8dfc8 EFLAGS: 00000202
-[  159.083404]  fb_sys_fops
-[  159.086036]  ORIG_RAX: 0000000000000106
-[  159.091286]  enclosure
-[  159.093828] RAX: ffffffffffffffda RBX: 00007ffc4ea8e728 RCX: 00007fa1ecfa0dee
-[  159.097682]  intel_uncore
-[  159.100051] RDX: 00007ffc4ea8e070 RSI: 00007ffc4ea903e9 RDI: 00000000ffffff9c
-[  159.107224]  cec
-[  159.109854] RBP: 0000000000000003 R08: 00000000018f12f0 R09: 0000000000000001
-[  159.117026]  ipmi_devintf
-[  159.118871] R10: 0000000000000100 R11: 0000000000000202 R12: 00007ffc4ea903e9
-[  159.126043]  mei_me
-[  159.128675] R13: 00007ffc4ea8e070 R14: 00007fa1ed11cc00 R15: 000000000040ce08
-[  159.135847]  mei acpi_tad ipmi_msghandler pcspkr lpc_ich ioatdma hpilo acpi_power_meter dca drm fuse xfs libcrc32c sd_mod t10_pi sg crct10dif_pclmul uas crc32_pclmul crc32c_intel smartpqi serio_raw usb_storage tg3 ghash_clmulni_intel scsi_transport_sas hpwdt wmi
-[  159.168470] CPU: 22 PID: 6084 Comm: cifsd Kdump: loaded Tainted: G          I  L    5.14.0-master-27151f177827+ #32
-[  159.178963] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  159.187532] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x42/0x190
-[  159.194272] Code: 0f ba 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 <8b> 02 84 c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00
-[  159.213149] RSP: 0018:ffffaedb47e5fd48 EFLAGS: 00000202
-[  159.218401] RAX: 0000000000000101 RBX: ffffffffc0deb2c4 RCX: 0000000000000000
-[  159.225573] RDX: ffffffffc0deb2c4 RSI: 0000000000000000 RDI: ffffffffc0deb2c4
-[  159.232746] RBP: ffffa01732f27800 R08: ffffa01732f27800 R09: ffffaedb47e5fd08
-[  159.239919] R10: ffffa016888a0000 R11: ffffffffa0c060e0 R12: ffffa01dcaca0000
-[  159.247092] R13: ffffaedb47e5feb0 R14: ffffa016b8c4cf00 R15: ffffa01dcaca0000
-[  159.254264] FS:  0000000000000000(0000) GS:ffffa01d9ff00000(0000) knlGS:0000000000000000
-[  159.262399] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  159.268175] CR2: 0000560f1678c958 CR3: 0000000ae1e10003 CR4: 00000000007706e0
-[  159.275348] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  159.282520] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  159.289693] PKRU: 55555554
-[  159.292412] Call Trace:
-[  159.294867]  _raw_spin_lock+0x1a/0x20
-[  159.298548]  cifs_put_smb_ses+0x37/0x3b0 [cifs]
-[  159.303130]  smb2_find_smb_tcon+0x8a/0xd0 [cifs]
-[  159.307803]  smb2_handle_cancelled_mid+0x3e/0x90 [cifs]
-[  159.313087]  _cifs_mid_q_entry_release+0x83/0xb0 [cifs]
-[  159.318367]  cifs_mid_q_entry_release+0x41/0x50 [cifs]
-[  159.323560]  cifs_demultiplex_thread+0x2f5/0x7a0 [cifs]
-[  159.328838]  ? cifs_handle_standard+0x190/0x190 [cifs]
-[  159.334027]  kthread+0x10c/0x130
-[  159.337271]  ? set_kthread_struct+0x40/0x40
-[  159.341475]  ret_from_fork+0x1f/0x30
-[  163.490051] rcu: INFO: rcu_sched self-detected stall on CPU
-[  163.495654] rcu: 	22-....: (58901 ticks this GP) idle=335/1/0x4000000000000000 softirq=2462/2462 fqs=15001
-[  163.505451] 	(t=60016 jiffies g=19949 q=792)
-[  163.509744] NMI backtrace for cpu 22
-[  163.513336] CPU: 22 PID: 6084 Comm: cifsd Kdump: loaded Tainted: G          I  L    5.14.0-master-27151f177827+ #32
-[  163.523829] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  163.532399] Call Trace:
-[  163.534857]  <IRQ>
-[  163.536877]  dump_stack_lvl+0x34/0x44
-[  163.540562]  nmi_cpu_backtrace.cold+0x30/0x6f
-[  163.544941]  ? lapic_can_unplug_cpu+0x80/0x80
-[  163.549321]  nmi_trigger_cpumask_backtrace+0xd2/0xe0
-[  163.554316]  trigger_single_cpu_backtrace+0x2a/0x2d
-[  163.559224]  rcu_dump_cpu_stacks+0xaa/0xe3
-[  163.563341]  print_cpu_stall.cold+0x2f/0xd2
-[  163.567546]  check_cpu_stall+0xe9/0x240
-[  163.571403]  rcu_pending+0x26/0x130
-[  163.574909]  rcu_sched_clock_irq+0x43/0x100
-[  163.579114]  update_process_times+0x8c/0xc0
-[  163.583319]  tick_sched_handle+0x22/0x60
-[  163.587265]  tick_sched_timer+0x61/0x70
-[  163.591122]  ? tick_sched_do_timer+0x50/0x50
-[  163.595415]  __hrtimer_run_queues+0x127/0x270
-[  163.599796]  hrtimer_interrupt+0xfc/0x210
-[  163.603825]  __sysvec_apic_timer_interrupt+0x59/0xd0
-[  163.608820]  sysvec_apic_timer_interrupt+0x6d/0x90
-[  163.613637]  </IRQ>
-[  163.615742]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-[  163.620907] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x42/0x190
-[  163.627646] Code: 0f ba 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 <8b> 02 84 c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00
-[  163.646525] RSP: 0018:ffffaedb47e5fd48 EFLAGS: 00000202
-[  163.651779] RAX: 0000000000000101 RBX: ffffffffc0deb2c4 RCX: 0000000000000000
-[  163.658952] RDX: ffffffffc0deb2c4 RSI: 0000000000000000 RDI: ffffffffc0deb2c4
-[  163.666125] RBP: ffffa01732f27800 R08: ffffa01732f27800 R09: ffffaedb47e5fd08
-[  163.673299] R10: ffffa016888a0000 R11: ffffffffa0c060e0 R12: ffffa01dcaca0000
-[  163.680471] R13: ffffaedb47e5feb0 R14: ffffa016b8c4cf00 R15: ffffa01dcaca0000
-[  163.687646]  _raw_spin_lock+0x1a/0x20
-[  163.691328]  cifs_put_smb_ses+0x37/0x3b0 [cifs]
-[  163.695906]  smb2_find_smb_tcon+0x8a/0xd0 [cifs]
-[  163.700580]  smb2_handle_cancelled_mid+0x3e/0x90 [cifs]
-[  163.705865]  _cifs_mid_q_entry_release+0x83/0xb0 [cifs]
-[  163.711146]  cifs_mid_q_entry_release+0x41/0x50 [cifs]
-[  163.716339]  cifs_demultiplex_thread+0x2f5/0x7a0 [cifs]
-[  163.721616]  ? cifs_handle_standard+0x190/0x190 [cifs]
-[  163.726806]  kthread+0x10c/0x130
-[  163.730051]  ? set_kthread_struct+0x40/0x40
-[  163.734256]  ret_from_fork+0x1f/0x30
-[  186.697897] watchdog: BUG: soft lockup - CPU#6 stuck for 78s! [xfs_fsr:6618]
-[  186.704986] Modules linked in: nls_utf8 cifs cifs_arc4 rdma_cm iw_cm ib_cm ib_core cifs_md4 dns_resolver fscache netfs rfkill intel_rapl_msr intel_rapl_common sunrpc isst_if_common nfit x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm ipmi_ssif mgag200 i2c_algo_bit drm_kms_helper irqbypass acpi_ipmi syscopyarea sysfillrect ipmi_si rapl ses sysimgblt intel_cstate fb_sys_fops enclosure intel_uncore cec ipmi_devintf mei_me mei acpi_tad ipmi_msghandler pcspkr lpc_ich ioatdma hpilo acpi_power_meter dca drm fuse xfs libcrc32c sd_mod t10_pi sg crct10dif_pclmul uas crc32_pclmul crc32c_intel smartpqi serio_raw usb_storage tg3 ghash_clmulni_intel scsi_transport_sas hpwdt wmi
-[  186.765293] CPU: 6 PID: 6618 Comm: xfs_fsr Kdump: loaded Tainted: G          I  L    5.14.0-master-27151f177827+ #32
-[  186.775874] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  186.784446] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x42/0x190
-[  186.791186] Code: 0f ba 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 <8b> 02 84 c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00
-[  186.810063] RSP: 0018:ffffaedb4abcbb88 EFLAGS: 00000202
-[  186.815314] RAX: 0000000000000101 RBX: ffffa016a569fec0 RCX: 0000000000000000
-[  186.822488] RDX: ffffffffc0deb2b4 RSI: 0000000000000000 RDI: ffffffffc0deb2b4
-[  186.829662] RBP: ffffa01dc2a8c000 R08: 0000000000000001 R09: 0000000000000064
-[  186.836836] R10: ffffa016a569fec0 R11: 0000000074736574 R12: ffffa016a569fec0
-[  186.844009] R13: ffffaedb4abcbcf0 R14: ffffaedb4abcbc6c R15: 0000000000000000
-[  186.851183] FS:  00007fa1ece9d740(0000) GS:ffffa01d9fd80000(0000) knlGS:0000000000000000
-[  186.859319] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  186.865096] CR2: 00007ffc4ea8bf40 CR3: 000000015448c002 CR4: 00000000007706e0
-[  186.872268] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  186.879442] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  186.886615] PKRU: 55555554
-[  186.889332] Call Trace:
-[  186.891789]  _raw_spin_lock+0x1a/0x20
-[  186.895471]  _get_xid+0x11/0xa0 [cifs]
-[  186.899270]  cifs_revalidate_dentry_attr+0x70/0x360 [cifs]
-[  186.904811]  cifs_revalidate_dentry+0xf/0x20 [cifs]
-[  186.909740]  cifs_d_revalidate+0x51/0x150 [cifs]
-[  186.914406]  lookup_fast+0xd2/0x160
-[  186.917913]  walk_component+0x41/0x1d0
-[  186.921683]  path_lookupat+0x6e/0x1b0
-[  186.925364]  __filename_lookup+0xcf/0x1d0
-[  186.929392]  ? path_openat+0x21d/0x2b0
-[  186.933160]  ? __virt_addr_valid+0x45/0x70
-[  186.937279]  ? __check_object_size.part.0+0x11f/0x140
-[  186.942357]  user_path_at_empty+0x3a/0x60
-[  186.946386]  vfs_statx+0x74/0x130
-[  186.949717]  ? rcu_nocb_try_bypass+0x4a/0x3f0
-[  186.954096]  __do_sys_newfstatat+0x31/0x70
-[  186.958213]  ? syscall_trace_enter.constprop.0+0x13d/0x1b0
-[  186.963729]  do_syscall_64+0x38/0x90
-[  186.967323]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  186.972401] RIP: 0033:0x7fa1ecfa0dee
-[  186.975994] Code: 48 89 f2 b9 00 01 00 00 48 89 fe bf 9c ff ff ff e9 07 00 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 41 89 ca b8 06 01 00 00 0f 05 <3d> 00 f0 ff ff 77 0b 31 c0 c3 0f 1f 84 00 00 00 00 00 48 8b 15 01
-[  186.994872] RSP: 002b:00007ffc4ea8dfc8 EFLAGS: 00000202 ORIG_RAX: 0000000000000106
-[  187.002483] RAX: ffffffffffffffda RBX: 00007ffc4ea8e728 RCX: 00007fa1ecfa0dee
-[  187.009655] RDX: 00007ffc4ea8e070 RSI: 00007ffc4ea903e9 RDI: 00000000ffffff9c
-[  187.016829] RBP: 0000000000000003 R08: 00000000018f12f0 R09: 0000000000000001
-[  187.024003] R10: 0000000000000100 R11: 0000000000000202 R12: 00007ffc4ea903e9
-[  187.031175] R13: 00007ffc4ea8e070 R14: 00007fa1ed11cc00 R15: 000000000040ce08
-[  190.794869] watchdog: BUG: soft lockup - CPU#22 stuck for 82s! [cifsd:6084]
-[  190.801872] Modules linked in: nls_utf8 cifs cifs_arc4 rdma_cm iw_cm ib_cm ib_core cifs_md4 dns_resolver fscache netfs rfkill intel_rapl_msr intel_rapl_common sunrpc isst_if_common nfit x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm ipmi_ssif mgag200 i2c_algo_bit drm_kms_helper irqbypass acpi_ipmi syscopyarea sysfillrect ipmi_si rapl ses sysimgblt intel_cstate fb_sys_fops enclosure intel_uncore cec ipmi_devintf mei_me mei acpi_tad ipmi_msghandler pcspkr lpc_ich ioatdma hpilo acpi_power_meter dca drm fuse xfs libcrc32c sd_mod t10_pi sg crct10dif_pclmul uas crc32_pclmul crc32c_intel smartpqi serio_raw usb_storage tg3 ghash_clmulni_intel scsi_transport_sas hpwdt wmi
-[  190.862180] CPU: 22 PID: 6084 Comm: cifsd Kdump: loaded Tainted: G          I  L    5.14.0-master-27151f177827+ #32
-[  190.872674] Hardware name: HPE ProLiant DL388 Gen10/ProLiant DL388 Gen10, BIOS U30 04/18/2019
-[  190.881243] RIP: 0010:native_queued_spin_lock_slowpath.part.0+0x42/0x190
-[  190.887983] Code: 0f ba 2a 08 0f 92 c1 8b 02 0f b6 c9 c1 e1 08 30 e4 09 c8 a9 00 01 ff ff 0f 85 ed 00 00 00 85 c0 74 0e 8b 02 84 c0 74 08 f3 90 <8b> 02 84 c0 75 f8 b8 01 00 00 00 66 89 02 c3 8b 37 b8 00 02 00 00
-[  190.906861] RSP: 0018:ffffaedb47e5fd48 EFLAGS: 00000202
-[  190.912113] RAX: 0000000000000101 RBX: ffffffffc0deb2c4 RCX: 0000000000000000
-[  190.919287] RDX: ffffffffc0deb2c4 RSI: 0000000000000000 RDI: ffffffffc0deb2c4
-[  190.926460] RBP: ffffa01732f27800 R08: ffffa01732f27800 R09: ffffaedb47e5fd08
-[  190.933631] R10: ffffa016888a0000 R11: ffffffffa0c060e0 R12: ffffa01dcaca0000
-[  190.940804] R13: ffffaedb47e5feb0 R14: ffffa016b8c4cf00 R15: ffffa01dcaca0000
-[  190.947976] FS:  0000000000000000(0000) GS:ffffa01d9ff00000(0000) knlGS:0000000000000000
-[  190.956110] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  190.961887] CR2: 0000560f1678c958 CR3: 0000000ae1e10003 CR4: 00000000007706e0
-[  190.969062] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  190.976236] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  190.983409] PKRU: 55555554
-[  190.986127] Call Trace:
-[  190.988584]  _raw_spin_lock+0x1a/0x20
-[  190.992267]  cifs_put_smb_ses+0x37/0x3b0 [cifs]
-[  190.996848]  smb2_find_smb_tcon+0x8a/0xd0 [cifs]
-[  191.001524]  smb2_handle_cancelled_mid+0x3e/0x90 [cifs]
-[  191.006809]  _cifs_mid_q_entry_release+0x83/0xb0 [cifs]
-[  191.012090]  cifs_mid_q_entry_release+0x41/0x50 [cifs]
-[  191.017286]  cifs_demultiplex_thread+0x2f5/0x7a0 [cifs]
-[  191.022562]  ? cifs_handle_standard+0x190/0x190 [cifs]
-[  191.027752]  kthread+0x10c/0x130
-[  191.030995]  ? set_kthread_struct+0x40/0x40
-[  191.035199]  ret_from_fork+0x1f/0x30
+ fs/ksmbd/auth.c       |   4 +-
+ fs/ksmbd/ksmbd_work.h |   4 +-
+ fs/ksmbd/oplock.c     |  22 +--
+ fs/ksmbd/smb2misc.c   |   4 +-
+ fs/ksmbd/smb2pdu.c    | 443 +++++++++++++++++++++---------------------
+ fs/ksmbd/smb2pdu.h    |  14 +-
+ fs/ksmbd/smb_common.c |  11 +-
+ fs/ksmbd/smb_common.h |   6 -
+ 8 files changed, 255 insertions(+), 253 deletions(-)
 
+diff --git a/fs/ksmbd/auth.c b/fs/ksmbd/auth.c
+index de36f12070bf..1aa199cee668 100644
+--- a/fs/ksmbd/auth.c
++++ b/fs/ksmbd/auth.c
+@@ -1076,9 +1076,9 @@ int ksmbd_gen_preauth_integrity_hash(struct ksmbd_conn *conn, char *buf,
+ 				     __u8 *pi_hash)
+ {
+ 	int rc;
+-	struct smb2_hdr *rcv_hdr = (struct smb2_hdr *)buf;
++	struct smb2_hdr *rcv_hdr = smb2_get_msg(buf);
+ 	char *all_bytes_msg = (char *)&rcv_hdr->ProtocolId;
+-	int msg_size = be32_to_cpu(rcv_hdr->smb2_buf_length);
++	int msg_size = get_rfc1002_len(buf);
+ 	struct ksmbd_crypto_ctx *ctx = NULL;
+ 
+ 	if (conn->preauth_info->Preauth_HashId !=
+diff --git a/fs/ksmbd/ksmbd_work.h b/fs/ksmbd/ksmbd_work.h
+index f7156bc50049..5ece58e40c97 100644
+--- a/fs/ksmbd/ksmbd_work.h
++++ b/fs/ksmbd/ksmbd_work.h
+@@ -92,7 +92,7 @@ struct ksmbd_work {
+  */
+ static inline void *ksmbd_resp_buf_next(struct ksmbd_work *work)
+ {
+-	return work->response_buf + work->next_smb2_rsp_hdr_off;
++	return work->response_buf + work->next_smb2_rsp_hdr_off + 4;
+ }
+ 
+ /**
+@@ -101,7 +101,7 @@ static inline void *ksmbd_resp_buf_next(struct ksmbd_work *work)
+  */
+ static inline void *ksmbd_req_buf_next(struct ksmbd_work *work)
+ {
+-	return work->request_buf + work->next_smb2_rcv_hdr_off;
++	return work->request_buf + work->next_smb2_rcv_hdr_off + 4;
+ }
+ 
+ struct ksmbd_work *ksmbd_alloc_work_struct(void);
+diff --git a/fs/ksmbd/oplock.c b/fs/ksmbd/oplock.c
+index 16b6236d1bd2..662070316e25 100644
+--- a/fs/ksmbd/oplock.c
++++ b/fs/ksmbd/oplock.c
+@@ -629,10 +629,10 @@ static void __smb2_oplock_break_noti(struct work_struct *wk)
+ 		return;
+ 	}
+ 
+-	rsp_hdr = work->response_buf;
++	rsp_hdr = smb2_get_msg(work->response_buf);
+ 	memset(rsp_hdr, 0, sizeof(struct smb2_hdr) + 2);
+-	rsp_hdr->smb2_buf_length =
+-		cpu_to_be32(smb2_hdr_size_no_buflen(conn->vals));
++	*(__be32 *)work->response_buf =
++		cpu_to_be32(conn->vals->header_size);
+ 	rsp_hdr->ProtocolId = SMB2_PROTO_NUMBER;
+ 	rsp_hdr->StructureSize = SMB2_HEADER_STRUCTURE_SIZE;
+ 	rsp_hdr->CreditRequest = cpu_to_le16(0);
+@@ -645,7 +645,7 @@ static void __smb2_oplock_break_noti(struct work_struct *wk)
+ 	rsp_hdr->SessionId = 0;
+ 	memset(rsp_hdr->Signature, 0, 16);
+ 
+-	rsp = work->response_buf;
++	rsp = smb2_get_msg(work->response_buf);
+ 
+ 	rsp->StructureSize = cpu_to_le16(24);
+ 	if (!br_info->open_trunc &&
+@@ -659,7 +659,7 @@ static void __smb2_oplock_break_noti(struct work_struct *wk)
+ 	rsp->PersistentFid = cpu_to_le64(fp->persistent_id);
+ 	rsp->VolatileFid = cpu_to_le64(fp->volatile_id);
+ 
+-	inc_rfc1001_len(rsp, 24);
++	inc_rfc1001_len(work->response_buf, 24);
+ 
+ 	ksmbd_debug(OPLOCK,
+ 		    "sending oplock break v_id %llu p_id = %llu lock level = %d\n",
+@@ -736,10 +736,10 @@ static void __smb2_lease_break_noti(struct work_struct *wk)
+ 		return;
+ 	}
+ 
+-	rsp_hdr = work->response_buf;
++	rsp_hdr = smb2_get_msg(work->response_buf);
+ 	memset(rsp_hdr, 0, sizeof(struct smb2_hdr) + 2);
+-	rsp_hdr->smb2_buf_length =
+-		cpu_to_be32(smb2_hdr_size_no_buflen(conn->vals));
++	*(__be32 *)work->response_buf =
++		cpu_to_be32(conn->vals->header_size);
+ 	rsp_hdr->ProtocolId = SMB2_PROTO_NUMBER;
+ 	rsp_hdr->StructureSize = SMB2_HEADER_STRUCTURE_SIZE;
+ 	rsp_hdr->CreditRequest = cpu_to_le16(0);
+@@ -752,7 +752,7 @@ static void __smb2_lease_break_noti(struct work_struct *wk)
+ 	rsp_hdr->SessionId = 0;
+ 	memset(rsp_hdr->Signature, 0, 16);
+ 
+-	rsp = work->response_buf;
++	rsp = smb2_get_msg(work->response_buf);
+ 	rsp->StructureSize = cpu_to_le16(44);
+ 	rsp->Epoch = br_info->epoch;
+ 	rsp->Flags = 0;
+@@ -768,7 +768,7 @@ static void __smb2_lease_break_noti(struct work_struct *wk)
+ 	rsp->AccessMaskHint = 0;
+ 	rsp->ShareMaskHint = 0;
+ 
+-	inc_rfc1001_len(rsp, 44);
++	inc_rfc1001_len(work->response_buf, 44);
+ 
+ 	ksmbd_conn_write(work);
+ 	ksmbd_free_work_struct(work);
+@@ -1457,7 +1457,7 @@ struct create_context *smb2_find_context_vals(void *open_req, const char *tag)
+ 	char *name;
+ 	struct smb2_create_req *req = (struct smb2_create_req *)open_req;
+ 
+-	data_offset = (char *)req + 4 + le32_to_cpu(req->CreateContextsOffset);
++	data_offset = (char *)req + le32_to_cpu(req->CreateContextsOffset);
+ 	cc = (struct create_context *)data_offset;
+ 	do {
+ 		int val;
+diff --git a/fs/ksmbd/smb2misc.c b/fs/ksmbd/smb2misc.c
+index 9aa46bb3e10d..66052b5a88ac 100644
+--- a/fs/ksmbd/smb2misc.c
++++ b/fs/ksmbd/smb2misc.c
+@@ -332,11 +332,11 @@ static int smb2_validate_credit_charge(struct smb2_hdr *hdr)
+ 
+ int ksmbd_smb2_check_message(struct ksmbd_work *work)
+ {
+-	struct smb2_pdu *pdu = work->request_buf;
++	struct smb2_pdu *pdu = smb2_get_msg(work->request_buf);
+ 	struct smb2_hdr *hdr = &pdu->hdr;
+ 	int command;
+ 	__u32 clc_len;  /* calculated length */
+-	__u32 len = get_rfc1002_len(pdu);
++	__u32 len = get_rfc1002_len(work->request_buf);
+ 
+ 	if (work->next_smb2_rcv_hdr_off) {
+ 		pdu = ksmbd_req_buf_next(work);
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index a350e1cef7f4..9b2875bdd9be 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -44,8 +44,8 @@ static void __wbuf(struct ksmbd_work *work, void **req, void **rsp)
+ 		*req = ksmbd_req_buf_next(work);
+ 		*rsp = ksmbd_resp_buf_next(work);
+ 	} else {
+-		*req = work->request_buf;
+-		*rsp = work->response_buf;
++		*req = smb2_get_msg(work->request_buf);
++		*rsp = smb2_get_msg(work->response_buf);
+ 	}
+ }
+ 
+@@ -93,7 +93,7 @@ struct channel *lookup_chann_list(struct ksmbd_session *sess, struct ksmbd_conn
+  */
+ int smb2_get_ksmbd_tcon(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *req_hdr = work->request_buf;
++	struct smb2_hdr *req_hdr = smb2_get_msg(work->request_buf);
+ 	int tree_id;
+ 
+ 	work->tcon = NULL;
+@@ -130,7 +130,7 @@ void smb2_set_err_rsp(struct ksmbd_work *work)
+ 	if (work->next_smb2_rcv_hdr_off)
+ 		err_rsp = ksmbd_resp_buf_next(work);
+ 	else
+-		err_rsp = work->response_buf;
++		err_rsp = smb2_get_msg(work->response_buf);
+ 
+ 	if (err_rsp->hdr.Status != STATUS_STOPPED_ON_SYMLINK) {
+ 		err_rsp->StructureSize = SMB2_ERROR_STRUCTURE_SIZE2_LE;
+@@ -150,7 +150,7 @@ void smb2_set_err_rsp(struct ksmbd_work *work)
+  */
+ bool is_smb2_neg_cmd(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr = work->request_buf;
++	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+ 
+ 	/* is it SMB2 header ? */
+ 	if (hdr->ProtocolId != SMB2_PROTO_NUMBER)
+@@ -174,7 +174,7 @@ bool is_smb2_neg_cmd(struct ksmbd_work *work)
+  */
+ bool is_smb2_rsp(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr = work->response_buf;
++	struct smb2_hdr *hdr = smb2_get_msg(work->response_buf);
+ 
+ 	/* is it SMB2 header ? */
+ 	if (hdr->ProtocolId != SMB2_PROTO_NUMBER)
+@@ -200,7 +200,7 @@ u16 get_smb2_cmd_val(struct ksmbd_work *work)
+ 	if (work->next_smb2_rcv_hdr_off)
+ 		rcv_hdr = ksmbd_req_buf_next(work);
+ 	else
+-		rcv_hdr = work->request_buf;
++		rcv_hdr = smb2_get_msg(work->request_buf);
+ 	return le16_to_cpu(rcv_hdr->Command);
+ }
+ 
+@@ -216,7 +216,7 @@ void set_smb2_rsp_status(struct ksmbd_work *work, __le32 err)
+ 	if (work->next_smb2_rcv_hdr_off)
+ 		rsp_hdr = ksmbd_resp_buf_next(work);
+ 	else
+-		rsp_hdr = work->response_buf;
++		rsp_hdr = smb2_get_msg(work->response_buf);
+ 	rsp_hdr->Status = err;
+ 	smb2_set_err_rsp(work);
+ }
+@@ -240,13 +240,11 @@ int init_smb2_neg_rsp(struct ksmbd_work *work)
+ 	      conn->dialect <= SMB311_PROT_ID))
+ 		return -EINVAL;
+ 
+-	rsp_hdr = work->response_buf;
++	*(__be32 *)work->response_buf =
++		cpu_to_be32(conn->vals->header_size);
+ 
++	rsp_hdr = smb2_get_msg(work->response_buf);
+ 	memset(rsp_hdr, 0, sizeof(struct smb2_hdr) + 2);
+-
+-	rsp_hdr->smb2_buf_length =
+-		cpu_to_be32(smb2_hdr_size_no_buflen(conn->vals));
+-
+ 	rsp_hdr->ProtocolId = SMB2_PROTO_NUMBER;
+ 	rsp_hdr->StructureSize = SMB2_HEADER_STRUCTURE_SIZE;
+ 	rsp_hdr->CreditRequest = cpu_to_le16(2);
+@@ -259,7 +257,7 @@ int init_smb2_neg_rsp(struct ksmbd_work *work)
+ 	rsp_hdr->SessionId = 0;
+ 	memset(rsp_hdr->Signature, 0, 16);
+ 
+-	rsp = work->response_buf;
++	rsp = smb2_get_msg(work->response_buf);
+ 
+ 	WARN_ON(ksmbd_conn_good(work));
+ 
+@@ -280,12 +278,12 @@ int init_smb2_neg_rsp(struct ksmbd_work *work)
+ 
+ 	rsp->SecurityBufferOffset = cpu_to_le16(128);
+ 	rsp->SecurityBufferLength = cpu_to_le16(AUTH_GSS_LENGTH);
+-	ksmbd_copy_gss_neg_header(((char *)(&rsp->hdr) +
+-		sizeof(rsp->hdr.smb2_buf_length)) +
++	ksmbd_copy_gss_neg_header((char *)(&rsp->hdr) +
+ 		le16_to_cpu(rsp->SecurityBufferOffset));
+-	inc_rfc1001_len(rsp, sizeof(struct smb2_negotiate_rsp) -
+-		sizeof(struct smb2_hdr) - sizeof(rsp->Buffer) +
+-		AUTH_GSS_LENGTH);
++	inc_rfc1001_len(work->response_buf,
++			sizeof(struct smb2_negotiate_rsp) -
++			sizeof(struct smb2_hdr) - sizeof(rsp->Buffer) +
++			AUTH_GSS_LENGTH);
+ 	rsp->SecurityMode = SMB2_NEGOTIATE_SIGNING_ENABLED_LE;
+ 	if (server_conf.signing == KSMBD_CONFIG_OPT_MANDATORY)
+ 		rsp->SecurityMode |= SMB2_NEGOTIATE_SIGNING_REQUIRED_LE;
+@@ -413,8 +411,8 @@ static void init_chained_smb2_rsp(struct ksmbd_work *work)
+ 	next_hdr_offset = le32_to_cpu(req->NextCommand);
+ 
+ 	new_len = ALIGN(len, 8);
+-	inc_rfc1001_len(work->response_buf, ((sizeof(struct smb2_hdr) - 4)
+-			+ new_len - len));
++	inc_rfc1001_len(work->response_buf,
++			sizeof(struct smb2_hdr) + new_len - len);
+ 	rsp->NextCommand = cpu_to_le32(new_len);
+ 
+ 	work->next_smb2_rcv_hdr_off += next_hdr_offset;
+@@ -458,7 +456,7 @@ static void init_chained_smb2_rsp(struct ksmbd_work *work)
+  */
+ bool is_chained_smb2_message(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr = work->request_buf;
++	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+ 	unsigned int len;
+ 
+ 	if (hdr->ProtocolId != SMB2_PROTO_NUMBER)
+@@ -494,13 +492,13 @@ bool is_chained_smb2_message(struct ksmbd_work *work)
+  */
+ int init_smb2_rsp_hdr(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *rsp_hdr = work->response_buf;
+-	struct smb2_hdr *rcv_hdr = work->request_buf;
++	struct smb2_hdr *rsp_hdr = smb2_get_msg(work->response_buf);
++	struct smb2_hdr *rcv_hdr = smb2_get_msg(work->request_buf);
+ 	struct ksmbd_conn *conn = work->conn;
+ 
+ 	memset(rsp_hdr, 0, sizeof(struct smb2_hdr) + 2);
+-	rsp_hdr->smb2_buf_length =
+-		cpu_to_be32(smb2_hdr_size_no_buflen(conn->vals));
++	*(__be32 *)work->response_buf =
++		cpu_to_be32(conn->vals->header_size);
+ 	rsp_hdr->ProtocolId = rcv_hdr->ProtocolId;
+ 	rsp_hdr->StructureSize = SMB2_HEADER_STRUCTURE_SIZE;
+ 	rsp_hdr->Command = rcv_hdr->Command;
+@@ -533,7 +531,7 @@ int init_smb2_rsp_hdr(struct ksmbd_work *work)
+  */
+ int smb2_allocate_rsp_buf(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr = work->request_buf;
++	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+ 	size_t small_sz = MAX_CIFS_SMALL_BUFFER_SIZE;
+ 	size_t large_sz = work->conn->vals->max_trans_size + MAX_SMB2_HDR_SIZE;
+ 	size_t sz = small_sz;
+@@ -545,7 +543,7 @@ int smb2_allocate_rsp_buf(struct ksmbd_work *work)
+ 	if (cmd == SMB2_QUERY_INFO_HE) {
+ 		struct smb2_query_info_req *req;
+ 
+-		req = work->request_buf;
++		req = smb2_get_msg(work->request_buf);
+ 		if (req->InfoType == SMB2_O_INFO_FILE &&
+ 		    (req->FileInfoClass == FILE_FULL_EA_INFORMATION ||
+ 		     req->FileInfoClass == FILE_ALL_INFORMATION))
+@@ -572,7 +570,7 @@ int smb2_allocate_rsp_buf(struct ksmbd_work *work)
+  */
+ int smb2_check_user_session(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *req_hdr = work->request_buf;
++	struct smb2_hdr *req_hdr = smb2_get_msg(work->request_buf);
+ 	struct ksmbd_conn *conn = work->conn;
+ 	unsigned int cmd = conn->ops->get_cmd_val(work);
+ 	unsigned long long sess_id;
+@@ -663,7 +661,7 @@ int setup_async_work(struct ksmbd_work *work, void (*fn)(void **), void **arg)
+ 	struct ksmbd_conn *conn = work->conn;
+ 	int id;
+ 
+-	rsp_hdr = work->response_buf;
++	rsp_hdr = smb2_get_msg(work->response_buf);
+ 	rsp_hdr->Flags |= SMB2_FLAGS_ASYNC_COMMAND;
+ 
+ 	id = ksmbd_acquire_async_msg_id(&conn->async_ida);
+@@ -695,7 +693,7 @@ void smb2_send_interim_resp(struct ksmbd_work *work, __le32 status)
+ {
+ 	struct smb2_hdr *rsp_hdr;
+ 
+-	rsp_hdr = work->response_buf;
++	rsp_hdr = smb2_get_msg(work->response_buf);
+ 	smb2_set_err_rsp(work);
+ 	rsp_hdr->Status = status;
+ 
+@@ -823,11 +821,11 @@ static void build_posix_ctxt(struct smb2_posix_neg_context *pneg_ctxt)
+ }
+ 
+ static void assemble_neg_contexts(struct ksmbd_conn *conn,
+-				  struct smb2_negotiate_rsp *rsp)
++				  struct smb2_negotiate_rsp *rsp,
++				  void *smb2_buf_len)
+ {
+-	/* +4 is to account for the RFC1001 len field */
+ 	char *pneg_ctxt = (char *)rsp +
+-			le32_to_cpu(rsp->NegotiateContextOffset) + 4;
++			le32_to_cpu(rsp->NegotiateContextOffset);
+ 	int neg_ctxt_cnt = 1;
+ 	int ctxt_size;
+ 
+@@ -836,7 +834,7 @@ static void assemble_neg_contexts(struct ksmbd_conn *conn,
+ 	build_preauth_ctxt((struct smb2_preauth_neg_context *)pneg_ctxt,
+ 			   conn->preauth_info->Preauth_HashId);
+ 	rsp->NegotiateContextCount = cpu_to_le16(neg_ctxt_cnt);
+-	inc_rfc1001_len(rsp, AUTH_GSS_PADDING);
++	inc_rfc1001_len(smb2_buf_len, AUTH_GSS_PADDING);
+ 	ctxt_size = sizeof(struct smb2_preauth_neg_context);
+ 	/* Round to 8 byte boundary */
+ 	pneg_ctxt += round_up(sizeof(struct smb2_preauth_neg_context), 8);
+@@ -890,7 +888,7 @@ static void assemble_neg_contexts(struct ksmbd_conn *conn,
+ 		ctxt_size += sizeof(struct smb2_signing_capabilities) + 2;
+ 	}
+ 
+-	inc_rfc1001_len(rsp, ctxt_size);
++	inc_rfc1001_len(smb2_buf_len, ctxt_size);
+ }
+ 
+ static __le32 decode_preauth_ctxt(struct ksmbd_conn *conn,
+@@ -973,14 +971,14 @@ static void decode_sign_cap_ctxt(struct ksmbd_conn *conn,
+ }
+ 
+ static __le32 deassemble_neg_contexts(struct ksmbd_conn *conn,
+-				      struct smb2_negotiate_req *req)
++				      struct smb2_negotiate_req *req,
++				      int len_of_smb)
+ {
+ 	/* +4 is to account for the RFC1001 len field */
+-	struct smb2_neg_context *pctx = (struct smb2_neg_context *)((char *)req + 4);
++	struct smb2_neg_context *pctx = (struct smb2_neg_context *)req;
+ 	int i = 0, len_of_ctxts;
+ 	int offset = le32_to_cpu(req->NegotiateContextOffset);
+ 	int neg_ctxt_cnt = le16_to_cpu(req->NegotiateContextCount);
+-	int len_of_smb = be32_to_cpu(req->hdr.smb2_buf_length);
+ 	__le32 status = STATUS_INVALID_PARAMETER;
+ 
+ 	ksmbd_debug(SMB, "decoding %d negotiate contexts\n", neg_ctxt_cnt);
+@@ -1065,8 +1063,8 @@ static __le32 deassemble_neg_contexts(struct ksmbd_conn *conn,
+ int smb2_handle_negotiate(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_negotiate_req *req = work->request_buf;
+-	struct smb2_negotiate_rsp *rsp = work->response_buf;
++	struct smb2_negotiate_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_negotiate_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	int rc = 0;
+ 	__le32 status;
+ 
+@@ -1097,7 +1095,8 @@ int smb2_handle_negotiate(struct ksmbd_work *work)
+ 			goto err_out;
+ 		}
+ 
+-		status = deassemble_neg_contexts(conn, req);
++		status = deassemble_neg_contexts(conn, req,
++						 get_rfc1002_len(work->request_buf));
+ 		if (status != STATUS_SUCCESS) {
+ 			pr_err("deassemble_neg_contexts error(0x%x)\n",
+ 			       status);
+@@ -1117,7 +1116,7 @@ int smb2_handle_negotiate(struct ksmbd_work *work)
+ 						 conn->preauth_info->Preauth_HashValue);
+ 		rsp->NegotiateContextOffset =
+ 				cpu_to_le32(OFFSET_OF_NEG_CONTEXT);
+-		assemble_neg_contexts(conn, rsp);
++		assemble_neg_contexts(conn, rsp, work->response_buf);
+ 		break;
+ 	case SMB302_PROT_ID:
+ 		init_smb3_02_server(conn);
+@@ -1174,10 +1173,9 @@ int smb2_handle_negotiate(struct ksmbd_work *work)
+ 
+ 	rsp->SecurityBufferOffset = cpu_to_le16(128);
+ 	rsp->SecurityBufferLength = cpu_to_le16(AUTH_GSS_LENGTH);
+-	ksmbd_copy_gss_neg_header(((char *)(&rsp->hdr) +
+-				  sizeof(rsp->hdr.smb2_buf_length)) +
+-				   le16_to_cpu(rsp->SecurityBufferOffset));
+-	inc_rfc1001_len(rsp, sizeof(struct smb2_negotiate_rsp) -
++	ksmbd_copy_gss_neg_header((char *)(&rsp->hdr) +
++				  le16_to_cpu(rsp->SecurityBufferOffset));
++	inc_rfc1001_len(work->response_buf, sizeof(struct smb2_negotiate_rsp) -
+ 			sizeof(struct smb2_hdr) - sizeof(rsp->Buffer) +
+ 			 AUTH_GSS_LENGTH);
+ 	rsp->SecurityMode = SMB2_NEGOTIATE_SIGNING_ENABLED_LE;
+@@ -1258,7 +1256,7 @@ static int decode_negotiation_token(struct ksmbd_work *work,
+ 	if (!conn->use_spnego)
+ 		return -EINVAL;
+ 
+-	req = work->request_buf;
++	req = smb2_get_msg(work->request_buf);
+ 	sz = le16_to_cpu(req->SecurityBufferLength);
+ 
+ 	if (ksmbd_decode_negTokenInit((char *)negblob, sz, conn)) {
+@@ -1274,8 +1272,8 @@ static int decode_negotiation_token(struct ksmbd_work *work,
+ static int ntlm_negotiate(struct ksmbd_work *work,
+ 			  struct negotiate_message *negblob)
+ {
+-	struct smb2_sess_setup_req *req = work->request_buf;
+-	struct smb2_sess_setup_rsp *rsp = work->response_buf;
++	struct smb2_sess_setup_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_sess_setup_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct challenge_message *chgblob;
+ 	unsigned char *spnego_blob = NULL;
+ 	u16 spnego_blob_len;
+@@ -1373,8 +1371,8 @@ static struct ksmbd_user *session_user(struct ksmbd_conn *conn,
+ 
+ static int ntlm_authenticate(struct ksmbd_work *work)
+ {
+-	struct smb2_sess_setup_req *req = work->request_buf;
+-	struct smb2_sess_setup_rsp *rsp = work->response_buf;
++	struct smb2_sess_setup_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_sess_setup_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct ksmbd_session *sess = work->sess;
+ 	struct channel *chann = NULL;
+@@ -1397,7 +1395,7 @@ static int ntlm_authenticate(struct ksmbd_work *work)
+ 		memcpy((char *)&rsp->hdr.ProtocolId + sz, spnego_blob, spnego_blob_len);
+ 		rsp->SecurityBufferLength = cpu_to_le16(spnego_blob_len);
+ 		kfree(spnego_blob);
+-		inc_rfc1001_len(rsp, spnego_blob_len - 1);
++		inc_rfc1001_len(work->response_buf, spnego_blob_len - 1);
+ 	}
+ 
+ 	user = session_user(conn, req);
+@@ -1511,8 +1509,8 @@ static int ntlm_authenticate(struct ksmbd_work *work)
+ #ifdef CONFIG_SMB_SERVER_KERBEROS5
+ static int krb5_authenticate(struct ksmbd_work *work)
+ {
+-	struct smb2_sess_setup_req *req = work->request_buf;
+-	struct smb2_sess_setup_rsp *rsp = work->response_buf;
++	struct smb2_sess_setup_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_sess_setup_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct ksmbd_session *sess = work->sess;
+ 	char *in_blob, *out_blob;
+@@ -1527,8 +1525,7 @@ static int krb5_authenticate(struct ksmbd_work *work)
+ 	out_blob = (char *)&rsp->hdr.ProtocolId +
+ 		le16_to_cpu(rsp->SecurityBufferOffset);
+ 	out_len = work->response_sz -
+-		offsetof(struct smb2_hdr, smb2_buf_length) -
+-		le16_to_cpu(rsp->SecurityBufferOffset);
++		(le16_to_cpu(rsp->SecurityBufferOffset) + 4);
+ 
+ 	/* Check previous session */
+ 	prev_sess_id = le64_to_cpu(req->PreviousSessionId);
+@@ -1545,7 +1542,7 @@ static int krb5_authenticate(struct ksmbd_work *work)
+ 		return -EINVAL;
+ 	}
+ 	rsp->SecurityBufferLength = cpu_to_le16(out_len);
+-	inc_rfc1001_len(rsp, out_len - 1);
++	inc_rfc1001_len(work->response_buf, out_len - 1);
+ 
+ 	if ((conn->sign || server_conf.enforced_signing) ||
+ 	    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
+@@ -1603,8 +1600,8 @@ static int krb5_authenticate(struct ksmbd_work *work)
+ int smb2_sess_setup(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_sess_setup_req *req = work->request_buf;
+-	struct smb2_sess_setup_rsp *rsp = work->response_buf;
++	struct smb2_sess_setup_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_sess_setup_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_session *sess;
+ 	struct negotiate_message *negblob;
+ 	int rc = 0;
+@@ -1615,7 +1612,7 @@ int smb2_sess_setup(struct ksmbd_work *work)
+ 	rsp->SessionFlags = 0;
+ 	rsp->SecurityBufferOffset = cpu_to_le16(72);
+ 	rsp->SecurityBufferLength = 0;
+-	inc_rfc1001_len(rsp, 9);
++	inc_rfc1001_len(work->response_buf, 9);
+ 
+ 	if (!req->hdr.SessionId) {
+ 		sess = ksmbd_smb2_session_create();
+@@ -1723,7 +1720,8 @@ int smb2_sess_setup(struct ksmbd_work *work)
+ 				 * Note: here total size -1 is done as an
+ 				 * adjustment for 0 size blob
+ 				 */
+-				inc_rfc1001_len(rsp, le16_to_cpu(rsp->SecurityBufferLength) - 1);
++				inc_rfc1001_len(work->response_buf,
++						le16_to_cpu(rsp->SecurityBufferLength) - 1);
+ 
+ 			} else if (negblob->MessageType == NtLmAuthenticate) {
+ 				rc = ntlm_authenticate(work);
+@@ -1791,8 +1789,8 @@ int smb2_sess_setup(struct ksmbd_work *work)
+ int smb2_tree_connect(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_tree_connect_req *req = work->request_buf;
+-	struct smb2_tree_connect_rsp *rsp = work->response_buf;
++	struct smb2_tree_connect_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_tree_connect_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_session *sess = work->sess;
+ 	char *treename = NULL, *name = NULL;
+ 	struct ksmbd_tree_conn_status status;
+@@ -1857,7 +1855,7 @@ int smb2_tree_connect(struct ksmbd_work *work)
+ 	rsp->Reserved = 0;
+ 	/* default manual caching */
+ 	rsp->ShareFlags = SMB2_SHAREFLAG_MANUAL_CACHING;
+-	inc_rfc1001_len(rsp, 16);
++	inc_rfc1001_len(work->response_buf, 16);
+ 
+ 	if (!IS_ERR(treename))
+ 		kfree(treename);
+@@ -1962,17 +1960,18 @@ static int smb2_create_open_flags(bool file_present, __le32 access,
+  */
+ int smb2_tree_disconnect(struct ksmbd_work *work)
+ {
+-	struct smb2_tree_disconnect_rsp *rsp = work->response_buf;
++	struct smb2_tree_disconnect_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_session *sess = work->sess;
+ 	struct ksmbd_tree_connect *tcon = work->tcon;
+ 
+ 	rsp->StructureSize = cpu_to_le16(4);
+-	inc_rfc1001_len(rsp, 4);
++	inc_rfc1001_len(work->response_buf, 4);
+ 
+ 	ksmbd_debug(SMB, "request\n");
+ 
+ 	if (!tcon) {
+-		struct smb2_tree_disconnect_req *req = work->request_buf;
++		struct smb2_tree_disconnect_req *req =
++			smb2_get_msg(work->request_buf);
+ 
+ 		ksmbd_debug(SMB, "Invalid tid %d\n", req->hdr.Id.SyncId.TreeId);
+ 		rsp->hdr.Status = STATUS_NETWORK_NAME_DELETED;
+@@ -1994,11 +1993,11 @@ int smb2_tree_disconnect(struct ksmbd_work *work)
+ int smb2_session_logoff(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_logoff_rsp *rsp = work->response_buf;
++	struct smb2_logoff_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_session *sess = work->sess;
+ 
+ 	rsp->StructureSize = cpu_to_le16(4);
+-	inc_rfc1001_len(rsp, 4);
++	inc_rfc1001_len(work->response_buf, 4);
+ 
+ 	ksmbd_debug(SMB, "request\n");
+ 
+@@ -2011,7 +2010,7 @@ int smb2_session_logoff(struct ksmbd_work *work)
+ 	ksmbd_conn_wait_idle(conn);
+ 
+ 	if (ksmbd_tree_conn_session_logoff(sess)) {
+-		struct smb2_logoff_req *req = work->request_buf;
++		struct smb2_logoff_req *req = smb2_get_msg(work->request_buf);
+ 
+ 		ksmbd_debug(SMB, "Invalid tid %d\n", req->hdr.Id.SyncId.TreeId);
+ 		rsp->hdr.Status = STATUS_NETWORK_NAME_DELETED;
+@@ -2038,8 +2037,8 @@ int smb2_session_logoff(struct ksmbd_work *work)
+  */
+ static noinline int create_smb2_pipe(struct ksmbd_work *work)
+ {
+-	struct smb2_create_rsp *rsp = work->response_buf;
+-	struct smb2_create_req *req = work->request_buf;
++	struct smb2_create_rsp *rsp = smb2_get_msg(work->response_buf);
++	struct smb2_create_req *req = smb2_get_msg(work->request_buf);
+ 	int id;
+ 	int err;
+ 	char *name;
+@@ -2077,7 +2076,7 @@ static noinline int create_smb2_pipe(struct ksmbd_work *work)
+ 	rsp->CreateContextsOffset = 0;
+ 	rsp->CreateContextsLength = 0;
+ 
+-	inc_rfc1001_len(rsp, 88); /* StructureSize - 1*/
++	inc_rfc1001_len(work->response_buf, 88); /* StructureSize - 1*/
+ 	kfree(name);
+ 	return 0;
+ 
+@@ -2410,7 +2409,7 @@ int smb2_open(struct ksmbd_work *work)
+ 	struct ksmbd_session *sess = work->sess;
+ 	struct ksmbd_tree_connect *tcon = work->tcon;
+ 	struct smb2_create_req *req;
+-	struct smb2_create_rsp *rsp, *rsp_org;
++	struct smb2_create_rsp *rsp;
+ 	struct path path;
+ 	struct ksmbd_share_config *share = tcon->share_conf;
+ 	struct ksmbd_file *fp = NULL;
+@@ -2436,7 +2435,6 @@ int smb2_open(struct ksmbd_work *work)
+ 	umode_t posix_mode = 0;
+ 	__le32 daccess, maximal_access = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (req->hdr.NextCommand && !work->next_smb2_rcv_hdr_off &&
+@@ -3088,7 +3086,7 @@ int smb2_open(struct ksmbd_work *work)
+ 
+ 	rsp->CreateContextsOffset = 0;
+ 	rsp->CreateContextsLength = 0;
+-	inc_rfc1001_len(rsp_org, 88); /* StructureSize - 1*/
++	inc_rfc1001_len(work->response_buf, 88); /* StructureSize - 1*/
+ 
+ 	/* If lease is request send lease context response */
+ 	if (opinfo && opinfo->is_lease) {
+@@ -3103,7 +3101,8 @@ int smb2_open(struct ksmbd_work *work)
+ 		create_lease_buf(rsp->Buffer, opinfo->o_lease);
+ 		le32_add_cpu(&rsp->CreateContextsLength,
+ 			     conn->vals->create_lease_size);
+-		inc_rfc1001_len(rsp_org, conn->vals->create_lease_size);
++		inc_rfc1001_len(work->response_buf,
++				conn->vals->create_lease_size);
+ 		next_ptr = &lease_ccontext->Next;
+ 		next_off = conn->vals->create_lease_size;
+ 	}
+@@ -3123,7 +3122,8 @@ int smb2_open(struct ksmbd_work *work)
+ 				le32_to_cpu(maximal_access));
+ 		le32_add_cpu(&rsp->CreateContextsLength,
+ 			     conn->vals->create_mxac_size);
+-		inc_rfc1001_len(rsp_org, conn->vals->create_mxac_size);
++		inc_rfc1001_len(work->response_buf,
++				conn->vals->create_mxac_size);
+ 		if (next_ptr)
+ 			*next_ptr = cpu_to_le32(next_off);
+ 		next_ptr = &mxac_ccontext->Next;
+@@ -3141,7 +3141,8 @@ int smb2_open(struct ksmbd_work *work)
+ 				stat.ino, tcon->id);
+ 		le32_add_cpu(&rsp->CreateContextsLength,
+ 			     conn->vals->create_disk_id_size);
+-		inc_rfc1001_len(rsp_org, conn->vals->create_disk_id_size);
++		inc_rfc1001_len(work->response_buf,
++				conn->vals->create_disk_id_size);
+ 		if (next_ptr)
+ 			*next_ptr = cpu_to_le32(next_off);
+ 		next_ptr = &disk_id_ccontext->Next;
+@@ -3155,15 +3156,15 @@ int smb2_open(struct ksmbd_work *work)
+ 				fp);
+ 		le32_add_cpu(&rsp->CreateContextsLength,
+ 			     conn->vals->create_posix_size);
+-		inc_rfc1001_len(rsp_org, conn->vals->create_posix_size);
++		inc_rfc1001_len(work->response_buf,
++				conn->vals->create_posix_size);
+ 		if (next_ptr)
+ 			*next_ptr = cpu_to_le32(next_off);
+ 	}
+ 
+ 	if (contxt_cnt > 0) {
+ 		rsp->CreateContextsOffset =
+-			cpu_to_le32(offsetof(struct smb2_create_rsp, Buffer)
+-			- 4);
++			cpu_to_le32(offsetof(struct smb2_create_rsp, Buffer));
+ 	}
+ 
+ err_out:
+@@ -3746,7 +3747,7 @@ int smb2_query_dir(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct smb2_query_directory_req *req;
+-	struct smb2_query_directory_rsp *rsp, *rsp_org;
++	struct smb2_query_directory_rsp *rsp;
+ 	struct ksmbd_share_config *share = work->tcon->share_conf;
+ 	struct ksmbd_file *dir_fp = NULL;
+ 	struct ksmbd_dir_info d_info;
+@@ -3756,7 +3757,6 @@ int smb2_query_dir(struct ksmbd_work *work)
+ 	int buffer_sz;
+ 	struct smb2_query_dir_private query_dir_private = {NULL, };
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (ksmbd_override_fsids(work)) {
+@@ -3818,7 +3818,8 @@ int smb2_query_dir(struct ksmbd_work *work)
+ 	memset(&d_info, 0, sizeof(struct ksmbd_dir_info));
+ 	d_info.wptr = (char *)rsp->Buffer;
+ 	d_info.rptr = (char *)rsp->Buffer;
+-	d_info.out_buf_len = (work->response_sz - (get_rfc1002_len(rsp_org) + 4));
++	d_info.out_buf_len =
++		work->response_sz - (get_rfc1002_len(work->response_buf) + 4);
+ 	d_info.out_buf_len = min_t(int, d_info.out_buf_len, le32_to_cpu(req->OutputBufferLength)) -
+ 		sizeof(struct smb2_query_directory_rsp);
+ 	d_info.flags = srch_flag;
+@@ -3873,7 +3874,7 @@ int smb2_query_dir(struct ksmbd_work *work)
+ 		rsp->OutputBufferOffset = cpu_to_le16(0);
+ 		rsp->OutputBufferLength = cpu_to_le32(0);
+ 		rsp->Buffer[0] = 0;
+-		inc_rfc1001_len(rsp_org, 9);
++		inc_rfc1001_len(work->response_buf, 9);
+ 	} else {
+ 		((struct file_directory_info *)
+ 		((char *)rsp->Buffer + d_info.last_entry_offset))
+@@ -3882,7 +3883,7 @@ int smb2_query_dir(struct ksmbd_work *work)
+ 		rsp->StructureSize = cpu_to_le16(9);
+ 		rsp->OutputBufferOffset = cpu_to_le16(72);
+ 		rsp->OutputBufferLength = cpu_to_le32(d_info.data_count);
+-		inc_rfc1001_len(rsp_org, 8 + d_info.data_count);
++		inc_rfc1001_len(work->response_buf, 8 + d_info.data_count);
+ 	}
+ 
+ 	kfree(srch_ptr);
+@@ -3925,26 +3926,28 @@ int smb2_query_dir(struct ksmbd_work *work)
+  * Return:	0 on success, otherwise error
+  */
+ static int buffer_check_err(int reqOutputBufferLength,
+-			    struct smb2_query_info_rsp *rsp, int infoclass_size)
++			    struct smb2_query_info_rsp *rsp,
++			    void *rsp_org, int infoclass_size)
+ {
+ 	if (reqOutputBufferLength < le32_to_cpu(rsp->OutputBufferLength)) {
+ 		if (reqOutputBufferLength < infoclass_size) {
+ 			pr_err("Invalid Buffer Size Requested\n");
+ 			rsp->hdr.Status = STATUS_INFO_LENGTH_MISMATCH;
+-			rsp->hdr.smb2_buf_length = cpu_to_be32(sizeof(struct smb2_hdr) - 4);
++			*(__be32 *)rsp_org = cpu_to_be32(sizeof(struct smb2_hdr));
+ 			return -EINVAL;
+ 		}
+ 
+ 		ksmbd_debug(SMB, "Buffer Overflow\n");
+ 		rsp->hdr.Status = STATUS_BUFFER_OVERFLOW;
+-		rsp->hdr.smb2_buf_length = cpu_to_be32(sizeof(struct smb2_hdr) - 4 +
++		*(__be32 *)rsp_org = cpu_to_be32(sizeof(struct smb2_hdr) +
+ 				reqOutputBufferLength);
+ 		rsp->OutputBufferLength = cpu_to_le32(reqOutputBufferLength);
+ 	}
+ 	return 0;
+ }
+ 
+-static void get_standard_info_pipe(struct smb2_query_info_rsp *rsp)
++static void get_standard_info_pipe(struct smb2_query_info_rsp *rsp,
++				   void *rsp_org)
+ {
+ 	struct smb2_file_standard_info *sinfo;
+ 
+@@ -3957,10 +3960,11 @@ static void get_standard_info_pipe(struct smb2_query_info_rsp *rsp)
+ 	sinfo->Directory = 0;
+ 	rsp->OutputBufferLength =
+ 		cpu_to_le32(sizeof(struct smb2_file_standard_info));
+-	inc_rfc1001_len(rsp, sizeof(struct smb2_file_standard_info));
++	inc_rfc1001_len(rsp_org, sizeof(struct smb2_file_standard_info));
+ }
+ 
+-static void get_internal_info_pipe(struct smb2_query_info_rsp *rsp, u64 num)
++static void get_internal_info_pipe(struct smb2_query_info_rsp *rsp, u64 num,
++				   void *rsp_org)
+ {
+ 	struct smb2_file_internal_info *file_info;
+ 
+@@ -3970,12 +3974,13 @@ static void get_internal_info_pipe(struct smb2_query_info_rsp *rsp, u64 num)
+ 	file_info->IndexNumber = cpu_to_le64(num | (1ULL << 63));
+ 	rsp->OutputBufferLength =
+ 		cpu_to_le32(sizeof(struct smb2_file_internal_info));
+-	inc_rfc1001_len(rsp, sizeof(struct smb2_file_internal_info));
++	inc_rfc1001_len(rsp_org, sizeof(struct smb2_file_internal_info));
+ }
+ 
+ static int smb2_get_info_file_pipe(struct ksmbd_session *sess,
+ 				   struct smb2_query_info_req *req,
+-				   struct smb2_query_info_rsp *rsp)
++				   struct smb2_query_info_rsp *rsp,
++				   void *rsp_org)
+ {
+ 	u64 id;
+ 	int rc;
+@@ -3993,14 +3998,16 @@ static int smb2_get_info_file_pipe(struct ksmbd_session *sess,
+ 
+ 	switch (req->FileInfoClass) {
+ 	case FILE_STANDARD_INFORMATION:
+-		get_standard_info_pipe(rsp);
++		get_standard_info_pipe(rsp, rsp_org);
+ 		rc = buffer_check_err(le32_to_cpu(req->OutputBufferLength),
+-				      rsp, FILE_STANDARD_INFORMATION_SIZE);
++				      rsp, rsp_org,
++				      FILE_STANDARD_INFORMATION_SIZE);
+ 		break;
+ 	case FILE_INTERNAL_INFORMATION:
+-		get_internal_info_pipe(rsp, id);
++		get_internal_info_pipe(rsp, id, rsp_org);
+ 		rc = buffer_check_err(le32_to_cpu(req->OutputBufferLength),
+-				      rsp, FILE_INTERNAL_INFORMATION_SIZE);
++				      rsp, rsp_org,
++				      FILE_INTERNAL_INFORMATION_SIZE);
+ 		break;
+ 	default:
+ 		ksmbd_debug(SMB, "smb2_info_file_pipe for %u not supported\n",
+@@ -4602,7 +4609,7 @@ static int find_file_posix_info(struct smb2_query_info_rsp *rsp,
+ 
+ static int smb2_get_info_file(struct ksmbd_work *work,
+ 			      struct smb2_query_info_req *req,
+-			      struct smb2_query_info_rsp *rsp, void *rsp_org)
++			      struct smb2_query_info_rsp *rsp)
+ {
+ 	struct ksmbd_file *fp;
+ 	int fileinfoclass = 0;
+@@ -4613,7 +4620,8 @@ static int smb2_get_info_file(struct ksmbd_work *work,
+ 	if (test_share_config_flag(work->tcon->share_conf,
+ 				   KSMBD_SHARE_FLAG_PIPE)) {
+ 		/* smb2 info file called for pipe */
+-		return smb2_get_info_file_pipe(work->sess, req, rsp);
++		return smb2_get_info_file_pipe(work->sess, req, rsp,
++					       work->response_buf);
+ 	}
+ 
+ 	if (work->next_smb2_rcv_hdr_off) {
+@@ -4638,77 +4646,77 @@ static int smb2_get_info_file(struct ksmbd_work *work,
+ 
+ 	switch (fileinfoclass) {
+ 	case FILE_ACCESS_INFORMATION:
+-		get_file_access_info(rsp, fp, rsp_org);
++		get_file_access_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_ACCESS_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_BASIC_INFORMATION:
+-		rc = get_file_basic_info(rsp, fp, rsp_org);
++		rc = get_file_basic_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_BASIC_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_STANDARD_INFORMATION:
+-		get_file_standard_info(rsp, fp, rsp_org);
++		get_file_standard_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_STANDARD_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_ALIGNMENT_INFORMATION:
+-		get_file_alignment_info(rsp, rsp_org);
++		get_file_alignment_info(rsp, work->response_buf);
+ 		file_infoclass_size = FILE_ALIGNMENT_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_ALL_INFORMATION:
+-		rc = get_file_all_info(work, rsp, fp, rsp_org);
++		rc = get_file_all_info(work, rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_ALL_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_ALTERNATE_NAME_INFORMATION:
+-		get_file_alternate_info(work, rsp, fp, rsp_org);
++		get_file_alternate_info(work, rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_ALTERNATE_NAME_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_STREAM_INFORMATION:
+-		get_file_stream_info(work, rsp, fp, rsp_org);
++		get_file_stream_info(work, rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_STREAM_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_INTERNAL_INFORMATION:
+-		get_file_internal_info(rsp, fp, rsp_org);
++		get_file_internal_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_INTERNAL_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_NETWORK_OPEN_INFORMATION:
+-		rc = get_file_network_open_info(rsp, fp, rsp_org);
++		rc = get_file_network_open_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_NETWORK_OPEN_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_EA_INFORMATION:
+-		get_file_ea_info(rsp, rsp_org);
++		get_file_ea_info(rsp, work->response_buf);
+ 		file_infoclass_size = FILE_EA_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_FULL_EA_INFORMATION:
+-		rc = smb2_get_ea(work, fp, req, rsp, rsp_org);
++		rc = smb2_get_ea(work, fp, req, rsp, work->response_buf);
+ 		file_infoclass_size = FILE_FULL_EA_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_POSITION_INFORMATION:
+-		get_file_position_info(rsp, fp, rsp_org);
++		get_file_position_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_POSITION_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_MODE_INFORMATION:
+-		get_file_mode_info(rsp, fp, rsp_org);
++		get_file_mode_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_MODE_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_COMPRESSION_INFORMATION:
+-		get_file_compression_info(rsp, fp, rsp_org);
++		get_file_compression_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_COMPRESSION_INFORMATION_SIZE;
+ 		break;
+ 
+ 	case FILE_ATTRIBUTE_TAG_INFORMATION:
+-		rc = get_file_attribute_tag_info(rsp, fp, rsp_org);
++		rc = get_file_attribute_tag_info(rsp, fp, work->response_buf);
+ 		file_infoclass_size = FILE_ATTRIBUTE_TAG_INFORMATION_SIZE;
+ 		break;
+ 	case SMB_FIND_FILE_POSIX_INFO:
+@@ -4716,7 +4724,7 @@ static int smb2_get_info_file(struct ksmbd_work *work,
+ 			pr_err("client doesn't negotiate with SMB3.1.1 POSIX Extensions\n");
+ 			rc = -EOPNOTSUPP;
+ 		} else {
+-			rc = find_file_posix_info(rsp, fp, rsp_org);
++			rc = find_file_posix_info(rsp, fp, work->response_buf);
+ 			file_infoclass_size = sizeof(struct smb311_posix_qinfo);
+ 		}
+ 		break;
+@@ -4727,7 +4735,7 @@ static int smb2_get_info_file(struct ksmbd_work *work,
+ 	}
+ 	if (!rc)
+ 		rc = buffer_check_err(le32_to_cpu(req->OutputBufferLength),
+-				      rsp,
++				      rsp, work->response_buf,
+ 				      file_infoclass_size);
+ 	ksmbd_fd_put(work, fp);
+ 	return rc;
+@@ -4735,7 +4743,7 @@ static int smb2_get_info_file(struct ksmbd_work *work,
+ 
+ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 				    struct smb2_query_info_req *req,
+-				    struct smb2_query_info_rsp *rsp, void *rsp_org)
++				    struct smb2_query_info_rsp *rsp)
+ {
+ 	struct ksmbd_session *sess = work->sess;
+ 	struct ksmbd_conn *conn = sess->conn;
+@@ -4775,7 +4783,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->DeviceType = cpu_to_le32(stfs.f_type);
+ 		info->DeviceCharacteristics = cpu_to_le32(0x00000020);
+ 		rsp->OutputBufferLength = cpu_to_le32(8);
+-		inc_rfc1001_len(rsp_org, 8);
++		inc_rfc1001_len(work->response_buf, 8);
+ 		fs_infoclass_size = FS_DEVICE_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4801,7 +4809,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->FileSystemNameLen = cpu_to_le32(len);
+ 		sz = sizeof(struct filesystem_attribute_info) - 2 + len;
+ 		rsp->OutputBufferLength = cpu_to_le32(sz);
+-		inc_rfc1001_len(rsp_org, sz);
++		inc_rfc1001_len(work->response_buf, sz);
+ 		fs_infoclass_size = FS_ATTRIBUTE_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4822,7 +4830,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->Reserved = 0;
+ 		sz = sizeof(struct filesystem_vol_info) - 2 + len;
+ 		rsp->OutputBufferLength = cpu_to_le32(sz);
+-		inc_rfc1001_len(rsp_org, sz);
++		inc_rfc1001_len(work->response_buf, sz);
+ 		fs_infoclass_size = FS_VOLUME_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4836,7 +4844,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->SectorsPerAllocationUnit = cpu_to_le32(1);
+ 		info->BytesPerSector = cpu_to_le32(stfs.f_bsize);
+ 		rsp->OutputBufferLength = cpu_to_le32(24);
+-		inc_rfc1001_len(rsp_org, 24);
++		inc_rfc1001_len(work->response_buf, 24);
+ 		fs_infoclass_size = FS_SIZE_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4853,7 +4861,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->SectorsPerAllocationUnit = cpu_to_le32(1);
+ 		info->BytesPerSector = cpu_to_le32(stfs.f_bsize);
+ 		rsp->OutputBufferLength = cpu_to_le32(32);
+-		inc_rfc1001_len(rsp_org, 32);
++		inc_rfc1001_len(work->response_buf, 32);
+ 		fs_infoclass_size = FS_FULL_SIZE_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4874,7 +4882,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->extended_info.rel_date = 0;
+ 		memcpy(info->extended_info.version_string, "1.1.0", strlen("1.1.0"));
+ 		rsp->OutputBufferLength = cpu_to_le32(64);
+-		inc_rfc1001_len(rsp_org, 64);
++		inc_rfc1001_len(work->response_buf, 64);
+ 		fs_infoclass_size = FS_OBJECT_ID_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4895,7 +4903,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->ByteOffsetForSectorAlignment = 0;
+ 		info->ByteOffsetForPartitionAlignment = 0;
+ 		rsp->OutputBufferLength = cpu_to_le32(28);
+-		inc_rfc1001_len(rsp_org, 28);
++		inc_rfc1001_len(work->response_buf, 28);
+ 		fs_infoclass_size = FS_SECTOR_SIZE_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4917,7 +4925,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		info->DefaultQuotaLimit = cpu_to_le64(SMB2_NO_FID);
+ 		info->Padding = 0;
+ 		rsp->OutputBufferLength = cpu_to_le32(48);
+-		inc_rfc1001_len(rsp_org, 48);
++		inc_rfc1001_len(work->response_buf, 48);
+ 		fs_infoclass_size = FS_CONTROL_INFORMATION_SIZE;
+ 		break;
+ 	}
+@@ -4938,7 +4946,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 			info->TotalFileNodes = cpu_to_le64(stfs.f_files);
+ 			info->FreeFileNodes = cpu_to_le64(stfs.f_ffree);
+ 			rsp->OutputBufferLength = cpu_to_le32(56);
+-			inc_rfc1001_len(rsp_org, 56);
++			inc_rfc1001_len(work->response_buf, 56);
+ 			fs_infoclass_size = FS_POSIX_INFORMATION_SIZE;
+ 		}
+ 		break;
+@@ -4948,7 +4956,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 		return -EOPNOTSUPP;
+ 	}
+ 	rc = buffer_check_err(le32_to_cpu(req->OutputBufferLength),
+-			      rsp,
++			      rsp, work->response_buf,
+ 			      fs_infoclass_size);
+ 	path_put(&path);
+ 	return rc;
+@@ -4956,7 +4964,7 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 
+ static int smb2_get_info_sec(struct ksmbd_work *work,
+ 			     struct smb2_query_info_req *req,
+-			     struct smb2_query_info_rsp *rsp, void *rsp_org)
++			     struct smb2_query_info_rsp *rsp)
+ {
+ 	struct ksmbd_file *fp;
+ 	struct user_namespace *user_ns;
+@@ -4983,7 +4991,7 @@ static int smb2_get_info_sec(struct ksmbd_work *work,
+ 
+ 		secdesclen = sizeof(struct smb_ntsd);
+ 		rsp->OutputBufferLength = cpu_to_le32(secdesclen);
+-		inc_rfc1001_len(rsp_org, secdesclen);
++		inc_rfc1001_len(work->response_buf, secdesclen);
+ 
+ 		return 0;
+ 	}
+@@ -5025,7 +5033,7 @@ static int smb2_get_info_sec(struct ksmbd_work *work,
+ 		return rc;
+ 
+ 	rsp->OutputBufferLength = cpu_to_le32(secdesclen);
+-	inc_rfc1001_len(rsp_org, secdesclen);
++	inc_rfc1001_len(work->response_buf, secdesclen);
+ 	return 0;
+ }
+ 
+@@ -5038,10 +5046,9 @@ static int smb2_get_info_sec(struct ksmbd_work *work,
+ int smb2_query_info(struct ksmbd_work *work)
+ {
+ 	struct smb2_query_info_req *req;
+-	struct smb2_query_info_rsp *rsp, *rsp_org;
++	struct smb2_query_info_rsp *rsp;
+ 	int rc = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	ksmbd_debug(SMB, "GOT query info request\n");
+@@ -5049,15 +5056,15 @@ int smb2_query_info(struct ksmbd_work *work)
+ 	switch (req->InfoType) {
+ 	case SMB2_O_INFO_FILE:
+ 		ksmbd_debug(SMB, "GOT SMB2_O_INFO_FILE\n");
+-		rc = smb2_get_info_file(work, req, rsp, (void *)rsp_org);
++		rc = smb2_get_info_file(work, req, rsp);
+ 		break;
+ 	case SMB2_O_INFO_FILESYSTEM:
+ 		ksmbd_debug(SMB, "GOT SMB2_O_INFO_FILESYSTEM\n");
+-		rc = smb2_get_info_filesystem(work, req, rsp, (void *)rsp_org);
++		rc = smb2_get_info_filesystem(work, req, rsp);
+ 		break;
+ 	case SMB2_O_INFO_SECURITY:
+ 		ksmbd_debug(SMB, "GOT SMB2_O_INFO_SECURITY\n");
+-		rc = smb2_get_info_sec(work, req, rsp, (void *)rsp_org);
++		rc = smb2_get_info_sec(work, req, rsp);
+ 		break;
+ 	default:
+ 		ksmbd_debug(SMB, "InfoType %d not supported yet\n",
+@@ -5082,7 +5089,7 @@ int smb2_query_info(struct ksmbd_work *work)
+ 	}
+ 	rsp->StructureSize = cpu_to_le16(9);
+ 	rsp->OutputBufferOffset = cpu_to_le16(72);
+-	inc_rfc1001_len(rsp_org, 8);
++	inc_rfc1001_len(work->response_buf, 8);
+ 	return 0;
+ }
+ 
+@@ -5095,8 +5102,8 @@ int smb2_query_info(struct ksmbd_work *work)
+ static noinline int smb2_close_pipe(struct ksmbd_work *work)
+ {
+ 	u64 id;
+-	struct smb2_close_req *req = work->request_buf;
+-	struct smb2_close_rsp *rsp = work->response_buf;
++	struct smb2_close_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_close_rsp *rsp = smb2_get_msg(work->response_buf);
+ 
+ 	id = le64_to_cpu(req->VolatileFileId);
+ 	ksmbd_session_rpc_close(work->sess, id);
+@@ -5111,7 +5118,7 @@ static noinline int smb2_close_pipe(struct ksmbd_work *work)
+ 	rsp->AllocationSize = 0;
+ 	rsp->EndOfFile = 0;
+ 	rsp->Attributes = 0;
+-	inc_rfc1001_len(rsp, 60);
++	inc_rfc1001_len(work->response_buf, 60);
+ 	return 0;
+ }
+ 
+@@ -5127,14 +5134,12 @@ int smb2_close(struct ksmbd_work *work)
+ 	u64 sess_id;
+ 	struct smb2_close_req *req;
+ 	struct smb2_close_rsp *rsp;
+-	struct smb2_close_rsp *rsp_org;
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct ksmbd_file *fp;
+ 	struct inode *inode;
+ 	u64 time;
+ 	int err = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (test_share_config_flag(work->tcon->share_conf,
+@@ -5224,7 +5229,7 @@ int smb2_close(struct ksmbd_work *work)
+ 			rsp->hdr.Status = STATUS_FILE_CLOSED;
+ 		smb2_set_err_rsp(work);
+ 	} else {
+-		inc_rfc1001_len(rsp_org, 60);
++		inc_rfc1001_len(work->response_buf, 60);
+ 	}
+ 
+ 	return 0;
+@@ -5238,11 +5243,11 @@ int smb2_close(struct ksmbd_work *work)
+  */
+ int smb2_echo(struct ksmbd_work *work)
+ {
+-	struct smb2_echo_rsp *rsp = work->response_buf;
++	struct smb2_echo_rsp *rsp = smb2_get_msg(work->response_buf);
+ 
+ 	rsp->StructureSize = cpu_to_le16(4);
+ 	rsp->Reserved = 0;
+-	inc_rfc1001_len(rsp, 4);
++	inc_rfc1001_len(work->response_buf, 4);
+ 	return 0;
+ }
+ 
+@@ -5814,14 +5819,13 @@ static int smb2_set_info_sec(struct ksmbd_file *fp, int addition_info,
+ int smb2_set_info(struct ksmbd_work *work)
+ {
+ 	struct smb2_set_info_req *req;
+-	struct smb2_set_info_rsp *rsp, *rsp_org;
++	struct smb2_set_info_rsp *rsp;
+ 	struct ksmbd_file *fp;
+ 	int rc = 0;
+ 	unsigned int id = KSMBD_NO_FID, pid = KSMBD_NO_FID;
+ 
+ 	ksmbd_debug(SMB, "Received set info request\n");
+ 
+-	rsp_org = work->response_buf;
+ 	if (work->next_smb2_rcv_hdr_off) {
+ 		req = ksmbd_req_buf_next(work);
+ 		rsp = ksmbd_resp_buf_next(work);
+@@ -5832,8 +5836,8 @@ int smb2_set_info(struct ksmbd_work *work)
+ 			pid = work->compound_pfid;
+ 		}
+ 	} else {
+-		req = work->request_buf;
+-		rsp = work->response_buf;
++		req = smb2_get_msg(work->request_buf);
++		rsp = smb2_get_msg(work->response_buf);
+ 	}
+ 
+ 	if (!has_file_id(id)) {
+@@ -5874,7 +5878,7 @@ int smb2_set_info(struct ksmbd_work *work)
+ 		goto err_out;
+ 
+ 	rsp->StructureSize = cpu_to_le16(2);
+-	inc_rfc1001_len(rsp_org, 2);
++	inc_rfc1001_len(work->response_buf, 2);
+ 	ksmbd_fd_put(work, fp);
+ 	return 0;
+ 
+@@ -5914,12 +5918,12 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
+ 	int nbytes = 0, err;
+ 	u64 id;
+ 	struct ksmbd_rpc_command *rpc_resp;
+-	struct smb2_read_req *req = work->request_buf;
+-	struct smb2_read_rsp *rsp = work->response_buf;
++	struct smb2_read_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_read_rsp *rsp = smb2_get_msg(work->response_buf);
+ 
+ 	id = le64_to_cpu(req->VolatileFileId);
+ 
+-	inc_rfc1001_len(rsp, 16);
++	inc_rfc1001_len(work->response_buf, 16);
+ 	rpc_resp = ksmbd_rpc_read(work->sess, id);
+ 	if (rpc_resp) {
+ 		if (rpc_resp->flags != KSMBD_RPC_OK) {
+@@ -5938,7 +5942,7 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
+ 		       rpc_resp->payload_sz);
+ 
+ 		nbytes = rpc_resp->payload_sz;
+-		work->resp_hdr_sz = get_rfc1002_len(rsp) + 4;
++		work->resp_hdr_sz = get_rfc1002_len(work->response_buf) + 4;
+ 		work->aux_payload_sz = nbytes;
+ 		kvfree(rpc_resp);
+ 	}
+@@ -5949,7 +5953,7 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
+ 	rsp->DataLength = cpu_to_le32(nbytes);
+ 	rsp->DataRemaining = 0;
+ 	rsp->Reserved2 = 0;
+-	inc_rfc1001_len(rsp, nbytes);
++	inc_rfc1001_len(work->response_buf, nbytes);
+ 	return 0;
+ 
+ out:
+@@ -5999,14 +6003,13 @@ int smb2_read(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct smb2_read_req *req;
+-	struct smb2_read_rsp *rsp, *rsp_org;
++	struct smb2_read_rsp *rsp;
+ 	struct ksmbd_file *fp;
+ 	loff_t offset;
+ 	size_t length, mincount;
+ 	ssize_t nbytes = 0, remain_bytes = 0;
+ 	int err = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (test_share_config_flag(work->tcon->share_conf,
+@@ -6088,10 +6091,10 @@ int smb2_read(struct ksmbd_work *work)
+ 	rsp->DataLength = cpu_to_le32(nbytes);
+ 	rsp->DataRemaining = cpu_to_le32(remain_bytes);
+ 	rsp->Reserved2 = 0;
+-	inc_rfc1001_len(rsp_org, 16);
+-	work->resp_hdr_sz = get_rfc1002_len(rsp_org) + 4;
++	inc_rfc1001_len(work->response_buf, 16);
++	work->resp_hdr_sz = get_rfc1002_len(work->response_buf) + 4;
+ 	work->aux_payload_sz = nbytes;
+-	inc_rfc1001_len(rsp_org, nbytes);
++	inc_rfc1001_len(work->response_buf, nbytes);
+ 	ksmbd_fd_put(work, fp);
+ 	return 0;
+ 
+@@ -6126,8 +6129,8 @@ int smb2_read(struct ksmbd_work *work)
+  */
+ static noinline int smb2_write_pipe(struct ksmbd_work *work)
+ {
+-	struct smb2_write_req *req = work->request_buf;
+-	struct smb2_write_rsp *rsp = work->response_buf;
++	struct smb2_write_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_write_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_rpc_command *rpc_resp;
+ 	u64 id = 0;
+ 	int err = 0, ret = 0;
+@@ -6141,11 +6144,13 @@ static noinline int smb2_write_pipe(struct ksmbd_work *work)
+ 	    (offsetof(struct smb2_write_req, Buffer) - 4)) {
+ 		data_buf = (char *)&req->Buffer[0];
+ 	} else {
+-		if ((le16_to_cpu(req->DataOffset) > get_rfc1002_len(req)) ||
+-		    (le16_to_cpu(req->DataOffset) + length > get_rfc1002_len(req))) {
++		if ((le16_to_cpu(req->DataOffset) >
++		     get_rfc1002_len(work->request_buf)) ||
++		    (le16_to_cpu(req->DataOffset) + length >
++		     get_rfc1002_len(work->request_buf))) {
+ 			pr_err("invalid write data offset %u, smb_len %u\n",
+ 			       le16_to_cpu(req->DataOffset),
+-			       get_rfc1002_len(req));
++			       get_rfc1002_len(work->request_buf));
+ 			err = -EINVAL;
+ 			goto out;
+ 		}
+@@ -6177,7 +6182,7 @@ static noinline int smb2_write_pipe(struct ksmbd_work *work)
+ 	rsp->DataLength = cpu_to_le32(length);
+ 	rsp->DataRemaining = 0;
+ 	rsp->Reserved2 = 0;
+-	inc_rfc1001_len(rsp, 16);
++	inc_rfc1001_len(work->response_buf, 16);
+ 	return 0;
+ out:
+ 	if (err) {
+@@ -6245,7 +6250,7 @@ static ssize_t smb2_write_rdma_channel(struct ksmbd_work *work,
+ int smb2_write(struct ksmbd_work *work)
+ {
+ 	struct smb2_write_req *req;
+-	struct smb2_write_rsp *rsp, *rsp_org;
++	struct smb2_write_rsp *rsp;
+ 	struct ksmbd_file *fp = NULL;
+ 	loff_t offset;
+ 	size_t length;
+@@ -6254,7 +6259,6 @@ int smb2_write(struct ksmbd_work *work)
+ 	bool writethrough = false;
+ 	int err = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (test_share_config_flag(work->tcon->share_conf, KSMBD_SHARE_FLAG_PIPE)) {
+@@ -6300,11 +6304,13 @@ int smb2_write(struct ksmbd_work *work)
+ 		    (offsetof(struct smb2_write_req, Buffer) - 4)) {
+ 			data_buf = (char *)&req->Buffer[0];
+ 		} else {
+-			if ((le16_to_cpu(req->DataOffset) > get_rfc1002_len(req)) ||
+-			    (le16_to_cpu(req->DataOffset) + length > get_rfc1002_len(req))) {
++			if ((le16_to_cpu(req->DataOffset) >
++			     get_rfc1002_len(work->request_buf)) ||
++			    (le16_to_cpu(req->DataOffset) + length >
++			     get_rfc1002_len(work->request_buf))) {
+ 				pr_err("invalid write data offset %u, smb_len %u\n",
+ 				       le16_to_cpu(req->DataOffset),
+-				       get_rfc1002_len(req));
++				       get_rfc1002_len(work->request_buf));
+ 				err = -EINVAL;
+ 				goto out;
+ 			}
+@@ -6342,7 +6348,7 @@ int smb2_write(struct ksmbd_work *work)
+ 	rsp->DataLength = cpu_to_le32(nbytes);
+ 	rsp->DataRemaining = 0;
+ 	rsp->Reserved2 = 0;
+-	inc_rfc1001_len(rsp_org, 16);
++	inc_rfc1001_len(work->response_buf, 16);
+ 	ksmbd_fd_put(work, fp);
+ 	return 0;
+ 
+@@ -6376,10 +6382,9 @@ int smb2_write(struct ksmbd_work *work)
+ int smb2_flush(struct ksmbd_work *work)
+ {
+ 	struct smb2_flush_req *req;
+-	struct smb2_flush_rsp *rsp, *rsp_org;
++	struct smb2_flush_rsp *rsp;
+ 	int err;
+ 
+-	rsp_org = work->response_buf;
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	ksmbd_debug(SMB, "SMB2_FLUSH called for fid %llu\n",
+@@ -6393,7 +6398,7 @@ int smb2_flush(struct ksmbd_work *work)
+ 
+ 	rsp->StructureSize = cpu_to_le16(4);
+ 	rsp->Reserved = 0;
+-	inc_rfc1001_len(rsp_org, 4);
++	inc_rfc1001_len(work->response_buf, 4);
+ 	return 0;
+ 
+ out:
+@@ -6414,7 +6419,7 @@ int smb2_flush(struct ksmbd_work *work)
+ int smb2_cancel(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_hdr *hdr = work->request_buf;
++	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+ 	struct smb2_hdr *chdr;
+ 	struct ksmbd_work *cancel_work = NULL;
+ 	int canceled = 0;
+@@ -6429,7 +6434,7 @@ int smb2_cancel(struct ksmbd_work *work)
+ 		spin_lock(&conn->request_lock);
+ 		list_for_each_entry(cancel_work, command_list,
+ 				    async_request_entry) {
+-			chdr = cancel_work->request_buf;
++			chdr = smb2_get_msg(cancel_work->request_buf);
+ 
+ 			if (cancel_work->async_id !=
+ 			    le64_to_cpu(hdr->Id.AsyncId))
+@@ -6448,7 +6453,7 @@ int smb2_cancel(struct ksmbd_work *work)
+ 
+ 		spin_lock(&conn->request_lock);
+ 		list_for_each_entry(cancel_work, command_list, request_entry) {
+-			chdr = cancel_work->request_buf;
++			chdr = smb2_get_msg(cancel_work->request_buf);
+ 
+ 			if (chdr->MessageId != hdr->MessageId ||
+ 			    cancel_work == work)
+@@ -6583,8 +6588,8 @@ static inline bool lock_defer_pending(struct file_lock *fl)
+  */
+ int smb2_lock(struct ksmbd_work *work)
+ {
+-	struct smb2_lock_req *req = work->request_buf;
+-	struct smb2_lock_rsp *rsp = work->response_buf;
++	struct smb2_lock_req *req = smb2_get_msg(work->request_buf);
++	struct smb2_lock_rsp *rsp = smb2_get_msg(work->response_buf);
+ 	struct smb2_lock_element *lock_ele;
+ 	struct ksmbd_file *fp = NULL;
+ 	struct file_lock *flock = NULL;
+@@ -6891,7 +6896,7 @@ int smb2_lock(struct ksmbd_work *work)
+ 	ksmbd_debug(SMB, "successful in taking lock\n");
+ 	rsp->hdr.Status = STATUS_SUCCESS;
+ 	rsp->Reserved = 0;
+-	inc_rfc1001_len(rsp, 4);
++	inc_rfc1001_len(work->response_buf, 4);
+ 	ksmbd_fd_put(work, fp);
+ 	return 0;
+ 
+@@ -7356,14 +7361,13 @@ static int fsctl_request_resume_key(struct ksmbd_work *work,
+ int smb2_ioctl(struct ksmbd_work *work)
+ {
+ 	struct smb2_ioctl_req *req;
+-	struct smb2_ioctl_rsp *rsp, *rsp_org;
++	struct smb2_ioctl_rsp *rsp;
+ 	int cnt_code, nbytes = 0;
+ 	int out_buf_len;
+ 	u64 id = KSMBD_NO_FID;
+ 	struct ksmbd_conn *conn = work->conn;
+ 	int ret = 0;
+ 
+-	rsp_org = work->response_buf;
+ 	if (work->next_smb2_rcv_hdr_off) {
+ 		req = ksmbd_req_buf_next(work);
+ 		rsp = ksmbd_resp_buf_next(work);
+@@ -7373,8 +7377,8 @@ int smb2_ioctl(struct ksmbd_work *work)
+ 			id = work->compound_fid;
+ 		}
+ 	} else {
+-		req = work->request_buf;
+-		rsp = work->response_buf;
++		req = smb2_get_msg(work->request_buf);
++		rsp = smb2_get_msg(work->response_buf);
+ 	}
+ 
+ 	if (!has_file_id(id))
+@@ -7606,7 +7610,7 @@ int smb2_ioctl(struct ksmbd_work *work)
+ 	rsp->Reserved = cpu_to_le16(0);
+ 	rsp->Flags = cpu_to_le32(0);
+ 	rsp->Reserved2 = cpu_to_le32(0);
+-	inc_rfc1001_len(rsp_org, 48 + nbytes);
++	inc_rfc1001_len(work->response_buf, 48 + nbytes);
+ 
+ 	return 0;
+ 
+@@ -7631,8 +7635,8 @@ int smb2_ioctl(struct ksmbd_work *work)
+  */
+ static void smb20_oplock_break_ack(struct ksmbd_work *work)
+ {
+-	struct smb2_oplock_break *req = work->request_buf;
+-	struct smb2_oplock_break *rsp = work->response_buf;
++	struct smb2_oplock_break *req = smb2_get_msg(work->request_buf);
++	struct smb2_oplock_break *rsp = smb2_get_msg(work->response_buf);
+ 	struct ksmbd_file *fp;
+ 	struct oplock_info *opinfo = NULL;
+ 	__le32 err = 0;
+@@ -7739,7 +7743,7 @@ static void smb20_oplock_break_ack(struct ksmbd_work *work)
+ 	rsp->Reserved2 = 0;
+ 	rsp->VolatileFid = cpu_to_le64(volatile_id);
+ 	rsp->PersistentFid = cpu_to_le64(persistent_id);
+-	inc_rfc1001_len(rsp, 24);
++	inc_rfc1001_len(work->response_buf, 24);
+ 	return;
+ 
+ err_out:
+@@ -7775,8 +7779,8 @@ static int check_lease_state(struct lease *lease, __le32 req_state)
+ static void smb21_lease_break_ack(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_lease_ack *req = work->request_buf;
+-	struct smb2_lease_ack *rsp = work->response_buf;
++	struct smb2_lease_ack *req = smb2_get_msg(work->request_buf);
++	struct smb2_lease_ack *rsp = smb2_get_msg(work->response_buf);
+ 	struct oplock_info *opinfo;
+ 	__le32 err = 0;
+ 	int ret = 0;
+@@ -7888,7 +7892,7 @@ static void smb21_lease_break_ack(struct ksmbd_work *work)
+ 	memcpy(rsp->LeaseKey, req->LeaseKey, 16);
+ 	rsp->LeaseState = lease_state;
+ 	rsp->LeaseDuration = 0;
+-	inc_rfc1001_len(rsp, 36);
++	inc_rfc1001_len(work->response_buf, 36);
+ 	return;
+ 
+ err_out:
+@@ -7909,8 +7913,8 @@ static void smb21_lease_break_ack(struct ksmbd_work *work)
+  */
+ int smb2_oplock_break(struct ksmbd_work *work)
+ {
+-	struct smb2_oplock_break *req = work->request_buf;
+-	struct smb2_oplock_break *rsp = work->response_buf;
++	struct smb2_oplock_break *req = smb2_get_msg(work->request_buf);
++	struct smb2_oplock_break *rsp = smb2_get_msg(work->response_buf);
+ 
+ 	switch (le16_to_cpu(req->StructureSize)) {
+ 	case OP_BREAK_STRUCT_SIZE_20:
+@@ -7962,7 +7966,7 @@ int smb2_notify(struct ksmbd_work *work)
+  */
+ bool smb2_is_sign_req(struct ksmbd_work *work, unsigned int command)
+ {
+-	struct smb2_hdr *rcv_hdr2 = work->request_buf;
++	struct smb2_hdr *rcv_hdr2 = smb2_get_msg(work->request_buf);
+ 
+ 	if ((rcv_hdr2->Flags & SMB2_FLAGS_SIGNED) &&
+ 	    command != SMB2_NEGOTIATE_HE &&
+@@ -7981,22 +7985,22 @@ bool smb2_is_sign_req(struct ksmbd_work *work, unsigned int command)
+  */
+ int smb2_check_sign_req(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr, *hdr_org;
++	struct smb2_hdr *hdr;
+ 	char signature_req[SMB2_SIGNATURE_SIZE];
+ 	char signature[SMB2_HMACSHA256_SIZE];
+ 	struct kvec iov[1];
+ 	size_t len;
+ 
+-	hdr_org = hdr = work->request_buf;
++	hdr = smb2_get_msg(work->request_buf);
+ 	if (work->next_smb2_rcv_hdr_off)
+ 		hdr = ksmbd_req_buf_next(work);
+ 
+ 	if (!hdr->NextCommand && !work->next_smb2_rcv_hdr_off)
+-		len = be32_to_cpu(hdr_org->smb2_buf_length);
++		len = get_rfc1002_len(work->request_buf);
+ 	else if (hdr->NextCommand)
+ 		len = le32_to_cpu(hdr->NextCommand);
+ 	else
+-		len = be32_to_cpu(hdr_org->smb2_buf_length) -
++		len = get_rfc1002_len(work->request_buf) -
+ 			work->next_smb2_rcv_hdr_off;
+ 
+ 	memcpy(signature_req, hdr->Signature, SMB2_SIGNATURE_SIZE);
+@@ -8024,25 +8028,26 @@ int smb2_check_sign_req(struct ksmbd_work *work)
+  */
+ void smb2_set_sign_rsp(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *hdr, *hdr_org;
++	struct smb2_hdr *hdr;
+ 	struct smb2_hdr *req_hdr;
+ 	char signature[SMB2_HMACSHA256_SIZE];
+ 	struct kvec iov[2];
+ 	size_t len;
+ 	int n_vec = 1;
+ 
+-	hdr_org = hdr = work->response_buf;
++	hdr = smb2_get_msg(work->response_buf);
+ 	if (work->next_smb2_rsp_hdr_off)
+ 		hdr = ksmbd_resp_buf_next(work);
+ 
+ 	req_hdr = ksmbd_req_buf_next(work);
+ 
+ 	if (!work->next_smb2_rsp_hdr_off) {
+-		len = get_rfc1002_len(hdr_org);
++		len = get_rfc1002_len(work->response_buf);
+ 		if (req_hdr->NextCommand)
+ 			len = ALIGN(len, 8);
+ 	} else {
+-		len = get_rfc1002_len(hdr_org) - work->next_smb2_rsp_hdr_off;
++		len = get_rfc1002_len(work->response_buf) -
++			work->next_smb2_rsp_hdr_off;
+ 		len = ALIGN(len, 8);
+ 	}
+ 
+@@ -8078,23 +8083,23 @@ int smb3_check_sign_req(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+ 	char *signing_key;
+-	struct smb2_hdr *hdr, *hdr_org;
++	struct smb2_hdr *hdr;
+ 	struct channel *chann;
+ 	char signature_req[SMB2_SIGNATURE_SIZE];
+ 	char signature[SMB2_CMACAES_SIZE];
+ 	struct kvec iov[1];
+ 	size_t len;
+ 
+-	hdr_org = hdr = work->request_buf;
++	hdr = smb2_get_msg(work->request_buf);
+ 	if (work->next_smb2_rcv_hdr_off)
+ 		hdr = ksmbd_req_buf_next(work);
+ 
+ 	if (!hdr->NextCommand && !work->next_smb2_rcv_hdr_off)
+-		len = be32_to_cpu(hdr_org->smb2_buf_length);
++		len = get_rfc1002_len(work->request_buf);
+ 	else if (hdr->NextCommand)
+ 		len = le32_to_cpu(hdr->NextCommand);
+ 	else
+-		len = be32_to_cpu(hdr_org->smb2_buf_length) -
++		len = get_rfc1002_len(work->request_buf) -
+ 			work->next_smb2_rcv_hdr_off;
+ 
+ 	if (le16_to_cpu(hdr->Command) == SMB2_SESSION_SETUP_HE) {
+@@ -8135,8 +8140,7 @@ int smb3_check_sign_req(struct ksmbd_work *work)
+ void smb3_set_sign_rsp(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_hdr *req_hdr;
+-	struct smb2_hdr *hdr, *hdr_org;
++	struct smb2_hdr *req_hdr, *hdr;
+ 	struct channel *chann;
+ 	char signature[SMB2_CMACAES_SIZE];
+ 	struct kvec iov[2];
+@@ -8144,18 +8148,19 @@ void smb3_set_sign_rsp(struct ksmbd_work *work)
+ 	size_t len;
+ 	char *signing_key;
+ 
+-	hdr_org = hdr = work->response_buf;
++	hdr = smb2_get_msg(work->response_buf);
+ 	if (work->next_smb2_rsp_hdr_off)
+ 		hdr = ksmbd_resp_buf_next(work);
+ 
+ 	req_hdr = ksmbd_req_buf_next(work);
+ 
+ 	if (!work->next_smb2_rsp_hdr_off) {
+-		len = get_rfc1002_len(hdr_org);
++		len = get_rfc1002_len(work->response_buf);
+ 		if (req_hdr->NextCommand)
+ 			len = ALIGN(len, 8);
+ 	} else {
+-		len = get_rfc1002_len(hdr_org) - work->next_smb2_rsp_hdr_off;
++		len = get_rfc1002_len(work->response_buf) -
++			work->next_smb2_rsp_hdr_off;
+ 		len = ALIGN(len, 8);
+ 	}
+ 
+@@ -8207,7 +8212,7 @@ void smb3_preauth_hash_rsp(struct ksmbd_work *work)
+ 	WORK_BUFFERS(work, req, rsp);
+ 
+ 	if (le16_to_cpu(req->Command) == SMB2_NEGOTIATE_HE)
+-		ksmbd_gen_preauth_integrity_hash(conn, (char *)rsp,
++		ksmbd_gen_preauth_integrity_hash(conn, work->response_buf,
+ 						 conn->preauth_info->Preauth_HashValue);
+ 
+ 	if (le16_to_cpu(rsp->Command) == SMB2_SESSION_SETUP_HE && sess) {
+@@ -8225,7 +8230,7 @@ void smb3_preauth_hash_rsp(struct ksmbd_work *work)
+ 			if (!hash_value)
+ 				return;
+ 		}
+-		ksmbd_gen_preauth_integrity_hash(conn, (char *)rsp,
++		ksmbd_gen_preauth_integrity_hash(conn, work->response_buf,
+ 						 hash_value);
+ 	}
+ }
+@@ -8307,7 +8312,6 @@ int smb3_decrypt_req(struct ksmbd_work *work)
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct ksmbd_session *sess;
+ 	char *buf = work->request_buf;
+-	struct smb2_hdr *hdr;
+ 	unsigned int pdu_length = get_rfc1002_len(buf);
+ 	struct kvec iov[2];
+ 	unsigned int buf_data_size = pdu_length + 4 -
+@@ -8344,8 +8348,7 @@ int smb3_decrypt_req(struct ksmbd_work *work)
+ 		return rc;
+ 
+ 	memmove(buf + 4, iov[1].iov_base, buf_data_size);
+-	hdr = (struct smb2_hdr *)buf;
+-	hdr->smb2_buf_length = cpu_to_be32(buf_data_size);
++	*(__be32 *)buf = cpu_to_be32(buf_data_size);
+ 
+ 	return rc;
+ }
+@@ -8353,7 +8356,7 @@ int smb3_decrypt_req(struct ksmbd_work *work)
+ bool smb3_11_final_sess_setup_resp(struct ksmbd_work *work)
+ {
+ 	struct ksmbd_conn *conn = work->conn;
+-	struct smb2_hdr *rsp = work->response_buf;
++	struct smb2_hdr *rsp = smb2_get_msg(work->response_buf);
+ 
+ 	if (conn->dialect < SMB30_PROT_ID)
+ 		return false;
+diff --git a/fs/ksmbd/smb2pdu.h b/fs/ksmbd/smb2pdu.h
+index bcec845b03f3..d975e044704f 100644
+--- a/fs/ksmbd/smb2pdu.h
++++ b/fs/ksmbd/smb2pdu.h
+@@ -128,11 +128,6 @@
+ 	cpu_to_le16(__SMB2_HEADER_STRUCTURE_SIZE)
+ 
+ struct smb2_hdr {
+-	__be32 smb2_buf_length;	/* big endian on wire */
+-				/*
+-				 * length is only two or three bytes - with
+-				 * one or two byte type preceding it that MBZ
+-				 */
+ 	__le32 ProtocolId;	/* 0xFE 'S' 'M' 'B' */
+ 	__le16 StructureSize;	/* 64 */
+ 	__le16 CreditCharge;	/* MBZ */
+@@ -1695,4 +1690,13 @@ int smb2_ioctl(struct ksmbd_work *work);
+ int smb2_oplock_break(struct ksmbd_work *work);
+ int smb2_notify(struct ksmbd_work *ksmbd_work);
+ 
++/*
++ * Get the body of the smb2 message excluding the 4 byte rfc1002 headers
++ * from request/response buffer.
++ */
++static inline void *smb2_get_msg(void *buf)
++{
++	return buf + 4;
++}
++
+ #endif	/* _SMB2PDU_H */
+diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
+index 43d3123d8b62..7360387a6b4d 100644
+--- a/fs/ksmbd/smb_common.c
++++ b/fs/ksmbd/smb_common.c
+@@ -133,7 +133,7 @@ int ksmbd_lookup_protocol_idx(char *str)
+  */
+ int ksmbd_verify_smb_message(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *smb2_hdr = work->request_buf;
++	struct smb2_hdr *smb2_hdr = smb2_get_msg(work->request_buf);
+ 
+ 	if (smb2_hdr->ProtocolId == SMB2_PROTO_NUMBER)
+ 		return ksmbd_smb2_check_message(work);
+@@ -244,11 +244,11 @@ static int ksmbd_negotiate_smb_dialect(void *buf)
+ {
+ 	__le32 proto;
+ 
+-	proto = ((struct smb2_hdr *)buf)->ProtocolId;
++	proto = ((struct smb2_hdr *)smb2_get_msg(buf))->ProtocolId;
+ 	if (proto == SMB2_PROTO_NUMBER) {
+ 		struct smb2_negotiate_req *req;
+ 
+-		req = (struct smb2_negotiate_req *)buf;
++		req = (struct smb2_negotiate_req *)smb2_get_msg(buf);
+ 		return ksmbd_lookup_dialect_by_id(req->Dialects,
+ 						  req->DialectCount);
+ 	}
+@@ -437,11 +437,12 @@ int ksmbd_smb_negotiate_common(struct ksmbd_work *work, unsigned int command)
+ 	struct ksmbd_conn *conn = work->conn;
+ 	int ret;
+ 
+-	conn->dialect = ksmbd_negotiate_smb_dialect(work->request_buf);
++	conn->dialect =
++		ksmbd_negotiate_smb_dialect(work->request_buf);
+ 	ksmbd_debug(SMB, "conn->dialect 0x%x\n", conn->dialect);
+ 
+ 	if (command == SMB2_NEGOTIATE_HE) {
+-		struct smb2_hdr *smb2_hdr = work->request_buf;
++		struct smb2_hdr *smb2_hdr = smb2_get_msg(work->request_buf);
+ 
+ 		if (smb2_hdr->ProtocolId != SMB2_PROTO_NUMBER) {
+ 			ksmbd_debug(SMB, "Downgrade to SMB1 negotiation\n");
+diff --git a/fs/ksmbd/smb_common.h b/fs/ksmbd/smb_common.h
+index 57c667c1be06..b66f28f28b0a 100644
+--- a/fs/ksmbd/smb_common.h
++++ b/fs/ksmbd/smb_common.h
+@@ -482,12 +482,6 @@ struct smb_version_cmds {
+ 	int (*proc)(struct ksmbd_work *swork);
+ };
+ 
+-static inline size_t
+-smb2_hdr_size_no_buflen(struct smb_version_values *vals)
+-{
+-	return vals->header_size - 4;
+-}
+-
+ int ksmbd_min_protocol(void);
+ int ksmbd_max_protocol(void);
+ 
+-- 
+2.25.1
 
