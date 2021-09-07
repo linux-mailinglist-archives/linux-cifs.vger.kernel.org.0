@@ -2,87 +2,69 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A4D402741
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Sep 2021 12:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E5440289C
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Sep 2021 14:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343512AbhIGKfv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 7 Sep 2021 06:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S1344484AbhIGMVw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 7 Sep 2021 08:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245704AbhIGKfo (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Sep 2021 06:35:44 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DE3C06175F
-        for <linux-cifs@vger.kernel.org>; Tue,  7 Sep 2021 03:34:38 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id j1so6018066pjv.3
-        for <linux-cifs@vger.kernel.org>; Tue, 07 Sep 2021 03:34:38 -0700 (PDT)
+        with ESMTP id S1344102AbhIGMVW (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Sep 2021 08:21:22 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C5C0611F8
+        for <linux-cifs@vger.kernel.org>; Tue,  7 Sep 2021 05:19:04 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id f15so19386280ybg.3
+        for <linux-cifs@vger.kernel.org>; Tue, 07 Sep 2021 05:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A0g4QO4P0JFivl3i93tVvHLf7hXT+lwh80qMpB+sFIU=;
-        b=PlG9uI4pcO0DKjy3pXIG40+g1Rbhd88KwsnPuktzA0Cj5bMkk5UgaEvGNwEq7BKpWw
-         FpTjRHAtAXUUVA63co2DLmXJACk4J871tUa1DivRTLAFRhPKTPRsew9tyxD113qVVFEK
-         JA3RKbw93J9xzqHoVn8t8HpNE4fq+eAKs/3Lw=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=TDfVpW4YTIIyXLQOllLGbaOrIu3ZDr/QU6X9z54RSgw=;
+        b=oyeXtj68FlcItrjzgJnJanYODf7VsWo4+gga1+mKUKCpX8UlPIIF31zGAPAYjLISJS
+         jwcAk7kUXsNX0b2tRH+tiW6ii8m8ovukxQMqlzN/eVID7DJoFDmflLj1A0i9tOBUV3ep
+         So9OWQHSuiRsoPcbiClT/Wq4dHy87LEf5QPNDIG17pZ7hne8kcFLnPBQ4EXBpo7tKt1j
+         dLGAcesrh7VXlbupJqAhU8npFcuGGOu7LOgmmF3MhNb+NpnTg63GsaHCKZ0oa4UtOQCx
+         RzeFJJugjSVbddr/MQooukMAAg0pI/i7IbuuRPjWp/y+uV7QIgNgp0IKHJtqC1hv/y6V
+         BOVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A0g4QO4P0JFivl3i93tVvHLf7hXT+lwh80qMpB+sFIU=;
-        b=WZ/+C3n8qWxZ7wVXKO9zDM48SFBZmlH7vrsAAMlVwRVEdMVcDkN7Mwb9h+TZSCWYMA
-         EcBvb2ovMYXjVHbpH9Gx6g3yVoTePBiJdsWw/fbcCoJVo+M1uw+GWM1p/d+cPBZdB3ou
-         bU0yyBFu9AKb5G8nA05irhzFR72cfj3PN3FebzGe3E6GrSM459S3ImfVEbS3NmdWwYpk
-         PTi8gyatm3U01Ae0MQyBsHv7KZs3dYoFQSmXW4yXabWJyjNnLyeb65RVaXnX+dzFG5oo
-         jqDwjtFj75mIC6tyLCoDcUzJbiDdXRarN0M9XP4oYZYTeAEHH2zqlu4s5gIXa4FIx7dp
-         RTlQ==
-X-Gm-Message-State: AOAM531NLvKcx1PAeks6TAAjSvRDtCj0WwnvFrhDSQF4K/oyG0zLDxxH
-        YoihoZwQASYTw6qnqGiDkfQDSg==
-X-Google-Smtp-Source: ABdhPJxqt9Cl0GMMJIDHlKAW0o79LWvz2tL8dP+PtsaMs6vPP0Qg42SAwBJIamsc/5wnjctucG12Ag==
-X-Received: by 2002:a17:902:a50f:b029:11a:cd45:9009 with SMTP id s15-20020a170902a50fb029011acd459009mr14300427plq.38.1631010878319;
-        Tue, 07 Sep 2021 03:34:38 -0700 (PDT)
-Received: from google.com ([2409:10:2e40:5100:4040:44a5:1453:e72c])
-        by smtp.gmail.com with ESMTPSA id z12sm10230941pfe.79.2021.09.07.03.34.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Sep 2021 03:34:37 -0700 (PDT)
-Date:   Tue, 7 Sep 2021 19:34:33 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] ksmbd: remove unnecessary conditions
-Message-ID: <YTdAOWa/vLEhWQVt@google.com>
-References: <20210907073428.GD18254@kili>
- <YTcdbOgmB7758K+/@google.com>
- <20210907085430.GM1957@kadam>
- <YTcrA2U2n5QAUkt5@google.com>
- <20210907091411.GG1935@kadam>
- <YTc4ClL0EwuHsPXP@google.com>
- <20210907101705.GH1935@kadam>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=TDfVpW4YTIIyXLQOllLGbaOrIu3ZDr/QU6X9z54RSgw=;
+        b=CBjjXmdGGQV9mUGGjXMvnDBVZUbWRvZAiv0QTpXyw3bUwb0Pa7kEUCJtUQIuBySAIc
+         OZuOnm8EaUq7flzZxpm9/53koFmC0WNw8k0ZvjqBlHp1sJzQhaQ4WqwPhvmOtPOgr3le
+         k3NiRYds8mvrGWNkBecMup/i2bLItPTfGxQpoJJ5fGeYuw1r18HQvSvprM5f00YnQTqo
+         f8xfXNgW8l/++svVIh/zuwXIBakKFJOSIsW1iGxodJICexZrZQwQxDPw5Qj+8sHbksPe
+         ac42HAGUKPxccNxEZBx/seqKu3mqBEjFRWGueNvMy/OugDBEur1Rk7eRHKz4hqucA/eq
+         w0uw==
+X-Gm-Message-State: AOAM530ZbNxQOdqLawDjwCpFA4L8sM7Ikos4BljN4qn28LAAlQcqwuzl
+        lc/PeNf4zs7YgoksKiTvBfsFr2ti7ELqVRXPBWM=
+X-Google-Smtp-Source: ABdhPJzuQ1xJLUjCUizuP4y9N+dn/2FV1LjkgWazamQsaEVcOYdOSS9rQfu9CsDK2rccfTwO13rd9+XlQhmsiJlsttA=
+X-Received: by 2002:a25:392:: with SMTP id 140mr12799338ybd.549.1631017144039;
+ Tue, 07 Sep 2021 05:19:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210907101705.GH1935@kadam>
+Received: by 2002:a05:7000:b401:0:0:0:0 with HTTP; Tue, 7 Sep 2021 05:19:03
+ -0700 (PDT)
+Reply-To: geomic123@yahoo.com
+From:   George Micheal <agnestetteh16@gmail.com>
+Date:   Tue, 7 Sep 2021 13:19:03 +0100
+Message-ID: <CACBPRAob_auxJBdDNq0c61UHMqKUGw3BMXs_8v1EPm3h_sQzRw@mail.gmail.com>
+Subject: Read My Mail
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On (21/09/07 13:17), Dan Carpenter wrote:
-> > > 
-> > > But you've seen it now, right?
-> > 
-> > A linear search in array of 5 elements or a binary search in array of 340
-> > elements? Yea, I saw it. I'd prefer one extra uid_valid(), if you'd ask
-> > me - why call the function if we already know that it'll fail.
-> 
-> It's a failure path.  Hopefully people will only give us valid data.
-> 
+-- 
+Dear Sir,
 
-I usually prefer to assume that remote clients are _not exactly_ nice folks.
-Can this be a DoS vector - probably not. `cmp; je;` is several thousand
-times cheaper that a bsearch, and this is a remote user request servicing
-path. So. Just my 5 cents.
+My name is Mr George Michael,i am the Personal Assistant to former
+President Baba Yahya Abdul-Aziz Jemus Jammeh of the Republic of Gambia
+in west Africa, who is currently in exile with his farmily. I have
+been trying on how to get in touch with you over an important issue
+concerning a project that will be profitable. I anticipate hearing
+from you for more details.
 
-I'll leave it to you and Namjae to decide.
+Yours faithfully
+Mr George Michael
