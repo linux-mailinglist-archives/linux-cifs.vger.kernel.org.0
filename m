@@ -2,317 +2,477 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ED1402514
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Sep 2021 10:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623CE402516
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Sep 2021 10:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242535AbhIGI0l (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 7 Sep 2021 04:26:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29999 "EHLO
+        id S242600AbhIGI0s (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 7 Sep 2021 04:26:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28395 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242568AbhIGI0k (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Sep 2021 04:26:40 -0400
+        by vger.kernel.org with ESMTP id S242634AbhIGI0q (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Sep 2021 04:26:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631003133;
+        s=mimecast20190719; t=1631003140;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fng4Yb9b/QbSlm6TNHIpXCJ6DEQK0xCAPlXMpvLzgVY=;
-        b=jKIbuP3e57Amd74UITmrpt/nQX43wqtN47TTZ+1Aei8H4yXId13uPF6DA8g+gK522kwTD/
-        hfy6V+iC5Vl6Z34Ynacsj+3TF0aszUtmlnvrfIw9hv/RIfpOb46yPNX8FQJlU33Fp7bi9U
-        r8OijeVwNRx4IFO7rCenFS3bpQ1TQYo=
+        bh=isu4+JdU+wxM4uro8S21eYa0p+9UHTtrTBSjru8SFFk=;
+        b=KYZpryL6p/wUTIZ3SyWrMrZAeoPxIL4UIUGd6i3YV8hMHrf+czMxiSDRM8vQUzenU3lEK4
+        E2IbczadV3wHkXwfJVulum5OGSOdo3ZZ0Dwlr2MqfbYUwUsyBLXf3O2I2oCr0cOvWUV2tJ
+        sIx+4FXaI+ijo9lb6NYUZjTsdf1Ya4E=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-498-QSrfbfsOP42d0AM95s9YIg-1; Tue, 07 Sep 2021 04:25:32 -0400
-X-MC-Unique: QSrfbfsOP42d0AM95s9YIg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-497-5mBjFT5rMbawRFurLPvQKg-1; Tue, 07 Sep 2021 04:25:38 -0400
+X-MC-Unique: 5mBjFT5rMbawRFurLPvQKg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5C24E107ACE3;
-        Tue,  7 Sep 2021 08:25:31 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B304B1B18BC0;
+        Tue,  7 Sep 2021 08:25:37 +0000 (UTC)
 Received: from localhost.localdomain (vpn2-54-114.bne.redhat.com [10.64.54.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 697F05C25D;
-        Tue,  7 Sep 2021 08:25:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73BB75D740;
+        Tue,  7 Sep 2021 08:25:36 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 2/4] ksmbd: Move more definitions into the shared area
-Date:   Tue,  7 Sep 2021 18:25:21 +1000
-Message-Id: <20210907082523.2087981-2-lsahlber@redhat.com>
+Subject: [PATCH 3/4] cifs: Move SMB2_Create definitions to the shared area
+Date:   Tue,  7 Sep 2021 18:25:22 +1000
+Message-Id: <20210907082523.2087981-3-lsahlber@redhat.com>
 In-Reply-To: <20210907082523.2087981-1-lsahlber@redhat.com>
 References: <20210907082523.2087981-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Move SMB2_SessionSetup, SMB2_Close, SMB2_Read, SMB2_Write and
-SMB2_ChangeNotify commands into cifs_common/smb2pdu.h
+Move all SMB2_Create definitions (except contexts) into the shared area.
 
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/ksmbd/smb2pdu.c |   8 +-
- fs/ksmbd/smb2pdu.h | 188 ---------------------------------------------
- 2 files changed, 4 insertions(+), 192 deletions(-)
+ fs/cifs/smb2pdu.c        |   4 +-
+ fs/cifs/smb2pdu.h        | 165 --------------------------------
+ fs/cifs_common/smb2pdu.h | 201 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 203 insertions(+), 167 deletions(-)
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index c0adfb9b6248..cb4aa64b2098 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -5956,7 +5956,7 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
- 	rsp->Reserved = 0;
- 	rsp->DataLength = cpu_to_le32(nbytes);
- 	rsp->DataRemaining = 0;
--	rsp->Reserved2 = 0;
-+	rsp->Flags = 0;
- 	inc_rfc1001_len(work->response_buf, nbytes);
- 	return 0;
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index facbc0ebd355..502aadbd85cb 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3600,8 +3600,8 @@ SMB2_notify_init(const unsigned int xid, struct smb_rqst *rqst,
+ 	if (rc)
+ 		return rc;
  
-@@ -6094,7 +6094,7 @@ int smb2_read(struct ksmbd_work *work)
- 	rsp->Reserved = 0;
- 	rsp->DataLength = cpu_to_le32(nbytes);
- 	rsp->DataRemaining = cpu_to_le32(remain_bytes);
--	rsp->Reserved2 = 0;
-+	rsp->Flags = 0;
- 	inc_rfc1001_len(work->response_buf, 16);
- 	work->resp_hdr_sz = get_rfc1002_len(work->response_buf) + 4;
- 	work->aux_payload_sz = nbytes;
-@@ -7945,8 +7945,8 @@ int smb2_oplock_break(struct ksmbd_work *work)
-  */
- int smb2_notify(struct ksmbd_work *work)
- {
--	struct smb2_notify_req *req;
--	struct smb2_notify_rsp *rsp;
-+	struct smb2_change_notify_req *req;
-+	struct smb2_change_notify_rsp *rsp;
- 
- 	WORK_BUFFERS(work, req, rsp);
- 
-diff --git a/fs/ksmbd/smb2pdu.h b/fs/ksmbd/smb2pdu.h
-index b941c0ee6c67..41e3dde87f49 100644
---- a/fs/ksmbd/smb2pdu.h
-+++ b/fs/ksmbd/smb2pdu.h
-@@ -95,59 +95,10 @@ struct preauth_integrity_info {
- #define OFFSET_OF_NEG_CONTEXT	0xd0
- #endif
- 
--/* Flags */
--#define SMB2_SESSION_REQ_FLAG_BINDING		0x01
--#define SMB2_SESSION_REQ_FLAG_ENCRYPT_DATA	0x04
--
- #define SMB2_SESSION_EXPIRED		(0)
- #define SMB2_SESSION_IN_PROGRESS	BIT(0)
- #define SMB2_SESSION_VALID		BIT(1)
- 
--/* Flags */
--#define SMB2_SESSION_REQ_FLAG_BINDING		0x01
--#define SMB2_SESSION_REQ_FLAG_ENCRYPT_DATA	0x04
--
--struct smb2_sess_setup_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 25 */
--	__u8   Flags;
--	__u8   SecurityMode;
--	__le32 Capabilities;
--	__le32 Channel;
--	__le16 SecurityBufferOffset;
--	__le16 SecurityBufferLength;
--	__le64 PreviousSessionId;
--	__u8   Buffer[1];	/* variable length GSS security buffer */
--} __packed;
--
--/* Flags/Reserved for SMB3.1.1 */
--#define SMB2_SHAREFLAG_CLUSTER_RECONNECT	0x0001
--
--/* Currently defined SessionFlags */
--#define SMB2_SESSION_FLAG_IS_GUEST_LE		cpu_to_le16(0x0001)
--#define SMB2_SESSION_FLAG_IS_NULL_LE		cpu_to_le16(0x0002)
--#define SMB2_SESSION_FLAG_ENCRYPT_DATA_LE	cpu_to_le16(0x0004)
--struct smb2_sess_setup_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 9 */
--	__le16 SessionFlags;
--	__le16 SecurityBufferOffset;
--	__le16 SecurityBufferLength;
--	__u8   Buffer[1];	/* variable length GSS security buffer */
--} __packed;
--
--struct smb2_logoff_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize;	/* Must be 4 */
--	__le16 Reserved;
--} __packed;
--
--struct smb2_logoff_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize;	/* Must be 4 */
--	__le16 Reserved;
--} __packed;
--
- #define ATTR_READONLY_LE	cpu_to_le32(ATTR_READONLY)
- #define ATTR_HIDDEN_LE		cpu_to_le32(ATTR_HIDDEN)
- #define ATTR_SYSTEM_LE		cpu_to_le32(ATTR_SYSTEM)
-@@ -447,114 +398,12 @@ struct create_lease_v2 {
- 	__u8   Pad[4];
+-	req->PersistentFileId = persistent_fid;
+-	req->VolatileFileId = volatile_fid;
++	req->PersistentFileId = cpu_to_le64(persistent_fid);
++	req->VolatileFileId = cpu_to_le64(volatile_fid);
+ 	/* See note 354 of MS-SMB2, 64K max */
+ 	req->OutputBufferLength =
+ 		cpu_to_le32(SMB2_MAX_BUFFER_SIZE - MAX_SMB2_HDR_SIZE);
+diff --git a/fs/cifs/smb2pdu.h b/fs/cifs/smb2pdu.h
+index f5760346d9c5..d06676daaa7d 100644
+--- a/fs/cifs/smb2pdu.h
++++ b/fs/cifs/smb2pdu.h
+@@ -116,120 +116,6 @@ struct share_redirect_error_context_rsp {
+ 	/* __u8 ResourceName[] */ /* Name of share as counted Unicode string */
  } __packed;
  
--/* Currently defined values for close flags */
--#define SMB2_CLOSE_FLAG_POSTQUERY_ATTRIB	cpu_to_le16(0x0001)
--struct smb2_close_req {
+-/* File Attrubutes */
+-#define FILE_ATTRIBUTE_READONLY			0x00000001
+-#define FILE_ATTRIBUTE_HIDDEN			0x00000002
+-#define FILE_ATTRIBUTE_SYSTEM			0x00000004
+-#define FILE_ATTRIBUTE_DIRECTORY		0x00000010
+-#define FILE_ATTRIBUTE_ARCHIVE			0x00000020
+-#define FILE_ATTRIBUTE_NORMAL			0x00000080
+-#define FILE_ATTRIBUTE_TEMPORARY		0x00000100
+-#define FILE_ATTRIBUTE_SPARSE_FILE		0x00000200
+-#define FILE_ATTRIBUTE_REPARSE_POINT		0x00000400
+-#define FILE_ATTRIBUTE_COMPRESSED		0x00000800
+-#define FILE_ATTRIBUTE_OFFLINE			0x00001000
+-#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED	0x00002000
+-#define FILE_ATTRIBUTE_ENCRYPTED		0x00004000
+-#define FILE_ATTRIBUTE_INTEGRITY_STREAM		0x00008000
+-#define FILE_ATTRIBUTE_NO_SCRUB_DATA		0x00020000
+-
+-/* Oplock levels */
+-#define SMB2_OPLOCK_LEVEL_NONE		0x00
+-#define SMB2_OPLOCK_LEVEL_II		0x01
+-#define SMB2_OPLOCK_LEVEL_EXCLUSIVE	0x08
+-#define SMB2_OPLOCK_LEVEL_BATCH		0x09
+-#define SMB2_OPLOCK_LEVEL_LEASE		0xFF
+-/* Non-spec internal type */
+-#define SMB2_OPLOCK_LEVEL_NOCHANGE	0x99
+-
+-/* Desired Access Flags */
+-#define FILE_READ_DATA_LE		cpu_to_le32(0x00000001)
+-#define FILE_WRITE_DATA_LE		cpu_to_le32(0x00000002)
+-#define FILE_APPEND_DATA_LE		cpu_to_le32(0x00000004)
+-#define FILE_READ_EA_LE			cpu_to_le32(0x00000008)
+-#define FILE_WRITE_EA_LE		cpu_to_le32(0x00000010)
+-#define FILE_EXECUTE_LE			cpu_to_le32(0x00000020)
+-#define FILE_READ_ATTRIBUTES_LE		cpu_to_le32(0x00000080)
+-#define FILE_WRITE_ATTRIBUTES_LE	cpu_to_le32(0x00000100)
+-#define FILE_DELETE_LE			cpu_to_le32(0x00010000)
+-#define FILE_READ_CONTROL_LE		cpu_to_le32(0x00020000)
+-#define FILE_WRITE_DAC_LE		cpu_to_le32(0x00040000)
+-#define FILE_WRITE_OWNER_LE		cpu_to_le32(0x00080000)
+-#define FILE_SYNCHRONIZE_LE		cpu_to_le32(0x00100000)
+-#define FILE_ACCESS_SYSTEM_SECURITY_LE	cpu_to_le32(0x01000000)
+-#define FILE_MAXIMAL_ACCESS_LE		cpu_to_le32(0x02000000)
+-#define FILE_GENERIC_ALL_LE		cpu_to_le32(0x10000000)
+-#define FILE_GENERIC_EXECUTE_LE		cpu_to_le32(0x20000000)
+-#define FILE_GENERIC_WRITE_LE		cpu_to_le32(0x40000000)
+-#define FILE_GENERIC_READ_LE		cpu_to_le32(0x80000000)
+-
+-/* ShareAccess Flags */
+-#define FILE_SHARE_READ_LE		cpu_to_le32(0x00000001)
+-#define FILE_SHARE_WRITE_LE		cpu_to_le32(0x00000002)
+-#define FILE_SHARE_DELETE_LE		cpu_to_le32(0x00000004)
+-#define FILE_SHARE_ALL_LE		cpu_to_le32(0x00000007)
+-
+-/* CreateDisposition Flags */
+-#define FILE_SUPERSEDE_LE		cpu_to_le32(0x00000000)
+-#define FILE_OPEN_LE			cpu_to_le32(0x00000001)
+-#define FILE_CREATE_LE			cpu_to_le32(0x00000002)
+-#define	FILE_OPEN_IF_LE			cpu_to_le32(0x00000003)
+-#define FILE_OVERWRITE_LE		cpu_to_le32(0x00000004)
+-#define FILE_OVERWRITE_IF_LE		cpu_to_le32(0x00000005)
+-
+-/* CreateOptions Flags */
+-#define FILE_DIRECTORY_FILE_LE		cpu_to_le32(0x00000001)
+-/* same as #define CREATE_NOT_FILE_LE	cpu_to_le32(0x00000001) */
+-#define FILE_WRITE_THROUGH_LE		cpu_to_le32(0x00000002)
+-#define FILE_SEQUENTIAL_ONLY_LE		cpu_to_le32(0x00000004)
+-#define FILE_NO_INTERMEDIATE_BUFFERRING_LE cpu_to_le32(0x00000008)
+-#define FILE_SYNCHRONOUS_IO_ALERT_LE	cpu_to_le32(0x00000010)
+-#define FILE_SYNCHRONOUS_IO_NON_ALERT_LE	cpu_to_le32(0x00000020)
+-#define FILE_NON_DIRECTORY_FILE_LE	cpu_to_le32(0x00000040)
+-#define FILE_COMPLETE_IF_OPLOCKED_LE	cpu_to_le32(0x00000100)
+-#define FILE_NO_EA_KNOWLEDGE_LE		cpu_to_le32(0x00000200)
+-#define FILE_RANDOM_ACCESS_LE		cpu_to_le32(0x00000800)
+-#define FILE_DELETE_ON_CLOSE_LE		cpu_to_le32(0x00001000)
+-#define FILE_OPEN_BY_FILE_ID_LE		cpu_to_le32(0x00002000)
+-#define FILE_OPEN_FOR_BACKUP_INTENT_LE	cpu_to_le32(0x00004000)
+-#define FILE_NO_COMPRESSION_LE		cpu_to_le32(0x00008000)
+-#define FILE_RESERVE_OPFILTER_LE	cpu_to_le32(0x00100000)
+-#define FILE_OPEN_REPARSE_POINT_LE	cpu_to_le32(0x00200000)
+-#define FILE_OPEN_NO_RECALL_LE		cpu_to_le32(0x00400000)
+-#define FILE_OPEN_FOR_FREE_SPACE_QUERY_LE cpu_to_le32(0x00800000)
+-
+-#define FILE_READ_RIGHTS_LE (FILE_READ_DATA_LE | FILE_READ_EA_LE \
+-			| FILE_READ_ATTRIBUTES_LE)
+-#define FILE_WRITE_RIGHTS_LE (FILE_WRITE_DATA_LE | FILE_APPEND_DATA_LE \
+-			| FILE_WRITE_EA_LE | FILE_WRITE_ATTRIBUTES_LE)
+-#define FILE_EXEC_RIGHTS_LE (FILE_EXECUTE_LE)
+-
+-/* Impersonation Levels. See MS-WPO section 9.7 and MSDN-IMPERS */
+-#define IL_ANONYMOUS		cpu_to_le32(0x00000000)
+-#define IL_IDENTIFICATION	cpu_to_le32(0x00000001)
+-#define IL_IMPERSONATION	cpu_to_le32(0x00000002)
+-#define IL_DELEGATE		cpu_to_le32(0x00000003)
+-
+-/* Create Context Values */
+-#define SMB2_CREATE_EA_BUFFER			"ExtA" /* extended attributes */
+-#define SMB2_CREATE_SD_BUFFER			"SecD" /* security descriptor */
+-#define SMB2_CREATE_DURABLE_HANDLE_REQUEST	"DHnQ"
+-#define SMB2_CREATE_DURABLE_HANDLE_RECONNECT	"DHnC"
+-#define SMB2_CREATE_ALLOCATION_SIZE		"AISi"
+-#define SMB2_CREATE_QUERY_MAXIMAL_ACCESS_REQUEST "MxAc"
+-#define SMB2_CREATE_TIMEWARP_REQUEST		"TWrp"
+-#define SMB2_CREATE_QUERY_ON_DISK_ID		"QFid"
+-#define SMB2_CREATE_REQUEST_LEASE		"RqLs"
+-#define SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2	"DH2Q"
+-#define SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2	"DH2C"
+-#define SMB2_CREATE_APP_INSTANCE_ID	0x45BCA66AEFA7F74A9008FA462E144D74
+-#define SMB2_CREATE_APP_INSTANCE_VERSION 0xB982D0B73B56074FA07B524A8116A010
+-#define SVHDX_OPEN_DEVICE_CONTEX	0x9CCBCF9E04C1E643980E158DA1F6EC83
+-#define SMB2_CREATE_TAG_POSIX		0x93AD25509CB411E7B42383DE968BCD7C
+-
+-/* Flag (SMB3 open response) values */
+-#define SMB2_CREATE_FLAG_REPARSEPOINT 0x01
+-
+ /*
+  * Maximum number of iovs we need for an open/create request.
+  * [0] : struct smb2_create_req
+@@ -243,26 +129,6 @@ struct share_redirect_error_context_rsp {
+  */
+ #define SMB2_CREATE_IOV_SIZE 8
+ 
+-struct smb2_create_req {
 -	struct smb2_hdr hdr;
--	__le16 StructureSize;	/* Must be 24 */
--	__le16 Flags;
--	__le32 Reserved;
--	__le64  PersistentFileId;
--	__le64  VolatileFileId;
+-	__le16 StructureSize;	/* Must be 57 */
+-	__u8   SecurityFlags;
+-	__u8   RequestedOplockLevel;
+-	__le32 ImpersonationLevel;
+-	__le64 SmbCreateFlags;
+-	__le64 Reserved;
+-	__le32 DesiredAccess;
+-	__le32 FileAttributes;
+-	__le32 ShareAccess;
+-	__le32 CreateDisposition;
+-	__le32 CreateOptions;
+-	__le16 NameOffset;
+-	__le16 NameLength;
+-	__le32 CreateContextsOffset;
+-	__le32 CreateContextsLength;
+-	__u8   Buffer[];
 -} __packed;
 -
--struct smb2_close_rsp {
+ /*
+  * Maximum size of a SMB2_CREATE response is 64 (smb2 header) +
+  * 88 (fixed part of create response) + 520 (path) + 208 (contexts) +
+@@ -270,37 +136,6 @@ struct smb2_create_req {
+  */
+ #define MAX_SMB2_CREATE_RESPONSE_SIZE 880
+ 
+-struct smb2_create_rsp {
 -	struct smb2_hdr hdr;
--	__le16 StructureSize; /* 60 */
--	__le16 Flags;
--	__le32 Reserved;
+-	__le16 StructureSize;	/* Must be 89 */
+-	__u8   OplockLevel;
+-	__u8   Flag;  /* 0x01 if reparse point */
+-	__le32 CreateAction;
 -	__le64 CreationTime;
 -	__le64 LastAccessTime;
 -	__le64 LastWriteTime;
 -	__le64 ChangeTime;
--	__le64 AllocationSize;	/* Beginning of FILE_STANDARD_INFO equivalent */
--	__le64 EndOfFile;
--	__le32 Attributes;
--} __packed;
--
--struct smb2_flush_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize;	/* Must be 24 */
--	__le16 Reserved1;
+-	__le64 AllocationSize;
+-	__le64 EndofFile;
+-	__le32 FileAttributes;
 -	__le32 Reserved2;
--	__le64  PersistentFileId;
--	__le64  VolatileFileId;
+-	__u64  PersistentFileId; /* opaque endianness */
+-	__u64  VolatileFileId; /* opaque endianness */
+-	__le32 CreateContextsOffset;
+-	__le32 CreateContextsLength;
+-	__u8   Buffer[1];
 -} __packed;
 -
--struct smb2_flush_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize;
+-struct create_context {
+-	__le32 Next;
+-	__le16 NameOffset;
+-	__le16 NameLength;
 -	__le16 Reserved;
+-	__le16 DataOffset;
+-	__le32 DataLength;
+-	__u8 Buffer[];
 -} __packed;
 -
- struct smb2_buffer_desc_v1 {
- 	__le64 offset;
- 	__le32 token;
- 	__le32 length;
+ #define SMB2_LEASE_READ_CACHING_HE	0x01
+ #define SMB2_LEASE_HANDLE_CACHING_HE	0x02
+ #define SMB2_LEASE_WRITE_CACHING_HE	0x04
+diff --git a/fs/cifs_common/smb2pdu.h b/fs/cifs_common/smb2pdu.h
+index 0d9c3ebdb773..7ccadcbe684b 100644
+--- a/fs/cifs_common/smb2pdu.h
++++ b/fs/cifs_common/smb2pdu.h
+@@ -784,5 +784,206 @@ struct smb2_change_notify_rsp {
  } __packed;
  
--#define SMB2_CHANNEL_NONE		cpu_to_le32(0x00000000)
--#define SMB2_CHANNEL_RDMA_V1		cpu_to_le32(0x00000001)
--#define SMB2_CHANNEL_RDMA_V1_INVALIDATE cpu_to_le32(0x00000002)
--
--struct smb2_read_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 49 */
--	__u8   Padding; /* offset from start of SMB2 header to place read */
--	__u8   Reserved;
--	__le32 Length;
--	__le64 Offset;
--	__le64  PersistentFileId;
--	__le64  VolatileFileId;
--	__le32 MinimumCount;
--	__le32 Channel; /* Reserved MBZ */
--	__le32 RemainingBytes;
--	__le16 ReadChannelInfoOffset; /* Reserved MBZ */
--	__le16 ReadChannelInfoLength; /* Reserved MBZ */
--	__u8   Buffer[1];
--} __packed;
--
--struct smb2_read_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 17 */
--	__u8   DataOffset;
--	__u8   Reserved;
--	__le32 DataLength;
--	__le32 DataRemaining;
--	__u32  Reserved2;
--	__u8   Buffer[1];
--} __packed;
--
--/* For write request Flags field below the following flag is defined: */
--#define SMB2_WRITEFLAG_WRITE_THROUGH 0x00000001
--
--struct smb2_write_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 49 */
--	__le16 DataOffset; /* offset from start of SMB2 header to write data */
--	__le32 Length;
--	__le64 Offset;
--	__le64  PersistentFileId;
--	__le64  VolatileFileId;
--	__le32 Channel; /* Reserved MBZ */
--	__le32 RemainingBytes;
--	__le16 WriteChannelInfoOffset; /* Reserved MBZ */
--	__le16 WriteChannelInfoLength; /* Reserved MBZ */
--	__le32 Flags;
--	__u8   Buffer[1];
--} __packed;
--
--struct smb2_write_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 17 */
--	__u8   DataOffset;
--	__u8   Reserved;
--	__le32 DataLength;
--	__le32 DataRemaining;
--	__u32  Reserved2;
--	__u8   Buffer[1];
--} __packed;
--
- #define SMB2_0_IOCTL_IS_FSCTL 0x00000001
  
- struct duplicate_extents_to_file {
-@@ -704,43 +553,6 @@ struct reparse_data_buffer {
- 	__u8	DataBuffer[]; /* Variable Length */
- } __packed;
++/*
++ * SMB2_CREATE  See MS-SMB2 section 2.2.13
++ */
++/* Oplock levels */
++#define SMB2_OPLOCK_LEVEL_NONE		0x00
++#define SMB2_OPLOCK_LEVEL_II		0x01
++#define SMB2_OPLOCK_LEVEL_EXCLUSIVE	0x08
++#define SMB2_OPLOCK_LEVEL_BATCH		0x09
++#define SMB2_OPLOCK_LEVEL_LEASE		0xFF
++/* Non-spec internal type */
++#define SMB2_OPLOCK_LEVEL_NOCHANGE	0x99
++
++/* Impersonation Levels. See MS-WPO section 9.7 and MSDN-IMPERS */
++#define IL_ANONYMOUS		cpu_to_le32(0x00000000)
++#define IL_IDENTIFICATION	cpu_to_le32(0x00000001)
++#define IL_IMPERSONATION	cpu_to_le32(0x00000002)
++#define IL_DELEGATE		cpu_to_le32(0x00000003)
++
++/* File Attrubutes */
++#define FILE_ATTRIBUTE_READONLY			0x00000001
++#define FILE_ATTRIBUTE_HIDDEN			0x00000002
++#define FILE_ATTRIBUTE_SYSTEM			0x00000004
++#define FILE_ATTRIBUTE_DIRECTORY		0x00000010
++#define FILE_ATTRIBUTE_ARCHIVE			0x00000020
++#define FILE_ATTRIBUTE_NORMAL			0x00000080
++#define FILE_ATTRIBUTE_TEMPORARY		0x00000100
++#define FILE_ATTRIBUTE_SPARSE_FILE		0x00000200
++#define FILE_ATTRIBUTE_REPARSE_POINT		0x00000400
++#define FILE_ATTRIBUTE_COMPRESSED		0x00000800
++#define FILE_ATTRIBUTE_OFFLINE			0x00001000
++#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED	0x00002000
++#define FILE_ATTRIBUTE_ENCRYPTED		0x00004000
++#define FILE_ATTRIBUTE_INTEGRITY_STREAM		0x00008000
++#define FILE_ATTRIBUTE_NO_SCRUB_DATA		0x00020000
++#define FILE_ATTRIBUTE__MASK			0x00007FB7
++
++#define FILE_ATTRIBUTE_READONLY_LE              cpu_to_le32(0x00000001)
++#define FILE_ATTRIBUTE_HIDDEN_LE		cpu_to_le32(0x00000002)
++#define FILE_ATTRIBUTE_SYSTEM_LE		cpu_to_le32(0x00000004)
++#define FILE_ATTRIBUTE_DIRECTORY_LE		cpu_to_le32(0x00000010)
++#define FILE_ATTRIBUTE_ARCHIVE_LE		cpu_to_le32(0x00000020)
++#define FILE_ATTRIBUTE_NORMAL_LE		cpu_to_le32(0x00000080)
++#define FILE_ATTRIBUTE_TEMPORARY_LE		cpu_to_le32(0x00000100)
++#define FILE_ATTRIBUTE_SPARSE_FILE_LE		cpu_to_le32(0x00000200)
++#define FILE_ATTRIBUTE_REPARSE_POINT_LE		cpu_to_le32(0x00000400)
++#define FILE_ATTRIBUTE_COMPRESSED_LE		cpu_to_le32(0x00000800)
++#define FILE_ATTRIBUTE_OFFLINE_LE		cpu_to_le32(0x00001000)
++#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED_LE	cpu_to_le32(0x00002000)
++#define FILE_ATTRIBUTE_ENCRYPTED_LE		cpu_to_le32(0x00004000)
++#define FILE_ATTRIBUTE_INTEGRITY_STREAM_LE	cpu_to_le32(0x00008000)
++#define FILE_ATTRIBUTE_NO_SCRUB_DATA_LE		cpu_to_le32(0x00020000)
++#define FILE_ATTRIBUTE_MASK_LE			cpu_to_le32(0x00007FB7)
++
++/* Desired Access Flags */
++#define FILE_READ_DATA_LE		cpu_to_le32(0x00000001)
++#define FILE_LIST_DIRECTORY_LE		cpu_to_le32(0x00000001)
++#define FILE_WRITE_DATA_LE		cpu_to_le32(0x00000002)
++#define FILE_APPEND_DATA_LE		cpu_to_le32(0x00000004)
++#define FILE_ADD_SUBDIRECTORY_LE	cpu_to_le32(0x00000004)
++#define FILE_READ_EA_LE			cpu_to_le32(0x00000008)
++#define FILE_WRITE_EA_LE		cpu_to_le32(0x00000010)
++#define FILE_EXECUTE_LE			cpu_to_le32(0x00000020)
++#define FILE_DELETE_CHILD_LE		cpu_to_le32(0x00000040)
++#define FILE_READ_ATTRIBUTES_LE		cpu_to_le32(0x00000080)
++#define FILE_WRITE_ATTRIBUTES_LE	cpu_to_le32(0x00000100)
++#define FILE_DELETE_LE			cpu_to_le32(0x00010000)
++#define FILE_READ_CONTROL_LE		cpu_to_le32(0x00020000)
++#define FILE_WRITE_DAC_LE		cpu_to_le32(0x00040000)
++#define FILE_WRITE_OWNER_LE		cpu_to_le32(0x00080000)
++#define FILE_SYNCHRONIZE_LE		cpu_to_le32(0x00100000)
++#define FILE_ACCESS_SYSTEM_SECURITY_LE	cpu_to_le32(0x01000000)
++#define FILE_MAXIMAL_ACCESS_LE		cpu_to_le32(0x02000000)
++#define FILE_GENERIC_ALL_LE		cpu_to_le32(0x10000000)
++#define FILE_GENERIC_EXECUTE_LE		cpu_to_le32(0x20000000)
++#define FILE_GENERIC_WRITE_LE		cpu_to_le32(0x40000000)
++#define FILE_GENERIC_READ_LE		cpu_to_le32(0x80000000)
++#define DESIRED_ACCESS_MASK             cpu_to_le32(0xF21F01FF)
++
++
++#define FILE_READ_DESIRED_ACCESS_LE     (FILE_READ_DATA_LE        |	\
++					 FILE_READ_EA_LE          |     \
++					 FILE_GENERIC_READ_LE)
++#define FILE_WRITE_DESIRE_ACCESS_LE     (FILE_WRITE_DATA_LE       |	\
++					 FILE_APPEND_DATA_LE      |	\
++					 FILE_WRITE_EA_LE         |	\
++					 FILE_WRITE_ATTRIBUTES_LE |	\
++					 FILE_GENERIC_WRITE_LE)
++
++/* ShareAccess Flags */
++#define FILE_SHARE_READ_LE		cpu_to_le32(0x00000001)
++#define FILE_SHARE_WRITE_LE		cpu_to_le32(0x00000002)
++#define FILE_SHARE_DELETE_LE		cpu_to_le32(0x00000004)
++#define FILE_SHARE_ALL_LE		cpu_to_le32(0x00000007)
++
++/* CreateDisposition Flags */
++#define FILE_SUPERSEDE_LE		cpu_to_le32(0x00000000)
++#define FILE_OPEN_LE			cpu_to_le32(0x00000001)
++#define FILE_CREATE_LE			cpu_to_le32(0x00000002)
++#define	FILE_OPEN_IF_LE			cpu_to_le32(0x00000003)
++#define FILE_OVERWRITE_LE		cpu_to_le32(0x00000004)
++#define FILE_OVERWRITE_IF_LE		cpu_to_le32(0x00000005)
++#define FILE_CREATE_MASK_LE             cpu_to_le32(0x00000007)
++
++#define FILE_READ_RIGHTS (FILE_READ_DATA | FILE_READ_EA \
++			| FILE_READ_ATTRIBUTES)
++#define FILE_WRITE_RIGHTS (FILE_WRITE_DATA | FILE_APPEND_DATA \
++			| FILE_WRITE_EA | FILE_WRITE_ATTRIBUTES)
++#define FILE_EXEC_RIGHTS (FILE_EXECUTE)
++
++/* CreateOptions Flags */
++#define FILE_DIRECTORY_FILE_LE		cpu_to_le32(0x00000001)
++/* same as #define CREATE_NOT_FILE_LE	cpu_to_le32(0x00000001) */
++#define FILE_WRITE_THROUGH_LE		cpu_to_le32(0x00000002)
++#define FILE_SEQUENTIAL_ONLY_LE		cpu_to_le32(0x00000004)
++#define FILE_NO_INTERMEDIATE_BUFFERING_LE cpu_to_le32(0x00000008)
++#define FILE_NON_DIRECTORY_FILE_LE	cpu_to_le32(0x00000040)
++#define FILE_COMPLETE_IF_OPLOCKED_LE	cpu_to_le32(0x00000100)
++#define FILE_NO_EA_KNOWLEDGE_LE		cpu_to_le32(0x00000200)
++#define FILE_RANDOM_ACCESS_LE		cpu_to_le32(0x00000800)
++#define FILE_DELETE_ON_CLOSE_LE		cpu_to_le32(0x00001000)
++#define FILE_OPEN_BY_FILE_ID_LE		cpu_to_le32(0x00002000)
++#define FILE_OPEN_FOR_BACKUP_INTENT_LE	cpu_to_le32(0x00004000)
++#define FILE_NO_COMPRESSION_LE		cpu_to_le32(0x00008000)
++#define FILE_OPEN_REPARSE_POINT_LE	cpu_to_le32(0x00200000)
++#define FILE_OPEN_NO_RECALL_LE		cpu_to_le32(0x00400000)
++#define CREATE_OPTIONS_MASK_LE          cpu_to_le32(0x00FFFFFF)
++
++#define FILE_READ_RIGHTS_LE (FILE_READ_DATA_LE | FILE_READ_EA_LE \
++			| FILE_READ_ATTRIBUTES_LE)
++#define FILE_WRITE_RIGHTS_LE (FILE_WRITE_DATA_LE | FILE_APPEND_DATA_LE \
++			| FILE_WRITE_EA_LE | FILE_WRITE_ATTRIBUTES_LE)
++#define FILE_EXEC_RIGHTS_LE (FILE_EXECUTE_LE)
++
++/* Create Context Values */
++#define SMB2_CREATE_EA_BUFFER			"ExtA" /* extended attributes */
++#define SMB2_CREATE_SD_BUFFER			"SecD" /* security descriptor */
++#define SMB2_CREATE_DURABLE_HANDLE_REQUEST	"DHnQ"
++#define SMB2_CREATE_DURABLE_HANDLE_RECONNECT	"DHnC"
++#define SMB2_CREATE_ALLOCATION_SIZE		"AISi"
++#define SMB2_CREATE_QUERY_MAXIMAL_ACCESS_REQUEST "MxAc"
++#define SMB2_CREATE_TIMEWARP_REQUEST		"TWrp"
++#define SMB2_CREATE_QUERY_ON_DISK_ID		"QFid"
++#define SMB2_CREATE_REQUEST_LEASE		"RqLs"
++#define SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2	"DH2Q"
++#define SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2	"DH2C"
++#define SMB2_CREATE_TAG_POSIX          "\x93\xAD\x25\x50\x9C\xB4\x11\xE7\xB4\x23\x83\xDE\x96\x8B\xCD\x7C"
++
++/* Flag (SMB3 open response) values */
++#define SMB2_CREATE_FLAG_REPARSEPOINT 0x01
++
++struct create_context {
++	__le32 Next;
++	__le16 NameOffset;
++	__le16 NameLength;
++	__le16 Reserved;
++	__le16 DataOffset;
++	__le32 DataLength;
++	__u8 Buffer[];
++} __packed;
++
++struct smb2_create_req {
++	struct smb2_hdr hdr;
++	__le16 StructureSize;	/* Must be 57 */
++	__u8   SecurityFlags;
++	__u8   RequestedOplockLevel;
++	__le32 ImpersonationLevel;
++	__le64 SmbCreateFlags;
++	__le64 Reserved;
++	__le32 DesiredAccess;
++	__le32 FileAttributes;
++	__le32 ShareAccess;
++	__le32 CreateDisposition;
++	__le32 CreateOptions;
++	__le16 NameOffset;
++	__le16 NameLength;
++	__le32 CreateContextsOffset;
++	__le32 CreateContextsLength;
++	__u8   Buffer[];
++} __packed;
++
++struct smb2_create_rsp {
++	struct smb2_hdr hdr;
++	__le16 StructureSize;	/* Must be 89 */
++	__u8   OplockLevel;
++	__u8   Flags;  /* 0x01 if reparse point */
++	__le32 CreateAction;
++	__le64 CreationTime;
++	__le64 LastAccessTime;
++	__le64 LastWriteTime;
++	__le64 ChangeTime;
++	__le64 AllocationSize;
++	__le64 EndofFile;
++	__le32 FileAttributes;
++	__le32 Reserved2;
++	__le64  PersistentFileId;
++	__le64  VolatileFileId;
++	__le32 CreateContextsOffset;
++	__le32 CreateContextsLength;
++	__u8   Buffer[1];
++} __packed;
++
  
--/* Completion Filter flags for Notify */
--#define FILE_NOTIFY_CHANGE_FILE_NAME	0x00000001
--#define FILE_NOTIFY_CHANGE_DIR_NAME	0x00000002
--#define FILE_NOTIFY_CHANGE_NAME		0x00000003
--#define FILE_NOTIFY_CHANGE_ATTRIBUTES	0x00000004
--#define FILE_NOTIFY_CHANGE_SIZE		0x00000008
--#define FILE_NOTIFY_CHANGE_LAST_WRITE	0x00000010
--#define FILE_NOTIFY_CHANGE_LAST_ACCESS	0x00000020
--#define FILE_NOTIFY_CHANGE_CREATION	0x00000040
--#define FILE_NOTIFY_CHANGE_EA		0x00000080
--#define FILE_NOTIFY_CHANGE_SECURITY	0x00000100
--#define FILE_NOTIFY_CHANGE_STREAM_NAME	0x00000200
--#define FILE_NOTIFY_CHANGE_STREAM_SIZE	0x00000400
--#define FILE_NOTIFY_CHANGE_STREAM_WRITE	0x00000800
--
--/* Flags */
--#define SMB2_WATCH_TREE	0x0001
--
--struct smb2_notify_req {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 32 */
--	__le16 Flags;
--	__le32 OutputBufferLength;
--	__le64 PersistentFileId;
--	__le64 VolatileFileId;
--	__u32 CompletionFileter;
--	__u32 Reserved;
--} __packed;
--
--struct smb2_notify_rsp {
--	struct smb2_hdr hdr;
--	__le16 StructureSize; /* Must be 9 */
--	__le16 OutputBufferOffset;
--	__le32 OutputBufferLength;
--	__u8 Buffer[1];
--} __packed;
--
- /* SMB2 Notify Action Flags */
- #define FILE_ACTION_ADDED		0x00000001
- #define FILE_ACTION_REMOVED		0x00000002
+ #endif				/* _COMMON_SMB2PDU_H */
 -- 
 2.30.2
 
