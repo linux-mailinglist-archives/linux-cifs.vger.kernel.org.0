@@ -2,76 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E0D40562C
-	for <lists+linux-cifs@lfdr.de>; Thu,  9 Sep 2021 15:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11580405F0E
+	for <lists+linux-cifs@lfdr.de>; Thu,  9 Sep 2021 23:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355911AbhIINSX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 9 Sep 2021 09:18:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35418 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355371AbhIINNS (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:13:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A6FB632E4;
-        Thu,  9 Sep 2021 12:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188915;
-        bh=wvImG6Kd4LlMY5c/CMhznAAaoKkkYegLJ08YLuKwVOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oagez3mX1eqoFiYz9rGPFWxyoUjeNSrAD0PigKISBmBqCoqLMcbEHAsm/MnKyPmKF
-         e9xvmtdVIUvztOn4N7bdVBpM0mY8fu2qXg5toGCCECrmU/o422Oq9yTH3s75TswGg+
-         4HefX8DdqjYrzro8ck7JrLVU4pmIx6Pc1ZGFVcK8WEyNOrqpgawnXGq8bR/5/lzZy4
-         0AiFlkwris5EP0mc6gh8nyB9T0z9ed9/ZemIwaMO+BK5v9anTZPz0cTkUD9ls/rw96
-         6XRB5RG3VgR1xvl2RWJhpZ5Xdy52Mxsea140+nfs4HBvbZyAvV1mmqghJP2uKa4M4E
-         urWS8dYtbE06A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ding Hui <dinghui@sangfor.com.cn>, Paulo Alcantara <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.4 31/35] cifs: fix wrong release in sess_alloc_buffer() failed path
-Date:   Thu,  9 Sep 2021 08:01:12 -0400
-Message-Id: <20210909120116.150912-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909120116.150912-1-sashal@kernel.org>
-References: <20210909120116.150912-1-sashal@kernel.org>
+        id S1345078AbhIIVsG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 9 Sep 2021 17:48:06 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:40510 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232371AbhIIVsG (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 9 Sep 2021 17:48:06 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 013BE1FE36;
+        Thu,  9 Sep 2021 21:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1631224015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KYEQfeb7GpLEDCgtN3fdOhil68NMIoT4dUWx2CTUaOM=;
+        b=mwMdgObUrMFZuMH9wqCZ9lISzl9lK1Y0hbHv++uVjawAgYLlNI0XNt1Dz0h3ndDAeH0r3t
+        tcEjX9lb3w2exIv3bRLS8QgPa/tyLSdwZRCgC55v77nVTktzU/9JMBEA4qkS9dUOBc+0Jj
+        DNw7dfW383AesXmiJ7UjCiECRX+V9BI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1631224015;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KYEQfeb7GpLEDCgtN3fdOhil68NMIoT4dUWx2CTUaOM=;
+        b=4YH6kkMWx6y1VDuFj5jpY4ZACjleOt5hnhQ+r+csyCYbHdrqNQdFQF/xVswSadDeshciNc
+        NcCbO0zK2vS8ldDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87A9113CDF;
+        Thu,  9 Sep 2021 21:46:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id csSOFM6AOmGAbwAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Thu, 09 Sep 2021 21:46:54 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linux-cifs@vger.kernel.org
+Cc:     pc@cjr.nz, Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <sfrench@samba.org>,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cifs: properly invalidate cached root handle when closing it
+Date:   Thu,  9 Sep 2021 18:46:45 -0300
+Message-Id: <20210909214646.8790-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Ding Hui <dinghui@sangfor.com.cn>
+Cached root file was not being completely invalidated sometimes.
 
-[ Upstream commit d72c74197b70bc3c95152f351a568007bffa3e11 ]
+Reproducing:
+- With a DFS share with 2 targets, one disabled and one enabled
+- start some I/O on the mount
+  # while true; do ls /mnt/dfs; done
+- at the same time, disable the enabled target and enable the disabled
+  one
+- wait for DFS cache to expire
+- on reconnect, the previous cached root handle should be invalid, but
+  open_cached_dir_by_dentry() will still try to use it, but throws a
+  use-after-free warning (kref_get())
 
-smb_buf is allocated by small_smb_init_no_tc(), and buf type is
-CIFS_SMALL_BUFFER, so we should use cifs_small_buf_release() to
-release it in failed path.
+Make smb2_close_cached_fid() invalidate all fields every time, but only
+send an SMB2_close() when the entry is still valid.
 
-Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
 ---
- fs/cifs/sess.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/cifs/smb2ops.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
-index 9bc7a29f88d6..2d3918cdcc28 100644
---- a/fs/cifs/sess.c
-+++ b/fs/cifs/sess.c
-@@ -602,7 +602,7 @@ sess_alloc_buffer(struct sess_data *sess_data, int wct)
- 	return 0;
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 2dfd0d8297eb..1b9de38a136a 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -689,13 +689,19 @@ smb2_close_cached_fid(struct kref *ref)
+ 		cifs_dbg(FYI, "clear cached root file handle\n");
+ 		SMB2_close(0, cfid->tcon, cfid->fid->persistent_fid,
+ 			   cfid->fid->volatile_fid);
+-		cfid->is_valid = false;
+-		cfid->file_all_info_is_valid = false;
+-		cfid->has_lease = false;
+-		if (cfid->dentry) {
+-			dput(cfid->dentry);
+-			cfid->dentry = NULL;
+-		}
++	}
++
++	/*
++	 * We only check validity above to send SMB2_close,
++	 * but we still need to invalidate these entries
++	 * when this function is called
++	 */
++	cfid->is_valid = false;
++	cfid->file_all_info_is_valid = false;
++	cfid->has_lease = false;
++	if (cfid->dentry) {
++		dput(cfid->dentry);
++		cfid->dentry = NULL;
+ 	}
+ }
  
- out_free_smb_buf:
--	kfree(smb_buf);
-+	cifs_small_buf_release(smb_buf);
- 	sess_data->iov[0].iov_base = NULL;
- 	sess_data->iov[0].iov_len = 0;
- 	sess_data->buf0_type = CIFS_NO_BUFFER;
 -- 
-2.30.2
+2.33.0
 
