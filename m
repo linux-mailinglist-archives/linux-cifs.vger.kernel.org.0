@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4EA405755
-	for <lists+linux-cifs@lfdr.de>; Thu,  9 Sep 2021 15:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D325405627
+	for <lists+linux-cifs@lfdr.de>; Thu,  9 Sep 2021 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354789AbhIINdZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 9 Sep 2021 09:33:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42432 "EHLO mail.kernel.org"
+        id S1359291AbhIINST (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 9 Sep 2021 09:18:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356216AbhIIM67 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:58:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 568D363267;
-        Thu,  9 Sep 2021 11:58:44 +0000 (UTC)
+        id S1357889AbhIINFS (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:05:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 28B6761212;
+        Thu,  9 Sep 2021 12:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188725;
+        s=k20201202; t=1631188801;
         bh=Hf2RRelyE2amnSnIibj8OQSt2FVQFWgfHCv0/xYHdsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fP7HQ3b7y+jgnHoWXg4Cl/tvsvBjB4y3KlFPzeAZcRWOzpIrmgH3pcJXrm5t7zlza
-         Kmx11FSAs9X/yabVTFrwFVorOEahrT9MH2kT9N+1Slnjs3UCTpse2cHMGqG0qlUkG4
-         SqvvPRPyu/bfnYFOBC6oncJz1y9FxoQVz4ZKX4KQKy6GGnroY3jaQcmwbY1FtBODE0
-         XAg9mZklkuXErjrhnTPW2xDyuzqAbeTFnGX/36KLk+mfCE3hsMRaXjP/I9f6upmRie
-         92N0J+aqFf0YbdF4kHZ1C0BwT0SgxhS4EQFUz6SPpYIkpACgRSbRnevTIWsJAo5Tj6
-         4g2ifNV24FKZA==
+        b=OHJTIs4KZhqW82qcHmcdITIWiR8j9QCPxGRJxa5P1dqWVdbkdaHwkc9ZlMjJQthNx
+         fnDMgmMi0CN3cabukU0VyVCahnJ8EJEcmkp1B+asxb5entoh7nFwX6qdrmqC0J7XuR
+         XXXHaO1kqqsmZXuEmLlaWmFau7Fj45PMX3ZNsv/ytVI6v26Ly7uwv0Cqb1v50X4Mp6
+         TdYKsBum5wCFOit8RzhMqTVmZW7l8RdHeS5mK5YG8Io3149U8QtAchf36tzoiQJoXk
+         HbuxOQiyxaVii40yiwvVkNHhfgU0noYtuRDUqPeJ2XcfcZxSrPEJtn2SZcv/TXKlcD
+         tHoAwR6x4juWA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ding Hui <dinghui@sangfor.com.cn>, Paulo Alcantara <pc@cjr.nz>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, linux-cifs@vger.kernel.org,
         samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.19 63/74] cifs: fix wrong release in sess_alloc_buffer() failed path
-Date:   Thu,  9 Sep 2021 07:57:15 -0400
-Message-Id: <20210909115726.149004-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 48/59] cifs: fix wrong release in sess_alloc_buffer() failed path
+Date:   Thu,  9 Sep 2021 07:58:49 -0400
+Message-Id: <20210909115900.149795-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
-References: <20210909115726.149004-1-sashal@kernel.org>
+In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
+References: <20210909115900.149795-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
