@@ -2,78 +2,60 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2E74122FF
-	for <lists+linux-cifs@lfdr.de>; Mon, 20 Sep 2021 20:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BD5412973
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Sep 2021 01:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351222AbhITST5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 20 Sep 2021 14:19:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39827 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347357AbhITSRr (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 20 Sep 2021 14:17:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632161780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=smgGeNTJKJdRB3jySjdLq/O6aIDEticWWn8WNZpB814=;
-        b=YuzYaMpkaJ4+hcmiSIGX+WLg+FrxfFxmsxQm/ktdsnP/BzzcfcBcpTS4DM7jtd3dhsYvv+
-        rAe1GcG5MJWgxqwQTaINACBqzJmBKfcmnOmA0KbogN1Gv4Z5hgvDmYC68lQWEBgVHcTS7l
-        kuoC+MOzcpDhniydyD7dcl8h7q+dKVA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-338-V_dpYbo3NfOmkZRcCVpp8Q-1; Mon, 20 Sep 2021 14:16:19 -0400
-X-MC-Unique: V_dpYbo3NfOmkZRcCVpp8Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 467EE802936;
-        Mon, 20 Sep 2021 18:16:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 687BB19724;
-        Mon, 20 Sep 2021 18:16:14 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAH2r5murR7TbC9BtSgWyrJVC-YG5dUba2ekZTvX75gg4ukaAZw@mail.gmail.com>
-References: <CAH2r5murR7TbC9BtSgWyrJVC-YG5dUba2ekZTvX75gg4ukaAZw@mail.gmail.com> <163214005516.2945267.7000234432243167892.stgit@warthog.procyon.org.uk>
+        id S240640AbhITXfg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 20 Sep 2021 19:35:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45306 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239084AbhITXdg (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 20 Sep 2021 19:33:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 30E0860F48;
+        Mon, 20 Sep 2021 23:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632180729;
+        bh=KeJverb6JHqfOnBMfUCmPZv4ASGMoxZ4WaHMmdXayB4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ahL+aKvfixjvcKfVpGzjDTpjamjks/K/Im6q1+I+decfcToFJVecYwSivauXiVmFN
+         m162IytF3cre0Zhu9pjaCI4YpEZ9xHMnJ6+gSyc+TMNtc3Pnn22KLdzOaXLU2J0xst
+         a9L4r+xwd7Si0twTntqY/ZvoEN7UsDLu/8SBI/yS5wXKdnZlDuLSIIKuYKmr5IxOzm
+         tLPEI1tL+CMFB4b0Mrh95HQDbTy/FRqPK7Pb6Jrdavtw87Y5M5ANDOXaq5GDFWYyh8
+         o3fc0JfU3qrzNNImfDqwW/IRYyAAzc0N/hHjiscwg7bHLAEi+ZmZnYCqjZ93hchXiX
+         KoJOBJoZfSONw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2A69F60A3A;
+        Mon, 20 Sep 2021 23:32:09 +0000 (UTC)
+Subject: Re: [GIT PULL] cifs/smb3 client fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mtYiadLYKVhkBFo9=a9+y0BK2z20r7dNGrdvRkyzXYJHA@mail.gmail.com>
+References: <CAH2r5mtYiadLYKVhkBFo9=a9+y0BK2z20r7dNGrdvRkyzXYJHA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mtYiadLYKVhkBFo9=a9+y0BK2z20r7dNGrdvRkyzXYJHA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.15-rc1-smb3
+X-PR-Tracked-Commit-Id: 35866f3f779aef5e7ba84e4d1023fe2e2a0e219e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fdf5078458793fca9e9c0fb5e58a1a970ca0fdef
+Message-Id: <163218072916.25470.5666451145016996044.pr-tracker-bot@kernel.org>
+Date:   Mon, 20 Sep 2021 23:32:09 +0000
 To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, CIFS <linux-cifs@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>, linux-doc@vger.kernel.org,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] fscache, 9p, afs, cifs, nfs: Deal with some warnings from W=1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2976711.1632161773.1@warthog.procyon.org.uk>
-Date:   Mon, 20 Sep 2021 19:16:13 +0100
-Message-ID: <2976712.1632161773@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Steve French <smfrench@gmail.com> wrote:
+The pull request you sent on Sat, 18 Sep 2021 14:54:43 -0500:
 
-> For the cifs ones in connect.c (and also ioctl.c), I had submitted a
-> patch in rc1 for these (haven't heard back on that) but did not submit
-> kerneldoc fixup for fs/cifs/misc.c.  They seem trivial and safe, do
-> you want to split those out and I can put them in?
+> git://git.samba.org/sfrench/cifs-2.6.git tags/5.15-rc1-smb3
 
-I can, though the reason I did the patch is that the warnings are always
-popping up in what I'm doing.  I can drop the patch from mine when I'm done, I
-guess.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fdf5078458793fca9e9c0fb5e58a1a970ca0fdef
 
-David
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
