@@ -2,71 +2,150 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B536D4151BC
-	for <lists+linux-cifs@lfdr.de>; Wed, 22 Sep 2021 22:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9AF4152E1
+	for <lists+linux-cifs@lfdr.de>; Wed, 22 Sep 2021 23:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237816AbhIVU42 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S238125AbhIVVew (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 22 Sep 2021 17:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237795AbhIVU41 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Sep 2021 16:56:27 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F9DC061760
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id i25so17425223lfg.6
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
+        with ESMTP id S238086AbhIVVev (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Sep 2021 17:34:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB04EC061574
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Sep 2021 14:33:20 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id u27so15204822edi.9
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Sep 2021 14:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
-         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
-         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
-         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
-         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
-         Tc/A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7LGxkujETQiI1pNbMhuk/VqWE2js81Y+CkeVIBvtm2M=;
+        b=LIwoOjzwegOzGzsfOc8Xm/fkJiCczI+kM1VDd7tVLoEstocfZ+7WuuWK72vvyYCmJ5
+         h6npu9pMXKN/6c2J+gmJ2aGDh0zWrIXLE/3zr/cTZiyeQPVNArAro/aLUjK/2QZ+HO+E
+         DJ1SblrP9Ni+7SP3HgEVLv0CQUTHm4oPb8BD5GqjuDv7UorpDf1onJMeANazV1OSFPx6
+         /lqBkdPYNwZJRc7FTHjkxvhj3qmPSrIW4aoLU7fKnmaDfKKGq9e+TkBt3hwDWbn+L9xC
+         JW+zNwuh/9XS97c6paUt2M1UrJgfcoX3WMeBQsGo28R65FXSrx9dkgevL1waQdk05mco
+         t9sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=U+l9rgk4izdq7M8OaZlDh+XO9zjCFJKg/qXnNNjF+iZqimJawLb4h2kF7YRi9Da0+S
-         XjcUQMdBVbs+2JHmyhEkgb5UFnsYXRYBTwGSAwFIjGePCR/KtmQD7HO0LlaHTHNAib6N
-         5lT/l7w1Qu8lyQYnVTLwtmSKwnyxnlofAm5r3aEmi+zAmJgq1et+y1SBG5WloumF3e1O
-         mp+/l5N+3cRKeMhJfVoJbyX50ZB2A0LS67XpF0i0q+uBm2BQ0m77OtrAPa1g2r1g7p59
-         5Q0trQaH1WHYtyUO4TTATy/BmfdPFd8KzvQB8uGAlT9p82SHpvMC2g+KJCYhSNoQVBN9
-         7F6Q==
-X-Gm-Message-State: AOAM531hD5OlyD3lKFo74ORquNzHp1kg6yujmeB9tzein3m5dMrdnOUi
-        F+ovZuV+CdgZawj/XjGYic33YJEixfZV30/P8Zw=
-X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
-X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
- Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7LGxkujETQiI1pNbMhuk/VqWE2js81Y+CkeVIBvtm2M=;
+        b=Savp9wQTg6qMMqzkw8MvqKRwFr5slg4uyIkVqw/QRUE6BqOcYxwiKw5XyDSgLcNLQe
+         SFfEnzN7D8gSDUAxWUQfjKfjOeKz/So/sBuiLLU6khWQUjVT1UyGdQ5JvwmOaLxfOZQy
+         xIGx4GsFnN8Oc9NGW29PMy6MQOUOwkY0zJz+kvfwh92MG4lSmrQzC2PWpUrrd/8T0kuT
+         VsYYua9C0tF8S4bLka0+sJUEtxeZwjZMox5mXVRJ/f1R8mz4xDfAnYm03gHRpz7cIgpr
+         9LoCqcHQJilWlGhBOUJxp+TGXlVqShYtdHMjrVRYB+YK/yV/cgBST/MAGPQbtOo0e3tq
+         MLYg==
+X-Gm-Message-State: AOAM530iRJuUKxorLJVfNNnlrMoDF758TMn7QKGM5VIA6Mmya6UjUDS3
+        Hw9N673PNX0J2jF+73OkcaG/Tllnm2AM7S320pI=
+X-Google-Smtp-Source: ABdhPJxGtMXNErKDlEXY5Tywvfkf10xq52k389Uato91Pbc8KHZgUWJVKGORZ4Q2KS3pD0v+lvwCL3rX5GRhR3tZsCs=
+X-Received: by 2002:a50:becb:: with SMTP id e11mr1720269edk.161.1632346399288;
+ Wed, 22 Sep 2021 14:33:19 -0700 (PDT)
 MIME-Version: 1.0
-Sender: ratcliffijames58@gmail.com
-Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:54:54 +0100
-X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
-Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
+References: <20210922120057.45789-1-linkinjeon@kernel.org>
+In-Reply-To: <20210922120057.45789-1-linkinjeon@kernel.org>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Thu, 23 Sep 2021 07:33:07 +1000
+Message-ID: <CAN05THQVgu33LmFx5u3xm7MjdJZMYe81-bJEvAVJLPrMkjYYZg@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: check protocol id in ksmbd_verify_smb_message()
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>,
+        =?UTF-8?B?UmFscGggQsO2aG1l?= <slow@samba.org>,
+        Steve French <smfrench@gmail.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+reviewed by me
+
+On Wed, Sep 22, 2021 at 10:01 PM Namjae Jeon <linkinjeon@kernel.org> wrote:
+>
+> When second smb2 pdu has invalid protocol id, ksmbd doesn't detect it
+> and allow to process smb2 request. This patch add the check it in
+> ksmbd_verify_smb_message() and don't use protocol id of smb2 request as
+> protocol id of response.
+>
+> Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+> Cc: Ralph B=C3=B6hme <slow@samba.org>
+> Cc: Steve French <smfrench@gmail.com>
+> Reported-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+> ---
+>  fs/ksmbd/smb2pdu.c    |  2 +-
+>  fs/ksmbd/smb_common.c | 13 +++++++++----
+>  fs/ksmbd/smb_common.h |  1 +
+>  3 files changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index 3d250e2539e6..3be1493cb18d 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -433,7 +433,7 @@ static void init_chained_smb2_rsp(struct ksmbd_work *=
+work)
+>                 work->compound_pfid =3D KSMBD_NO_FID;
+>         }
+>         memset((char *)rsp_hdr + 4, 0, sizeof(struct smb2_hdr) + 2);
+> -       rsp_hdr->ProtocolId =3D rcv_hdr->ProtocolId;
+> +       rsp_hdr->ProtocolId =3D SMB2_PROTO_NUMBER;
+>         rsp_hdr->StructureSize =3D SMB2_HEADER_STRUCTURE_SIZE;
+>         rsp_hdr->Command =3D rcv_hdr->Command;
+>
+> diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
+> index da17b21ac685..ace8a1b02c81 100644
+> --- a/fs/ksmbd/smb_common.c
+> +++ b/fs/ksmbd/smb_common.c
+> @@ -129,16 +129,22 @@ int ksmbd_lookup_protocol_idx(char *str)
+>   *
+>   * check for valid smb signature and packet direction(request/response)
+>   *
+> - * Return:      0 on success, otherwise 1
+> + * Return:      0 on success, otherwise -EINVAL
+>   */
+>  int ksmbd_verify_smb_message(struct ksmbd_work *work)
+>  {
+> -       struct smb2_hdr *smb2_hdr =3D work->request_buf;
+> +       struct smb2_hdr *smb2_hdr =3D work->request_buf + work->next_smb2=
+_rcv_hdr_off;
+> +       struct smb_hdr *hdr;
+>
+>         if (smb2_hdr->ProtocolId =3D=3D SMB2_PROTO_NUMBER)
+>                 return ksmbd_smb2_check_message(work);
+>
+> -       return 0;
+> +       hdr =3D work->request_buf;
+> +       if (*(__le32 *)hdr->Protocol =3D=3D SMB1_PROTO_NUMBER &&
+> +           hdr->Command =3D=3D SMB_COM_NEGOTIATE)
+> +               return 0;
+> +
+> +       return -EINVAL;
+>  }
+>
+>  /**
+> @@ -270,7 +276,6 @@ static int ksmbd_negotiate_smb_dialect(void *buf)
+>         return BAD_PROT_ID;
+>  }
+>
+> -#define SMB_COM_NEGOTIATE      0x72
+>  int ksmbd_init_smb_server(struct ksmbd_work *work)
+>  {
+>         struct ksmbd_conn *conn =3D work->conn;
+> diff --git a/fs/ksmbd/smb_common.h b/fs/ksmbd/smb_common.h
+> index d7df19c97c4c..994abede27e9 100644
+> --- a/fs/ksmbd/smb_common.h
+> +++ b/fs/ksmbd/smb_common.h
+> @@ -202,6 +202,7 @@
+>                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES)
+>
+>  #define SMB1_PROTO_NUMBER              cpu_to_le32(0x424d53ff)
+> +#define SMB_COM_NEGOTIATE              0x72
+>
+>  #define SMB1_CLIENT_GUID_SIZE          (16)
+>  struct smb_hdr {
+> --
+> 2.25.1
+>
