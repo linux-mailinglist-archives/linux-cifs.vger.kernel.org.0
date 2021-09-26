@@ -2,111 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB41418970
-	for <lists+linux-cifs@lfdr.de>; Sun, 26 Sep 2021 16:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F034189A3
+	for <lists+linux-cifs@lfdr.de>; Sun, 26 Sep 2021 16:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbhIZO3d (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 26 Sep 2021 10:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S231874AbhIZO7X (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 26 Sep 2021 10:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbhIZO3d (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 26 Sep 2021 10:29:33 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB982C061570
-        for <linux-cifs@vger.kernel.org>; Sun, 26 Sep 2021 07:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=From:To:Date:Message-ID:CC;
-        bh=UKU/7J6zt0z0L5fS4oKC35dlynxHUs72b5ElbxJBRZ4=; b=Fx5euXydJj3XpDr+eg2+Ahvdkp
-        RcaJ4McbIMu3pLgSeIFnKUgmSu3LykYJzqqtsWzD05tljXlzeZZsW6/QPFNWQh18hgxVyF2fZCnon
-        /AXLHh714PLytCye0p8BoRUeG9fn0gQcnQNrmYVGGdo6JASZFdbdIpYbHNxE0t30y4YcNp5OOwkri
-        VWjXMt58rg7Cfb4t6FV5ckP8ps3jmcc+q75JlsRH+bc3gXjJ9WnLA4FsjCEGcIP3SQF1lvb13YRKR
-        sJeAnJOOhLjhMsE+hx3en39i79/qdBViohcljXT3SbwFLXwygwfYSsHEck8lEMkjAqFKl00ZbcWTO
-        48QJs825FfLQFVc78Osh8l3aPc7/sFuD7KAv+c/8ch5sUhGqSjVqF6el6/hsFwcDevdQEx64zUQ7M
-        4FJzvMp8jgcZYorSmt+xw3odyfxjlSzCcBTIgi1gQWJje5D1KYqCZ2/FfIfEhwG0WhOwG3Z+LFbVc
-        Rc+vRFyIeyQEQv5JX3B31Lg/;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1mUV8E-000B5s-9C; Sun, 26 Sep 2021 14:27:54 +0000
-Message-ID: <a1fc90f5-3e35-98f7-b932-7eee62200de0@samba.org>
-Date:   Sun, 26 Sep 2021 16:27:53 +0200
+        with ESMTP id S231849AbhIZO7X (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 26 Sep 2021 10:59:23 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8130C061570
+        for <linux-cifs@vger.kernel.org>; Sun, 26 Sep 2021 07:57:46 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id r16so14315175qtw.11
+        for <linux-cifs@vger.kernel.org>; Sun, 26 Sep 2021 07:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=r20U5um9SFXUEVrAFmXDQzSJbV+BAzYQXY5jJ/3sLxE=;
+        b=g3wtJuyf2h1bDi7rYQVAJ5ry1g83x+jHoLO9D1h8NzUJ5/6gAbUEEeJu04nsw8JelC
+         7U0Vgngeq2BF7au8JKmL2qeys+BntlWBRHvnBHdOTnyFev+8cXmBavTNwg6dWLDr6WRQ
+         iR7QhqsD9fXgZwY2irMCLDPobLEkWAIA5pJa/6hCxsUBh8/gduZMMqxPxA3OgZaNdn7C
+         HKhv8hyYsMJbXGeR7wmyCtIDTkBNiiiQ6Kf5jsHPQLr6dibGjvBLOnznnGEyed60jNTA
+         3nr3WxQbzRwavv6MIyNAdO1t6FPsiV5ri7UsDnfsKGZqV5RfzHvxR12F6ZFQbtkEF3P+
+         c+VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=r20U5um9SFXUEVrAFmXDQzSJbV+BAzYQXY5jJ/3sLxE=;
+        b=sbvqf1N1236Bh5wmtBvlxfUxl8/kwKuHSVTS7NqcI4ig8/VNAseW7UBF6mQPO5ye42
+         ZAtJ8DNC2VlnMCUj1W5iC3vd7CFm4p01LH9c7e32H9TCG2PM6AkGofQwSi/OuCIvztQy
+         tk1WpuYkrCxJOeuAkz9UqtX5gtLdCpAYM68vTiV20JGTHa9absoMlwRCwXnxGSAhiKUI
+         kCMsi45M6kBKNgSj6a+GnljWYXzcqIdTukBLpwW1thHV74CrDlMtiUemcHFbJ1CAxWK4
+         PW7rBCbNbe/plAmhUcP9zRpXYj0GJdHB3Kr4wkxQ+22/x4iKPyFH0upiqPLCzPPE+1gn
+         HPow==
+X-Gm-Message-State: AOAM533q0n8QyWvR0tITVypjdwmMXU3sfxx1CAzXQ7ha7xr9WnAFzP0K
+        0pjWlomp1/j5VjjsGy27CH97ck3nfVmQWS/KyQ==
+X-Google-Smtp-Source: ABdhPJxdl9Q+EYwujrHH9QVWPdHc69jRrCkNAgHh4KRO80tNk7lKaTo1gt49Mt0dZZ57BhsApz5KHKXBPmhqZjV+/eQ=
+X-Received: by 2002:ac8:7050:: with SMTP id y16mr14414166qtm.399.1632668266113;
+ Sun, 26 Sep 2021 07:57:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH v3 0/5] ksmbd: a bunch of patches
-Content-Language: en-US
-To:     Namjae Jeon <linkinjeon@kernel.org>, linux-cifs@vger.kernel.org
-References: <20210926135543.119127-1-linkinjeon@kernel.org>
-From:   Ralph Boehme <slow@samba.org>
-In-Reply-To: <20210926135543.119127-1-linkinjeon@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------aFYhstO2sDwwhykpcoHEMhsL"
+Received: by 2002:aed:2082:0:0:0:0:0 with HTTP; Sun, 26 Sep 2021 07:57:45
+ -0700 (PDT)
+Reply-To: tecobanktg@gmail.com
+From:   Multi Lotto Company <bankofrusia@gmail.com>
+Date:   Sun, 26 Sep 2021 14:57:45 +0000
+Message-ID: <CANw5huY1tRdHdvWZ35_tNykipxRDNBG2m8c+nV-1gk8C+Le8Vg@mail.gmail.com>
+Subject: Dear Lucky winner
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------aFYhstO2sDwwhykpcoHEMhsL
-Content-Type: multipart/mixed; boundary="------------RddRDTrQ0Np650ff170tCq0I";
- protected-headers="v1"
-From: Ralph Boehme <slow@samba.org>
-To: Namjae Jeon <linkinjeon@kernel.org>, linux-cifs@vger.kernel.org
-Message-ID: <a1fc90f5-3e35-98f7-b932-7eee62200de0@samba.org>
-Subject: Re: [PATCH v3 0/5] ksmbd: a bunch of patches
-References: <20210926135543.119127-1-linkinjeon@kernel.org>
-In-Reply-To: <20210926135543.119127-1-linkinjeon@kernel.org>
-
---------------RddRDTrQ0Np650ff170tCq0I
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-QW0gMjYuMDkuMjEgdW0gMTU6NTUgc2NocmllYiBOYW1qYWUgSmVvbjoNCj4gQ2M6IFRvbSBU
-YWxwZXkgPHRvbUB0YWxwZXkuY29tPg0KPiBDYzogUm9ubmllIFNhaGxiZXJnIDxyb25uaWVz
-YWhsYmVyZ0BnbWFpbC5jb20+DQo+IENjOiBSYWxwaCBCw7ZobWUgPHNsb3dAc2FtYmEub3Jn
-Pg0KPiBDYzogU3RldmUgRnJlbmNoIDxzbWZyZW5jaEBnbWFpbC5jb20+DQo+IENjOiBIeXVu
-Y2h1bCBMZWUgPGh5Yy5sZWVAZ21haWwuY29tPg0KPiBDYzogU2VyZ2V5IFNlbm96aGF0c2t5
-IDxzZW5vemhhdHNreUBjaHJvbWl1bS5vcmc+DQo+IA0KPiB2MjoNCj4gICAgLSB1cGRhdGUg
-Y29tbWVudHMgb2Ygc21iMl9nZXRfZGF0YV9hcmVhX2xlbigpLg0KPiAgICAtIGZpeCB3cm9u
-ZyBidWZmZXIgc2l6ZSBjaGVjayBpbiBmc2N0bF9xdWVyeV9pZmFjZV9pbmZvX2lvY3RsKCku
-DQo+ICAgIC0gZml4IDMyYml0IG92ZXJmbG93IGluIHNtYjJfc2V0X2luZm8uDQo+IA0KPiB2
-MzoNCj4gICAgLSBhZGQgYnVmZmVyIGNoZWNrIGZvciBCeXRlQ291bnQgb2Ygc21iIG5lZ290
-aWF0ZSByZXF1ZXN0Lg0KPiAgICAtIE1vdmVkIGJ1ZmZlciBjaGVjayBvZiB0byB0aGUgdG9w
-IG9mIGxvb3AgdG8gYXZvaWQgdW5uZWVkZWQgYmVoYXZpb3Igd2hlbg0KPiAgICAgIG91dF9i
-dWZfbGVuIGlzIHNtYWxsZXIgdGhhbiBuZXR3b3JrX2ludGVyZmFjZV9pbmZvX2lvY3RsX3Jz
-cC4NCj4gICAgLSBnZXQgY29ycmVjdCBvdXRfYnVmX2xlbiB3aGljaCBkb2Vzbid0IGV4Y2Vl
-ZCBtYXggc3RyZWFtIHByb3RvY29sIGxlbmd0aC4NCj4gICAgLSBzdWJ0cmFjdCBzaW5nbGUg
-c21iMl9sb2NrX2VsZW1lbnQgZm9yIGNvcnJlY3QgYnVmZmVyIHNpemUgY2hlY2sgaW4NCj4g
-ICAgICBrc21iZF9zbWIyX2NoZWNrX21lc3NhZ2UoKS4NCg0KbG9va3MgbGlrZSB5b3UgaGF2
-ZW4ndCBwdXNoZWQgdGhvc2UgdG8gZ2l0aHViIHlldD8gQXQgbGVhc3QgSSBkb24ndCBzZWUg
-DQphbiB1cGRhdGUgdG8ga3NtYmQtZm9yLW5leHQtcGVuZGluZy4NCg0KSSdkIHByZWZlciBm
-ZXRjaGluZyBmcm9tIGdpdCB0byByZXZpZXcgdGhlIHBhdGNoZXMuIEkgYWxzbyBoYXZlIGEg
-ZmV3IA0KcGF0Y2hlcyBvbiB0b3AuDQoNClRoYW5rcyENCi1zbG93DQoNCi0tIA0KUmFscGgg
-Qm9laG1lLCBTYW1iYSBUZWFtICAgICAgICAgICAgICAgICBodHRwczovL3NhbWJhLm9yZy8N
-ClNlck5ldCBTYW1iYSBUZWFtIExlYWQgICAgICBodHRwczovL3Nlcm5ldC5kZS9lbi90ZWFt
-LXNhbWJhDQo=
-
---------------RddRDTrQ0Np650ff170tCq0I--
-
---------------aFYhstO2sDwwhykpcoHEMhsL
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEE+uLGCIokJSBRxVnkqh6bcSY5nkYFAmFQg2kFAwAAAAAACgkQqh6bcSY5nkZs
-Ig/+I0Qjv0IGoEljmv2ivfc1EWb5USC6eIhbIB8BKdHU47Hm+eo1PL9J8pZmDw5SrT/hgEklsrRg
-iysMzhvnLlgEpFhkSTpn7bvLbAV8Lrb0CzqEZ/YVeeoVQ+W0gS/abG+SeHiTZlaG9m4jHXEg1TJf
-t0kXRrpALrqGPnXeskjcpzOzXNFgiR4qrimr9u2LUUG3vtrHtxY1KF5RmOjfUrXjjfgIh44gfLHf
-2tclNVPAAFLEI7lIKrgeRl46qf20pSxs1uP+zmV+kK+HGYz9z/BX/L8aPd2eQy0EJplfEQkU1LLb
-RYpABBsTRsbqHgXZS7isFKUlPbHBCX7OuU5DAyb5tN0Ck7nVZpOtaSyeBcKpsR6EQD4BwnaWrxSY
-/VF7w9GTnRbY3kDcYff56mrU2DiCQx9WvDMTA4y/xIkgj7S1DwtkPq/IlzNQIH6mdFe8Nj1PpBGb
-hVYayO2J7kqpNA3SNXzyicreBgQ+kgAvXttFlXCRuZnhgmJktrEU4gtSIqfDWXum7VWxQnG5PMqy
-13gYQQbFqdyLcPGfYit0QehpYU66/LrhTl0ZwpwmlZz4tOKzuTdHUn9EDagWL72XlfYg+1UvqTM2
-gpaxlapUDvjpIlmlKl96UfV+VFV29zoBMmJkC5GUR0lNt20BaLOffvjk+yQk32sQ2NlK02qoFWGy
-l0E=
-=Kk/Z
------END PGP SIGNATURE-----
-
---------------aFYhstO2sDwwhykpcoHEMhsL--
+This message is to let you know that your email address won
+the sum of $ 1,700,000.00 only {ONE MILLION SEVEN HUNDRED
+THOUSAND DOLLARS} in our MULTI LOTTO lottery company this month and
+your money is converted into a Visa ATM card to  be delivered through
+D H L  courier company.
+We have deposited your visa card package with D H L  courier company
+and tell them to help us deliver your visa card package as soon  as
+they hear from you, so please contact D H L delivery company through
+this email   dhlofficestg@gmail.com and ask them to give you your ATM
+card that is deposited in their office  by  Multi Lottery Organization
+Thank you
