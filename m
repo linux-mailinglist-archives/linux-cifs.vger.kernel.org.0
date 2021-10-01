@@ -2,71 +2,139 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FE041EC32
-	for <lists+linux-cifs@lfdr.de>; Fri,  1 Oct 2021 13:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F2D41ECB7
+	for <lists+linux-cifs@lfdr.de>; Fri,  1 Oct 2021 13:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354008AbhJALgw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
+        id S1354193AbhJAMBP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 1 Oct 2021 08:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354005AbhJALgr (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Oct 2021 07:36:47 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C47C0613E9
-        for <linux-cifs@vger.kernel.org>; Fri,  1 Oct 2021 04:35:02 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id l8so33897607edw.2
-        for <linux-cifs@vger.kernel.org>; Fri, 01 Oct 2021 04:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=kb6MbLUy++O6PNHhKSFPx9v4fFtwpvxJeNblR4kji6+6qq2Lucl0Bos7Wr8pcLX+hO
-         tRyb9xiWVR8p706SNC+HizJNgSL5UH7etOYT4KJNUPAxZsx19kSXdlPSkzuaY1jTWaLY
-         4tzz18G2my1E8FkqDzcvEfU/fmLr7epbivZsMIbMD2QsJgHn219yKjZHacudF+1Otelk
-         Ps1x6eI3Y+KniUoXNyOSthjl8bPizc7o0PNNLM7mCUJWrsXs698IFJfmckZW2ZuwAS6o
-         Sx6QKffvmRb5RhKFnE364qOhRDY4B39bqiG8gRsgkqiSO/SRZOJpzUOpTrf/l9gFCHVc
-         XGiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=dhlcjALNp/2Uc+JVUEnR1iSn87v/5MTNsww5SbShrL1W9vT1oHnUxyS0u9d9eqL31y
-         KXz781fmjk5nJdOpME0yARp1wg38OdjoGLDty4P9ncClGdKIpnfsXPVzwl4huaJ1VIWw
-         CLLM/TbWShYMt0MrBKDl2CEAGnLplVNQ8AZQOhYI/gVKMH01lqfFxow4nxhoO9yG0LtG
-         vKTjqSXdLyfRoRNz9MVwlFUkv5bmhdW7GBiZG7aR8XgxE7ZT1WCP1wAExd5+wWKyyJaD
-         2BIOxjOPXwt1KyTMjAC70NzX6PNcXss41XFBDYjbYHyrfuVstXYRE1pRwZnLzK8mhaEQ
-         oR/w==
-X-Gm-Message-State: AOAM530fREaPRlWV9S5MxRrpHXUMZYKg3iiFOMhGkiqyyu2gNe6aQL+L
-        e5NUlnRpWkBtTzdWt5qARJ6wzFnLNvimwhZDipI=
-X-Google-Smtp-Source: ABdhPJxO5JZDMou4ZeNj31LReXKwuJbss5Bcqb0SVbR3DI9xevoj0I1eyLAyk/Sg0BjFpvAB7vI/ZitZ52WunSuQcUw=
-X-Received: by 2002:a17:906:3882:: with SMTP id q2mr5834865ejd.396.1633088100599;
- Fri, 01 Oct 2021 04:35:00 -0700 (PDT)
+        with ESMTP id S1354196AbhJAMBN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Oct 2021 08:01:13 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57BEC06177D
+        for <linux-cifs@vger.kernel.org>; Fri,  1 Oct 2021 04:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=hwwXDBLWPtfg2XJWUiNJ6wJB9ABUzO0rPMx/JSZb888=; b=CuGIHc4+aSYYBhI0I5Ev2WfwCf
+        iblDRqH92J8jrcQRUnNZYUM0xTyq7BzNpJIYSdo07kaSd5rAzYDnqOzrZjdx/CwhSBedpYrP81a4p
+        m2GYuMTtZpuDCfMJehM7EIjv4WIN8UgtacJnzFDAoYFdMLlsjRAiWbOS7Q2dv8rC5HRL0NICA1Nwb
+        qNlx7DNHPto5xjyfHFoRTcDmrOAbLscTKLdwxfXaBw0yn8I8mXA6peJ6LkXtFVau9yKKcl7O7gXbL
+        gAiP00sagR8ccGlZE81rEXj0vGebx8/hTi9F4hSILElMvn+Fr8q8dtXnfepOyRW+rqPCmVloXX92A
+        HV9RaeImvHYSKIinuU3WqK9uKAX2F/sxyiyixDEEeNIztgJh/pnJuuYUHL60Oc/gVgqcNBv4C4XUg
+        yY8gbY8/Ap3MNH4S1KSCmAP1sVe1bEJBAfaRZ3lD23EQVWZq7lVp2u2LtidbtaS6U5iB0r1qu8DoP
+        IvfFsGhEEoj68Wz+hhxIxPf3;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1mWHCI-0013W7-5n; Fri, 01 Oct 2021 11:59:26 +0000
+Message-ID: <db055e2c-b5c5-8def-e2dd-066f84b29e36@samba.org>
+Date:   Fri, 1 Oct 2021 13:59:25 +0200
 MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:58
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:58 -0700
-Message-ID: <CAF-RpUjEy3ZrsPpj7r5ZFKjGM=JQyOMzOcWwONVKJZrBckwU0Q@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v4 0/9] ksmbd: a bunch of patches that is being reviewed
+Content-Language: en-US
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     linux-cifs@vger.kernel.org, Tom Talpey <tom@talpey.com>,
+        Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+References: <20210929084501.94846-1-linkinjeon@kernel.org>
+ <bf665917-cf8c-30ca-4ce0-4614adaf0988@samba.org>
+ <CAKYAXd-A4FLznKAVesfOiSpNy0KPAkXUppN4rkbGPBMdBMQLkA@mail.gmail.com>
+ <2b536a89-cba6-88a0-b7d8-c5435d183679@samba.org>
+ <CAKYAXd87aCAMZ56Ch68-NRjCH41MDdYYHUOSo3mfiMAOq_+QFA@mail.gmail.com>
+ <40575524-51ff-0c78-98d9-23878e8390fb@samba.org>
+ <CAKYAXd8uU=4U1+_rXNeNtu1sAztshzXVi2SGVjcuSSmVtTc+8A@mail.gmail.com>
+From:   Ralph Boehme <slow@samba.org>
+In-Reply-To: <CAKYAXd8uU=4U1+_rXNeNtu1sAztshzXVi2SGVjcuSSmVtTc+8A@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------kNC0S2chUQ0Z0CUsbIMdOEdw"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
-Address:
-Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------kNC0S2chUQ0Z0CUsbIMdOEdw
+Content-Type: multipart/mixed; boundary="------------gZi6XFdK4KDaz0L4h7b5t3c5";
+ protected-headers="v1"
+From: Ralph Boehme <slow@samba.org>
+To: Namjae Jeon <linkinjeon@kernel.org>
+Cc: linux-cifs@vger.kernel.org, Tom Talpey <tom@talpey.com>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>, Steve French
+ <smfrench@gmail.com>, Hyunchul Lee <hyc.lee@gmail.com>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>
+Message-ID: <db055e2c-b5c5-8def-e2dd-066f84b29e36@samba.org>
+Subject: Re: [PATCH v4 0/9] ksmbd: a bunch of patches that is being reviewed
+References: <20210929084501.94846-1-linkinjeon@kernel.org>
+ <bf665917-cf8c-30ca-4ce0-4614adaf0988@samba.org>
+ <CAKYAXd-A4FLznKAVesfOiSpNy0KPAkXUppN4rkbGPBMdBMQLkA@mail.gmail.com>
+ <2b536a89-cba6-88a0-b7d8-c5435d183679@samba.org>
+ <CAKYAXd87aCAMZ56Ch68-NRjCH41MDdYYHUOSo3mfiMAOq_+QFA@mail.gmail.com>
+ <40575524-51ff-0c78-98d9-23878e8390fb@samba.org>
+ <CAKYAXd8uU=4U1+_rXNeNtu1sAztshzXVi2SGVjcuSSmVtTc+8A@mail.gmail.com>
+In-Reply-To: <CAKYAXd8uU=4U1+_rXNeNtu1sAztshzXVi2SGVjcuSSmVtTc+8A@mail.gmail.com>
+
+--------------gZi6XFdK4KDaz0L4h7b5t3c5
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+QW0gMDEuMTAuMjEgdW0gMDM6MTAgc2NocmllYiBOYW1qYWUgSmVvbjoNCj4gMS4gWW91IG5l
+ZWQgdG8gY2hlY2sgaGVhZGVyIHNpemUgb2YgcmVsYXRlZCBwZHUgb2YgY29tcG91bmQgcmVx
+dWVzdCBpcw0KPiBhbHJlYWR5IGNoZWNrZWQgaW4gdGhlIGlzX2NoYWluZWRfc21iMl9tZXNz
+YWdlIGZ1bmN0aW9uLg0KPiANCj4gaXNfY2hhaW5lZF9zbWIyX21lc3NhZ2UoKQ0KPiAuLi4N
+Cj4gICAgICAgICAgaWYgKG5leHRfY21kID4gMCkgew0KPiAgICAgICAgICAgICAgICAgIGlm
+ICgodTY0KXdvcmstPm5leHRfc21iMl9yY3ZfaGRyX29mZiArIG5leHRfY21kICsNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgIF9fU01CMl9IRUFERVJfU1RSVUNUVVJFX1NJWkUgPg0K
+PiAgICAgICAgICAgICAgICAgICAgICBnZXRfcmZjMTAwMl9sZW4od29yay0+cmVxdWVzdF9i
+dWYpKSB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICBwcl9lcnIoIm5leHQgY29tbWFu
+ZCgldSkgb2Zmc2V0IGV4Y2VlZHMgc21iIG1zZyBzaXplXG4iLA0KPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIG5leHRfY21kKTsNCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgIHJldHVybiBmYWxzZTsNCj4gICAgICAgICAgICAgICAgICB9DQoNCnllYWgsIEkgYWxy
+ZWFkeSBtZW50aW9uZWQgdGhhdCBpbiB0aGUgY29tbWl0IG1lc3NhZ2UgaWlyYy4gVGhlIHBy
+b2JsZW0gDQp3aXRoIHRoaXMgaXMgdGhhdCB0aGlzIGxvZ2ljIGlzIHRvbyBicml0dGxlIGFu
+ZCBoYXJkIHRvIHVuZGVyc3RhbmQuIFRoZSANCmNvZGUgc2hvdWxkIGJlIHJvYnVzdCBhbmQg
+ZWFzeSB0byB1bmRlcnN0YW5kLCB0aGF0J3Mgd2h5IEkgc3Ryb25nbHkgDQpzdWdnZXN0IHRv
+IGFkZCB0aGUgY2hlY2sgdG8ga3NtYmRfc21iMl9jaGVja19tZXNzYWdlKCkuDQoNCj4gMi4g
+c2Vzc2lvbiBpZCBhbmQgdHJlZSBpZCBvbmx5IG5lZWRzIHRvIGJlIGNoZWNrZWQgaW4gdGhl
+IGhlYWRlciBvZg0KPiB0aGUgZmlyc3QgcGR1IHJlZ2FyZGxlc3Mgb2YgY29tcG91bmQgYW5k
+IHNpbmdsZSBvbmUuDQoNClVubGVzcyBJJ20gY29tcGxldGVseSBvZmYgKHdoaWNoIEkgc29t
+ZXRpbWVzIGFyZSwgc28gSSdtIHByZXBhcmVkIHRvIGJlIA0KcHJvdmVuIGZhbHNlIDopICks
+IHRoaXMgaXMgbm90IGNvcnJlY3QuIENmIE1TLVNNQjIgMy4zLjUuMi43LiBGb3IgDQpub24t
+cmVsYXRlZCBjb21wb3VuZCByZXF1ZXN0cyBzZXNzaW9uLWlkIGFuZCB0cmVlLWlkIGFyZSB0
+byBiZSB0YWtlbiANCmZyb20gZWFjaCBQRFUuDQoNCkNmIGFsc28gdGhlIFNhbWJhIGNvZGUg
+aW4gc21iZF9zbWIyX3JlcXVlc3RfZGlzcGF0Y2goKSB3aGljaCBjYWxscyANCnNtYmRfc21i
+Ml9yZXF1ZXN0X2NoZWNrX3Nlc3Npb24oKSBhbmQgc21iZF9zbWIyX3JlcXVlc3RfY2hlY2tf
+dGNvbigpIHRvIA0KaW1wbGVtZW50IHRoZSByZWxldmFudCBsb2dpYy4NCg0KSSdsbCBzZW5k
+IHdoYXQgSSBoYXZlIGluIGEgc2Vjb25kLg0KDQotc2xvdw0KDQotLSANClJhbHBoIEJvZWht
+ZSwgU2FtYmEgVGVhbSAgICAgICAgICAgICAgICAgaHR0cHM6Ly9zYW1iYS5vcmcvDQpTZXJO
+ZXQgU2FtYmEgVGVhbSBMZWFkICAgICAgaHR0cHM6Ly9zZXJuZXQuZGUvZW4vdGVhbS1zYW1i
+YQ0K
+
+--------------gZi6XFdK4KDaz0L4h7b5t3c5--
+
+--------------kNC0S2chUQ0Z0CUsbIMdOEdw
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEE+uLGCIokJSBRxVnkqh6bcSY5nkYFAmFW+B0FAwAAAAAACgkQqh6bcSY5nkay
+yBAAhb5eVarGD1XqMC9aCMIjuFyO4u84ix2/TRWPDzEQN76A+EVscpscNB+I4TThD+B2BISzQeUi
+GcKpr4oDnPeaZPufYqHd1jbDQQ8LMeMXwAxHeLsYK4NSQ5u4PvCnt/Vz7noXqLzVny/y4CP4WYoa
+C02aDXptgL/7XJFdOt62a0F0OMTgYBwFhiWe3I9JR4D+bWXQXuib8hZVt8DOVFRCyyYxrdTbdWDt
+hn1wjnCNVJmYOmCYE1q2Vb6DKumndGETcwrPooeROchF7WaD1CFne0DtuSGTqmzRY6pjJ9HaK6Is
+HiQ0vJlmDLv3bOirogTtIHYpPsJEUf2Qh4KMvckFmsdTZKtCj0OsO4iWykL0R8h8SX3kl69IGweJ
+JlOsofKoAN8pzENpHmKZJCHL8YwXmKOpa+zoX/CMcgKcBXb0UlG2iHc4MUnm28wgMle08Lb8ZI3L
+jOSQ6g8NapYnqdUEerffKNFFUCS5UFTejhrnZlQvntDwLTkaH/O612sk2A7jbC06EbUq/fDR41gI
+Ep9NhWUw3dX72hJQ/1gIsgRGZ7ZkPir3mcxV4Ecvtg/SjkGng0EeMgVkES0PCaSvgp3J+3tbHn68
++GKzXcODIgj1DyfMkN1pdChOIbN7YfvYiWGJ+GwVtvsHCs+mUX94ZQApPr2fpHR/lPa+nmH0cWNv
+RWY=
+=Yxi0
+-----END PGP SIGNATURE-----
+
+--------------kNC0S2chUQ0Z0CUsbIMdOEdw--
