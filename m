@@ -2,32 +2,32 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F226341FC3D
-	for <lists+linux-cifs@lfdr.de>; Sat,  2 Oct 2021 15:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C8441FC48
+	for <lists+linux-cifs@lfdr.de>; Sat,  2 Oct 2021 15:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbhJBN06 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 2 Oct 2021 09:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S233265AbhJBN11 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 2 Oct 2021 09:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbhJBN05 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Oct 2021 09:26:57 -0400
+        with ESMTP id S230089AbhJBN11 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Oct 2021 09:27:27 -0400
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD29AC0613EC
-        for <linux-cifs@vger.kernel.org>; Sat,  2 Oct 2021 06:25:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6BFC0613EC
+        for <linux-cifs@vger.kernel.org>; Sat,  2 Oct 2021 06:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
         s=42; h=Message-Id:Date:Cc:To:From;
-        bh=QpGs2DgXxGuTIpK2NWlT87Xsetv+cUnKN0xFbJPFDYU=; b=JYclVPCfweytXgpzL0PMnTYD8Q
-        PkRq1jYWOjjgCCI3KW5p7h1jSwzl8T14rqvRDlvRlfFuAbYNPPiRkZQukF7X4OZ84tlplWE9HZf8W
-        F0WiYl0zwmVlpmIskfyx950mVahJ37gGBp2caUO0rAmIX7M1+NY/U2WM6TcvDdukflGpbP2/ZPiiL
-        CnTiO0lgwzY0fse4fMqIvK5VoHXJU7Yjtw4EpdODtbE2u7oq8I2oDT9qpq8OR2oGNSm+rXqg55aRg
-        WeycTNAR4eFnuz8hHXutHt3Zl4TgbAB89L+7BS9plG6/i4wIc/8j6jOdqlnHVuaLK3+FIpGhOXhJa
-        xHxmbxnK+LJfSOb5viCo4+egw+LOMvkD8+OzkBF7ZleV21b4sXhBaW0QNr2anG8H+fZNMSxT+NC5Z
-        eIwPjb8FdT1M7U6m/e37zKTlahNP2W+FuWRW9tfRWmNxUABx0C1mejOgwtfDf0Z8kAfv+85XooFcO
-        metNzMzGjCgz5xHCijut/TCS;
+        bh=TK9qiT27d4foHLgTPiXRQKYqkNOpAHE0UzhEoKCwx40=; b=IHkQ/V0HMF6I9Qmmx+07ysI+tK
+        GBxTg7hYKfvx+jSJYZTpxWBR8TO5T1mx+VzRbmpKmmDoxRan83tTVOkgDsHjevn3LEozkoxffhJde
+        ofJeCbsCnhRcNEr6C/4ce2Zdvs/RvGVfa+dwnwQZV2zXAXAJbRf5az9kBDsXIGrvsfLZyMOCItt6D
+        Pzb3cYQb9pV+j0sG1Towv/V1M/+bcIVlBo9hxOwBHYA7Q9js2WJbq0RbyeyKISSXLxybbRHtU7gPj
+        3/MShzg1t74OEoFYg9mFAuKfItjiRtNlV/V6qUrI5bJdV9DlTe4LIXvG0sT3Z/1jJMauJlpXi0ZI6
+        FEeppVGg3O9AnQFEcvJsCV9kSdSRZP2dRXnf915MRjJqN/spiQT/NiSEDQX6wKNBIIxGdLRgEffES
+        nmRhP0A+XZBQJmAh21uEp0g1FxefrWpnyYv1rg4wNR/jqeL38Up+17MSsvWoOuxZesLhbisJa2HD3
+        kbQQM87QREQQpGWXt6PRIHkE;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
         (Exim)
-        id 1mWeoT-001DcY-B2; Sat, 02 Oct 2021 13:12:25 +0000
+        id 1mWeoT-001DcY-V1; Sat, 02 Oct 2021 13:12:26 +0000
 From:   Ralph Boehme <slow@samba.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     Ralph Boehme <slow@samba.org>, Namjae Jeon <linkinjeon@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Ralph Boehme <slow@samba.org>, Namjae Jeon <linkinjeon@kernel.org>,
         Ronnie Sahlberg <ronniesahlberg@gmail.com>,
         Steve French <smfrench@gmail.com>,
         Hyunchul Lee <hyc.lee@gmail.com>
-Subject: [PATCH v6 11/14] ksmdb: make smb2_get_ksmbd_tcon() callable with chained PDUs
-Date:   Sat,  2 Oct 2021 15:12:09 +0200
-Message-Id: <20211002131212.130629-12-slow@samba.org>
+Subject: [PATCH v6 12/14] ksmbd: make smb2_check_user_session() callable for compound PDUs
+Date:   Sat,  2 Oct 2021 15:12:10 +0200
+Message-Id: <20211002131212.130629-13-slow@samba.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211002131212.130629-1-slow@samba.org>
 References: <20211002131212.130629-1-slow@samba.org>
@@ -47,8 +47,6 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Also track the tcon id of compound requests.
-
 Cc: Namjae Jeon <linkinjeon@kernel.org>
 Cc: Tom Talpey <tom@talpey.com>
 Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
@@ -56,61 +54,56 @@ Cc: Steve French <smfrench@gmail.com>
 Cc: Hyunchul Lee <hyc.lee@gmail.com>
 Signed-off-by: Ralph Boehme <slow@samba.org>
 ---
- fs/ksmbd/ksmbd_work.h |  1 +
- fs/ksmbd/smb2pdu.c    | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ fs/ksmbd/smb2pdu.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/fs/ksmbd/ksmbd_work.h b/fs/ksmbd/ksmbd_work.h
-index f7156bc50049..91363d508909 100644
---- a/fs/ksmbd/ksmbd_work.h
-+++ b/fs/ksmbd/ksmbd_work.h
-@@ -46,6 +46,7 @@ struct ksmbd_work {
- 	u64				compound_fid;
- 	u64				compound_pfid;
- 	u64				compound_sid;
-+	u32				compound_tid;
- 
- 	const struct cred		*saved_cred;
- 
 diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 7d3344b5519c..8cbce9a9c2e0 100644
+index 8cbce9a9c2e0..2f71905503b5 100644
 --- a/fs/ksmbd/smb2pdu.c
 +++ b/fs/ksmbd/smb2pdu.c
-@@ -97,7 +97,6 @@ int smb2_get_ksmbd_tcon(struct ksmbd_work *work)
- 	unsigned int cmd = le16_to_cpu(req_hdr->Command);
- 	int tree_id;
- 
--	work->tcon = NULL;
- 	if (cmd == SMB2_TREE_CONNECT_HE ||
- 	    cmd ==  SMB2_CANCEL_HE ||
- 	    cmd ==  SMB2_LOGOFF_HE) {
-@@ -110,13 +109,26 @@ int smb2_get_ksmbd_tcon(struct ksmbd_work *work)
- 		return -ENOENT;
+@@ -416,7 +416,6 @@ static void init_chained_smb2_rsp(struct ksmbd_work *work)
+ 		work->compound_pfid =
+ 			le64_to_cpu(((struct smb2_create_rsp *)rsp)->
+ 				PersistentFileId);
+-		work->compound_sid = le64_to_cpu(rsp->SessionId);
  	}
  
+ 	len = get_rfc1002_len(work->response_buf) - work->next_smb2_rsp_hdr_off;
+@@ -596,7 +595,6 @@ int smb2_check_user_session(struct ksmbd_work *work)
+ 	unsigned int cmd = conn->ops->get_cmd_val(work);
+ 	unsigned long long sess_id;
+ 
+-	work->sess = NULL;
+ 	/*
+ 	 * SMB2_ECHO, SMB2_NEGOTIATE, SMB2_SESSION_SETUP command do not
+ 	 * require a session id, so no need to validate user session's for
+@@ -609,11 +607,25 @@ int smb2_check_user_session(struct ksmbd_work *work)
+ 	if (!ksmbd_conn_good(work))
+ 		return -EINVAL;
+ 
 +	if (req_hdr->Flags & SMB2_FLAGS_RELATED_OPERATIONS) {
-+		if (!work->tcon) {
-+			pr_err("Missing tcon\n");
++		if (work->sess) {
++			pr_err("Missing session\n");
 +			return -EINVAL;
 +		}
 +		return 1;
 +	}
 +
-+	work->tcon = NULL;
-+	work->compound_tid = 0;
++	work->sess = NULL;
++	work->compound_sid = 0;
 +
- 	tree_id = le32_to_cpu(req_hdr->Id.SyncId.TreeId);
+ 	sess_id = le64_to_cpu(req_hdr->SessionId);
 +
- 	work->tcon = ksmbd_tree_conn_lookup(work->sess, tree_id);
- 	if (!work->tcon) {
- 		pr_err("Invalid tid %d\n", tree_id);
- 		return -EINVAL;
- 	}
- 
-+	work->compound_tid = tree_id;
- 	return 1;
+ 	/* Check for validity of user session */
+ 	work->sess = ksmbd_session_lookup_all(conn, sess_id);
+-	if (work->sess)
++	if (work->sess) {
++		work->compound_sid = sess_id;
+ 		return 1;
++	}
+ 	ksmbd_debug(SMB, "Invalid user session, Uid %llu\n", sess_id);
+ 	return -EINVAL;
  }
- 
 -- 
 2.31.1
 
