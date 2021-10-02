@@ -2,39 +2,46 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CA041FC1E
-	for <lists+linux-cifs@lfdr.de>; Sat,  2 Oct 2021 15:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8583641FC3E
+	for <lists+linux-cifs@lfdr.de>; Sat,  2 Oct 2021 15:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbhJBNOH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 2 Oct 2021 09:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S233038AbhJBN1A (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 2 Oct 2021 09:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbhJBNOH (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Oct 2021 09:14:07 -0400
+        with ESMTP id S230089AbhJBN1A (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Oct 2021 09:27:00 -0400
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410BC0613EE
-        for <linux-cifs@vger.kernel.org>; Sat,  2 Oct 2021 06:12:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3647AC0613EC
+        for <linux-cifs@vger.kernel.org>; Sat,  2 Oct 2021 06:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
         s=42; h=Message-Id:Date:Cc:To:From;
-        bh=PL5cMQjWVZMWF5DFXnCkGcrbNUGlz5WUau8iM0ri+s4=; b=ctxpBhcEN7swo6ECs739W7V4zc
-        2XtGPynrTh6ApsxEd2e/fTN8nafj0ADorvkyKCm3qsNoGunLT1YHqSNxTL6v4Z55H8R1krsmwA1zS
-        fEva1YsY8o53V+oLcENikOv4ce5X5fjJ+JU9Da1UUdByaJb6eG9KGIizlF+az7JuKrV/kSCEN6h2E
-        yP3bQkcJIQ/ZqKzvqkMmX9LOJldvBdA4C9lOl2CPLAIn5oBBH+1/zMHq9+GlYWYsBRXljXwKlq0Nq
-        q/NouyNs6eHg6xAAp9DmaepdIz8mqtIDEK/GbuU8n6oVY+vhGg+AJjwF6X8mLsI9KMUz7CNrkeIwJ
-        u6RjclIvt3IXUYa02YTGpe0YLDHl5uo2LejRT+VqiqWVWcjLH+tkFrHlWf4pknnOI/M6DCGgu/T7c
-        iY6qg2++/DXHTZQ3jWaHc38+403LZkqIGT6rJK0TKCB7qVh/u5dfENhl6dVaAKusl6mvTGPXe5UhL
-        01JxarXyfWawxav2dSljPsSM;
+        bh=5hAfwrhGJImpHft8YW0KFLOp0dMZ1hNydIR2TVPmsEs=; b=q8U5YTEpC9e2neA5o0uBFbksiI
+        EgRhe8zWBJRdHE5WjfPpgFL0cqc32uh1mW+ROhAYRjFocyVx35ZoMYT3jRpGypdrfPXGonIxiSISi
+        K5YWVDsnRDLb5mnzaLk8q5JeT37P5+wplUFwv/B/WjG7wd5qlLB/RWlcJgbLeNwRfqQAlypqZRm79
+        klqE/9Z4qFW2q6dZi5StSCAUd2DYuGUxZJSEbW/yBk9CpCmpYJ9gUpOzPM2TvYXC2rUPYaRZ6Mxhd
+        Ld8Eorrivcqg9q9W8gQzfKshzI/TYWB59czgXky+AVPv+RSIKMQTfqEwb6LIZyz/GG3S9iyuwilb5
+        bx6DhRJOwDVQwWilZWJK3zEvetnfktzhcL5iVaQr5fGmfPyDTEloSBRJrpG99AedbbdMM7YWN3eJg
+        ImJfbKnTdtbUZN2xvmLW6R/KNJnpj/9tN1b/6TTP3mVtzo2cBfnacSuQ0UddQGWau026RIGWkz4iZ
+        bk/2RezrVnQp7klRV4G9mhPd;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
         (Exim)
-        id 1mWeoN-001DcY-4r; Sat, 02 Oct 2021 13:12:19 +0000
+        id 1mWeoN-001DcY-OX; Sat, 02 Oct 2021 13:12:19 +0000
 From:   Ralph Boehme <slow@samba.org>
 To:     linux-cifs@vger.kernel.org
-Cc:     Ralph Boehme <slow@samba.org>
-Subject: [PATCH v6 00/14] Buffer validation patches
-Date:   Sat,  2 Oct 2021 15:11:58 +0200
-Message-Id: <20211002131212.130629-1-slow@samba.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>, Tom Talpey <tom@talpey.com>,
+        Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+        =?UTF-8?q?Ralph=20B=C3=B6hme?= <slow@samba.org>,
+        Steve French <smfrench@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>
+Subject: [PATCH v6 01/14] ksmbd: add the check to vaildate if stream protocol length exceeds maximum value
+Date:   Sat,  2 Oct 2021 15:11:59 +0200
+Message-Id: <20211002131212.130629-2-slow@samba.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211002131212.130629-1-slow@samba.org>
+References: <20211002131212.130629-1-slow@samba.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -42,72 +49,91 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-v2:
-  - update comments of smb2_get_data_area_len().
-  - fix wrong buffer size check in fsctl_query_iface_info_ioctl().
-  - fix 32bit overflow in smb2_set_info.
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-v3:
-  - add buffer check for ByteCount of smb negotiate request.
-  - Moved buffer check of to the top of loop to avoid unneeded behavior when
-    out_buf_len is smaller than network_interface_info_ioctl_rsp.
-  - get correct out_buf_len which doesn't exceed max stream protocol length.
-  - subtract single smb2_lock_element for correct buffer size check in
-    ksmbd_smb2_check_message().
+This patch add MAX_STREAM_PROT_LEN macro and check if stream protocol
+length exceeds maximum value. opencode pdu size check in
+ksmbd_pdu_size_has_room().
 
-v4: 
-  - use work->response_sz for out_buf_len calculation in smb2_ioctl.
-  - move smb2_neg size check to above to validate NegotiateContextOffset
-    field.
-  - remove unneeded dialect checks in smb2_sess_setup() and
-    smb2_handle_negotiate().
-  - split smb2_set_info patch into two patches(declaring
-    smb2_file_basic_info and buffer check) 
+Cc: Tom Talpey <tom@talpey.com>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Cc: Ralph Böhme <slow@samba.org>
+Cc: Steve French <smfrench@gmail.com>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Acked-by: Hyunchul Lee <hyc.lee@gmail.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+---
+ fs/ksmbd/connection.c | 9 +++++----
+ fs/ksmbd/smb_common.c | 6 ------
+ fs/ksmbd/smb_common.h | 4 ++--
+ 3 files changed, 7 insertions(+), 12 deletions(-)
 
-v5:
-  - remove PDU size validation from ksmbd_conn_handler_loop()
-  - add PDU size validation to ksmbd_smb2_check_message()
-  - fix compound non-related request handling
-
-v6:
-  - check we can access ProtocolId in ksmbd_verify_smb_message()
-  - optimize tcon and session check functions for compound related PDUs
-  - drop patch that broke SMB1 negprot
-  - check credits after fully validating PDU size
-
-Namjae Jeon (4):
-  ksmbd: add the check to vaildate if stream protocol length exceeds
-    maximum value
-  ksmbd: add validation in smb2_ioctl
-  ksmbd: check strictly data area in ksmbd_smb2_check_message()
-  ksmbd: remove the leftover of smb2.0 dialect support
-
-Ralph Boehme (10):
-  ksmbd: use ksmbd_req_buf_next() in ksmbd_verify_smb_message()
-  ksmbd: check buffer is big enough to access the ProtocolId field
-  ksmbd: use ksmbd_req_buf_next() in ksmbd_smb2_check_message()
-  ksmbd: use ksmbd_smb2_cur_pdu_buflen() in ksmbd_smb2_check_message()
-  ksmbd: check PDU len is at least header plus body size in
-    ksmbd_smb2_check_message()
-  ksmdb: use cmd helper variable in smb2_get_ksmbd_tcon()
-  ksmdb: make smb2_get_ksmbd_tcon() callable with chained PDUs
-  ksmbd: make smb2_check_user_session() callable for compound PDUs
-  ksmdb: move session and tcon validation to ksmbd_smb2_check_message()
-  ksmdb: validate credit charge after validating SMB2 PDU body size
-
- fs/ksmbd/connection.c |   9 ++-
- fs/ksmbd/ksmbd_work.h |   1 +
- fs/ksmbd/server.c     |  46 +++++++----
- fs/ksmbd/smb2misc.c   | 152 +++++++++++++++++++-----------------
- fs/ksmbd/smb2ops.c    |   5 --
- fs/ksmbd/smb2pdu.c    | 178 +++++++++++++++++++++++++++++-------------
- fs/ksmbd/smb2pdu.h    |   2 +-
- fs/ksmbd/smb_common.c |  22 +++---
- fs/ksmbd/smb_common.h |   4 +-
- fs/ksmbd/vfs.c        |   2 +-
- fs/ksmbd/vfs.h        |   2 +-
- 11 files changed, 256 insertions(+), 167 deletions(-)
-
+diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
+index af086d35398a..e50353c50661 100644
+--- a/fs/ksmbd/connection.c
++++ b/fs/ksmbd/connection.c
+@@ -296,10 +296,11 @@ int ksmbd_conn_handler_loop(void *p)
+ 		pdu_size = get_rfc1002_len(hdr_buf);
+ 		ksmbd_debug(CONN, "RFC1002 header %u bytes\n", pdu_size);
+ 
+-		/* make sure we have enough to get to SMB header end */
+-		if (!ksmbd_pdu_size_has_room(pdu_size)) {
+-			ksmbd_debug(CONN, "SMB request too short (%u bytes)\n",
+-				    pdu_size);
++		/*
++		 * Check if pdu size is valid (min : smb header size,
++		 * max : 0x00FFFFFF).
++		 */
++		if (pdu_size > MAX_STREAM_PROT_LEN) {
+ 			continue;
+ 		}
+ 
+diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
+index db8042a173d0..b6c4c7e960fa 100644
+--- a/fs/ksmbd/smb_common.c
++++ b/fs/ksmbd/smb_common.c
+@@ -21,7 +21,6 @@ static const char basechars[43] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_-!@#$%";
+ #define MAGIC_CHAR '~'
+ #define PERIOD '.'
+ #define mangle(V) ((char)(basechars[(V) % MANGLE_BASE]))
+-#define KSMBD_MIN_SUPPORTED_HEADER_SIZE	(sizeof(struct smb2_hdr))
+ 
+ struct smb_protocol {
+ 	int		index;
+@@ -294,11 +293,6 @@ int ksmbd_init_smb_server(struct ksmbd_work *work)
+ 	return 0;
+ }
+ 
+-bool ksmbd_pdu_size_has_room(unsigned int pdu)
+-{
+-	return (pdu >= KSMBD_MIN_SUPPORTED_HEADER_SIZE - 4);
+-}
+-
+ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
+ 				      struct ksmbd_file *dir,
+ 				      struct ksmbd_dir_info *d_info,
+diff --git a/fs/ksmbd/smb_common.h b/fs/ksmbd/smb_common.h
+index 994abede27e9..6e79e7577f6b 100644
+--- a/fs/ksmbd/smb_common.h
++++ b/fs/ksmbd/smb_common.h
+@@ -48,6 +48,8 @@
+ #define CIFS_DEFAULT_IOSIZE	(64 * 1024)
+ #define MAX_CIFS_SMALL_BUFFER_SIZE 448 /* big enough for most */
+ 
++#define MAX_STREAM_PROT_LEN	0x00FFFFFF
++
+ /* Responses when opening a file. */
+ #define F_SUPERSEDED	0
+ #define F_OPENED	1
+@@ -493,8 +495,6 @@ int ksmbd_lookup_dialect_by_id(__le16 *cli_dialects, __le16 dialects_count);
+ 
+ int ksmbd_init_smb_server(struct ksmbd_work *work);
+ 
+-bool ksmbd_pdu_size_has_room(unsigned int pdu);
+-
+ struct ksmbd_kstat;
+ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work,
+ 				      int info_level,
 -- 
 2.31.1
 
