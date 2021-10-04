@@ -2,109 +2,149 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75179420AAD
-	for <lists+linux-cifs@lfdr.de>; Mon,  4 Oct 2021 14:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AEB420B24
+	for <lists+linux-cifs@lfdr.de>; Mon,  4 Oct 2021 14:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbhJDMO2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 4 Oct 2021 08:14:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232549AbhJDMO0 (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 4 Oct 2021 08:14:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2514161181
-        for <linux-cifs@vger.kernel.org>; Mon,  4 Oct 2021 12:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633349558;
-        bh=oI+uvjOXMxjt5A9vo4n8127tkLZCtdr/aOee3MJgW0U=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=pkp5ZTYyj/Im60CMYrUy3E4xmUKPmNPO6ofPaG9iJ8bFBJkwWb8YLH3Ep6GIry/1a
-         UXz708/0qHKdT/qPQwD8FMPgGb5Kyjg9YJRT0EYuyzfBFRTSKgHHAvLJ1uCeZFMp+v
-         26MJL6mYrlyHlrELx0eVP+T0NCtLw0Gl8t9UGQ9yHg9qWXJxm+qFyQshfKBhWS20EN
-         H25DmvupWnCeaIrEPUKOMSt4Hk955QIEhykvauTLZZ0SvH2fLIrI6iuxXGMklUeG1R
-         kJT1gHlzk5JY0QAflggtkPa8FXCABymFuh2JdjAy0vWtNRnmzsRqlT8x1HqsjENLU3
-         ZzqybWYnrMg1g==
-Received: by mail-ot1-f54.google.com with SMTP id c26-20020a056830349a00b0054d96d25c1eso21190056otu.9
-        for <linux-cifs@vger.kernel.org>; Mon, 04 Oct 2021 05:12:38 -0700 (PDT)
-X-Gm-Message-State: AOAM533dRrJtkzsgernKKscKGbw1TN8SlclfkDvj7fBeP2kDBe3Qlhwk
-        YrTG0ygwJGuHJ1UMB8g4hcoWMSLvkklZVxQIo2M=
-X-Google-Smtp-Source: ABdhPJyH9Ij35xClvGXpXwaM9lJphbUv1snnfciyI8w1xeFx0OolOih4POkUM6TYW0QVV3AEHBjw6dZDb9PedF1+Bkc=
-X-Received: by 2002:a05:6830:1147:: with SMTP id x7mr9192511otq.18.1633349556796;
- Mon, 04 Oct 2021 05:12:36 -0700 (PDT)
+        id S229836AbhJDMtB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 4 Oct 2021 08:49:01 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:40472 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233216AbhJDMtA (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 4 Oct 2021 08:49:00 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4FC261FDE4;
+        Mon,  4 Oct 2021 12:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1633351631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=SoOqLW1X+Iq4MDGFhD2Lq321ygi5vVzLuBYSOccGbSU=;
+        b=1gM6edeJWUuqGUPlhImhcLExge+QHPvYYcI1/H8AFgo+GTG0P9mm5yx+5o3/uEtvB++BJO
+        Y+qVQUPYylgU/GH2CAl4IkJZl5gU2eAGVzgm/objBpprfGUiCz9BHfoR073ofx0kYgCqev
+        hVKMnd64bLVFHD11SFEQpzBQ4G08zPg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1633351631;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=SoOqLW1X+Iq4MDGFhD2Lq321ygi5vVzLuBYSOccGbSU=;
+        b=2DmrLw2YbueYoq0eNMzBBQ9JhKrryJSjSI/zYna/czfOLProzOEpSF8Hlg6Xy7Dq5LSiIr
+        IXzuUw0sGqWGWKAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA77313CEE;
+        Mon,  4 Oct 2021 12:47:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mFl7Jc73WmEILwAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Mon, 04 Oct 2021 12:47:10 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linkinjeon@kernel.org
+Cc:     linux-cifs@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>
+Subject: [PATCH] ksmbd-tools: Add ksmbd-tools.spec template
+Date:   Mon,  4 Oct 2021 09:47:04 -0300
+Message-Id: <20211004124704.17616-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:ac9:31e7:0:0:0:0:0 with HTTP; Mon, 4 Oct 2021 05:12:36 -0700 (PDT)
-In-Reply-To: <20211004104544.GA25640@kili>
-References: <20211004104544.GA25640@kili>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 4 Oct 2021 21:12:36 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-v8tM_56V0U2m3piUfUipB4EHe5-aCBbC=mJ0MP2J4XA@mail.gmail.com>
-Message-ID: <CAKYAXd-v8tM_56V0U2m3piUfUipB4EHe5-aCBbC=mJ0MP2J4XA@mail.gmail.com>
-Subject: Re: [bug report] ksmbd: add validation in smb2 negotiate
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-cifs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-2021-10-04 19:45 GMT+09:00, Dan Carpenter <dan.carpenter@oracle.com>:
-> Hello Namjae Jeon,
->
-> This is a semi-automatic email about new static checker warnings.
->
-> The patch 442ff9ebeb01: "ksmbd: add validation in smb2 negotiate"
-> from Sep 29, 2021, leads to the following Smatch complaint:
->
->     fs/ksmbd/smb2pdu.c:8330 smb3_preauth_hash_rsp()
->     error: we previously assumed 'conn->preauth_info' could be null (see
-> line 8310)
->
-> fs/ksmbd/smb2pdu.c
->   8309		if (le16_to_cpu(req->Command) == SMB2_NEGOTIATE_HE &&
->   8310		    conn->preauth_info)
->                     ^^^^^^^^^^^^^^^^^^
-> The patch adds a new check for "conn->preauth_info"
->
->   8311			ksmbd_gen_preauth_integrity_hash(conn, (char *)rsp,
->   8312							 conn->preauth_info->Preauth_HashValue);
->   8313	
->   8314		if (le16_to_cpu(rsp->Command) == SMB2_SESSION_SETUP_HE && sess) {
->   8315			__u8 *hash_value;
->   8316	
->   8317			if (conn->binding) {
->   8318				struct preauth_session *preauth_sess;
->   8319	
->   8320				preauth_sess = ksmbd_preauth_session_lookup(conn, sess->id);
->   8321				if (!preauth_sess)
->   8322					return;
->   8323				hash_value = preauth_sess->Preauth_HashValue;
->   8324			} else {
->   8325				hash_value = sess->Preauth_HashValue;
->   8326				if (!hash_value)
->   8327					return;
->   8328			}
->   8329			ksmbd_gen_preauth_integrity_hash(conn, (char *)rsp,
->
-Hi Dan,
+ksmbd-tools.spec should serve as a base template for RPM packagers.
 
-First, Thanks for your report:)
-> But it's not checked inside the ksmbd_gen_preauth_integrity_hash()
-> function.
-conn->preauth_info can not be NULL on smb3.1.1 session setup stage.
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+---
+ README           |  2 ++
+ ksmbd-tools.spec | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+)
+ create mode 100644 ksmbd-tools.spec
 
-smb2 negotate(smb3.1.1, allocate conn->preauth_info) ->  smb3.1.1
-session setup -> smb3_preauth_hash_rsp().
+diff --git a/README b/README
+index 3dce3bb41c6e..c64b75c58c2f 100644
+--- a/README
++++ b/README
+@@ -13,6 +13,8 @@ Install preprequisite packages:
+ 	For CentOS:
+ 	sudo yum install glib2-devel libnl3-devel
+ 
++ksmbd-tools.spec should serve as a base template for RPM packagers.
++
+ Build steps:
+         - cd into the ksmbd-tools directory
+         - ./autogen.sh
+diff --git a/ksmbd-tools.spec b/ksmbd-tools.spec
+new file mode 100644
+index 000000000000..901ca6e6cb76
+--- /dev/null
++++ b/ksmbd-tools.spec
+@@ -0,0 +1,63 @@
++#
++# spec file for package ksmbd-tools
++#
++# Copyright (c) 2021 SUSE LLC
++#
++# All modifications and additions to the file contributed by third parties
++# remain the property of their copyright owners, unless otherwise agreed
++# upon. The license for this file, and modifications and additions to the
++# file, is the same license as for the pristine package itself (unless the
++# license for the pristine package is not an Open Source License, in which
++# case the license is the MIT License). An "Open Source License" is a
++# license that conforms to the Open Source Definition (Version 1.9)
++# published by the Open Source Initiative.
++#
++# Please submit bugfixes or comments via https://bugs.opensuse.org/
++#
++
++Name:           ksmbd-tools
++Version:        3.4.2
++Release:        0
++Summary:        cifsd/ksmbd kernel server userspace utilities
++License:        GPL-2.0-or-later
++Group:          System/Filesystems
++Url:            https://github.com/namjaejeon/ksmbd-tools
++Source:         %{name}-%{version}.tar.bz2
++
++# ksmbd kernel module was only added in kernel 5.15
++BuildRequires:  kernel-default >= 5.15
++BuildRequires:  glib2-devel
++BuildRequires:  libnl3-devel
++BuildRequires:  autoconf
++BuildRequires:  automake
++BuildRequires:	libtool
++
++Requires(pre):	kernel-default >= 5.15
++
++%description
++Set of utilities for creating and managing SMB3 shares for the ksmbd kernel
++module.
++
++%prep
++%setup -q
++
++%build
++./autogen.sh
++%configure
++make %{?_smp_mflags}
++
++%install
++mkdir -p %{buildroot}/%{_sysconfdir}/ksmbd
++
++%make_install
++install -m 644 -p smb.conf.example %{buildroot}%{_sysconfdir}/ksmbd
++
++%files
++%{_sbindir}/ksmbd.addshare
++%{_sbindir}/ksmbd.adduser
++%{_sbindir}/ksmbd.control
++%{_sbindir}/ksmbd.mountd
++%dir %{_sysconfdir}/ksmbd
++%config %{_sysconfdir}/ksmbd/smb.conf.example
++
++%changelog
+-- 
+2.33.0
 
-This is the check not to call ksmbd_gen_preauth_integrity_hash().
-if (le16_to_cpu(rsp->Command) == SMB2_SESSION_SETUP_HE && sess) {
-
-Let me know if I am missing something:)
-
-Thanks!
->
->   8330							 hash_value);
->   8331		}
->   8332	}
->
-> regards,
-> dan carpenter
->
