@@ -2,105 +2,67 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E1E421DCC
-	for <lists+linux-cifs@lfdr.de>; Tue,  5 Oct 2021 07:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB1C421DE2
+	for <lists+linux-cifs@lfdr.de>; Tue,  5 Oct 2021 07:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbhJEFF7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 5 Oct 2021 01:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
+        id S231740AbhJEF1C (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 5 Oct 2021 01:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbhJEFF7 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Oct 2021 01:05:59 -0400
+        with ESMTP id S230403AbhJEF1C (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Oct 2021 01:27:02 -0400
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E12C061745
-        for <linux-cifs@vger.kernel.org>; Mon,  4 Oct 2021 22:04:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927AC061745
+        for <linux-cifs@vger.kernel.org>; Mon,  4 Oct 2021 22:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
         s=42; h=Message-Id:Date:Cc:To:From;
-        bh=Iw6WFO0iDQeCspedTuBZLZDxGxfDlxyZMrystAVjMkM=; b=rXAPut1/fSMTUWu3DDJrWab2V6
-        NQS6uTM96+TeGCvPWDC4yO/OCYB0WRjefVXAjhpsuXeCO5oMzoW55DHqRtcTpDLpp2T0/MM6q8AmA
-        Sc+uJcCchNxfBBQ/KvHhoxKnQKt9Wjf24dhV+beA9QtjM1kemCA8JmP3wUp3x1WlI8z5hqIqQ4k9v
-        BI9T6SJBfbm5qjUYfmjTI3+denzxyP0YYMt6+QkSzhd96SEIVNfmJ+pTnEBk7HGFW9Bix+NL4E+nw
-        3A/nlcHMabtaOIXsZklKdH+oidpZdvMSXUJKOyq4AWtBB1I71O1ekjfScF5qVB79wnOxFrydx9oPE
-        yeqCZgO1Rh7I9OCavwOLvWt7VPLJhL17Q91307gyEovx1bjMIHbtaAwymQEJkNX91xsuOCLnUr0Y5
-        ybs5OlHJ3du2u6VJCtTBoNISm5YHVPxe9lJdMtAmMebq9I49Fte8qZ9S5zzQ3uNTBdJEZZRhxfuLn
-        H9VgXnHFWlkzpyZcW2wCUi47;
+        bh=FbToP3cBCVM9Ma6brMXNh+tonQqcwo/eFaZFr4z6ESg=; b=wyHUIsyvNpRcIpO9BmJc4A4OaE
+        xxUztab4d0eUxx+y4wL01/W3qbiTM4bZwDXZTAPgP88TAVDgGpjwQimoDnCq7j4KvMxfopvfYMutd
+        gGVkMkP68gAM15pqcjVYeCOuTOYn7S6tkJvbFVpbKSVNU1e2D9QlAHYGbKf+6iX9O3b3tX3rcGOAC
+        0MxZTo+PFEzguoTV+nBr/l4G/541abNt7ikaPYjKOOI1SmS/o5ID3pLMo9waC6vB9oiYn4J/VgVuP
+        nGQP7liinhblRq6NdiEHHmHafniw79+99BhDj/auP0qXTxNnQzU0C5Xd3q95x+FSkQRIGV5KVA+I+
+        jCpWX6aql7HZftNSU6Vqe84i53MM/RN6mtxtXxY7tzq3xOH4l8Ik5W0gEl9m/b9uNHIRkzDD+pzBQ
+        0+xlfi69KWVYrtSsnAMuaDIEZbojKrI3kzPFLiacMoVUgBwujV1/G++dJCLgGp++LcfvCz3RIuDQU
+        wfmaDjKWQKbgd+Fxm4N7vTLN;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
         (Exim)
-        id 1mXccY-001Yyq-S6; Tue, 05 Oct 2021 05:04:07 +0000
+        id 1mXccZ-001Yyq-8k; Tue, 05 Oct 2021 05:04:07 +0000
 From:   Ralph Boehme <slow@samba.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     Ralph Boehme <slow@samba.org>
-Subject: [PATCH v7 0/9] Buffer validation and compound handling patches
-Date:   Tue,  5 Oct 2021 07:03:34 +0200
-Message-Id: <20211005050343.268514-1-slow@samba.org>
+Subject: [PATCH v7 1/9] ksmbd: use ksmbd_req_buf_next() in ksmbd_verify_smb_message()
+Date:   Tue,  5 Oct 2021 07:03:35 +0200
+Message-Id: <20211005050343.268514-2-slow@samba.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211005050343.268514-1-slow@samba.org>
+References: <20211005050343.268514-1-slow@samba.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-v2:
-  - update comments of smb2_get_data_area_len().
-  - fix wrong buffer size check in fsctl_query_iface_info_ioctl().
-  - fix 32bit overflow in smb2_set_info.
+No change in behaviour.
 
-v3:
-  - add buffer check for ByteCount of smb negotiate request.
-  - Moved buffer check of to the top of loop to avoid unneeded behavior when
-    out_buf_len is smaller than network_interface_info_ioctl_rsp.
-  - get correct out_buf_len which doesn't exceed max stream protocol length.
-  - subtract single smb2_lock_element for correct buffer size check in
-    ksmbd_smb2_check_message().
+Signed-off-by: Ralph Boehme <slow@samba.org>
+---
+ fs/ksmbd/smb_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v4: 
-  - use work->response_sz for out_buf_len calculation in smb2_ioctl.
-  - move smb2_neg size check to above to validate NegotiateContextOffset
-    field.
-  - remove unneeded dialect checks in smb2_sess_setup() and
-    smb2_handle_negotiate().
-  - split smb2_set_info patch into two patches(declaring
-    smb2_file_basic_info and buffer check) 
-
-v5:
-  - remove PDU size validation from ksmbd_conn_handler_loop()
-  - add PDU size validation to ksmbd_smb2_check_message()
-  - fix compound non-related request handling
-
-v6:
-  - check we can access ProtocolId in ksmbd_verify_smb_message()
-  - optimize tcon and session check functions for compound related PDUs
-  - drop patch that broke SMB1 negprot
-  - check credits after fully validating PDU size
-
-v7:
-  - drop header size check in ksmbd_verify_smb_message()
-  - fix invalid read when accessing StructureSize2 in
-    ksmbd_smb2_check_message()
-  - validate credit charge after validating SMB2 PDU body size
-
-Ralph Boehme (9):
-  ksmbd: use ksmbd_req_buf_next() in ksmbd_verify_smb_message()
-  ksmbd: use ksmbd_req_buf_next() in ksmbd_smb2_check_message()
-  ksmbd: add and use ksmbd_smb2_cur_pdu_buflen() in
-    ksmbd_smb2_check_message()
-  ksmbd: check buffer is big enough to access the SMB2 PUD body size
-    field
-  ksmdb: validate credit charge after validating SMB2 PDU body size
-  ksmdb: use cmd helper variable in smb2_get_ksmbd_tcon()
-  ksmdb: make smb2_get_ksmbd_tcon() callable with chained PDUs
-  ksmbd: make smb2_check_user_session() callable for compound PDUs
-  ksmdb: move session and tcon validation to __process_request()
-
- fs/ksmbd/ksmbd_work.h |  1 +
- fs/ksmbd/server.c     | 46 +++++++++++++++++++++-------------
- fs/ksmbd/smb2misc.c   | 58 +++++++++++++++++++++++++++----------------
- fs/ksmbd/smb2pdu.c    | 39 +++++++++++++++++++++++------
- fs/ksmbd/smb2pdu.h    |  1 +
- fs/ksmbd/smb_common.c |  2 +-
- 6 files changed, 101 insertions(+), 46 deletions(-)
-
+diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
+index 707490ab1f4c..e1e5a071678e 100644
+--- a/fs/ksmbd/smb_common.c
++++ b/fs/ksmbd/smb_common.c
+@@ -132,7 +132,7 @@ int ksmbd_lookup_protocol_idx(char *str)
+  */
+ int ksmbd_verify_smb_message(struct ksmbd_work *work)
+ {
+-	struct smb2_hdr *smb2_hdr = work->request_buf + work->next_smb2_rcv_hdr_off;
++	struct smb2_hdr *smb2_hdr = ksmbd_req_buf_next(work);
+ 	struct smb_hdr *hdr;
+ 
+ 	if (smb2_hdr->ProtocolId == SMB2_PROTO_NUMBER)
 -- 
 2.31.1
 
