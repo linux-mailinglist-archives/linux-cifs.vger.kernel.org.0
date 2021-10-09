@@ -2,66 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A278427CAE
-	for <lists+linux-cifs@lfdr.de>; Sat,  9 Oct 2021 20:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9654A427DCF
+	for <lists+linux-cifs@lfdr.de>; Sun, 10 Oct 2021 00:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbhJIS3D (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 9 Oct 2021 14:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbhJIS3D (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 9 Oct 2021 14:29:03 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04E2C061762
-        for <linux-cifs@vger.kernel.org>; Sat,  9 Oct 2021 11:27:05 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id y3so7366584wrl.1
-        for <linux-cifs@vger.kernel.org>; Sat, 09 Oct 2021 11:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=k6fomv0sdqyhGG3g2MPtJX0afBVvlWccl4oJlzfMn9Y=;
-        b=M8Ss0wpRIi20+VnqWMkSGVatC+t5MXxS4kk5zPArtmk0oI6vdKfVixJR9+e8X5qb5m
-         RKnV470x/XFxiHYBmC/Iu2l0kxtP7ycPUYbo3FGtcxXj3tStB9TMZztkqgNSm0zJa2aw
-         FwkZwaTAf4Kjs6OHmQZXfKcfw40+44yVfujFbgNMXBvp8V1Gsn3YJ1TMsmKbrHZjhZqc
-         OzC5f2NE/XhfWUIfIjbq5e8yCF3W1yPqRrleSd1cOYkD1Ik4NswU03piSp+hiCDu2JkA
-         OHcNHTiX6FsJbT5zebjeQatcoNI7+1wTrWWZlqCfmw+h60mebzlIquY/KiX9Z/Enr9i/
-         UnJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=k6fomv0sdqyhGG3g2MPtJX0afBVvlWccl4oJlzfMn9Y=;
-        b=dBGz/G6djn+Ywm8hTGlzK+DaNfSrwD4AT7/vWFYwh7iL6XyatnazjcFxc5MZLkTax4
-         1suuFi23ccCsdnli+7TK/JU4pFe2ZJD7dguKTpS5Mntw1WRYbLil3lgRnMrnefAZW9Fj
-         XbiEOdoxqL7sSuHxqLhDYqLxp9/QCzW8qQ2mMFYn0LwbC4cA5sMWiTt9SeXaD0EsP7IJ
-         o0auuizJZWiUreNRMBYj/ykssVLdoO9TxPJHqTrJ90qQbTfKFdrUdSK35r0J504FVAH2
-         qx2gmOsVwF39N+k7Noe/Yp+esZYo5Jumj4wMoDz6C90+tT6t0icp34QJ4seN+GfruJL2
-         aWUA==
-X-Gm-Message-State: AOAM530bsBHBWJ8LVXB46WApwqI4gDkUxlfzg7hEK8ZvZptLZv5iz7oY
-        XgeaWteEYI+gSKSm6LfmVzvib/1KyJX32fu0aCg=
-X-Google-Smtp-Source: ABdhPJytrjbLUWlCj++X9kHSkd67itkzRKteFxCMXTepSu3hfvdmFx1jeOMddxEiy5G8z9UNoCGKiuefdpp7rK4jLRU=
-X-Received: by 2002:adf:a34b:: with SMTP id d11mr12906202wrb.107.1633804024209;
- Sat, 09 Oct 2021 11:27:04 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:adf:b194:0:0:0:0:0 with HTTP; Sat, 9 Oct 2021 11:27:03 -0700 (PDT)
-Reply-To: asameraa950@gmail.com
-From:   Samera Ali <princesesther94@gmail.com>
-Date:   Sat, 9 Oct 2021 11:27:03 -0700
-Message-ID: <CAOWxp5PakB9SJBA88p0HJbCwp9xKBqPNr9HhyBX+tiVR9Xgqwg@mail.gmail.com>
-Subject: Hey dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S231201AbhJIWHX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 9 Oct 2021 18:07:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43700 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230296AbhJIWHW (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 9 Oct 2021 18:07:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4F15D60F23;
+        Sat,  9 Oct 2021 22:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633817125;
+        bh=M5uV95UnfiqW0HqJ/5bRDHy3Dj2jLeTDaYt9RxLsTEY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=IGrcwmdHhcWHJKUskEcysU2bA7RkTQ4nia/ZWyHjaT+cXKhTZ+sbuna7+0SutmPqk
+         YmGFiqQMt2393z41zZiSXNkBK/8cZvqm7DLgD0+fH0OjWmLqCfBnppHf6pW7EY41Em
+         fsGmfffwoJ7fRA2lnPDM5o0+m0kZVoCzM+Ov//Y/LhaTGE2SRzqFj9IUKtmB367KPN
+         biwr7nbD/t/RpNn9ORnJneJljyfOFclDObYu5lZUMyhKV9SvJGz54wKblG3itB+m60
+         TBMg3CpIno/U5lqlLuemJMQKj8a5dCZof+zpNsaui4KQoGS2w4hgh9aIIQ9yhtBXld
+         BKdASWGnLaZpA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4933060A38;
+        Sat,  9 Oct 2021 22:05:25 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5msTLfojvmuejv+hO6CvF8cwuAw9CpiJWxs9a_D7pZfSLw@mail.gmail.com>
+References: <CAH2r5msTLfojvmuejv+hO6CvF8cwuAw9CpiJWxs9a_D7pZfSLw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5msTLfojvmuejv+hO6CvF8cwuAw9CpiJWxs9a_D7pZfSLw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/5.15-rc4-ksmbd-fixes
+X-PR-Tracked-Commit-Id: 64e7875560270b8f669fca9fcd6a689fea56fbeb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c75de8453c3e2f8a8fcee9171118b7da29d3fb9c
+Message-Id: <163381712529.3348.3091109306467539409.pr-tracker-bot@kernel.org>
+Date:   Sat, 09 Oct 2021 22:05:25 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hey dear
+The pull request you sent on Fri, 8 Oct 2021 23:59:17 -0500:
 
-Nice to meet you, Am Miss samera I found your email here in google
-search and I picked interest to contact you. I've something very
-important which I would like to discuss with you and I would
-appreciate if you respond back to me through my email address as to
-tell you more about me with my photos, my private email as fellows??
-[ asameraa950@gmail.com ]
+> git://git.samba.org/ksmbd.git tags/5.15-rc4-ksmbd-fixes
 
-From, samera ali
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c75de8453c3e2f8a8fcee9171118b7da29d3fb9c
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
