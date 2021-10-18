@@ -2,65 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197D5430843
-	for <lists+linux-cifs@lfdr.de>; Sun, 17 Oct 2021 13:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9297431EF7
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Oct 2021 16:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245437AbhJQLPC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 17 Oct 2021 07:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241750AbhJQLPB (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 17 Oct 2021 07:15:01 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59309C061768
-        for <linux-cifs@vger.kernel.org>; Sun, 17 Oct 2021 04:12:52 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id i189so13004063ioa.1
-        for <linux-cifs@vger.kernel.org>; Sun, 17 Oct 2021 04:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=O72dKQ3LJGamdGfTg6h5apNrZitzy0yNCJdz+p5Nrco=;
-        b=H4FnRQcPfMGBsemgjlsoynNRDEsgl9LItiMirAGkAYC+vKyzLL1fJSHgW/zSRCpGqf
-         jWkiDAAcfQ+9Xclua+eDxw6ixQmfKYxeN3oWQ5GX5UWiJNlPzeCFvguRturqBhPZrZFU
-         TyV0lPeJO8oXXtUDaRqTcJd2WIB5NKa5sa5Tfi2xYiZ6ELCzMDF+OH68krvqV8SYIfb3
-         wVhCFM9p4YNWq+Ni+bsPtf6gYbIcPYJKtpuYCwtjtJZnn4FdKijhjrJeCNnFeEBWamiO
-         QRjYqJRJBWYVbAcBpeS+zhpz++5WqJI1w1atj9l5/U/CW4sfgC3slg2A8aEtF7nYu4Mv
-         wrLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=O72dKQ3LJGamdGfTg6h5apNrZitzy0yNCJdz+p5Nrco=;
-        b=7lKKYWszwve6S8nSbmoe9NicNKI7kb1WiSM1wZv3bKtUpFSALSuJXUcwTvsiMdu6BC
-         7Wa339Wq1iSWrHj2toa99roj5QCljbnqSw/z3HIuQvdVURlCQz/PsfVUXkMUz1NlwZLy
-         zZf8skqDY8rK+1JzMEvaCat1F7QL18hfucg2HEsPYvKrbbtpxx32TDuagu1Zo/6YU0uR
-         PaLXayiKlvbzfkvkOjv2F1ELkufQ8g47DYgme80pBGftmjgsEmLzyWf5P46zRq0wsrOJ
-         3hH7pMecTCJvxR9Kx2f3JxpY2kjE7GFTUT2dvM8g5LnqvmYtpuoyHUK8TYIAFS3gLfBp
-         8SPQ==
-X-Gm-Message-State: AOAM532E0Aq+z64fWarzaw4sIe+8PI1NX8wDDdVJXUmOJrWsUWdv4ZUh
-        43I7G+4Tuo7USOIhvjrmqrSLI2R3Kphzw6Vsqrw=
-X-Google-Smtp-Source: ABdhPJxFmEsbtP1BZaaDiwTYPMcf6rOQi4r+KExQP1awZ77Ho6tQVBVmtlfBhkAg3bfAG9rRVSFlN96k9AkpHcp3gx0=
-X-Received: by 2002:a05:6602:2ac3:: with SMTP id m3mr10260819iov.138.1634469171714;
- Sun, 17 Oct 2021 04:12:51 -0700 (PDT)
+        id S232263AbhJROJA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 18 Oct 2021 10:09:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234944AbhJROGx (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 18 Oct 2021 10:06:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB15B60EE3
+        for <linux-cifs@vger.kernel.org>; Mon, 18 Oct 2021 14:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634565880;
+        bh=Vva2ejMH4JoHY85AFlBKPI+8Cf97CsOHSYib5mm3F+0=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=O2y/ZpYwo5LIpzyHfRuP47rKzbQHd0tuGsGt06XGxWQV3UxtTrS6tf2Lr6h/r+XmC
+         mtQcwCYEZFLLeOkdLWXXoWqS/Sq2EtaOomobLOIPbQhcywe1FkK89vG9xiosi2MVdL
+         KOOmkDCrZz2acWJp/xmNFCqJCDbC4ja6C5AW2q5e3AA628KuorcqERPx3UB67kRJ6Z
+         gqxqDITFfxuKFjkxjfBoUoTbzwNtcccmfnQVKM2A/5mNUZm3/ddDCrg1QS4geDTlsm
+         mDncMeD6NSa/q84c73MSaYUEK/3on8+eRiOLURctZyFwFAA6y2AzPq8r9PjXvmMVe0
+         vOetE8j/qC+WQ==
+Received: by mail-oi1-f170.google.com with SMTP id v77so20165263oie.1
+        for <linux-cifs@vger.kernel.org>; Mon, 18 Oct 2021 07:04:40 -0700 (PDT)
+X-Gm-Message-State: AOAM532Fd7kgQ7nP0wl/T89GAhqaZINN4dN9JD4KLBgQed6Pk7xwohuz
+        GcLGeCKPXTjP7aOsVnv7lX5hBW1Hb2vZyXOzezc=
+X-Google-Smtp-Source: ABdhPJzezQzmzdQA/BPrg8siUZmggvqaDMbzLmzfwZS06WNpF0k/FwhF4fo8aZEGSIaFBz/qS43h+BPWAb+eXIqBpnI=
+X-Received: by 2002:a05:6808:6c2:: with SMTP id m2mr6800oih.8.1634565880162;
+ Mon, 18 Oct 2021 07:04:40 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6622:e85:0:0:0:0 with HTTP; Sun, 17 Oct 2021 04:12:51
+Received: by 2002:ac9:31e7:0:0:0:0:0 with HTTP; Mon, 18 Oct 2021 07:04:39
  -0700 (PDT)
-Reply-To: justinseydou@gmail.com
-From:   Justin Seydou <munozharry894@gmail.com>
-Date:   Sun, 17 Oct 2021 12:12:51 +0100
-Message-ID: <CAMUE5RJGeEk4Bco+JasN_OURJmvFaZ1G+RT2cGgMS_Oja671rA@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
+In-Reply-To: <20211016235715.3469969-1-mmakassikis@freebox.fr>
+References: <20211016235715.3469969-1-mmakassikis@freebox.fr>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Mon, 18 Oct 2021 23:04:39 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9iC6+S+rrp=DGyR6f7qxOQm7i-nqmHK=m2qM8t3UbJdQ@mail.gmail.com>
+Message-ID: <CAKYAXd9iC6+S+rrp=DGyR6f7qxOQm7i-nqmHK=m2qM8t3UbJdQ@mail.gmail.com>
+Subject: Re: [PATCH v2] ksmbd: add buffer validation in session setup
+To:     Marios Makassikis <mmakassikis@freebox.fr>
+Cc:     linux-cifs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear friend,
+Hi Marios,
+> +	negblob_off = le16_to_cpu(req->SecurityBufferOffset);
+> +	negblob_len = le16_to_cpu(req->SecurityBufferLength);
+> +	if (negblob_off < (offsetof(struct smb2_sess_setup_req, Buffer) - 4))
+> +		return -EINVAL;
+Like the following code, negblob is still used without buffer check.
+We need to add buffer check for it here ?
 
-I am Mr. Justin Seydou. I have a mutually beneficial proposal
-$35millionUSD I want to introduce to you. All documents to execute the
-transaction are valid and available.
-Kindly indicate your interest to enable me explain further.
+if (negblob->MessageType == NtLmNegotiate) {
 
-Justin Seydou.
+} else if (negblob->MessageType == NtLmAuthenticate) {
+
+Thanks!
+
+> +
+>  	negblob = (struct negotiate_message *)((char *)&req->hdr.ProtocolId +
+> -			le16_to_cpu(req->SecurityBufferOffset));
+> +			negblob_off);
+>
+> -	if (decode_negotiation_token(work, negblob) == 0) {
+> +	if (decode_negotiation_token(conn, negblob, negblob_len) == 0) {
+>  		if (conn->mechToken)
+>  			negblob = (struct negotiate_message *)conn->mechToken;
+>  	}
+> @@ -1736,7 +1746,7 @@ int smb2_sess_setup(struct ksmbd_work *work)
+>  			sess->Preauth_HashValue = NULL;
+>  		} else if (conn->preferred_auth_mech == KSMBD_AUTH_NTLMSSP) {
+>  			if (negblob->MessageType == NtLmNegotiate) {
+> -				rc = ntlm_negotiate(work, negblob);
+> +				rc = ntlm_negotiate(work, negblob, negblob_len);
+>  				if (rc)
+>  					goto out_err;
+>  				rsp->hdr.Status =
+> --
+> 2.25.1
+>
+>
