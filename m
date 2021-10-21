@@ -2,100 +2,49 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 600A3434989
-	for <lists+linux-cifs@lfdr.de>; Wed, 20 Oct 2021 12:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD5C435E6D
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Oct 2021 11:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbhJTLAM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 20 Oct 2021 07:00:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44505 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229921AbhJTLAL (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 20 Oct 2021 07:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634727476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nznzQGZwFhWi7IrCsZuwpAlnduoRBn7ox7Rs/xNM+f4=;
-        b=ao7CYGkAf2Rc5QTHAndf5BYdCyum23WSVz/VyMKxK4+H+JavDtVnb9MUMvNV4GzbSzPunQ
-        EO8qkbTIIvgXrzS2ZGzMLicnkLpEtBEX1OoxBirXV4sbntNwea5+ONM1PVSS9QrrPQ7EqD
-        fqGc1BVyCvIAndToX3UTFVVRNiuMisk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-104-d8OhdiHCN4OcfUmy5JVW4A-1; Wed, 20 Oct 2021 06:57:53 -0400
-X-MC-Unique: d8OhdiHCN4OcfUmy5JVW4A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09B5D10A8E00;
-        Wed, 20 Oct 2021 10:57:51 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9758360D30;
-        Wed, 20 Oct 2021 10:57:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <67f55d920f40bf6c49643af08fe8a5cfc97a9542.camel@kernel.org>
-References: <67f55d920f40bf6c49643af08fe8a5cfc97a9542.camel@kernel.org> <163456861570.2614702.14754548462706508617.stgit@warthog.procyon.org.uk> <163456871794.2614702.15398637170877934146.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-nfs@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        ceph-devel@vger.kernel.org, Steve French <sfrench@samba.org>,
-        linux-cifs@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        v9fs-developer@lists.sourceforge.net,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/67] nfs, cifs, ceph, 9p: Disable use of fscache prior to its rewrite
+        id S231391AbhJUKBN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 21 Oct 2021 06:01:13 -0400
+Received: from sv1043.wpx.ne.jp ([183.181.91.44]:54644 "EHLO sv1043.wpx.ne.jp"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231334AbhJUKBN (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Thu, 21 Oct 2021 06:01:13 -0400
+X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Oct 2021 06:01:13 EDT
+Received: from virusgw1001.wpx.ne.jp (virusgw1001.wpx.ne.jp [183.181.91.251])
+        by sv1043.wpx.ne.jp (Postfix) with ESMTP id F1BB31D09E7C25
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Oct 2021 18:51:19 +0900 (JST)
+Received: from sv1043.wpx.ne.jp (183.181.91.44)
+ by virusgw1001.wpx.ne.jp (F-Secure/fsigk_smtp/521/virusgw1001.wpx.ne.jp);
+ Thu, 21 Oct 2021 18:51:19 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw1001.wpx.ne.jp)
+Received: by sv1043.wpx.ne.jp (Postfix, from userid 2055)
+        id F022E1D09C3427; Thu, 21 Oct 2021 18:51:19 +0900 (JST)
+To:     linux-cifs@vger.kernel.org
+Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44KS5Y+X44GR5LuY44GR44G+44GX44Gf44CC?=
+Date:   Thu, 21 Oct 2021 09:51:19 +0000
+From:   WordPress <hello@hypex.jp>
+Reply-To: kohta_kawai@hypex.jp
+Message-ID: <b5246bf59255775724b4b1d49ba53925@hypex.jp>
+X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3164228.1634727463.1@warthog.procyon.org.uk>
-Date:   Wed, 20 Oct 2021 11:57:43 +0100
-Message-ID: <3164229.1634727463@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+株式会社hypexです。
+以下の内容でお問い合わせを受け付けましたのでご確認ください。
 
-> The typical way to do this would be to rebrand the existing FSCACHE
-> Kconfig symbols into FSCACHE_OLD and then build the new fscache
-> structure such that it exists in parallel with the old.
+氏名：❤️ There are candid videos for you! Click here: http://bit.do/hotvideogo?5dumc ❤️
+会社名：4ntkol
+電話番号：569486069293
+メールアドレス：linux-cifs@vger.kernel.org
+お問い合わせ区分：その他
+お問い合わせ内容：znqdkz
 
-That, there, is nub of the problem.
-
-You can't have parallel cachefiles drivers: There's a single userspace
-interface (/dev/cachefiles) and only one driver can register it.  You would
-need to decide at compile time whether you want the converted or the
-unconverted network filesystems to be cached.
-
-> You'd then just drop the old infrastructure once all of the fs's are
-> converted to the new. You could even make them conflict with one another in
-> Kconfig too, so that only one could be built in during the transition period
-> if supporting both at runtime is too difficult.
-> 
-> This approach of disabling everything is much more of an all-or-nothing
-> affair. It may mean less "churn" overall, but it seems less "nice"
-> because you have an interval of commits where fscache is non-functional.
-> 
-> I'm not necessarily opposed to this approach, but I'd like to better
-> understand why doing it this way was preferred.
-
-I'm trying to avoid adding two parallel drivers, but change in place so that I
-can test parts of it as I go along.
-
-David
+-- 
+このメールは  (https://hypex.jp) のお問い合わせフォームから送信されました
 
