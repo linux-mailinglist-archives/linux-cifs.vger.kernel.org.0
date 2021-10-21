@@ -2,49 +2,65 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD5C435E6D
-	for <lists+linux-cifs@lfdr.de>; Thu, 21 Oct 2021 11:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CEE43615E
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Oct 2021 14:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhJUKBN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 21 Oct 2021 06:01:13 -0400
-Received: from sv1043.wpx.ne.jp ([183.181.91.44]:54644 "EHLO sv1043.wpx.ne.jp"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231334AbhJUKBN (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 21 Oct 2021 06:01:13 -0400
-X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Oct 2021 06:01:13 EDT
-Received: from virusgw1001.wpx.ne.jp (virusgw1001.wpx.ne.jp [183.181.91.251])
-        by sv1043.wpx.ne.jp (Postfix) with ESMTP id F1BB31D09E7C25
-        for <linux-cifs@vger.kernel.org>; Thu, 21 Oct 2021 18:51:19 +0900 (JST)
-Received: from sv1043.wpx.ne.jp (183.181.91.44)
- by virusgw1001.wpx.ne.jp (F-Secure/fsigk_smtp/521/virusgw1001.wpx.ne.jp);
- Thu, 21 Oct 2021 18:51:19 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw1001.wpx.ne.jp)
-Received: by sv1043.wpx.ne.jp (Postfix, from userid 2055)
-        id F022E1D09C3427; Thu, 21 Oct 2021 18:51:19 +0900 (JST)
-To:     linux-cifs@vger.kernel.org
-Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44KS5Y+X44GR5LuY44GR44G+44GX44Gf44CC?=
-Date:   Thu, 21 Oct 2021 09:51:19 +0000
-From:   WordPress <hello@hypex.jp>
-Reply-To: kohta_kawai@hypex.jp
-Message-ID: <b5246bf59255775724b4b1d49ba53925@hypex.jp>
-X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
+        id S231784AbhJUMVt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 21 Oct 2021 08:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231503AbhJUMVY (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 21 Oct 2021 08:21:24 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D810AC061760
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id m20so633104iol.4
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
+        b=ffKmYx2fMIYl+OvJQQopnpiCeJRTG9P9KFv8M/82NWd2iRdr6FH2GSUfX4dihVwp/4
+         j3BBt8gtfGRwriH7QaI70cXqaYxp9ZB8IdW+AAJ3XWxbhn/W/4z89PrBZ3/2rnhl+5p4
+         slIUeI/d0se+fbKVCqySusiscs7YTggdFIx/lIQo0jD9OBm3/E6HIs73TdR5+EDc4Ahn
+         Mx3oX/4Jht8hJFRtk5Rk/ZtBUnWHcvUlGjzuHFD2c3qgVHCXo5sQXMFhDt//I4s8bxor
+         0lHgZbVQWxyw1uqR2LKA3z5mNeOQjztcOBRK2nMHBotT/Ptq5yh5oJc65RUVpYj9vAKX
+         E+1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
+        b=oitOjGR3vStH0WGGGNh7ZM34I8H2rnnkpTz0CbTUMiv/xrfT0Qd1Nnelo19dszvZzT
+         R/KeNFajYNqUCF3SSKMUhmuBjQsPR1RpFDRZWR65HnAjusWfs24t1p98Jq7zQLM2pCa2
+         2RMpu/53/f4OtLFUPI/uHP59h03vvHaNIpr+QxnMczuVEYjozI14vDsilIQrXxsFMqGd
+         sNlk0aMx2Q8dMMYlMN7RScWEqAzj0enp36x8AtioDCoQxGLzMhURNImWQQmWxhgRN6Bq
+         ltmXEl44U/uDn9fd8m4qgXISfHjxqfjxFPUEd4Vbkq2QDfKznxZZUcqmFxrPkAl8eryO
+         GC7g==
+X-Gm-Message-State: AOAM531t4d5/yL216oR1LtOCaaRdrH2TpJzA2aPZTY9FjLXCJ5/+xWeo
+        DCiMb0Z/Pq6Ylx6z0hugaxLHskoPLA5e5GlZ41Q=
+X-Google-Smtp-Source: ABdhPJy/O5GAp34/8OGCgwxgN16t4zAtUhD1QqHkZqC4kznm6N81zl7Wcf3jBmF+fUfqmk/Z+gQhgoaiTdlocMxWQvk=
+X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr3773434iow.23.1634818737372;
+ Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6638:1924:0:0:0:0 with HTTP; Thu, 21 Oct 2021 05:18:57
+ -0700 (PDT)
+Reply-To: ooisangkuang63@gmail.com
+From:   Mr Ooi Sang Kuang <mrsshirleyperezfosgate7@gmail.com>
+Date:   Thu, 21 Oct 2021 05:18:57 -0700
+Message-ID: <CA+ynneC82om4XGpeSLLyaZ9uiZCuHkofPAtHcga0--5BW77aFA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-株式会社hypexです。
-以下の内容でお問い合わせを受け付けましたのでご確認ください。
-
-氏名：❤️ There are candid videos for you! Click here: http://bit.do/hotvideogo?5dumc ❤️
-会社名：4ntkol
-電話番号：569486069293
-メールアドレス：linux-cifs@vger.kernel.org
-お問い合わせ区分：その他
-お問い合わせ内容：znqdkz
-
 -- 
-このメールは  (https://hypex.jp) のお問い合わせフォームから送信されました
+Hello,
 
+I want to discuss an important project issue with you.
+Please, let me know if this email is valid. Reply me at ooisangkuang63@gmail.com
+
+Thank you,
+Mr Ooi Sang Kuang
