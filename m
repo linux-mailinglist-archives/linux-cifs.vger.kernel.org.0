@@ -2,36 +2,45 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27043953E
-	for <lists+linux-cifs@lfdr.de>; Mon, 25 Oct 2021 13:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D4743A644
+	for <lists+linux-cifs@lfdr.de>; Mon, 25 Oct 2021 23:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhJYLxn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Mon, 25 Oct 2021 07:53:43 -0400
-Received: from morente.dipgra.es ([195.57.47.7]:45626 "EHLO morente.dipgra.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232114AbhJYLxf (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
-        Mon, 25 Oct 2021 07:53:35 -0400
-From:   "TARRAGA ESCUDERO, CONCHA" <conchate@dipgra.es>
-Subject: Re: Apply
-Thread-Topic: Apply
-Thread-Index: AdfJjV9DjdO6sE+3SsGqo8fNJlBELg==
-Date:   Mon, 25 Oct 2021 10:45:05 +0000
-Message-ID: <C7D37520DF01C04F81F3C07A8FC1785E02197D80CA@alfaguara.grx>
-Accept-Language: es-ES, en-US
-Content-Language: es-ES
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [176.67.82.4]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S231359AbhJYWCF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 25 Oct 2021 18:02:05 -0400
+Received: from relay.shared-server.net ([211.13.204.73]:34604 "EHLO
+        relay.shared-server.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231289AbhJYWCE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 25 Oct 2021 18:02:04 -0400
+X-Greylist: delayed 511 seconds by postgrey-1.27 at vger.kernel.org; Mon, 25 Oct 2021 18:02:04 EDT
+Received: from w23-blue.in.shared-server.net (w23-blue.in.shared-server.net [192.168.2.46])
+        by relay09.in.shared-server.net (Postfix) with ESMTP id 7B7701665D3
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Oct 2021 06:51:08 +0900 (JST)
+Received: by w23-blue.in.shared-server.net (Postfix, from userid 177972)
+        id 7C705E0BFB; Tue, 26 Oct 2021 06:51:08 +0900 (JST)
+To:     linux-cifs@vger.kernel.org
+Subject: =?UTF-8?B?44OV44Kn44Oq44O844K544K944OL44O844OJ44KI44KK44GK5ZWP44GE5ZCI?=  =?UTF-8?B?44KP44Gb5YaF5a6544Gu6YCB5L+h?=
+Date:   Mon, 25 Oct 2021 21:51:08 +0000
+From:   =?UTF-8?B?44OV44Kn44Oq44O844K544K944OL44O844OJ?= <info@felisoni.jp>
+Message-ID: <BRmxGLLGABehm7SREPVLcnJ4tX0KGAvgCtwTl38@www.felisoni.jp>
+X-Mailer: PHPMailer 6.1.6 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-X-FE-Policy-ID: 1:3:1:SYSTEM
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+フェリースソニードサイトよりお問い合わせいただきました内容を送信します。
 
+会社名：❤️ There are candid videos for you! Click here: http://bit.do/hotvideo2?q9u0s ❤️
+お名前：sta4538 
+ふりがな：5xn6nout
+メールアドレス：linux-cifs@vger.kernel.org
+電話番号：675057044149
+お問い合わせ内容：[shubetsu]
+メッセージ本文:
+ogbi25m
 
-Have you been searching for a legit and a genuine Loan lender? Email us now via indexialnfm@outlook.com, Are you in need of a Loan to pay off your Bills and start up your own business? Here is a place were you can get Fast and Easy Loan with 2% interest rate without any delay, apply today and contact us for more details and get funded asap on any amount you need as Loan email us now on ( indexialnfm@outlook.com)
+-- 
+このメールは フェリースソニード（フェリソニ）Felis Sonido (http://hsg-s.sakura.ne.jp/felisoni) のお問い合わせフォームから送信されました
 
