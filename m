@@ -2,89 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5621843DF53
-	for <lists+linux-cifs@lfdr.de>; Thu, 28 Oct 2021 12:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9075C43E8BC
+	for <lists+linux-cifs@lfdr.de>; Thu, 28 Oct 2021 21:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhJ1Kyo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 28 Oct 2021 06:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S230448AbhJ1TEL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 28 Oct 2021 15:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbhJ1Kyj (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 28 Oct 2021 06:54:39 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F7C06122F
-        for <linux-cifs@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id k13so9872819ljj.12
-        for <linux-cifs@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
+        with ESMTP id S229645AbhJ1TEL (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 28 Oct 2021 15:04:11 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CE6C061570
+        for <linux-cifs@vger.kernel.org>; Thu, 28 Oct 2021 12:01:43 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id p14so11872582wrd.10
+        for <linux-cifs@vger.kernel.org>; Thu, 28 Oct 2021 12:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
+        d=freebox-fr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G7jTJSPqK7GcsLP1mWujIY+vR8W5851kmvgTfQoUVSI=;
+        b=8PD2PaeOv70+0vnITFslX0F4o/DeUpkZPAoM8c5ybGptN9Y+jjwaAw3ph1dLFVXyG1
+         1WEVrl0Y+hzU5Qj2f5XjZML9njoogO2OQou1HTHV/+Q8TdSdPaFM6lTvjja6D7VeV50A
+         Y83GYuNdQzo2r66mk4na17ZZu7ji/dKQ88P84OmxEGN7K0d8v2Fn8PFvdWnpVZhKZLU8
+         C5a2O0mo3WRKikjjLsKjrNaKnW7DpLspD02PcVEm5FurNE43Y0MgjVpTpnDFnWNaCMDN
+         3EDe83Nuo+FYiCsY31viCt4CObTelrKomcxVxdMibXDYT1Vn7U+09QN/r/NE20kp6sFm
+         tuhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=M1tRjp1OSkxG/IH7QBEvPzRZ3RvGmqUP/o03PScP8PjJgv9i95JM1VY/4IqJe0COm/
-         it53kIm2zydkLKUdLuGbNDgI8XemxDZdh/tSOkxbsYppUzg8+fdA3NEAjNjqoIVRChsa
-         N4XEL8ZhLq/Y2UdxYVprq1X+sJkQoCJCWDSN0O6RcvO4gjaMUZPwxrItIImlMO81Z5n3
-         cu1DWetQvwEQ6Qe/gymvCbPMaYFvpW9jAO/Id8Kv+5na/8+QoAmXcMCutqxUXcu7DO8R
-         cn+mV0bwPP13SM1xSKtoWBNn1SSK18Hz9Xx/43oabO5pgB8ZIdtLokrmcKTow+euojYe
-         F0mA==
-X-Gm-Message-State: AOAM5309ieamg4N+X7gTMwi912+2iXJ6w+oOOgnqfmhfLaIgm+XGZ99O
-        U/aTHi0rciekgU099RFAg1YLoq4+t4RiGOiL8GI=
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G7jTJSPqK7GcsLP1mWujIY+vR8W5851kmvgTfQoUVSI=;
+        b=wT50B33O2oOD/iitA6/CBHscFN8qeu3URil6Nf7bnRXfLPr91BknkaGiQA02uV0w9v
+         SzlMy6MA0tCTwpiUFXcJkycMMKKhTFULFhLvYiayhnN7VDhAP7wGW4aPmUhe7zbbGQgn
+         NQAl7hSNsbJJOrehB1lwyMElYycsbp0kejva1BeuhTOeEbFs6dnryOtU6jYq1cS8Tlag
+         k67oR1y2qSu7+1myMVjxnwDkopXaKKlvpn6t1cuc7BaW7F200y2u2HTyS1viqQtgOtph
+         3P+GGDgjqDtMJukrIChU2yC/l+aXZjzrgelz/ivkSrR0ndRK5n2mkY5/zencxtwVkZWJ
+         Uz8w==
+X-Gm-Message-State: AOAM5323cW66Z/Mk+zEvlE51dy4tT6B1UK30z6Wcz6vSp9i4+35WsOhc
+        WtM9DxRVJZPPbd3f1HaneleBQcIu4e8Cig==
+X-Google-Smtp-Source: ABdhPJzJZk4j2SEYmgCUMOJ90cJ5u7BN8OXPQzeEVTyjuhUNwjtJlGIsDNlI9rbA2TWb10DDh/l0aw==
+X-Received: by 2002:adf:ee0c:: with SMTP id y12mr5340082wrn.82.1635447701896;
+        Thu, 28 Oct 2021 12:01:41 -0700 (PDT)
+Received: from localhost.localdomain (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.gmail.com with ESMTPSA id j20sm3017511wmp.27.2021.10.28.12.01.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 12:01:41 -0700 (PDT)
+From:   Marios Makassikis <mmakassikis@freebox.fr>
+To:     linux-cifs@vger.kernel.org
+Cc:     Marios Makassikis <mmakassikis@freebox.fr>
+Subject: [PATCH] ksmbd: Fix buffer length check in fsctl_validate_negotiate_info()
+Date:   Thu, 28 Oct 2021 21:01:27 +0200
+Message-Id: <20211028190125.391374-1-mmakassikis@freebox.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+The validate_negotiate_info_req struct definition includes an extra
+field to access the data coming after the header. This causes the check
+in fsctl_validate_negotiate_info() to count the first element of the
+array twice. This in turn makes some valid requests fail, depending on
+whether they include padding or not.
+
+Fixes: f7db8fd03a4b ("ksmbd: add validation in smb2_ioctl")
+Signed-off-by: Marios Makassikis <mmakassikis@freebox.fr>
+---
+This causes mounts to fail on older kernels (v4.19 on debian10) when
+specifying vers=3.0.
+
+ fs/ksmbd/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 7e448df3f847..a03b53df3f04 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -7312,7 +7312,7 @@ static int fsctl_validate_negotiate_info(struct ksmbd_conn *conn,
+ 	int ret = 0;
+ 	int dialect;
+ 
+-	if (in_buf_len < sizeof(struct validate_negotiate_info_req) +
++	if (in_buf_len < offsetof(struct validate_negotiate_info_req, Dialects) +
+ 			le16_to_cpu(neg_req->DialectCount) * sizeof(__le16))
+ 		return -EINVAL;
+ 
 -- 
-Greetings,
+2.25.1
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
-
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
-
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
-
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
