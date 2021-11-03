@@ -2,43 +2,43 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD63444279
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Nov 2021 14:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E097244427B
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Nov 2021 14:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbhKCNgl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 3 Nov 2021 09:36:41 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:45570 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbhKCNgl (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 3 Nov 2021 09:36:41 -0400
-Received: by mail-pg1-f177.google.com with SMTP id f5so2361949pgc.12
-        for <linux-cifs@vger.kernel.org>; Wed, 03 Nov 2021 06:34:05 -0700 (PDT)
+        id S231476AbhKCNgq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 3 Nov 2021 09:36:46 -0400
+Received: from mail-pj1-f51.google.com ([209.85.216.51]:33646 "EHLO
+        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbhKCNgp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 3 Nov 2021 09:36:45 -0400
+Received: by mail-pj1-f51.google.com with SMTP id x1-20020a17090a530100b001a1efa4ebe6so1700794pjh.0
+        for <linux-cifs@vger.kernel.org>; Wed, 03 Nov 2021 06:34:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Hb8Zp0vsB6F60+UxyxsLZ3rqgNPpuqgrAqBkNV5rbUU=;
-        b=JwqTqQ6A1ISvV4T1IurmG6Cu81IzlxOC+jFW/LuzsQ6Wnoj4CP7CWMXggUbsVaTfna
-         NcIEE3K7TzvyCNWJJmO40ISatsjROfaK9qJCxV+sKIl8Kwcp/NHg8OM/qbY/kA3alEtA
-         ONY5jdvzwhTyBRiR/uH0yNy5FBhoGCrGU5TMjhl7wuMR1B0Lg7q4W/97KDoPELMSGeWh
-         62HvCJ0U6ggYmrDXPsjmsYRS60PHI+JYDkKMq9qY0ezWmlwXrEzfiupQOBVp3Y0b0cFs
-         bD4wbw0+EAKaj9i7QYVH3GBjG6w2kDTSeTyeG5ZBQov2Ztib8i0/KA8y4FxxGu7RQNah
-         U8ng==
-X-Gm-Message-State: AOAM532hBGS+vlY+Paeiw1zhpSZHFuD+1+x6wsNUzC8oFEfr0vO5WNXO
-        T8gMhv+uNWwKHu9DmzDi44nyACOkW3w=
-X-Google-Smtp-Source: ABdhPJzoAd4eiu3Xwx1vS3d4KnY3xij10XBYweDXcMqmpa0dto63Uj5o2js/tF4satkEH+6ysDhvCQ==
-X-Received: by 2002:a63:d857:: with SMTP id k23mr26143376pgj.31.1635946444463;
-        Wed, 03 Nov 2021 06:34:04 -0700 (PDT)
+        bh=jaDC5Ppyu0J12jWMDjEb68FOKw6yvLdX0D4gJGum9LU=;
+        b=luL+puSPzVrIpZ5OPdc5mOg4gtKNTMGZf9cRlhe0rOxyUUUmjMbBTLahIVNI9+k6hW
+         cMn/5i8JRV0uGV59ArGrtgEF4zv0h75nLteFgVJxA7UEy7SOZ422JxaIUXajRqqSq2xJ
+         mztLfwd5SIUtRu/voyelkqn9k/0RYmA4V7twmWOI0kF4win8uT3BSvC6N/BtzcW8mCod
+         YEtB26NVC9wD+nci0UUGPhlCkmBZ+JtPkIVrsXFqxNeN/9LgiSFtLmad2S6f+s983e3u
+         stER/AfwwmzAPRLHnHN2YvCmIy6ns8GBTfFzLD0eCmoIIalL9D5z/MgnAunXWZnDS5X5
+         Ixjw==
+X-Gm-Message-State: AOAM530NPPQdAEGk5Qwpj9l8n5nIPnoS1IjaUjXZdRYLr57LDJ7BcmvD
+        eWir5zsG4KsM60q64Dxv43cTUHJT7d0=
+X-Google-Smtp-Source: ABdhPJywv8RZmCwpT+lA5KFYYiWhMCX8CLUEyIpnXFkLmP9WyfksS5pe33AS54ho2vv17+fllAxNPQ==
+X-Received: by 2002:a17:90a:6782:: with SMTP id o2mr14789552pjj.165.1635946448830;
+        Wed, 03 Nov 2021 06:34:08 -0700 (PDT)
 Received: from localhost.localdomain ([61.74.27.164])
-        by smtp.gmail.com with ESMTPSA id s14sm2692024pfk.95.2021.11.03.06.34.03
+        by smtp.gmail.com with ESMTPSA id s14sm2692024pfk.95.2021.11.03.06.34.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Nov 2021 06:34:04 -0700 (PDT)
+        Wed, 03 Nov 2021 06:34:08 -0700 (PDT)
 From:   Namjae Jeon <linkinjeon@kernel.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 2/3] ksmbd: remove smb2_buf_length in smb2_transform_hdr
-Date:   Wed,  3 Nov 2021 22:33:52 +0900
-Message-Id: <20211103133353.6650-2-linkinjeon@kernel.org>
+Subject: [PATCH 3/3] ksmbd: change LeaseKey data type to u8 array
+Date:   Wed,  3 Nov 2021 22:33:53 +0900
+Message-Id: <20211103133353.6650-3-linkinjeon@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211103133353.6650-1-linkinjeon@kernel.org>
 References: <20211103133353.6650-1-linkinjeon@kernel.org>
@@ -48,172 +48,123 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-To move smb2_transform_hdr to smbfs_common, This patch remove
-smb2_buf_length variable in smb2_transform_hdr.
+cifs define LeaseKey as u8 array in structure. To move lease structure
+to smbfs_common, ksmbd change LeaseKey data type to u8 array.
 
 Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/ksmbd/auth.c       |  7 +++----
- fs/ksmbd/connection.c |  2 +-
- fs/ksmbd/smb2pdu.c    | 37 +++++++++++++++++--------------------
- fs/ksmbd/smb2pdu.h    |  5 -----
- 4 files changed, 21 insertions(+), 30 deletions(-)
+ fs/ksmbd/oplock.c  | 24 +++++++++---------------
+ fs/ksmbd/oplock.h  |  2 --
+ fs/ksmbd/smb2pdu.h | 11 +++++------
+ 3 files changed, 14 insertions(+), 23 deletions(-)
 
-diff --git a/fs/ksmbd/auth.c b/fs/ksmbd/auth.c
-index c69c5471db1c..3503b1c48cb4 100644
---- a/fs/ksmbd/auth.c
-+++ b/fs/ksmbd/auth.c
-@@ -983,7 +983,7 @@ static struct scatterlist *ksmbd_init_sg(struct kvec *iov, unsigned int nvec,
- 					 u8 *sign)
+diff --git a/fs/ksmbd/oplock.c b/fs/ksmbd/oplock.c
+index ce0e85552da9..077b8761d099 100644
+--- a/fs/ksmbd/oplock.c
++++ b/fs/ksmbd/oplock.c
+@@ -1335,19 +1335,16 @@ __u8 smb2_map_lease_to_oplock(__le32 lease_state)
+  */
+ void create_lease_buf(u8 *rbuf, struct lease *lease)
  {
- 	struct scatterlist *sg;
--	unsigned int assoc_data_len = sizeof(struct smb2_transform_hdr) - 24;
-+	unsigned int assoc_data_len = sizeof(struct smb2_transform_hdr) - 20;
- 	int i, nr_entries[3] = {0}, total_entries = 0, sg_idx = 0;
+-	char *LeaseKey = (char *)&lease->lease_key;
+-
+ 	if (lease->version == 2) {
+ 		struct create_lease_v2 *buf = (struct create_lease_v2 *)rbuf;
+-		char *ParentLeaseKey = (char *)&lease->parent_lease_key;
  
- 	if (!nvec)
-@@ -1047,9 +1047,8 @@ static struct scatterlist *ksmbd_init_sg(struct kvec *iov, unsigned int nvec,
- int ksmbd_crypt_message(struct ksmbd_conn *conn, struct kvec *iov,
- 			unsigned int nvec, int enc)
- {
--	struct smb2_transform_hdr *tr_hdr =
--		(struct smb2_transform_hdr *)iov[0].iov_base;
--	unsigned int assoc_data_len = sizeof(struct smb2_transform_hdr) - 24;
-+	struct smb2_transform_hdr *tr_hdr = smb2_get_msg(iov[0].iov_base);
-+	unsigned int assoc_data_len = sizeof(struct smb2_transform_hdr) - 20;
- 	int rc;
- 	struct scatterlist *sg;
- 	u8 sign[SMB2_SIGNATURE_SIZE] = {};
-diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
-index 12f710ccbdff..83a94d0bb480 100644
---- a/fs/ksmbd/connection.c
-+++ b/fs/ksmbd/connection.c
-@@ -171,7 +171,7 @@ int ksmbd_conn_write(struct ksmbd_work *work)
+ 		memset(buf, 0, sizeof(struct create_lease_v2));
+-		buf->lcontext.LeaseKeyLow = *((__le64 *)LeaseKey);
+-		buf->lcontext.LeaseKeyHigh = *((__le64 *)(LeaseKey + 8));
++		memcpy(buf->lcontext.LeaseKey, lease->lease_key,
++		       SMB2_LEASE_KEY_SIZE);
+ 		buf->lcontext.LeaseFlags = lease->flags;
+ 		buf->lcontext.LeaseState = lease->state;
+-		buf->lcontext.ParentLeaseKeyLow = *((__le64 *)ParentLeaseKey);
+-		buf->lcontext.ParentLeaseKeyHigh = *((__le64 *)(ParentLeaseKey + 8));
++		memcpy(buf->lcontext.ParentLeaseKey, lease->parent_lease_key,
++		       SMB2_LEASE_KEY_SIZE);
+ 		buf->ccontext.DataOffset = cpu_to_le16(offsetof
+ 				(struct create_lease_v2, lcontext));
+ 		buf->ccontext.DataLength = cpu_to_le32(sizeof(struct lease_context_v2));
+@@ -1362,8 +1359,7 @@ void create_lease_buf(u8 *rbuf, struct lease *lease)
+ 		struct create_lease *buf = (struct create_lease *)rbuf;
  
- 	if (work->tr_buf) {
- 		iov[iov_idx] = (struct kvec) { work->tr_buf,
--				sizeof(struct smb2_transform_hdr) };
-+				sizeof(struct smb2_transform_hdr) + 4 };
- 		len += iov[iov_idx++].iov_len;
- 	}
+ 		memset(buf, 0, sizeof(struct create_lease));
+-		buf->lcontext.LeaseKeyLow = *((__le64 *)LeaseKey);
+-		buf->lcontext.LeaseKeyHigh = *((__le64 *)(LeaseKey + 8));
++		memcpy(buf->lcontext.LeaseKey, lease->lease_key, SMB2_LEASE_KEY_SIZE);
+ 		buf->lcontext.LeaseFlags = lease->flags;
+ 		buf->lcontext.LeaseState = lease->state;
+ 		buf->ccontext.DataOffset = cpu_to_le16(offsetof
+@@ -1416,19 +1412,17 @@ struct lease_ctx_info *parse_lease_state(void *open_req)
+ 		if (sizeof(struct lease_context_v2) == le32_to_cpu(cc->DataLength)) {
+ 			struct create_lease_v2 *lc = (struct create_lease_v2 *)cc;
  
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 63bf185530c2..ba68a27cabf8 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -8424,13 +8424,13 @@ void smb3_preauth_hash_rsp(struct ksmbd_work *work)
- 	}
- }
+-			*((__le64 *)lreq->lease_key) = lc->lcontext.LeaseKeyLow;
+-			*((__le64 *)(lreq->lease_key + 8)) = lc->lcontext.LeaseKeyHigh;
++			memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
+ 			lreq->req_state = lc->lcontext.LeaseState;
+ 			lreq->flags = lc->lcontext.LeaseFlags;
+ 			lreq->duration = lc->lcontext.LeaseDuration;
+-			*((__le64 *)lreq->parent_lease_key) = lc->lcontext.ParentLeaseKeyLow;
+-			*((__le64 *)(lreq->parent_lease_key + 8)) = lc->lcontext.ParentLeaseKeyHigh;
++			memcpy(lreq->parent_lease_key, lc->lcontext.ParentLeaseKey,
++			       SMB2_LEASE_KEY_SIZE);
+ 			lreq->version = 2;
+ 		} else {
+ 			struct create_lease *lc = (struct create_lease *)cc;
  
--static void fill_transform_hdr(struct smb2_transform_hdr *tr_hdr, char *old_buf,
--			       __le16 cipher_type)
-+static void fill_transform_hdr(void *tr_buf, char *old_buf, __le16 cipher_type)
- {
--	struct smb2_hdr *hdr = (struct smb2_hdr *)old_buf;
-+	struct smb2_transform_hdr *tr_hdr = tr_buf + 4;
-+	struct smb2_hdr *hdr = smb2_get_msg(old_buf);
- 	unsigned int orig_len = get_rfc1002_len(old_buf);
+-			*((__le64 *)lreq->lease_key) = lc->lcontext.LeaseKeyLow;
+-			*((__le64 *)(lreq->lease_key + 8)) = lc->lcontext.LeaseKeyHigh;
++			memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
+ 			lreq->req_state = lc->lcontext.LeaseState;
+ 			lreq->flags = lc->lcontext.LeaseFlags;
+ 			lreq->duration = lc->lcontext.LeaseDuration;
+diff --git a/fs/ksmbd/oplock.h b/fs/ksmbd/oplock.h
+index 119b8047cfbd..0cf7a2b5bbc0 100644
+--- a/fs/ksmbd/oplock.h
++++ b/fs/ksmbd/oplock.h
+@@ -28,8 +28,6 @@
+ #define OPLOCK_WRITE_TO_NONE		0x04
+ #define OPLOCK_READ_TO_NONE		0x08
  
--	memset(tr_hdr, 0, sizeof(struct smb2_transform_hdr));
-+	memset(tr_buf, 0, sizeof(struct smb2_transform_hdr) + 4);
- 	tr_hdr->ProtocolId = SMB2_TRANSFORM_PROTO_NUM;
- 	tr_hdr->OriginalMessageSize = cpu_to_le32(orig_len);
- 	tr_hdr->Flags = cpu_to_le16(0x01);
-@@ -8440,14 +8440,13 @@ static void fill_transform_hdr(struct smb2_transform_hdr *tr_hdr, char *old_buf,
- 	else
- 		get_random_bytes(&tr_hdr->Nonce, SMB3_AES_CCM_NONCE);
- 	memcpy(&tr_hdr->SessionId, &hdr->SessionId, 8);
--	inc_rfc1001_len(tr_hdr, sizeof(struct smb2_transform_hdr) - 4);
--	inc_rfc1001_len(tr_hdr, orig_len);
-+	inc_rfc1001_len(tr_buf, sizeof(struct smb2_transform_hdr));
-+	inc_rfc1001_len(tr_buf, orig_len);
- }
- 
- int smb3_encrypt_resp(struct ksmbd_work *work)
- {
- 	char *buf = work->response_buf;
--	struct smb2_transform_hdr *tr_hdr;
- 	struct kvec iov[3];
- 	int rc = -ENOMEM;
- 	int buf_size = 0, rq_nvec = 2 + (work->aux_payload_sz ? 1 : 0);
-@@ -8455,15 +8454,15 @@ int smb3_encrypt_resp(struct ksmbd_work *work)
- 	if (ARRAY_SIZE(iov) < rq_nvec)
- 		return -ENOMEM;
- 
--	tr_hdr = kzalloc(sizeof(struct smb2_transform_hdr), GFP_KERNEL);
--	if (!tr_hdr)
-+	work->tr_buf = kzalloc(sizeof(struct smb2_transform_hdr) + 4, GFP_KERNEL);
-+	if (!work->tr_buf)
- 		return rc;
- 
- 	/* fill transform header */
--	fill_transform_hdr(tr_hdr, buf, work->conn->cipher_type);
-+	fill_transform_hdr(work->tr_buf, buf, work->conn->cipher_type);
- 
--	iov[0].iov_base = tr_hdr;
--	iov[0].iov_len = sizeof(struct smb2_transform_hdr);
-+	iov[0].iov_base = work->tr_buf;
-+	iov[0].iov_len = sizeof(struct smb2_transform_hdr) + 4;
- 	buf_size += iov[0].iov_len - 4;
- 
- 	iov[1].iov_base = buf + 4;
-@@ -8483,15 +8482,14 @@ int smb3_encrypt_resp(struct ksmbd_work *work)
- 		return rc;
- 
- 	memmove(buf, iov[1].iov_base, iov[1].iov_len);
--	tr_hdr->smb2_buf_length = cpu_to_be32(buf_size);
--	work->tr_buf = tr_hdr;
-+	*(__be32 *)work->tr_buf = cpu_to_be32(buf_size);
- 
- 	return rc;
- }
- 
- bool smb3_is_transform_hdr(void *buf)
- {
--	struct smb2_transform_hdr *trhdr = buf;
-+	struct smb2_transform_hdr *trhdr = smb2_get_msg(buf);
- 
- 	return trhdr->ProtocolId == SMB2_TRANSFORM_PROTO_NUM;
- }
-@@ -8503,9 +8501,8 @@ int smb3_decrypt_req(struct ksmbd_work *work)
- 	char *buf = work->request_buf;
- 	unsigned int pdu_length = get_rfc1002_len(buf);
- 	struct kvec iov[2];
--	int buf_data_size = pdu_length + 4 -
--		sizeof(struct smb2_transform_hdr);
--	struct smb2_transform_hdr *tr_hdr = (struct smb2_transform_hdr *)buf;
-+	int buf_data_size = pdu_length - sizeof(struct smb2_transform_hdr);
-+	struct smb2_transform_hdr *tr_hdr = smb2_get_msg(buf);
- 	int rc = 0;
- 
- 	if (buf_data_size < sizeof(struct smb2_hdr)) {
-@@ -8527,8 +8524,8 @@ int smb3_decrypt_req(struct ksmbd_work *work)
- 	}
- 
- 	iov[0].iov_base = buf;
--	iov[0].iov_len = sizeof(struct smb2_transform_hdr);
--	iov[1].iov_base = buf + sizeof(struct smb2_transform_hdr);
-+	iov[0].iov_len = sizeof(struct smb2_transform_hdr) + 4;
-+	iov[1].iov_base = buf + sizeof(struct smb2_transform_hdr) + 4;
- 	iov[1].iov_len = buf_data_size;
- 	rc = ksmbd_crypt_message(conn, iov, 2, 0);
- 	if (rc)
+-#define SMB2_LEASE_KEY_SIZE		16
+-
+ struct lease_ctx_info {
+ 	__u8			lease_key[SMB2_LEASE_KEY_SIZE];
+ 	__le32			req_state;
 diff --git a/fs/ksmbd/smb2pdu.h b/fs/ksmbd/smb2pdu.h
-index a70f5461bffe..f418b001b999 100644
+index f418b001b999..829f44569077 100644
 --- a/fs/ksmbd/smb2pdu.h
 +++ b/fs/ksmbd/smb2pdu.h
-@@ -159,11 +159,6 @@ struct smb2_pdu {
- #define SMB3_AES_GCM_NONCE 12
+@@ -733,22 +733,21 @@ struct create_posix_rsp {
  
- struct smb2_transform_hdr {
--	__be32 smb2_buf_length; /* big endian on wire */
--	/*
--	 * length is only two or three bytes - with
--	 * one or two byte type preceding it that MBZ
--	 */
- 	__le32 ProtocolId;      /* 0xFD 'S' 'M' 'B' */
- 	__u8   Signature[16];
- 	__u8   Nonce[16];
+ #define SMB2_LEASE_FLAG_BREAK_IN_PROGRESS_LE	cpu_to_le32(0x02)
+ 
++#define SMB2_LEASE_KEY_SIZE			16
++
+ struct lease_context {
+-	__le64 LeaseKeyLow;
+-	__le64 LeaseKeyHigh;
++	__u8 LeaseKey[SMB2_LEASE_KEY_SIZE];
+ 	__le32 LeaseState;
+ 	__le32 LeaseFlags;
+ 	__le64 LeaseDuration;
+ } __packed;
+ 
+ struct lease_context_v2 {
+-	__le64 LeaseKeyLow;
+-	__le64 LeaseKeyHigh;
++	__u8 LeaseKey[SMB2_LEASE_KEY_SIZE];
+ 	__le32 LeaseState;
+ 	__le32 LeaseFlags;
+ 	__le64 LeaseDuration;
+-	__le64 ParentLeaseKeyLow;
+-	__le64 ParentLeaseKeyHigh;
++	__u8 ParentLeaseKey[SMB2_LEASE_KEY_SIZE];
+ 	__le16 Epoch;
+ 	__le16 Reserved;
+ } __packed;
 -- 
 2.25.1
 
