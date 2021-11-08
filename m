@@ -2,130 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0E6447AB9
-	for <lists+linux-cifs@lfdr.de>; Mon,  8 Nov 2021 08:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF40447AF5
+	for <lists+linux-cifs@lfdr.de>; Mon,  8 Nov 2021 08:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236457AbhKHHOW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Nov 2021 02:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S237800AbhKHHaM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Nov 2021 02:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236151AbhKHHOV (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Nov 2021 02:14:21 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD362C061570
-        for <linux-cifs@vger.kernel.org>; Sun,  7 Nov 2021 23:11:37 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id f4so58205071edx.12
-        for <linux-cifs@vger.kernel.org>; Sun, 07 Nov 2021 23:11:37 -0800 (PST)
+        with ESMTP id S237482AbhKHHaJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Nov 2021 02:30:09 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57473C061227
+        for <linux-cifs@vger.kernel.org>; Sun,  7 Nov 2021 23:27:23 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x15so27360291edv.1
+        for <linux-cifs@vger.kernel.org>; Sun, 07 Nov 2021 23:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wzdiKLmaDKEmfHlMRNj//CPWsTyxjOmEIsoboHjAidc=;
-        b=g+2lhJTjzPLbsViRBldaqyZ+pF+t/bCYSKQBlbGCz8AhpszsQThZqJzHFf2gDneZNh
-         gtLsxiT+PkWeZcxwadn49iq1YkQSf//tL9ruQ9SLulfY1xxyN49m02JObogXBXh9WGLM
-         Y1f3j2ICCJRYOuc78781p4shkPO+/ag/S0rWxYgD06sa6yD4ZFtXvejgdh6ABRYGQpd0
-         qiK5yRazYqA/2qgYZRDM9x+m0yRJbzn6SXJ24TO11/+aZGURA+sYoupahRxU8FqgRsTx
-         Xrmt41TGjMcgKhmeOYAs+T24g3Dyl+cwc6ibRfmRRMlHoskPTCu/9eK2hjWf1ZQIX2CC
-         ghgw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
+         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
+         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
+         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
+         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
+         BcYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wzdiKLmaDKEmfHlMRNj//CPWsTyxjOmEIsoboHjAidc=;
-        b=0hHOo4B5fpCKXzXQDfZZykTWmJ/vB7tcGIOrRSa/r/8iI1Wece999Yy4QCZvB/790k
-         bPzZb5zyGzASVt9v+drC3xfi+YumtFW3Q3jIbiYo/g2J81LHEFmzOY7PH8/ylDvFnNGk
-         zRFHnU8UUcy93zIQsvqUm/52dSvJGhS2iPPK+eQlZO6++ZPnrEAFD9j6OQUzfiEUIrwV
-         AEOIgTSoN7XVjNChvc7dmjelqJxyTvibDNeZs1pMyVG9D1BqvhSQ7Pt197OAjBGkBsi/
-         gXPGssZ0de0D0hmoMw5gb9LajhAXYn/RgZ92qrgTL1FmQamLUCMTt6N3odc8Bo0KK0Pp
-         aO0A==
-X-Gm-Message-State: AOAM532GdM6gZ4bVHqQsdrFj0vrEapSMm3mvDurTjEbwikBxr7+5oHsU
-        hH6IeMecztVzg4HEBCC3kRYTzzZvuUyRkFO7v9k=
-X-Google-Smtp-Source: ABdhPJzBWWkgdsBZCv57hfP343jUqqbMx5JJDg920G4OGsl4r/8+ZAATyRgWPh9QRhwYHeQhmH/w8w9ceINEfWV9sng=
-X-Received: by 2002:a05:6402:17c6:: with SMTP id s6mr89047983edy.11.1636355496414;
- Sun, 07 Nov 2021 23:11:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=aumdomqkWNSoBQLnddrVN7rejZkcXjbOGx5tSJu+eu0lmnQrk7ZP2EunmzNyPMMesb
+         eTyzpTITt1rvMIA137ae2c9jX+XREiEQvwpoFqMF+XQ6hq8rIRaD+HVV02+C4BsgDpao
+         Q9BMVtBun4/ECKGlP+TwcraWDRLSUGApMUNVfv4NtluznRhkNGTo0Vs9ZCDPyvTN0tpu
+         Ka650K+TDeE5+rl36PUaNNL5JTsDZYm9SS+7o2RwbH6u0U2QTWpLF7UaLihkKB6DWqTK
+         1IlQ5mBGd9yiKDbUm059cGyhZ3JrW7T6lWXXJl3TVCWMlTNjqSX8Ik5lRuB1i0b/YZug
+         jtwQ==
+X-Gm-Message-State: AOAM532PJSXm7++XJXb+ixAyfBdUwU2SyEAZ8YeMvBhwLiSdwET2SIl1
+        /yM8L+emXhbSe09ejiJOr2IqvUzbMokGsC3daTM=
+X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
+X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
+ Sun, 07 Nov 2021 23:27:21 -0800 (PST)
 MIME-Version: 1.0
-References: <CANT5p=rgHn59NVvH32FSKtNv_cyKi4ATSAExBmWT_qjb7km7Fw@mail.gmail.com>
- <20211106013854.6qx3tz53pvayqcgm@cyberdelia> <CAH2r5mvQG0DFmMdzojH2u_w2=_9oGRV++AnEt_d7WJzj=-uTKA@mail.gmail.com>
- <CANT5p=qOQDg4xDbx6oZafJc+gnM0pN+aYOgjokU54ZeLXq_uDQ@mail.gmail.com> <bf98a745-5feb-c38a-4641-6dd91c364c8e@samba.org>
-In-Reply-To: <bf98a745-5feb-c38a-4641-6dd91c364c8e@samba.org>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Mon, 8 Nov 2021 12:41:25 +0530
-Message-ID: <CANT5p=r6c+1Zmc9DysK1c6TPMVJ1QhW5+z1G3gDf1fvXpHyj_w@mail.gmail.com>
-Subject: Re: [PATCH] cifs: send workstation name during ntlmssp session setup
-To:     Stefan Metzmacher <metze@samba.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@cjr.nz>
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:27:21 +0000
+Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Stefan,
-
-Good points. Please read my replies inline below.
-
-On Sun, Nov 7, 2021 at 4:19 PM Stefan Metzmacher <metze@samba.org> wrote:
->
->
-> Hi Shyam,
->
-> >>>> Please review this patch, and let me know what you think.
-> >>>> Having this info in the workstation field of session setup helps
-> >>>> server debugging in two ways.
-> >>>> 1. It helps identify the client by node name.
-> >>>> 2. It helps get the kernel release running on the client side.
-> >>>>
-> >>>> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/d988e704dd9170c19ff94d9421c017e65dbbaac1.patch
-> >>>
-> >>> - AFAICS it doesn't consider runtime hostname changes. Is it important
-> >>>    to keep track of it? Would changing it mid-auth steps break it
-> >>>    somehow?
-> > I think that's okay. AFAIK, that's only used for
-> > debugging/troubleshooting purposes. So it doesn't need to be a 100%
-> > accurate.
->
-> That's not true, the workstation name is used for access checks.
->
-> [MS-ADA3] 2.353 Attribute userWorkstations
-> https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada3/ec941bac-bc77-48f3-a1cf-79d773a91b6b
->
-I see.
-So ideally we should be setting the FQDN of the client here. I don't
-know if there's a way to get the FQDN from within the kernel.
-I'll just set the utsname()->nodename for now. If someone has better
-ideas, feel free to chime in.
-
-> >>>
-> >>> - I didn't understand the purpose of CIFS_DEFAULT_WORKSTATION_NAME. Why
-> >>>    not simply use utsname()->nodename? Or even init_utsname()->nodename, which
-> >>>    is supposed to be always valid.
-> > I initially did not have the utsname changes. That idea was an afterthought.
-> > Sure. I'll update the patch to fix this.
-> >
-> >>>
-> >>> - Ditto for CIFS_MAX_WORKSTATION_LEN. utsname()->nodename has at most 65
-> >>>    bytes (__NEW_UTS_LEN + 1) anyway. Perhaps using MAXHOSTNAMELEN from
-> >>>    <asm/param.h> would be a more generic approach.
-> >>>    (btw this is because nodename is the unqualified hostname, sans-domain)
-> > Noted.
-> >
-> >>>
-> >>> - Instead of setting workstation_name to "nodename:release", why not
-> >>>    implement the VERSION structure (MS-NLMP 2.2.2.10)? Then use
-> >>>    LINUX_VERSION_* from <linux/version.h> or parse utsname()->release.
-> > That's a good idea. Let me explore that too.
->
-> No, it's not this is for windows version numbers.
-> https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/a211d894-21bc-4b8b-86ba-b83d0c167b00#Appendix_A_32
->
-> If you want to encode something you can use
-> 2.2.2.2 Single_Host_Data
->
-> metze
-
-Thanks for the tip. I'll explore this option for a future fix.
-
--- 
-Regards,
-Shyam
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
