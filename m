@@ -2,61 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF40447AF5
-	for <lists+linux-cifs@lfdr.de>; Mon,  8 Nov 2021 08:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13A644975B
+	for <lists+linux-cifs@lfdr.de>; Mon,  8 Nov 2021 16:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237800AbhKHHaM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 8 Nov 2021 02:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S231368AbhKHPE0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 8 Nov 2021 10:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237482AbhKHHaJ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Nov 2021 02:30:09 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57473C061227
-        for <linux-cifs@vger.kernel.org>; Sun,  7 Nov 2021 23:27:23 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x15so27360291edv.1
-        for <linux-cifs@vger.kernel.org>; Sun, 07 Nov 2021 23:27:23 -0800 (PST)
+        with ESMTP id S237575AbhKHPEZ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 8 Nov 2021 10:04:25 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB382C061570
+        for <linux-cifs@vger.kernel.org>; Mon,  8 Nov 2021 07:01:40 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j10so11357133lfu.4
+        for <linux-cifs@vger.kernel.org>; Mon, 08 Nov 2021 07:01:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
-         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
-         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
-         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
-         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
-         BcYQ==
+        bh=zJP7+1ZXDXp11HWINuoAGyZ6jOIrf7ew3LN0AMlhLAQ=;
+        b=ctU6XFghhdj9dpLqfcLxjjy4YfuujVmuM5Qbl8B61NoPs/y2n/0+k/iGt0oiQPeYZm
+         I4BrsxldA86bLzeMKk4hxDNQcAbS4wB6Au3MOnpGlHXAJh0AC3gjFT3Zm720vovgQU1w
+         Q+HQbvp2OjyFs6VXITsKQKaC44DJBCZATnagRw+zOZ6WRs/RUeDC1oXxiM8ioE8gYoZ6
+         TG0onsnVPZvB8LG0O61unC6TzuLnmbT0K2qV5y6NWiyAAxwe9fLTQOizsSfFEBq3uGNK
+         /bLEVYDyfSqhLiNGZOlomUVVvnhcL0Wr2qGX9yvLs/MLxTmjIOOnH4TxBpBurRNaHcMG
+         kAEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=aumdomqkWNSoBQLnddrVN7rejZkcXjbOGx5tSJu+eu0lmnQrk7ZP2EunmzNyPMMesb
-         eTyzpTITt1rvMIA137ae2c9jX+XREiEQvwpoFqMF+XQ6hq8rIRaD+HVV02+C4BsgDpao
-         Q9BMVtBun4/ECKGlP+TwcraWDRLSUGApMUNVfv4NtluznRhkNGTo0Vs9ZCDPyvTN0tpu
-         Ka650K+TDeE5+rl36PUaNNL5JTsDZYm9SS+7o2RwbH6u0U2QTWpLF7UaLihkKB6DWqTK
-         1IlQ5mBGd9yiKDbUm059cGyhZ3JrW7T6lWXXJl3TVCWMlTNjqSX8Ik5lRuB1i0b/YZug
-         jtwQ==
-X-Gm-Message-State: AOAM532PJSXm7++XJXb+ixAyfBdUwU2SyEAZ8YeMvBhwLiSdwET2SIl1
-        /yM8L+emXhbSe09ejiJOr2IqvUzbMokGsC3daTM=
-X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
-X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
- Sun, 07 Nov 2021 23:27:21 -0800 (PST)
+        bh=zJP7+1ZXDXp11HWINuoAGyZ6jOIrf7ew3LN0AMlhLAQ=;
+        b=Pr3cET2qOmekhIa2Pe7E0UutYHvFiJiYuHVT1TB7RDlr0cRLQGL3A022CTCEQJZ88E
+         6pqB9ctpzesSTT+NsyT+dDO8hR7Z9MXPqFSfW2bD4A60zIhVcocWnWjRBNzr9vD+W4Cy
+         YwmIFgKoq9D8DVI/2ZA1xsavw97WlR8zKzWo8MK07Nu7BkPJ1Vg1ZtoKhSm7H6NRp7Uh
+         4WWWG0FNRvOMdnl8f7+jkWw+75qEmZVes5RGWuJ4Gm8qHHZDstQm3N6+WZJZyuVdXmtL
+         A6g9Dm7E10uo6GsHs2zVyXfDrBh5YQSy4s9EE0ZmRdn5F7YwEb8eI3Iy24xjW/CKBALQ
+         uQGQ==
+X-Gm-Message-State: AOAM530N1d0E0va+0AuXimFJYtFG5tvXn+27uf/UDiZSFqJ5kAC87kSi
+        97IfsNnvTVAcaS7yn7aOSyAYW6dS90abs5AM+lo=
+X-Google-Smtp-Source: ABdhPJydCgKj7SOQEqSEVbYva82OIyWdAqUWHHFk6so9aV/7eM5zUxFtgiC0I6W9J+7k3ZVTuv+hg96hZSXVUWNEq2A=
+X-Received: by 2002:a05:6512:314b:: with SMTP id s11mr57652lfi.543.1636383698763;
+ Mon, 08 Nov 2021 07:01:38 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
-Reply-To: mariaschaefler@gmx.com
-From:   Maria Schaefler <ziskoraa@gmail.com>
-Date:   Mon, 8 Nov 2021 07:27:21 +0000
-Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
-Subject: MY HEART CHOOSE YOU.
+Received: by 2002:a05:6520:4250:b0:14d:4b9c:d58e with HTTP; Mon, 8 Nov 2021
+ 07:01:38 -0800 (PST)
+Reply-To: edwardpoulin014@gmail.com
+From:   Edward Poulin <gadjenour@gmail.com>
+Date:   Mon, 8 Nov 2021 16:01:38 +0100
+Message-ID: <CAPDjPgc+biKZvf3wp7QXT47QiG-8gUWoJOToQaq2=GEd0qsO=A@mail.gmail.com>
+Subject: Greetings to you,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Given my current state of health, I have decided to donate what I
-inherited from my late husband to you to help the poor and needy. I am
-Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
-cancer about 2 years ago and I have few months to live according to
-medical experts. Email me for my directives
+Hello i sent you mail write me back???
