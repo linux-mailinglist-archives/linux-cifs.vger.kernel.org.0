@@ -2,70 +2,141 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D94D644CAE8
-	for <lists+linux-cifs@lfdr.de>; Wed, 10 Nov 2021 21:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651E544CAF3
+	for <lists+linux-cifs@lfdr.de>; Wed, 10 Nov 2021 22:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbhKJVCV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 10 Nov 2021 16:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbhKJVCV (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 10 Nov 2021 16:02:21 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0E8C061767
-        for <linux-cifs@vger.kernel.org>; Wed, 10 Nov 2021 12:59:32 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id bi37so4094347lfb.5
-        for <linux-cifs@vger.kernel.org>; Wed, 10 Nov 2021 12:59:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=do0Xbn6HilLuW8HOVUEAMlULKqOM9wL8+/0bws2l460=;
-        b=efkl6UQPm61k/Vfq8y5kTaap2nzyDinIqB/CA1rcGzRLQOp1fdwcwPlyUYvOXGComF
-         ElwqT71YQ5KzYOEVsLQqjeWdCe3QGthl6buadOQighKlKDZoyy2gU9Fcvl7O6qyn6g/n
-         dJ6yHzrZqgbaz7chlnn0fnSngIA+/AOwEWyrYaZchjv4WNXj3QjrqlODj/e7HySq1vr+
-         yHjA/nDEfcaIlHDLRjeahwOk10FE1Dnk7Dxwacd33hdcRBSAl5wvzP2uawdpzGRIFHuh
-         4j+5YOlPfYHJF8TCBznJ04Fm7UUCTqZqDWM3mXZYRMmYtCJFhGuJZ3GuYCc6qJBxPE38
-         M3qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=do0Xbn6HilLuW8HOVUEAMlULKqOM9wL8+/0bws2l460=;
-        b=qnrrxXuptQKGiWQrISNmVRUM7I2MXG7bemgo1eEzKtV/e7+pV+gr6ip/iE8vG7kICP
-         60NRBTFputJD9JyrJazKL9fNg3BlZH7WRAoWr96uKjTwj/UQtZ4J9d8H+rqV+4LNmMRb
-         NoO5Nhep9vdGJzKk+ddq+fjT7lzYjQpCZx5rfkELTaves/1wBrNc1Jr/XBn4hyjxkqlA
-         7LKtCslUvx4YYk1L43wHkrE4JOkSVh6gsmWJbjssaxlJhRBeqx5Lj5vE9RumPawH7LNJ
-         SBdJnnku2qmnpdd9vYHQTXuNKlVqnMQYWQu4eWGY7oL1qzDN+Mcz7JwrIuikXn/UktON
-         1ODQ==
-X-Gm-Message-State: AOAM530xf2bL5REc2juQxJ6B/ldA/txHHaWf5O0gCKsotK7ymrHXdomA
-        QooIKYkGeYPI7lfu5HBjU8hYUVpnpX54EEdbmQw=
-X-Google-Smtp-Source: ABdhPJyZjswv+Kxh/xjEYFtGTx4AFnwe3kla9er2n797iV/IjijZBYEcMaSE8hBrTUHjkb0zp8TIQSS7PgAfshRCnSI=
-X-Received: by 2002:a05:6512:1289:: with SMTP id u9mr1906175lfs.226.1636577970950;
- Wed, 10 Nov 2021 12:59:30 -0800 (PST)
+        id S233245AbhKJVKz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 10 Nov 2021 16:10:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50370 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233176AbhKJVKz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 10 Nov 2021 16:10:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636578486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RL/EowzczUDf0c++gAzZ8s42VZcgm4/UY4al6ue8qeQ=;
+        b=cOgaKjfeyq31Q9ixjam8cuxrIWrFzfUovW5MNKfqHosBW0Q2yG+jj3BUfpiXHQAUhJY9lk
+        OUpUlF79TTlEwqIjnQkkiiAbgbyOLIIl94j8Y5HgYYifhbLYzOVhF3WtZD8oVUf/MlZQoH
+        MojBkdA5qX95j0tkfD1rR1kti50XG7E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-349-E0UUaYW9NRKIqZJHYJZzTw-1; Wed, 10 Nov 2021 16:08:03 -0500
+X-MC-Unique: E0UUaYW9NRKIqZJHYJZzTw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3FE9418A0728;
+        Wed, 10 Nov 2021 21:08:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F3DB360240;
+        Wed, 10 Nov 2021 21:07:56 +0000 (UTC)
+Subject: [PATCH v5 0/4] netfs, 9p, afs, ceph: Support folios,
+ at least partially
+From:   David Howells <dhowells@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-afs@lists.infradead.org, Jeff Layton <jlayton@kernel.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-cachefs@redhat.com,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        kafs-testing@auristor.com, v9fs-developer@lists.sourceforge.net,
+        dhowells@redhat.com, Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        devel@lists.orangefs.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 10 Nov 2021 21:07:56 +0000
+Message-ID: <163657847613.834781.7923681076643317435.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Received: by 2002:a05:6520:811:b0:14c:d09a:22 with HTTP; Wed, 10 Nov 2021
- 12:59:30 -0800 (PST)
-Reply-To: justinseydou@gmail.com
-From:   Justin Seydou <thierryhonore85@gmail.com>
-Date:   Wed, 10 Nov 2021 21:59:30 +0100
-Message-ID: <CAOsQ9s1bF+v5HZy--OYZXZxx-V2jYeK05Zy=FK=DqV7Cx=GdHw@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear friend,
 
-With much sincerity of heart I write to inform you about a business
-proposal I have which I would like to handle with you.
+Here's a set of patches to convert netfs, 9p and afs to use folios and to
+provide sufficient conversion for ceph that it can continue to use the
+netfs library.  Jeff Layton is working on fully converting ceph.
 
-Kindly indicate your interest so as to enable
-me give you more details of the proposal.
+This has been rebased on to the 9p merge in Linus's tree[5] so that it has
+access to both the 9p conversion to fscache and folios.
 
-Waiting for your response.
+Changes
+=======
+ver #5:
+ - Got rid of the folio_endio bits again as Willy changed his mind and
+   would rather I inlined the code directly instead.
 
-Yours faithfully,
+ver #4:
+ - Detached and sent the afs symlink split patch separately.
+ - Handed the 9p netfslibisation patch off to Dominique Martinet.
+ - Added a patch to foliate page_endio().
+ - Fixed a bug in afs_redirty_page() whereby it didn't set the next page
+   index in the loop and returned too early.
+ - Simplified a check in v9fs_vfs_write_folio_locked()[4].
+ - Undid a change to afs_symlink_readpage()[4].
+ - Used offset_in_folio() in afs_write_end()[4].
+ - Rebased on 9p-folio merge upstream[5].
 
-Mr.Justin Seydou.
+ver #3:
+ - Rebased on upstream as folios have been pulled.
+ - Imported a patch to convert 9p to netfslib from my
+   fscache-remove-old-api branch[3].
+ - Foliated netfslib.
+
+ver #2:
+ - Reorder the patches to put both non-folio afs patches to the front.
+ - Use page_offset() rather than manual calculation[1].
+ - Fix folio_inode() to directly access the inode[2].
+
+David
+
+Link: https://lore.kernel.org/r/YST/0e92OdSH0zjg@casper.infradead.org/ [1]
+Link: https://lore.kernel.org/r/YST8OcVNy02Rivbm@casper.infradead.org/ [2]
+Link: https://lore.kernel.org/r/163551653404.1877519.12363794970541005441.stgit@warthog.procyon.org.uk/ [3]
+Link: https://lore.kernel.org/r/YYKa3bfQZxK5/wDN@casper.infradead.org/ [4]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f89ce84bc33330607a782e47a8b19406ed109b15 [5]
+Link: https://lore.kernel.org/r/2408234.1628687271@warthog.procyon.org.uk/ # v0
+Link: https://lore.kernel.org/r/162981147473.1901565.1455657509200944265.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163005740700.2472992.12365214290752300378.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/163584174921.4023316.8927114426959755223.stgit@warthog.procyon.org.uk>/ # v3
+Link: https://lore.kernel.org/r/163649323416.309189.4637503793406396694.stgit@warthog.procyon.org.uk/ # v4
+---
+David Howells (4):
+      folio: Add a function to change the private data attached to a folio
+      folio: Add a function to get the host inode for a folio
+      netfs, 9p, afs, ceph: Use folios
+      afs: Use folios in directory handling
+
+
+ fs/9p/vfs_addr.c           |  83 +++++----
+ fs/9p/vfs_file.c           |  20 +--
+ fs/afs/dir.c               | 229 ++++++++++--------------
+ fs/afs/dir_edit.c          | 154 ++++++++--------
+ fs/afs/file.c              |  70 ++++----
+ fs/afs/internal.h          |  46 ++---
+ fs/afs/write.c             | 347 ++++++++++++++++++-------------------
+ fs/ceph/addr.c             |  80 +++++----
+ fs/netfs/read_helper.c     | 165 +++++++++---------
+ include/linux/netfs.h      |  12 +-
+ include/linux/pagemap.h    |  14 ++
+ include/trace/events/afs.h |  21 +--
+ mm/page-writeback.c        |   2 +-
+ 13 files changed, 617 insertions(+), 626 deletions(-)
+
+
+
+Tested-by: Jeff Layton <jlayton@kernel.org>
+Tested-by: Dominique Martinet <asmadeus@codewreck.org>
+Tested-by: kafs-testing@auristor.com
+
