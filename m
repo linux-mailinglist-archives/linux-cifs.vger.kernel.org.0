@@ -2,182 +2,86 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B3644D984
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Nov 2021 16:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD92444D9A7
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Nov 2021 16:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbhKKPxD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 11 Nov 2021 10:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S233987AbhKKQAA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 11 Nov 2021 11:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbhKKPwx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 11 Nov 2021 10:52:53 -0500
-X-Greylist: delayed 254 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 Nov 2021 07:50:03 PST
-Received: from sequoia-grove.ad.secure-endpoints.com (sequoia-grove.secure-endpoints.com [IPv6:2001:470:1f07:f77:70f5:c082:a96a:5685])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A381C06120D
-        for <linux-cifs@vger.kernel.org>; Thu, 11 Nov 2021 07:50:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-        d=auristor.com; s=MDaemon; r=y; t=1636645545; x=1637250345;
-        i=jaltman@auristor.com; q=dns/txt; h=Message-ID:Date:
-        MIME-Version:User-Agent:Subject:Content-Language:To:Cc:
-        References:From:Organization:In-Reply-To:Content-Type; bh=o43ddd
-        RqvcOKv8dV2+541CLjyFn2jjeaDK5ooAtjc4g=; b=KVXX/LkE2EixlW4UO4v94+
-        ycYpuPwZHSbTGlFqdmV1MSTo3o8Bd19Fhf3XmGjpOyP7b9jgiCEqrOiSgwZqPhZq
-        pLA2CSoF+3GYlFXGxK2iOkMyOpe4Mr9CDVbSBNUA1rK13eSC/9CdQ+G9olb9Godd
-        r05WIVCJFHemKppsJ9B0A=
-X-MDAV-Result: clean
-X-MDAV-Processed: sequoia-grove.ad.secure-endpoints.com, Thu, 11 Nov 2021 10:45:45 -0500
-Received: from [IPV6:2603:7000:73d:4f22:489a:3cea:a047:72cb] by auristor.com (IPv6:2001:470:1f07:f77:28d9:68fb:855d:c2a5) (MDaemon PRO v21.5.0) 
-        with ESMTPSA id md5001003028602.msg; Thu, 11 Nov 2021 10:45:45 -0500
-X-Spam-Processed: sequoia-grove.ad.secure-endpoints.com, Thu, 11 Nov 2021 10:45:45 -0500
-        (not processed: message from trusted or authenticated source)
-X-MDRemoteIP: 2603:7000:73d:4f22:489a:3cea:a047:72cb
-X-MDHelo: [IPV6:2603:7000:73d:4f22:489a:3cea:a047:72cb]
-X-MDArrival-Date: Thu, 11 Nov 2021 10:45:45 -0500
-X-MDOrigin-Country: US, NA
-X-Authenticated-Sender: jaltman@auristor.com
-X-Return-Path: prvs=19492496b8=jaltman@auristor.com
-X-Envelope-From: jaltman@auristor.com
-X-MDaemon-Deliver-To: linux-cifs@vger.kernel.org
-Message-ID: <2e766687-23b3-7983-7b03-cb28f49ad41f@auristor.com>
-Date:   Thu, 11 Nov 2021 10:45:37 -0500
+        with ESMTP id S234026AbhKKP77 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 11 Nov 2021 10:59:59 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026B9C061767
+        for <linux-cifs@vger.kernel.org>; Thu, 11 Nov 2021 07:57:10 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id f7-20020a1c1f07000000b0032ee11917ceso4768852wmf.0
+        for <linux-cifs@vger.kernel.org>; Thu, 11 Nov 2021 07:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ePYZWHXANTLAfCGNIrDqR/tKQ8RPUIxsEL1GS7U8994=;
+        b=CI5U/ClEkgmaXPjph61/8xm3ZsFA34wsTVrjkMV+pJgFJHX7zNYsLYvVwap+S3hcbr
+         AfxRJzHnZJre+l6xzwebJd6mJoY5LXEKSNbPUro4dY05zIkSmLQDzUUcuQhzsEFnHdIC
+         nvoV511dZjV4zU0ixkJPX7RdC8YdTo39sS32QIQmxmi65qooFe7K+NvoSdS2GgvBuOjD
+         q7wypv7ZrZUooQsUYaZc8r0uwYVF4OPdQgNxAie5UT3bHIRS9OOwoUpgNd+RP8gYuRO5
+         OwAlfF28Wua+117x3fm8grsQhiOP/BB/IJis5gkd0waS+9Ie/w9X3pCTAFabC0IXHUyq
+         hJPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ePYZWHXANTLAfCGNIrDqR/tKQ8RPUIxsEL1GS7U8994=;
+        b=z/pIH1mDopQNbWfMEXDvreEVNckdT0kQ6W4Bzz6wawKyzXs01B+aLz+7I7tSxl0Vos
+         ts2hjlgRDFl4jz7pdK9GK2gplrSPiONOO64NmINlsdoT/Mm5oR4Lze42ag5Y7mUtk4nS
+         fQ/oAiDpRcUlNj1oPq7uBclxuVCG/eOa3yLNQlhRKdJLO1yubdCquFTg9nMwIlceLYHV
+         t3+W84QPozws1xAjpPrnkDW8vF/qyrdGKGjmXBrhd5z8OvV0Ge+wcbIfwhK21IuL88oN
+         MvlN25ffM0Wgit7jmNKOwJIjK/PhM8UqKfvqcyCqjrq7jE8XiRvKz3nr1xrJR7y3hGF2
+         BpuQ==
+X-Gm-Message-State: AOAM530ge4Onp/Jkyt1Cyg5Vz1g88cH3o0YFjHh9PO9iDGKDkedsba54
+        ZGFe+5og7GnDpLPrBysqnwmIYL0EYQ34as0dBN8=
+X-Google-Smtp-Source: ABdhPJyS5fbJQwxu9potWuTth7je0Hcmp4zS6OmDf4tEaA98C+VByls44MfAUfQCa+IcC55zcWbCzLdWg9NutIIJYpg=
+X-Received: by 2002:a05:600c:253:: with SMTP id 19mr26469668wmj.179.1636646228257;
+ Thu, 11 Nov 2021 07:57:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [kafs-testing] [PATCH v5 4/4] afs: Use folios in directory
- handling
-Content-Language: en-US
-To:     "David Howells (dhowells@redhat.com)" <dhowells@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kafs-testing@auristor.com, Jeff Layton <jlayton@kernel.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-cachefs@redhat.com,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        linux-fsdevel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        devel@lists.orangefs.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <163657847613.834781.7923681076643317435.stgit@warthog.procyon.org.uk>
- <MDAEMON-F202111101609.AA0938215md5001000000902@sequoia-grove.ad.secure-endpoints.com>
-From:   Jeffrey E Altman <jaltman@auristor.com>
-Organization: AuriStor, Inc.
-In-Reply-To: <MDAEMON-F202111101609.AA0938215md5001000000902@sequoia-grove.ad.secure-endpoints.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms080703040809060001010207"
-X-MDCFSigsAdded: auristor.com
+Sender: rev.benaldjoseph@gmail.com
+Received: by 2002:adf:ebc4:0:0:0:0:0 with HTTP; Thu, 11 Nov 2021 07:57:07
+ -0800 (PST)
+From:   Anderson Thereza <anderson.thereza24@gmail.com>
+Date:   Thu, 11 Nov 2021 07:57:07 -0800
+X-Google-Sender-Auth: xLpfmkep_w13PiCmtLGNFATwt60
+Message-ID: <CALZVc+Tpzk-GqQy6W5-ywkQJ5JtHuW-Yh3W0+4YoVXDj+jL99Q@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This is a cryptographically signed message in MIME format.
+Greetings,
 
---------------ms080703040809060001010207
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night without knowing if I may be alive to see the next day. I am
+mrs.theresa anderson, a widow suffering from a long time illness. I
+have some funds I inherited from my late husband, the sum of
+($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
+that I have serious sickness which is a cancer problem. What disturbs
+me most is my stroke sickness. Having known my condition, I decided to
+donate this fund to a good person that will utilize it the way I am
+going to instruct herein. I need a very honest God.
 
-On 11/10/2021 4:09 PM, David Howells (dhowells@redhat.com) wrote:
-> Convert the AFS directory handling code to use folios.
->
-> With these changes, afs passes -g quick xfstests.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Tested-by: kafs-testing@auristor.com
-> cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: linux-afs@lists.infradead.org
-> cc: linux-cachefs@redhat.com
-> Link: https://lore.kernel.org/r/162877312172.3085614.992850861791211206.stgit@warthog.procyon.org.uk/
-> Link: https://lore.kernel.org/r/162981154845.1901565.2078707403143240098.stgit@warthog.procyon.org.uk/
-> Link: https://lore.kernel.org/r/163005746215.2472992.8321380998443828308.stgit@warthog.procyon.org.uk/ # v2
-> Link: https://lore.kernel.org/r/163584190457.4023316.10544419117563104940.stgit@warthog.procyon.org.uk/ # v3
-> Link: https://lore.kernel.org/r/CAH2r5mtECQA6K_OGgU=_G8qLY3G-6-jo1odVyF9EK+O2-EWLFg@mail.gmail.com/ # v3
-> Link: https://lore.kernel.org/r/163649330345.309189.11182522282723655658.stgit@warthog.procyon.org.uk/ # v4
-Patch v5
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your
+reply.
 
-Tested-by: kafs-testing@auristor.com
-
-
---------------ms080703040809060001010207
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCC
-DGswggXSMIIEuqADAgECAhBAAW0B1qVVQ32wvx2EXYU6MA0GCSqGSIb3DQEBCwUAMDoxCzAJ
-BgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQgQ0EgQTEy
-MB4XDTE5MDkwNTE0MzE0N1oXDTIyMTEwMTE0MzE0N1owcDEvMC0GCgmSJomT8ixkAQETH0Ew
-MTQxMEMwMDAwMDE2RDAxRDZBNTQwMDAwMDQ0NDcxGTAXBgNVBAMTEEplZmZyZXkgRSBBbHRt
-YW4xFTATBgNVBAoTDEF1cmlTdG9yIEluYzELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEB
-AQUAA4IBDwAwggEKAoIBAQCY1TC9QeWnUgEoJ81FcAVnhGn/AWuzvkYRUG5/ZyXDdaM212e8
-ybCklgSmZweqNdrfaaHXk9vwjpvpD4YWgb07nJ1QBwlvRV/VPAaDdneIygJJWBCzaMVLttKO
-0VimH/I/HUwFBQT2mrktucCEf2qogdi2P+p5nuhnhIUiyZ71Fo43gF6cuXIMV/1rBNIJDuwM
-Q3H8zi6GL0p4mZFZDDKtbYq2l8+MNxFvMrYcLaJqejQNQRBuZVfv0Fq9pOGwNLAk19baIw3U
-xdwx+bGpTtS63Py1/57MQ0W/ZXE/Ocnt1qoDLpJeZIuEBKgMcn5/iN9+Ro5zAuOBEKg34wBS
-8QCTAgMBAAGjggKcMIICmDAOBgNVHQ8BAf8EBAMCBPAwgYQGCCsGAQUFBwEBBHgwdjAwBggr
-BgEFBQcwAYYkaHR0cDovL2NvbW1lcmNpYWwub2NzcC5pZGVudHJ1c3QuY29tMEIGCCsGAQUF
-BzAChjZodHRwOi8vdmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NlcnRzL3RydXN0aWRjYWEx
-Mi5wN2MwHwYDVR0jBBgwFoAUpHPa72k1inXMoBl7CDL4a4nkQuwwCQYDVR0TBAIwADCCASsG
-A1UdIASCASIwggEeMIIBGgYLYIZIAYb5LwAGAgEwggEJMEoGCCsGAQUFBwIBFj5odHRwczov
-L3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRpZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRt
-bDCBugYIKwYBBQUHAgIwga0MgapUaGlzIFRydXN0SUQgQ2VydGlmaWNhdGUgaGFzIGJlZW4g
-aXNzdWVkIGluIGFjY29yZGFuY2Ugd2l0aCBJZGVuVHJ1c3QncyBUcnVzdElEIENlcnRpZmlj
-YXRlIFBvbGljeSBmb3VuZCBhdCBodHRwczovL3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRp
-ZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRtbDBFBgNVHR8EPjA8MDqgOKA2hjRodHRwOi8v
-dmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NybC90cnVzdGlkY2FhMTIuY3JsMB8GA1UdEQQY
-MBaBFGphbHRtYW5AYXVyaXN0b3IuY29tMB0GA1UdDgQWBBR7pHsvL4H5GdzNToI9e5BuzV19
-bzAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDQYJKoZIhvcNAQELBQADggEBAFlm
-JYk4Ff1v/n0foZkv661W4LCRtroBaVykOXetrDDOQNK2N6JdTa146uIZVgBeU+S/0DLvJBKY
-tkUHQ9ovjXJTsuCBmhIIw3YlHoFxbku0wHEpXMdFUHV3tUodFJJKF3MbC8j7dOMkag59/Mdz
-Sjszdvit0av9nTxWs/tRKKtSQQlxtH34TouIke2UgP/Nn901QLOrJYJmtjzVz8DW3IYVxfci
-SBHhbhJTdley5cuEzphELo5NR4gFjBNlxH7G57Hno9+EWILpx302FJMwTgodIBJbXLbPMHou
-xQbOL2anOTUMKO8oH0QdQHCtC7hpgoQa7UJYJxDBI+PRaQ/HObkwggaRMIIEeaADAgECAhEA
-+d5Wf8lNDHdw+WAbUtoVOzANBgkqhkiG9w0BAQsFADBKMQswCQYDVQQGEwJVUzESMBAGA1UE
-ChMJSWRlblRydXN0MScwJQYDVQQDEx5JZGVuVHJ1c3QgQ29tbWVyY2lhbCBSb290IENBIDEw
-HhcNMTUwMjE4MjIyNTE5WhcNMjMwMjE4MjIyNTE5WjA6MQswCQYDVQQGEwJVUzESMBAGA1UE
-ChMJSWRlblRydXN0MRcwFQYDVQQDEw5UcnVzdElEIENBIEExMjCCASIwDQYJKoZIhvcNAQEB
-BQADggEPADCCAQoCggEBANGRTTzPCic0kq5L6ZrUJWt5LE/n6tbPXPhGt2Egv7plJMoEpvVJ
-JDqGqDYymaAsd8Hn9ZMAuKUEFdlx5PgCkfu7jL5zgiMNnAFVD9PyrsuF+poqmlxhlQ06sFY2
-hbhQkVVQ00KCNgUzKcBUIvjv04w+fhNPkwGW5M7Ae5K5OGFGwOoRck9GG6MUVKvTNkBw2/vN
-MOd29VGVTtR0tjH5PS5yDXss48Yl1P4hDStO2L4wTsW2P37QGD27//XGN8K6amWB6F2XOgff
-/PmlQjQOORT95PmLkwwvma5nj0AS0CVp8kv0K2RHV7GonllKpFDMT0CkxMQKwoj+tWEWJTiD
-KSsCAwEAAaOCAoAwggJ8MIGJBggrBgEFBQcBAQR9MHswMAYIKwYBBQUHMAGGJGh0dHA6Ly9j
-b21tZXJjaWFsLm9jc3AuaWRlbnRydXN0LmNvbTBHBggrBgEFBQcwAoY7aHR0cDovL3ZhbGlk
-YXRpb24uaWRlbnRydXN0LmNvbS9yb290cy9jb21tZXJjaWFscm9vdGNhMS5wN2MwHwYDVR0j
-BBgwFoAU7UQZwNPwBovupHu+QucmVMiONnYwDwYDVR0TAQH/BAUwAwEB/zCCASAGA1UdIASC
-ARcwggETMIIBDwYEVR0gADCCAQUwggEBBggrBgEFBQcCAjCB9DBFFj5odHRwczovL3NlY3Vy
-ZS5pZGVudHJ1c3QuY29tL2NlcnRpZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRtbDADAgEB
-GoGqVGhpcyBUcnVzdElEIENlcnRpZmljYXRlIGhhcyBiZWVuIGlzc3VlZCBpbiBhY2NvcmRh
-bmNlIHdpdGggSWRlblRydXN0J3MgVHJ1c3RJRCBDZXJ0aWZpY2F0ZSBQb2xpY3kgZm91bmQg
-YXQgaHR0cHM6Ly9zZWN1cmUuaWRlbnRydXN0LmNvbS9jZXJ0aWZpY2F0ZXMvcG9saWN5L3Rz
-L2luZGV4Lmh0bWwwSgYDVR0fBEMwQTA/oD2gO4Y5aHR0cDovL3ZhbGlkYXRpb24uaWRlbnRy
-dXN0LmNvbS9jcmwvY29tbWVyY2lhbHJvb3RjYTEuY3JsMB0GA1UdJQQWMBQGCCsGAQUFBwMC
-BggrBgEFBQcDBDAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0OBBYEFKRz2u9pNYp1zKAZewgy+GuJ
-5ELsMA0GCSqGSIb3DQEBCwUAA4ICAQAN4YKu0vv062MZfg+xMSNUXYKvHwvZIk+6H1pUmivy
-DI4I6A3wWzxlr83ZJm0oGIF6PBsbgKJ/fhyyIzb+vAYFJmyI8I/0mGlc+nIQNuV2XY8cypPo
-VJKgpnzp/7cECXkX8R4NyPtEn8KecbNdGBdEaG4a7AkZ3ujlJofZqYdHxN29tZPdDlZ8fR36
-/mAFeCEq0wOtOOc0Eyhs29+9MIZYjyxaPoTS+l8xLcuYX3RWlirRyH6RPfeAi5kySOEhG1qu
-NHe06QIwpigjyFT6v/vRqoIBr7WpDOSt1VzXPVbSj1PcWBgkwyGKHlQUOuSbHbHcjOD8w8wH
-SDbL+L2he8hNN54doy1e1wJHKmnfb0uBAeISoxRbJnMMWvgAlH5FVrQWlgajeH/6NbYbBSRx
-ALuEOqEQepmJM6qz4oD2sxdq4GMN5adAdYEswkY/o0bRKyFXTD3mdqeRXce0jYQbWm7oapqS
-ZBccFvUgYOrB78tB6c1bxIgaQKRShtWR1zMM0JfqUfD9u8Fg7G5SVO0IG/GcxkSvZeRjhYcb
-TfqF2eAgprpyzLWmdr0mou3bv1Sq4OuBhmTQCnqxAXr4yVTRYHkp5lCvRgeJAme1OTVpVPth
-/O7HJ7VuEP9GOr6kCXCXmjB4P3UJ2oU0NqfoQdcSSSt9hliALnExTEjii20B2nSDojGCAxQw
-ggMQAgEBME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEXMBUGA1UEAxMO
-VHJ1c3RJRCBDQSBBMTICEEABbQHWpVVDfbC/HYRdhTowDQYJYIZIAWUDBAIBBQCgggGXMBgG
-CSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMTExMTE1NDUzN1ow
-LwYJKoZIhvcNAQkEMSIEIFDjS9DDAqUn5ZC3EyI5skB04tdvXxjkw3hUQZ+EJa+WMF0GCSsG
-AQQBgjcQBDFQME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEXMBUGA1UE
-AxMOVHJ1c3RJRCBDQSBBMTICEEABbQHWpVVDfbC/HYRdhTowXwYLKoZIhvcNAQkQAgsxUKBO
-MDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQg
-Q0EgQTEyAhBAAW0B1qVVQ32wvx2EXYU6MGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwIC
-AUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAUB5olgH9fLBH
-ob+ZhhYHSiuaKa0qYVWtajIr2fKdAfINeQei1OSxjaNYuUZ9Z/bphddvr+qY4ESqcA55B4Uy
-Pw7ulaYR0h8KHJK0/v7P6BESakf3tMv+vY6jr9LBJ9UQEpgdixlaLyze/fWx5OjtJCGQ2E3I
-x2C0K0CXn0oPiB/tsNdbnus6iXu+iOpCaXk0PTblsLbr98VE5VXR2S9XAgUcv3OU8D0+Sbm0
-hTcr88zi3XPpm0ty8zcdd8X6swa6GGb8rxiK42v3M2k49uFBYbA0+KnQSRsPP5dLaFTbVHed
-XP/nqCIBtEmfBmh5R69o/9XA0zpKDHaEJkmCjmA6lgAAAAAAAA==
---------------ms080703040809060001010207--
-
+May God Bless you,
+mrs.theresa anderson.
