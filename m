@@ -2,116 +2,78 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E450844ED19
-	for <lists+linux-cifs@lfdr.de>; Fri, 12 Nov 2021 20:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4705644F01C
+	for <lists+linux-cifs@lfdr.de>; Sat, 13 Nov 2021 00:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbhKLTQN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 12 Nov 2021 14:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S231998AbhKLX7s (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 12 Nov 2021 18:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbhKLTQM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 12 Nov 2021 14:16:12 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624E6C061766
-        for <linux-cifs@vger.kernel.org>; Fri, 12 Nov 2021 11:13:21 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m27so343073lfj.12
-        for <linux-cifs@vger.kernel.org>; Fri, 12 Nov 2021 11:13:21 -0800 (PST)
+        with ESMTP id S231320AbhKLX7s (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 12 Nov 2021 18:59:48 -0500
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A0C061767
+        for <linux-cifs@vger.kernel.org>; Fri, 12 Nov 2021 15:56:56 -0800 (PST)
+Received: by mail-oo1-xc44.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so3435295ood.9
+        for <linux-cifs@vger.kernel.org>; Fri, 12 Nov 2021 15:56:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=2ME2XxSedMtGMH3gWRIcGR0XC5Xt7Rmzvk2hCvjwdz8=;
-        b=pomQorS5cfLvCOLmjPYTBuUMUC1GjDR9S+gf9l6pAXQeVwTgsuktOQjKwesoDRGxSJ
-         RmzVb3TMHBhQWPzCfPMjrPT1I19OCnjaR1FU+bulK6vmy7tA4iEEuSN7ZV+DSpivKqyz
-         rwTq+nFxpm4fkDnr4f9wg5Ki6V/aZtB7GhC/0sLTFPv49ypJ0DEGdbtIcNEjuxG+eLs2
-         vmUkZKj0CAsd2wKutzfTRxhzrsxXxogeaZj1FfsRi0GCFCq9FqyG1NvneJLsANLMqZ5n
-         rVvLOa7g0zbCGCaHAQlTLh0184wh+stphHB1eGgtlarWc+S0EoFznUPy5f4ZgueC2lR6
-         3+Rg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1Bbi1dTodYSxYFvQyegx5oXbco/1YM4dBbouw8AdF18=;
+        b=k1Y8XJGMd/OGVp2wbEJMNXQpah+IDXwuI5FrFYaUDU+0mqSpCdjUFzf5wzIB2g5q9s
+         L28KMw76e+gFQiDu5Q5R1a5fAc8ojQl9ovg+MfuANxd+sLzWriLTMaNlDp3eTSZ1dzZq
+         X3LrnDQx0M8cAmjnRZCE2VJdEQCW6R7pGTwnhhw0ZqtMeMwo0NAI3YzMFQpxwMdctevJ
+         Ty6wrhjtifOfsD7FDUVDV9nnzhsvTXPoFheScI9dNNr/N3psrrIiE5B5wYfKJY4Onkul
+         Q3uk6QIc3ADdvtQTANo4+kyv3hpGbTl4XNrMqRiqwo7IJbtkQjcjO/5XJ+HnD53/d2ns
+         MbzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=2ME2XxSedMtGMH3gWRIcGR0XC5Xt7Rmzvk2hCvjwdz8=;
-        b=cGP+AgM7ViIM0SZZrxkMJWPjh8GqLNJtnWoefIghA1ea7x55A64qE0CBxNfdWZ00tR
-         yOp4XXng9ot050tXzm0p6zkvbRD4qB9o2b1F9W1iORj7Kk/xUU4M96PkocRtvJMPtdLr
-         TPpkueFDUWol2/5pDRdZy6Gqf907J7EkWzDxahGa/0dygFeGq57t2vn/owk++Vw147Uh
-         bpc+yR0pnG/iDAbLf+VNUWHT231aZCxCOde3PAg6kYpYxCoqxucVmzzekgG8ZCR1stbc
-         YUr88+1/UU/EzKk9/O0YwA1Cl5WSaRMEbKXTN5TKH8SQjQsv+rhZknU9HMgL1iNJmmhB
-         Qy8g==
-X-Gm-Message-State: AOAM531ui+ejDYxUI4yoknh+PXQfVwm1HnVKMfkO4qYCMCUVgdAz95C/
-        3qfeQ0Ea0OVlEiLvjX+PKLF6ViNeJeU2VQi5EmNmfPsj
-X-Google-Smtp-Source: ABdhPJyvQAZjSvt6cHYzTI7MOfHi+dyrO5FwoAXd2K289vDpQgoUHwWnNY7t1OhWHgE+FpZGskUHjbAi3zg8t0KgNtU=
-X-Received: by 2002:a05:6512:3991:: with SMTP id j17mr15841937lfu.545.1636744399529;
- Fri, 12 Nov 2021 11:13:19 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1Bbi1dTodYSxYFvQyegx5oXbco/1YM4dBbouw8AdF18=;
+        b=ZT6PtBPt/rPQbEUdt1nRSuqM25QCONOMpDhCcBi9tQOK0lQ00Ql9QpkWdzMEj4FBRq
+         5vYu277NXfOUYnoRpPAcgYnpH68w3GC7iLF5cU8MXrcwLQRjLEXMkK8ydosO9yUf9B/b
+         PMQJZbmWyJ6ByuCbMPCNHKBo3aqmP8e4UdDhDNesrZDPvyEK/dwDY3AJzA1qIJhdZZvg
+         j6mKhwn3P4rcIjKEk/ouXRdYOdAbAEs6N6tSUpyZKkoitegTGi2pqePaD59v4wN1/w4H
+         RBgCtRhD4Kwu3FeFkwg7NIBLbY4X0q9ZXaoee/6ErpRfxXmn8C/9H4xt6HLiRUssTmr9
+         QR8g==
+X-Gm-Message-State: AOAM531ruEbkMWmQFkFhyCUpfWRZlod05qPmi52bVVxyQaBjbIhxtYf5
+        JburGfvP2iXfleEb2I3+nXOaksmOhY8ntXHMA2s=
+X-Google-Smtp-Source: ABdhPJzweIbM/0UQXzsghkmxZ2EXnzLZlUCIrqGYObszoc7ctM4tjzCQulvjefwUrKEnlMXp9UoO6j0boxygBPEvo7w=
+X-Received: by 2002:a4a:5487:: with SMTP id t129mr10656804ooa.4.1636761416174;
+ Fri, 12 Nov 2021 15:56:56 -0800 (PST)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 12 Nov 2021 13:13:08 -0600
-Message-ID: <CAH2r5mvxEjaOjn7RFdi4uXR4kO-ts-8xVMg7+D5m60G0NR_cWg@mail.gmail.com>
-Subject: [PATCH] updated version of the get_fscache_super_cookie fix
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@cjr.nz>
-Content-Type: multipart/mixed; boundary="00000000000085c34305d09c40c0"
+Received: by 2002:a05:6839:639e:0:0:0:0 with HTTP; Fri, 12 Nov 2021 15:56:55
+ -0800 (PST)
+Reply-To: ahmadmustafa.7800@gmail.com
+From:   Ahmad Mustafa <delgadoangelo650@gmail.com>
+Date:   Sat, 13 Nov 2021 00:56:55 +0100
+Message-ID: <CAKOM8vp-2tK7CHP-1kixDbVa6TvU0b34m5SnrcPYQ1iTWBTfUA@mail.gmail.com>
+Subject: LOANS AND INVESTMENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---00000000000085c34305d09c40c0
-Content-Type: text/plain; charset="UTF-8"
+Dear Sir,
 
-Had a build issue when DFS was disabled in the build - fixed in attached.
+Aseel Islamic finance PJSC is private joint stock company that was
+established in 2006 and has built a leading market position for itself
+in the UAE's Islamic finance market which specializes in loan finance
+and investment activities in real estate, hospitality, industrial &
+sustainable technologies, strategic financial investments, specialized
+education, healthcare services, agriculture, manufacturing,
+mining,energy and additional environmentally sustainable projects.
 
+For further details,kindly indicate your interest.
 
+Best regards.
 
--- 
-Thanks,
-
-Steve
-
---00000000000085c34305d09c40c0
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smb3-do-not-setup-the-fscache_super_cookie-until-fsi.patch"
-Content-Disposition: attachment; 
-	filename="0001-smb3-do-not-setup-the-fscache_super_cookie-until-fsi.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kvwrcj8n0>
-X-Attachment-Id: f_kvwrcj8n0
-
-RnJvbSAwMjEwMjc0NGQzNjRjMWJjYTRhMGRhMTNjMmE3MjY1NjAzN2Y2NGViIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IFdlZCwgMTAgTm92IDIwMjEgMDM6MTU6MjkgLTA2MDAKU3ViamVjdDogW1BBVENIXSBz
-bWIzOiBkbyBub3Qgc2V0dXAgdGhlIGZzY2FjaGVfc3VwZXJfY29va2llIHVudGlsIGZzaW5mbwog
-aW5pdGlhbGl6ZWQKCldlIHdlcmUgY2FsbGluZyBjaWZzX2ZzY2FjaGVfZ2V0X3N1cGVyX2Nvb2tp
-ZSBhZnRlciB0Y29uIGJ1dCBiZWZvcmUKd2UgcXVlcmllZCB0aGUgaW5mbyAoUUZTX0luZm8pIHdl
-IG5lZWQgdG8gaW5pdGlhbGl6ZSB0aGUgY29va2llCnByb3Blcmx5LiAgQWxzbyBpbmNsdWRlcyBh
-biBhZGRpdGlvbmFsIGNoZWNrIHN1Z2dlc3RlZCBieSBQYXVsbwp0byBtYWtlIHN1cmUgd2UgZG9u
-J3QgaW5pdGlhbGl6ZSBzdXBlciBjb29raWUgdHdpY2UuCgpTdWdnZXN0ZWQtYnk6IERhdmlkIEhv
-d2VsbHMgPGRob3dlbGxzQHJlZGhhdC5jb20+ClJldmlld2VkLWJ5OiBQYXVsbyBBbGNhbnRhcmEg
-KFNVU0UpIDxwY0BjanIubno+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hA
-bWljcm9zb2Z0LmNvbT4KLS0tCiBmcy9jaWZzL2Nvbm5lY3QuYyB8IDggKysrKysrLS0KIGZzL2Np
-ZnMvZnNjYWNoZS5jIHwgOCArKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NpZnMvY29ubmVjdC5jIGIvZnMv
-Y2lmcy9jb25uZWN0LmMKaW5kZXggNWM1MDZmNmVjZDY1Li4wODQ2MDVmN2NlOTYgMTAwNjQ0Ci0t
-LSBhL2ZzL2NpZnMvY29ubmVjdC5jCisrKyBiL2ZzL2NpZnMvY29ubmVjdC5jCkBAIC0yMzUwLDgg
-KzIzNTAsNiBAQCBjaWZzX2dldF90Y29uKHN0cnVjdCBjaWZzX3NlcyAqc2VzLCBzdHJ1Y3Qgc21i
-M19mc19jb250ZXh0ICpjdHgpCiAJbGlzdF9hZGQoJnRjb24tPnRjb25fbGlzdCwgJnNlcy0+dGNv
-bl9saXN0KTsKIAlzcGluX3VubG9jaygmY2lmc190Y3Bfc2VzX2xvY2spOwogCi0JY2lmc19mc2Nh
-Y2hlX2dldF9zdXBlcl9jb29raWUodGNvbik7Ci0KIAlyZXR1cm4gdGNvbjsKIAogb3V0X2ZhaWw6
-CkBAIC0zMDAzLDYgKzMwMDEsMTIgQEAgc3RhdGljIGludCBtb3VudF9nZXRfY29ubnMoc3RydWN0
-IG1vdW50X2N0eCAqbW50X2N0eCkKIAkJCQljaWZzX2RiZyhWRlMsICJyZWFkIG9ubHkgbW91bnQg
-b2YgUlcgc2hhcmVcbiIpOwogCQkJLyogbm8gbmVlZCB0byBsb2cgYSBSVyBtb3VudCBvZiBhIHR5
-cGljYWwgUlcgc2hhcmUgKi8KIAkJfQorCQkvKgorCQkgKiBUaGUgY29va2llIGlzIGluaXRpYWxp
-emVkIGZyb20gdm9sdW1lIGluZm8gcmV0dXJuZWQgYWJvdmUuCisJCSAqIEluc2lkZSBjaWZzX2Zz
-Y2FjaGVfZ2V0X3N1cGVyX2Nvb2tpZSBpdCBjaGVja3MKKwkJICogdGhhdCB3ZSBkbyBub3QgZ2V0
-IHN1cGVyIGNvb2tpZSB0d2ljZS4KKwkJICovCisJCWNpZnNfZnNjYWNoZV9nZXRfc3VwZXJfY29v
-a2llKHRjb24pOwogCX0KIAogCS8qCmRpZmYgLS1naXQgYS9mcy9jaWZzL2ZzY2FjaGUuYyBiL2Zz
-L2NpZnMvZnNjYWNoZS5jCmluZGV4IDhlZWRkMjBjNDRhYi4uN2U0MDlhMzhhMmQ3IDEwMDY0NAot
-LS0gYS9mcy9jaWZzL2ZzY2FjaGUuYworKysgYi9mcy9jaWZzL2ZzY2FjaGUuYwpAQCAtODcsNiAr
-ODcsMTQgQEAgdm9pZCBjaWZzX2ZzY2FjaGVfZ2V0X3N1cGVyX2Nvb2tpZShzdHJ1Y3QgY2lmc190
-Y29uICp0Y29uKQogCWNoYXIgKnNoYXJlbmFtZTsKIAlzdHJ1Y3QgY2lmc19mc2NhY2hlX3N1cGVy
-X2F1eGRhdGEgYXV4ZGF0YTsKIAorCS8qCisJICogQ2hlY2sgaWYgY29va2llIHdhcyBhbHJlYWR5
-IGluaXRpYWxpemVkIHNvIGRvbid0IHJlaW5pdGlhbGl6ZSBpdC4KKwkgKiBJbiB0aGUgZnV0dXJl
-LCBhcyB3ZSBpbnRlZ3JhdGUgd2l0aCBuZXdlciBmc2NhY2hlIGZlYXR1cmVzLAorCSAqIHdlIG1h
-eSB3YW50IHRvIGluc3RlYWQgYWRkIGEgY2hlY2sgaWYgY29va2llIGhhcyBjaGFuZ2VkCisJICov
-CisJaWYgKHRjb24tPmZzY2FjaGUgPT0gTlVMTCkKKwkJcmV0dXJuOworCiAJc2hhcmVuYW1lID0g
-ZXh0cmFjdF9zaGFyZW5hbWUodGNvbi0+dHJlZU5hbWUpOwogCWlmIChJU19FUlIoc2hhcmVuYW1l
-KSkgewogCQljaWZzX2RiZyhGWUksICIlczogY291bGRuJ3QgZXh0cmFjdCBzaGFyZW5hbWVcbiIs
-IF9fZnVuY19fKTsKLS0gCjIuMzIuMAoK
---00000000000085c34305d09c40c0--
+Mr. Ibn Ahmad Mustafa
+International Business Coordinator
+Aseel Islamic Finance PJSC
+Al Mankhool, Dubai C2 Tower,
+Ground floor,P.O 94669 Dubai, UAE
+Abu Dhabi - United Arab Emirates
+Email : ahmadmustafa.7800@gmail.com
