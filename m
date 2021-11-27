@@ -2,70 +2,98 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E587745FDA8
-	for <lists+linux-cifs@lfdr.de>; Sat, 27 Nov 2021 10:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADF64601BA
+	for <lists+linux-cifs@lfdr.de>; Sat, 27 Nov 2021 22:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245327AbhK0Jnq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 27 Nov 2021 04:43:46 -0500
-Received: from [175.207.13.15] ([175.207.13.15]:33518 "EHLO
-        forestfire.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1350827AbhK0Jlq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 27 Nov 2021 04:41:46 -0500
-X-Greylist: delayed 70896 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 04:41:43 EST
-Received: from User (localhost [127.0.0.1])
-        by forestfire.localdomain (Postfix) with SMTP id D64A8DDA708;
-        Fri, 26 Nov 2021 18:38:09 +0900 (KST)
-Reply-To: <hihulwarence@gmail.com>
-From:   "Mrs.Barbara Sharon" <hihulwarence@gmail.com>
-Subject: US. Security Exchange & Commission 
-Date:   Fri, 26 Nov 2021 10:38:44 +0100
+        id S229723AbhK0Vsl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 27 Nov 2021 16:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236029AbhK0Vql (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 27 Nov 2021 16:46:41 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F218CC06173E;
+        Sat, 27 Nov 2021 13:43:25 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id z8so26217158ljz.9;
+        Sat, 27 Nov 2021 13:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=bml/NFEGd+kn2xT1YP9f+ZlUupFkhTxDiEEx32jkgxE=;
+        b=JOqkRW43e6TcCGAPFLnBkSQdIfssD9Azf6og3dR9yvmXAI3gVxvJEepM0UnPcx119s
+         riYuSjToPNg7lD+NTORkQvucIx3Mpnlky/1tOq19Dso2IHIIiWZkx3I/1liUE/XRuccm
+         JtyCvC1z7J78qLsgcDqiIXpTOTlDHU94Pf3EtmjN1suTMUeq+ovf1gAcsKqLbZ1wBKsQ
+         1Rpiqt4uOseKaWhdVRdkwoRHu8CXIvQk59W+w1w24S8lKUSytzgDGkQa3B4jvPh+FqNj
+         2NKcto9+cj1sQrmhSR+FfUxQusI+rs+HNyuh6qrN7YC2OBkiToOO3apWsvygNxXYRV0Z
+         6PVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=bml/NFEGd+kn2xT1YP9f+ZlUupFkhTxDiEEx32jkgxE=;
+        b=EiXjcq6hnfOS7922mRGC6H5GCa8OQPxRGi2pRq+XrFXsGu7m8EDtq+57HpRT2u2XPa
+         BdFuU/UwXy8xBon2SUvme8Sm95qhEriYpFfx25yxB9TFrFWErWEssKujZp6g8pBbsmtH
+         t5EO8FuMjJ/v5SUXRAxVPfDUMkhrEIQHqbHuLO7SIvvlYIAHYUTYTUbsiPsQNIiJvbET
+         48K+D9DR8weN51j9x7yAZWwIre/jbQhmtt6VAe+qNWBkHAgGMiFLheVVN09gPfYaRFxi
+         cMqE5L80oRozlEHS+K8Jvt24UDRuk1mG9hb3VPzsyjtyAamcG6Cag63Z7N28ftESKenM
+         5pBg==
+X-Gm-Message-State: AOAM533PxTw0PekzVmtj4rfv8NI5OwbAKeQaNt8G6kqQB4LlHJviZTje
+        haHxclqdT+J7Bn/JWGLVTrm59COp/0in3gV6oMmYsQVdSAI=
+X-Google-Smtp-Source: ABdhPJysnOc964BpO4TupD4dIS0Ool7Gb54XEmp+KMn4jhq00tT7dD+BK4WxxdgF1RtX0iVIVeV4tCSZyBSPMreER1I=
+X-Received: by 2002:a2e:7c16:: with SMTP id x22mr40218388ljc.460.1638049403985;
+ Sat, 27 Nov 2021 13:43:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20211126093809.D64A8DDA708@forestfire.localdomain>
-To:     unlisted-recipients:; (no To-header on input)
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 27 Nov 2021 15:43:13 -0600
+Message-ID: <CAH2r5muqy=YYFYkgZFenPSx0WexNmnp6GYL0qHP2hbyHA--Ckw@mail.gmail.com>
+Subject: [GIT PULL] ksmbd server fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Security Exchange and Commission
-200 Vesey Street, Suite 400.
-New York, NY 10281.
-Tel: +1(716-608-3814
-Emai:SEC.hihulwarence@gmail.com
+Please pull the following changes since commit
+136057256686de39cc3a07c2e39ef6bc43003ff6:
 
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-Attn: Sir,
+are available in the Git repository at:
 
-We are the US.Security Exchange and Commission pay centre point
-attachedwith  the Deutsche Bank branch in New York City hereby contact
-you today to inform you on  the transfer on transit with this bank
-(Bank of America ) in your favour.
+  git://git.samba.org/ksmbd.git tags/5.16-rc2-ksmbd-fixes
 
-Fund worth TEN MILLION, FIVE HUNDRED  THOUSAND US DOLLARS ONLY (US$10.
-500,000.00) You are requested to confirm the ownership so that we can
-proceed with the transaction to transmit your fund to your choice
-account.
+for you to fetch changes up to 178ca6f85aa3231094467691f5ea1ff2f398aa8d:
 
-We request you to send any form of Identification which will
-substantiate your claims. We have been Authorised by the Federal
-Government of Nigeria and the United Nations to wire the above funds
-into your account without any further delay or interception kindly get
-back to us as soon as possible to enable the paying bank to process
-the bank Draft on your behalf which was issued by the Federal
-Government of Nigeria.
+  ksmbd: fix memleak in get_file_stream_info() (2021-11-25 00:09:26 -0600)
 
-Thank you.
+----------------------------------------------------------------
+5 ksmbd server fixes, 4 for stable
+- memleak fix
+- fix for default data stream on fs that don't support xattr
+- error logging fix
+- session setup fix
+- minor doc cleanup
 
-Yours Faithfully
-Mrs.Barbara Sharon (P.A.)to,
-Mrs. Stephanie Avakian
-Director  US Security Exchange
-and Commission (SEC).
+Regression test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/96
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      ksmbd: Fix an error handling path in 'smb2_sess_setup()'
 
+Namjae Jeon (3):
+      ksmbd: downgrade addition info error msg to debug in smb2_get_info_sec()
+      ksmbd: contain default data stream even if xattr is empty
+      ksmbd: fix memleak in get_file_stream_info()
+
+Salvatore Bonaccorso (1):
+      docs: filesystem: cifs: ksmbd: Fix small layout issues
+
+ Documentation/filesystems/cifs/ksmbd.rst | 10 +++++-----
+ fs/ksmbd/smb2pdu.c                       | 30 +++++++++++++++++-------------
+
+-- 
+Thanks,
+
+Steve
