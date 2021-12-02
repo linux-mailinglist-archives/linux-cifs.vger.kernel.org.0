@@ -2,125 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05754465747
-	for <lists+linux-cifs@lfdr.de>; Wed,  1 Dec 2021 21:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F91466306
+	for <lists+linux-cifs@lfdr.de>; Thu,  2 Dec 2021 13:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353005AbhLAUpT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 1 Dec 2021 15:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S241895AbhLBMF4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 2 Dec 2021 07:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353033AbhLAUpD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Dec 2021 15:45:03 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA4C0613D7
-        for <linux-cifs@vger.kernel.org>; Wed,  1 Dec 2021 12:41:40 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q3so32161662wru.5
-        for <linux-cifs@vger.kernel.org>; Wed, 01 Dec 2021 12:41:40 -0800 (PST)
+        with ESMTP id S1357802AbhLBMFq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 2 Dec 2021 07:05:46 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA59C0613ED
+        for <linux-cifs@vger.kernel.org>; Thu,  2 Dec 2021 04:02:20 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id g14so115012245edb.8
+        for <linux-cifs@vger.kernel.org>; Thu, 02 Dec 2021 04:02:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l//lAquFJsJlyejqCexAu+Y+9jr6gTNi1DSeoz57KBw=;
-        b=HxBj9PVbjs0YS/rLsqKMCCF+fVLUi6O+F9aRSFhM1G+4HGKfgoDrWSzGdu2h5+K2Iu
-         dbBDOhvIwtT1N32vbAFUtL3I3TgZyCLW4jNjX3t3T2KghL1IwmRC/I2haRSMcQxbpJTK
-         BAfLN78s8KbjSJxeju+g2TOOOYq3yRrsJ9jNaUCYO3tCZ8b2lMGpUmXBS9HZZenT4ch0
-         oRi9PaH90wCb3tKmNa46t+0H7TuYB+ZW2vEBXv5TZZ/pS69t8ZEnUdjSG6UTwGZJdaWz
-         CgDOSvsKgQH48WkRV7yFq+N83/Yw3cfFPy5QSz4wH1OrGQjBH6JkuPrL0OfMixSeqHKu
-         HQ1Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=zGfYDDkDk6d5v1nLgtOCNQOtLJ9EWXHvGVmOeZ9aU+M=;
+        b=TzZnbOjsdicYXf+nmR0llE/d5LoxU4sfaA0XFVp6uR68dxCcq721l1dIjsa64wwBQI
+         HDSi/MKhdXEywMgNFPVREQuT3FxugsCec3bQWzDa7/hs9GDfU70y8qIMcJNpGmIunyZ8
+         ppKpwV+5Y5E5VaDcm6qI6mNktZ7ojnxKN92zoAYHRDoip8w4sNm0XcOgIWSmT6vhcnFi
+         Oak4BcL8YHpK4H0mUZ5/BBI6R/w46RzcLvrSyylPGEOxYS1rRBxigaAmgBnAD9VIRheq
+         4cSeiZz5arffedULATxN/xb//QvER2Vxb6AEXa/VDg2uLW/Boa54B+M3Mp2YKTkvTFiD
+         e7SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l//lAquFJsJlyejqCexAu+Y+9jr6gTNi1DSeoz57KBw=;
-        b=PRXsGVPTdKdm8nNAgWTr/lCj/08z/Y1qjVuQVUNtRf9MiwKdV2FzG+UzGvmVcEdk1A
-         Fcpu6Y7fn2WNlr2HaH6bJfhLH/VgxPAeNpit8d+Dudw5pdrZVAUn56G6N+ULJQxcaHvz
-         1i5ReWp/otLpKES+HsQTSNdLbFuq0dPeRW/9ljxiHD4bOgVJnvhnte1cALH7cEmW+qxQ
-         phuOSf3O5mA4oYW3Fqk1Hvs/xPM8kAIuhQ8A1cMWbI2yCCLTswV+Gkx16PT8Nwm50w8J
-         eEENStRfq0Z6SYTTeZ6osPloEftpvkgOY2nvSQ+8bgb7O97LUCTHbYF9N+asnnU3Scdd
-         lEVA==
-X-Gm-Message-State: AOAM5310FfEf9HQW9RSzbqUxbwnpt0RhOplcCwIqBQ81ykHyOqUrFbJW
-        6d2M2eTC58UmvEqAPLYnPkWKWkgY/lGb+A==
-X-Google-Smtp-Source: ABdhPJxz3fCQpjBMfW/NdFU+OOmIFHjJXvhllaMIwrLGz3+CmHPUm79Jyo14au1msyh47nvtImfumA==
-X-Received: by 2002:a5d:4a0b:: with SMTP id m11mr9433204wrq.120.1638391299378;
-        Wed, 01 Dec 2021 12:41:39 -0800 (PST)
-Received: from localhost.localdomain (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id o5sm687492wrx.83.2021.12.01.12.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 12:41:39 -0800 (PST)
-From:   Marios Makassikis <mmakassikis@freebox.fr>
-To:     linux-cifs@vger.kernel.org
-Cc:     Marios Makassikis <mmakassikis@freebox.fr>
-Subject: [PATCH] ksmbd: Remove unused parameter from smb2_get_name()
-Date:   Wed,  1 Dec 2021 21:41:19 +0100
-Message-Id: <20211201204118.3617544-1-mmakassikis@freebox.fr>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=zGfYDDkDk6d5v1nLgtOCNQOtLJ9EWXHvGVmOeZ9aU+M=;
+        b=zah7PcTVAYpJDtrKpX591/MkCNRuKEwd8ZKMRTaT/zM1xdrS1ve3ZYBLKpPAfxYFpa
+         rRnPwMy+Dq5ilTAyDFqXNsIFJatjQ6EhiA2j+CLmOUyBFBlWq58Jwrj5+kP/G8k1QzWV
+         dNK7Q2DUIaOgf3wdw3xsnfBd4gtSVgT9UTFeGG2iKlNnvAQMQft+XVVtCDD19k27piOe
+         qqlF5NG1MqxDb74tQiv8HRD7knb12wtNNA5u8EfIIaKkQzJHslEPl1vU9ZLZp0ujG8vg
+         SFVyPPpEMC1bdhzcJZu4SO8I6pzaUM4/DOqnAdnznLq9gWkYhcEwrhWvCuL+ryRP1WBF
+         3uOQ==
+X-Gm-Message-State: AOAM531ATC9NSEH+fykJmUVXNmwYyq5vAQ3r0G0EPTH8XdWd6RNpMfGr
+        74bOBURzBzJhKiZk5aDCtNyzfD1i9p61pXq9Jp3CP8oM0+5+MB/o
+X-Google-Smtp-Source: ABdhPJxYsbrhdUp+CIDWWl1ZD292gqHmuZT+dKcrHe4CFVI7hcjAC/RRDACZ7lh/yIc7e7R3uNn/CXdRm0rHogHMnzU=
+X-Received: by 2002:a17:907:608e:: with SMTP id ht14mr14837269ejc.120.1638446535881;
+ Thu, 02 Dec 2021 04:02:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Thu, 2 Dec 2021 17:32:04 +0530
+Message-ID: <CANT5p=qfOdaFQF+EUgjgQx=zGb09FCu=zjZ7q622G--dUy7F3w@mail.gmail.com>
+Subject: [PATCH SET] fscache fixes
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@cjr.nz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The 'share' parameter is no longer used by smb2_get_name() since
-commit 265fd1991c1d ("ksmbd: use LOOKUP_BENEATH to prevent the out of
-share access").
+Hi Steve,
 
-Signed-off-by: Marios Makassikis <mmakassikis@freebox.fr>
----
- fs/ksmbd/smb2pdu.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+Please review and consider the following fixes in fscache integration
+of cifs.ko.
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 125590d5e940..1edb536fbf75 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -610,7 +610,6 @@ static void destroy_previous_session(struct ksmbd_user *user, u64 id)
- 
- /**
-  * smb2_get_name() - get filename string from on the wire smb format
-- * @share:	ksmbd_share_config pointer
-  * @src:	source buffer
-  * @maxlen:	maxlen of source string
-  * @nls_table:	nls_table pointer
-@@ -618,8 +617,7 @@ static void destroy_previous_session(struct ksmbd_user *user, u64 id)
-  * Return:      matching converted filename on success, otherwise error ptr
-  */
- static char *
--smb2_get_name(struct ksmbd_share_config *share, const char *src,
--	      const int maxlen, struct nls_table *local_nls)
-+smb2_get_name(const char *src, const int maxlen, struct nls_table *local_nls)
- {
- 	char *name;
- 
-@@ -2513,8 +2511,7 @@ int smb2_open(struct ksmbd_work *work)
- 			goto err_out1;
- 		}
- 
--		name = smb2_get_name(share,
--				     req->Buffer,
-+		name = smb2_get_name(req->Buffer,
- 				     le16_to_cpu(req->NameLength),
- 				     work->conn->local_nls);
- 		if (IS_ERR(name)) {
-@@ -5381,8 +5378,7 @@ static int smb2_rename(struct ksmbd_work *work,
- 		goto out;
- 	}
- 
--	new_name = smb2_get_name(share,
--				 file_info->FileName,
-+	new_name = smb2_get_name(file_info->FileName,
- 				 le32_to_cpu(file_info->FileNameLength),
- 				 local_nls);
- 	if (IS_ERR(new_name)) {
-@@ -5493,8 +5489,7 @@ static int smb2_create_link(struct ksmbd_work *work,
- 	if (!pathname)
- 		return -ENOMEM;
- 
--	link_name = smb2_get_name(share,
--				  file_info->FileName,
-+	link_name = smb2_get_name(file_info->FileName,
- 				  le32_to_cpu(file_info->FileNameLength),
- 				  local_nls);
- 	if (IS_ERR(link_name) || S_ISDIR(file_inode(filp)->i_mode)) {
+https://github.com/sprasad-microsoft/smb3-kernel-client/commit/d70e50047c7daa3de17c7c41a0c4ef4f9e4443c9.patch
+https://github.com/sprasad-microsoft/smb3-kernel-client/commit/089dd629653b857b6096966e9d2df301653a36ea.patch
+https://github.com/sprasad-microsoft/smb3-kernel-client/commit/a9a62cdfe26c782dadd0b94ab529b883426d0acd.patch
+
 -- 
-2.25.1
-
+Regards,
+Shyam
