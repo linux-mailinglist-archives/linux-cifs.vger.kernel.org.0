@@ -2,100 +2,139 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C190467FB2
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Dec 2021 23:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109EF46819E
+	for <lists+linux-cifs@lfdr.de>; Sat,  4 Dec 2021 01:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383337AbhLCWOg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 3 Dec 2021 17:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S1354625AbhLDBCh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 3 Dec 2021 20:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383334AbhLCWOf (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Dec 2021 17:14:35 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABF3C061359
-        for <linux-cifs@vger.kernel.org>; Fri,  3 Dec 2021 14:11:10 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so5164715otg.4
-        for <linux-cifs@vger.kernel.org>; Fri, 03 Dec 2021 14:11:10 -0800 (PST)
+        with ESMTP id S1354600AbhLDBCg (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Dec 2021 20:02:36 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10A9C061751
+        for <linux-cifs@vger.kernel.org>; Fri,  3 Dec 2021 16:59:11 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id r15so8712676uao.3
+        for <linux-cifs@vger.kernel.org>; Fri, 03 Dec 2021 16:59:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=+njUJFANrRfary3f3PcyrmVgFtnY6oPG/0UjNHcAJ+A=;
-        b=jat+tkrw47BTaAzsDYPA+Ddc3bQQeBeLIz2kxLPnB1uQ7rVhV/o6YK8IBSUoowKVTv
-         xTNmtEthgseQZFMz96liLVjtqZQeScIx9O65PbBU1KZJa5xSapw6WDsi9QnmBixcJPuU
-         F7ZpTcpeXxWe5zkNis3oYM12YA0u6OS7VtBJgUNTBOB+sa7MbhcEguDTiKsrq8pE4t4J
-         b4BmlWU65gtK4mhnIEC/4Jeabn/iIa1L0Nih8N2M+ECxk+MmcHAN9F2uizWyhzlv5SF8
-         e0Wt4CpcjqAKTGXWEPbQInbdhjoBOiKjAPCz1sHqsp948Nif1mONDaXV8aOpv8sMEk7x
-         0AUw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=G1W6iqHkZBflNIsKZCUFWf5aZOWe1GO9txX3Nyh63Ow=;
+        b=ln21d2vskYcDpHYxtPMXVu4vk54/WiuHJ0QxkP3WWHO55yjj4zjjHpg3h1ba87kegI
+         DPnR9F1fZc3Z1SNgxTpvEbV4Le1Q/jcSKiOz3tXq2XppPSw/aN2ZR/GgvBYTayDYntju
+         HYsQO9VvuZVBCyZGE0nK16L96J3dApMvj4AhfCT8fCaZmQFFXCDVYrXALVCPGhezInzx
+         ice2fT95YEG2P34m96vNuq8ti7an73d3MxP8Mvl32S15KcLkvJyHKURzFYDCza1x1Kba
+         SowurvAaiFmSLTk5NPllek0oJuGDnFseQEgXlQiFeoqmBiX5EZTWOUqODvI8Axv3zYH2
+         wKug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=+njUJFANrRfary3f3PcyrmVgFtnY6oPG/0UjNHcAJ+A=;
-        b=wbDWCim2DmUzxa/MEGLjpHIJj0Tw2+u4yXQw3WwAtPV4Cb2+qBK4sTEsuabOFFuq4r
-         ok8znkj5nP7SBizP9DdkL+KrBcw5a8v/7ag9JkZpby5vcY1ySjLWh98DsXo6zz6iO3l5
-         0K0QCEsennWLrVl8mxWY+Z00psxqJVcG5lj2gDHZd7rnlDPmkEp/t9EYEU/MgmS5aJDn
-         1g4cQBRgcZbqoMP5aU1Ma0xrwV5pLjC44zuHyC19OeY4639j0A2kPK2cyPGdu7ihNrkk
-         OSj/XT4dntiHaRvOwEAb0bUYolv0P88TKgYxrK7TyNVY7/Nw+JJL4VapUdIQjT8E/xyb
-         fNLA==
-X-Gm-Message-State: AOAM5325eVbgt1inJiM5mEgbmQOp6TjMHGxHuLD0U1aJ3eu+f7Fem8en
-        SZXcVhbVPxN0Wwx1wyKnh+GSiuGeKIrsR2iL5NY=
-X-Google-Smtp-Source: ABdhPJxlU67e0eCC6Q3ZHB+DvizFm+G79JBSqtPrWHgBTnn4I1aZY0etypA9xkcBDk87u+eHqyrnRMUZ6QD9pgBnYxA=
-X-Received: by 2002:a9d:7dca:: with SMTP id k10mr18703317otn.274.1638569469834;
- Fri, 03 Dec 2021 14:11:09 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=G1W6iqHkZBflNIsKZCUFWf5aZOWe1GO9txX3Nyh63Ow=;
+        b=qFTziQ3fTyBhYsNFGYs4Irfs6wvX3W3TCiwiyWvKHilrbMYpELdnJAeOAx+gnAwQdL
+         VX+H1vbt4xrO3pSjJiBvLPHBypXJkSWYwfQz5Gnu186B4+h0OP1UdDtjWp9HduJ/FA7Y
+         Q+tnw/eCU0I6cQ7q5xCRUOR229GJtkKLer+La95Sgn2ywqaifL1f+z+FjU8MlA3gZFiC
+         vHhGhNLHPN9tufb7Ct3qWZD+By78wV+S27WEJsoo7Ej0pl/4FtaqXieBKbNoW0MENjlV
+         jb+K89ZE5Shqyc04/SriX10fR4GRtaiRNizuGPdHoaaeVkjL8XxQyMKgHABCErix7IC5
+         IfQA==
+X-Gm-Message-State: AOAM532vU1bNRIGKnAjWQr8Tetyl3f64wjhfNVe/VLIMv/ezfQYVr66a
+        HDgxjf9XR/mZtURZEYOBo3xzaUl7ONGZ+eJKgdmh/EXOBC8=
+X-Google-Smtp-Source: ABdhPJyb77UO2E9w0oelhE8MXxCvieU0v0kfZPiLoCeepnxDNhruhHpFZXNRI/U78EpkLCr3a6r8OmWcOLWdLFMQVXk=
+X-Received: by 2002:a05:6102:2c6:: with SMTP id h6mr25933092vsh.13.1638579550839;
+ Fri, 03 Dec 2021 16:59:10 -0800 (PST)
 MIME-Version: 1.0
-Sender: chiboy6866@gmail.com
-Received: by 2002:a4a:962c:0:0:0:0:0 with HTTP; Fri, 3 Dec 2021 14:11:09 -0800 (PST)
-From:   Evelyn Philips <evelynphilips517@gmail.com>
-Date:   Fri, 3 Dec 2021 14:11:09 -0800
-X-Google-Sender-Auth: MBZGkcixpCj6YmR9D67w8VhAZrg
-Message-ID: <CANLRrPfwf4+N6SS3rON+Ry8s6uzfGcNFL26eU5vx3n+Dn1M=cg@mail.gmail.com>
-Subject: Hello dear frined
-To:     undisclosed-recipients:;
+References: <20211201204118.3617544-1-mmakassikis@freebox.fr>
+In-Reply-To: <20211201204118.3617544-1-mmakassikis@freebox.fr>
+From:   Hyunchul Lee <hyc.lee@gmail.com>
+Date:   Sat, 4 Dec 2021 09:58:59 +0900
+Message-ID: <CANFS6bZbiK3NZU+-FxccQwvroZTGgV0Gc8h=r0v=-EsC7PK-oA@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: Remove unused parameter from smb2_get_name()
+To:     Marios Makassikis <mmakassikis@freebox.fr>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello My Dear.
+Acked-by: Hyunchul Lee <hyc.lee@gmail.com>
 
-Please do not feel disturbed for contacting =C2=A0you in this regards, It
-was based on the critical health condition I find mine self. =C2=A0My names
- are Mrs.Evelyn.Philips.a widow and I=E2=80=99m suffering from brain tumor
-disease and this illness has gotten to a very bad stage, I
- married my husband for Ten years without a child. =C2=A0My husband died
-after a brief illness that lasted for few  days.
-Since the death of my husband, I decided not to remarry again, When my
-late husband was alive he deposited the sum of =C2=A0($ 9,500,000.00 Nine
-point five million dollars.)  with the Bank. Presently this money is
-still in bank. And My  Doctor told me that I don't have much time to
-live because my illness has gotten to a very bad stage, Having known
-my condition I  decided to entrust over the deposited fund under your
-custody to take care of the less-privileged ones therein your country
-or position,
-which i believe that you will utilize this money the way I am going to
-instruct herein.
+2021=EB=85=84 12=EC=9B=94 4=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 1:21, M=
+arios Makassikis <mmakassikis@freebox.fr>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
+>
+> The 'share' parameter is no longer used by smb2_get_name() since
+> commit 265fd1991c1d ("ksmbd: use LOOKUP_BENEATH to prevent the out of
+> share access").
+>
+> Signed-off-by: Marios Makassikis <mmakassikis@freebox.fr>
+> ---
+>  fs/ksmbd/smb2pdu.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index 125590d5e940..1edb536fbf75 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -610,7 +610,6 @@ static void destroy_previous_session(struct ksmbd_use=
+r *user, u64 id)
+>
+>  /**
+>   * smb2_get_name() - get filename string from on the wire smb format
+> - * @share:     ksmbd_share_config pointer
+>   * @src:       source buffer
+>   * @maxlen:    maxlen of source string
+>   * @nls_table: nls_table pointer
+> @@ -618,8 +617,7 @@ static void destroy_previous_session(struct ksmbd_use=
+r *user, u64 id)
+>   * Return:      matching converted filename on success, otherwise error =
+ptr
+>   */
+>  static char *
+> -smb2_get_name(struct ksmbd_share_config *share, const char *src,
+> -             const int maxlen, struct nls_table *local_nls)
+> +smb2_get_name(const char *src, const int maxlen, struct nls_table *local=
+_nls)
+>  {
+>         char *name;
+>
+> @@ -2513,8 +2511,7 @@ int smb2_open(struct ksmbd_work *work)
+>                         goto err_out1;
+>                 }
+>
+> -               name =3D smb2_get_name(share,
+> -                                    req->Buffer,
+> +               name =3D smb2_get_name(req->Buffer,
+>                                      le16_to_cpu(req->NameLength),
+>                                      work->conn->local_nls);
+>                 if (IS_ERR(name)) {
+> @@ -5381,8 +5378,7 @@ static int smb2_rename(struct ksmbd_work *work,
+>                 goto out;
+>         }
+>
+> -       new_name =3D smb2_get_name(share,
+> -                                file_info->FileName,
+> +       new_name =3D smb2_get_name(file_info->FileName,
+>                                  le32_to_cpu(file_info->FileNameLength),
+>                                  local_nls);
+>         if (IS_ERR(new_name)) {
+> @@ -5493,8 +5489,7 @@ static int smb2_create_link(struct ksmbd_work *work=
+,
+>         if (!pathname)
+>                 return -ENOMEM;
+>
+> -       link_name =3D smb2_get_name(share,
+> -                                 file_info->FileName,
+> +       link_name =3D smb2_get_name(file_info->FileName,
+>                                   le32_to_cpu(file_info->FileNameLength),
+>                                   local_nls);
+>         if (IS_ERR(link_name) || S_ISDIR(file_inode(filp)->i_mode)) {
+> --
+> 2.25.1
+>
 
-However all I need and required from you is your sincerity and ability
-to carry out the transaction successfully and fulfill my final wish in
-implementing the charitable project as it requires absolute trust and
-devotion without any failure and I will be glad to see that the bank
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything needs to be
-process rapidly as soon as possible.
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35 % percent of the total fund for your effort in
- handling the transaction, 5 % percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country
-for the mutual benefit of the orphans and the less privileges ones.
-Meanwhile I am waiting for your prompt respond, if only you are
-interested for further details of the transaction and execution of
-this  humanitarian project for the glory and honor of God the merciful
-compassionate.
-May God bless you and your family.
-Regards,
-Evelyn.Philips.
-written from Hospital.
+
+--=20
+Thanks,
+Hyunchul
