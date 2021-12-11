@@ -2,77 +2,43 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DEF471036
-	for <lists+linux-cifs@lfdr.de>; Sat, 11 Dec 2021 03:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3845F471320
+	for <lists+linux-cifs@lfdr.de>; Sat, 11 Dec 2021 10:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244317AbhLKCFm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 10 Dec 2021 21:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345658AbhLKCFl (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 10 Dec 2021 21:05:41 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB5DC061D5E
-        for <linux-cifs@vger.kernel.org>; Fri, 10 Dec 2021 18:02:05 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id i63so16187441lji.3
-        for <linux-cifs@vger.kernel.org>; Fri, 10 Dec 2021 18:02:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=YLFlW2EU3wC14KpVTk+IM58oSghSYLjMmVu6zQ/IYCwgsR5Sf12xJCL/5+CVpbXsnt
-         22KfNqT06o98mhCtfoOfWNh/4tfFmj2AFDjLdssqJs8+fwuuzWeqstsrP9Eqc87OlMHn
-         TvZYh66KNDgDYMOMzV+7fqlsVNnsPbs5tbKal0uE5CTp2Rk7sipJ65nnPaJWW6urjiYG
-         yjhaQr0+DsLsyIMnaiNd6rjtUc7yQgIo65YEuBLpX5cuMOVjNiZW8dTCMF1ZcQmI8lLg
-         ts2zRNIssQ7WVu8YEQseHp9elEHPuA+qDafMGck3ipNTcw1LcoccQXJFJcltFVTtty4m
-         33gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=Q7c7zr3HJtJ62jq9WirKqw+4wwAf2hqkIE6XzwGwRkX8g/sMaHGGUIzyvPxECbXfBa
-         JPVSecI9+PdA9/Ul3mEHFbXY4Vk8UcKtJlbLFz12pi7cB5EW//14FQqi/34vJlpUQylh
-         Vs1DyE5zQHprAU38W598Khv+hCCkVAHvkCXea6RjZ/W7rCnrqRqUgo52VW1XiXAXqtJy
-         AyuYXT+N06irN6mQhHWz7eSO6llWRjAU+ev4VvBx9LL5/gy6A9RCDv2X65D/Hn+9TPyN
-         O0+U+dZFBXEZBQuQ3/gVtRI+MbDRHJkQ1/FsXprgDDbE4FhAN/tr+L7585/fYVJ8twxX
-         Hf2w==
-X-Gm-Message-State: AOAM530HBy9hT/w9TuQOYJ7rMf1QaV6gM7kDwtnF/+rQRG8OKTbXjMlI
-        DW9QpearNAw+4GvfghfdR7nLfGOWRJKxWyNpjlk=
-X-Google-Smtp-Source: ABdhPJxBVYZ26kuukI+qghu2oEbePULLlY8UzOvy8Thh2XI49DVZF++TlN5eyoWkvajWnohXM36KonRfGTJC1IRe82w=
-X-Received: by 2002:a2e:9d8f:: with SMTP id c15mr17452679ljj.477.1639188123220;
- Fri, 10 Dec 2021 18:02:03 -0800 (PST)
+        id S230207AbhLKJTe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Sat, 11 Dec 2021 04:19:34 -0500
+Received: from bizcloud-petrocapre.com ([159.203.56.4]:54620 "EHLO
+        bizcloud-petrocapre.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229455AbhLKJTd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Sat, 11 Dec 2021 04:19:33 -0500
+X-Greylist: delayed 1453 seconds by postgrey-1.27 at vger.kernel.org; Sat, 11 Dec 2021 04:19:33 EST
+Received: from ip224.ip-5-39-25.eu (bizcloud-petrocapre.com [IPv6:::1])
+        by bizcloud-petrocapre.com (Postfix) with ESMTP id 198AC102466
+        for <linux-cifs@vger.kernel.org>; Sat, 11 Dec 2021 08:43:47 +0000 (UTC)
+Reply-To: luisfernandezconsultant@gmail.com
+From:   Luis Fernandez <luisfernandezfirm@consultant.com>
+To:     linux-cifs@vger.kernel.org
+Subject: Re:Mutual Investment Proposal
+Date:   11 Dec 2021 00:43:47 -0800
+Message-ID: <20211211004347.09484DAAAAF1443E@consultant.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:02:02
- -0800 (PST)
-Reply-To: internationallmonetary695@gmail.com
-From:   International Monetary fund <abubakarsadiq1297@gmail.com>
-Date:   Fri, 10 Dec 2021 18:02:02 -0800
-Message-ID: <CAHXNoSg3Z7iK4ieUWhau28hUaL637ztb2vgqOT3oZCxEMRC3RQ@mail.gmail.com>
-Subject: Dear Beneficiary,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
- I.M.F Head Office
-#1900 Pennsylvania Ave NW,
-Washington, DC 20431
-INTERNATIONAL MONETARY FUND.
-REF:-XVGNN82010
-internationallmonetary695@gmail.com
-Telephone : +12062785473
+Good Day,
 
-This message is from International Monetary fund (IMF) I am Mr Bo Li
-deputy to  Kristalina Georgieva the current president of International
-  Monetary fund (IMF) We are aware of the stress you have been passing
-through and how you have lost your money trying to claim your fund ,
-you have to worry no more for the international monetary fund is fully
- in-charge of your fund now, contact  me for more info on how you will
-receive your fund( internationallmonetary695@gmail.com) or call me
-on-Telephone : +12062785473 for more info.
+My name is Luis Fernandez, I am contacting you because we have 
+investors that have the capacity to invest in any massive project 
+in your country or invest in your existing project that requires 
+funding.
+Kindly get back to me for more details.
 
-Regards,
-Mr Bo Li
+
+Regards
+
+Luis Fernandez
