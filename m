@@ -2,110 +2,78 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD8D471405
-	for <lists+linux-cifs@lfdr.de>; Sat, 11 Dec 2021 14:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EA04716F6
+	for <lists+linux-cifs@lfdr.de>; Sat, 11 Dec 2021 22:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbhLKNh5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 11 Dec 2021 08:37:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20724 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229800AbhLKNh5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:37:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639229876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Z8c8lX7Q347Z+4ORdcMYBofXUvb1OCWCHdF//k2AV4=;
-        b=YD8Pg4Is/ZMC+w1fz2iDcGtvA123OdHK9nwlSUbXY8AZhzMw2JanwNdF3LiVqvQI+458UR
-        HMM6EawTFzSW1w12cWRiLvz0QF6gg8zgwQfFCBlJzXr3jd8DQLV79ffA7Xsi6jWJ0yES0C
-        ShI9kVgS33gk7wmLPPyDrO+YwoOs6kw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-qp91NnnxO2W56AfTygDTXQ-1; Sat, 11 Dec 2021 08:37:55 -0500
-X-MC-Unique: qp91NnnxO2W56AfTygDTXQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1F5FF801AAB;
-        Sat, 11 Dec 2021 13:37:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BBF188F7;
-        Sat, 11 Dec 2021 13:37:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALF+zOknSu_qkb9N0i4LY8tUtXmXirSsU7gGZsUOtLu8c88ieg@mail.gmail.com>
-References: <CALF+zOknSu_qkb9N0i4LY8tUtXmXirSsU7gGZsUOtLu8c88ieg@mail.gmail.com> <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk> <163906979003.143852.2601189243864854724.stgit@warthog.procyon.org.uk>
-To:     David Wysochanski <dwysocha@redhat.com>
-Cc:     dhowells@redhat.com, linux-cachefs <linux-cachefs@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 62/67] nfs: Convert to new fscache volume/cookie API
+        id S231609AbhLKV6V (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 11 Dec 2021 16:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231611AbhLKV6U (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 11 Dec 2021 16:58:20 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD506C061D60
+        for <linux-cifs@vger.kernel.org>; Sat, 11 Dec 2021 13:58:19 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id w1so40362435edc.6
+        for <linux-cifs@vger.kernel.org>; Sat, 11 Dec 2021 13:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
+        b=SOBkDHN1upt351fJGA10IENq8Lskn6OtfiA/mtFXWwbxNo6rK0VqMIikUbNdR10QL9
+         NEz57nH7+DwD4ui2QjR5G0PDUg/x30DeYlpAViKmfLpj6c8owgTXHIRe2HlXrWJIYspc
+         p1qexb7VgQzyxOs2U317jKWC2PVt5FsJQNP/qzuU8HlodfKZxoIrg2Y5u0+UlgiuF7n+
+         KF6xHlFhNhhV0WZH+n1XpQNFkro1//sIniT/eC7+Qq7omDixZHJ42uWefxucVRQsgqoP
+         MP9jAyQEdDJw2KiXunMshfyB4wcDGfWvxehuLHSr6op0i/Er4qRI4zT2OKxsbV2QjSnP
+         PYpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
+        b=rXQPJGyvwIUkQA4k3sQIUNAlonB2cW6U52CL+B2hEJ5PuG2UYn369ZMtXynraKoifw
+         4u1++BS3QTvMM4KPbkq6n3k5qAIXjIu4Hhs3DXdBq6nFQa3y5O+sn0dtVFhlpujAQD7H
+         iElP2xJYteQ+aPRbx6BnGydQi7rvvu5/ls0u2TK1iUPKavBZFAxK/qE6mPdfhqHXenrm
+         jKkaCcwqz1ccr6/hNOVjPabiBY6xdfMFzQeb44ZMZURZdDErGcxldQb/wv8YR16C1UvH
+         p/CUV8uVXh4mzCsefMmwC4vwa3DRB2VnQG25fI/eS0MrcMEm+axUByD6iTQKnpOktnfg
+         jCIA==
+X-Gm-Message-State: AOAM531tuuzDymc1pb9GPgGX2xdZcXDEl+BYzaBtf8N0SGEP9Is2eTGU
+        LuEP3TYFbSA1JXryA2/Bo+3wBXsgYd6crm1KzxQ=
+X-Google-Smtp-Source: ABdhPJxTVLquc00JfCv8xmVg6F+Df36Ax6F8m8eI1vWHtjjPBaUzu2dvtxl/29t2QJINStCFpJhLct20UqzajIEroTA=
+X-Received: by 2002:a17:907:6da2:: with SMTP id sb34mr33325880ejc.509.1639259897490;
+ Sat, 11 Dec 2021 13:58:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <353627.1639229864.1@warthog.procyon.org.uk>
+Reply-To: martinafrancis022@gmail.com
+Sender: rebeccaalhajidangombe@gmail.com
+Received: by 2002:a17:907:94d3:0:0:0:0 with HTTP; Sat, 11 Dec 2021 13:58:16
+ -0800 (PST)
+From:   Martina Francis <martinafrancis61@gmail.com>
+Date:   Sat, 11 Dec 2021 13:58:16 -0800
+X-Google-Sender-Auth: QI6h_ccu4Os7HpLN5lf7FmNkMqQ
+Message-ID: <CANadOMYJBdKak2aObykULF4gdU88=OTR03g+XDqpCofMfFracg@mail.gmail.com>
+Subject: Bom Dia meu querido
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Sat, 11 Dec 2021 13:37:44 +0000
-Message-ID: <353628.1639229864@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-David Wysochanski <dwysocha@redhat.com> wrote:
+--=20
+Bom Dia meu querido,
+Como vai voc=C3=AA hoje, meu nome =C3=A9 Dona Martina Francis, uma vi=C3=BA=
+va doente.
+Eu tenho um fundo de doa=C3=A7=C3=A3o de ($ 2.700.000,00 USD) MILH=C3=95ES =
+que quero
+doar atrav=C3=A9s de voc=C3=AA para ajudar os =C3=B3rf=C3=A3os, vi=C3=BAvas=
+, deficientes
+f=C3=ADsicos e casas de caridade.
 
-> >  (4) fscache_enable/disable_cookie() have been removed.
-> >
-> >      Call fscache_use_cookie() and fscache_unuse_cookie() when a file =
-is
-> >      opened or closed to prevent a cache file from being culled and to=
- keep
-> >      resources to hand that are needed to do I/O.
-> >
-> >      Unuse the cookie when a file is opened for writing.  This is gate=
-d by
-> >      the NFS_INO_FSCACHE flag on the nfs_inode.
-> >
-> >      A better way might be to invalidate it with FSCACHE_INVAL_DIO_WRI=
-TE
-> >      which will keep it unused until all open files are closed.
-> >
-> =
+Por favor, volte para mim imediatamente ap=C3=B3s ler esta mensagem para
+obter mais detalhes sobre esta agenda humanit=C3=A1ria.
 
-> It looks like the comment doesn't match what was actually done inside
-> nfs_fscache_open_file().  Is the code right and the comment just out of =
-date?
+Deus te aben=C3=A7oe enquanto espero sua resposta.
+Sua irm=C3=A3.
 
-The comment is out of date.  NFS_INO_FSCACHE isn't used now.
-
-> I'm getting that kasan UAF firing periodically in this code path, and so=
- it
-> looks related to this change,though I don't have great info on it so far=
- and
-> it's hard to reproduce.
-
-Can you copy the kasan UAF text into a reply?
-
-David
-
+Sra. Martina Francis.
