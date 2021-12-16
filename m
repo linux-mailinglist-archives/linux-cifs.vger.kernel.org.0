@@ -2,85 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65413477096
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Dec 2021 12:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CDE47711E
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Dec 2021 12:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbhLPLmc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbhLPLm2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Dec 2021 06:42:28 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C51EC061756
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Dec 2021 03:42:27 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id q14so25085196qtx.10
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Dec 2021 03:42:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=RYToo8NyNPhlgiHYmZ1ikup312GHYFKKh+SoiQn5DFM08VhX1fCTukNf+Ub7gXZH+R
-         Fdt5I+ZO38LiZ7aX4HrBDtCguvWjGt4+jG/EN+k0G3h02B6emUjwzPzxnL4uWQz6AWTD
-         WqO7wKZcX2hj88TEq1skHq9q03JmZTMsDYFAuzRyTE65aq8YfmTLKW6klN/Aemrjl5Su
-         VOqZm/oCKsPxxvibvSdyBq0qcyBC7yt8asycNVxLymhtuzVbvkdkv8HRw/7WHA5ZhBTe
-         lfMRM7TjowGzvp5BFYZjQfF4jcwfD0Oa7xMNuJL1tGpMndUewyeeM3+DNYanGu61M7GC
-         kNpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=xGrKVelcCalcDf8opPE/8EEMMEdpA8IRFAIA18zZqXaSLyceSlujaa7YKxVJr9g8ja
-         L7DOI+ySijIAkCZ7e0Nq39DZnNhts3P5AuKk0JSIDZbI74GCQdOh2XANWGzjYSFrz+Y8
-         tWVRfW75OaPL/6RbD08I304vUYoNjqdd+y+ovX1VJ3IgxXPbaez37t0xih5N6przlbDG
-         uQZP4jZvXh/NPUvGLN6d9M8QU8bTABOIYtGHUY90Ufs/9LvkBMf2S6IGjqBJwdbc4cdg
-         ZGjE/VYsUcVyXxsy70TqEKkS27kRdhyv9DdDWqN1cnBaRLzVy6FpKgZQC4ErjX5aq1//
-         SPTA==
-X-Gm-Message-State: AOAM531F6KHHm89U0qs38DQncNmIoRWXzfk1fwjYQo/ieuwvQPu85Tdb
-        B/eSmbBiWNQproa5jVfodkRG/eh/hsUdFXmiUmRSZY4tvGE=
-X-Google-Smtp-Source: ABdhPJxYJ2zBl8EMgF/vH/Si0uACMgpOTf1urUCOAwYb4fXYvwfKJa3PKYFOZBbaDpp9AFOjwJ3sIeVfeVjNcnbyBfg=
-X-Received: by 2002:a05:620a:bc3:: with SMTP id s3mr11727889qki.197.1639654936129;
- Thu, 16 Dec 2021 03:42:16 -0800 (PST)
+        id S233064AbhLPLxI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Dec 2021 06:53:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50132 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229845AbhLPLxH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Dec 2021 06:53:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AB41B823AF;
+        Thu, 16 Dec 2021 11:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F82C36AE3;
+        Thu, 16 Dec 2021 11:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639655585;
+        bh=kutu15ERamquSNkAlx1bDeUoCF/UYHWL53rUHvMX9Fs=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=dy2jQEMV/6qhdfMxYGoMk3fxP/8MUfJbRzw8gHQySz0QH3zyZRHenVLGijH9fyhx+
+         n1poY8RFt+g6d2Z9u+PU8/pZS4oVDNJgRdvs16n+NXQULs3Q0WZr2wdZ1aSAnS9jIG
+         T/h99G3hwgzWyhNcURgcUbvzQAvob7QhC7VJwood8MD1JePK10cg6x4sFjisont3ts
+         hcQoVC3GKWNUKJ7PqsAr5VO4GNzsl7nX8eUuGEImuqMpc/A3DZE78Jk4MxW6bkeaTc
+         7Z4gQd1LymaLhnLuqZ7/8cfdQYC2SYkwAx1EM/bWP12RqISEidaw8jZUDJlVOWRyHZ
+         xSajFQnvX9Uqw==
+Received: by mail-oo1-f50.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso6842717ood.13;
+        Thu, 16 Dec 2021 03:53:05 -0800 (PST)
+X-Gm-Message-State: AOAM532Y9CaCyXzpxmVL4h6odr65K3Mw6jAM+x+eCNBsDbEraicaiRaC
+        mXb0pCCpToWnZFstszg+ESNDYTW0mxnMXOHBltU=
+X-Google-Smtp-Source: ABdhPJy7gZKCLdC21/xK+PNfiB9yQVQzSFUsRma50bn2AQjzfMW4vD2rV9nkaZOTdtRE0NE9NTMra70dag3UXjY6JQM=
+X-Received: by 2002:a05:6820:622:: with SMTP id e34mr10975602oow.19.1639655584417;
+ Thu, 16 Dec 2021 03:53:04 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:15
+Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:53:04
  -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:15 +0000
-Message-ID: <CAONDhKPUij_8sWOmcDAVKuHSL7avy+Ti7bOVRu6x__3ouvD7kw@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
+In-Reply-To: <20211216103721.1686600-1-marcos@orca.pet>
+References: <20211216103721.1686600-1-marcos@orca.pet>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Thu, 16 Dec 2021 20:53:04 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9w7BBGBn_ZuSNZ-KVL_YLUW0_TFAKXSRr=YAdETsMv6A@mail.gmail.com>
+Message-ID: <CAKYAXd9w7BBGBn_ZuSNZ-KVL_YLUW0_TFAKXSRr=YAdETsMv6A@mail.gmail.com>
+Subject: Re: [PATCH v2] ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
+To:     Marcos Del Sol Vives <marcos@orca.pet>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-Urgent
+2021-12-16 19:37 GMT+09:00, Marcos Del Sol Vives <marcos@orca.pet>:
+> According to the official Microsoft MS-SMB2 document section 3.3.5.4, this
+> flag should be used only for 3.0 and 3.0.2 dialects. Setting it for 3.1.1
+> is a violation of the specification.
+>
+> This causes my Windows 10 client to detect an anomaly in the negotiation,
+> and disable encryption entirely despite being explicitly enabled in ksmbd,
+> causing all data transfers to go in plain text.
+>
+> Signed-off-by: Marcos Del Sol Vives <marcos@orca.pet>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Namjae Jeon <linkinjeon@kernel.org>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
-
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
-
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
+Thanks!
