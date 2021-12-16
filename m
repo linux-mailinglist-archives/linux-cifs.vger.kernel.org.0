@@ -2,141 +2,131 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1196476E7D
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Dec 2021 11:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA49476F10
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Dec 2021 11:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235627AbhLPKFd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Dec 2021 05:05:33 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51136
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233678AbhLPKFb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:05:31 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0D68B4068E
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Dec 2021 10:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639649130;
-        bh=iEjFNSHMwi4aeXpe7cQghYno80kPHKULcTC4SGtg0Js=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=sQlCXDkHyyfpPGofjCMUtFw2SsLAVDnrnr/gISSdvLsK8qiFt2TvzkP2xscHxyifA
-         M6vl3sB3NeWDqPjJvOwQJcpg/ffx0cDO7WrDF1ETPFsIjP6m/rsAoJcaVBpJ6iU/qA
-         VLuS3kO1l3lEw4hHnBggRSmVoydaVE4YGHzE0kRvZXB7cezyMXl8Xg+PozwZRg8UlG
-         Ojrp439VUuhFhvMowYle2ZjkPmnPcV92Bkt+N1LVGIuxSg0cRsazzrml5eNcayreLd
-         yhtYk7mjWdOUcJ3PViUQgllOYzu8XhDJAaNNSslvuF4AL+PjjR2SldldlexKdPHvVH
-         JTv6gx0aiBIdA==
-Received: by mail-ed1-f71.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so22857689ede.0
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Dec 2021 02:05:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iEjFNSHMwi4aeXpe7cQghYno80kPHKULcTC4SGtg0Js=;
-        b=Eca3VwgkPher8Cw/AMOibLC2nMSUgcMViV0U/bV/8jFVbxPItnmUqB6lL2RDb9eCRL
-         3v1dOqyb4kuYQIFIvOZ2g62W02UIxWvz5fcnk8ZnmMyoR2mYK3qAou+YxPn5CRdRmdQk
-         1V/x/gGcMO3fSvlAl2x+A5uPbH6Rl52fJy06OOAMnEQJiF0qgyycLVgGyGnBI1d2ymoI
-         Sdh+h+cVtGVywtaWBRLV8wX7ILKpGZggggEnit83iyk1/DTm2ZNbzXMW/vCJmtsepnBs
-         SBFPF14gvx4ACqqmSqEgJzBHSEC2CqtK0BBA99cuEqfrjxqi9uJLxUCoXKWrS1Sj01gv
-         3qWg==
-X-Gm-Message-State: AOAM531UGSS8BevxVwboqQmU+tewyxbdyFPSRvGKUUtNg3WzMoiVlhT+
-        voy6bS0IAVGNbuLrIb8lH2e0YFB6zRBjOxspszS0iXAqFouICo5l/+3oQjQxCazsanNEZDk3QkZ
-        bedVeF9XQvYBuygj0SDEGzgzSLH2LkvI0ZXGW6hHHlGIVOJYyWdZFFKI=
-X-Received: by 2002:a17:906:48d:: with SMTP id f13mr1328909eja.178.1639649129033;
-        Thu, 16 Dec 2021 02:05:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4csYse2ts0CIc+GNT8hFD4S36DkgIwbzgfyBzIjr+nwEiJtuY5m75c6D7//m27d8UIPSjBoFZUfOIoRMOvGc=
-X-Received: by 2002:a17:906:48d:: with SMTP id f13mr1328883eja.178.1639649128845;
- Thu, 16 Dec 2021 02:05:28 -0800 (PST)
+        id S236177AbhLPKoG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Dec 2021 05:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233456AbhLPKoF (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Dec 2021 05:44:05 -0500
+X-Greylist: delayed 382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Dec 2021 02:44:05 PST
+Received: from forward101p.mail.yandex.net (forward101p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84823C061574;
+        Thu, 16 Dec 2021 02:44:05 -0800 (PST)
+Received: from sas1-0a2be8f95474.qloud-c.yandex.net (sas1-0a2be8f95474.qloud-c.yandex.net [IPv6:2a02:6b8:c08:f21f:0:640:a2b:e8f9])
+        by forward101p.mail.yandex.net (Yandex) with ESMTP id 8081159CCE00;
+        Thu, 16 Dec 2021 13:37:39 +0300 (MSK)
+Received: from sas8-b61c542d7279.qloud-c.yandex.net (sas8-b61c542d7279.qloud-c.yandex.net [2a02:6b8:c1b:2912:0:640:b61c:542d])
+        by sas1-0a2be8f95474.qloud-c.yandex.net (mxback/Yandex) with ESMTP id BJmvtfpYM5-bdeuFB9F;
+        Thu, 16 Dec 2021 13:37:39 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orca.pet; s=mail; t=1639651059;
+        bh=Nf3LvXH5AXN+JC9P+ix28xro/gBL7qkBplUcuybM6lA=;
+        h=Date:Subject:To:From:Message-Id:Cc;
+        b=U+s/h9l0u5kShf3mXigHbGHjM2XStxiGACPEiXDq/1xYLN6NoBuEOIFTTiRc9h9Tb
+         ppwWBZ2ABxjbG2NUigdE4EKBCfRWZ4KLB2NgQ+V+3NhRBATMeNO9Fga7Jun7CbOBbg
+         cg5nWy+Qh6StKns5Gs0/j8sK+d0yn3yIFPhJ4vT0=
+Authentication-Results: sas1-0a2be8f95474.qloud-c.yandex.net; dkim=pass header.i=@orca.pet
+Received: by sas8-b61c542d7279.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id TkkqXHcr21-bbPqYmKS;
+        Thu, 16 Dec 2021 13:37:38 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Marcos Del Sol Vives <marcos@orca.pet>
+To:     linux-cifs@vger.kernel.org
+Cc:     Marcos Del Sol Vives <marcos@orca.pet>,
+        linux-kernel@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH v2] ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
+Date:   Thu, 16 Dec 2021 11:37:22 +0100
+Message-Id: <20211216103721.1686600-1-marcos@orca.pet>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
- <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com>
- <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com> <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Date:   Thu, 16 Dec 2021 11:05:18 +0100
-Message-ID: <CA+zEjCu9KmTMpvXkFqgHX0C1jNZKquZU4owZKaJ_-o4+M_7ACg@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Cleanup after removal of configs
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-power@fi.rohmeurope.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:49 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
-> >
-> > On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
-> > > <alexandre.ghiti@canonical.com> wrote:
-> > > >
-> > > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
-> > > > left some pieces here and there: this patchset cleans that.
-> > > >
-> > > > Alexandre Ghiti (7):
-> > > >   Documentation, arch: Remove leftovers from fscache/cachefiles
-> > > >     histograms
-> > > >   Documentation, arch: Remove leftovers from raw device
-> > > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
-> > > >   arch: Remove leftovers from mandatory file locking
-> > > >   Documentation, arch, fs: Remove leftovers from fscache object list
-> > > >   include: mfd: Remove leftovers from bd70528 watchdog
-> > > >   arch: Remove leftovers from prism54 wireless driver
-> > >
-> > > Looks all good to me, thanks a lot for the cleanup!
-> > >
-> > > For arch/arm/configs:
-> > >
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > assuming this goes through someone else's tree. Let me know if you need me
-> > > to pick up the patches in the asm-generic tree for cross-architecture work.
-> >
-> > Arnd, do you mind taking the whole series except patch 6 ("include:
-> > mfd: Remove leftovers from bd70528 watchdog") as this will be handled
-> > separately. I can ask Jonathan for the doc patches if needed.
->
-> I tried to apply them, but only three of the patches applied cleanly. Can you
-> resend them based on v5.16-rc1?
+According to the official Microsoft MS-SMB2 document section 3.3.5.4, this
+flag should be used only for 3.0 and 3.0.2 dialects. Setting it for 3.1.1
+is a violation of the specification.
 
-Sure, I have just sent the v2.
+This causes my Windows 10 client to detect an anomaly in the negotiation,
+and disable encryption entirely despite being explicitly enabled in ksmbd,
+causing all data transfers to go in plain text.
 
-Thanks,
+Signed-off-by: Marcos Del Sol Vives <marcos@orca.pet>
+Cc: linux-kernel@vger.kernel.org
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+---
+ fs/ksmbd/smb2ops.c |  3 ---
+ fs/ksmbd/smb2pdu.c | 25 +++++++++++++++++++++----
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-Alex
+diff --git a/fs/ksmbd/smb2ops.c b/fs/ksmbd/smb2ops.c
+index 0a5d8450e835..02a44d28bdaf 100644
+--- a/fs/ksmbd/smb2ops.c
++++ b/fs/ksmbd/smb2ops.c
+@@ -271,9 +271,6 @@ int init_smb3_11_server(struct ksmbd_conn *conn)
+ 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
+ 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING;
+ 
+-	if (conn->cipher_type)
+-		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
+-
+ 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
+ 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
+ 
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 49c9da37315c..049fa81281b4 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -915,6 +915,25 @@ static void decode_encrypt_ctxt(struct ksmbd_conn *conn,
+ 	}
+ }
+ 
++/**
++ * smb3_encryption_negotiated() - checks if server and client agreed on enabling encryption
++ * @conn:	smb connection
++ *
++ * Return:	true if connection should be encrypted, else false
++ */
++static bool smb3_encryption_negotiated(struct ksmbd_conn *conn)
++{
++	if (!conn->ops->generate_encryptionkey)
++		return false;
++
++	/*
++	 * SMB 3.0 and 3.0.2 dialects use the SMB2_GLOBAL_CAP_ENCRYPTION flag.
++	 * SMB 3.1.1 uses the cipher_type field.
++	 */
++	return (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
++	    conn->cipher_type;
++}
++
+ static void decode_compress_ctxt(struct ksmbd_conn *conn,
+ 				 struct smb2_compression_capabilities_context *pneg_ctxt)
+ {
+@@ -1469,8 +1488,7 @@ static int ntlm_authenticate(struct ksmbd_work *work)
+ 		    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
+ 			sess->sign = true;
+ 
+-		if (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION &&
+-		    conn->ops->generate_encryptionkey &&
++		if (smb3_encryption_negotiated(conn) &&
+ 		    !(req->Flags & SMB2_SESSION_REQ_FLAG_BINDING)) {
+ 			rc = conn->ops->generate_encryptionkey(sess);
+ 			if (rc) {
+@@ -1559,8 +1577,7 @@ static int krb5_authenticate(struct ksmbd_work *work)
+ 	    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
+ 		sess->sign = true;
+ 
+-	if ((conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) &&
+-	    conn->ops->generate_encryptionkey) {
++	if (smb3_encryption_negotiated(conn)) {
+ 		retval = conn->ops->generate_encryptionkey(sess);
+ 		if (retval) {
+ 			ksmbd_debug(SMB,
+-- 
+2.25.1
 
->
->         Arnd
