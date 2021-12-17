@@ -2,80 +2,82 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A524478BFE
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Dec 2021 14:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B767B479020
+	for <lists+linux-cifs@lfdr.de>; Fri, 17 Dec 2021 16:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236546AbhLQNJu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 17 Dec 2021 08:09:50 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:37793 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbhLQNJt (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 Dec 2021 08:09:49 -0500
-Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MKt3r-1nCq863kJJ-00LH3c; Fri, 17 Dec 2021 14:09:47 +0100
-Received: by mail-wm1-f51.google.com with SMTP id p18so1549578wmq.5;
-        Fri, 17 Dec 2021 05:09:47 -0800 (PST)
-X-Gm-Message-State: AOAM532Q3TgVP8Hm9bfs7rnlBao8UUC8lgXgmRMhg68dB30Ki/qLf9Mx
-        Dgc7Z8pvhsD4uGq1A9LByYyxf4hAdEi+f0mqlso=
-X-Google-Smtp-Source: ABdhPJz7G1Jphi5B+WPZUUBROjJfTQT5bMgaRQTtBbW6svcijGRnk/NTqL4833WgkZbH4dijpWWNsIR992CZFrm3sB8=
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr2709166wmn.98.1639746587350;
- Fri, 17 Dec 2021 05:09:47 -0800 (PST)
+        id S234756AbhLQPlE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 17 Dec 2021 10:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232504AbhLQPlC (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 Dec 2021 10:41:02 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFFCC061574
+        for <linux-cifs@vger.kernel.org>; Fri, 17 Dec 2021 07:41:01 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso3399965wmc.1
+        for <linux-cifs@vger.kernel.org>; Fri, 17 Dec 2021 07:41:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
+        b=ljOQPBXgp9Smquj8Ng29odlWvElKpDTqPPRQidAvnJdl86g5nPxdxVOZaobu1aloU+
+         BxF5ZdXve/fC4OuYzbHgAUFAehuKXONKOPKgrIHUWfGLCcOJX/U/gOYdmBq6WyLeERdT
+         ozYUTpfSpt07FF5ffiTm4B7CQSEO1ZBiQTa06KV8GgCOIdCJFutYQjrAan6yxWHvjBqu
+         s3jFIVsLoZ/IZoqi6JKr/nIv3vj8GNx282V5ptrp/uJp9JZwAiAOsq6cpABPaCV7OhgW
+         cmo1ALjk+DwDVXAHtO3FpoIc4cmbInE/sdkNMZBNe1A/Dl1L5RcE6GwljTHvXJv+iTxY
+         +fzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
+        b=TCTxES3KU/e7rSOBYb/MRVeloZz4+QIFBJgtSuBknW4M5IBOEJd+dHFaB/rc6FgvuW
+         QLVqB3dYyaGpgNVt1/VgH2HIszS8BFGU3gkM+64CREnj6rgbFqq3XEXA7oVNAFP8/c4i
+         DIP4D/AyOPxxwpN6QqD8rGY61okV9BgCbx7fmDsiobCWzg3ABs+AlC6biKxYrc/65cbW
+         6c0lT6dM7Ds2Fw1EqOqcvJjh2vAl7UPR+BmTS/ooojXyvkJz67ZPj/1e1qi3/p6AmkjT
+         zDjBDUwbvgdI4HY8zgwOfjpy7XZCqodz9VCJspU2P36M2MR97Gt3EpgRwdphEr3gaiJu
+         3Lyg==
+X-Gm-Message-State: AOAM531TVr3EeWx64UAOpw/kZRXgDyzkLhVpvBssZBSUsSMu5gEUlAUn
+        +MiGySU/dJLiX21aoGOoWEc2FUdeuAeQhH7aeb0=
+X-Google-Smtp-Source: ABdhPJxfsjQgHDN6hfp0UDJtilGfevXXUtMuuj2tGJDfuwC3m9wsAQWz0ZAPQHNXJPjD271t7JZ3GM4XtKA/wSbdlVU=
+X-Received: by 2002:a7b:c256:: with SMTP id b22mr9903656wmj.176.1639755660466;
+ Fri, 17 Dec 2021 07:41:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216094426.2083802-1-alexandre.ghiti@canonical.com>
- <20211216094426.2083802-6-alexandre.ghiti@canonical.com> <1956456.1639746081@warthog.procyon.org.uk>
-In-Reply-To: <1956456.1639746081@warthog.procyon.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Dec 2021 14:09:31 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1M-kDqe0uwzyfUiErOavoEi3bVpy4m4BPbBXQr6JrHdw@mail.gmail.com>
-Message-ID: <CAK8P3a1M-kDqe0uwzyfUiErOavoEi3bVpy4m4BPbBXQr6JrHdw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] Documentation, arch, fs: Remove leftovers from
- fscache object list
-To:     David Howells <dhowells@redhat.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Steve French <sfrench@samba.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jeff Layton <jlayton@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com
+Received: by 2002:a5d:5284:0:0:0:0:0 with HTTP; Fri, 17 Dec 2021 07:41:00
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <mrsaishag88@gmail.com>
+Date:   Fri, 17 Dec 2021 07:41:00 -0800
+Message-ID: <CAFGDMRtKGyZiiTfzULTKo4ohvL3kRgZ2x9vYGqnnjd75dhsEEw@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hLxcLGJobju1Hy8o/4lalmO21mxrA/gxXSLx1+T+8tRx09fRKR2
- kZSLHoQ7vwqmWXkWZUtGybzIbvtXcwWRK7RfmkdE7bS3c0OTJh+iJUF7P05+9KfxMasilqv
- BCTj0ePnXc4M/3VDcHI3ZwM5ccl7OgKjUkULNuC0g5dkDmTOX0+ZgBT/CKj8oUgBBaJj2e4
- 1g9zSlYYH7DpvM2iXdpsQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2PZaWxpMsa4=:A3gCyZo3oFOL7En6B4sCju
- jyk7WAOL88OO5k13jwzXV+bAh1Oya0qRARReutgSW/6dWu/3lKqc/pwYIUBuAgPqErM0GAfMO
- z/FG0fiqLUe+3hTm2Fi5d1HXkByYl866t0ByFKB2EdxhWj+CAyqgw8U+OBMv0TaKt5QhMSThX
- OObETgmklFI+6AZgio+onY2v7SmJhbR7h56RfT49Ne5QT8po75XQ80U3JEWZk/p7ihs/t7nvz
- CtvvEvXRHq6ttwG+Hb2lmdy2i0ur7idobdid+Vk9gBIjHoajw+t4BC5UnZFOQ69WfXx18dJcg
- J2/shj55SgNMz5yWlcGC2MFw8PawgXuB4QWJSH4DEI5TJvgs8Hlrx9HvYbVFE4v9ifiNE7Ta+
- aI/pLqyocw2vn5XP1ieLZnHFBwzjsyGvmYAQ/Yc2mzF7mLxGEjFuOT6IG+qYLSAioPZblqeNc
- qlMypxs+6tUJH2u+8WzlnnkcavtKeNfJ456Kyla0swuAeb9hfBPXa3q++9ambCLIX0NwoTLw4
- 5tBREScyY2C97z2LJx1DKQ9mbCkBXVyKOZocdnHtRlhDK3ah6l5DLiFRUJeY5JYOFrI+BLogP
- BdnWPLk3OFI08oVsmH1MdJPOetN1DOCEnFxUkiGyoaaHN4swQktM0hZWuSpdvxjK2V8PL/+/T
- HJOqxGP+DWNEjL4Mh/E/n+p2YE3pSBbyaIRLmlnecrTKH9J5fYrby2kNHQA5izEKB6Xo23poD
- 41DN2pzbQ4Pk1fL/O13wCxKgTDALpl6Nv0yc5TwQCuJQbalgyEtmoWVHzmA12p2j3AchHjGRE
- Fn+nHLnTEgjor+3Txt8DMZlXUJtk3lgRvXIETt6JuBKjlzF+kg=
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:01 PM David Howells <dhowells@redhat.com> wrote:
->
-> Hi Alexandre,
->
-> >  Documentation/filesystems/caching/fscache.rst | 89 -------------------
-> > ...
-> >  fs/fscache/object.c                           |  3 -
-> >  fs/fscache/proc.c                             | 12 ---
->
-> Can you please drop all of the fscache bits?  They're dealt with by my
-> fscache-rewrite patchset that I'm proposing for the next merge window[1].
+Dear Friend,
 
-I've dropped them both from the asm-generic tree.
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
 
-       Arnd
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+
+Your Urgent Reply Will Be Appreciated
+
+Best Regards
+Mrs Aisha Al-Qaddafi
