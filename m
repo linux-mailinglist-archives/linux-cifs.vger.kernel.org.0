@@ -2,75 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2347D443
-	for <lists+linux-cifs@lfdr.de>; Wed, 22 Dec 2021 16:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20AF47D4C9
+	for <lists+linux-cifs@lfdr.de>; Wed, 22 Dec 2021 17:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343711AbhLVPd2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 22 Dec 2021 10:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S229436AbhLVQEU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 22 Dec 2021 11:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237912AbhLVPd2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Dec 2021 10:33:28 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C1C061574
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Dec 2021 07:33:27 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id y68so7831521ybe.1
-        for <linux-cifs@vger.kernel.org>; Wed, 22 Dec 2021 07:33:27 -0800 (PST)
+        with ESMTP id S229957AbhLVQEU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Dec 2021 11:04:20 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355AC061574
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Dec 2021 08:04:20 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id kd9so2687597qvb.11
+        for <linux-cifs@vger.kernel.org>; Wed, 22 Dec 2021 08:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=ncjzj9RiUZpCIoC2a2VzvFA9cwMZVl00CzKdmoXMOa7+eBlS9eafPqqUH5B2gYvRvD
-         7Rw/vNWY+BwQxSR8dPqpdV0wPF4+y0gdzwmVuLqrN+5WJBBR7FjUL9v1iOQa7QJZHjDk
-         lEnVGRxKHnqgFbxIpsJT4KBawX3uAHNSjjPBz8cP2nYJGGN2xpdybiKYiKzpSGTM26rC
-         zMxgsf15kFVZ+NOcVx49u59IQ1LUYAFkMxvi7OLtnoiLitd7IyrmPkeymRTZ5f85pdG9
-         cJ9Q2ItW0O1DEbuLNvd8J5eNtZbV2rqMNow8IuhN3JBZHSWiVZ4/+rgG3HFWcdrFU/tx
-         yhZQ==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YyF03xCIR7a/gHYcxi3+4aYjvLR9rTtlYrHDfuOd4wc=;
+        b=Oy3ty0e50l1tlDMO8m+0uBiqF33LEZqf7o1VwjvX90GtEM8EvBaVxU/aUuUphADtPU
+         DnLXjKLDjEQQ6UaV8JcL6hsEjynW4feEaG9NEs61DL8CSCRGNBSkAxDDFvZpvuG6AySf
+         M8KrTM6dkFmwZUTbmxTIJdPXxudoee3ZWldnh6uBW9jeaTki8oGu0xTxe5FtfnKbkwxa
+         LCPXX/AMqxS6Rvt+Lw397WxthHP6d406h2QaWetsPBtxMgtgJoO8psjPBdr/ZMkKFX6I
+         /VY6oUbLqQpSBn+9Fgm5kzylDpg45p/CKUdReY+M/m8wLieHSJiyGQZfuDe2dztHomwG
+         wghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=BQNvBYxb8hMeSFaYiQtZJ1CNcIp2rNalO90mbnvRIZ7IWnBm5AzizfG+t4b7bk3yKk
-         XNUxKrTQE06gicsWDVuN7f4HD6kTzf6eY6UU+Re2MLpGGTa/NH5Ro+9RfVC7AOtf4C8Q
-         j2Rumk00Wi1AVVTrJuSt6DoTlv2hcClqDiwT9ArnfgpxkTZnu5JcgFLVCMy/wQym36iM
-         3L4TGytJRLnqq6Zc6e5brGyRwG8NyDoLJYx2I5ZLoNqYwTexD30zT84SBToo4/I06D6B
-         UBNgqPWLwS4mQr2ixTADsSrK111doa8u5zCLjtyZDDsOGKOeGHnL8lga3QwaeB1oe81v
-         Lnxw==
-X-Gm-Message-State: AOAM531cAIZVW3E/uWNKYBrM4TQEY9AXZ45ruHO8pTgm9swzJ0/FS78E
-        XWgAcPUjpaV19Ym4nE0BSyIadVEohmtubeTddus=
-X-Google-Smtp-Source: ABdhPJzByBtW8lbt0QP0ejZPHsSeI+Qub7+VDaq+wUv4cCbYKX2dr5uWl353xvH5+Dwoe7IrOhLsNqqNhQdusDdeL5U=
-X-Received: by 2002:a25:20a:: with SMTP id 10mr5273655ybc.221.1640187207038;
- Wed, 22 Dec 2021 07:33:27 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YyF03xCIR7a/gHYcxi3+4aYjvLR9rTtlYrHDfuOd4wc=;
+        b=pNBwKCtQRk9MjC28BxHR4TRYyAqj7gA/paxqIoTmgSSUPkNsSNgvu/R1mY9QyzHHlZ
+         munpaCAmnFzFW7kk9QapGjc1ARIqnuWaB8CPlnfUln2YD0hq54T9H86AXBZAwCyxu3/i
+         2GWsJVbeCIUMTxXU1vmcMGAqgz2sfgq9I11c5oRHPK26iRsK1BlI1cdT3nNLvJFH5yip
+         q33TJqrl6Tkbbd9B+W2d0abiwd6EXZI64J1fYVs9wvBkJw/HAIZcNIVnnlebep3ZyJ+A
+         qQ74S4pgfY7E8WVv8Gf3fSRsvNahxzHI333hMB4VUqvGMQewAv/HfzEq2YcN54wZw8Mm
+         Bbfg==
+X-Gm-Message-State: AOAM531iacRCYwsQfUf6P624SKNuZRIXbCFKv7mxSzf4bOk3/uwub/Wq
+        3/HijAkCD8CUOY+TL3CUJ41p4LWJaBs=
+X-Google-Smtp-Source: ABdhPJwoeI9ropVKd1eOwmXH2Z9hy3udLBhVkKBDRjl2MtBqYkz5utmiwdLLl02CNQdYYOkb5UUgNg==
+X-Received: by 2002:a05:6214:e6e:: with SMTP id jz14mr2938132qvb.33.1640189059304;
+        Wed, 22 Dec 2021 08:04:19 -0800 (PST)
+Received: from pascal.home.bair.one (2603-7000-0d07-ad00-0000-0000-0000-081b.res6.spectrum.com. [2603:7000:d07:ad00::81b])
+        by smtp.googlemail.com with ESMTPSA id d17sm1909361qtx.96.2021.12.22.08.04.18
+        for <linux-cifs@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 08:04:19 -0800 (PST)
+From:   Ryan Bair <ryandbair@gmail.com>
+To:     linux-cifs@vger.kernel.org
+Subject: fix workstation_name for multiuser mounts
+Date:   Wed, 22 Dec 2021 11:04:04 -0500
+Message-Id: <20211222160405.3174438-1-ryandbair@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Received: by 2002:a05:7110:5282:b0:11b:1d37:210e with HTTP; Wed, 22 Dec 2021
- 07:33:26 -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <whitemrshannah@gmail.com>
-Date:   Wed, 22 Dec 2021 07:33:26 -0800
-Message-ID: <CAPOLZixyz+paQ0DfZKObqmRvtHm4Ua0NBh1D-hbM7Td1Gi0b8g@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Friend,
+Long time user, first time contributor. 
+Please let me know if I need to be doing something different. 
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. My name is Aisha Gaddafi a single Mother and a
-Widow with three Children. I am the only biological Daughter of late
-Libyan President (Late Colonel Muammar Gaddafi).
+Thanks,
+-Ryan
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-Best Regards
-Mrs Aisha Gaddafi
