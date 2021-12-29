@@ -2,77 +2,54 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC30481712
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Dec 2021 22:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723E948171A
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Dec 2021 22:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbhL2Vcg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 29 Dec 2021 16:32:36 -0500
-Received: from mail.astralinux.ru ([217.74.38.119]:41918 "EHLO
+        id S232167AbhL2Vkf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 29 Dec 2021 16:40:35 -0500
+Received: from mail.astralinux.ru ([217.74.38.119]:43858 "EHLO
         mail.astralinux.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbhL2Vcg (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 29 Dec 2021 16:32:36 -0500
-X-Greylist: delayed 399 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 16:32:35 EST
+        with ESMTP id S231322AbhL2Vkf (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 29 Dec 2021 16:40:35 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id C96052FA8066;
-        Thu, 30 Dec 2021 00:32:34 +0300 (MSK)
+        by mail.astralinux.ru (Postfix) with ESMTP id 0615B2FA7FBB
+        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 00:40:34 +0300 (MSK)
 Received: from mail.astralinux.ru ([127.0.0.1])
         by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id VA3HS0ZxnR7w; Thu, 30 Dec 2021 00:32:34 +0300 (MSK)
+        with ESMTP id USmlMObV-Zk2 for <linux-cifs@vger.kernel.org>;
+        Thu, 30 Dec 2021 00:40:33 +0300 (MSK)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 466972FA8069;
-        Thu, 30 Dec 2021 00:32:34 +0300 (MSK)
+        by mail.astralinux.ru (Postfix) with ESMTP id 938BC2FA8001
+        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 00:40:33 +0300 (MSK)
 X-Virus-Scanned: amavisd-new at astralinux.ru
 Received: from mail.astralinux.ru ([127.0.0.1])
         by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JeSdrgKkN6fo; Thu, 30 Dec 2021 00:32:34 +0300 (MSK)
+        with ESMTP id Pqz5-iGTeQJB for <linux-cifs@vger.kernel.org>;
+        Thu, 30 Dec 2021 00:40:33 +0300 (MSK)
 Received: from himera.home (37-145-209-165.broadband.corbina.ru [37.145.209.165])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id EFC212FA8066;
-        Thu, 30 Dec 2021 00:32:33 +0300 (MSK)
-Date:   Thu, 30 Dec 2021 00:32:32 +0300
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 584A82FA7FBB
+        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 00:40:33 +0300 (MSK)
+Date:   Thu, 30 Dec 2021 00:40:31 +0300
 From:   Eugene Korenevsky <ekorenevsky@astralinux.ru>
 To:     linux-cifs@vger.kernel.org
-Cc:     Steve French <sfrench@samba.org>
-Subject: [PATCH] cifs: alloc_path_with_tree_prefix: do not append sep. if the
- path is empty
-Message-ID: <YczT8K47eA6JqEIB@himera.home>
+Subject: bug: DFS namespaces with non-ASCII symbols cannot be mounted
+Message-ID: <YczVz6tiutXEGmLk@himera.home>
+References: <YczT8K47eA6JqEIB@himera.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YczT8K47eA6JqEIB@himera.home>
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-alloc_path_with_tree_prefix() concatenates tree prefix and the path.
-Windows CIFS client does not append separator after the tree prefix if
-the path is empty. Let's do the same.
+Please pay attention to the bug:
+https://bugzilla.kernel.org/show_bug.cgi?id=215440
 
-This fixes mounting DFS namespaces with names containing non-ASCII symbols.
+The patch in previous message is a solution.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215440
-Signed-off-by: Eugene Korenevsky <ekorenevsky@astralinux.ru>
----
- fs/cifs/smb2pdu.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 8b3670388cda..88ea0163257c 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -2527,8 +2527,13 @@ alloc_path_with_tree_prefix(__le16 **out_path, int *out_size, int *out_len,
- 
- 	cp = load_nls_default();
- 	cifs_strtoUTF16(*out_path, treename, treename_len, cp);
--	UniStrcat(*out_path, sep);
--	UniStrcat(*out_path, path);
-+
-+	/* Do not append the separator if the path is empty */
-+	if (path[0] != cpu_to_le16(0x0000)) {
-+		UniStrcat(*out_path, sep);
-+		UniStrcat(*out_path, path);
-+	}
-+
- 	unload_nls(cp);
- 
- 	return 0;
--- 
-2.30.2
+But the problem is more
+global: after tis patch, Windows SMB server returns undocumented response
+STATUS_OBJECT_NAME_INVALID to SMB2 CREATE request for DFS referrals at
+non-ASCII DFS namespace. And 'ls' for mounted  non-ASCII DFS namespace
+fails.
