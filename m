@@ -2,123 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D73F9481AAF
-	for <lists+linux-cifs@lfdr.de>; Thu, 30 Dec 2021 09:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6CF481DF1
+	for <lists+linux-cifs@lfdr.de>; Thu, 30 Dec 2021 17:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbhL3IP3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 30 Dec 2021 03:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S240684AbhL3QIi (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 30 Dec 2021 11:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhL3IP2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 30 Dec 2021 03:15:28 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9257FC061574
-        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 00:15:28 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id s15so20790293pfk.6
-        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 00:15:28 -0800 (PST)
+        with ESMTP id S240663AbhL3QIi (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 30 Dec 2021 11:08:38 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C457AC06173E
+        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id j83so54858314ybg.2
+        for <linux-cifs@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:mime-version:subject:message-id:date:to;
-        bh=sw3QPnKQCF/U+4v/Crq3SYPNJ6wegRCRUFRLMfBwQjU=;
-        b=nh/F4VU2A+P/6kDXPfLoBQbgO7YFyXqlCrvJ7HjBX4hro4y9ZbMTZLfd7g5jUa9nK6
-         NcwCphFnULY98233XJlL3/vZW877cerfU/QAoSQ1JF7CKGSiWDPH4M/roynQvjl8FWz3
-         b8vE+8p+Rc+1LabZQDvYZ2Mc9G4l8lgOGZCIvmFwsFpkz7Po7XZbfDdpA8nAwp7KdJ1O
-         z8Eh5S5zvpS4Kv771WVGHJeL/069Y8fSkcKgsrLyKH2G/0tbx1YZ1KSoeSsk0Gb9/Ulv
-         nCCKmVhDWApeLN+xc5XY2I3SBx1CUhnZy1d3GHCv8pWhmmq6M+CxE1VmRFv0RGqoEUOw
-         coPA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
+        b=g8o2h2RQcqNo/F+3DYQfaJEsouH/CqW+llScFI+0y/YK9gshPwoSnBA7u+fxrgE5mE
+         LIYxPuNLOS4V24zLsyUSlMBWaltD8K88+j8rjh1OGXrTk+5yCckAdxE40dkz3ZA2qjDf
+         pP74lReWCH0oiCqFf+mX4H2HIK/WMnUXAMGrRwmNhufvLVo9G0TSAZ00+bI/hhN0Qw6f
+         ibdw6+bmk9rS8/AmIRqdp0QRTTdDwRjLtTvAxrPlODMeab9dKj/aH2uIgJm3UNRp8xRq
+         OSteVQSFB/SB2W41XfTndznnl5PcD/nAK09nfV/srz8zHZtOtsf+cG0lBc00bjWBOVF6
+         6YaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:mime-version:subject:message-id:date:to;
-        bh=sw3QPnKQCF/U+4v/Crq3SYPNJ6wegRCRUFRLMfBwQjU=;
-        b=oFviPbR3tXCaDaD0uydWGQ5214GHnrUlrisIamP7kjQt0C6x75faSNnsxvTB7Dle4I
-         FQmbEj+EfQ5Edq9AgTWgeYMQcaSpw+4OWxE8z91l3xPSZexK+tiwjEwpVU94CsDuA3gu
-         9s2rCihOimrZr3n95YJ7DJcmCEfLuj/yIc6T69uHevQcUex1KTh19p0wZAaZlzDc/2KC
-         FE1FBRpMHaZBjAU6+Cfd4QiwJySoZBXkEKinluMZsl3ddn5i+Dh3DACYK9fxBKbsRjrx
-         bNYXMVYLO8pHHcpW7yPM4opjvdUweEUg1GMsX2hVfcdt6P+8XHpeqChDf/p35e9LtWv7
-         KcgQ==
-X-Gm-Message-State: AOAM532mm9/GqPJ4sc1Iy3RqDpHC9vEz9TPYexqOCbxNvZhk0bJkP3n0
-        co5H/G9zCk2WFXCe5XEFlcWO9Cg+6TA=
-X-Google-Smtp-Source: ABdhPJy9Ue/G6JNi+cvJMB9ztVuUzbw1e0q9SUYaSkMxZ8Z+fzdzCM0l9n1o8eh1dj9igc6lAOKdPg==
-X-Received: by 2002:aa7:88ce:0:b0:4ba:efec:39e0 with SMTP id k14-20020aa788ce000000b004baefec39e0mr30526296pff.80.1640852127798;
-        Thu, 30 Dec 2021 00:15:27 -0800 (PST)
-Received: from smtpclient.apple ([110.76.108.172])
-        by smtp.gmail.com with ESMTPSA id j20sm405221pfh.22.2021.12.30.00.15.26
-        for <linux-cifs@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Dec 2021 00:15:27 -0800 (PST)
-From:   =?utf-8?B?6rmA7JiB7ZuI?= <lanph3re@gmail.com>
-Content-Type: multipart/mixed;
-        boundary="Apple-Mail=_4AB26377-62D8-4938-AA3F-B4B93D2A1C06"
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
-Subject: Patch for ksmbd-tools (issue #222)
-Message-Id: <BCCDD94E-F82F-4EDA-AC7E-9393C217A459@gmail.com>
-Date:   Thu, 30 Dec 2021 17:15:24 +0900
-To:     linux-cifs@vger.kernel.org
-X-Mailer: Apple Mail (2.3693.20.0.1.32)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
+        b=JW1kU0Gj2tgk04hw57BQ+NXJH6YErADFKww7GSERRtm3J946MnkvAMIyIsswBfcyl5
+         xaEr6Vjk1zykzamhWOV11/W5ao8FaRg7b9dSc+5ymiKlfKanZ5Bt5xbeTDBjpFZak4ze
+         IiuPrVFnXTgamMZgROy6abWLj+82++UCRGUIWB+4d/Z0eYGRFqmZMzHy9Lm5k8YIInIk
+         0/1n4gQ+imhPaiMUXH5QBjrqCMY1u19GObXHiK8OxGXGee5/VFWzwi6NjWHQtwpqgV0/
+         Ttm1fiBcrzwkofrnNJiTudfJAdXzHL7dajeU6xYf13SAk4Pz4E63ZcJZ2ToZll/JDd3S
+         LMJA==
+X-Gm-Message-State: AOAM533Jcz8mn8fLZuMtVr/Pe1pKpNOl7s6+zx6DJkx8XubnmecJf2OA
+        kHSm18+oZUHcz49Z57AGpHypqRrlDIf3v7XXiw==
+X-Google-Smtp-Source: ABdhPJwuSjN7xfoyLu1r1dQt30WYWXddHE0I+3dzQKxwPhzuycpakWPgAPiRrrYt6R9lB0Z+hLKjWp3HLc3CnoYu6Ig=
+X-Received: by 2002:a25:cec6:: with SMTP id x189mr30595254ybe.470.1640880516931;
+ Thu, 30 Dec 2021 08:08:36 -0800 (PST)
+MIME-Version: 1.0
+Sender: anera.lenneh@gmail.com
+Received: by 2002:a05:7110:4b09:b0:11e:f454:286b with HTTP; Thu, 30 Dec 2021
+ 08:08:36 -0800 (PST)
+From:   Mrs Aisha Gaddafi <aishagarddaff@gmail.com>
+Date:   Thu, 30 Dec 2021 08:08:36 -0800
+X-Google-Sender-Auth: 7y8Zq0ZzNomh2WVyIrjYFGYVx2Q
+Message-ID: <CAKsGGvO9_2GzH0HZ-OhHRhj1gj+ku_UTm3-=WH_r0OwgE-2pZg@mail.gmail.com>
+Subject: Urgent Message From Mrs Aisha Gaddafi.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Dear Friend,
+Greetings and Nice Day.
+Assalamu Alaikum
 
---Apple-Mail=_4AB26377-62D8-4938-AA3F-B4B93D2A1C06
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
 
-Hello, I wrote an issue #222 in ksmbd-tools repository.
+May i  use this medium to open a mutual communication with you seeking
+your acceptance towards investing in your country under your
+management as my partner, My name is Aisha  Gaddafi and presently
+living in Oman, i am a Widow and single Mother with three Children,
+the only biological Daughter of late Libyan President (Late Colonel
+Muammar Gaddafi) and presently i am under political asylum protection
+by the Omani Government.
 
-The one of the maintainers commented that I can send the patch to the =
-mailing list.
-I attached the patch generated with `git diff`.
-I=E2=80=99ll also leave the original link for the issue below.
+I have funds worth "EIGHT Million Five Hundred Thousand United State
+Dollars" -$8.500.000.00 US Dollars which i want to entrust on you for
+investment project in your country.If you are willing to handle this
+project on my behalf, kindly reply urgent to enable me provide you
+more details to start the transfer process.
+I shall appreciate your urgent response through my email address.
 
-Thank you.
-
-Issue link: https://github.com/cifsd-team/ksmbd-tools/issues/222=
-
---Apple-Mail=_4AB26377-62D8-4938-AA3F-B4B93D2A1C06
-Content-Disposition: attachment;
-	filename=issue222.patch
-Content-Type: application/octet-stream;
-	x-unix-mode=0644;
-	name="issue222.patch"
-Content-Transfer-Encoding: 7bit
-
-diff --git a/addshare/addshare.c b/addshare/addshare.c
-index 7458b6c..3c997e1 100644
---- a/addshare/addshare.c
-+++ b/addshare/addshare.c
-@@ -91,10 +91,10 @@ static int sanity_check_share_name_simple(char *name)
- 		return -EINVAL;
- 
- 	for (i = 0; i < sz; i++) {
--		if (isalnum(name[i]))
--			return 0;
-+		if (!isalnum(name[i]))
-+			return -EINVAL;
- 	}
--	return -EINVAL;
-+	return 0;
- }
- 
- int main(int argc, char *argv[])
-diff --git a/adduser/adduser.c b/adduser/adduser.c
-index 5ffb296..7f7988b 100644
---- a/adduser/adduser.c
-+++ b/adduser/adduser.c
-@@ -88,10 +88,10 @@ static int sanity_check_user_name_simple(char *uname)
- 		return -EINVAL;
- 
- 	for (i = 0; i < sz; i++) {
--		if (isalnum(uname[i]))
--			return 0;
-+		if (!isalnum(uname[i]))
-+			return -EINVAL;
- 	}
--	return -EINVAL;
-+	return 0;
- }
- 
- int main(int argc, char *argv[])
-
---Apple-Mail=_4AB26377-62D8-4938-AA3F-B4B93D2A1C06--
+Best Regards
+Mrs Aisha Gaddafi
