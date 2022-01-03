@@ -2,73 +2,120 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DF3483021
-	for <lists+linux-cifs@lfdr.de>; Mon,  3 Jan 2022 11:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581134833C3
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Jan 2022 15:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbiACK7B (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 3 Jan 2022 05:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S232323AbiACOul (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 3 Jan 2022 09:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbiACK7B (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Jan 2022 05:59:01 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68FDC061784
-        for <linux-cifs@vger.kernel.org>; Mon,  3 Jan 2022 02:59:00 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id i9so46218689oih.4
-        for <linux-cifs@vger.kernel.org>; Mon, 03 Jan 2022 02:59:00 -0800 (PST)
+        with ESMTP id S232301AbiACOul (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 3 Jan 2022 09:50:41 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01B0C061761
+        for <linux-cifs@vger.kernel.org>; Mon,  3 Jan 2022 06:50:40 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l4so21553303wmq.3
+        for <linux-cifs@vger.kernel.org>; Mon, 03 Jan 2022 06:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PrtkiLnruR90iW6K5TjEW64KiN6Egmec2tVvw5EN+Jg=;
-        b=nErk3pBeR55LCYMr+Vbyc0UB9lc/O9qI/UE2OOKHlY/pcZ5xvc3e3okdGjVG2E0TRp
-         L/yeS5VbOuEmTFXvY53cAM83YUxIN87ONGLNl6eEQxssA2CitPDxYxwYNpTcOY0gmFU/
-         ucCjkc34bt+LxEePh+nToZzFaIaOmX1QL7yznQTvuLc+fW+iV3WpyWvoRL4S0xsUw6LT
-         uYWtXNsEWLucoZANJy+CFXeQWKeuzdY/idKZCt+gresSMfPNODr2/5NI5CI24kIlPXeV
-         2GgSWJbMBp0Y9P7er3YSRzMtBw3KvLQUdeaXhUQ3fRF5k8172yFmgq7GFJb/NkTx+3sw
-         lfqg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=re67WGqWcG/HXr1cYssMtIWoyahh9zUkXGzeD4T8vyo=;
+        b=HByRcjvB1fNXdy8FsnFigwcbjfoqq4/8BiI9wi9GHn9dwFOpW1ixFtvGKL/bM4PynW
+         xTQKFs/IKcUQ/IJO01WMG0JUmwYPwxhgtTF6CGjisF/HJbgfTCYwXKLr9sIs7LzmXV0A
+         thJjA5/rVZNOiTgyesmu1r/ZiiwgCr3hCFVwkdPO7dANDicQCyqG1Z0wndbWEbeWpEme
+         ZeD4psZWYkdWGG+e0nrfjdlqYaEJsdNAmkEnE4m5RCvvznc+kEfvkxWuDV1Ljztf1HEP
+         5joY+geaLVYSpSxslgSaTtP6t1jp5G55BjTGE8ceC/7o535uWX5HMMZEfeG4x4MYPNF6
+         bpQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PrtkiLnruR90iW6K5TjEW64KiN6Egmec2tVvw5EN+Jg=;
-        b=Zs3ZOUoqv4Zk9UZ28vlmjhGPSeSetx0LdJKPsubpt2u0Hk0ebn57foCiZQuX8aglpr
-         zg8jfJuIpsi6NUL1mhg1PjY/qnsipIhhOcxGwFW48jTyvWiMJDLzAsVAUZzka4EQgkom
-         7t6Vo9pZGYfdRYJKPtTgVm2LTKud2YrnONoCHrm55HCYpJoZSW5mzgHHU3+aDUfvbY/q
-         DDTc/wpd1/3JFoSJktJYQP1wK5zn7GzaHxLjTzwWnhMcY55P/4O2Uv3DK7QWxJplUQrB
-         Exwngj3EciI+6CYeINxggYd3RIZ1aXkDH+6pwGYMkGVMVHUOEkt0tUfVW7TW+Pobf/1J
-         9IXg==
-X-Gm-Message-State: AOAM531P3zlk/pu7XsDaqLhBVc+4X0ycZDFmG1ONsN+NNtrHyr/5HpzC
-        q5ChLigivABt0RQfwtecw2oS82rnqmhqwOu6UI4=
-X-Google-Smtp-Source: ABdhPJwgydQBa9a/wB9z1Gk1XesqG0dmeFm49cKrYvuESMeGo92J0RwlzwoscA8SW+9TDoy0vegj3WT9L1bc2Q/BCg4=
-X-Received: by 2002:aca:ac93:: with SMTP id v141mr35628433oie.106.1641207540129;
- Mon, 03 Jan 2022 02:59:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=re67WGqWcG/HXr1cYssMtIWoyahh9zUkXGzeD4T8vyo=;
+        b=66nrQ8NmSeZDGjR02jl+6oamMmSbNIU0Wq8mDZ0qISE/8FW1YC0S11KlubzHUbHzLE
+         FvaT3ZYZY1ZF0FFuN/D6Ex9asI+3yTfVzldA9OJtlTFESQmZwQgUFInRvqGrC7dkUiTJ
+         pgT1HldtRMOv20Fx4bnX8wAlS2R++xWbqXbnpTfbWBQgjNooq1bIhzFr4f4VN3Zi7Zsa
+         fh8ofq2vJmZQZWeWXUAFKa4jGQEVr0z6yilLt5rVA9OJLj0hijAd8WJ5KPDI0ifkg7O+
+         YdFPa5r26LSUObddU/ot1KAHnV+grE1FND6M5BjvA31dKNGCEN7Q2c2YjIsB58eR3xkR
+         RgnA==
+X-Gm-Message-State: AOAM533Qwm5MXAm+6mGFXD7VG2JT1XffFUG9pZCjRiw7zgchDyDm0Gt/
+        8fS1DIX9wFPnP/x+I0QMki5/CK5P7QA=
+X-Google-Smtp-Source: ABdhPJyNTsnV82RtboxGSY3V+cP1PPdpDd2YI3hrZdtBdSGgEhj55429D0408/U8+XA3YeQQqsILPg==
+X-Received: by 2002:a7b:cd82:: with SMTP id y2mr11095691wmj.99.1641221439212;
+        Mon, 03 Jan 2022 06:50:39 -0800 (PST)
+Received: from amir-ThinkPad-T480.ctera.local (bzq-166-168-31-246.red.bezeqint.net. [31.168.166.246])
+        by smtp.gmail.com with ESMTPSA id i15sm25787423wrf.6.2022.01.03.06.50.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 06:50:38 -0800 (PST)
+From:   Amir Goldstein <amir73il@gmail.com>
+To:     Steve French <smfrench@gmail.com>,
+        Boris Protopopov <pboris@amazon.com>
+Cc:     Pavel Shilovsky <pshilovsky@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs@vger.kernel.org
+Subject: [PATCH] cifs: fix set of group SID via NTSD xattrs
+Date:   Mon,  3 Jan 2022 16:50:25 +0200
+Message-Id: <20220103145025.3867146-1-amir73il@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6838:7cd1:0:0:0:0 with HTTP; Mon, 3 Jan 2022 02:58:59
- -0800 (PST)
-Reply-To: mmjanee02@gmail.com
-From:   Mary Jane Kallon <maurmbama1@gmail.com>
-Date:   Mon, 3 Jan 2022 02:58:59 -0800
-Message-ID: <CAD2nLk63VNw+VL3Vh1NutU4vDosoiX_y4Kz-aQEWTkjg_YoOuQ@mail.gmail.com>
-Subject: MY INFORMATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-Dear,
-How are you doing today? I got your contact from a directory andpicked
-interest to communicate you by faith, though we have not met before, I
-believe we can achieve something together. My husband died few years
-ago after battling with brain cancer, before his death, he deposited
-($10.5 Million) in one of the financial institution. He wanted to
-establish coco processing factory and also real estate business.
+'setcifsacl -g <SID>' silently fails to set the group SID on server.
 
-After the death of my husband, I have been receiving all manner of
-life threats from the family members, now the pressure is getting more
-severe I decided to leave this country. Please can you partner with me
-and receive the fund in your account while I come over there with my
-son for investment. If you  agree, get back for more details and what
-will be your commission for the assistance. I wait for your reply,
-Mary Jane Kallon
+Actually, the bug existed since commit 438471b67963 ("CIFS: Add support
+for setting owner info, dos attributes, and create time"), but this fix
+will not apply cleanly to kernel versions <= v5.10.
+
+Fixes: a9352ee926eb ("SMB3: Add support for getting and setting SACLs")
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+---
+
+Boris,
+
+I am a little confused from the comments in the code an emails.
+In this thread [1] you wrote that you tested "setting/getting the owner,
+DACL, and SACL...".
+
+Does it mean that you did not test setting group SID?
+
+It is also confusing that comments in the code says /* owner plus DACL */
+and /* owner/DACL/SACL */.
+Does it mean that setting group SID is not supposed to be supported?
+Or was this just an oversight?
+
+Anyway, with this patch, setcifsacl -g <SID> works as expected,
+at least when the server is samba.
+
+Thanks,
+Amir.
+
+
+[1] https://lore.kernel.org/linux-cifs/CAHhKpQ7PwgDysS3nUAA0ALLdMZqnzG6q6wL1tmn3aqOPwZbyyg@mail.gmail.com/
+
+ fs/cifs/xattr.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/cifs/xattr.c b/fs/cifs/xattr.c
+index 7d8b72d67c80..9d486fbbfbbd 100644
+--- a/fs/cifs/xattr.c
++++ b/fs/cifs/xattr.c
+@@ -175,11 +175,13 @@ static int cifs_xattr_set(const struct xattr_handler *handler,
+ 				switch (handler->flags) {
+ 				case XATTR_CIFS_NTSD_FULL:
+ 					aclflags = (CIFS_ACL_OWNER |
++						    CIFS_ACL_GROUP |
+ 						    CIFS_ACL_DACL |
+ 						    CIFS_ACL_SACL);
+ 					break;
+ 				case XATTR_CIFS_NTSD:
+ 					aclflags = (CIFS_ACL_OWNER |
++						    CIFS_ACL_GROUP |
+ 						    CIFS_ACL_DACL);
+ 					break;
+ 				case XATTR_CIFS_ACL:
+-- 
+2.25.1
+
