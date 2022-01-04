@@ -2,88 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3154842C7
-	for <lists+linux-cifs@lfdr.de>; Tue,  4 Jan 2022 14:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D46C4849D5
+	for <lists+linux-cifs@lfdr.de>; Tue,  4 Jan 2022 22:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbiADNvf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 4 Jan 2022 08:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbiADNve (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Jan 2022 08:51:34 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBA3C061785
-        for <linux-cifs@vger.kernel.org>; Tue,  4 Jan 2022 05:51:34 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id d201so84298445ybc.7
-        for <linux-cifs@vger.kernel.org>; Tue, 04 Jan 2022 05:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
-        b=MOD+Zv88AfSiXD9TtMDuvVQHaZVJyUAeaxECTeG9iw00CgAPOtVuaUrvRQgb+Kyo7a
-         YGKtd9w6xYgWXybFChpwQsY/Z7aOn47wsHW8BI3FN7zOA/x9QHpRwJoG4Njhmn7q+W3H
-         /X80Fs3tmiKe/HzVL1a9A/IU7em0sC/u3HuAEOu7eVddJJx97dwVt+Kyr1lM4+5InF/n
-         CSCj6fdhNf5kG1YKyn/e2yx7ros4b2Bsl+WbhpdxpVvzjz1/cR9a+FxL1rP3jz/N/CAm
-         c1h7GeOD0y9rIJZECxY+yXnLjmNmLkTJCqFgSwwAXzWjLyUEC3AZwkLwI0eebNddDkcT
-         UszQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
-        b=Pby1kgPtsYPDIFiXFROcZP5UjDNAJKS+yYgQvygy9zK7uw3wTEUOj2pdRzJ3qMMkQB
-         DsqWuu5w1b9YO8RMh1eKvsv3TVPBhdbOJC2v9eFhb3oc9Z38tblZOTemfv9cIvgpTSum
-         S0c4eqlewiaUqrxRYMGlAsyZUJQIKbuRUaI8exlCkOurLuEuCEL4llTohR02OIXjdOzU
-         A+sll8nw7ZgkwVPLLM/TBjM0Q+iBQKaYNACxYaUNPvkOLFjsCcnz+Mfjjt+9H59zZykc
-         ufJqI4iWJVCNrzDIFJBKrv8+gRNHXBk+rEJ0S43lsutEulsspypzfwZREXcvS8NhliqD
-         FAhA==
-X-Gm-Message-State: AOAM530/izaVVmhh88jszPQ34mVCw6l1bIX3bF7O1MB1HT+P0XZdDhZB
-        LxByAdZEGUc6hBb5/i1AqCeH0ZxQGzJLWr+LUf4=
-X-Google-Smtp-Source: ABdhPJwY1D3h7V5MHnZOmyNzPYCobsd1mMk6JYbhfyblVkWwdST0DBL7VM9P3qB9mgRVm87RSwskLoWaZaxK9HrC9NA=
-X-Received: by 2002:a25:e70d:: with SMTP id e13mr58689415ybh.24.1641304292868;
- Tue, 04 Jan 2022 05:51:32 -0800 (PST)
+        id S234083AbiADVYq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Jan 2022 16:24:46 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35870 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234134AbiADVYp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Jan 2022 16:24:45 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id EF8A91F43DE4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641331484;
+        bh=fNOthzA/oqOjDWMc8+5brhPj9n+JoXNQ8+YI2p4wmaU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Mh3pmnIf7nD8nkQt4F4AaMXth63TbadsVfg5BYt8jmC7R2YgL6eNEbT8Epls1/v9f
+         5+gBPgRFfj83/UwiI6nJySwcVoqonXAxIEVn3J9weBUtL3lJGmenEOcNQP8Kauqtsz
+         a/QOi32OHuUsj0VSrJ7G9Qj/b7eJdm+bq6sgdZfPWt8g40yGIrv3V9XUbtJMuaLsnQ
+         +7vHjz8mu9YymkbVMNzVq+UKht3T+MWGhX6hBpyf8HgCvg5jX8/bKvO7ACb0uMV5J7
+         DgaSF/vwO4r8TagNIctGqqrH5aDGz0mdoCvyeC9Jk+I1hRpSsar40ji86ejeqQA9Tq
+         9btyx1TQUmBxQ==
+Date:   Wed, 5 Jan 2022 02:24:37 +0500
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Steve French <sfrench@samba.org>,
+        "open list:COMMON INTERNET FILE SYSTEM CLIENT (CIFS)" 
+        <linux-cifs@vger.kernel.org>,
+        "moderated list:COMMON INTERNET FILE SYSTEM CLIENT (CIFS)" 
+        <samba-technical@lists.samba.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     usama.anjum@collabora.com
+Subject: [PATCH] cifs: remove unused variable ses_selected
+Message-ID: <YdS7Fb/MzAy+IRyP@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-Received: by 2002:a5b:f10:0:0:0:0:0 with HTTP; Tue, 4 Jan 2022 05:51:32 -0800 (PST)
-Reply-To: michelmadi01@gmail.com
-From:   Mr Michel Madi <ousmaneouedraogo05@gmail.com>
-Date:   Tue, 4 Jan 2022 13:51:32 +0000
-Message-ID: <CA+u7ZgSnVSJ4B5jscL7RiqPZ7vs2oQWV3ygY3oJVv4dnyH5-rg@mail.gmail.com>
-Subject: Request
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Friend,
+ses_selected is being declared and set at several places. It is not
+being used. Remove it.
 
-Let me start by introducing myself, I am Mr Michel Madi Manager of
-Bank Of Africa Burkina Faso.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ fs/cifs/smb2pdu.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I am writing you this letter based on the latest development at my
-Department which I will like to bring to your personal edification.
-(7.5 million U.S Dollars transfer claims).
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 19c54b309e39..9a72c22bb189 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3790,7 +3790,7 @@ void smb2_reconnect_server(struct work_struct *work)
+ 	struct cifs_tcon *tcon, *tcon2;
+ 	struct list_head tmp_list, tmp_ses_list;
+ 	bool tcon_exist = false, ses_exist = false;
+-	bool tcon_selected = false, ses_selected = false;
++	bool tcon_selected = false;
+ 	int rc;
+ 	bool resched = false;
+ 
+@@ -3807,7 +3807,7 @@ void smb2_reconnect_server(struct work_struct *work)
+ 	spin_lock(&cifs_tcp_ses_lock);
+ 	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
+ 
+-		tcon_selected = ses_selected = false;
++		tcon_selected = false;
+ 
+ 		list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
+ 			if (tcon->need_reconnect || tcon->need_reopen_files) {
+@@ -3833,7 +3833,7 @@ void smb2_reconnect_server(struct work_struct *work)
+ 		spin_lock(&ses->chan_lock);
+ 		if (!tcon_selected && cifs_chan_needs_reconnect(ses, server)) {
+ 			list_add_tail(&ses->rlist, &tmp_ses_list);
+-			ses_selected = ses_exist = true;
++			ses_exist = true;
+ 			ses->ses_count++;
+ 		}
+ 		spin_unlock(&ses->chan_lock);
+-- 
+2.30.2
 
-This is a legitimate transaction and I agreed to offer you 40% of this
-money as my foreign partner after confirmation of the fund in your
-bank account, if you are interested, get back to me with the following
-details below.
-
-(1)Your age........
-
-(2)Your occupation.....
-
-(3)Your marital status.....
-
-(4)Your full residential address.......
-
-(5)Your private phone and fax number and your complete name.......
-
-As soon as I receive these data's, I will forward to you the
-application form which you will complete and send to the bank to
-commence the processing of the transfer, you can get back to me
-through this my private email address (michelmadi01@gmail.com)
-
-
-Best Regard
-Mr. Michel Madi
