@@ -2,97 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267B04868F6
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jan 2022 18:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B7C48693D
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jan 2022 18:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242202AbiAFRoP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 6 Jan 2022 12:44:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57359 "EHLO
+        id S241764AbiAFR63 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 6 Jan 2022 12:58:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48881 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242247AbiAFRoO (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 Jan 2022 12:44:14 -0500
+        by vger.kernel.org with ESMTP id S241753AbiAFR63 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 6 Jan 2022 12:58:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641491053;
+        s=mimecast20190719; t=1641491908;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zpIRZHdll9Kvd0nCHQ+ZsJmW/V2ZBc2nIIWedRx6PP0=;
-        b=bR3GxVjSoIQeuEyk0+GzR8OPzb07fxDPWWxUYZjo4hocfhoZzSS1c27XPtLAsiCShLE2K9
-        BfFATgMGjzqt3Od6gRkP6k4daNJh734/veEw0GCYgA8elaXCs60wthQnBArH2k6Z/3EXjr
-        kv9S/yUiGzuJJbxOAQxSlsP/qfuiHVQ=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PT9ey7hZx8cRSUsGa96WlhWve6b1NE4HPbJbyeLjnMk=;
+        b=izmvUUBFgEZ5lN2DOMQsm91O1hvdceWuXqsM8/ENKCpXTSGYfvEBRXE7Q8yYMOTrHPROCf
+        75F5kTIf9t1Jg1mrS3N9uIiVuDEqJuXX+93sevQxJXnEzaOZSV+74Fdn8TqWiHznRq5QkF
+        5xayyj0HOwIUd+lZGXuSDJ7YuJ2vwVk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-Bg1iYB-BPxuii1R-44xhhw-1; Thu, 06 Jan 2022 12:44:10 -0500
-X-MC-Unique: Bg1iYB-BPxuii1R-44xhhw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-264-ctdbpef8NvS4DpJI91OUXA-1; Thu, 06 Jan 2022 12:58:25 -0500
+X-MC-Unique: ctdbpef8NvS4DpJI91OUXA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EF87190A7A0;
-        Thu,  6 Jan 2022 17:44:08 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6F63781EE64;
+        Thu,  6 Jan 2022 17:58:24 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E22B777479;
-        Thu,  6 Jan 2022 17:44:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C5381091EF6;
+        Thu,  6 Jan 2022 17:58:20 +0000 (UTC)
+Subject: 
 From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <568749bd7cc02908ecf6f3d6a611b6f9cf5c4afd.camel@kernel.org>
-References: <568749bd7cc02908ecf6f3d6a611b6f9cf5c4afd.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021543872.640689.14370017789605073222.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 40/68] cachefiles: Implement cache registration and withdrawal
+To:     smfrench@gmail.com
+Cc:     nspmangalore@gmail.com, dhowells@redhat.com, jlayton@kernel.org,
+        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com
+Date:   Thu, 06 Jan 2022 17:58:19 +0000
+Message-ID: <164149189935.2867367.12096515579793121868.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2856723.1641491044.1@warthog.procyon.org.uk>
-Date:   Thu, 06 Jan 2022 17:44:04 +0000
-Message-ID: <2856724.1641491044@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+[RFC][PATCH 0/3] cifs: In-progress conversion to use iov_iters instead of page lists
+Date: 
 
-> > +	/* check parameters */
-> > +	ret = -EOPNOTSUPP;
-> > +	if (d_is_negative(root) ||
-> > +	    !d_backing_inode(root)->i_op->lookup ||
-> > +	    !d_backing_inode(root)->i_op->mkdir ||
-> > +	    !(d_backing_inode(root)->i_opflags & IOP_XATTR) ||
-> > +	    !root->d_sb->s_op->statfs ||
-> > +	    !root->d_sb->s_op->sync_fs ||
-> > +	    root->d_sb->s_blocksize > PAGE_SIZE)
-> > +		goto error_unsupported;
-> > +
-> 
-> That's quite a collection of tests.
-> 
-> Most are obvious, but some comments explaining the need for others would
-> not be a bad thing. In particular, why is s_blocksize > PAGE_SIZE
-> unsupported?
 
-It can't do page-sized DIO requests to a filesystem with a block size larger
-than a page.  In the future I can work around that in conjunction with
-netfslib by expanding read and write sizes.
+Hi Steve,
 
-> Also, should you vet whether the fs supports i_op->tmpfile here ?
+For your illumination, here's where I'm currently at with making cifs use
+netfslib more fully.  I ended up delving into the realms of converting it
+to use iov_iter instead of page lists and doing partial foliation.
 
-That's a good idea.
+It isn't complete yet and some of the patches don't compile, but if you
+want a look at what I've been doing...
 
 David
+---
+David Howells (3):
+      cifs: Use netfslib
+      cifs: Reverse the way iov_iters are used in reading
+      cifs: Eliminate cifs_readdata::pages
+
+
+ fs/cifs/cifsfs.h    |    3 +
+ fs/cifs/cifsglob.h  |   28 +-
+ fs/cifs/cifsproto.h |    8 +-
+ fs/cifs/cifssmb.c   |  219 +++++----
+ fs/cifs/file.c      | 1041 ++++++++++++++-----------------------------
+ fs/cifs/misc.c      |  109 -----
+ fs/cifs/smb2ops.c   |  132 +++---
+ fs/cifs/smb2pdu.c   |   12 +-
+ fs/cifs/transport.c |   41 +-
+ include/linux/uio.h |    3 +
+ lib/iov_iter.c      |   94 ++++
+ 11 files changed, 647 insertions(+), 1043 deletions(-)
+
 
