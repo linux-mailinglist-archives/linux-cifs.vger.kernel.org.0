@@ -2,81 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD21648C2DF
-	for <lists+linux-cifs@lfdr.de>; Wed, 12 Jan 2022 12:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB1D48C3A5
+	for <lists+linux-cifs@lfdr.de>; Wed, 12 Jan 2022 13:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352775AbiALLJm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 12 Jan 2022 06:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S1353025AbiALMBP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 12 Jan 2022 07:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352776AbiALLJk (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 12 Jan 2022 06:09:40 -0500
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0018BC06173F
-        for <linux-cifs@vger.kernel.org>; Wed, 12 Jan 2022 03:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=awvZsCH9vh6r2P0sbzH8u9YY6RFXHlW148Q+lmcG1FE=; b=Szuy6HS8Ul0hLBmQMWDITGului
-        E42ize4dMfcbe3InhN8PAKPDVyWDbeBTlJEGOuIc9oyzzuaiNliuQCOXAUZcFmEeXT61RLvfhhqib
-        5Ej7Nq3TQpk4lWhl8AXv2eKkU8D/3Mbhzo7IiTlJCreA66OznP9OoyqiPCK/hzqYvdGZx24CQXbll
-        ubX6XOzcdXl5rANwBEMJUbvuE5PY/SIuv92fdl7YRGvJ3WFORcsZlELJKv2M0V+yMMIrYQoPBXuZ2
-        yj24wmVPVr4+xP6sOUxlyJSV4zJKkwzJovgOkgF/V7CRoMhrM9xY+KD4cZxfxXK71X8ixU3Y/ie9h
-        Ts2QFAy88Ocv/rkMXjLGF3NROitZ1Ae0mP67k+nNTBV5w9sXG+GFyFFkCd5uAe/BzgOY63yDJZoO/
-        dTsXFegedisV2pr7eDeJbdO4VKwtwKcW+dAI10BLTAl3xdZgCsl6r7PxJzW2Pz6lEbshMz7F7vXoq
-        92UvmPIXPGXDjx/IqkCbzbpJ;
-Received: from [2a01:4f8:192:486::6:0] (port=46708 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1n7bVY-006uTm-C8
-        for cifs-qa@samba.org; Wed, 12 Jan 2022 11:09:36 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1n7bVY-001Q0l-3a
-        for cifs-qa@samba.org; Wed, 12 Jan 2022 11:09:36 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 7726] NT_STATUS_ILLEGAL_CHARACTER -- cifs broken
-Date:   Wed, 12 Jan 2022 11:09:35 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 2.6
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: WORKSFORME
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-7726-10630-MsiwGa69dK@https.bugzilla.samba.org/>
-In-Reply-To: <bug-7726-10630@https.bugzilla.samba.org/>
-References: <bug-7726-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1353018AbiALMBO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 12 Jan 2022 07:01:14 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC804C061756
+        for <linux-cifs@vger.kernel.org>; Wed, 12 Jan 2022 04:01:13 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id i14so3221992ioj.12
+        for <linux-cifs@vger.kernel.org>; Wed, 12 Jan 2022 04:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=SggCxYop4x6AUz17YPeViEFXSiHUpJbn2eaOZ321yQBtSKHfZAU/OqkhXSvsfitNjL
+         /fDKDIua+t8340kyX9OQG1Cw5hx7n1g/hnjZdKr3+3PdMeXUcMCIK/jY/iYq2ePu1Kgh
+         jDVr8hAZCgtM8GweWCFZUEB8bccOXPwQNxijDuZHpEfK5QC/zvAA/+jOsU+0UVBXefYZ
+         uy0xae1hwt4k5uGYnYOi9If5f75ZGFGnDlBirlKiKlzjyhuOWrY5y82NmpIQqGFjpNro
+         IDbVwHGaRdqaczp166km7o/py16TeS5RQToQ6lyiTnWw70/47Olmv5Ad9Ixn4CjPqdmA
+         WSnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=fkch/mWDKZdrFn4ZDYRZ7/Q70eGNXPDdNtfMiJ4bIBOfEoZTPTDOb1T0/0AwP1kHL3
+         lewKsMv89zGW69sAoM2KbVioX0WHpKeUIwd08rlz/oAHUXVit6qzd7NOZX0Ds/wfwoLf
+         EaxnGFJgpnUluuFpvnDsQ2wgjt+cAIJqGtbVbEUd5/D3hmTQEo2L5kh4aF/wk9Y0IfNy
+         EcxMuxmeimKfFWw3KRkZaay1WPFhmeHdU+wUlux0Ivta5AU/aX87ulePwJLhpT/SE9kR
+         c/yohKOYF9/f169CF0DkyxTsSmTkcR5wItjSY+zhQsq5YCoRjOu4hInn94f8FFtOGb4F
+         ewvg==
+X-Gm-Message-State: AOAM531BbiX+I1o7Ye7Gj0MAG0MEWw/UVxnobrbSRdrFEaOPrhfZJFcx
+        Hc8jXYf0LViNqC4QT4RUG7MAaf+kbv0AmDlrT4g=
+X-Google-Smtp-Source: ABdhPJyz9uewAPOviRNb9lRbFMWmlKfe4MEc5Ch/CVVPk6ELko+U94XVx8kNxQbapC+qnyfGx6fLLQuaR/dlD1GXwiQ=
+X-Received: by 2002:a6b:c891:: with SMTP id y139mr2810100iof.63.1641988873190;
+ Wed, 12 Jan 2022 04:01:13 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a05:6e04:131c:0:0:0:0 with HTTP; Wed, 12 Jan 2022 04:01:12
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <gaddafia487@gmail.com>
+Date:   Wed, 12 Jan 2022 04:01:12 -0800
+Message-ID: <CAJbXPF1_M37_ppjiRuoQx3HTV1DdfvDwaHYjjH88ioohRUTBTQ@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D7726
+Dear Friend,
 
-Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name is Aisha Gaddafi a single
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+Mother and a Widow with three Children. I am the only biological
+Daughter of late Libyan President (Late Colonel Muammar
 
---- Comment #4 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
-no response, no similar problems known these days. Closing
+Gaddafi).
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a
+
+trusted investment Manager/Partner because of my current refugee
+status, however, I am interested in you for investment
+
+project assistance in your country, may be from there, we can build
+business relationship in the nearest future.
+
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about
+Mrs Aisha Gaddafi
