@@ -2,83 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2028B48E04B
-	for <lists+linux-cifs@lfdr.de>; Thu, 13 Jan 2022 23:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A452248E45A
+	for <lists+linux-cifs@lfdr.de>; Fri, 14 Jan 2022 07:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237734AbiAMWeR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 13 Jan 2022 17:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S233466AbiANGqc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 14 Jan 2022 01:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiAMWeQ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 13 Jan 2022 17:34:16 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FBEC06173E
-        for <linux-cifs@vger.kernel.org>; Thu, 13 Jan 2022 14:34:16 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso20203467pjm.4
-        for <linux-cifs@vger.kernel.org>; Thu, 13 Jan 2022 14:34:16 -0800 (PST)
+        with ESMTP id S233481AbiANGqc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 14 Jan 2022 01:46:32 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED243C061574;
+        Thu, 13 Jan 2022 22:46:31 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo13303389pjb.2;
+        Thu, 13 Jan 2022 22:46:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
-        b=PmI1q6hfnxTpvxktOArZiwOqnnyO33V8k9lk4Ab5uv/tXUMKhuD8j8DnVmdRviHBgQ
-         Foc2Z7xpr0+dGrc0Uv+No6bmc1bXJ6iySDBpW0NAHvbBtPqnrOlUGfQo1kpsPy2M3ZFW
-         KgAgk6tld3+pr0QWKcw/GEP/Taug5jXuIrWArSUWLjzq7fzHIjO6suVDXL4olTuQcVDc
-         /fFYzdXXoLCmrN0z9qO9LILGwX6wVS411acRlSyS1xaxNoHeVcILxkxcBAlhNcOnYDeE
-         uggA/kiFfwQN9TLWOZorzi/ZxPmGxx89HbiOJDPUON+39VTtdp/97BLxkI8e6lgMGfLb
-         rtMQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=60RR5RY0BZL0/Lke1Efhyp4YheRzC1dv7rn1c/0ivY0=;
+        b=S4hbf+xby5wSt3TcP+HCkU4m/3sA+E3ggOqPLKFj+dIkHGNn5Yb11R80tZwoGU+3ro
+         nTapbQ5ju1GFvB0FPaS6n78Ttr1H1xvnZKG0n29fMsqwSz6f+6QbBANC20eXwR8MVvcr
+         JmQ4ZmG4L3TcuXu10Q3N7a73TONH6BjPwfpov+Bt1e3rnQG6HdqE+PTiX6ELJSzuccXf
+         S0G9maukPD93aSbTE+45mMJULnfffHApeU8wc4U2isv3+xJPtC2PaHQNS7fI/ql+Rsn2
+         vZ0Mf+iT6Wm1YoRz7D01iJ0IKByOWXWyiCW6FVZoJYv+YUopFo+7nxh3qwCasfP6q6d4
+         92Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
-        b=HPCoezkacXgLAU3aYdnhrg/RwP8RjLVfhQavORS5xBZi+HtyjjOIxcttl6qQa4X99s
-         rKcjme8s+2PQjwh4iHfwy5FEw1cCL9+u1Z7RPPaUcG1DChXkRhyrPfQsxFmJ77iA2lrF
-         13Lp7FBbC3fUXEBzCOBQp5kPgkCnfFH7VGfXuoaaqYGPjFx1QVLaRCCqjwa7P/fNALGs
-         z4Dquu4EbUv50pWDN/OK7c+jPUXz0yN5acmyYcZgDzExc1q+FprRwV3I3SILB4+54Pl7
-         nhz+4Zp+EwCDTzRoT644Dd9nRkFgDQVVEn0XWFhZD/02biuTkknCtebpzrrTsXqGk+UD
-         y6LQ==
-X-Gm-Message-State: AOAM531ozRSRKRGtrQYpgwGtbm6tuaZ6lsgxr7zgWryLoQP5iExY8GNM
-        reAxka61UibwVK+G6N4CHTc01r3FiVNRUoubZ+s=
-X-Google-Smtp-Source: ABdhPJxPH1SPs9VBzcbfXJ3d2utoM5GhhRKP5HiIE3oBL1f64+1h4Kzxk+wuxy1TV7gelIxtN/6shqF+sQXPWsvN6EY=
-X-Received: by 2002:a17:902:c443:b0:14a:30f2:95e8 with SMTP id
- m3-20020a170902c44300b0014a30f295e8mr6460931plm.43.1642113255770; Thu, 13 Jan
- 2022 14:34:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=60RR5RY0BZL0/Lke1Efhyp4YheRzC1dv7rn1c/0ivY0=;
+        b=zXcDtvWIhVjNr6YauiJbBzwpLoe8FyTKTsUKXAaWLtG6R5ju5KswJwiBT+su0AI74O
+         LqIPJFrwRQNu+gM6nSQGNoWsvmGF/rRcJQMqWMMPzkDRPOJ6MspAsd80oKK/+XX/LZfg
+         NcOAjq+BwQaR2IN9JloxPLN0MfUbRK/x1gyt6ok7dutkUGkl6J1YexX2d6gRbsNW0547
+         T4aVarovL0xnFea8rHyk7Tq3MfRCOFDm40mXE4kavwky9FMLwWg4OJ8YTGgs8XAPrb2X
+         40SHoErBEtYlFBcRdBSEqIAgiWw8WMyZNkk7VtU9QTXlCSLehVP5/W5ieZulXHYc+DWr
+         9IJA==
+X-Gm-Message-State: AOAM531JrXlHqxbqJM5mB38JAbyDBcrH1isXGQkVeJmjbEGQxVyJ40hl
+        Gb7X51p1AYXsp5e8gLrvvZG+HwM9cV4=
+X-Google-Smtp-Source: ABdhPJwmD+sPDAyu7I2wlipvAonyc4QC+uR0hMvVedvmdoCCRGxWuZXEfSV/ozJ1txzyLwhNNe20FQ==
+X-Received: by 2002:a17:902:c64b:b0:14a:6895:949b with SMTP id s11-20020a170902c64b00b0014a6895949bmr8254929pls.147.1642142791431;
+        Thu, 13 Jan 2022 22:46:31 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id h12sm3752057pfv.214.2022.01.13.22.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 22:46:30 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     sfrench@samba.org
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] cifs: Replace one-element array with flexible-array member
+Date:   Fri, 14 Jan 2022 06:46:25 +0000
+Message-Id: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:f38c:0:0:0:0 with HTTP; Thu, 13 Jan 2022 14:34:15
- -0800 (PST)
-Reply-To: mchristophdaniel@gmail.com
-From:   Marcus Galois <marcus.galois@gmail.com>
-Date:   Thu, 13 Jan 2022 23:34:15 +0100
-Message-ID: <CANqBaXVDDVUk7AD8fcNLQEsEm=xAQJqUVJvKAZ0mRa9+uyUdSw@mail.gmail.com>
-Subject: Good News Finally.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello friend.
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-You might find it so difficult to remember me, though it is indeed a
-very long time, I am much delighted to contact you again after a long
-period of time, I remember you despite circumstances that made things
-not worked out as we projected then. I want to inform you that the
-transaction we're doing together then finally worked out and I decided
-to contact you and to let you know because of your tremendous effort
-to make things work out then.
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use "flexible array members" for these cases. The older
+style of one-element or zero-length arrays should no longer be used.
+Reference:
+https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-Meanwhile I must inform you that I'm presently in Caribbean Island for
-numerous business negotiation with some partners. with my sincere
-heart i have decided to compensate you with USD$900,000 for your
-dedication then on our transaction, you tried so much that period and
-I appreciated your effort. I wrote a cheque/check on your name, as
-soon as you receive it, you let me know.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ fs/cifs/smb2ops.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Contact my secretary now on his email: mchristophdaniel@gmail.com
-Name: Mr. Christoph Daniel
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index af5d0830bc8a..5c104b2f308a 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -1609,10 +1609,10 @@ struct iqi_vars {
+ 	struct smb_rqst rqst[3];
+ 	struct kvec rsp_iov[3];
+ 	struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
+-	struct kvec qi_iov[1];
++	struct kvec qi_iov[];
+ 	struct kvec io_iov[SMB2_IOCTL_IOV_SIZE];
+ 	struct kvec si_iov[SMB2_SET_INFO_IOV_SIZE];
+-	struct kvec close_iov[1];
++	struct kvec close_iov[];
+ };
+ 
+ static int
+-- 
+2.25.1
 
-You are to forward to him your Name........ Address.......,Phone
-number......for shipment/dispatch of the cheque/Check to you
-
-Regards,
-Mr. Marcus Galois
