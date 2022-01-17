@@ -2,97 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCADB490992
-	for <lists+linux-cifs@lfdr.de>; Mon, 17 Jan 2022 14:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA7D4909D7
+	for <lists+linux-cifs@lfdr.de>; Mon, 17 Jan 2022 14:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiAQNao (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Jan 2022 08:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S235978AbiAQNzO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Jan 2022 08:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiAQNan (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Jan 2022 08:30:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E1C061574;
-        Mon, 17 Jan 2022 05:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DEDlOvAxf5W8MkgN2U6MW75EWRQeMQMQaovnQRcgffo=; b=sWeOK+ACOkqqrSHFGcOcHtqNUt
-        affW2E23Y5H4gus5QTI9RNzR2H8EFMA+ssyXPEH7r0ChvHKzzQZMM6GhvSo9Y6sSIYLuUHknRms35
-        r4m4Ukllxqdjth6/xEcNDXSsNRIKty4SfiLeQ8WlVQaGLQ9nHIgFuvZKcOEU2QaAvMn3xKQx8Is36
-        wrlnbO+VINuUCt6Ifo4R91YldO2uIRPsLZbnaqNcpdpZpstOVzNqmwYWKYxnovCJ0GDEMR54Ffti6
-        jldfxY4Dt7+NOyW8Fv26ursPmOgw9jR1Mp4KN89hlw3J5Uicwo4lbSZWBnUkV7lQwn2lq4D66VNBa
-        0SAtDMtw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9S5F-008EUB-2d; Mon, 17 Jan 2022 13:30:05 +0000
-Date:   Mon, 17 Jan 2022 13:30:05 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Omar Sandoval <osandov@osandov.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cachefs@redhat.com, CIFS <linux-cifs@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Out of order read() completion and buffer filling beyond
- returned amount
-Message-ID: <YeVvXToTxCsMzHZv@casper.infradead.org>
-References: <2752208.1642413437@warthog.procyon.org.uk>
- <CAHk-=wjQG5HnwQD98z8de1EvRzDnebZxh=gQUVTKCn0DOp7PQw@mail.gmail.com>
+        with ESMTP id S235940AbiAQNzO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Jan 2022 08:55:14 -0500
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4216CC06173E
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
+Received: by mail-oi1-x242.google.com with SMTP id q186so23480450oih.8
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=aZs/ZGcz5LVCQKjKDrcHm2WQvDBkAB0PB/5zF5l6r+N38dkPp9I3s5tO7W6cun57T2
+         KGPFKYGYHvnyWJBvKWDsG3UNQf/jxXLLS8bG+6pm5nRfFT5RVBgN+5L77tTPLGaq2Okj
+         UwmPZ1wEUICqTHMCC3q+ZOBtWgQyU+bipop5dyoRaqn2wRxoX+5pmHCizmdxjqh1Noqs
+         kuDmJuKeq0K28b2GbKuvuniOxAtbkeyY3YINZAl2twrgc3pQa59VPdeBnr1DTN71kG8B
+         oPU4KwJ7ekNdoKSx00J8DLK/jbrqXhYiZecGT7YrTn6kpz9fTpnO3vNZTivvdw498Nvj
+         wckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=XyKEVqmYd86j0QUOS3qecRRabn3kyHJ+/lweIoPVc3es1YB8YzrN4bmS+oY3U7wg7K
+         Hlf68859mBA6NMgd6oCGsxclvGGVE4ox9fRNDEToS7mEOt16VUpd7/fOpfpwXIUnAr1T
+         MVqgVx77K/lOKAC5xIW9yh2V5oacAAK8buFmgVpSQBfmERh56R1smao9Oj9vDx86k4ax
+         uCIVETkr891Frg9EL25w0mF9jKi8BgLVrcNl+gisLk2zXWhDmL6y7S0x5TMDh3ant4Gx
+         tz3OM0l7YLfWVCCo0yB+yO31rOKsyw/pVReadamBWZf9af2ve6G56QUqDNjkeIKHSloF
+         6+nA==
+X-Gm-Message-State: AOAM531y0RxQaRQWoEvdwIQgoV90yCRJJA7xrGssNW7DSIcfHIyoYV61
+        myo9fqwMf4ekNfP80+CpaEgVjeGdqB9ySL/acnA=
+X-Google-Smtp-Source: ABdhPJwYSo/7Ep0cMj5ymsBYVumoh1PXeBtIKEQY+KZh+YUg/E009Lk9NR6wk/Lqhi5mc1rHZk6liNDiICAzvGZBJQw=
+X-Received: by 2002:a05:6808:618:: with SMTP id y24mr7784962oih.127.1642427713286;
+ Mon, 17 Jan 2022 05:55:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjQG5HnwQD98z8de1EvRzDnebZxh=gQUVTKCn0DOp7PQw@mail.gmail.com>
+Received: by 2002:a4a:c18d:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 05:55:12
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <mrsaishag09@gmail.com>
+Date:   Mon, 17 Jan 2022 05:55:12 -0800
+Message-ID: <CA+ATk24o-gEi=_tbZ7CTc3=ah13JPwS4zFNwq4SPxjmNLOERtg@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 12:19:29PM +0200, Linus Torvalds wrote:
-> On Mon, Jan 17, 2022 at 11:57 AM David Howells <dhowells@redhat.com> wrote:
-> >
-> > Do you have an opinion on whether it's permissible for a filesystem to write
-> > into the read() buffer beyond the amount it claims to return, though still
-> > within the specified size of the buffer?
-> 
-> I'm pretty sure that would seriously violate POSIX in the general
-> case, and maybe even break some programs that do fancy buffer
-> management (ie I could imagine some circular buffer thing that expects
-> any "unwritten" ('unread'?) parts to stay with the old contents)
-> 
-> That said, that's for generic 'read()' cases for things like tty's or
-> pipes etc that can return partial reads in the first place.
-> 
-> If it's a regular file, then any partial read *already* violates
-> POSIX, and nobody sane would do any such buffer management because
-> it's supposed to be a 'can't happen' thing.
-> 
-> And since you mention DIO, that's doubly true, and is already outside
-> basic POSIX, and has already violated things like "all or nothing"
-> rules for visibility of writes-vs-reads (which admittedly most Linux
-> filesystems have violated even outside of DIO, since the strictest
-> reading of the rules are incredibly nasty anyway). But filesystems
-> like XFS which took some of the strict rules more seriously already
-> ignored them for DIO, afaik.
+Dear Friend,
 
-I think for DIO, you're sacrificing the entire buffer with any filesystem.
-If the underlying file is split across multiple drives, or is even
-just fragmented on a single drive, we'll submit multiple BIOs which
-will complete independently (even for SCSI which writes sequentially;
-never mind NVMe which can DMA blocks asynchronously).  It might be
-more apparent in a networking situation where errors are more common,
-but it's always been a possibility since Linux introduced DIO.
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name is Aisha Gaddafi a single
+
+Mother and a Widow with three Children. I am the only biological
+Daughter of late Libyan President (Late Colonel Muammar
+
+Gaddafi).
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a
+
+trusted investment Manager/Partner because of my current refugee
+status, however, I am interested in you for investment
+
+project assistance in your country, may be from there, we can build
+business relationship in the nearest future.
+
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about
+Mrs Aisha Gaddafi
