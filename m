@@ -2,141 +2,64 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413CE493C77
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Jan 2022 16:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5388E493DCC
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Jan 2022 16:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355426AbiASPBj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 19 Jan 2022 10:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S1355860AbiASP5p (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 19 Jan 2022 10:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349566AbiASPBi (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 19 Jan 2022 10:01:38 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9007C061574
-        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:01:38 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id p125so2873639pga.2
-        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:01:38 -0800 (PST)
+        with ESMTP id S1355867AbiASP5p (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 19 Jan 2022 10:57:45 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537AC061574
+        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:57:45 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b14so11232817lff.3
+        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:57:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zgBbQ9wNUvkfhI9BOFDKAJ35bWh/CFXR2wzthqKsMDw=;
-        b=GRnvDO7daPYqMXIFhwOhEePyvUji4UqgYnF/8O5qMNq+wxbeS2tQb8WozF/d9SN7fG
-         yJ0kQiyjuaAKXdp7R+3LR6Vok/vCuP72nJF2srrgm7aWdNlmk1rzcpb7xfy3xdRDTGdS
-         Z6F536JorIfhv4Z7idZelM374Bgp5+b0npMHZ2dTmQ38mlWghJ9HXq7Fuu7lxQAT+FRj
-         cEROmNqvRNKUM6AQwjAXbO/WDQI97uZ+tfjlr+TXOph6pbpHXiX8GVFCwptxM9+z+Ec1
-         79xiGNtFgBPKF+cDW0cbGNvvTZEpiUYbGjAQX0wMf0shjyk+6a90Qa0T1GdQEuEp/5mo
-         WIrw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S/NPx9ZAU9zKIZ/Wl/wJ5cTCA38rwFqmn27pwAogCrs=;
+        b=FBNzRCA8+cVtA+wpvA6p3sHT8P58U1vqbYPMIFa5c0RcXP785mUcL5oYfXKerJjTCg
+         Qmm/bqIR9ZgzQJw1ami/lx63YmBNnOMScZfCFZVqlrGzxUYshUdg1YIppb/6Y7i+e/VI
+         1AaW7pvZfgmNAOiXgd1WJ/Gf/f2xUHMVbXgvAiQKUi5ER5WId389rF2sm1lI1qUv5a3T
+         v/6cXGhrHmkbnqQ7BK19ZKgGJsFpfPZoi+JU6PhUIpJdSJTv3vi3ZkWL/aj0LQM/KEvb
+         uPYH+bgOdE+8v9IYhkApQdRkiu4Qzf43Xth3aEuJMvPwJXFsYiFyf0qrDaT9V/9hAovG
+         3Few==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zgBbQ9wNUvkfhI9BOFDKAJ35bWh/CFXR2wzthqKsMDw=;
-        b=OiKnImW2sMv6yUJy7PuVpPgiJJ72NxZnzgGvhv0rXYL707ej8JsD79ltlCAGdYUgij
-         oEo8sq4m/BnQw5cbrP+aWJHDuHamlqrfq7tCOo1k5yZv7rtjX5++eTEmQ6tt8+EJqnma
-         sMC3lQwTbuM2X95zpddkoq1Epk+5nKmp9P4wJTilRyHLayscG6jNQbF19ORiC2h+MOnL
-         5AyE7b+FyrXL+pSeaSBB0IbkTZFAlOLqyfE9ErNZaWyWezatn6wCO5CQzJpEF5WYs98F
-         G0r2xpEm4oJsbN9WKU3XeSoTQalCmiQ2B8PS2pmNlKl0rmRfNH0TzvdjAahsnAtztOyq
-         /+KA==
-X-Gm-Message-State: AOAM5305fL+Afb/Yaza/FffZ/lCiZ85MWVsmGJjKYugNzmF79yFL5gKG
-        yODu39RVvV4vVpjO3oodB+vPXUBj+54=
-X-Google-Smtp-Source: ABdhPJw2zLw4SW+4PDK5V0cxcb6efhhzoWqwKWPqi1XgpC/HX0sq87FoUPLGFSA8NjKA9cCRieOXog==
-X-Received: by 2002:a62:1ec3:0:b0:4bb:ea7d:6c4f with SMTP id e186-20020a621ec3000000b004bbea7d6c4fmr30716730pfe.4.1642604497887;
-        Wed, 19 Jan 2022 07:01:37 -0800 (PST)
-Received: from localhost.localdomain ([125.177.232.58])
-        by smtp.googlemail.com with ESMTPSA id gj1sm6265016pjb.18.2022.01.19.07.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 07:01:36 -0800 (PST)
-From:   Hyunchul Lee <hyc.lee@gmail.com>
-To:     linux-cifs@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steve French <smfrench@gmail.com>,
-        Hyunchul Lee <hyc.lee@gmail.com>
-Subject: [PATCH] ksmbd: smbd: validate buffer descriptor structures
-Date:   Thu, 20 Jan 2022 00:01:15 +0900
-Message-Id: <20220119150115.177058-1-hyc.lee@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S/NPx9ZAU9zKIZ/Wl/wJ5cTCA38rwFqmn27pwAogCrs=;
+        b=2MgCFgdFT9sw9l7mxuPdMQ8NzVQR+hF44i5jy9wuwSbmpNaQHeUwRm0qoXPe3ucMyg
+         hBn0oKfyJ6sIFFsm7Ebkm9pAe9MvDfAcvs2EhPjexg7K9nwtdUxM9noF4gw/ObXRxOHZ
+         2DoMWlzouemNLSRqg6QHSUdWpVqSmQl0PDZxTbgml5XuXX2CNGhRa70thyuDYM3AxdVI
+         atFiKenzuQGyd2mHZKpU0CSzPYQdXmMtnkMcSztBa9xm3Gpl6o9XcC7bkOz6POkWhMlu
+         xFgC1GTvy544zBabB7LOBW6Qb83D3aAhbhDZF1u9czNAH4Q+p1zOU/omh9lOdcOMriDM
+         pjRQ==
+X-Gm-Message-State: AOAM533C96cq0U+SWsQ7M8N6YTiPvm6HIYP1V9yq/nL80fkB3ONH5Mlq
+        zSf+QWnhVvZpGzCchm1aVAModV8obm97xS+L/VWrfdxJ7C7Y9Q==
+X-Google-Smtp-Source: ABdhPJyH1/xXbw+IcVMikHXQRGATj8cGM7vi1Vw/KNIkZUL5OszhMaBvhz/pxNYLo4iRuBK4e1LPBUitQsZBEZM5bZY=
+X-Received: by 2002:a05:651c:513:: with SMTP id o19mr13985081ljp.90.1642607558721;
+ Wed, 19 Jan 2022 07:52:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6520:6106:b0:18f:aeed:1294 with HTTP; Wed, 19 Jan 2022
+ 07:52:38 -0800 (PST)
+Reply-To: maddahabdwabbo@gmail.com
+From:   Abd-Jafaari Maddah <shawnmack995@gmail.com>
+Date:   Wed, 19 Jan 2022 07:52:38 -0800
+Message-ID: <CAJqTORRK=pstW_GH+PLec4WGcU5YT1Dz833mHbV88t7Df7at4A@mail.gmail.com>
+Subject: Did You Get My E-mail?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Check ChannelInfoOffset and ChannelInfoLength
-to validate buffer descriptor structures.
-And add a debug log to print the structures'
-content.
-
-Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
----
- fs/ksmbd/smb2pdu.c | 31 +++++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 6 deletions(-)
-
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index c3f248d461e6..f664fbadb09a 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -6130,12 +6130,20 @@ static int smb2_set_remote_key_for_rdma(struct ksmbd_work *work,
- 					__le16 ChannelInfoOffset,
- 					__le16 ChannelInfoLength)
- {
-+	unsigned int i, ch_count;
-+
- 	if (work->conn->dialect == SMB30_PROT_ID &&
- 	    Channel != SMB2_CHANNEL_RDMA_V1)
- 		return -EINVAL;
- 
--	if (ChannelInfoOffset == 0 ||
--	    le16_to_cpu(ChannelInfoLength) < sizeof(*desc))
-+	ch_count = le16_to_cpu(ChannelInfoLength) / sizeof(*desc);
-+	for (i = 0; i < ch_count; i++) {
-+		ksmbd_debug(RDMA, "RDMA r/w request %#x: token %#x, length %#x\n",
-+			    i,
-+			    le32_to_cpu(desc[i].token),
-+			    le32_to_cpu(desc[i].length));
-+	}
-+	if (ch_count != 1)
- 		return -EINVAL;
- 
- 	work->need_invalidate_rkey =
-@@ -6189,9 +6197,15 @@ int smb2_read(struct ksmbd_work *work)
- 
- 	if (req->Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE ||
- 	    req->Channel == SMB2_CHANNEL_RDMA_V1) {
-+		unsigned int ch_offset = le16_to_cpu(req->ReadChannelInfoOffset);
-+
-+		if (ch_offset < offsetof(struct smb2_read_req, Buffer)) {
-+			err = -EINVAL;
-+			goto out;
-+		}
- 		err = smb2_set_remote_key_for_rdma(work,
- 						   (struct smb2_buffer_desc_v1 *)
--						   &req->Buffer[0],
-+						   ((char *)req + ch_offset),
- 						   req->Channel,
- 						   req->ReadChannelInfoOffset,
- 						   req->ReadChannelInfoLength);
-@@ -6432,11 +6446,16 @@ int smb2_write(struct ksmbd_work *work)
- 
- 	if (req->Channel == SMB2_CHANNEL_RDMA_V1 ||
- 	    req->Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE) {
--		if (req->Length != 0 || req->DataOffset != 0)
--			return -EINVAL;
-+		unsigned int ch_offset = le16_to_cpu(req->WriteChannelInfoOffset);
-+
-+		if (req->Length != 0 || req->DataOffset != 0 ||
-+		    ch_offset < offsetof(struct smb2_write_req, Buffer)) {
-+			err = -EINVAL;
-+			goto out;
-+		}
- 		err = smb2_set_remote_key_for_rdma(work,
- 						   (struct smb2_buffer_desc_v1 *)
--						   &req->Buffer[0],
-+						   ((char *)req + ch_offset),
- 						   req->Channel,
- 						   req->WriteChannelInfoOffset,
- 						   req->WriteChannelInfoLength);
 -- 
-2.25.1
-
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Am waiting,
+Abd-jaafari Maddah
