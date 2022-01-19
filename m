@@ -2,64 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5388E493DCC
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Jan 2022 16:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9496F494334
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Jan 2022 23:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355860AbiASP5p (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 19 Jan 2022 10:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S1357567AbiASWnd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 19 Jan 2022 17:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355867AbiASP5p (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 19 Jan 2022 10:57:45 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537AC061574
-        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:57:45 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b14so11232817lff.3
-        for <linux-cifs@vger.kernel.org>; Wed, 19 Jan 2022 07:57:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S/NPx9ZAU9zKIZ/Wl/wJ5cTCA38rwFqmn27pwAogCrs=;
-        b=FBNzRCA8+cVtA+wpvA6p3sHT8P58U1vqbYPMIFa5c0RcXP785mUcL5oYfXKerJjTCg
-         Qmm/bqIR9ZgzQJw1ami/lx63YmBNnOMScZfCFZVqlrGzxUYshUdg1YIppb/6Y7i+e/VI
-         1AaW7pvZfgmNAOiXgd1WJ/Gf/f2xUHMVbXgvAiQKUi5ER5WId389rF2sm1lI1qUv5a3T
-         v/6cXGhrHmkbnqQ7BK19ZKgGJsFpfPZoi+JU6PhUIpJdSJTv3vi3ZkWL/aj0LQM/KEvb
-         uPYH+bgOdE+8v9IYhkApQdRkiu4Qzf43Xth3aEuJMvPwJXFsYiFyf0qrDaT9V/9hAovG
-         3Few==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S/NPx9ZAU9zKIZ/Wl/wJ5cTCA38rwFqmn27pwAogCrs=;
-        b=2MgCFgdFT9sw9l7mxuPdMQ8NzVQR+hF44i5jy9wuwSbmpNaQHeUwRm0qoXPe3ucMyg
-         hBn0oKfyJ6sIFFsm7Ebkm9pAe9MvDfAcvs2EhPjexg7K9nwtdUxM9noF4gw/ObXRxOHZ
-         2DoMWlzouemNLSRqg6QHSUdWpVqSmQl0PDZxTbgml5XuXX2CNGhRa70thyuDYM3AxdVI
-         atFiKenzuQGyd2mHZKpU0CSzPYQdXmMtnkMcSztBa9xm3Gpl6o9XcC7bkOz6POkWhMlu
-         xFgC1GTvy544zBabB7LOBW6Qb83D3aAhbhDZF1u9czNAH4Q+p1zOU/omh9lOdcOMriDM
-         pjRQ==
-X-Gm-Message-State: AOAM533C96cq0U+SWsQ7M8N6YTiPvm6HIYP1V9yq/nL80fkB3ONH5Mlq
-        zSf+QWnhVvZpGzCchm1aVAModV8obm97xS+L/VWrfdxJ7C7Y9Q==
-X-Google-Smtp-Source: ABdhPJyH1/xXbw+IcVMikHXQRGATj8cGM7vi1Vw/KNIkZUL5OszhMaBvhz/pxNYLo4iRuBK4e1LPBUitQsZBEZM5bZY=
-X-Received: by 2002:a05:651c:513:: with SMTP id o19mr13985081ljp.90.1642607558721;
- Wed, 19 Jan 2022 07:52:38 -0800 (PST)
+        with ESMTP id S1344033AbiASWnb (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 19 Jan 2022 17:43:31 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F177C061574;
+        Wed, 19 Jan 2022 14:43:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfLJw5xvFz4y3q;
+        Thu, 20 Jan 2022 09:43:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642632209;
+        bh=w4RJa7LhdlEwidZ+0nB3oeRlJt8ZXOwyiD8Czy99fzU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TA9kdtZ8Cax6NiKl4d2zCMZr/te6y4kixuSSJMFG7wFNCUjzHRsE6QATh2aSMV75t
+         ypR7Ndm073YXOfkqH0AfXLZ7z8tiIC6ZY1ZkZ8/7GuBkVGzMjKfLtCsldU5qokgb2L
+         n+w4bXCBu7slmY5/4BwBOLNfpV61YrrKug3/tqePZjj8338iXiUPwFmXoqUsa2qQqC
+         q/EMSMoV4pG57vcTVljnwzrPrqUbr7IGiR2yLNwdijtFErn2B6b7cz6M8+VHfwZegq
+         UJand6kq6LJULCgZLe6xQcsLXuHlQIJN9y6HZinSOzBmkHqILViUHdMZijTys90cOZ
+         WfCGRaxjY0BVA==
+Date:   Thu, 20 Jan 2022 09:43:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>
+Subject: linux-next: manual merge of the cifs tree with the fscache tree
+Message-ID: <20220120094328.1e7015cb@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:6106:b0:18f:aeed:1294 with HTTP; Wed, 19 Jan 2022
- 07:52:38 -0800 (PST)
-Reply-To: maddahabdwabbo@gmail.com
-From:   Abd-Jafaari Maddah <shawnmack995@gmail.com>
-Date:   Wed, 19 Jan 2022 07:52:38 -0800
-Message-ID: <CAJqTORRK=pstW_GH+PLec4WGcU5YT1Dz833mHbV88t7Df7at4A@mail.gmail.com>
-Subject: Did You Get My E-mail?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/bOe_3LTxZ/S.vWHPjj+71Yj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Am waiting,
-Abd-jaafari Maddah
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the cifs tree got conflicts in:
+
+  fs/cifs/file.c
+  fs/cifs/fscache.h
+
+between commit:
+
+  a91e6e1c8074 ("cifs: Support fscache indexing rewrite")
+
+from the fscache tree and commit:
+
+  70431bfd825d ("cifs: Support fscache indexing rewrite")
+
+from the cifs tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHolBAACgkQAVBC80lX
+0GwSuAf/dlThWpO7LU9wRWkFgFqPTONn2TeyQPiPn1nrP97g/M+82fxLpZRw2ez7
+oLh1iIqRV5xDdVlL9EIVZ5XWA1qc1WCZ3KYeBXHGv9tX8JYG6GlvhfrOHJoc3zbj
+7leI+pF1nIEg4gh+TXotCD8y09Vs0j8k/hVCXYAQrB8J4xhUFKd1NDKIY3ajdhax
+EGXjoGq/aj6OmD28LDkZ1HPPUIskkTL7tVa0gMExeX5PxhF+A5sU8/rrTtZBIce+
+PugOhy65ywGia7/FRErmu+rd4VPhNhxFTrdkNQLDzRuvapCUQNWGxUl2obJJsetU
+eXYJSKs2/AUKf/V8wIFmeAu02M4TgQ==
+=i3M4
+-----END PGP SIGNATURE-----
+
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj--
