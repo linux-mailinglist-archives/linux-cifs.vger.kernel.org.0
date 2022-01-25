@@ -2,72 +2,127 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EADAB49ACF3
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Jan 2022 08:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FA849B587
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Jan 2022 15:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352495AbiAYHFr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 25 Jan 2022 02:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391317AbiAYHCc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 Jan 2022 02:02:32 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04DC033275
-        for <linux-cifs@vger.kernel.org>; Mon, 24 Jan 2022 21:41:42 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id i62so12019893ybg.5
-        for <linux-cifs@vger.kernel.org>; Mon, 24 Jan 2022 21:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=omchJdYJcVvbnbx3iWDsqNfzfvgFxRY5UV8d5JFHFd0Qxp4Fs99oOTWbnsLJvmkGLO
-         KJ9h0aIZipzZCxLYUC1EbKJQXjsTnrYD4skWPu5L6KEa7WwksJ/DgfAKn2I//FvNz16e
-         yvRSMjBJIkfJOiN7QosmIFzfX6t0OymUxXq/kzoldmt5Tk4SMXy3poAlzZfnj4tLqkCO
-         r1uVZjBjIcfKcTHUm4yIRwmNGijXGA0OAhFYRol/6hiAAZJ37V1K6a3bLM+XpGdFXGos
-         hPiIHyT9XSW8aiVFGjIdHRgRcnWLHkX21ZW87GvspRwlXlL9xuI6dXFZXWxBZnRTJWgA
-         Bk5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=aA27Lc1cpr4D7dDf53VSxMNHHu9JJeSUhdUnP5LUV/ipq+kxdlfLOLgStSvorqmnqx
-         M7CHjhr/RQJuEL6wB0R1UqQQUyHl//L6/S7Gicu3TJmtq4wtTQkdDSTOP9TlD8s4j2xw
-         gokl1nWLm3RupAlDVcGTKFdyXa3l83p7Sp4Mccjvf+VTPiE1e1SKeW8SWkiNuWj7gFBL
-         ya9pylFZzEDH/RT9LNcMCL9LbxEh5Ad6tmLMar9kV9ABoJMFnrgHvu66ESe1qilN35tj
-         aGohWk6ICzQszMRUfYtToZhOqOg1AQLX7Dw0fOFhg54YPKzq0wU6g8yaxY8gPsziOV12
-         VexA==
-X-Gm-Message-State: AOAM531n7p1mfDuXmB4o4AlM84jpM/k4OSUvMhXt+3cs2wcJHmzAJTsh
-        jdn5OhzpPAueJ4FMqJLGo8OhMaEqyAzDScyY+gk=
-X-Google-Smtp-Source: ABdhPJwywiwyTtOCXfovmJIEM7Vqt+PFDzMW3tzxRj90P3fJDPhIlV2jOd/vI9WPw47eCab8Z7S4n4qldrLRD5Ly+Sc=
-X-Received: by 2002:a25:d783:: with SMTP id o125mr27594671ybg.710.1643089301256;
- Mon, 24 Jan 2022 21:41:41 -0800 (PST)
+        id S239289AbiAYOAh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 Jan 2022 09:00:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35174 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1386718AbiAYN6F (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:58:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643119062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ow5nEIIpxxsm8kbS7mSXJOPAG/qpnBjx5RaUIpFZ4VQ=;
+        b=W08yXKz/bBoYWnLIjsI3qfUmg8hWoLQeAG5Cd4/XhLshSrIwURbJ5cCbSQV7cV7h9lVOfi
+        qGItRyvYz02EkoteqHOe+jKus6hj90YX+7k/OGOntRDt12LqJ7ZHw+ccnBUz9xCu2ZXv3l
+        r5dPEwzD7dWPMTx/G0VzwfQji23pxUs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-Q64prpWINnyJ0BEZ04TElA-1; Tue, 25 Jan 2022 08:57:40 -0500
+X-MC-Unique: Q64prpWINnyJ0BEZ04TElA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7834A1018722;
+        Tue, 25 Jan 2022 13:57:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4EA27D3D6;
+        Tue, 25 Jan 2022 13:57:05 +0000 (UTC)
+Subject: [RFC][RFC PATCH 0/7] cifs: In-progress conversion to use iov_iters
+ and netfslib
+From:   David Howells <dhowells@redhat.com>
+To:     smfrench@gmail.com, nspmangalore@gmail.com
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        dhowells@redhat.com, jlayton@kernel.org,
+        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org
+Date:   Tue, 25 Jan 2022 13:57:04 +0000
+Message-ID: <164311902471.2806745.10187041199819525677.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Received: by 2002:a05:7000:ad9d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 21:41:40
- -0800 (PST)
-Reply-To: danielseyba@yahoo.com
-From:   Seyba Daniel <mrssuzaramaling19@gmail.com>
-Date:   Tue, 25 Jan 2022 06:41:40 +0100
-Message-ID: <CAKN-9XgQjuMspSnu-F01fv+Bgr6eZEygpsR3pZ-5cF=m78av-Q@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello,
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+Hi Steve,
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+Okay, I've has a go at crudely splitting up my conversion of cifs to use
+netfslib into separate patches and I thought I'd post it for you and Shyam
+to have a look over:
 
-So please confirm interest by responding back.
+ (1) The conversion from ->readpages() to ->readahead().
 
-My dearest regards
+ (2) A patch that does some random miscellaneous bits.
 
-Seyba Daniel
+ (3) Change the I/O paths to use an iterator all the way to the socket
+     instead of a page list.  Note that cifs won't compile from this patch
+     until patch 6.
+
+ (4) Replace cifs's writepages implementation with the one from afs and
+     make it deal with variable rsize and stuff like that.  This sets up
+     iterators rather than page lists.
+
+     This also makes direct/unbuffered write use an iterator.  This
+     probably requires more massaging to make it handle credits.
+
+ (5) Modify cifs_readahead() to hand an iterator down.
+
+ (6) Make direct and unbuffered reads hand an iterator down.  Note that the
+     iterator refers to the original buffers and bounce pages aren't used.
+
+ (7) Make cifs use netfslib for reading.
+
+As stated, patches 3, 4 and 5 don't compile because the pagelist struct
+members disappeared to make way for the iterators.  This avoids duplicating
+various functions in the transport and transport security code.  I'm not
+sure how best to deal with this - maybe by setting up bvecs instead of
+pagelists at the top level and then I can hand a bvec-class iter down.
+
+The patches can also be found here.  Note that this requires some of the
+patches from my netfs-lib branch.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-experimental
+
+David
+---
+David Howells (7):
+      cifs: Transition from ->readpages() to ->readahead()
+      cifs: Miscellaneous bits
+      cifs: Change the I/O paths to use an iterator rather than a page list
+      cifs: Make cifs_writepages() hand an iterator down
+      cifs: Make cifs_readahead() pass an iterator down
+      cifs: Get direct I/O and unbuffered I/O working with iterators
+      cifs: Use netfslib to handle reads
+
+
+ fs/cifs/Kconfig        |    1 +
+ fs/cifs/cifsencrypt.c  |   40 +-
+ fs/cifs/cifsfs.c       |    8 +-
+ fs/cifs/cifsfs.h       |    6 +-
+ fs/cifs/cifsglob.h     |   34 +-
+ fs/cifs/cifsproto.h    |   11 +-
+ fs/cifs/cifssmb.c      |  233 +++--
+ fs/cifs/connect.c      |   18 +-
+ fs/cifs/file.c         | 1930 ++++++++++------------------------------
+ fs/cifs/fscache.c      |   31 -
+ fs/cifs/fscache.h      |   52 --
+ fs/cifs/inode.c        |   17 +-
+ fs/cifs/misc.c         |  109 ---
+ fs/cifs/smb2ops.c      |  365 ++++----
+ fs/cifs/smb2pdu.c      |   27 +-
+ fs/cifs/transport.c    |   37 +-
+ fs/netfs/read_helper.c |    7 +-
+ 17 files changed, 888 insertions(+), 2038 deletions(-)
+
+
