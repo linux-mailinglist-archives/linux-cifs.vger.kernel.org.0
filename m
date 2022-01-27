@@ -2,67 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE7449E71D
-	for <lists+linux-cifs@lfdr.de>; Thu, 27 Jan 2022 17:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDD149ED16
+	for <lists+linux-cifs@lfdr.de>; Thu, 27 Jan 2022 22:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243304AbiA0QJy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 27 Jan 2022 11:09:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35554 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235189AbiA0QJx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:09:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643299792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7WoybKu6jP1QrYEjNppjV5tqvzvxfK13MZO3ivIjeOQ=;
-        b=XYwqxcJ0yR2ggVC0XNud5/hESxiUARAEwHbTXOIQDzhpWQMP76RMCtWaG384bM4VmWBIPm
-        7fk/7TCOUnUyqmfwfTKJePFbVFti1oO2mHCX5Ug1h+KFJrYiRn3A+Dm1NM1WAHKq2WcTHm
-        uKqbvbnzergu2g7uz224bvNK2UqilQQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-311-4-5cPEDoPbGB8a8bgOKtgA-1; Thu, 27 Jan 2022 11:09:49 -0500
-X-MC-Unique: 4-5cPEDoPbGB8a8bgOKtgA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA651835BD2;
-        Thu, 27 Jan 2022 16:09:47 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C0F4A798B9;
-        Thu, 27 Jan 2022 16:09:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <164329930161.843658.7387773437540491743.stgit@warthog.procyon.org.uk>
-References: <164329930161.843658.7387773437540491743.stgit@warthog.procyon.org.uk>
-To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] cifs: Use fscache I/O again after the rewrite disabled it
+        id S1344214AbiA0VKv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 27 Jan 2022 16:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344191AbiA0VKu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 27 Jan 2022 16:10:50 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C71C06175D
+        for <linux-cifs@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id w6so3586054qtk.4
+        for <linux-cifs@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=OdzISMDR5kyl4USx524bIVSaabXR5slFi3IeKc0FnEitP8p0/dAi5sNf1LNzYlFDMK
+         vWmn98JEDGZNXZdfk5FdwExPlTz2KJygj9I0l+DVnu6bI9BmZlV8f7m+YhPaJB+/njC+
+         NZK5iTl/1hNPzGdnzX5VOZLbUq/dqASTJyqgf/54ZiPafi8rJILLwhUdR+/ETtTNuQlE
+         gMjPP2T4mDEIobs3mX8purWr9CvvGWwQOF50tBuI+Fz7b/Tb2dqLE0FQO7CVhe1fVo54
+         UXT6yBGVPRl+nCx14Gw8tVXbIb9T4YtF/1BDc0w2VWl/hkcMwgFPok+LtGVJK3lMEzMW
+         daZA==
+X-Gm-Message-State: AOAM530YmwGeOMIjBXEzGMqTY0YcdUUDnI1SW9HyUqYkevUeOhe50fst
+        2C8sT/kgv5lkLSWRALlzVnLSawShxzKDul7EP4I=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <855752.1643299784.1@warthog.procyon.org.uk>
-Date:   Thu, 27 Jan 2022 16:09:44 +0000
-Message-ID: <855753.1643299784@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
->  (4) Make ->readahead() call
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
- (4) Make cifs_readahead() call into the cache to query if and where is has
-     data available, and if it has, read data from it.
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-David
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
 
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward
