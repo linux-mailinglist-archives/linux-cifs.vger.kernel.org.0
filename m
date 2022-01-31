@@ -2,79 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B827F4A410E
-	for <lists+linux-cifs@lfdr.de>; Mon, 31 Jan 2022 12:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAC34A4D8F
+	for <lists+linux-cifs@lfdr.de>; Mon, 31 Jan 2022 18:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358877AbiAaLB5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 31 Jan 2022 06:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358674AbiAaLBA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 31 Jan 2022 06:01:00 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C08EC06178B
-        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 02:59:47 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id p63so15481981iod.11
-        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 02:59:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=OjUeAkMVzEddLMMo5PnTCjKyhCs1ageGmC5+cFdXpsSEtg6JbUDTvXCRmwfTUCSofJ
-         slj36zZmhn3J4uwPw0DJBjnv3hUS5m+nEauuYDUNcCWjc1f+d0I+yOjKIUc0Pgz+j5Ue
-         rRdRGfWkjcSXGfwT+M+UDneKFOQe0c6aLr+5TauC2FupNgb1qyGc5yiIkJ8k0NAmHZhf
-         anrjd59/OgrastnWs4ZkrvFaIDjw5pd3eh107tNZ/TuMjnW3micCxNZKM2MDkg13GKwm
-         O5Q6tfm8j18o2CLpoCl1kG865M+uxrSOQqgPJI+OJu79ECke4sTf94bEwDsB5fZLVwuG
-         tdrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=6LlkVmDWzB/B180c7C2lpGuWZfOD1gGmF0oJ/+dMjKPfftZQiBCldtnwkn++/LB2L9
-         qilU7xvI52NKs9HcXGAy9JUkUPdRJxQ/RUfVUsoXS4MA4SWoqLulCpLLCZkGBsldwIN4
-         bmVL0pTfy8VFkTxrNkluFdp3WSz/ZjdMdN4BLQ3gJLVaR1QaqrBBvteg5G+wU8ZYiJuk
-         VM4w6hgCli6BGb7ivuNUtOidDOiy/mOwu1UJGKoapJKHWwZgVcLaNy123J3Sj8cqNn7c
-         DAMSWq3LazYqhg5yCUNyVZevbBugQBD/PTCFa+sALTsk/e17zdXowjEQ0AIDRMILfaXV
-         MHMg==
-X-Gm-Message-State: AOAM5300crS3b1nuT4J1XiLvpF4v++TlaIB3obu8purivmadsrKKsh0m
-        gvZ0h+JXFb5BwBiNOgsUoq0sRZuwcLYd02g2VQs=
-X-Google-Smtp-Source: ABdhPJx07OLMUPeEc0ImjaiJBKF2Mcc3ZmsWTIoSvX2FNfz03c1HE0RFqesREnjvPqYHKyL/ALkhu5ugV57XI3T5t/k=
-X-Received: by 2002:a6b:441a:: with SMTP id r26mr10856124ioa.211.1643626786286;
- Mon, 31 Jan 2022 02:59:46 -0800 (PST)
+        id S1353243AbiAaRxI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 31 Jan 2022 12:53:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26392 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354715AbiAaRxF (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>);
+        Mon, 31 Jan 2022 12:53:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643651585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Dad+NRO6CeianVL7/Op9DvhkqOApC5yos9M42t9RgSs=;
+        b=ABHjVJKvPKF2LGeTk23j0ywc91OcF0QA5h4Pn60Y6y4LzZnPOKg63GgZJsNAV+xCs3oa6o
+        xjZBhdI1fAG1SKFYhEipxFaw1fW8pUI4VzQZNMXe3u93iPbaxxWZclzh+H5pV+ofL6PdvR
+        PRZMXU0kbswdMkIf3WZPYITGhynpRE8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-ExP3oVaSOZW5qjvIia2n6A-1; Mon, 31 Jan 2022 12:53:01 -0500
+X-MC-Unique: ExP3oVaSOZW5qjvIia2n6A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4EE3101F001;
+        Mon, 31 Jan 2022 17:52:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A3D0838D2;
+        Mon, 31 Jan 2022 17:52:48 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] cachefiles: Fix the volume coherency check
+From:   David Howells <dhowells@redhat.com>
+To:     smfrench@gmail.com
+Cc:     Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-cachefs@redhat.com, dhowells@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 31 Jan 2022 17:52:47 +0000
+Message-ID: <164365156782.2040161.8222945480682704501.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Reply-To: daniellakyle60@gmail.com
-Sender: drdanielmorris11111@gmail.com
-Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 02:59:45
- -0800 (PST)
-From:   Mrs daniell akyle <daniellakyle60@gmail.com>
-Date:   Mon, 31 Jan 2022 11:59:45 +0100
-X-Google-Sender-Auth: xE_x512-NJSetLeK1z_d90RC9Q0
-Message-ID: <CAKFcj-P8h0HeDMtZZnog7Sh8cFMKV7095BN2fQnUMpCGPgmhFg@mail.gmail.com>
-Subject: Ahoj
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Pozdravy
-Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
-Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
-ilip=C3=ADn=C3=A1ch, kde jsem
-podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
-=ADraj=C3=ADc=C3=AD,
-vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
-lehliv=C3=A9 osob=C4=9B
-kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
-=9B privilegovan=C3=BDm. Chci
-poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
-vn=C3=AD organizace
-ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
-ab=C3=ADdku p=C5=99ijmout
-a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
-k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
-pozdravy
-Pan=C3=AD Daniella Kyleov=C3=A1
+Fix the cache volume coherency attribute check.  It was copied from the
+file coherency check which uses as struct to lay out the xattr, and so
+needs to add a bit on to find the coherency data - but the volume coherency
+attribute only contains the coherency data, so we shouldn't be using the
+layout struct for it.
+
+This has passed unnoticed so far because it only affects cifs at the
+moment, and cifs had its fscache component disabled.
+
+This can now be checked by enabling CONFIG_CIFS_FSCACHE, enabling the
+following tracepoint:
+
+	/sys/kernel/debug/tracing/events/cachefiles/cachefiles_vol_coherency/enable
+
+and making a cifs mount.  Without this change, the trace shows a
+cachefiles_vol_coherency line with "VOL BAD cmp" in it; with this change it
+shows "VOL OK" instead.
+
+Fixes: 32e150037dce ("fscache, cachefiles: Store the volume coherency data")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: Steve French <smfrench@gmail.com>
+cc: linux-cifs@vger.kernel.org
+cc: linux-cachefs@redhat.com
+---
+
+ fs/cachefiles/xattr.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
+index 83f41bd0c3a9..c6171e818a7c 100644
+--- a/fs/cachefiles/xattr.c
++++ b/fs/cachefiles/xattr.c
+@@ -218,10 +218,10 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+  */
+ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
+ {
+-	struct cachefiles_xattr *buf;
+ 	struct dentry *dentry = volume->dentry;
+ 	unsigned int len = volume->vcookie->coherency_len;
+ 	const void *p = volume->vcookie->coherency;
++	void *buf;
+ 	enum cachefiles_coherency_trace why;
+ 	ssize_t xlen;
+ 	int ret = -ESTALE;
+@@ -245,7 +245,7 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
+ 					"Failed to read xattr with error %zd", xlen);
+ 		}
+ 		why = cachefiles_coherency_vol_check_xattr;
+-	} else if (memcmp(buf->data, p, len) != 0) {
++	} else if (memcmp(buf, p, len) != 0) {
+ 		why = cachefiles_coherency_vol_check_cmp;
+ 	} else {
+ 		why = cachefiles_coherency_vol_check_ok;
+
+
