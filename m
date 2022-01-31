@@ -2,105 +2,90 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1937A4A4EAB
-	for <lists+linux-cifs@lfdr.de>; Mon, 31 Jan 2022 19:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB1B4A5183
+	for <lists+linux-cifs@lfdr.de>; Mon, 31 Jan 2022 22:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344176AbiAaSnV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 31 Jan 2022 13:43:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59774 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350447AbiAaSnV (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 31 Jan 2022 13:43:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E128C6115C;
-        Mon, 31 Jan 2022 18:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1109C340E8;
-        Mon, 31 Jan 2022 18:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643654600;
-        bh=MlCVNXyMLH8N9zlEgC505sGgVhNwmsbLQHiBxPE+K58=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=IM19ayOIddG1TmaKYhEGPvyzdDS/gGRO9UoQES/v9E/djUqXQnoHmovXnNkwq+E2A
-         SAzWRVnV9+s8D2WaIhSak1rGr3hDcSJXijPTAGmX17QgXTdzot2WlNR3qs4mC9vDPc
-         OdHOzwN16WNYk3f1ZJTpWV1VyQ9VkieVJ49eYWHvUFP87xvXEQF56xxVz72r/aubyk
-         46vIfIe3et2S7mxrUOFaIqUnuWp8F8qolITZ5Mc8ACd5aYeZ2sgQ5wCxt7iyLPqTC5
-         bGEvhZ07U3Kj53WNWx/9u8HcAjqxU+vUr8LDftcXRn+kujXAETeSKpoSv3HNjwI2xU
-         fsbb0Rx5MWmrQ==
-Message-ID: <cc2a90295935c8841abf5d0538590eb5202a745c.camel@kernel.org>
-Subject: Re: [PATCH] cachefiles: Fix the volume coherency check
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 31 Jan 2022 13:43:18 -0500
-In-Reply-To: <164365156782.2040161.8222945480682704501.stgit@warthog.procyon.org.uk>
-References: <164365156782.2040161.8222945480682704501.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        id S1380999AbiAaVg7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 31 Jan 2022 16:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380011AbiAaVg5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 31 Jan 2022 16:36:57 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE8AC06173D
+        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 13:36:56 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id 4so4940580oil.11
+        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 13:36:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=h0/ZbeSbhpQI9P1vadFWIIwaFx6Wg7DqXMk6y/6+HmqNlUgv3SlNpJw4qpKTo06mte
+         9c8XYB94UqfO8qOJWjzFkjv5zc9WvJZZl3Js9F72ABObxzvVfflP7X59ytjFJOxjOG2l
+         LO3Y+aza5Rf6VWZX6T/nuKCfE48EtABITU6cGLgH5Lgy6DZ7btNOQ2K6FCDw4SVAmVb+
+         bozVeCVEuRNzl4R/3iiKyQWEN4FwtOoBFNE1mvxGgM+MeOAXwYWRhKwNuVBkTmZ3ljfc
+         /CIpJAIw2H+Xim8Oyn6ivr2wbXYsB8V9T2ZN0w8wKdgaTu/QkrQmZRS8vp1zfQE1kyl/
+         bECA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=YrD5g99j2mO7EtcxFvM+2ygZF9j4xalcziu32U5JD9FqUMpLCgr9SAPLqMEQ9+r5H+
+         lSHpLbKUr79pC/K/xEk9F6fJlrF2seloCguGG/K23xHogt0GSaFiDJFZlS78Uj5GLzkf
+         YbwqBbNZ0npM84piAiG4MuImeSqfsvm0QJXS6AWxuih9HR1yDcxfFB1aKMZnA1aLznqW
+         to+/2dbqOYL7ULTfYm3vG02c5iZfjl9+m0t0yPeq9nUjKwkaiDkT/Wsh9YzYc8DTkDKe
+         AGuqqgeUITU42HuVH3uYLEYqo++nC29C8hqefku/WbrQTNQbjcNQqIw47r23/MOdGQ41
+         1IxQ==
+X-Gm-Message-State: AOAM533A8pLBuJtcYoc9V6d4LC5ZuZlYAfvcNq/t2AeTg5a7L8oVnXrT
+        4FvjE1Aqt4o1dVuPptGtfUzy4LhoF2euKl9KKJ8=
+X-Google-Smtp-Source: ABdhPJwOKKiu9r5CLPBfR9xT27fzBbARJMbuDEn6UccpYrL5eWNExCgl2kvk+baqoa5SwK6UrZG3WcDm232+Riit43k=
+X-Received: by 2002:a54:4490:: with SMTP id v16mr14816050oiv.157.1643665016077;
+ Mon, 31 Jan 2022 13:36:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:36:55
+ -0800 (PST)
+Reply-To: westerunion909@gmail.com
+From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
+Date:   Mon, 31 Jan 2022 13:36:55 -0800
+Message-ID: <CAExPwBBtJH3GcqF-weqUuAur7b38Y2T1d6e9FzvuN_q1Nhi-zw@mail.gmail.com>
+Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, 2022-01-31 at 17:52 +0000, David Howells wrote:
-> Fix the cache volume coherency attribute check.  It was copied from the
-> file coherency check which uses as struct to lay out the xattr, and so
-> needs to add a bit on to find the coherency data - but the volume coherency
-> attribute only contains the coherency data, so we shouldn't be using the
-> layout struct for it.
-> 
-> This has passed unnoticed so far because it only affects cifs at the
-> moment, and cifs had its fscache component disabled.
-> 
-> This can now be checked by enabling CONFIG_CIFS_FSCACHE, enabling the
-> following tracepoint:
-> 
-> 	/sys/kernel/debug/tracing/events/cachefiles/cachefiles_vol_coherency/enable
-> 
-> and making a cifs mount.  Without this change, the trace shows a
-> cachefiles_vol_coherency line with "VOL BAD cmp" in it; with this change it
-> shows "VOL OK" instead.
-> 
-> Fixes: 32e150037dce ("fscache, cachefiles: Store the volume coherency data")
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Steve French <smfrench@gmail.com>
-> cc: linux-cifs@vger.kernel.org
-> cc: linux-cachefs@redhat.com
-> ---
-> 
->  fs/cachefiles/xattr.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
-> index 83f41bd0c3a9..c6171e818a7c 100644
-> --- a/fs/cachefiles/xattr.c
-> +++ b/fs/cachefiles/xattr.c
-> @@ -218,10 +218,10 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
->   */
->  int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
->  {
-> -	struct cachefiles_xattr *buf;
->  	struct dentry *dentry = volume->dentry;
->  	unsigned int len = volume->vcookie->coherency_len;
->  	const void *p = volume->vcookie->coherency;
-> +	void *buf;
->  	enum cachefiles_coherency_trace why;
->  	ssize_t xlen;
->  	int ret = -ESTALE;
-> @@ -245,7 +245,7 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
->  					"Failed to read xattr with error %zd", xlen);
->  		}
->  		why = cachefiles_coherency_vol_check_xattr;
-> -	} else if (memcmp(buf->data, p, len) != 0) {
-> +	} else if (memcmp(buf, p, len) != 0) {
->  		why = cachefiles_coherency_vol_check_cmp;
->  	} else {
->  		why = cachefiles_coherency_vol_check_ok;
-> 
-> 
+Dear Email ID Owner.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+The IMF is compensating all the email address that was funds as one of
+the ward win Victims and your email address and your name is among the
+listed one of approved to pay the sum of $3.6 million U.S Dollars. We
+have concluded to effect your own payment through Western Union Money
+Transfer for easy pick-up of those funds in good condition,$4000 twice
+daily,till the $3.6 million is completely transferred to you.We now
+need your information where we will be sending the funds,such
+as;Receiver name(Your full Name)address and phone number.Contact
+Western Union agent with this Email: ( westerunion995@gmail.com  ) for
+your payment fund.
+
+Ms.Maria Zatto
+E-mail:westerunion995@gmail.com
+Telephone: +229 682 97 169
+
+Contact Ms.Maria,immediately you get this mail through western union
+email address above to enable her speed-up.your payment and release
+the $4000 dollars MTCN today for you to pick up the payment OK.
+
+You are expected to provide us with the details as prescribed below to
+enable safe and easy release of your funds today.
+
+(1)Your Full name:
+(2)Your Phone number:
+(3)Your Country:
+(4)Your Age:
+
+Thank you,
+Dr.Antonia Lloyd.
+Contact Dir.Western Union Money Transfer,
+Cotonou-Benin Republic.
