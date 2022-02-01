@@ -2,90 +2,112 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB1B4A5183
-	for <lists+linux-cifs@lfdr.de>; Mon, 31 Jan 2022 22:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004414A57DD
+	for <lists+linux-cifs@lfdr.de>; Tue,  1 Feb 2022 08:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380999AbiAaVg7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 31 Jan 2022 16:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S234194AbiBAHgt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 1 Feb 2022 02:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380011AbiAaVg5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 31 Jan 2022 16:36:57 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE8AC06173D
-        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 13:36:56 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id 4so4940580oil.11
-        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 13:36:56 -0800 (PST)
+        with ESMTP id S234936AbiBAHgt (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 1 Feb 2022 02:36:49 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCA6C06173D
+        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 23:36:49 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z19so31862321lfq.13
+        for <linux-cifs@vger.kernel.org>; Mon, 31 Jan 2022 23:36:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=h0/ZbeSbhpQI9P1vadFWIIwaFx6Wg7DqXMk6y/6+HmqNlUgv3SlNpJw4qpKTo06mte
-         9c8XYB94UqfO8qOJWjzFkjv5zc9WvJZZl3Js9F72ABObxzvVfflP7X59ytjFJOxjOG2l
-         LO3Y+aza5Rf6VWZX6T/nuKCfE48EtABITU6cGLgH5Lgy6DZ7btNOQ2K6FCDw4SVAmVb+
-         bozVeCVEuRNzl4R/3iiKyQWEN4FwtOoBFNE1mvxGgM+MeOAXwYWRhKwNuVBkTmZ3ljfc
-         /CIpJAIw2H+Xim8Oyn6ivr2wbXYsB8V9T2ZN0w8wKdgaTu/QkrQmZRS8vp1zfQE1kyl/
-         bECA==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=elKn4vakOsBG7m79uqt+w4yX/RyLRRgctL1bVd6YaPA=;
+        b=hBa/ppq71p1kvgwiphWUuRTuTwyXeUVFVtvyJ37H3a9Bk4yLuhKxbAMl0LK0DogNcf
+         uQKl7cAtZ/itEaeQIQCWiGaJzqHTBMJkLV5rBvGjVvmNKIQ5Wj/Wr7FoxA2nRlVRk8Io
+         humpu1a5a3ZC9WbkftdNcy32OWfS5Ye0rHzy4XZfE0Q/BYj+VxBO5A6Flm+n+WDIJ6Mo
+         beoo7WSL3rucn5yIypblxJqh68KgSunJdQjAkoetQ2PSQjMky9OhNMOAFRpJK0dMw61H
+         Fek57CHBShv/2RUFjcdqyb27aDBmtsSKwRbwlIpDIUm+EGa2Tn0d/b6M88PhoI2xu70I
+         2pYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=YrD5g99j2mO7EtcxFvM+2ygZF9j4xalcziu32U5JD9FqUMpLCgr9SAPLqMEQ9+r5H+
-         lSHpLbKUr79pC/K/xEk9F6fJlrF2seloCguGG/K23xHogt0GSaFiDJFZlS78Uj5GLzkf
-         YbwqBbNZ0npM84piAiG4MuImeSqfsvm0QJXS6AWxuih9HR1yDcxfFB1aKMZnA1aLznqW
-         to+/2dbqOYL7ULTfYm3vG02c5iZfjl9+m0t0yPeq9nUjKwkaiDkT/Wsh9YzYc8DTkDKe
-         AGuqqgeUITU42HuVH3uYLEYqo++nC29C8hqefku/WbrQTNQbjcNQqIw47r23/MOdGQ41
-         1IxQ==
-X-Gm-Message-State: AOAM533A8pLBuJtcYoc9V6d4LC5ZuZlYAfvcNq/t2AeTg5a7L8oVnXrT
-        4FvjE1Aqt4o1dVuPptGtfUzy4LhoF2euKl9KKJ8=
-X-Google-Smtp-Source: ABdhPJwOKKiu9r5CLPBfR9xT27fzBbARJMbuDEn6UccpYrL5eWNExCgl2kvk+baqoa5SwK6UrZG3WcDm232+Riit43k=
-X-Received: by 2002:a54:4490:: with SMTP id v16mr14816050oiv.157.1643665016077;
- Mon, 31 Jan 2022 13:36:56 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=elKn4vakOsBG7m79uqt+w4yX/RyLRRgctL1bVd6YaPA=;
+        b=cbFEyM6Ktv2LRGOQ8XEidPvM6TsulVbsgra8dTgOjg+34CR1Ez6RvO0DYyYQTvywdI
+         2uUrkEIPYtnFt2a2IVpyYNj4oxGuBlnym73XiRbN5SjRxQVJ+XHsuK5nW1vzO48qaKyU
+         B92yQfi+OnzOwLKLheALsGJlol4/zQPGqQDcsKkXHwEynxhgXydECtbCXKT6irFZTKDA
+         rh/ZppKYd1X2bzbw59pmqWqhfz0DsNSidC1ipQnwswNkWNl1+UveRjpc2NMa14fBL8+h
+         l7zGJeK7AxD6ilVP26McRGd3YtfMCcPDyyXRuD2xPwA7PllMAdih5uTG/F3otspguFqq
+         O+DQ==
+X-Gm-Message-State: AOAM532vf9c35F61jWZ+7HZHwi7rYODTzPc6NVuckmH7cTas3dTRKw9M
+        6s0/aL59R+j7zpBmIbQw+lWnvdioh/sOBA13jTJJ5Yk8
+X-Google-Smtp-Source: ABdhPJw1Pciv5rfuxjsVknnRGJebbQ8m+RBy0v63CVMirdKBmu7K75ePNDvgKGx/8JV8iG2mKX3x9I065yRvg5tjBUA=
+X-Received: by 2002:a05:6512:68e:: with SMTP id t14mr18818746lfe.366.1643701007414;
+ Mon, 31 Jan 2022 23:36:47 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:36:55
- -0800 (PST)
-Reply-To: westerunion909@gmail.com
-From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
-Date:   Mon, 31 Jan 2022 13:36:55 -0800
-Message-ID: <CAExPwBBtJH3GcqF-weqUuAur7b38Y2T1d6e9FzvuN_q1Nhi-zw@mail.gmail.com>
-Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+From:   Rohith Surabattula <rohiths.msft@gmail.com>
+Date:   Tue, 1 Feb 2022 13:06:36 +0530
+Message-ID: <CACdtm0b61sLQo85HdZubh34ieMveMZdZ_tbpmf41U7u+-_LgFw@mail.gmail.com>
+Subject: [PATCH] cifs: Invalidate fscache cookie
+To:     Steve French <smfrench@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>
+Content-Type: multipart/mixed; boundary="000000000000aa39b805d6eff670"
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear Email ID Owner.
+--000000000000aa39b805d6eff670
+Content-Type: text/plain; charset="UTF-8"
 
-The IMF is compensating all the email address that was funds as one of
-the ward win Victims and your email address and your name is among the
-listed one of approved to pay the sum of $3.6 million U.S Dollars. We
-have concluded to effect your own payment through Western Union Money
-Transfer for easy pick-up of those funds in good condition,$4000 twice
-daily,till the $3.6 million is completely transferred to you.We now
-need your information where we will be sending the funds,such
-as;Receiver name(Your full Name)address and phone number.Contact
-Western Union agent with this Email: ( westerunion995@gmail.com  ) for
-your payment fund.
+Hi All,
 
-Ms.Maria Zatto
-E-mail:westerunion995@gmail.com
-Telephone: +229 682 97 169
+Currently, FScache is getting invalidated during close of the file. It
+should be invalidated only when there is change in inode attributes.
 
-Contact Ms.Maria,immediately you get this mail through western union
-email address above to enable her speed-up.your payment and release
-the $4000 dollars MTCN today for you to pick up the payment OK.
+Please find the below patch which will address the fscache invalidation.
 
-You are expected to provide us with the details as prescribed below to
-enable safe and easy release of your funds today.
+Regards,
+Rohith
 
-(1)Your Full name:
-(2)Your Phone number:
-(3)Your Country:
-(4)Your Age:
+--000000000000aa39b805d6eff670
+Content-Type: application/octet-stream; 
+	name="Invalidate-fscache-cookie-only-when-inode-attributes.patch"
+Content-Disposition: attachment; 
+	filename="Invalidate-fscache-cookie-only-when-inode-attributes.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kz3t0t0m0>
+X-Attachment-Id: f_kz3t0t0m0
 
-Thank you,
-Dr.Antonia Lloyd.
-Contact Dir.Western Union Money Transfer,
-Cotonou-Benin Republic.
+RnJvbSA5NjUxMzA3ZTkwNzU1YWM4MmU2YTFmZjNlODJjMjk0Y2RlMmM3ZWIyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBSb2hpdGggU3VyYWJhdHR1bGEgPHJvaGl0aHNAbWljcm9zb2Z0
+LmNvbT4KRGF0ZTogVHVlLCAxIEZlYiAyMDIyIDA3OjIyOjAyICswMDAwClN1YmplY3Q6IFtQQVRD
+SF0gSW52YWxpZGF0ZSBmc2NhY2hlIGNvb2tpZSBvbmx5IHdoZW4gaW5vZGUgYXR0cmlidXRlcyBh
+cmUKIGNoYW5nZWQuCgpTaWduZWQtb2ZmLWJ5OiBSb2hpdGggU3VyYWJhdHR1bGEgPHJvaGl0aHNA
+bWljcm9zb2Z0LmNvbT4KLS0tCiBmcy9jaWZzL2lub2RlLmMgfCA4ICsrKystLS0tCiAxIGZpbGUg
+Y2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Zz
+L2NpZnMvaW5vZGUuYyBiL2ZzL2NpZnMvaW5vZGUuYwppbmRleCA3ZDhiM2NlYjJhZjMuLjYwZDg1
+M2M5MmY2YSAxMDA2NDQKLS0tIGEvZnMvY2lmcy9pbm9kZS5jCisrKyBiL2ZzL2NpZnMvaW5vZGUu
+YwpAQCAtODMsNiArODMsNyBAQCBzdGF0aWMgdm9pZCBjaWZzX3NldF9vcHMoc3RydWN0IGlub2Rl
+ICppbm9kZSkKIHN0YXRpYyB2b2lkCiBjaWZzX3JldmFsaWRhdGVfY2FjaGUoc3RydWN0IGlub2Rl
+ICppbm9kZSwgc3RydWN0IGNpZnNfZmF0dHIgKmZhdHRyKQogeworCXN0cnVjdCBjaWZzX2ZzY2Fj
+aGVfaW5vZGVfY29oZXJlbmN5X2RhdGEgY2Q7CiAJc3RydWN0IGNpZnNJbm9kZUluZm8gKmNpZnNf
+aSA9IENJRlNfSShpbm9kZSk7CiAKIAljaWZzX2RiZyhGWUksICIlczogcmV2YWxpZGF0aW5nIGlu
+b2RlICVsbHVcbiIsCkBAIC0xMTMsNiArMTE0LDkgQEAgY2lmc19yZXZhbGlkYXRlX2NhY2hlKHN0
+cnVjdCBpbm9kZSAqaW5vZGUsIHN0cnVjdCBjaWZzX2ZhdHRyICpmYXR0cikKIAljaWZzX2RiZyhG
+WUksICIlczogaW52YWxpZGF0aW5nIGlub2RlICVsbHUgbWFwcGluZ1xuIiwKIAkJIF9fZnVuY19f
+LCBjaWZzX2ktPnVuaXF1ZWlkKTsKIAlzZXRfYml0KENJRlNfSU5PX0lOVkFMSURfTUFQUElORywg
+JmNpZnNfaS0+ZmxhZ3MpOworCS8qIEludmFsaWRhdGUgZnNjYWNoZSBjb29raWUgKi8KKwljaWZz
+X2ZzY2FjaGVfZmlsbF9jb2hlcmVuY3koJmNpZnNfaS0+dmZzX2lub2RlLCAmY2QpOworCWZzY2Fj
+aGVfaW52YWxpZGF0ZShjaWZzX2lub2RlX2Nvb2tpZShpbm9kZSksICZjZCwgaV9zaXplX3JlYWQo
+aW5vZGUpLCAwKTsKIH0KIAogLyoKQEAgLTIyNjEsOCArMjI2NSw2IEBAIGNpZnNfZGVudHJ5X25l
+ZWRzX3JldmFsKHN0cnVjdCBkZW50cnkgKmRlbnRyeSkKIGludAogY2lmc19pbnZhbGlkYXRlX21h
+cHBpbmcoc3RydWN0IGlub2RlICppbm9kZSkKIHsKLQlzdHJ1Y3QgY2lmc19mc2NhY2hlX2lub2Rl
+X2NvaGVyZW5jeV9kYXRhIGNkOwotCXN0cnVjdCBjaWZzSW5vZGVJbmZvICpjaWZzaSA9IENJRlNf
+SShpbm9kZSk7CiAJaW50IHJjID0gMDsKIAogCWlmIChpbm9kZS0+aV9tYXBwaW5nICYmIGlub2Rl
+LT5pX21hcHBpbmctPm5ycGFnZXMgIT0gMCkgewpAQCAtMjI3Miw4ICsyMjc0LDYgQEAgY2lmc19p
+bnZhbGlkYXRlX21hcHBpbmcoc3RydWN0IGlub2RlICppbm9kZSkKIAkJCQkgX19mdW5jX18sIGlu
+b2RlKTsKIAl9CiAKLQljaWZzX2ZzY2FjaGVfZmlsbF9jb2hlcmVuY3koJmNpZnNpLT52ZnNfaW5v
+ZGUsICZjZCk7Ci0JZnNjYWNoZV9pbnZhbGlkYXRlKGNpZnNfaW5vZGVfY29va2llKGlub2RlKSwg
+JmNkLCBpX3NpemVfcmVhZChpbm9kZSksIDApOwogCXJldHVybiByYzsKIH0KIAotLSAKMi4zMi4w
+Cgo=
+--000000000000aa39b805d6eff670--
