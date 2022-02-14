@@ -2,133 +2,76 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A1E4B50E8
-	for <lists+linux-cifs@lfdr.de>; Mon, 14 Feb 2022 14:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8944B5597
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Feb 2022 17:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353777AbiBNNCo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 14 Feb 2022 08:02:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50548 "EHLO
+        id S232356AbiBNQHI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 14 Feb 2022 11:07:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiBNNCo (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Feb 2022 08:02:44 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CD74C7A4
-        for <linux-cifs@vger.kernel.org>; Mon, 14 Feb 2022 05:02:36 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id f17so26957395edd.2
-        for <linux-cifs@vger.kernel.org>; Mon, 14 Feb 2022 05:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1pff2KaA2YsJBdWQk9iXxsMw8KxxWwYcdZ74mkRkdQs=;
-        b=Qg6HAyrj3mzu+1gg1+eeRTV6lkAV5fsWdFHN9OTi/39hS9jq27O3VsEtpdfm+7JUkH
-         nDBLTocNtttAnDHN0Fxp0rnoTFCxZc3hTyyYtVktmx81POtUqlH+n7MpPH8HCtgpJ+pu
-         YRJTGU1lQ8cvtbJjfK7pRHskIHnuvHP39YpVK3R0nx4VEZWuwWe8Lsfbc2EjTkRapNsV
-         fLbEI11KPV0Ah29VFjuCeifWzp6MOANbtzRN0smcu3JWpnH2BlULHA8ISOa3GxokjI2+
-         5ykyQk031pR8hlsQYuNxzMi5aCKCsykj6yo+1dHaAt8+yHOmbGY1SmalgwEnZhUunIFK
-         TyZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1pff2KaA2YsJBdWQk9iXxsMw8KxxWwYcdZ74mkRkdQs=;
-        b=BIBOmOAHnlJOff9o6lM1QZFQ1wR4fG5bJY+mxa5jhdUgDugmWkdrZjRh5AHXUiFlox
-         eX6ot2Zr0rY6RkJ/eQPUv3Sfzd6PubBAlLPWAmlD/TM759uHh/4S89h2edurZUuJ9M3b
-         0vXH5McpDE6CKKK1jlunjeuggeOeLk6UKBFwepb9qrj9XN/UYIKY9+Ci3ij7b0xg7w1A
-         Ezx6/yvFrk6j5tl3qT37YQm5lQEL1reMGUx6S2uJc0+lKK7kK+iKKi3QrzyHyMaiDKpA
-         NIW/r2lQ5HJZRshTDXJ9vvi5Y8UhMmsFaEHpUb3LNFRZeCDHiFLvhJzlbBrmVZXhCQSy
-         m8JQ==
-X-Gm-Message-State: AOAM5308sOPT5towshfQrYXROuGD6Sv+CMXcAEBkBdyX19PW2U/mre8y
-        G5LwlBgi8S4daGt0V6fcarHjUy8m41TqntfEynw=
-X-Google-Smtp-Source: ABdhPJzSGoiVW0AAY80f/Z8XOuuvOtG1NJDwaQ/T8qJvEk94okmCQxE98ED+QjHS3x2lwocvYMaaWhF2tV41+kBl+L4=
-X-Received: by 2002:a50:cccb:: with SMTP id b11mr15438435edj.57.1644843754633;
- Mon, 14 Feb 2022 05:02:34 -0800 (PST)
+        with ESMTP id S1347023AbiBNQHH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Feb 2022 11:07:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EBCC488B6
+        for <linux-cifs@vger.kernel.org>; Mon, 14 Feb 2022 08:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644854818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RdoFPo0Y+0ZyN4NwJHVlPBv+GbPGBiBUAekBTnm7+8g=;
+        b=BFRCnIuQJdH8WO4fCi2hZ0+232xaoW/Ud78zbWwXh1QUfyYkHqt16BDduO4yU5Mb+rG5Qe
+        roJ41L5F6Fj0RfukcuyT4hJpdegBvOQLcLK+LLL8+P6l/amCu63MlP9jABQEYIqeyAt6gP
+        ceLH6CgQkOlJpKH7ITF1NKsZpv8WYkQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-9D-eZ2x3OjqcshVtQhwlIg-1; Mon, 14 Feb 2022 11:06:55 -0500
+X-MC-Unique: 9D-eZ2x3OjqcshVtQhwlIg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D1B71006AA0;
+        Mon, 14 Feb 2022 16:06:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.94])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DBC475746;
+        Mon, 14 Feb 2022 16:06:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CACdtm0bi4O36cif-iwarBb2oNOj-qjECr0iPAHK821E07u7p8A@mail.gmail.com>
+References: <CACdtm0bi4O36cif-iwarBb2oNOj-qjECr0iPAHK821E07u7p8A@mail.gmail.com> <164311902471.2806745.10187041199819525677.stgit@warthog.procyon.org.uk> <164311907995.2806745.400147335497304099.stgit@warthog.procyon.org.uk>
+To:     Rohith Surabattula <rohiths.msft@gmail.com>
+Cc:     dhowells@redhat.com, smfrench@gmail.com, nspmangalore@gmail.com,
+        jlayton@kernel.org, linux-cifs@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 3/7] cifs: Change the I/O paths to use an iterator rather than a page list
 MIME-Version: 1.0
-References: <20220213224052.3387192-1-lsahlber@redhat.com> <20220213224052.3387192-2-lsahlber@redhat.com>
- <CAH2r5ms+mW2ujPBObv4MbSe2VkXwthwVqJYQjd75MmyAU1YC-w@mail.gmail.com>
-In-Reply-To: <CAH2r5ms+mW2ujPBObv4MbSe2VkXwthwVqJYQjd75MmyAU1YC-w@mail.gmail.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Mon, 14 Feb 2022 18:32:22 +0530
-Message-ID: <CANT5p=ptM__+A6kjuxp5_Dm-ccMyUhabP+xb=LSX0FOsQDwe0g@mail.gmail.com>
-Subject: Re: [PATCH] cifs: modefromsids must add an ACE for authenticated users
-To:     Steve French <smfrench@gmail.com>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2976357.1644854775.1@warthog.procyon.org.uk>
+Date:   Mon, 14 Feb 2022 16:06:15 +0000
+Message-ID: <2976358.1644854775@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 3:45 PM Steve French <smfrench@gmail.com> wrote:
->
-> Should I add:
->    cc:Stable # 5.12+
->
-> Thoughts?
->
-> On Sun, Feb 13, 2022 at 4:41 PM Ronnie Sahlberg <lsahlber@redhat.com> wrote:
-> >
-> > When we create a file with modefromsids we set an ACL that
-> > has one ACE for the magic modefromsid as well as a second ACE that
-> > grants full access to all authenticated users.
-> >
-> > When later we chante the mode on the file we strip away this, and other,
-> > ACE for authenticated users in set_chmod_dacl() and then just add back/update
-> > the modefromsid ACE.
-> > Thus leaving the file with a single ACE that is for the mode and no ACE
-> > to grant any user any rights to access the file.
-> > Fix this by always adding back also the modefromsid ACE so that we do not
-> > drop the rights to access the file.
-> >
-> > Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> > ---
-> >  fs/cifs/cifsacl.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-> > index ee3aab3dd4ac..40cda87ce384 100644
-> > --- a/fs/cifs/cifsacl.c
-> > +++ b/fs/cifs/cifsacl.c
-> > @@ -949,6 +949,9 @@ static void populate_new_aces(char *nacl_base,
-> >                 pnntace = (struct cifs_ace *) (nacl_base + nsize);
-> >                 nsize += setup_special_mode_ACE(pnntace, nmode);
-> >                 num_aces++;
-> > +               pnntace = (struct cifs_ace *) (nacl_base + nsize);
-> > +               nsize += setup_authusers_ACE(pnntace);
-> > +               num_aces++;
-> >                 goto set_size;
-> >         }
-> >
-> > @@ -1613,7 +1616,7 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 *pnmode,
-> >         nsecdesclen = secdesclen;
-> >         if (pnmode && *pnmode != NO_CHANGE_64) { /* chmod */
-> >                 if (mode_from_sid)
-> > -                       nsecdesclen += sizeof(struct cifs_ace);
-> > +                       nsecdesclen += 2 * sizeof(struct cifs_ace);
-> >                 else /* cifsacl */
-> >                         nsecdesclen += 5 * sizeof(struct cifs_ace);
-> >         } else { /* chown */
-> > --
-> > 2.30.2
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+Rohith Surabattula <rohiths.msft@gmail.com> wrote:
 
-Good catch. Changes look good.
-Please run the tests with memory sanitizers enabled for this one.
+> After copying the buf to the XArray iterator, "got_bytes" field is not
+> updated. As a result, the read of data which is less than page size
+> failed.
+> Below is the patch to fix the above issue.
 
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Okay, I've folded that in, thanks.
 
--- 
-Regards,
-Shyam
+David
+
