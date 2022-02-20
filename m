@@ -2,74 +2,115 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F774BBE8F
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Feb 2022 18:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F204BD0DB
+	for <lists+linux-cifs@lfdr.de>; Sun, 20 Feb 2022 20:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238793AbiBRRkW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Feb 2022 12:40:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48196 "EHLO
+        id S230064AbiBTTIN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 20 Feb 2022 14:08:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238774AbiBRRkT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Feb 2022 12:40:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486EE888E3;
-        Fri, 18 Feb 2022 09:40:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9483B826B1;
-        Fri, 18 Feb 2022 17:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AF0FC340E9;
-        Fri, 18 Feb 2022 17:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645205999;
-        bh=SXr/bFDFwYAWUDgZ69MAEXJTNk1k6ybdXzqBZLk68c8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=sQ4P/AJHzz5cil2t/Q0JM92zidBn1pO87yybtY1TCBBr1vmF/kxLiNA28oSkSxjcY
-         zGAq2kY0AJqztBcZtWOMQyWqbHxoQbzJkPoJcjHvlLptMAommQMgx3Zg17qYq0y/H9
-         Zrrj2QDjrXpPY8tJCDnChIb8VPascAlLFqMlibR5TKk6dAupNhZgTAcP3UuoA4dDt0
-         xmdubaIaVyBCZ8dRawC+9TIEWbopGn6fW+abzuPQkSZwm0shhdm6SGZClSitm+TYMN
-         XptZapC5WoO909Y92Rmf1u4DlBGfiZ/HFb1gcvN7vVVFrU+iN0zeArI8UICpVbdG9h
-         ibLO5SK3fUPZA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89F3FE6BBD2;
-        Fri, 18 Feb 2022 17:39:59 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mukF1Af7TyrQPbvqQ1bpV67+btHiFstJLUh0RpJHeTmSg@mail.gmail.com>
-References: <CAH2r5mukF1Af7TyrQPbvqQ1bpV67+btHiFstJLUh0RpJHeTmSg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mukF1Af7TyrQPbvqQ1bpV67+btHiFstJLUh0RpJHeTmSg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc5-smb3-fixes
-X-PR-Tracked-Commit-Id: 53923e0fe2098f90f339510aeaa0e1413ae99a16
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7476b043b1914413f75b7e99040969734ae1fab6
-Message-Id: <164520599954.19024.10147255572362358663.pr-tracker-bot@kernel.org>
-Date:   Fri, 18 Feb 2022 17:39:59 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236158AbiBTTIM (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 20 Feb 2022 14:08:12 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AA940E67
+        for <linux-cifs@vger.kernel.org>; Sun, 20 Feb 2022 11:07:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=6roXkl1hawGu1OtzMYvihsEZoXJVgvf/ELRFmzr3u8o=; b=QusTwOZYue7d3HkoxyAhlO4unZ
+        Qw0LKtN0UUwSvRjpi9uyalcZ6sdUkpEQHttM5UcNU6oEvVYUe1z4wvRp2meSl1n9HmgesYdDyudLq
+        kWC9D1ye3xqSkxr0JmnBJySKVhMpqrYQ1v80bdd5C/wgiekodhxPTzM8yhBSx3Q/m+c08/HC3bYpc
+        50VsoGX+Zi8SODJiRroaOe/kPTETjkYyu3pEXaEDEFt8DNaCWST2YcIuvdFhMYaksfln+P0L4slKU
+        kZsuYFdVazsbtX/UawN8fwk6H48m20RrCnHlUfLqZH07BoW9ZVtI5JZp2HuLL1GIvTcY4jkqEOVlt
+        P+1GyCUhgpvuXVqnOk6XK+ig2u9mrBWN6J9CWU2g9ejgUlczLITI5ehZ09BoZdzskWc1qsIH5WzLE
+        JvKjHv9g2i5V1AYOrNOk/D0G+tieXBdwySAQG2cWKfTm7uqCxtR03hWxf5wfyW1oIxVe6Uc+ickY/
+        vFNzjESOjIKntvMDgmMxvAas;
+Received: from [2a01:4f8:192:486::6:0] (port=59788 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1nLrYh-004gg2-6B
+        for cifs-qa@samba.org; Sun, 20 Feb 2022 19:07:47 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1nLrYg-0034Wx-FU
+        for cifs-qa@samba.org; Sun, 20 Feb 2022 19:07:46 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14713] SMBv3 negotiation fails with a Solaris server
+Date:   Sun, 20 Feb 2022 19:07:45 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: richard.flint@gmail.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14713-10630-jr8d9dN2Dp@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14713-10630@https.bugzilla.samba.org/>
+References: <bug-14713-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Thu, 17 Feb 2022 18:26:04 -0600:
+https://bugzilla.samba.org/show_bug.cgi?id=3D14713
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc5-smb3-fixes
+--- Comment #39 from Richard Flint <richard.flint@gmail.com> ---
+Appreciate it has been sometime since this was updated but I just wanted to
+update this for completeness. I have tested this on Fedora 35
+(5.16.9-200.fc35.x86_64) and can confirm successful negotiation of 3.0 3.0.2
+and 3.1.1 with Solaris 11.4 servers both with and without encryption (as
+enabled by the seal parameter).=20
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7476b043b1914413f75b7e99040969734ae1fab6
+E.g. the following is successful:=20
+//myserver/myshare/myfolder /mnt/myserver/myfolder cifs
+noauto,nounix,vers=3D3.1.1,seal,noserverino,ro,_netdev,noexec,nosuid,perm,n=
+odev,iocharset=3Dutf8,cache=3Dstrict,sec=3Dntlmv2,credentials=3D/root/passw=
+ord,port=3D445,context=3D"system_u:object_r:myapp_content_t:s0",forceuid,fo=
+rcegid,file_mode=3D0440,dir_mode=3D0550,uid=3D1000,gid=3D1001
+0 0
 
-Thank you!
+Though noisy. E.g.:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+[Sat Feb 19 08:34:30 2022] CIFS: decode_ntlmssp_challenge: authentication h=
+as
+been weakened as server does not support key exchange
+[Sat Feb 19 08:34:30 2022] CIFS: VFS: \\myserver\myshare error -9 on ioctl =
+to
+get interface list
+[Sat Feb 19 08:34:30 2022] CIFS: VFS: \\myserver\IPC$ smb2_get_dfs_refer: i=
+octl
+error: rc=3D-19
+
+Intriguingly, despite specifying nounix in the mount, Wireshark shows we are
+still sending SMB2_POSIX_EXTENSIONS_CAPABILITY in the Negotiate Protocol
+Request - I'm not clear if that is the desired behaviour.
+
+The issue is still reproducible on the latest CentOS 8 Stream release, but =
+that
+it works on Fedora 35 makes we wonder if an issue was fixed in the meantime
+that never got back-ported to CentOS 8. If that's true, then this isn't rea=
+lly
+a fault in the CIFSVFS product itself I think - or maybe it isn't anymore.
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
