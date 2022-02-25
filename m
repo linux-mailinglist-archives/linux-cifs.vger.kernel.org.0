@@ -2,108 +2,109 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DDD4C3EC0
-	for <lists+linux-cifs@lfdr.de>; Fri, 25 Feb 2022 08:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0784C48D5
+	for <lists+linux-cifs@lfdr.de>; Fri, 25 Feb 2022 16:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237986AbiBYHK2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 25 Feb 2022 02:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
+        id S241944AbiBYP2k (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 25 Feb 2022 10:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238016AbiBYHK1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 25 Feb 2022 02:10:27 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989C21E374D
-        for <linux-cifs@vger.kernel.org>; Thu, 24 Feb 2022 23:09:55 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id d21so4100161yba.11
-        for <linux-cifs@vger.kernel.org>; Thu, 24 Feb 2022 23:09:55 -0800 (PST)
+        with ESMTP id S231340AbiBYP2k (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 25 Feb 2022 10:28:40 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E512036EC;
+        Fri, 25 Feb 2022 07:28:08 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id v28so7854073ljv.9;
+        Fri, 25 Feb 2022 07:28:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Y7X8uyaFI8LljuLAxhyM48+yTSBDN9zANH/IhPwl+SQ=;
-        b=YxomcVhOZ/D49FW5qhwHTKoVVib0raMx5yC3Cya4g5ngOi0w1jl8BZoM4/clKni9Pb
-         yqoJGrMCYLdk/a/fBmkEj5mgtBGwevKi6DWOOV0i0q7qvExwaF9CzGOrqPOYG/1lG9zD
-         ZwlOgzI2BA+6PahiABm3nQLGehJn3VM6QwcvY/6neMPcrXkzQ9Tl7TGKGYzlEQJljtlD
-         zbhL1ayhMorW5QmGKTl51KHBUSHxXl8QHxXV/adaBlMgVTOPldniBdDjFZpOD9Clltms
-         ZjeouqtAZnm9o9GLdHn3NNZg9HBE79mH3Hh0s/2fuDMGHH/3d5dX93GnySGwNtbU1hfT
-         FGfg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9EAGZgY5SPdT1cVkvJoh2QfrN+7asBE1KRK8S40gaDQ=;
+        b=fRej6ns/ZWUEzUvxNGbQZNAT0BSw4zJppp4g8vJ12SjSS7/PKWYqWh+qGLnO51O8iL
+         xYfz41lSy7g9p5dFSX/Vhn9G1iI4DI42ZpPD98CNT4CIVD+KHqAMGHjPeFAxtW7r4OWJ
+         Bt24gJWuMtOlAENd3MxdHU1fclGI3Ej7waj6TqxJBGC+e5Plc8MWVww3O23yMZN5MEai
+         +v5oPQeRV/Ecda+PFN2Fi3sqCicKjkSIcXNayKhRTQKBSKzcFg6VPMXnJJl+dWQ+yZ2I
+         Us39X3Lp2huMeqYZOnP4q4WORoar2kNDCdTWI8b0htO7xg8iaNf+S0vFGZcd7nT8mqH5
+         YvuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Y7X8uyaFI8LljuLAxhyM48+yTSBDN9zANH/IhPwl+SQ=;
-        b=qTj2aaGrXnKA/gCxikngnJi8FNApdv0zkud+tSZzkEMsgDBovCa2FBPXOSLbrZgBK4
-         GLBWBcHnAZKVjAvPMguxh2SJJ1TjJU6HU4SlUBlwJ5/XWPHxx2HELjuMwpZxl+NMsO8P
-         jE//IqVXY52XPbSMyGkkV9e5DVUer/t9OSH3DEZqCcQ62ji8jf8he35uZT6Ty94tWPeE
-         KuPrA3QsU1f+Ta1JN6/XfphRE1lA3tHNhbu1BG6bFsJQksImtQts6DekCWNGZK0zGicD
-         rBUqCfunMy64aseflWvcUIe1Od44B74hov97nB1Q5j3o5QFOQJOVVIIBEkNLwe4GblFT
-         N0WQ==
-X-Gm-Message-State: AOAM530C0uZV/MRRA0N0vmCD8vWtST+t66lCHPQ2S1oyLe41ZiXMt7/v
-        pl6NFjPYyVkepXfySF1Dj7W1HLKbmCZ748cADmg=
-X-Google-Smtp-Source: ABdhPJzqP1eVeGmxq/Knm0kECMjsxmNWnoVdI9YWwZX0WuM0dRU/22lNt/XNJwSwuYOkYZicPx9TtPhvmt88a1BmNmE=
-X-Received: by 2002:a25:8149:0:b0:623:bc3c:be06 with SMTP id
- j9-20020a258149000000b00623bc3cbe06mr6240911ybm.223.1645772994878; Thu, 24
- Feb 2022 23:09:54 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9EAGZgY5SPdT1cVkvJoh2QfrN+7asBE1KRK8S40gaDQ=;
+        b=e/pMh0ERo9zeLe7Plgh6uI5/hPKEzI5VttLGDzkP2q4RgNNKM8RQvteO3sAY/9mefi
+         1eWNXUzgXbXnPi6kkQYDlRxiIlpl+oTAJowSbcgId2H5bPVUbT3GpX8/mT5KtHjN1sJp
+         mSQsDHrEG+HHkCeL1oG0t47zLX+Xs05Z59o6JNlYPUqw9A6IUuTw3vDTJ1my43xip37A
+         P+CCAov6mLEoXM2spSrd/a/JQhhSXFQVW7nNapjSGtyDtLhU2hr5HmmDFYiSXxBwHtmu
+         FlGeG9Zyc8T6jHRgZ8L5Z+MyQkvTn+mTU8AO72H4dvpAQmkkE2X6Uz7Xg/PpTIag5y06
+         hsyA==
+X-Gm-Message-State: AOAM532AZbdtveSY4Q7UY8n9VHmouzS1A8s4vyL8+KJaBns3Yltl3Qfr
+        BCoC80v2vrHSH6g2+t2kgVhCq+S0o9vyKDvaaqQ=
+X-Google-Smtp-Source: ABdhPJwxd5AOIZzj1xHVv9ZDVXsnGHmJoUs7e6+bgciCEyzgPU77fjeFtutgvognPrXU36YRHWEpujkFHRb8BSzbEgE=
+X-Received: by 2002:a2e:b014:0:b0:23c:9593:f7 with SMTP id y20-20020a2eb014000000b0023c959300f7mr5517803ljk.209.1645802886225;
+ Fri, 25 Feb 2022 07:28:06 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a81:a389:0:0:0:0:0 with HTTP; Thu, 24 Feb 2022 23:09:54
- -0800 (PST)
-Reply-To: markwillima00@gmail.com
-From:   Mark <nnannacolins@gmail.com>
-Date:   Thu, 24 Feb 2022 23:09:54 -0800
-Message-ID: <CAJAQTionfYc5m6BnPT_TCmsEnQvktMLHod+ArwPjJ_2yQ_V0RQ@mail.gmail.com>
-Subject: Re: Greetings!
-To:     undisclosed-recipients:;
+References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
+ <Yhf+FemcQQToB5x+@redhat.com> <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
+ <YhjYSMIE2NBZ/dGr@redhat.com> <YhjeX0HvXbED65IM@casper.infradead.org>
+In-Reply-To: <YhjeX0HvXbED65IM@casper.infradead.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 25 Feb 2022 09:27:55 -0600
+Message-ID: <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
+ cluster fs
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Vivek Goyal <vgoyal@redhat.com>, lsf-pc@lists.linux-foundation.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ioannis Angelakopoulos <jaggel@bu.edu>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nnannacolins[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [markwillima00[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello,
+On Fri, Feb 25, 2022 at 7:49 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
+> > What about local events. I am assuming you want to supress local events
+> > and only deliver remote events. Because having both local and remote
+> > events delivered at the same time will be just confusing at best.
+>
+> This paragraph confuses me.  If I'm writing, for example, a file manager
+> and I want it to update its display automatically when another task alters
+> the contents of a directory, I don't care whether the modification was
+> done locally or remotely.
+>
+> If I understand the SMB protocol correctly, it allows the client to take
+> out a lease on a directory and not send its modifications back to the
+> server until the client chooses to (or the server breaks the lease).
+> So you wouldn't get any remote notifications because the client hasn't
+> told the server.
 
-The HSBC Bank is a financial institution in United Kingdom. We
-promotes long-term,sustainable and broad-based economic growth in
-developing and emerging countries by providing financial support like
-loans and investment to large, small and
-medium-sized companies (SMEs) as well as fast-growing enterprises
-which in turn helps to create secure and permanent jobs and reduce
-poverty.
+Directory leases would be broken by file create so the more important
+question is what happens when client 1 has a change notification on writes
+to files in a directory then client 2 opens a file in the same directory and is
+granted a file lease and starts writing to the file (which means the
+writes could get cached).   This is probably a minor point because when
+writes get flushed from client 2, client 1 (and any others with notifications
+requested) will get notified of the event (changes to files in a directory
+that they are watching).
 
-If you need fund to promotes your business, project(Project Funding),
-Loan, planning, budgeting and expansion of your business(s) , do not
-hesitate to indicate your interest as we are here to serve you better
-by granting your request.
+Local applications watching a file on a network or cluster mount in Linux
+(just as is the case with Windows, Macs etc.) should be able to be notified of
+local (cached) writes to a remote file or remote writes to the file from another
+client.  I don't think the change is large, and there was an earlier version of
+a patch circulated for this
 
-Thank you
-Mr:Mark
+-- 
+Thanks,
+
+Steve
