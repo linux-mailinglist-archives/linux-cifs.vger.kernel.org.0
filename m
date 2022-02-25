@@ -2,167 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75CF4C099A
-	for <lists+linux-cifs@lfdr.de>; Wed, 23 Feb 2022 03:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037684C3A70
+	for <lists+linux-cifs@lfdr.de>; Fri, 25 Feb 2022 01:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236933AbiBWCrM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 22 Feb 2022 21:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S236114AbiBYAn1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 24 Feb 2022 19:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbiBWCrF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 22 Feb 2022 21:47:05 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A7445792
-        for <linux-cifs@vger.kernel.org>; Tue, 22 Feb 2022 18:44:15 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b11so28476381lfb.12
-        for <linux-cifs@vger.kernel.org>; Tue, 22 Feb 2022 18:44:15 -0800 (PST)
+        with ESMTP id S229923AbiBYAn0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 24 Feb 2022 19:43:26 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D52A278CA8
+        for <linux-cifs@vger.kernel.org>; Thu, 24 Feb 2022 16:42:56 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n13-20020a05600c3b8d00b0037bff8a24ebso770455wms.4
+        for <linux-cifs@vger.kernel.org>; Thu, 24 Feb 2022 16:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aB5e2tjVmAADTaOQSzpkGPj0yJ8zFPpGuVapYuWYx/U=;
-        b=o5NDsxUAHE48brHPcaz4/1JQNN2tEEzHUzTeE8wuY4d90jl0I+a9bQuhi+gt7/ET1J
-         JyZ70iNgR7YD6Fvf+hrstyWNiHVa/kUzpOZKrGwDvU8uIzVGGB3g3z4vdCclI6STeHvg
-         sxjysEPU8CuKC/yvB2WJwS0A7OhLFZJAgTPzDEdP4SDyKxI2vixe8gUjde9xhVs7GGo4
-         MYUgbtTZFm46SWJDbJaERXttnlbD0pAsOXt7Nh2rl3PLwOo+MpgSY8qwI3KVeL3YZwk6
-         YfPcGNUCdghX1qHmd6mdI5yd1oJDVsvSo6Q6KPXAUWVkIrTv2QIj4JPUGNe2JGdJPf8b
-         OGVw==
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=ixHVzoz696qN1Cmrg9x1bmR8vdWLOLbXCVjc9DtTLhI=;
+        b=nCP5TMAx1y583/QzXHHjjWmnCMU0EkD/vE14rqhwDJepycKs/tQSoIIInA/vZ9tA1S
+         GTIwa7vter52aPBjBoV5RuL2CU3avJIpc5frd7KZjpItgOsbsW+WPOAdlTmeJxkOefrL
+         doSSVchMMYidPHsZ8OYYPLNpeFZFTz+89Fb6hXTNGccLn8BpSU07CxwNjD7gS70iCNDk
+         H9h0fyAIwJdfuXX1dJVgsxg25KB2Sex3HNA2aQ/1OpH4Co0hWfGPal5wEEcDeIU/sYPO
+         S9/c0k9BUlO/FIQwelQo8s+vd4C5rEXb0jaCs0eVRRtmlqXaBHrG4cyZOTc2DThSecTl
+         jtmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aB5e2tjVmAADTaOQSzpkGPj0yJ8zFPpGuVapYuWYx/U=;
-        b=t5z7ybaUvW5VDHjezKwuVR1Nc2ehEqjH+CusxFLUYejWMSTFN/4L19uaHSH+KZBxqb
-         +Bs9rNcGP/cnidNSP0+pJ5rKRlS51tGKYVTs5QyK5vZGEjKOeheV1qalECESE0PySxYF
-         pkv/VmVavqOchPBOsVJvThEDq9nH/MNksprB6l3oj14f9X9JwOId/FUoffCxtZZQZvUT
-         qrRYDg/B1LfhMJuz0tAWJF5Srb9dEyiQ0/Oqrv/GD72HQUj3nhs0GnCvp718HlykkDgh
-         EMvjumMnIF9y2uLmu5qA53PBDJ+qFhYv4qNqR5NEBz0FmIeNHwkus9hLZYfexxNoE5oW
-         kiAQ==
-X-Gm-Message-State: AOAM533c93oFDx2zNJyD9tiC1vHCMlEX1iZrPBTYvwUPTGDzMpQ2s9/g
-        HdAENVyfTe/AEOSwhffIFCEd7dJQZqhTHPQrsdkykvA2ZGk=
-X-Google-Smtp-Source: ABdhPJzO39nNvyFEktWfpip5OBtFU7GbxdMTYj9FaurcfqP/XSa40Uspy9xnleBxl8os8qSnmr82bQB4dgHgrt+iGZg=
-X-Received: by 2002:ac2:4156:0:b0:443:1591:c2be with SMTP id
- c22-20020ac24156000000b004431591c2bemr19640418lfi.234.1645584253705; Tue, 22
- Feb 2022 18:44:13 -0800 (PST)
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=ixHVzoz696qN1Cmrg9x1bmR8vdWLOLbXCVjc9DtTLhI=;
+        b=s5hQ6DzJkZQQjjdf2ZlDPk4wHP9wq2Vz4WWgHgNzOcwbP5ru2G6nVbuL4yq/6+33Qn
+         NZ+Q3ErOcVObPmY3RGowOtSLOaw7eT86WlWNqVj7gEP/rnRY1E9PgoQQY9bRXAM626Z+
+         itjW4CErbNFQb/9j4IH6nUZalEZ3Ok9gj774L5bypaMJfyKAo1YZhr82LdEW4RGGiZ1w
+         O9js1EAs4sJUh/5fnh2xmFXOPe2zJX7Rztq0c7lXa3DpQJxAnp6JrX3CXLODdWS5Nkdi
+         pcMGYMo/2yo3mTDXAVozPjIDGiTXj/F8RdVmP7HPhQkKCRN5JGBhqakjjmA/hAJUjSuW
+         F/yQ==
+X-Gm-Message-State: AOAM533OKabJTvaOcne5Klliht9SigUSvu/YrnZs76LeVtauIXsL/Gqj
+        qu1ZMtPEbeg7JYkMMAMdlg==
+X-Google-Smtp-Source: ABdhPJzZybvnRNAtIM5kK+/8Bx5KjFTX3VYkrzQzM25fHvkdA5In3/cYFCOlwPDw4aHQl3mJLYD0vw==
+X-Received: by 2002:a1c:2946:0:b0:37b:d710:f565 with SMTP id p67-20020a1c2946000000b0037bd710f565mr502097wmp.10.1645749774567;
+        Thu, 24 Feb 2022 16:42:54 -0800 (PST)
+Received: from [192.168.0.133] ([5.193.8.34])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c410500b0037bc3e4b526sm4101740wmi.7.2022.02.24.16.42.50
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 24 Feb 2022 16:42:53 -0800 (PST)
+Message-ID: <6218260d.1c69fb81.25335.f28c@mx.google.com>
+From:   Mrs Maria Elisabeth Schaeffler <geraldhelper9@gmail.com>
+X-Google-Original-From: Mrs Maria Elisabeth Schaeffler
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20220223011416.323085-1-lsahlber@redhat.com>
-In-Reply-To: <20220223011416.323085-1-lsahlber@redhat.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 22 Feb 2022 20:44:02 -0600
-Message-ID: <CAH2r5mth2tMZq5k2Z89aSC9Tv1+k-WWN9a_5TGBJ5kTQGDWYUg@mail.gmail.com>
-Subject: Re: [PATCH] cifs: truncate the inode and mapping when we simulate fcollapse
-To:     Ronnie Sahlberg <lsahlber@redhat.com>
-Cc:     linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <Mrs@vger.kernel.org>
+Date:   Fri, 25 Feb 2022 04:42:44 +0400
+Reply-To: mariaeisaeth001@gmail.com
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,TO_MALFORMED,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Tentatively merged into cifs-2.6.git for-next pending review and testing
+Hallo,
 
-On Tue, Feb 22, 2022 at 7:14 PM Ronnie Sahlberg <lsahlber@redhat.com> wrote:
->
-> RHBZ:1997367
->
-> When we collapse a range in smb3_collapse_range() we must make sure
-> we update the inode size and pagecache accordingly.
->
-> If not, both inode size and pagecahce may be stale until it is refreshed.
->
-> This can be demonstrated for the inode size by running :
->
-> xfs_io -i -f -c "truncate 320k" -c "fcollapse 64k 128k" -c "fiemap -v"  \
-> /mnt/testfile
->
-> where we can see the result of stale data in the fiemap output.
-> The third line of the output is wrong, all this data should be truncated.
->
->  EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->    0: [0..127]:        hole               128
->    1: [128..383]:      128..383           256   0x1
->    2: [384..639]:      hole               256
->
-> And the correct output, when the inode size has been updated correctly should
-> look like this:
->
->  EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->    0: [0..127]:        hole               128
->    1: [128..383]:      128..383           256   0x1
->
-> Reported-by: Xiaoli Feng <xifeng@redhat.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-> ---
->  fs/cifs/smb2ops.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
->
-> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> index af5d0830bc8a..891b11576e55 100644
-> --- a/fs/cifs/smb2ops.c
-> +++ b/fs/cifs/smb2ops.c
-> @@ -25,6 +25,7 @@
->  #include "smb2glob.h"
->  #include "cifs_ioctl.h"
->  #include "smbdirect.h"
-> +#include "fscache.h"
->  #include "fs_context.h"
->
->  /* Change credits for different ops and return the total number of credits */
-> @@ -3887,29 +3888,38 @@ static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
->  {
->         int rc;
->         unsigned int xid;
-> +       struct inode *inode;
->         struct cifsFileInfo *cfile = file->private_data;
-> +       struct cifsInodeInfo *cifsi;
->         __le64 eof;
->
->         xid = get_xid();
->
-> -       if (off >= i_size_read(file->f_inode) ||
-> -           off + len >= i_size_read(file->f_inode)) {
-> +       inode = d_inode(cfile->dentry);
-> +       cifsi = CIFS_I(inode);
-> +
-> +       if (off >= i_size_read(inode) ||
-> +           off + len >= i_size_read(inode)) {
->                 rc = -EINVAL;
->                 goto out;
->         }
->
->         rc = smb2_copychunk_range(xid, cfile, cfile, off + len,
-> -                                 i_size_read(file->f_inode) - off - len, off);
-> +                                 i_size_read(inode) - off - len, off);
->         if (rc < 0)
->                 goto out;
->
-> -       eof = cpu_to_le64(i_size_read(file->f_inode) - len);
-> +       eof = cpu_to_le64(i_size_read(inode) - len);
->         rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
->                           cfile->fid.volatile_fid, cfile->pid, &eof);
->         if (rc < 0)
->                 goto out;
->
->         rc = 0;
-> +
-> +       cifsi->server_eof = i_size_read(inode) - len;
-> +       truncate_setsize(inode, cifsi->server_eof);
-> +       fscache_resize_cookie(cifs_inode_cookie(inode), cifsi->server_eof);
->   out:
->         free_xid(xid);
->         return rc;
-> --
-> 2.30.2
->
+Ich bin Frau Maria Elisabeth Schaeffler, eine deutsche Wirtschaftsmagnatin,=
+ Investorin und Philanthropin. Ich bin der Vorsitzende von Wipro Limited. I=
+ch habe 25 Prozent meines pers=F6nlichen Verm=F6gens f=FCr wohlt=E4tige Zwe=
+cke ausgegeben. Und ich habe auch versprochen zu geben
+der Rest von 25% geht dieses Jahr 2021 an Einzelpersonen. Ich habe mich ent=
+schlossen, Ihnen 1.500.000,00 Euro zu spenden. Wenn Sie an meiner Spende in=
+teressiert sind, kontaktieren Sie mich f=FCr weitere Informationen.
+
+Sie k=F6nnen auch =FCber den untenstehenden Link mehr =FCber mich lesen
 
 
--- 
-Thanks,
+https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
 
-Steve
+Sch=F6ne Gr=FC=DFe
+Gesch=E4ftsf=FChrer Wipro Limited
+Maria-Elisabeth_Schaeffler
+Email: mariaeisaeth001@gmail.com
