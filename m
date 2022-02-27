@@ -2,171 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606564C56E2
-	for <lists+linux-cifs@lfdr.de>; Sat, 26 Feb 2022 17:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A27E4C58FC
+	for <lists+linux-cifs@lfdr.de>; Sun, 27 Feb 2022 03:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiBZQph (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 26 Feb 2022 11:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S229699AbiB0Chp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 26 Feb 2022 21:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiBZQpb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 26 Feb 2022 11:45:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 885B315A13
-        for <linux-cifs@vger.kernel.org>; Sat, 26 Feb 2022 08:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645893896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lwMysCu29wz4OMNuwMpG+mGhMkT1ZhFO9Qcz0+0ggms=;
-        b=KfEmglK8EN9AMLrsgDyPnBdbCYb+D1i3vBdPoNrR+LgH8rKojrxO3f8SOuAYteVDuXBtWt
-        icb18OpPLpQgeXwPKcFZamyDtZRwhexBLSS5/Nbf5nly/IEynwBCmjGtU7LIfuUGwnMX67
-        bLJuIvr5XtCJDUbQ4c3Xw17hqWMgaSU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-Ua6DDJrUNHWzFxBM7yQ-4g-1; Sat, 26 Feb 2022 11:44:51 -0500
-X-MC-Unique: Ua6DDJrUNHWzFxBM7yQ-4g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 38DAB180A08B;
-        Sat, 26 Feb 2022 16:44:49 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.32.69])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D387C6A4B9;
-        Sat, 26 Feb 2022 16:44:48 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id D890C2237E9; Sat, 26 Feb 2022 11:44:47 -0500 (EST)
-Date:   Sat, 26 Feb 2022 11:44:47 -0500
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        lsf-pc@lists.linux-foundation.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ioannis Angelakopoulos <jaggel@bu.edu>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
- cluster fs
-Message-ID: <YhpY/zZe3UA2u3fj@redhat.com>
-References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
- <Yhf+FemcQQToB5x+@redhat.com>
- <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
- <YhjYSMIE2NBZ/dGr@redhat.com>
- <YhjeX0HvXbED65IM@casper.infradead.org>
- <CAH2r5mt9EtTEJCKsHkvRctfhMv7LnT6XT_JEvAb7ji6-oYnTPg@mail.gmail.com>
- <YhkFZE8wUWhycwX2@redhat.com>
- <CAH2r5msPz1JZK4OWX_=+2HTzKTZE07ACxbEv3xM-1T0HTnVWMw@mail.gmail.com>
+        with ESMTP id S229521AbiB0Cho (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 26 Feb 2022 21:37:44 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C972A24A829
+        for <linux-cifs@vger.kernel.org>; Sat, 26 Feb 2022 18:37:07 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id v22so12658539ljh.7
+        for <linux-cifs@vger.kernel.org>; Sat, 26 Feb 2022 18:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Yz3Ywju4CAZDdX91LkFgEI/u0yFaY8yVia1patdfBks=;
+        b=gP9BxbJUrWrPJelaRfNE3WQzwiF+KxzGvePHOZDfx9WTJRTZjml+Hhp6ywm4wdnwAu
+         5jT1F3ByTsF81LIJ6huyxQ2x/yyTMdFYtwjtjGghf71suBjLU2aBvnkcYUXGpIE0ZKPf
+         MjJuDZ1InMqQSNCHNEQMbrXh8lyDN4yc7p6ZtiEzOj/6pFB2CHdDSQOFfK4fnKAEK5wu
+         zfZlNiLch4gmXKA4rwS/1TYFYmJVivSXTdIq3KMZq50XElvb6Yw++SeXG8z963x4zSOX
+         EU5Fb+hlXNZ+/v7ivk1sillU5GnMnQ0USX4etszNfyTXOU5CWD6eucBmuYhkEHx5UmoI
+         FFPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Yz3Ywju4CAZDdX91LkFgEI/u0yFaY8yVia1patdfBks=;
+        b=DaQZvZ2w5u6ay+g74cVLeXpNWY6pJsbVw5MMgXL/FVs1oBZhOFQBFTGirCEHPdsAtH
+         O+Ko33O2hNRZLl4iVoBIEnehVSKw2mh38sTqMxtVBLsLkoFjHWUbjr8DLLABTAn1ZISx
+         maBCoRJ+JyK0xciC1zb3nEw99DckUzWcNGKxcHRv7Jz5uZu1Nx166yEIPy4L6gajZT7I
+         qk4WAJqvJahiHsR0CRZ+oTnUURotyLfq1/IRP85CAA+4d0cr/QLy6yHxnqQlzGe4a0Gk
+         CEk7pwBuz3so+u11O4TH1XiV7ra7e8JSHsBEX2n/WRJAvaUw0h5zt63XU9SfPxzs/Z0v
+         A0kQ==
+X-Gm-Message-State: AOAM530hOHtrzwP3fxIFNrlCgYCW3iiitj1QBSdB+0QZyzxC8pnyspas
+        qVV8uvkxMx7bIVDDzGXRm1lZmYIpQB/5rC5uL9yq/ePYoexHfw==
+X-Google-Smtp-Source: ABdhPJwj4IoB2WPkINUp86GMoJvjmLuDbL254oV766fI3NYlxP4iDVtdXsDzy1W65HGiO2AvMscY/Lmvlt34hr0po3g=
+X-Received: by 2002:a05:651c:b06:b0:246:6331:c34f with SMTP id
+ b6-20020a05651c0b0600b002466331c34fmr9925299ljr.362.1645929425592; Sat, 26
+ Feb 2022 18:37:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH2r5msPz1JZK4OWX_=+2HTzKTZE07ACxbEv3xM-1T0HTnVWMw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Satadru Pramanik <satadru@gmail.com>
+Date:   Sat, 26 Feb 2022 21:36:53 -0500
+Message-ID: <CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com>
+Subject: Failure to access cifs mount of samba share after resume from sleep
+ with 5.17-rc5
+To:     linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:11:10PM -0500, Steve French wrote:
-> > IOW, in general disable all local events and let filesystems decide which
-> local events to generate? And locally cached write is one such example?
-> 
-> The fs doesn't see cached writes so probably best to still use the common
-> existing code for notification on local writes
+I'm on a x86_64 ubuntu 22.04 system accessing a similar system running
+samba Version 4.13.14-Ubuntu. Both systems are on ubuntu mainline
+kernel 5.17-rc5.
 
-Filesystems could provide a hook/function which local notifications could
-call and then filesystem could take a decision whether to allow that
-particular local event. 
+I have a samba share mounted from my fstab, and file access works fine.
+Upon suspending my system and resuming though, the mounted samba share
+is inaccessible, and my dmesg has many "CIFS: VFS: cifs_tree_connect:
+could not find superblock: -22" messages.
 
-For example, Ioannis implemented inode operation ->fsnotify_event()
+Unmounting and remounting the share restores access.
 
-https://lore.kernel.org/linux-fsdevel/20211025204634.2517-6-iangelak@redhat.com/
+When I boot into kernel 5.16.11, I do not have this issue. The cifs
+share is accessible just fine after a suspend/resume cycle.
 
-This gives local event to fuse. And now fuse can decide whether to
-dispatch the event to user space by calling __fsnotify() or drop it
-on the floor.
+I assume this is a regression with 5.17? Is there any information
+worth providing which might help debug and fix this issue?
 
-As of now we drop everything on the floor if remote notifications are
-enabled. But I realize that cache=writeback mode can cache writes, so
-fs could selectively allow some local events.
+Regards,
 
-I guess for virtiofs, we could allow all local events. Supress remote
-events if event is triggered due to the action of same client. If we
-use fanotify on server, then it will report PID of process that caused
-the event. And if PID belongs to this virtiofsd instance, it probably
-could supress remote event. 
-
-That way an application running inside the guest will see all local
-events + remote events triggered by other clients. (But should not
-see duplicate events).
-
-Thanks
-Vivek
-
-> 
-> On Fri, Feb 25, 2022, 11:35 Vivek Goyal <vgoyal@redhat.com> wrote:
-> 
-> > On Fri, Feb 25, 2022 at 09:27:55AM -0600, Steve French wrote:
-> > > On Fri, Feb 25, 2022 at 7:49 AM Matthew Wilcox <willy@infradead.org>
-> > wrote:
-> > > >
-> > > > On Fri, Feb 25, 2022 at 08:23:20AM -0500, Vivek Goyal wrote:
-> > > > > What about local events. I am assuming you want to supress local
-> > events
-> > > > > and only deliver remote events. Because having both local and remote
-> > > > > events delivered at the same time will be just confusing at best.
-> > > >
-> > > > This paragraph confuses me.  If I'm writing, for example, a file
-> > manager
-> > > > and I want it to update its display automatically when another task
-> > alters
-> > > > the contents of a directory, I don't care whether the modification was
-> > > > done locally or remotely.
-> > > >
-> > > > If I understand the SMB protocol correctly, it allows the client to
-> > take
-> > > > out a lease on a directory and not send its modifications back to the
-> > > > server until the client chooses to (or the server breaks the lease).
-> > > > So you wouldn't get any remote notifications because the client hasn't
-> > > > told the server.
-> > >
-> > > Directory leases would be broken by file create so the more important
-> > > question is what happens when client 1 has a change notification on
-> > writes
-> > > to files in a directory then client 2 opens a file in the same directory
-> > and is
-> > > granted a file lease and starts writing to the file (which means the
-> > > writes could get cached).   This is probably a minor point because when
-> > > writes get flushed from client 2, client 1 (and any others with
-> > notifications
-> > > requested) will get notified of the event (changes to files in a
-> > directory
-> > > that they are watching).
-> > >
-> > > Local applications watching a file on a network or cluster mount in Linux
-> > > (just as is the case with Windows, Macs etc.) should be able to be
-> > notified of
-> > > local (cached) writes to a remote file or remote writes to the file from
-> > another
-> > > client.  I don't think the change is large, and there was an earlier
-> > version of
-> > > a patch circulated for this
-> >
-> > So local notifications are generated by filesystem code as needed?
-> >
-> > IOW, in general disable all local events and let filesystems decide which
-> > local events to generate? And locally cached write is one such example?
-> >
-> > Thanks
-> > Vivek
-> >
-> >
-
+Satadru Pramanik
