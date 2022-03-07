@@ -2,60 +2,60 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C294CEF29
-	for <lists+linux-cifs@lfdr.de>; Mon,  7 Mar 2022 02:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06C94CEF2A
+	for <lists+linux-cifs@lfdr.de>; Mon,  7 Mar 2022 02:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbiCGBfX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 6 Mar 2022 20:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S234619AbiCGBf0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 6 Mar 2022 20:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234620AbiCGBfV (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 6 Mar 2022 20:35:21 -0500
+        with ESMTP id S234622AbiCGBfY (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 6 Mar 2022 20:35:24 -0500
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2343ED2C
-        for <linux-cifs@vger.kernel.org>; Sun,  6 Mar 2022 17:34:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2903DDE6
+        for <linux-cifs@vger.kernel.org>; Sun,  6 Mar 2022 17:34:30 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 698641F38E;
-        Mon,  7 Mar 2022 01:34:25 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DCD2C1F38F;
+        Mon,  7 Mar 2022 01:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646616865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646616868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ko+1977Dpz412rYtBkdv3BBW+4Npe98VCjEVojvyaHU=;
-        b=SxaBxDLfmtXoIrjA20P+XnAV90zrg8ZT9xKZIC9ebvisMlQhRu0wewZtI3In5Wcw37T/Ml
-        1uptxzUdbv3WbGLVgANkhpo15v+godEjCAl4QasZiKojfP9cm9CUkAFvkKjwP4JjBtcbVr
-        fetg2dvVUYOzR92ruXkP0BBFww7uB0Q=
+        bh=ywfGlXuHZ9XWWs8WcbJUjWUpDhVOl7/dd652PCmxuu8=;
+        b=JIXirxw21fha+1jfXGwTe8lo5MkgzXF/gvMy1W2PFw52mKBc5zUkEp4A1aM6foAYfBMVwz
+        uoszPNAY2G9wNItVVfcoHy3c4fimlJguSNs2VT5KDZ1K/55UtPLlB2BcxMncyAUGyiVnia
+        BEhe73K93FF3hRqcFPB3QbVXMKxC3CU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646616865;
+        s=susede2_ed25519; t=1646616868;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ko+1977Dpz412rYtBkdv3BBW+4Npe98VCjEVojvyaHU=;
-        b=dERnD9JTsLFjqSsGeUERMMqkNzxzVNFMuvX8xdhSMlcDZ+pUcGvFTUOywrttRjnS8aSh10
-        7o6Cb8jEGpkL86CA==
+        bh=ywfGlXuHZ9XWWs8WcbJUjWUpDhVOl7/dd652PCmxuu8=;
+        b=e5oMXtITe5oFMC/fati9xuXdMfEbPKWukFBNUHzRymrCkwyS1xsouIO3jHOjxc+1vEunaS
+        hgoYJQIWRpcAedDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6FE821340A;
-        Mon,  7 Mar 2022 01:34:24 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 29B081340A;
+        Mon,  7 Mar 2022 01:34:27 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id q8h5DSBhJWIwdAAAMHmgww
-        (envelope-from <ematsumiya@suse.de>); Mon, 07 Mar 2022 01:34:24 +0000
+        id Xb3nNyNhJWI0dAAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Mon, 07 Mar 2022 01:34:27 +0000
 From:   Enzo Matsumiya <ematsumiya@suse.de>
 To:     linux-cifs@vger.kernel.org, linkinjeon@kernel.org
 Cc:     senozhatsky@chromium.org, sergey.senozhatsky@gmail.com,
         hyc.lee@gmail.com, smfrench@gmail.com,
         Enzo Matsumiya <ematsumiya@suse.de>
-Subject: [PATCH 5/9] user: introduce user_cmd
-Date:   Sun,  6 Mar 2022 22:33:40 -0300
-Message-Id: <20220307013344.29064-6-ematsumiya@suse.de>
+Subject: [PATCH 6/9] daemon: introduce daemon_cmd
+Date:   Sun,  6 Mar 2022 22:33:41 -0300
+Message-Id: <20220307013344.29064-7-ematsumiya@suse.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220307013344.29064-1-ematsumiya@suse.de>
 References: <20220307013344.29064-1-ematsumiya@suse.de>
@@ -71,1124 +71,761 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Create user command in preparation for binary unification.
+Implement and improve daemon management commands.
 
-Rename some variables to make them more relatable to user properties and
-management.
+Sets the forked process name to "ksmbd-daemon".
+
+Rename some variables and functions to something more meaningful.
 
 Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
 ---
- daemon/daemon.c         |  12 +-
- daemon/ipc.c            |   6 +-
- include/config_parser.h |   2 +-
- include/ksmbdtools.h    |   7 +-
- lib/config_parser.c     |   4 +-
- user/Makefile.am        |   2 +-
- user/adduser.c          | 180 -----------------------------
- user/user.c             | 238 ++++++++++++++++++++++++++++++++++++++
- user/user_admin.c       | 247 +++++++++++++++++++++-------------------
- user/user_admin.h       |  35 +++++-
- 10 files changed, 417 insertions(+), 316 deletions(-)
- delete mode 100644 user/adduser.c
- create mode 100644 user/user.c
+ daemon/daemon.c      | 320 ++++++++++++++++++++++++++++---------------
+ daemon/daemon.h      |  26 ++++
+ daemon/ipc.c         |   9 +-
+ daemon/rpc.c         |   6 +-
+ daemon/worker.c      |  13 +-
+ include/ksmbdtools.h |   2 +-
+ 6 files changed, 248 insertions(+), 128 deletions(-)
 
 diff --git a/daemon/daemon.c b/daemon/daemon.c
-index 946f500bc977..50afbd2ed70d 100644
+index 50afbd2ed70d..533b2bf9de0f 100644
 --- a/daemon/daemon.c
 +++ b/daemon/daemon.c
-@@ -291,11 +291,11 @@ static int setup_signals(sighandler_t handler)
+@@ -6,7 +6,7 @@
+  *   linux-cifsd-devel@lists.sourceforge.net
+  */
+ 
+-#include <ksmbdtools.h>
++#include "ksmbdtools.h"
+ 
+ #ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
+@@ -20,6 +20,7 @@
+ #include <fcntl.h>
+ #include <sys/file.h>
+ #include <sys/types.h>
++#include <sys/prctl.h>
+ #include <sys/wait.h>
+ #include <signal.h>
+ 
+@@ -35,53 +36,85 @@
+ #include "management/spnego.h"
+ #include "version.h"
+ 
+-static int no_detach = 0;
+ int ksmbd_health_status;
+ static pid_t worker_pid;
+ static int lock_fd = -1;
+ 
+-typedef int (*worker_fn)(void);
++typedef int (*worker_fn)(void *);
+ 
+-static void usage(void)
++static ksmbd_daemon_cmd ksmbd_daemon_get_cmd(char *cmd)
+ {
+-	fprintf(stderr, "Usage: ksmbd\n");
+-	fprintf(stderr, "\t--p=NUM | --port=NUM              TCP port NUM\n");
+-	fprintf(stderr, "\t--c=smb.conf | --config=smb.conf  config file\n");
+-	fprintf(stderr, "\t--u=pwd.db | --users=pwd.db       Users DB\n");
+-	fprintf(stderr, "\t--n | --nodetach                  Don't detach\n");
+-	fprintf(stderr, "\t--s | --systemd                   Service mode\n");
+-	fprintf(stderr, "\t-V | --version                    Show version\n");
+-	fprintf(stderr, "\t-h | --help                       Show help\n");
++	int i;
+ 
+-	exit(EXIT_FAILURE);
++	if (!cmd)
++		return KSMBD_CMD_DAEMON_NONE;
++
++	for (i = 0; i < KSMBD_CMD_DAEMON_MAX; i++)
++		if (!strcmp(cmd, ksmbd_daemon_cmds_str[i]))
++			return (ksmbd_daemon_cmd)i;
++
++	return KSMBD_CMD_DAEMON_NONE;
++}
++
++static const char *ksmbd_daemon_get_cmd_str(ksmbd_daemon_cmd cmd)
++{
++	if (cmd > KSMBD_CMD_DAEMON_MAX)
++		return ksmbd_daemon_cmds_str[KSMBD_CMD_DAEMON_NONE];
++
++	return ksmbd_daemon_cmds_str[(int)cmd];
+ }
+ 
+-static void show_version(void)
++void daemon_usage(ksmbd_daemon_cmd cmd)
+ {
+-	printf("ksmbd-tools version : %s\n", KSMBD_TOOLS_VERSION);
++	const char *cmd_str = ksmbd_daemon_get_cmd_str(cmd);
++	int i;
++
++	switch(cmd) {
++	case KSMBD_CMD_DAEMON_START:
++		pr_out("Usage: ksmbdctl daemon start [options]\n");
++		pr_out("Start ksmbd userspace and kernel daemon.\n\n");
++		pr_out("%-30s%s", "  -p, --port=<num>", "TCP port number to listen on\n");
++		pr_out("%-30s%s", "  -c, --config=<config>", "Use specified smb.conf file\n");
++		pr_out("%-30s%s", "  -u, --usersdb=<config>", "Use specified users DB file\n");
++		pr_out("%-30s%s", "  -n, --nodetach", "Don't detach\n");
++		pr_out("%-30s%s", "  -s, --systemd", "Start daemon in systemd service mode\n");
++		pr_out("%-30s%s", "  -h, --help", "Show this help menu\n\n");
++		break;
++	case KSMBD_CMD_DAEMON_SHUTDOWN:
++		pr_out("Usage: ksmbdctl daemon shutdown\n");
++		pr_out("Shuts down the userspace daemon and the kernel server.\n\n");
++		break;
++	case KSMBD_CMD_DAEMON_DEBUG:
++		pr_out("Usage: ksmbdctl daemon debug <type>\n");
++		pr_out("Enable/disable debugging modules for ksmbd.\n\n");
++		pr_out("List of available types:\n");
++		for (i = 0; i < ARRAY_SIZE(debug_type_strings); i++)
++			pr_out("%s ", debug_type_strings[i]);
++		pr_out("\n\n");
++		break;
++	default:
++		pr_out("Usage: ksmbdctl daemon <subcommand> <args> [options]\n");
++		pr_out("ksmbd daemon management.\n\n");
++		pr_out("List of available subcommands:\n");
++		pr_out("%-20s%s", "start", "Start ksmbd userspace daemon\n");
++		pr_out("%-20s%s", "shutdown", "Shutdown ksmbd userspace daemon\n");
++		pr_out("%-20s%s", "debug", "Enable/disable debugging for ksmbd components\n\n");
++		break;
++	}
++
+ 	exit(EXIT_FAILURE);
+ }
+ 
+ static int handle_orphaned_lock_file(void)
+ {
+-	char proc_ent[64] = {0, };
+-	char manager_pid[10] = {0, };
+-	int pid = 0;
++	char proc_ent[64] = { 0 };
++	pid_t pid;
+ 	int fd;
+ 
+-	fd = open(KSMBD_LOCK_FILE, O_RDONLY);
+-	if (fd < 0)
++	pid = get_running_pid();
++	if (pid < 0)
+ 		return -EINVAL;
+ 
+-	if (read(fd, &manager_pid, sizeof(manager_pid)) == -1) {
+-		pr_debug("Unable to read main PID: %s\n", strerr(errno));
+-		close(fd);
+-		return -EINVAL;
+-	}
+-
+-	close(fd);
+-
+-	pid = strtol(manager_pid, NULL, 10);
+ 	snprintf(proc_ent, sizeof(proc_ent), "/proc/%d", pid);
+ 	fd = open(proc_ent, O_RDONLY);
+ 	if (fd < 0) {
+@@ -91,17 +124,19 @@ static int handle_orphaned_lock_file(void)
+ 
+ 	close(fd);
+ 	pr_info("File '%s' belongs to pid %d\n", KSMBD_LOCK_FILE, pid);
++
+ 	return -EINVAL;
+ }
+ 
+ static int create_lock_file(void)
+ {
+-	char manager_pid[10];
+-	size_t sz;
++	char daemon_pid[10];
++	size_t len;
+ 
+ retry:
+ 	lock_fd = open(KSMBD_LOCK_FILE, O_CREAT | O_EXCL | O_WRONLY,
+ 			S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH);
++
+ 	if (lock_fd < 0) {
+ 		if (handle_orphaned_lock_file())
+ 			return -EINVAL;
+@@ -111,9 +146,10 @@ retry:
+ 	if (flock(lock_fd, LOCK_EX | LOCK_NB) != 0)
+ 		return -EINVAL;
+ 
+-	sz = snprintf(manager_pid, sizeof(manager_pid), "%d", getpid());
+-	if (write(lock_fd, manager_pid, sz) == -1)
++	len = snprintf(daemon_pid, sizeof(daemon_pid), "%d", getpid());
++	if (write(lock_fd, daemon_pid, len) == -1)
+ 		pr_err("Unable to record main PID: %s\n", strerr(errno));
++
  	return 0;
  }
  
--static int parse_configs(char *pwddb, char *smbconf)
-+static int parse_configs(char *db, char *smbconf)
+@@ -147,7 +183,7 @@ char *make_path_subauth(void)
+  * Avoids a corrupt file if the write would be interrupted due
+  * to a power failure.
+  */
+-static int write_file_safe(char *path, char *buff, size_t length, int mode)
++static int write_file_safe(char *path, char *buff, size_t len, int mode)
+ {
+ 	int fd, ret = -1;
+ 	char *path_tmp = g_strdup_printf("%s.tmp", path);
+@@ -161,7 +197,7 @@ static int write_file_safe(char *path, char *buff, size_t length, int mode)
+ 		goto err_out;
+ 	}
+ 
+-	if (write(fd, buff, length) == -1) {
++	if (write(fd, buff, len) == -1) {
+ 		pr_err("Unable to write to %s: %s\n", path_tmp, strerr(errno));
+ 		close(fd);
+ 		goto err_out;
+@@ -204,9 +240,8 @@ static int generate_sub_auth(void)
+ 	if (!path_subauth)
+ 		return -ENOMEM;
+ retry:
+-	if (g_file_test(path_subauth, G_FILE_TEST_EXISTS)) {
++	if (g_file_test(path_subauth, G_FILE_TEST_EXISTS))
+ 		rc = cp_parse_subauth(path_subauth);
+-	}
+ 
+ 	if (rc < 0) {
+ 		rc = create_subauth_file(path_subauth);
+@@ -238,14 +273,14 @@ static int wait_group_kill(int signo)
+ 	int status;
+ 
+ 	if (kill(worker_pid, signo) != 0)
+-		pr_err("can't execute kill %d: %s\n",
++		pr_warn("can't execute kill %d: %s\n",
+ 			worker_pid,
+ 			strerr(errno));
+ 
+ 	while (1) {
+ 		pid = waitpid(-1, &status, 0);
+ 		if (pid != 0) {
+-			pr_debug("detected pid %d termination\n", pid);
++			pr_debug("Detected pid %d termination\n", pid);
+ 			break;
+ 		}
+ 		sleep(1);
+@@ -297,16 +332,16 @@ static int parse_configs(char *db, char *smbconf)
+ 
+ 	ret = cp_parse_db(db);
+ 	if (ret == -ENOENT) {
+-		pr_err("User database file does not exist. %s\n",
++		pr_warn("User database file does not exist. %s\n",
+ 			"Only guest sessions (if permitted) will work.");
+ 	} else if (ret) {
+-		pr_err("Unable to parse user database\n");
++		pr_err("Unable to parse user database %s\n", db);
+ 		return ret;
+ 	}
+ 
+ 	ret = cp_parse_smbconf(smbconf);
+ 	if (ret) {
+-		pr_err("Unable to parse smb configuration file\n");
++		pr_err("Unable to parse configuration file %s\n", smbconf);
+ 		return ret;
+ 	}
+ 	return 0;
+@@ -353,7 +388,7 @@ static void child_sig_handler(int signo)
+ 	exit(EXIT_SUCCESS);
+ }
+ 
+-static void manager_sig_handler(int signo)
++static void daemon_sig_handler(int signo)
+ {
+ 	/*
+ 	 * Pass SIGHUP to worker, so it will reload configs
+@@ -376,7 +411,7 @@ static void manager_sig_handler(int signo)
+ 	kill(0, SIGINT);
+ }
+ 
+-static int worker_process_init(void)
++static int worker_process_init(void *data)
  {
  	int ret;
  
--	ret = cp_parse_pwddb(pwddb);
-+	ret = cp_parse_db(db);
- 	if (ret == -ENOENT) {
- 		pr_err("User database file does not exist. %s\n",
- 			"Only guest sessions (if permitted) will work.");
-@@ -395,7 +395,7 @@ static int worker_process_init(void)
+@@ -395,7 +430,7 @@ static int worker_process_init(void)
  		goto out;
  	}
  
--	ret = parse_configs(global_conf.pwddb, global_conf.smbconf);
-+	ret = parse_configs(global_conf.db, global_conf.smbconf);
+-	ret = parse_configs(global_conf.db, global_conf.smbconf);
++	ret = parse_configs(global_conf.users_db, global_conf.smbconf);
  	if (ret) {
  		pr_err("Failed to parse configuration files\n");
  		goto out;
-@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
+@@ -444,32 +479,40 @@ out:
+ 	return ret;
+ }
  
- 	set_logger_app_name("ksmbd.daemon");
- 	memset(&global_conf, 0x00, sizeof(struct smbconf_global));
--	global_conf.pwddb = PATH_PWDDB;
-+	global_conf.db = PATH_USERS_DB;
- 	global_conf.smbconf = PATH_SMBCONF;
- 	pr_logger_init(PR_LOGGER_STDIO);
+-static pid_t start_worker_process(worker_fn fn)
++static pid_t start_worker_process(worker_fn fn, void *data)
+ {
+ 	int status = 0;
+-	pid_t __pid;
++	pid_t pid;
  
-@@ -669,7 +669,7 @@ int main(int argc, char *argv[])
- 			global_conf.smbconf = g_strdup(optarg);
- 			break;
- 		case 'u':
--			global_conf.pwddb = g_strdup(optarg);
-+			global_conf.db = g_strdup(optarg);
- 			break;
- 		case 'n':
- 			if (!optarg)
-@@ -694,7 +694,7 @@ int main(int argc, char *argv[])
+-	__pid = fork();
+-	if (__pid < 0) {
++	pid = fork();
++	if (pid < 0) {
+ 		pr_err("Can't fork child process: `%s'\n", strerr(errno));
+ 		return -EINVAL;
+ 	}
+-	if (__pid == 0) {
+-		status = fn();
++	if (pid == 0) {
++		status = fn(data);
+ 		exit(status);
+ 	}
+-	return __pid;
++
++	return pid;
+ }
+ 
+-static int manager_process_init(void)
++static int daemon_process_start(void *data)
+ {
++	int no_detach;
+ 	/*
+ 	 * Do not chdir() daemon()'d process to '/'.
+ 	 */
+ 	int nochdir = 1;
+ 
+-	setup_signals(manager_sig_handler);
+-	if (no_detach == 0) {
++	if(prctl(PR_SET_NAME, "ksmbd-daemon\0", 0, 0, 0))
++		pr_info("Can't set program name: %s\n", strerr(errno));
++
++	if (data)
++		no_detach = *(int *)data;
++
++	setup_signals(daemon_sig_handler);
++	if (!no_detach) {
+ 		pr_logger_init(PR_LOGGER_SYSLOG);
+ 		if (daemon(nochdir, 0) != 0) {
+ 			pr_err("Daemonization failed\n");
+@@ -481,7 +524,7 @@ static int manager_process_init(void)
+ 		 * the group leader already then the function will do
+ 		 * nothing (apart from setting errnor to EPERM).
+ 		 */
+-		if (no_detach == 1)
++		if (no_detach)
+ 			setsid();
+ 	}
+ 
+@@ -494,7 +537,7 @@ static int manager_process_init(void)
+ 		pr_debug("Failed to generate subauth for domain sid: %s\n",
+ 				strerr(errno));
+ 
+-	worker_pid = start_worker_process(worker_process_init);
++	worker_pid = start_worker_process(worker_process_init, NULL);
+ 	if (worker_pid < 0)
+ 		goto out;
+ 
+@@ -509,8 +552,7 @@ static int manager_process_init(void)
+ 			continue;
  		}
- 	}
  
--	if (!global_conf.smbconf || !global_conf.pwddb) {
-+	if (!global_conf.smbconf || !global_conf.db) {
- 		pr_err("Out of memory\n");
- 		exit(EXIT_FAILURE);
+-		pr_err("WARNING: child process exited abnormally: %d\n",
+-				child);
++		pr_warn("child process exited abnormally: %d\n", child);
+ 		if (child == -1) {
+ 			pr_err("waitpid() returned error code: %s\n",
+ 				strerr(errno));
+@@ -525,7 +567,7 @@ static int manager_process_init(void)
+ 
+ 		/* Ratelimit automatic restarts */
+ 		sleep(1);
+-		worker_pid = start_worker_process(worker_process_init);
++		worker_pid = start_worker_process(worker_process_init, NULL);
+ 		if (worker_pid < 0)
+ 			goto out;
  	}
-diff --git a/daemon/ipc.c b/daemon/ipc.c
-index c46cbc174175..b793a1e101b0 100644
---- a/daemon/ipc.c
-+++ b/daemon/ipc.c
-@@ -63,13 +63,13 @@ static int generic_event(int type, void *payload, size_t sz)
+@@ -535,35 +577,34 @@ out:
  	return 0;
  }
  
--static int parse_reload_configs(const char *pwddb, const char *smbconf)
-+static int parse_reload_configs(const char *db, const char *smbconf)
+-static int manager_systemd_service(void)
++int daemon_start_cmd(int no_detach, int systemd_service)
  {
- 	int ret;
+-	pid_t __pid;
++	pid_t pid;
++	int ret = -EINVAL;
++
++	/* Check if process is already running */
++	pid = get_running_pid();
++	if (pid > 1) {
++		pr_err("ksmbd-daemon already running (%d)\n", pid);
++		exit(EXIT_FAILURE);
++	}
++
++	if (!systemd_service)
++		return daemon_process_start((void *)&no_detach);
  
- 	pr_debug("Reload config\n");
+-	__pid = start_worker_process(manager_process_init);
+-	if (__pid < 0)
++	pid = start_worker_process(daemon_process_start, (void *)&no_detach);
++	if (pid < 0)
+ 		return -EINVAL;
+ 
+ 	return 0;
+ }
+ 
+-static struct option opts[] = {
+-	{"port",	required_argument,	NULL,	'p' },
+-	{"config",	required_argument,	NULL,	'c' },
+-	{"users",	required_argument,	NULL,	'u' },
+-	{"systemd",	no_argument,		NULL,	's' },
+-	{"nodetach",	optional_argument,	NULL,	'n' },
+-	{"help",	no_argument,		NULL,	'h' },
+-	{"?",		no_argument,		NULL,	'?' },
+-	{"version",	no_argument,		NULL,	'V' },
+-	{NULL,		0,			NULL,	 0  }
+-};
+-
+ int daemon_shutdown_cmd(void)
+ {
+ 	int fd, ret;
+ 
+ 	if (get_running_pid() == -ENOENT) {
+-		pr_info("Server is not running.\n");
++		pr_out("Server is not running.\n");
+ 		exit(EXIT_FAILURE);
+ 	}
+ 
+@@ -613,7 +654,7 @@ err:
+ 	close(fd);
+ err_open:
+ 	if (ret == -EBADF)
+-		pr_debug("Can't open %s. Is ksmbd kernel module loaded?\n");
++		pr_debug("Can't open %s. Is ksmbd kernel module loaded?\n", KSMBD_SYSFS_DEBUG);
+ 	return ret;
+ }
+ 
+@@ -633,74 +674,125 @@ err:
+ 	if (ret < 0)
+ 		pr_err("%s. Is kernel module loaded?\n", strerr(errno));
+ 	else
+-		pr_info("ksmbd module version: %s\n", version);
++		pr_out("ksmbd module version: %s\n", version);
+ 
+ 	return ret;
+ }
+ 
+-int main(int argc, char *argv[])
++int daemon_cmd(int argc, char *argv[])
+ {
++	int ret = EXIT_FAILURE;
++	int no_detach = 0;
+ 	int systemd_service = 0;
+-	int c;
++	char *debug_type;
++	const char *cmd_str;
++	ksmbd_daemon_cmd cmd = KSMBD_CMD_DAEMON_NONE;
++	int c, i;
++
++	if (argc < 2)
++		goto usage;
++
++	set_logger_app_name("ksmbd-daemon");
++
++	cmd = ksmbd_daemon_get_cmd(argv[1]);
++	cmd_str = ksmbd_daemon_get_cmd_str(cmd);
++
++	if (cmd == KSMBD_CMD_DAEMON_NONE)
++		goto usage;
++
++	if (cmd == KSMBD_CMD_DAEMON_VERSION ||
++	    cmd == KSMBD_CMD_DAEMON_SHUTDOWN)
++		goto skip_opts;
++
++	if (cmd == KSMBD_CMD_DAEMON_DEBUG) {
++		if (argc == 2)
++			goto usage;
++
++		debug_type = strdup(argv[2]);
++
++		ret = daemon_debug_cmd(debug_type);
++		if (ret == -EINVAL) {
++			pr_out("Invalid debug type \"%s\"\n\n", debug_type);
++			pr_out("List of available types:\n");
++			for (i = 0; i < ARRAY_SIZE(debug_type_strings); i++)
++				pr_out("%s ", debug_type_strings[i]);
++			pr_out("\n\n");
++		} else if (ret < 0) {
++			pr_out("Error enabling/disabling ksmbd debug\n");
++		}
++
++		free(debug_type);
++		return ret;
++	}
+ 
+-	set_logger_app_name("ksmbd.daemon");
+ 	memset(&global_conf, 0x00, sizeof(struct smbconf_global));
+-	global_conf.db = PATH_USERS_DB;
++	global_conf.users_db = PATH_USERS_DB;
+ 	global_conf.smbconf = PATH_SMBCONF;
+-	pr_logger_init(PR_LOGGER_STDIO);
+ 
+-	opterr = 0;
+-	while (1) {
+-		c = getopt_long(argc, argv, "n::p:c:u:sVh", opts, NULL);
+-
+-		if (c < 0)
+-			break;
++	pr_logger_init(PR_LOGGER_STDIO);
+ 
+-		switch (c) {
+-		case 0: /* getopt_long() set a variable, just keep going */
+-			break;
++	optind = 1;
++	while ((c = getopt_long(argc, argv, "-:p:c:u:nsh", daemon_opts, NULL)) != EOF)
++		switch(c) {
+ 		case 1:
+ 			break;
+ 		case 'p':
+ 			global_conf.tcp_port = cp_get_group_kv_long(optarg);
+-			pr_debug("TCP port option override\n");
++			pr_info("Overriding TCP port to %hu\n", global_conf.tcp_port);
+ 			break;
+ 		case 'c':
+ 			global_conf.smbconf = g_strdup(optarg);
++			if (!global_conf.smbconf)
++				goto oom;
+ 			break;
+ 		case 'u':
+-			global_conf.db = g_strdup(optarg);
++			global_conf.users_db = g_strdup(optarg);
++			if (!global_conf.users_db)
++				goto oom;
+ 			break;
+ 		case 'n':
+-			if (!optarg)
+-				no_detach = 1;
+-			else
+-				no_detach = cp_get_group_kv_long(optarg);
++			no_detach = 1;
+ 			break;
+ 		case 's':
+ 			systemd_service = 1;
+ 			break;
+-		case 'V':
+-			show_version();
+-			break;
+ 		case ':':
+-			pr_err("Missing option argument\n");
+-			/* Fall through */
+ 		case '?':
+ 		case 'h':
+-			/* Fall through */
+ 		default:
+-			usage();
++			goto usage;
+ 		}
+-	}
+ 
+-	if (!global_conf.smbconf || !global_conf.db) {
+-		pr_err("Out of memory\n");
+-		exit(EXIT_FAILURE);
++skip_opts:
++	switch (cmd) {
++	case KSMBD_CMD_DAEMON_START:
++		setup_signals(daemon_sig_handler);
++		ret = daemon_start_cmd(no_detach, systemd_service);
++		if (ret != 0) {
++			pr_err("Error starting daemon\n");
++			exit(EXIT_FAILURE);
++		}
++		break;
++	case KSMBD_CMD_DAEMON_SHUTDOWN:
++		ret = daemon_shutdown_cmd();
++		if (ret < 0) {
++			pr_err("Error shutting down server. Is ksmbd kernel module loaded?\n");
++			exit(EXIT_FAILURE);
++		}
++		pr_out("Server was shut down.\n");
++		break;
++	case KSMBD_CMD_DAEMON_VERSION:
++		ret = daemon_version_cmd();
++		break;
+ 	}
+ 
+-	setup_signals(manager_sig_handler);
+-	if (!systemd_service)
+-		return manager_process_init();
+-	return manager_systemd_service();
++	return ret;
++
++usage:
++	daemon_usage(cmd);
++	exit(EXIT_FAILURE);
++oom:
++	pr_err("Out of memory\n");
++	ret = -ENOMEM;
++	return ret;
+ }
+diff --git a/daemon/daemon.h b/daemon/daemon.h
+index ca064b2b732d..7cfedc100e56 100644
+--- a/daemon/daemon.h
++++ b/daemon/daemon.h
+@@ -12,10 +12,33 @@
+ #define KSMBD_SYSFS_DEBUG	"/sys/class/ksmbd-control/debug"
+ #define KSMBD_SYSFS_VERSION	"/sys/module/ksmbd/version"
+ 
++int daemon_start_cmd(int no_detach, int systemd_service);
++int daemon_shutdown_cmd(void);
++int daemon_debug_cmd(char *debug_type);
++int daemon_version_cmd(void);
++
++typedef enum {
++	KSMBD_CMD_DAEMON_NONE = 0,
++	KSMBD_CMD_DAEMON_START,
++	KSMBD_CMD_DAEMON_SHUTDOWN,
++	KSMBD_CMD_DAEMON_DEBUG,
++	KSMBD_CMD_DAEMON_VERSION,
++	KSMBD_CMD_DAEMON_MAX
++} ksmbd_daemon_cmd;
++
+ static const char * const debug_type_strings[] = {
+ 	"all", "smb", "auth", "vfs", "oplock", "ipc", "conn", "rdma"
+ };
+ 
++/* List of supported subcommands */
++static const char *ksmbd_daemon_cmds_str[] ={
++	"none",
++	"start",
++	"shutdown",
++	"debug",
++	"version",
++};
++
+ static struct option daemon_opts[] = {
+ 	{ "port", required_argument, NULL, 'p' },
+ 	{ "config", required_argument, NULL, 'c' },
+@@ -26,4 +49,7 @@ static struct option daemon_opts[] = {
+ 	{ 0, 0, 0, 0 },
+ };
+ 
++void daemon_usage(ksmbd_daemon_cmd cmd);
++int daemon_cmd(int argc, char *argv[]);
++
+ #endif /* __DAEMON_H__ */
+diff --git a/daemon/ipc.c b/daemon/ipc.c
+index b793a1e101b0..a5ff31dcb7b0 100644
+--- a/daemon/ipc.c
++++ b/daemon/ipc.c
+@@ -31,6 +31,7 @@ struct ksmbd_ipc_msg *ipc_msg_alloc(size_t sz)
+ 	struct ksmbd_ipc_msg *msg;
+ 	size_t msg_sz = sz + sizeof(struct ksmbd_ipc_msg) + 1;
+ 
++	/* FIXME: shouldn't we fail here? */
+ 	if (msg_sz > KSMBD_IPC_MAX_MESSAGE_SIZE)
+ 		pr_err("IPC message is too large: %zu\n", msg_sz);
+ 
+@@ -71,7 +72,7 @@ static int parse_reload_configs(const char *db, const char *smbconf)
  	usm_remove_all_users();
--	ret = cp_parse_pwddb(pwddb);
-+	ret = cp_parse_db(db);
+ 	ret = cp_parse_db(db);
  	if (ret == -ENOENT) {
- 		pr_err("User database file does not exist. %s\n",
+-		pr_err("User database file does not exist. %s\n",
++		pr_warn("User database file does not exist. %s\n",
  		       "Only guest sessions (if permitted) will work.");
-@@ -91,7 +91,7 @@ static int handle_generic_event(struct nl_cache_ops *unused,
+ 	} else if (ret) {
+ 		pr_err("Unable to parse user database\n");
+@@ -91,7 +92,7 @@ static int handle_generic_event(struct nl_cache_ops *unused,
  				void *arg)
  {
  	if (ksmbd_health_status & KSMBD_SHOULD_RELOAD_CONFIG) {
--		parse_reload_configs(global_conf.pwddb, global_conf.smbconf);
-+		parse_reload_configs(global_conf.db, global_conf.smbconf);
+-		parse_reload_configs(global_conf.db, global_conf.smbconf);
++		parse_reload_configs(global_conf.users_db, global_conf.smbconf);
  		ksmbd_health_status &= ~KSMBD_SHOULD_RELOAD_CONFIG;
  	}
  
-diff --git a/include/config_parser.h b/include/config_parser.h
-index c051f487c319..0aefc3b4d5c7 100644
---- a/include/config_parser.h
-+++ b/include/config_parser.h
-@@ -26,7 +26,7 @@ int cp_parse_external_smbconf_group(char *name, char *opts);
- int cp_smbconfig_hash_create(const char *smbconf);
- void cp_smbconfig_destroy(void);
+@@ -108,7 +109,7 @@ static int nlink_msg_cb(struct nl_msg *msg, void *arg)
+ 	struct genlmsghdr *gnlh = genlmsg_hdr(nlmsg_hdr(msg));
  
--int cp_parse_pwddb(const char *pwddb);
-+int cp_parse_db(const char *db);
- int cp_parse_smbconf(const char *smbconf);
- int cp_parse_reload_smbconf(const char *smbconf);
- int cp_parse_subauth(const char *subauth_path);
+ 	if (gnlh->version != KSMBD_GENL_VERSION) {
+-		pr_err("IPC message version mistamtch: %d\n", gnlh->version);
++		pr_err("IPC message version mismatch: %d\n", gnlh->version);
+ 		return NL_SKIP;
+ 	}
+ 
+@@ -124,7 +125,7 @@ static int handle_unsupported_event(struct nl_cache_ops *unused,
+ 				    struct genl_info *info,
+ 				    void *arg)
+ {
+-	pr_err("Unsupported IPC event %d, ignore.\n", cmd->c_id);
++	pr_warn("Unsupported IPC event %d, ignore.\n", cmd->c_id);
+ 	return NL_SKIP;
+ }
+ 
+diff --git a/daemon/rpc.c b/daemon/rpc.c
+index ab2a7c6dfebe..0dbbbe6e9be7 100644
+--- a/daemon/rpc.c
++++ b/daemon/rpc.c
+@@ -588,7 +588,7 @@ static int __max_entries(struct ksmbd_dcerpc *dce, struct ksmbd_rpc_pipe *pipe)
+ 		return pipe->num_entries;
+ 
+ 	if (!dce->entry_size) {
+-		pr_err("No ->entry_size() callback was provided\n");
++		pr_warn("No ->entry_size() callback was provided\n");
+ 		return pipe->num_entries;
+ 	}
+ 
+@@ -1135,7 +1135,7 @@ int rpc_write_request(struct ksmbd_rpc_command *req,
+ 		return KSMBD_RPC_OK;
+ 
+ 	if (pipe->num_entries)
+-		pr_err("RPC: A call on unflushed pipe. Pending %d\n",
++		pr_warn("RPC: A call on unflushed pipe. Pending %d\n",
+ 			pipe->num_entries);
+ 
+ 	dce = pipe->dce;
+@@ -1208,6 +1208,6 @@ int rpc_close_request(struct ksmbd_rpc_command *req,
+ 		return 0;
+ 	}
+ 
+-	pr_err("RPC: unknown pipe ID: %d\n", req->handle);
++	pr_warn("RPC: unknown pipe ID: %d\n", req->handle);
+ 	return KSMBD_RPC_OK;
+ }
+diff --git a/daemon/worker.c b/daemon/worker.c
+index 0ddd88cea12c..eb9e646d4985 100644
+--- a/daemon/worker.c
++++ b/daemon/worker.c
+@@ -329,16 +329,17 @@ int wp_init(void)
+ 				 MAX_WORKER_THREADS,
+ 				 0,
+ 				 &err);
+-	if (!pool) {
+-		if (err) {
+-			pr_err("Can't create pool: %s\n", err->message);
+-			g_error_free(err);
+-		}
++	if (!pool)
+ 		goto out_error;
+-	}
+ 
+ 	return 0;
++
+ out_error:
++	if (err) {
++		pr_err("Can't create pool: %s\n", err->message);
++		g_error_free(err);
++	}
++
+ 	wp_destroy();
+ 	return -ENOMEM;
+ }
 diff --git a/include/ksmbdtools.h b/include/ksmbdtools.h
-index fccb88d8898a..978cbe148eac 100644
+index 978cbe148eac..c9831c16596a 100644
 --- a/include/ksmbdtools.h
 +++ b/include/ksmbdtools.h
 @@ -57,7 +57,7 @@ struct smbconf_global {
  	unsigned int		gen_subauth[3];
  	char			*krb5_keytab_file;
  	char			*krb5_service_name;
--	char			*pwddb;
-+	char			*db;
+-	char			*db;
++	char			*users_db;
  	char			*smbconf;
  };
  
-@@ -85,8 +85,9 @@ extern struct smbconf_global global_conf;
- 
- #define KSMBD_CONF_FILE_MAX		10000
- 
--#define PATH_PWDDB	"/etc/ksmbd/ksmbdpwd.db"
--#define PATH_SMBCONF	"/etc/ksmbd/smb.conf"
-+#define PATH_USERS_DB		"/etc/ksmbd/users.db"
-+#define PATH_OLD_USERS_DB	"/etc/ksmbd/ksmbdpwd.db"
-+#define PATH_SMBCONF		"/etc/ksmbd/smb.conf"
- 
- #define KSMBD_HEALTH_START		(0)
- #define KSMBD_HEALTH_RUNNING		(1 << 0)
-diff --git a/lib/config_parser.c b/lib/config_parser.c
-index 20e27c3ab8ec..a000a2a6059e 100644
---- a/lib/config_parser.c
-+++ b/lib/config_parser.c
-@@ -680,9 +680,9 @@ int cp_parse_smbconf(const char *smbconf)
- 				    GROUPS_CALLBACK_STARTUP_INIT);
- }
- 
--int cp_parse_pwddb(const char *pwddb)
-+int cp_parse_db(const char *db)
- {
--	return __mmap_parse_file(pwddb, usm_add_update_user_from_pwdentry);
-+	return __mmap_parse_file(db, usm_add_update_user_from_pwdentry);
- }
- 
- int cp_smbconfig_hash_create(const char *smbconf)
-diff --git a/user/Makefile.am b/user/Makefile.am
-index c5cee686f5cc..ba491c84f0f4 100644
---- a/user/Makefile.am
-+++ b/user/Makefile.am
-@@ -4,4 +4,4 @@ ksmbd_adduser_LDADD = $(top_builddir)/lib/libksmbdtools.a
- 
- sbin_PROGRAMS = ksmbd.adduser
- 
--ksmbd_adduser_SOURCES = md4_hash.c user_admin.c adduser.c md4_hash.h user_admin.h
-+ksmbd_adduser_SOURCES = md4_hash.c user_admin.c user.c md4_hash.h user_admin.h
-diff --git a/user/adduser.c b/user/adduser.c
-deleted file mode 100644
-index 88b12db9f439..000000000000
---- a/user/adduser.c
-+++ /dev/null
-@@ -1,180 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- *   Copyright (C) 2018 Samsung Electronics Co., Ltd.
-- *
-- *   linux-cifsd-devel@lists.sourceforge.net
-- */
--
--#include <glib.h>
--#include <stdlib.h>
--#include <stdio.h>
--#include <unistd.h>
--#include <getopt.h>
--#include <sys/stat.h>
--#include <fcntl.h>
--#include <sys/types.h>
--#include <signal.h>
--#include <errno.h>
--#include <ctype.h>
--
--#include "config_parser.h"
--#include "ksmbdtools.h"
--#include "management/user.h"
--#include "management/share.h"
--#include "user_admin.h"
--#include "linux/ksmbd_server.h"
--#include "version.h"
--
--static char *arg_account = NULL;
--static char *arg_password = NULL;
--
--enum {
--	COMMAND_ADD_USER = 1,
--	COMMAND_DEL_USER,
--	COMMAND_UPDATE_USER,
--};
--
--static void usage(void)
--{
--	fprintf(stderr, "Usage: smbuseradd\n");
--
--	fprintf(stderr, "\t-a | --add-user=login\n");
--	fprintf(stderr, "\t-d | --del-user=login\n");
--	fprintf(stderr, "\t-u | --update-user=login\n");
--	fprintf(stderr, "\t-p | --password=pass\n");
--
--	fprintf(stderr, "\t-i smbpwd.db | --import-users=smbpwd.db\n");
--	fprintf(stderr, "\t-V | --version\n");
--	fprintf(stderr, "\t-v | --verbose\n");
--
--	exit(EXIT_FAILURE);
--}
--
--static void show_version(void)
--{
--	printf("ksmbd-tools version : %s\n", KSMBD_TOOLS_VERSION);
--	exit(EXIT_FAILURE);
--}
--
--static int parse_configs(char *pwddb)
--{
--	int ret;
--
--	ret = test_file_access(pwddb);
--	if (ret)
--		return ret;
--
--	ret = cp_parse_pwddb(pwddb);
--	if (ret)
--		return ret;
--	return 0;
--}
--
--static int sanity_check_user_name_simple(char *uname)
--{
--	int sz, i;
--
--	if (!uname)
--		return -EINVAL;
--
--	sz = strlen(uname);
--	if (sz < 1)
--		return -EINVAL;
--	if (sz >= KSMBD_REQ_MAX_ACCOUNT_NAME_SZ)
--		return -EINVAL;
--
--	/* 1'; Drop table users -- */
--	if (!strcmp(uname, "root"))
--		return -EINVAL;
--
--	if (strpbrk(uname, ":\n"))
--		return -EINVAL;
--
--	return 0;
--}
--
--int main(int argc, char *argv[])
--{
--	int ret = EXIT_FAILURE;
--	char *pwddb = PATH_PWDDB;
--	int c, cmd = 0;
--
--	set_logger_app_name("ksmbd.adduser");
--
--	opterr = 0;
--	while ((c = getopt(argc, argv, "c:i:a:d:u:p:Vvh")) != EOF)
--		switch (c) {
--		case 'a':
--			arg_account = g_strdup(optarg);
--			cmd = COMMAND_ADD_USER;
--			break;
--		case 'd':
--			arg_account = g_strdup(optarg);
--			cmd = COMMAND_DEL_USER;
--			break;
--		case 'u':
--			arg_account = g_strdup(optarg);
--			cmd = COMMAND_UPDATE_USER;
--			break;
--		case 'p':
--			arg_password = g_strdup(optarg);
--			break;
--		case 'i':
--			pwddb = g_strdup(optarg);
--			break;
--		case 'V':
--			show_version();
--			break;
--		case 'v':
--			break;
--		case '?':
--		case 'h':
--		default:
--			usage();
--	}
--
--	if (sanity_check_user_name_simple(arg_account)) {
--		pr_err("User name sanity check failure\n");
--		goto out;
--	}
--
--	if (!pwddb) {
--		pr_err("Out of memory\n");
--		goto out;
--	}
--
--	ret = usm_init();
--	if (ret) {
--		pr_err("Failed to init user management\n");
--		goto out;
--	}
--
--	ret = shm_init();
--	if (ret) {
--		pr_err("Failed to init net share management\n");
--		goto out;
--	}
--
--	ret = parse_configs(pwddb);
--	if (ret) {
--		pr_err("Unable to parse configuration files\n");
--		goto out;
--	}
--
--	if (cmd == COMMAND_ADD_USER)
--		ret = command_add_user(pwddb, arg_account, arg_password);
--	if (cmd == COMMAND_DEL_USER)
--		ret = command_del_user(pwddb, arg_account);
--	if (cmd == COMMAND_UPDATE_USER)
--		ret = command_update_user(pwddb, arg_account, arg_password);
--
--	/*
--	 * We support only ADD_USER command at this moment
--	 */
--	if (ret == 0 && cmd == COMMAND_ADD_USER)
--		notify_ksmbd_daemon();
--out:
--	shm_destroy();
--	usm_destroy();
--	return ret;
--}
-diff --git a/user/user.c b/user/user.c
-new file mode 100644
-index 000000000000..f59c34c11b02
---- /dev/null
-+++ b/user/user.c
-@@ -0,0 +1,238 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *   Copyright (C) 2018 Samsung Electronics Co., Ltd.
-+ *   Copyright (C) 2021 SUSE LLC
-+ *
-+ *   linux-cifsd-devel@lists.sourceforge.net
-+ */
-+
-+#include <glib.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <getopt.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <sys/types.h>
-+#include <signal.h>
-+#include <errno.h>
-+#include <ctype.h>
-+
-+#include "config_parser.h"
-+#include "ksmbdtools.h"
-+#include "management/user.h"
-+#include "management/share.h"
-+#include "user_admin.h"
-+#include "linux/ksmbd_server.h"
-+
-+static ksmbd_user_cmd ksmbd_user_get_cmd(char *cmd)
-+{
-+	int i;
-+
-+	if (!cmd)
-+		return KSMBD_CMD_USER_NONE;
-+
-+	for (i = 1; i < KSMBD_CMD_USER_MAX; i++)
-+		if (!strcmp(cmd, ksmbd_user_cmds_str[i]))
-+			return (ksmbd_user_cmd)i;
-+
-+	return KSMBD_CMD_USER_NONE;
-+}
-+
-+static const char *ksmbd_user_get_cmd_str(ksmbd_user_cmd cmd)
-+{
-+	if (cmd > KSMBD_CMD_USER_MAX)
-+		return ksmbd_user_cmds_str[KSMBD_CMD_USER_NONE];
-+
-+	return ksmbd_user_cmds_str[(int)cmd];
-+}
-+
-+void user_usage(ksmbd_user_cmd cmd)
-+{
-+	const char *cmd_str = ksmbd_user_get_cmd_str(cmd);
-+
-+	switch (cmd) {
-+	case KSMBD_CMD_USER_ADD:
-+	case KSMBD_CMD_USER_UPDATE:
-+		pr_out("Usage: ksmbdctl user %s <username> [-p <password>] [-d <file>]\n", cmd_str);
-+		pr_out("Adds or updates a user to the database.\n\n");
-+		pr_out("%-30s%s", "  -p, --password=<password>", "Use <password> for <username>\n");
-+		pr_out("%-30s%s", "  -d, --database=<file>", "Use <file> as database\n\n");
-+		break;
-+	case KSMBD_CMD_USER_DELETE:
-+		pr_out("Usage: ksmbdctl user delete <username>\n");
-+		pr_out("Delete user from database.\n\n");
-+		break;
-+	case KSMBD_CMD_USER_LIST:
-+		pr_out("Usage: ksmbdctl user list\n");
-+		pr_out("List users in database.\n\n");
-+		pr_out("%-30s%s", "  -d, --database=<file>", "Use <file> as database\n\n");
-+		break;
-+	default:
-+		pr_out("Usage: ksmbdctl user <subcommand> <args> [options]\n");
-+		pr_out("User management.\n\n");
-+		pr_out("List of available subcommands:\n");
-+		pr_out("%-20s%s", "  add", "Add a user\n");
-+		pr_out("%-20s%s", "  delete", "Delete a user\n");
-+		pr_out("%-20s%s", "  update", "Update an existing user\n");
-+		pr_out("%-20s%s", "  list", "List users in user database\n\n");
-+		break;
-+	}
-+
-+	exit(EXIT_FAILURE);
-+}
-+
-+static int parse_configs(char *db)
-+{
-+	int ret;
-+
-+	ret = test_file_access(db);
-+	if (ret)
-+		return ret;
-+
-+	ret = cp_parse_db(db);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
-+static int sanity_check_user_name_simple(char *uname)
-+{
-+	int sz, i;
-+
-+	if (!uname)
-+		return -EINVAL;
-+
-+	sz = strlen(uname);
-+	if (sz < 1)
-+		return -EINVAL;
-+	if (sz >= KSMBD_REQ_MAX_ACCOUNT_NAME_SZ)
-+		return -EINVAL;
-+
-+	/* 1'; Drop table users -- */
-+	if (!strcmp(uname, "root"))
-+		return -EINVAL;
-+
-+	for (i = 0; i < sz; i++) {
-+		if (isalnum(uname[i]))
-+			return 0;
-+	}
-+	return -EINVAL;
-+}
-+
-+int user_cmd(int argc, char *argv[])
-+{
-+	int ret = EXIT_FAILURE;
-+	char *db = PATH_USERS_DB;
-+	char *login = NULL;
-+	char *pw = NULL;
-+	ksmbd_user_cmd cmd = KSMBD_CMD_USER_NONE;
-+	const char *cmd_str = NULL;
-+	int c;
-+
-+	if (argc < 2)
-+		goto usage;
-+
-+	set_logger_app_name("ksmbd-user");
-+
-+	cmd = ksmbd_user_get_cmd(argv[1]);
-+	cmd_str = ksmbd_user_get_cmd_str(cmd);
-+
-+	if (cmd == KSMBD_CMD_USER_NONE)
-+		goto usage;
-+
-+	if (cmd != KSMBD_CMD_USER_LIST) {
-+		if (argc == 2)
-+			goto missing_arg;
-+
-+		if (argv[2][0] != '-')
-+			login = g_strdup(argv[2]);
-+		else
-+			goto usage;
-+	}
-+
-+	optind = 1;
-+	while((c = getopt_long(argc, argv, "-:p:d:", user_opts, NULL)) != EOF)
-+		switch (c) {
-+		case 1:
-+			break;
-+		case 'p':
-+			pw = g_strdup(optarg);
-+			break;
-+		case 'd':
-+			db = g_strdup(optarg);
-+			break;
-+		case ':':
-+		case '?':
-+		default:
-+			goto usage;
-+		}
-+
-+	if (cmd == KSMBD_CMD_USER_LIST)
-+		goto user_list;
-+
-+	if (!login)
-+		goto missing_arg;
-+
-+	if (sanity_check_user_name_simple(login)) {
-+		pr_err("User name (%s) sanity check failure\n");
-+		goto out;
-+	}
-+
-+user_list:
-+	if (!db) {
-+		pr_err("Out of memory\n");
-+		goto out;
-+	}
-+
-+	ret = usm_init();
-+	if (ret) {
-+		pr_err("Failed to init user management\n");
-+		goto out;
-+	}
-+
-+	ret = shm_init();
-+	if (ret) {
-+		pr_err("Failed to init net share management\n");
-+		goto out;
-+	}
-+
-+	ret = parse_configs(db);
-+	if (ret) {
-+		pr_err("Unable to parse database file %s\n", db);
-+		goto out;
-+	}
-+
-+	switch (cmd) {
-+	case KSMBD_CMD_USER_ADD:
-+		ret = user_add_cmd(db, login, pw);
-+		break;
-+	case KSMBD_CMD_USER_DELETE:
-+		ret = user_delete_cmd(db, login);
-+		break;
-+	case KSMBD_CMD_USER_UPDATE:
-+		ret = user_update_cmd(db, login, pw);
-+		break;
-+	case KSMBD_CMD_USER_LIST:
-+		ret = user_list_cmd(db);
-+		break;
-+	}
-+
-+	/*
-+	 * FIXME: We support only ADD_USER command at this moment
-+	 */
-+	if (ret == 0 && cmd == KSMBD_CMD_USER_ADD)
-+		notify_ksmbd_daemon();
-+out:
-+	shm_destroy();
-+	usm_destroy();
-+	return ret;
-+
-+missing_arg:
-+	if (cmd > KSMBD_CMD_USER_NONE && cmd < KSMBD_CMD_USER_MAX)
-+		pr_out("Subcommand \"%s\" requires an argument.\n\n", cmd_str);
-+usage:
-+	user_usage(cmd);
-+
-+	return ret;
-+}
-diff --git a/user/user_admin.c b/user/user_admin.c
-index 95b05ea33f28..ca0e14978701 100644
---- a/user/user_admin.c
-+++ b/user/user_admin.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-  *   Copyright (C) 2018 Samsung Electronics Co., Ltd.
-+ *   Copyright (C) 2021 SUSE LLC
-  *
-  *   linux-cifsd-devel@lists.sourceforge.net
-  */
-@@ -8,8 +9,8 @@
- #include <glib.h>
- #include <stdlib.h>
- #include <stdio.h>
-+#include <stdbool.h>
- #include <unistd.h>
--#include <getopt.h>
- #include <sys/stat.h>
- #include <fcntl.h>
- #include <termios.h>
-@@ -24,23 +25,23 @@
- 
- #define MAX_NT_PWD_LEN 129
- 
--static char *arg_account = NULL;
--static char *arg_password = NULL;
- static int conf_fd = -1;
- static char wbuf[2 * MAX_NT_PWD_LEN + 2 * KSMBD_REQ_MAX_ACCOUNT_NAME_SZ];
- 
--static int __opendb_file(char *pwddb)
-+static int open_db(char *db, bool truncate)
- {
--	conf_fd = open(pwddb, O_WRONLY);
-+	conf_fd = open(db, O_WRONLY);
- 	if (conf_fd == -1) {
--		pr_err("%s %s\n", strerr(errno), pwddb);
-+		pr_err("%s %s\n", strerr(errno), db);
- 		return -EINVAL;
- 	}
- 
--	if (ftruncate(conf_fd, 0)) {
--		pr_err("%s %s\n", strerr(errno), pwddb);
--		close(conf_fd);
--		return -EINVAL;
-+	if (truncate) {
-+		if (ftruncate(conf_fd, 0)) {
-+			pr_err("%s %s\n", strerr(errno), db);
-+			close(conf_fd);
-+			return -EINVAL;
-+		}
- 	}
- 
- 	return 0;
-@@ -60,149 +61,147 @@ static void term_toggle_echo(int on_off)
- 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
- }
- 
--static char *__prompt_password_stdin(size_t *sz)
-+static char *prompt_password_stdin(size_t *sz)
- {
--	char *pswd1 = calloc(1, MAX_NT_PWD_LEN + 1);
--	char *pswd2 = calloc(1, MAX_NT_PWD_LEN + 1);
-+	char *pw1 = calloc(1, MAX_NT_PWD_LEN + 1);
-+	char *pw2 = calloc(1, MAX_NT_PWD_LEN + 1);
- 	size_t len = 0;
- 	int i;
- 
--	if (!pswd1 || !pswd2) {
--		free(pswd1);
--		free(pswd2);
--		pr_err("Out of memory\n");
--		return NULL;
--	}
-+	if (!pw1 || !pw2)
-+		goto fail;
- 
- again:
--	printf("New password: ");
-+	pr_out("New password: ");
- 	term_toggle_echo(0);
--	if (fgets(pswd1, MAX_NT_PWD_LEN, stdin) == NULL) {
-+	if (fgets(pw1, MAX_NT_PWD_LEN, stdin) == NULL) {
- 		term_toggle_echo(1);
--		pr_err("\nFatal error: %s\n", strerr(errno));
--		free(pswd1);
--		free(pswd2);
--		return NULL;
-+		pr_out("\n");
-+		goto fail;
- 	}
-+	pr_out("\n");
- 
--	printf("\nRetype new password: ");
--	if (fgets(pswd2, MAX_NT_PWD_LEN, stdin) == NULL) {
-+	pr_out("Retype new password: ");
-+	if (fgets(pw2, MAX_NT_PWD_LEN, stdin) == NULL) {
- 		term_toggle_echo(1);
--		pr_err("\nFatal error: %s\n", strerr(errno));
--		free(pswd1);
--		free(pswd2);
--		return NULL;
-+		pr_out("\n");
-+		goto fail;
- 	}
- 	term_toggle_echo(1);
--	printf("\n");
-+	pr_out("\n");
- 
--	len = strlen(pswd1);
-+	len = strlen(pw1);
- 	for (i = 0; i < len; i++)
--		if (pswd1[i] == '\n')
--			pswd1[i] = 0x00;
-+		if (pw1[i] == '\n')
-+			pw1[i] = 0x00;
- 
--	len = strlen(pswd2);
-+	len = strlen(pw2);
- 	for (i = 0; i < len; i++)
--		if (pswd2[i] == '\n')
--			pswd2[i] = 0x00;
-+		if (pw2[i] == '\n')
-+			pw2[i] = 0x00;
- 
--	if (memcmp(pswd1, pswd2, MAX_NT_PWD_LEN + 1)) {
-+	if (memcmp(pw1, pw2, MAX_NT_PWD_LEN + 1)) {
- 		pr_err("Passwords don't match\n");
- 		goto again;
- 	}
- 
--	len = strlen(pswd1);
-+	len = strlen(pw1);
- 	if (len <= 1) {
- 		pr_err("No password was provided\n");
- 		goto again;
- 	}
- 
- 	*sz = len;
--	free(pswd2);
--	return pswd1;
-+	free(pw2);
-+	return pw1;
-+fail:
-+	pr_err("Fatal error: %s\n", strerr(errno));
-+	free(pw1);
-+	free(pw2);
-+	return NULL;
- }
- 
--static char *prompt_password(size_t *sz)
-+static char *prompt_password(char *password, size_t *len)
- {
--	if (!arg_password)
--		return __prompt_password_stdin(sz);
-+	if (!password)
-+		return prompt_password_stdin(len);
- 
--	*sz = strlen(arg_password);
--	return arg_password;
-+	*len = strlen(password);
-+	return password;
- }
- 
--static char *get_utf8_password(long *len)
-+static char *get_utf8_password(char *password, long *len)
- {
- 	size_t raw_sz;
--	char *pswd_raw, *pswd_converted;
-+	char *pw_raw, *pw_converted;
- 	gsize bytes_read = 0;
- 	gsize bytes_written = 0;
- 
--	pswd_raw = prompt_password(&raw_sz);
--	if (!pswd_raw)
-+	pw_raw = prompt_password(password, &raw_sz);
-+	if (!pw_raw)
- 		return NULL;
- 
--	pswd_converted = ksmbd_gconvert(pswd_raw,
-+	pw_converted = ksmbd_gconvert(pw_raw,
- 					raw_sz,
- 					KSMBD_CHARSET_UTF16LE,
- 					KSMBD_CHARSET_DEFAULT,
- 					&bytes_read,
- 					&bytes_written);
--	if (!pswd_converted) {
--		free(pswd_raw);
-+	if (!pw_converted) {
-+		free(pw_raw);
- 		return NULL;
- 	}
- 
- 	*len = bytes_written;
--	free(pswd_raw);
--	return pswd_converted;
-+	free(pw_raw);
-+	return pw_converted;
- }
- 
--static void __sanity_check(char *pswd_hash, char *pswd_b64)
-+static void sanity_check_pw(char *pw_hash, char *pw_b64)
- {
--	size_t pass_sz;
--	char *pass = base64_decode(pswd_b64, &pass_sz);
-+	size_t len;
-+	char *pass = base64_decode(pw_b64, &len);
- 
- 	if (!pass) {
- 		pr_err("Unable to decode NT hash\n");
- 		exit(EXIT_FAILURE);
- 	}
- 
--	if (memcmp(pass, pswd_hash, pass_sz)) {
-+	if (memcmp(pass, pw_hash, len)) {
- 		pr_err("NT hash encoding error\n");
- 		exit(EXIT_FAILURE);
- 	}
- 	free(pass);
- }
- 
--static char *get_hashed_b64_password(void)
-+static char *get_hashed_b64_password(char *password)
- {
- 	struct md4_ctx mctx;
- 	long len;
--	char *pswd_plain, *pswd_hash, *pswd_b64;
-+	char *pw_plain, *pw_hash, *pw_b64;
- 
--	pswd_plain = get_utf8_password(&len);
--	if (!pswd_plain)
-+	pw_plain = get_utf8_password(password, &len);
-+	if (!pw_plain)
- 		return NULL;
- 
--	pswd_hash = calloc(1, sizeof(mctx.hash) + 1);
--	if (!pswd_hash) {
--		free(pswd_plain);
-+	pw_hash = calloc(1, sizeof(mctx.hash) + 1);
-+	if (!pw_hash) {
-+		free(pw_plain);
- 		pr_err("Out of memory\n");
- 		return NULL;
- 	}
- 
- 	md4_init(&mctx);
--	md4_update(&mctx, pswd_plain, len);
--	md4_final(&mctx, pswd_hash);
-+	md4_update(&mctx, pw_plain, len);
-+	md4_final(&mctx, pw_hash);
- 
--	pswd_b64 = base64_encode(pswd_hash,
-+	pw_b64 = base64_encode(pw_hash,
- 				 MD4_HASH_WORDS * sizeof(unsigned int));
- 
--	__sanity_check(pswd_hash, pswd_b64);
--	free(pswd_plain);
--	free(pswd_hash);
--	return pswd_b64;
-+	sanity_check_pw(pw_hash, pw_b64);
-+	free(pw_plain);
-+	free(pw_hash);
-+	return pw_b64;
- }
- 
- static void write_user(struct ksmbd_user *user)
-@@ -248,7 +247,7 @@ static void write_remove_user_cb(gpointer key,
- {
- 	struct ksmbd_user *user = (struct ksmbd_user *)value;
- 
--	if (!g_ascii_strcasecmp(user->name, arg_account)) {
-+	if (!g_ascii_strcasecmp(user->name, (char *)user_data)) {
- 		pr_info("User '%s' removed\n", user->name);
- 		return;
- 	}
-@@ -262,96 +261,91 @@ static void lookup_can_del_user(gpointer key,
- {
- 	struct ksmbd_share *share = (struct ksmbd_share *)value;
- 	int ret = 0;
--	int *abort_del_user = (int *)user_data;
-+	char *account = (char *)user_data;
- 
--	if (*abort_del_user)
-+	if (!account)
- 		return;
- 
- 	ret = shm_lookup_users_map(share,
- 				   KSMBD_SHARE_ADMIN_USERS_MAP,
--				   arg_account);
-+				   account);
- 	if (ret == 0)
- 		goto conflict;
- 
- 	ret = shm_lookup_users_map(share,
- 				   KSMBD_SHARE_WRITE_LIST_MAP,
--				   arg_account);
-+				   account);
- 	if (ret == 0)
- 		goto conflict;
- 
- 	ret = shm_lookup_users_map(share,
- 				   KSMBD_SHARE_VALID_USERS_MAP,
--				   arg_account);
-+				   account);
- 	if (ret == 0)
- 		goto conflict;
- 
--	*abort_del_user = 0;
- 	return;
- 
- conflict:
- 	pr_err("Share %s requires user %s to exist\n",
--		share->name, arg_account);
--	*abort_del_user = 1;
-+		share->name, account);
-+	account = NULL;
- }
- 
--int command_add_user(char *pwddb, char *account, char *password)
-+int user_add_cmd(char *db, char *account, char *password)
- {
- 	struct ksmbd_user *user;
--	char *pswd;
--
--	arg_account = account;
--	arg_password = password;
-+	char *pw;
- 
--	user = usm_lookup_user(arg_account);
-+	user = usm_lookup_user(account);
- 	if (user) {
- 		put_ksmbd_user(user);
--		pr_err("Account `%s' already exists\n", arg_account);
-+		pr_err("Account `%s' already exists\n", account);
- 		return -EEXIST;
- 	}
- 
--	pswd = get_hashed_b64_password();
--	if (!pswd) {
-+	pw = get_hashed_b64_password(password);
-+	if (!pw) {
- 		pr_err("Out of memory\n");
- 		return -EINVAL;
- 	}
- 
--	/* pswd is already g_strdup-ed */
--	if (usm_add_new_user(arg_account, pswd)) {
-+	/* pw is already g_strdup-ed */
-+	if (usm_add_new_user(account, pw)) {
- 		pr_err("Could not add new account\n");
- 		return -EINVAL;
- 	}
- 
--	pr_info("User '%s' added\n", arg_account);
--	if (__opendb_file(pwddb))
-+	if (open_db(db, true))
- 		return -EINVAL;
- 
- 	for_each_ksmbd_user(write_user_cb, NULL);
-+
-+	pr_info("User '%s' added\n", account);
-+
- 	close(conf_fd);
- 	return 0;
- }
- 
--int command_update_user(char *pwddb, char *account, char *password)
-+int user_update_cmd(char *db, char *account, char *password)
- {
- 	struct ksmbd_user *user;
--	char *pswd;
--
--	arg_password = password;
--	arg_account = account;
-+	char *pw;
- 
--	user = usm_lookup_user(arg_account);
-+	user = usm_lookup_user(account);
- 	if (!user) {
--		pr_err("Unknown account\n");
-+		pr_err("Unknown account \"%s\"\n", account);
- 		return -EINVAL;
- 	}
- 
--	pswd = get_hashed_b64_password();
--	if (!pswd) {
-+	pw = get_hashed_b64_password(password);
-+	if (!pw) {
- 		pr_err("Out of memory\n");
- 		put_ksmbd_user(user);
- 		return -EINVAL;
- 	}
- 
--	if (usm_update_user_password(user, pswd)) {
-+	if (usm_update_user_password(user, pw)) {
- 		pr_err("Out of memory\n");
- 		put_ksmbd_user(user);
- 		return -ENOMEM;
-@@ -359,9 +353,9 @@ int command_update_user(char *pwddb, char *account, char *password)
- 
- 	pr_info("User '%s' updated\n", account);
- 	put_ksmbd_user(user);
--	free(pswd);
-+	free(pw);
- 
--	if (__opendb_file(pwddb))
-+	if (open_db(db, true))
- 		return -EINVAL;
- 
- 	for_each_ksmbd_user(write_user_cb, NULL);
-@@ -369,28 +363,47 @@ int command_update_user(char *pwddb, char *account, char *password)
- 	return 0;
- }
- 
--int command_del_user(char *pwddb, char *account)
-+int user_delete_cmd(char *db, char *account)
- {
--	int abort_del_user = 0;
-+	char *abort_del_user = strdup(account);
- 
--	arg_account = account;
--	if (!cp_key_cmp(global_conf.guest_account, arg_account)) {
-+	if (!cp_key_cmp(global_conf.guest_account, account)) {
- 		pr_err("User %s is a global guest account. Abort deletion.\n",
--				arg_account);
-+				account);
- 		return -EINVAL;
- 	}
- 
--	for_each_ksmbd_share(lookup_can_del_user, &abort_del_user);
-+	for_each_ksmbd_share(lookup_can_del_user, abort_del_user);
- 
--	if (abort_del_user) {
-+	if (!abort_del_user) {
- 		pr_err("Aborting user deletion\n");
- 		return -EINVAL;
- 	}
- 
--	if (__opendb_file(pwddb))
-+	if (open_db(db, true))
-+		return -EINVAL;
-+
-+	for_each_ksmbd_user(write_remove_user_cb, account);
-+	close(conf_fd);
-+	return 0;
-+}
-+
-+static void list_users_cb(gpointer key, gpointer value, gpointer data)
-+{
-+	struct ksmbd_user *user = (struct ksmbd_user *)value;
-+
-+	pr_out("%s\n", user->name);
-+}
-+
-+int user_list_cmd(char *db)
-+{
-+	if (open_db(db, false))
- 		return -EINVAL;
- 
--	for_each_ksmbd_user(write_remove_user_cb, NULL);
-+	pr_out("Users in %s:\n", db);
-+	for_each_ksmbd_user(list_users_cb, NULL);
-+	pr_out("\n");
- 	close(conf_fd);
-+
- 	return 0;
- }
-diff --git a/user/user_admin.h b/user/user_admin.h
-index 9ff839e846bd..2dfbaa00b6b0 100644
---- a/user/user_admin.h
-+++ b/user/user_admin.h
-@@ -1,6 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-  *   Copyright (C) 2018 Samsung Electronics Co., Ltd.
-+ *   Copyright (C) 2021 SUSE LLC
-  *
-  *   linux-cifsd-devel@lists.sourceforge.net
-  */
-@@ -8,8 +9,36 @@
- #ifndef __KSMBD_USER_ADMIN_H__
- #define __KSMBD_USER_ADMIN_H__
- 
--int command_add_user(char *pwddb, char *account, char *password);
--int command_update_user(char *pwddb, char *account, char *password);
--int command_del_user(char *pwddb, char *account);
-+int user_add_cmd(char *db, char *account, char *password);
-+int user_delete_cmd(char *db, char *account);
-+int user_update_cmd(char *db, char *account, char *password);
-+int user_list_cmd(char *db);
-+
-+typedef enum {
-+	KSMBD_CMD_USER_NONE = 0,
-+	KSMBD_CMD_USER_ADD,
-+	KSMBD_CMD_USER_DELETE,
-+	KSMBD_CMD_USER_UPDATE,
-+	KSMBD_CMD_USER_LIST,
-+	KSMBD_CMD_USER_MAX
-+} ksmbd_user_cmd;
-+
-+/* List of supported subcommands */
-+static const char *ksmbd_user_cmds_str[] = {
-+	"none",
-+	"add",
-+	"delete",
-+	"update",
-+	"list",
-+};
-+
-+static struct option user_opts[] = {
-+	{ "password", required_argument, NULL, 'p' },
-+	{ "database", required_argument, NULL, 'd' },
-+	{ 0, 0, 0, 0 },
-+};
-+
-+void user_usage(ksmbd_user_cmd cmd);
-+int user_cmd(int argc, char *argv[]);
- 
- #endif /* __KSMBD_USER_ADMIN_H__ */
 -- 
 2.34.1
 
