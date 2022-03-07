@@ -2,75 +2,175 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025C24CE994
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Mar 2022 07:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BC84CEF22
+	for <lists+linux-cifs@lfdr.de>; Mon,  7 Mar 2022 02:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbiCFGvp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 6 Mar 2022 01:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S234607AbiCGBe5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 6 Mar 2022 20:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiCFGvn (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 6 Mar 2022 01:51:43 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE3B31935
-        for <linux-cifs@vger.kernel.org>; Sat,  5 Mar 2022 22:50:50 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id s25so16310926lji.5
-        for <linux-cifs@vger.kernel.org>; Sat, 05 Mar 2022 22:50:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
-        b=KDgAx1nMZI4VA0728iAuqALj69hyn7X0WLLUiz2m+OH09NDtWJqkn0K0IjhaqXccDL
-         nYA9IS56U+BvEYDp5ZuYOTDJ28DkbGQXOo4nCoFRXwOq8btCUGBKve+nLdvXGAtQGfZd
-         8/3HmQyIohZytZNIAaZ2YSJ+VGfF2cuAbX+92kqJIy7dPjcCYPV+qxcIVHj5OJkNioe8
-         RnnPJV63I7FofbcYlKCR7cawwHR+Gyj/OksLFoNh7LOBENUnMHRRrWfgS+R5N0DbQgRd
-         FM7OvtlHYW5haJ9bCovh/xFv8pj40s/F/HFWyLhlvxnDTkjGlvvz7xTkeBicCtgptiHh
-         fIkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
-        b=mdMgtVUxcjYoDIuXLtsVbm3dM2lx665ehF8G9+KEEzgnjIn+t3tSGQ8+VV9KUl6gi+
-         kkq+ROpHhn0NT2qTaHbWVV5eOc5ii08I4u5Yg9gzjw3u9mq4mCwJqX8XwTCVcvoXYBEM
-         Tqy8e1vM5htQJ+S1h4jbd5xhWrYB2XjdY/NNdCuaYOHIcxEIQCUq7yDlKhKVZhDBa4oF
-         MTiWSFfrtvYub+s4UPl8LE5D7NTMk/ZR+9cbBnq8Kk9zk8s5UXAB+02lI7cHpMKUifeD
-         +S509oRST9deUiEDFbd2trce8mF22W9jqvNek98uGYlduv1YWI1bBwjXS7r7YOjHGaKv
-         RI2w==
-X-Gm-Message-State: AOAM530GrMWvna7XkbWi2Uc0NlnrX9+w84DEYz5GiBZ8FneaVIvldVBQ
-        26nmgNZkGLPbjXwJf4DBKLB4TMMoIrFjnCBgi9s=
-X-Google-Smtp-Source: ABdhPJzq04i8VJyC6uwySEx5tzgrtxCg/XL0hqdBTWFWm66/zQAuy3m2ubrZV75jrYUP9jvmG0PdhfRUhLuebg8/B7w=
-X-Received: by 2002:a2e:94c7:0:b0:247:de4e:e9bc with SMTP id
- r7-20020a2e94c7000000b00247de4ee9bcmr2397951ljh.397.1646549448778; Sat, 05
- Mar 2022 22:50:48 -0800 (PST)
+        with ESMTP id S233960AbiCGBe5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 6 Mar 2022 20:34:57 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CF013EAB
+        for <linux-cifs@vger.kernel.org>; Sun,  6 Mar 2022 17:33:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6F356210FF;
+        Mon,  7 Mar 2022 01:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646616837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=lgYb+ENhs24TdAT2IUenIcZL53vK2G11yeghmPvCUDU=;
+        b=xowYVk9z3QnQISftu0flvhD4OrmubnhrJOR2ZR3J4hgF+Vc4DpQ6/Ir1vBxvC+49PYoy5Q
+        zrAHFbdN7/35BbAVrorHXwdZVxu/K4E3g3XV2iUc+fwqgZIg9JYzmz1TZyOjhNAxtZuD2D
+        5OeXljbu1eebqIGx3azY87Jc8z1NauA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646616837;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=lgYb+ENhs24TdAT2IUenIcZL53vK2G11yeghmPvCUDU=;
+        b=7uRNhQATogKs3/Z2+iwCHMblUtU6XM0hlZUS6r2vyprs0o7R6oxL5gPRxdwjCv8RE8mJ5I
+        GIxJ97HoigWIVhCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DED211340A;
+        Mon,  7 Mar 2022 01:33:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GjxCKARhJWIFdAAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Mon, 07 Mar 2022 01:33:56 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linux-cifs@vger.kernel.org, linkinjeon@kernel.org
+Cc:     senozhatsky@chromium.org, sergey.senozhatsky@gmail.com,
+        hyc.lee@gmail.com, smfrench@gmail.com,
+        Enzo Matsumiya <ematsumiya@suse.de>
+Subject: [PATCH 0/9] Unify all programs into a single binary "ksmbdctl"
+Date:   Sun,  6 Mar 2022 22:33:35 -0300
+Message-Id: <20220307013344.29064-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Reply-To: mrs.susanelwoodhara17@gmail.com
-Sender: mrs.arawyann@gmail.com
-Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:48 -0800 (PST)
-From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
-Date:   Sun, 6 Mar 2022 06:50:48 +0000
-X-Google-Sender-Auth: NOWRSnt_sskMD3s295a30bcHvEs
-Message-ID: <CACppo47TD9J4Sy+vaJu1wXHqd88WqFwMNn6OdkY1khwXu3TuFw@mail.gmail.com>
-Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-GOD BLESS YOU AS YOU REPLY URGENTLY
+Hello,
 
- Hello Dear,
-Greetings, I am contacting you regarding an important information i
-have for you please reply to confirm your email address and for more
-details Thanks
-Regards
-Mrs Susan Elwood Hara.
+This commit unifies all existing programs
+(ksmbd.{adduser,addshare,control,mountd}) into a single ksmbdctl binary.
+
+The intention is to make it more like other modern tools (e.g. git,
+nvme, virsh, etc) which have more clear user interface, readable
+commands, and also makes it easier to script.
+
+Example commands:
+  # ksmbdctl share add myshare -o "guest ok=yes, writable=yes, path=/mnt/data"
+  # ksmbdctl user add myuser
+  # ksmbdctl user add -i $HOME/mysmb.conf anotheruser
+  # ksmbdctl daemon start
+
+Besides adding a new "share list" command, any previously working
+functionality shouldn't be affected.
+
+Basic testing was done manually.
+
+TODO:
+- run more complex tests in more complex environments
+- implement unit tests (for each command and subcommand)
+- create an abstract command interface, to make it easier to add/modify
+  commands
+
+Enzo Matsumiya (9):
+  ksmbd-tools: rename dirs to reflect new commands
+  ksmbd-tools: move control functions to daemon
+  ksmbd-tools: use quotes for local includes
+  share: introduce share_cmd
+  user: introduce user_cmd
+  daemon: introduce daemon_cmd
+  daemon/rpc_samr: drop unused function rpc_samr_remove_domain_entry()
+  Unify all programs into a single binary "ksmbdctl"
+  README: change to markdown, updates for ksmbdctl
+
+ Makefile.am                        |  14 +-
+ README                             | 100 -------
+ README.md                          |  57 ++--
+ addshare/addshare.c                | 172 -------------
+ addshare/share_admin.h             |  15 --
+ adduser/adduser.c                  | 180 -------------
+ adduser/user_admin.h               |  15 --
+ configure.ac                       |   7 +-
+ control/Makefile.am                |   7 -
+ control/control.c                  | 128 ---------
+ {mountd => daemon}/Makefile.am     |   2 +-
+ mountd/mountd.c => daemon/daemon.c | 401 +++++++++++++++++++++--------
+ daemon/daemon.h                    |  55 ++++
+ {mountd => daemon}/ipc.c           |  27 +-
+ {mountd => daemon}/rpc.c           |  21 +-
+ {mountd => daemon}/rpc_lsarpc.c    |  13 +-
+ {mountd => daemon}/rpc_samr.c      |  22 +-
+ {mountd => daemon}/rpc_srvsvc.c    |  11 +-
+ {mountd => daemon}/rpc_wkssvc.c    |  10 +-
+ {mountd => daemon}/smbacl.c        |   4 +-
+ {mountd => daemon}/worker.c        |  32 +--
+ include/config_parser.h            |   2 +-
+ include/ksmbdtools.h               |  24 +-
+ ksmbdctl.c                         | 182 +++++++++++++
+ lib/config_parser.c                |  15 +-
+ lib/ksmbdtools.c                   |  26 +-
+ lib/management/spnego.c            |   6 +-
+ lib/management/spnego_krb5.c       |   4 +-
+ {addshare => share}/Makefile.am    |   2 +-
+ share/share.c                      | 227 ++++++++++++++++
+ {addshare => share}/share_admin.c  |  97 +++++--
+ share/share_admin.h                |  44 ++++
+ {adduser => user}/Makefile.am      |   2 +-
+ {adduser => user}/md4_hash.c       |   2 +-
+ {adduser => user}/md4_hash.h       |   0
+ user/user.c                        | 238 +++++++++++++++++
+ {adduser => user}/user_admin.c     | 263 ++++++++++---------
+ user/user_admin.h                  |  44 ++++
+ 38 files changed, 1458 insertions(+), 1013 deletions(-)
+ delete mode 100644 README
+ delete mode 100644 addshare/addshare.c
+ delete mode 100644 addshare/share_admin.h
+ delete mode 100644 adduser/adduser.c
+ delete mode 100644 adduser/user_admin.h
+ delete mode 100644 control/Makefile.am
+ delete mode 100644 control/control.c
+ rename {mountd => daemon}/Makefile.am (95%)
+ rename mountd/mountd.c => daemon/daemon.c (55%)
+ create mode 100644 daemon/daemon.h
+ rename {mountd => daemon}/ipc.c (95%)
+ rename {mountd => daemon}/rpc.c (98%)
+ rename {mountd => daemon}/rpc_lsarpc.c (98%)
+ rename {mountd => daemon}/rpc_samr.c (98%)
+ rename {mountd => daemon}/rpc_srvsvc.c (98%)
+ rename {mountd => daemon}/rpc_wkssvc.c (97%)
+ rename {mountd => daemon}/smbacl.c (99%)
+ rename {mountd => daemon}/worker.c (95%)
+ create mode 100644 ksmbdctl.c
+ rename {addshare => share}/Makefile.am (74%)
+ create mode 100644 share/share.c
+ rename {addshare => share}/share_admin.c (68%)
+ create mode 100644 share/share_admin.h
+ rename {adduser => user}/Makefile.am (69%)
+ rename {adduser => user}/md4_hash.c (99%)
+ rename {adduser => user}/md4_hash.h (100%)
+ create mode 100644 user/user.c
+ rename {adduser => user}/user_admin.c (52%)
+ create mode 100644 user/user_admin.h
+
+-- 
+2.34.1
+
