@@ -2,113 +2,95 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAB84E1EFA
-	for <lists+linux-cifs@lfdr.de>; Mon, 21 Mar 2022 03:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249154E224D
+	for <lists+linux-cifs@lfdr.de>; Mon, 21 Mar 2022 09:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344141AbiCUCPE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 20 Mar 2022 22:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S1345321AbiCUIje (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 21 Mar 2022 04:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiCUCPD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 20 Mar 2022 22:15:03 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC9E3AA6F
-        for <linux-cifs@vger.kernel.org>; Sun, 20 Mar 2022 19:13:38 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d07ae0b1c0so141230397b3.2
-        for <linux-cifs@vger.kernel.org>; Sun, 20 Mar 2022 19:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GztCmjK4G/jhboDimIaB1Z/Qpz0vQ5PHDEjorvQQYKk=;
-        b=GZWug1q4HhT0OnysCmlBnFvDv77Q91D9aMupHyAt5ha84xjoZl+cGEgXt9/N8/bPsa
-         MD5Xf8BHf2UvwNgCiDZxdeDW7nTZovXwCMDApO1QsYZTP6bw8xjg/HlPZwFRw4Lk3MkT
-         HE9M1qXwi4InhIMoEgX+/c7LYQb1b4lJHTvfAVONlcePrrpoWkEW0SVoCVF33HQBRzEg
-         O1fzGm5+gQniS2C6dazvdEJWoa8Lv3tFHHoIdy6PW7k9WGWcgZml9JSpjiSNVKnbM5uO
-         NApoWZNy72toexnS6XQkkYLZLXjK2xV9MT3sH5AZ8FXLTkeO6jIESpdrCvWuj1HCoDF/
-         Cgjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GztCmjK4G/jhboDimIaB1Z/Qpz0vQ5PHDEjorvQQYKk=;
-        b=W1y07KR2ltzlLSBxeff9QuQFZVsvizrk56klRsCvig7Dn8B/IghPrJGZjQbMy0tfKa
-         Xn+8++yaraCzGJPvlOTsGMlVdwZNLNiDRAmCvgyUgP/wUyyWHU0Pp/ZUkDX/0WW91V62
-         TUYi9PnJmPDtAXBueZy4/nrI7079pi0coGdaecepXktuM0209Z09hODuMUN2lGafdOHR
-         Ec6E1+10yZAi72h5nsf230kVv+zIlVJ3GyyXkIb7Jc5A14QDNUDLapdBlooDl3eLAz8f
-         jlL5UlCcN7UWaDggaK1Lc/3hFDSHFZDMxCrM+jo34DrcpbVYFF2UFwUczFtAZ9BGrlhe
-         yMbA==
-X-Gm-Message-State: AOAM532nv4q6fQ6pHelXy28FEiCm2HlkEG+BNWombUrx5oScoEcvUNRe
-        r4BY1ZZbar3YL6izdIk2n8c3G5Ue0ljEhIOU6V5vSh29
-X-Google-Smtp-Source: ABdhPJwqrezffPs1oBorRiRyS4VJm6mtJCkrv8Y3OM1x5O5kBCT6bBSClBXKUdsA2jh+O+VkBE3iNP9dRb0yDtQDrqw=
-X-Received: by 2002:a81:3ad3:0:b0:2db:49b2:5795 with SMTP id
- h202-20020a813ad3000000b002db49b25795mr21758082ywa.424.1647828818031; Sun, 20
- Mar 2022 19:13:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAH2r5mvG6jmUKVi4zqRouFgYSjYxJjTExjmPtH64PAjFahE8dQ@mail.gmail.com>
- <570f1f21-ecd2-6f88-e78f-7c57a22ba7e9@talpey.com> <283E0E80-BDAA-45B4-B627-C7BF44C0D126@cjr.nz>
- <CAH2r5mv2E=zQ+nVjMuLGvz3CGMLxM2Cq4aUEnLd3ieRCQTOM8Q@mail.gmail.com>
-In-Reply-To: <CAH2r5mv2E=zQ+nVjMuLGvz3CGMLxM2Cq4aUEnLd3ieRCQTOM8Q@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Mon, 21 Mar 2022 12:13:26 +1000
-Message-ID: <CAN05THQTnerXYrN8bCuXU2zf3pQjRiC+TVpBW+u4F5n2U+-M2A@mail.gmail.com>
-Subject: Re: [PATCH] cifs: fix bad fids sent over wire
-To:     Steve French <smfrench@gmail.com>
-Cc:     Paulo Alcantara <pc@cjr.nz>, Namjae Jeon <linkinjeon@kernel.org>,
-        Tom Talpey <tom@talpey.com>, CIFS <linux-cifs@vger.kernel.org>
+        with ESMTP id S1345232AbiCUIjd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 21 Mar 2022 04:39:33 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816541152
+        for <linux-cifs@vger.kernel.org>; Mon, 21 Mar 2022 01:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=bUShvee0qx8IlcYnB1PXqDAsDhsXiUVBta2H7Srk8mE=; b=2F3mh/ePlKuH0GTO6SIHxnYZXe
+        wS/aKsS2y1Dk0pw5zXcTNpCNz8+0BI4a4v4oxvYu5GfIiUXk6rYA8fnxQPjbDAlRVei0HGa6VozJP
+        w049eMu18ZZ2o1HI0cNGRPdXh9mOiwX3N7UdqTiyPS+/bjzIpZ1S+sToo1wvUU4QlM9RVsW6PmVL8
+        amdqkvJYJ6fRbSqVwN/3b3CL1pPVgchT9XobfHvHz+Z3IxgmPnLurK/ZnsJmgp2CiVEMiFC1JJm19
+        VsPLEr425xmkx7GxoPKnOKHzPEaeEjOgo2+C7jRez9MCR+fNvtVeVHQ7rATr8bGXjOZucmXNk4RN3
+        bwAxWxGQcmmNJ7cyqzFhz+fm8rzdHF7PA081MTF7SL/usCoYCiZ7Uq3gXvkaN2f6chAlruTbpL+Nw
+        B5cCjxKwyPFcEX8Ty7h2E96M4lNoVrWR3yc6mwtY2EACUrtSd7OvriCOnA5rLddEZuslDiAp+7vx4
+        UieSF4h9i88GFq0Krb+pteHm;
+Received: from [2a01:4f8:192:486::6:0] (port=56438 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1nWDY6-002bDq-Oe
+        for cifs-qa@samba.org; Mon, 21 Mar 2022 08:37:58 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1nWDY5-001dJb-N7
+        for cifs-qa@samba.org; Mon, 21 Mar 2022 08:37:57 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15025] New: CVE-2022-27239: Buffer overflow in mount.cifs
+ options parser
+Date:   Mon, 21 Mar 2022 08:37:56 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ddiss@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: ddiss@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone bug_group
+Message-ID: <bug-15025-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 7:24 PM Steve French <smfrench@gmail.com> wrote:
->
-> They probably should be always 'u64' everywhere (not le64) and change
-> the code back in fs/smbfs_common/smb2pdu.h (was this due to ksmbd
-> using the file and converting these fields in fs/smbfs_common) rather
-> than the ones you changed
+https://bugzilla.samba.org/show_bug.cgi?id=3D15025
 
-I agree, they should not be le64 as that implies there is a byteorder
-for this field, so u64 seems better.
+            Bug ID: 15025
+           Summary: CVE-2022-27239: Buffer overflow in mount.cifs options
+                    parser
+           Product: CifsVFS
+           Version: 5.x
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: user space tools
+          Assignee: ddiss@samba.org
+          Reporter: ddiss@samba.org
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
+             Group: samba-devel
 
-(Technically, it should probably not even be an integer and instead be
-unsigned char[8]
-but that seems like overkill.)
-
-
->
->
-> On Sat, Mar 19, 2022 at 11:01 AM Paulo Alcantara <pc@cjr.nz> wrote:
-> >
-> > Yes, I agreed. Why not simply store them as le64 and avoid the byteswapping altogether?
-> >
-> > On 19 March 2022 09:06:55 GMT-03:00, Tom Talpey <tom@talpey.com> wrote:
-> >>
-> >>
-> >> On 3/19/2022 12:23 AM, Steve French wrote:
-> >>>
-> >>> Any comments on Paulo's patch? It fixes an endian conversion problem
-> >>> that can affect file ids used on big endian archs.  I will add cc:
-> >>> stable
-> >>>
-> >>> https://git.cjr.nz/linux.git/commit/?h=cifs-bad-fid-fixes&id=a857bb6b15646a7946fafb281878ddf498107dc3
-> >>
-> >>
-> >> It seems a bad idea to be storing opaque fields in le64 integers, then
-> >> byteswapping them when they go back on the wire. Wouldn't it be better
-> >> to make them u8[8] arrays and just use memcpy/memcmp?
-> >>
-> >> Tom.
->
->
->
-> --
-> Thanks,
->
-> Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
