@@ -2,99 +2,84 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CE34E2687
-	for <lists+linux-cifs@lfdr.de>; Mon, 21 Mar 2022 13:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9E54E26C6
+	for <lists+linux-cifs@lfdr.de>; Mon, 21 Mar 2022 13:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346327AbiCUMc0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 21 Mar 2022 08:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S1347514AbiCUMoV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 21 Mar 2022 08:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347373AbiCUMcX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 21 Mar 2022 08:32:23 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABDB84ECA
-        for <linux-cifs@vger.kernel.org>; Mon, 21 Mar 2022 05:30:58 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id D870980851;
-        Mon, 21 Mar 2022 12:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1647865856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XLUYBlWQKdPWvFRX6s+fcXqyHyZ/iJdqSvW5kpkEdEA=;
-        b=1E+T47RO+RIpQNONM/wIkaRwtxP76ZoVPfSykbRhS0lUaj2htE6m/+hrtkK73HROUvroZO
-        jFeDPQPHBi3rTZTcp898SgAs0i56Ed7RlHMSV1owYX18x7rCurhHfIWcF9CmbDyTucDE/h
-        GlMD9txo/I5Lbft2CGZzJmrGv18yInibY2I6l2oHgOrvcIFb9+RkvIjF2zttv3ExsBQb8v
-        r0X3xhCb791SWhCU0mQ1T+yYj1RajzZ377NT8c1/UgWQ2sVR8FcqHBqD9+RhZ07CK+F/xb
-        FF7+lm3HaAh5ubn7HNIHJLndo9bjJY6cgUY7OQsmwICpXFepffsq22Z50DdbTg==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        smfrench@gmail.com
-Subject: Re: [PATCH] cifs: fix bad fids sent over wire
-In-Reply-To: <6ef3f7db-a6ed-62c7-226e-b2a20ef5b294@talpey.com>
-References: <20220321002007.26903-1-pc@cjr.nz>
- <6ef3f7db-a6ed-62c7-226e-b2a20ef5b294@talpey.com>
-Date:   Mon, 21 Mar 2022 09:30:51 -0300
-Message-ID: <878rt3v66c.fsf@cjr.nz>
+        with ESMTP id S1347079AbiCUMoU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 21 Mar 2022 08:44:20 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286EB158D85
+        for <linux-cifs@vger.kernel.org>; Mon, 21 Mar 2022 05:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=IEUy4SvQ5/pi3lGUEU9Dz386xjfNBjZucv7cz5faDWw=; b=21JQcaQoz9t3mI7kAJ6C1DuW5h
+        x+HI+nHcHl75OHj9pEP7y9OrhxhDLi89zRol/yfl+r6Lq+rVGippzLTBGTqc1L+lCwHACjWZEABAN
+        nmiQSMm/DIR8nS6i41FpFVxGyXppRA3bg1AGM+1+DLMQCU2j7dfiRhvT5wE0CNkE4Ur/fwWbXj0sh
+        P4Y7XQnBpT85/q2moz3HI9YjJgsWRjcILLf3hWcYQCJNxY324zEWeEnhEQKsD6Reqp9Fkk1dWEc4w
+        tmG55B2f18sfhNwEh8uyPiRl0Ar2yO+a5xI7hJa+mE8c04OAHSGyQGllyQ8Ywv44BMTggPoO7MTUV
+        s7KozLLA8kaBh3h+lxdNM4q95gzwv9wIv7sFwi8Ex6cciS4TjfqPPlKC443Qx95KxAVubK5ukC92u
+        h8RHiOVlnpYj1Y+Aa9jrYhIiWIhLLbdOJZTKC2ti302U4tX+9U1oytL+nJkL4N4Iah5eBYoYJcdO1
+        RgP1Ji1qL+ynrlS6xX6qyeKR;
+Received: from [2a01:4f8:192:486::6:0] (port=56568 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1nWHN6-002dGX-JQ
+        for cifs-qa@samba.org; Mon, 21 Mar 2022 12:42:52 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1nWHN5-001djV-UC
+        for cifs-qa@samba.org; Mon, 21 Mar 2022 12:42:52 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15026] Partial arbitrary file read via mount.cifs
+Date:   Mon, 21 Mar 2022 12:42:50 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ddiss@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: longdescs.isprivate
+Message-ID: <bug-15026-10630-n79fkhUhms@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15026-10630@https.bugzilla.samba.org/>
+References: <bug-15026-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Tom Talpey <tom@talpey.com> writes:
+https://bugzilla.samba.org/show_bug.cgi?id=3D15026
 
-> On 3/20/2022 8:20 PM, Paulo Alcantara wrote:
->> The client used to partially convert the fids to le64, while storing
->> or sending them by using host endianness.  This broke the client on
->> big-endian machines.  Instead of converting them to le64, store them
->> verbatim and then avoid byteswapping when sending them over wire.
->> 
->> Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
->> ---
->>   fs/cifs/smb2misc.c |  4 ++--
->>   fs/cifs/smb2ops.c  |  8 +++----
->>   fs/cifs/smb2pdu.c  | 53 ++++++++++++++++++++--------------------------
->>   3 files changed, 29 insertions(+), 36 deletions(-)
->> 
->> diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
->> index b25623e3fe3d..3b7c636be377 100644
->> --- a/fs/cifs/smb2misc.c
->> +++ b/fs/cifs/smb2misc.c
->> @@ -832,8 +832,8 @@ smb2_handle_cancelled_mid(struct mid_q_entry *mid, struct TCP_Server_Info *serve
->>   	rc = __smb2_handle_cancelled_cmd(tcon,
->>   					 le16_to_cpu(hdr->Command),
->>   					 le64_to_cpu(hdr->MessageId),
->> -					 le64_to_cpu(rsp->PersistentFileId),
->> -					 le64_to_cpu(rsp->VolatileFileId));
->> +					 rsp->PersistentFileId,
->> +					 rsp->VolatileFileId);
->
-> This conflicts with the statement "store them verbatim". Because the
-> rsp->{Persistent,Volatile}FileId fields are u64 (integer) types,
-> they are not being stored verbatim, they are being manipulated
-> by the CPU load/store instructions. Storing them into a u8[8]
-> array is more to the point.
+David Disseldorp <ddiss@samba.org> changed:
 
-Yes, makes sense.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+      Comment #1 is|1                           |0
+            private|                            |
 
-> If course, if the rsp structure is purely private to the code, then
-> the structure element type is similarly private. But a debugger, or
-> a future structure reference, may once again get it wrong
->
-> Are you rejecting the idea of using a byte array?
-
-No.  That would work, too.  I was just trying to avoid changing a lot of
-places and eventually making it harder to backport.
-
-I'll go with the byte array then.
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
