@@ -2,78 +2,113 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE3A4EC5EB
-	for <lists+linux-cifs@lfdr.de>; Wed, 30 Mar 2022 15:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9E24ECBD1
+	for <lists+linux-cifs@lfdr.de>; Wed, 30 Mar 2022 20:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346308AbiC3Nsg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 30 Mar 2022 09:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S1350515AbiC3S02 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiC3Nsf (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 30 Mar 2022 09:48:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384D9A94F2
-        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 06:46:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C89C6135B
-        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 13:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B55C34110
-        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 13:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648648007;
-        bh=tDb7wwWv3gQNUIHXO6yPHzZ6yYx8eivzPA220KxjOJU=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=PAE8a5AkitlD3K3qeE+gAGnucLixitusivgLU3PwE+vVqvfRSnrBV/zHKqABPNtsY
-         5rWOxdA7h+iRKVtDLECCpyp5N0NtckLz6SkYVzW1KutTuLCYin2Kg1jiGIW1ENAiMu
-         szGFkmJjLd82GNUUUqNPOQjcWSP7XLbYZM0GF/pfYPA8/BpeHPz9/nYAliw0uUW7xq
-         tax7Fu6RXtOTeoBT0NGxLLXbm2fioHhniRByTyQuxkYCK9J/T2ctCIAJPZ4nWexsiM
-         hfL4vV1ICJ0xOyvTOelCAI9mHNhpzSq6CAtUkVLYFJqB0HYOh7u0Bo1e80ECMMUmXU
-         EhM5PW6JrHzuQ==
-Received: by mail-wm1-f48.google.com with SMTP id p189so12293225wmp.3
-        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 06:46:46 -0700 (PDT)
-X-Gm-Message-State: AOAM532LdfI31/KEwtuAJk2qs51gzW7SC9M9H6wXNSw3EbIL0y4qSo24
-        FoobxgQIdaR/kHWKd0+DFIS1+UBZuK9F4gDDcrA=
-X-Google-Smtp-Source: ABdhPJyMtW5lkuH+oijHdek0TRhlFrhOHdxfR9Xl7wZ987ANJzEbQ3d1BwCyOlJvyYxdsol/UIh6Ypnl5btmVwJWkss=
-X-Received: by 2002:a05:600c:214a:b0:38c:aa5d:1872 with SMTP id
- v10-20020a05600c214a00b0038caa5d1872mr4611819wml.9.1648648005188; Wed, 30 Mar
- 2022 06:46:45 -0700 (PDT)
+        with ESMTP id S1350514AbiC3S0K (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 30 Mar 2022 14:26:10 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D9F48E55
+        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w8so21240972pll.10
+        for <linux-cifs@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=MgYPEaY7jXC9Cz011JNL/4NIlaVUPiucWBmg+Ssoj8YtHSTHbQb7LNK8pEoFwxcX4b
+         7TA5zeleYDqNXOVqga0zg9PsLQvsS61SO8Dxvd9jL66OPM3XbVYJicniAUTfn6f0/5rO
+         WZhMy1uYH9upmiDcM9cWH1ELhNzNTuuvvnO7GcQu8b17hGIYDou97LbNdJwlR+6xJznd
+         xxOA+m1bXFkrI4nM0fWSRAzawMfWUtn16kSS90EsT5e+UWSFynEOJFPtFvOq47Mpaa9l
+         I7X26S3rGYzbMa4DamJKOnrcxipnyxyFGL20rE63qVsIYDFqrLFt6qv3hxBWMe1Va2Jg
+         G7gQ==
+X-Gm-Message-State: AOAM5329RUEK8m4fDKRirZ6/0PizESjRI3tP/mvrgt9VCy14Yhfda/GD
+        8ePZMdAV21fH2ucGyat9+dfGdRZWeljNXfL1+A==
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Wed, 30 Mar 2022 06:46:44
- -0700 (PDT)
-In-Reply-To: <YkQdYwyBKl5hxJHu@infradead.org>
-References: <CAKYAXd_XMW1-VSLwB=k3ypqgqjsux5OFNnr=Ri3B+-8w4aNHjw@mail.gmail.com>
- <YkQdYwyBKl5hxJHu@infradead.org>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 30 Mar 2022 22:46:44 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-=nER-6QeqLUQegY1=Axt1rd2hkT7d7-HCRHzH=aKfrg@mail.gmail.com>
-Message-ID: <CAKYAXd-=nER-6QeqLUQegY1=Axt1rd2hkT7d7-HCRHzH=aKfrg@mail.gmail.com>
-Subject: Re: Regarding to how ksmbd handles sector size request from windows cllient
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Hyeoncheol Lee <hyc.lee@gmail.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-2022-03-30 18:05 GMT+09:00, Christoph Hellwig <hch@infradead.org>:
-> On Wed, Mar 30, 2022 at 04:53:32PM +0900, Namjae Jeon wrote:
->> I have received a report that the problem occurs when mounting an iso
->> file through windows client on ksmbd & zfs share.
->
-> ZFS violates the kernels licene.  Please tell the reported to go away
-> as this is completely unsupported.
-Okay.
-Thanks for your reply:)
->
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
