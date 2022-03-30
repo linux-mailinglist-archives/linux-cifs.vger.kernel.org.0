@@ -2,84 +2,119 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F634EB5FF
-	for <lists+linux-cifs@lfdr.de>; Wed, 30 Mar 2022 00:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2674EB7F6
+	for <lists+linux-cifs@lfdr.de>; Wed, 30 Mar 2022 03:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237308AbiC2Wbr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 29 Mar 2022 18:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S241722AbiC3Buz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 29 Mar 2022 21:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiC2Wbp (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 29 Mar 2022 18:31:45 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B067563D;
-        Tue, 29 Mar 2022 15:30:01 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p12-20020a05600c430c00b0038cbdf52227so2366168wme.2;
-        Tue, 29 Mar 2022 15:30:01 -0700 (PDT)
+        with ESMTP id S233672AbiC3Buy (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 29 Mar 2022 21:50:54 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C12E1C931
+        for <linux-cifs@vger.kernel.org>; Tue, 29 Mar 2022 18:49:11 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id b43so21259670ljr.10
+        for <linux-cifs@vger.kernel.org>; Tue, 29 Mar 2022 18:49:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:mime-version:content-transfer-encoding
-         :content-description:subject:to:from:date:reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=aqDO9b0s4rFbWyQhu08KqzA7mRlaQ2TzL/mNoslu4XdaO+OCcW1SzdwNHbDoZAOyd9
-         d3/j4RQaPaIoH1FSD5p5ZPrWgy+IE1GjAiEJXbpZrX2TVrMuDzyYpEtobJ12h0d/B92H
-         R5qDpYZPPgfSk0opZ94kW7+pbkAwIeb3V5QkIy2VUnPvDAcJ3p0OP3f/yophHVIqXbVc
-         RhumBoMpCglpyOay9MECQOjm2ssOJ3ineGg1d73vbJedCJmHNTxtR+xlIY0gAVIMSGSJ
-         7tbY01M/zEbOd10NBYz/Q6KKxYrM8sJ6b/kF9PtwmtV+SpQioqCmLxr+N7SIq5cIjE9f
-         12Eg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YFVXxEGcs3o9xt6nWAO4LCKdQ4d6aOglruUR5okbORk=;
+        b=QKQL51Cux42VdIwClcLsfLc3Abp3pgwkGuv5SNcD9ongKKWnH7VYBcvBS7iQjyyGvt
+         jbco+bRlh9Qsx/DdrXYP+5hklqXa4Qpa47Hx0lDNQqG14L0DxdaM154wVSPteYFbtgg8
+         9vyzViuRjEQZ6tEtz7kbss3ISrRXoyk9x35ns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:content-description:subject:to:from:date
-         :reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=o8UXjzetuFbr1yz5awmLsAcRr0xnP7SX/mB1dWJDmJxE4Su9CCYIcgiWD+/LZSwopC
-         RGMbv/oYRzSwz9WNEwu81TsUioVCut4Mg/1vZztG7F0nDnpLT1A5FvtwcNKsisuu54IJ
-         smJnu95GYH1hfr5BrPh9cbQ7uRTssh92/xM9629NXVoFwbEMXs4JBSySIxkcPXAkYlPx
-         b35/QTXCDkfW2ubWaZWY3aIKfwPh9niI2p59KOAL0XMJjrV9c4UuM4WweQ/EfPFFOKtW
-         dRQ/+GQ6yPHPGzW7kjQ+YGkBbNd9BNWeAch7m0AJRu82B0zGCDPaNuj58Qgm1K2uU0gA
-         993A==
-X-Gm-Message-State: AOAM530uCoTgq8YUHhMzavSw+ygjImMF7SVIjWI40UTDia+ivRUdCtEW
-        uz/48+FNeC54XDxmHdWUxKo=
-X-Google-Smtp-Source: ABdhPJzhAaCqjq90Bt/EUr9RedRfOwbmv2czyUkqcXa0y5McDQHqN+v1E4rj4O+0Uo1flGxwp6g55g==
-X-Received: by 2002:a05:600c:2146:b0:38c:ab68:1919 with SMTP id v6-20020a05600c214600b0038cab681919mr1640106wml.52.1648593000119;
-        Tue, 29 Mar 2022 15:30:00 -0700 (PDT)
-Received: from [172.20.10.4] ([102.91.4.187])
-        by smtp.gmail.com with ESMTPSA id p16-20020a5d48d0000000b00205cf199abcsm2851970wrs.46.2022.03.29.15.29.54
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 29 Mar 2022 15:29:57 -0700 (PDT)
-Message-ID: <62438865.1c69fb81.a7286.bcda@mx.google.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YFVXxEGcs3o9xt6nWAO4LCKdQ4d6aOglruUR5okbORk=;
+        b=DRprHzceGHj6fOSNAOvgYBy9EjOD0ikS+7pvlGS9/TZEj4zDtYEzfato7ZiOQzwtuT
+         bzCb3+7Ur9BbqclTBGSrTegcTVo4y6k3IdRuD1H7Kbh5DbDFuPfzSqb6LqP6e3KDVHIZ
+         O3gltm+k/s21v3eVE3R8D+69nV2kNJQKHWo/6UqNu7gz/nPsmCEWdmLJamG0zEVuauFy
+         yew6uXm+3p7OAkO9b5B6MSA+mAApwJJ2rEFQlV3ICnDqlRk1dcBiUaP+um15NnO62iKO
+         wEFA5ZjtfXuR3w4CynDfdy3MntfH01eApR9XZCWvwGtpEmcuse1kJiyAGXGPZwb8m3Sa
+         aUQg==
+X-Gm-Message-State: AOAM5332kP55jNJGOCdB4d2Y1OudkxSyAsD2fJUJRixoSlusMdbHPHQB
+        SRO4tDqVE0iS6Gl+2zSXOVXMmUi+MS96+OX7
+X-Google-Smtp-Source: ABdhPJyr0G7VIMS+1QYtWItA28c6rjc7O9U+UAO4cJOMOWH+m7pB23mdVk1z7ruRJ1k/rr5lDEQJjA==
+X-Received: by 2002:a2e:90ca:0:b0:246:48ce:ba0e with SMTP id o10-20020a2e90ca000000b0024648ceba0emr5117465ljg.401.1648604948889;
+        Tue, 29 Mar 2022 18:49:08 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id bu9-20020a056512168900b004489c47d241sm2168699lfb.32.2022.03.29.18.49.07
+        for <linux-cifs@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 18:49:08 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id p15so33309173lfk.8
+        for <linux-cifs@vger.kernel.org>; Tue, 29 Mar 2022 18:49:07 -0700 (PDT)
+X-Received: by 2002:a05:6512:3ca1:b0:44a:93f1:45cf with SMTP id
+ h33-20020a0565123ca100b0044a93f145cfmr5041233lfv.542.1648604947566; Tue, 29
+ Mar 2022 18:49:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Gefeliciteerd, er is geld aan je gedoneerd
-To:     Recipients <adeboyejofolashade55@gmail.com>
-From:   adeboyejofolashade55@gmail.com
-Date:   Tue, 29 Mar 2022 23:29:49 +0100
-Reply-To: mike.weirsky.foundation003@gmail.com
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <CAH2r5mvmUjSpb0hPjMguq8aFKi11JUDMN5JADFqxw5xhNDELCA@mail.gmail.com>
+In-Reply-To: <CAH2r5mvmUjSpb0hPjMguq8aFKi11JUDMN5JADFqxw5xhNDELCA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 29 Mar 2022 18:48:51 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whvfwQdpHv0E6UmaSeYKRYFL_CmaiGa8beCXdtX93U32w@mail.gmail.com>
+Message-ID: <CAHk-=whvfwQdpHv0E6UmaSeYKRYFL_CmaiGa8beCXdtX93U32w@mail.gmail.com>
+Subject: Re: [GIT PULL] ksmbd server fixes
+To:     Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Beste begunstigde,
+On Mon, Mar 28, 2022 at 6:39 PM Steve French <smfrench@gmail.com> wrote:
+>
+> - four patches relating to dentry race
 
- Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
-ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
-eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
-il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
-van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
-mijn winst te verifi=EBren
- =
+I took a look at this, and I absolutely hate it.
 
-  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
- Voor uw claim.
+You are basically exporting vfs-internal functions (__lookup_hash() in
+particular) that really shouldn't be exported.
+
+And the _reason_ you are exporting them seems to be that you have
+copied most of do_renameat2() as ksmbd_vfs_rename() but then made
+various small changes.
+
+This all makes me _very_ uncomfortable.
+
+I really get the feeling that we'd be much better off exporting
+something that is just a bigger part of that rename logic, not that
+really low-level __lookup_hash() thing.
+
+From what I can tell, almost everything between that __lookup_hash()
+and the final vfs_rename() call is shared, even to the point of error
+label names (ok, you call it "out5", the vfs layer calls it "exit5".
+
+The main exception is that odd
+
+        parent_fp = ksmbd_lookup_fd_inode(old_parent->d_inode);
+        if (parent_fp) {
+              ...
+
+sequence, but that looks like it could have been done before the
+__lookup_hash() too.
+
+I'd be even happier if we could actually hjave some common helper
+starting at that
+
+        trap = lock_rename(...);
+
+because that whole locking and 'trap' logic is kind of a big deal, and
+the locking is the only thing that makes __lookup_hash() work.
+
+Adding Al to the cc in case he has any ideas. Maybe he's ok with this
+whole thing, and with his blessing I'll take this pull as-is, but as
+it is I'm not comfortable with it.
+
+     Linus
