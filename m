@@ -2,66 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0D24EE4BC
-	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 01:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917CD4EE4EF
+	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 01:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiCaX1d (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 31 Mar 2022 19:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S242657AbiCaXyt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 31 Mar 2022 19:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiCaX1c (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 31 Mar 2022 19:27:32 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0338166656
-        for <linux-cifs@vger.kernel.org>; Thu, 31 Mar 2022 16:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=osikR6rTJTKFRCibKajJj4uWjRWx4LhBv/Xri3wcykI=; b=YNvbmMGwlQz71rNGnxuxt7HlO9
-        1QhZwXGbtVlk960Cf8sxO75i1AKEfUfXT2nKTGqnXQwf+jE0eBNLoVuy9qKhg6lEeQUinDzqgUfoW
-        +/WNC7Lu61yfm2g3JO9XcBzD7hjaWGqIlXeE+o3o9KKuizCJeUe181Gr0WKLV+NIIvHGFXIBUFq0n
-        iEq4CIB8SxrZ2DFfC9+t5Wo8Z+S4obcSdxJMA1btFf8HiegU/TjSdz61KhSj3aryR0UIKD/6oX8cA
-        8kWFxUxwjjmbe5HcxZ42LUEbWEjcmKszCbNcaXyo0z6AbRL0KTsR5yttcn6kjJbdnPh0p0WQS5nLK
-        Tx97YRj3jenuNAzgLzpZ5tqI13etiv83+9TLDaxTp0I6tMWU6HeeQe+jMBtMNWVtkWBPJG8fUlTCM
-        mO5v7A2O+JGr3vjEVwGIiifSOb2iBbRANgfa73TYdqnEgVSiXUNnvuvdP1YhR9AGKjKsZ+ZNYWAKt
-        If2nnrlNK9bsCemxIe3hiN0V;
-Received: from [2a01:4f8:192:486::6:0] (port=57748 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1na4Af-004fRe-0h
-        for cifs-qa@samba.org; Thu, 31 Mar 2022 23:25:41 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1na4Ae-002ikj-DX
-        for cifs-qa@samba.org; Thu, 31 Mar 2022 23:25:40 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 15025] CVE-2022-27239: Buffer overflow in mount.cifs options
- parser
-Date:   Thu, 31 Mar 2022 23:25:39 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: user space tools
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: sfrench@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: ddiss@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_group
-Message-ID: <bug-15025-10630-lVLlGk6zZR@https.bugzilla.samba.org/>
-In-Reply-To: <bug-15025-10630@https.bugzilla.samba.org/>
-References: <bug-15025-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229912AbiCaXyt (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 31 Mar 2022 19:54:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD0E24A8BD
+        for <linux-cifs@vger.kernel.org>; Thu, 31 Mar 2022 16:52:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4EBDB1F7AC;
+        Thu, 31 Mar 2022 23:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648770778; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9tTS7Z4WAu0Fen7w1wgaZ5bVLFlVnx0mYtU9iLCktQ4=;
+        b=KobdTOFV+Hr8re6I35R4r2EoMQ4c1YBbYj3/gO9QSxDLZf/Bf05bO0fwzzBHSnMiBs0hrX
+        CLk0WmE/yjxI9XX+TvBysfdjB39Ya7ORWy8qznOB5bW3fFzplhZ0fHHbIqU8URK4wcy/go
+        EjqPdzz04WXNJJWDnEf9+7Ni/Ah8fjE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648770778;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9tTS7Z4WAu0Fen7w1wgaZ5bVLFlVnx0mYtU9iLCktQ4=;
+        b=35jTFHR1prXBCx8neIQgD6/R5X1Sh5bbtFuaHnXJpzBRUkH71sxQQui67DK4CuHSthMrOT
+        hmM3eoPR1aECvMAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3F24132DC;
+        Thu, 31 Mar 2022 23:52:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +X1pIdk+RmL4KgAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Thu, 31 Mar 2022 23:52:57 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linux-cifs@vger.kernel.org
+Cc:     pshilovsky@samba.org, smfrench@gmail.com, pc@cjr.nz,
+        Enzo Matsumiya <ematsumiya@suse.de>
+Subject: [PATCH] mount.cifs.rst: add FIPS information
+Date:   Thu, 31 Mar 2022 20:52:51 -0300
+Message-Id: <20220331235251.4753-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -72,14 +64,68 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D15025
+Add FIPS 140-2 compliance information regarding mounting SMB shares.
 
-Steve French <sfrench@samba.org> changed:
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+---
+ mount.cifs.rst | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-              Group|                            |cifsvfs-devel
+diff --git a/mount.cifs.rst b/mount.cifs.rst
+index 9d4446f035b6..4ca46976fee6 100644
+--- a/mount.cifs.rst
++++ b/mount.cifs.rst
+@@ -376,6 +376,10 @@ sec=arg
+   may be enabled automatically. Packet signing may also be enabled
+   automatically if it's enabled in */proc/fs/cifs/SecurityFlags*.
+ 
++  For environments that requires FIPS 140-2 compliance, only ``sec=krb5`` and
++  ``sec=krb5i`` are valid. See also ``vers``. See section `SECURITY`_
++  for more information.
++
+ seal
+   Request encryption at the SMB layer. The encryption algorithm used
+   is AES-128-CCM. Requires SMB3 or above (see ``vers``).
+@@ -624,6 +628,9 @@ vers=arg
+   kernels prior to v4.13, the default was ``1.0``. For kernels
+   between v4.13 and v4.13.5 the default is ``3.0``.
+ 
++  For environments that requires FIPS 140-2 compliance, only version ``2.0`` or
++  or newer is allowed. See section `SECURITY`_ for more information.
++
+ --verbose
+   Print additional debugging information for the mount. Note that this
+   parameter must be specified before the ``-o`` . For example::
+@@ -923,6 +930,29 @@ by default at mount time. Old dialects such as CIFS (SMB1, ie vers=1.0)
+ have much weaker security. Use of CIFS (SMB1) can be disabled by
+ modprobe cifs disable_legacy_dialects=y.
+ 
++For environments that requires FIPS 140-2 compliance, the following applies:
++
++- SMB1 (``vers=1.0``) is not allowed
++- SMB2 and newer are only allowed with ``sec=krb5`` or ``sec=krb5i`` security
++  modes
++
++This is because FIPS 140-2 does not approve MD4/MD5 hashing algorithms, which
++are used either by SMB1 or the other security modes.
++
++When running a kernel in FIPS mode (i.e. with ``fips=1`` in boot command line),
++the above will be enforced, and running ``mount.cifs`` might fail.
++In the failing cases, the following error message (or similar, depending on the
++security mode) will appear in the ring buffer:
++
++  "CIFS VFS: could not allocate crypto hmacmd5"
++
++When not running a kernel in FIPS mode, the above serves only as informational
++purpose as ``mount.cifs`` does not enforce any of that.
++
++References:
++FIPS 140-2 Implementation Guide, G.6
++`https://csrc.nist.gov/csrc/media/projects/cryptographic-module-validation-program/documents/fips140-2/fips1402ig.pdf<https://csrc.nist.gov/csrc/media/projects/cryptographic-module-validation-program/documents/fips140-2/fips1402ig.pdf>`_
++
+ ****
+ BUGS
+ ****
+-- 
+2.34.1
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
