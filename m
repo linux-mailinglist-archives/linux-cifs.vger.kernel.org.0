@@ -2,104 +2,131 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBA14EF86D
-	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 18:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FA24EF91B
+	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 19:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349547AbiDAQzh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 1 Apr 2022 12:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S244827AbiDARnj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 1 Apr 2022 13:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349698AbiDAQz2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Apr 2022 12:55:28 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9651AF2C
-        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 09:51:48 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        with ESMTP id S238038AbiDARnj (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Apr 2022 13:43:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9188411436C
+        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 10:41:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 6AD797FC23;
-        Fri,  1 Apr 2022 16:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1648831906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3EA0D210EC;
+        Fri,  1 Apr 2022 17:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648834908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bIM8RhEWB60yYRj8uXGhOauFpbX6RHPFm2z9rnnY87s=;
-        b=NPaQ9f11OUUKx4nquY8YvEWe8SlgYte8+cLpiSeqIkFVCtCyKwjP8cPB9Zto/rD+5bHZqt
-        35AIephbPmBiVVB2i4EW49zWxiNc2ebjqtjAl9dMKkMi+1GVt7PS/tDTsuakPUwqaoYthB
-        wdYbAEkLsalrDzfkYPsxwmadZ2QQLGQcEs7yNlNjZSSjBN1iV6u9E8eNfr/1WjMEE4uisz
-        X0NMYTMBTLjaXd9yAVBDUq0zgFxvK2xSwXXZ/4HMaZtIN+0CmuvXWiaHBgJaBEWOjrUIbY
-        zkC2gx77wiVbeQy1IHSDlkEBk8vwqMokRjITv0i0mbNZUnyWzJ+qZzO5d+LGaw==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
-Cc:     Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH v2] cifs: force new session setup and tcon for dfs
-Date:   Fri,  1 Apr 2022 13:51:34 -0300
-Message-Id: <20220401165134.25471-1-pc@cjr.nz>
-In-Reply-To: <20220331180151.5301-2-pc@cjr.nz>
-References: <20220331180151.5301-2-pc@cjr.nz>
+        bh=YffL2htPiHircpdKU3GEGMdIgTCPBYrAI/HK81ZuL8k=;
+        b=DftZ8Q6Ktb8EBQRsWn/Tgj89I/il0igI1qOZ46BYKKzdKrYnl6VTtsdsdEfEoq1xGu82LL
+        Ijxj80qM7uhXSxrXjjUCSoAKdBmngXLWSxphcQbAJQU4ANmK5ae/doJ+kc6NbwHOyb69Gn
+        oC7BwIFjWtQ9YaCVLqD70VVOpT1FsGQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648834908;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YffL2htPiHircpdKU3GEGMdIgTCPBYrAI/HK81ZuL8k=;
+        b=Me7r3L9cwb5vg91RVHmT20I8Oo+s0d4lkY4SRSFT9TmoOF99Eiufj2bAtGxIX5iTXFCH0/
+        8IqcrZVF5wWFsgBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD3A5132C1;
+        Fri,  1 Apr 2022 17:41:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VrjtIFs5R2KWUwAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Fri, 01 Apr 2022 17:41:47 +0000
+Date:   Fri, 1 Apr 2022 14:41:45 -0300
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     Tom Talpey <tom@talpey.com>
+Cc:     linux-cifs@vger.kernel.org, pshilovsky@samba.org,
+        smfrench@gmail.com, pc@cjr.nz
+Subject: Re: [PATCH] mount.cifs.rst: add FIPS information
+Message-ID: <20220401174145.6x443h555ch7kspd@cyberdelia>
+References: <20220331235251.4753-1-ematsumiya@suse.de>
+ <efb1d822-4fcf-dc3b-2861-8394f50aedbe@talpey.com>
+ <20220401152508.edovgwz5pxn6gnhn@cyberdelia>
+ <d5648e12-c5b9-07de-a20b-afd49adc5f56@talpey.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,DOS_RCVD_IP_TWICE_B,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <d5648e12-c5b9-07de-a20b-afd49adc5f56@talpey.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Do not reuse existing sessions and tcons in DFS failover as it might
-connect to different servers and shares.
+On 04/01, Tom Talpey wrote:
+>On 4/1/2022 11:25 AM, Enzo Matsumiya wrote:
+>>On 04/01, Tom Talpey wrote:
+>>>Is SMB2 really FIPS compliant? Even if it is, a server that doesn't
+>>>support anything higher is obviously far out of date.
+>>
+>>It's more that the crypto stuff used by SMB1 is *not* compliant.
+>
+>Sure, but that's not the point here. It's time to simply state
+>"don't use SMB1".
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/connect.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+I 100% agree.
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 3ca06bd88b6e..54155eb4faac 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -453,9 +453,7 @@ static int reconnect_target_unlocked(struct TCP_Server_Info *server, struct dfs_
- 	return rc;
- }
- 
--static int
--reconnect_dfs_server(struct TCP_Server_Info *server,
--		     bool mark_smb_session)
-+static int reconnect_dfs_server(struct TCP_Server_Info *server)
- {
- 	int rc = 0;
- 	const char *refpath = server->current_fullpath + 1;
-@@ -479,7 +477,12 @@ reconnect_dfs_server(struct TCP_Server_Info *server,
- 	if (!cifs_tcp_ses_needs_reconnect(server, num_targets))
- 		return 0;
- 
--	cifs_mark_tcp_ses_conns_for_reconnect(server, mark_smb_session);
-+	/*
-+	 * Unconditionally mark all sessions & tcons for reconnect as we might be connecting to a
-+	 * different server or share during failover.  It could be improved by adding some logic to
-+	 * only do that in case it connects to a different server or share, though.
-+	 */
-+	cifs_mark_tcp_ses_conns_for_reconnect(server, true);
- 
- 	cifs_abort_connection(server);
- 
-@@ -537,7 +540,7 @@ int cifs_reconnect(struct TCP_Server_Info *server, bool mark_smb_session)
- 	}
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
--	return reconnect_dfs_server(server, mark_smb_session);
-+	return reconnect_dfs_server(server);
- }
- #else
- int cifs_reconnect(struct TCP_Server_Info *server, bool mark_smb_session)
--- 
-2.35.1
+But, actually, that's the whole point of my commit. I just wanted to add
+what will work with mount.cifs on a FIPS compliant environment. Nothing
+else.
 
+Stating "don't use SMB1" (either FIPS or not) could come in a different
+commit.
+
+(Personally, I would've nuked all SMB1 from the kernel altogether :P)
+
+>I don't think the crypto algorithm is enough. SMB2 is vulnerable
+>to man-in-the-middle attacks and therefore the crypto type is
+>only a part of the picture. SMB3 is much stronger, even with the
+>same crypto algs.
+
+Again, I agree. But I'd say it's up to FIPS to mandate that. Even
+because their requirements only cover the crypto modules, not
+filesystems and/or versions as a whole AFAIK.
+
+>The Microsoft FIPS statement only refers to SMB3, for example:
+>
+>
+>https://docs.microsoft.com/en-us/windows/security/threat-protection/fips-140-validation
+>
+>  Is SMB3 (Server Message Block) FIPS 140 compliant in Windows?
+>
+>  SMB3 can be FIPS 140 compliant, if Windows is configured to operate in
+>  FIPS 140 mode on both client and server. In FIPS mode, SMB3 relies on
+>  the underlying Windows FIPS 140 validated cryptographic modules for
+>  cryptographic operations.
+
+But that's on a product (OS) level. We're preparing similar
+documentation for SUSE as well, for example.
+
+>I think anyone who is serious enough to want FIPS should darn well
+>be advised that the best security means running the strongest version
+>of the protocol, and the doc should not waffle around with discussion
+>of SMB1 or SMB2.
+
+And again, I also agree. My intent was to rather have specified in the
+docs what's supported in FIPS mode. Suggesting/enforcing a particular
+version or security mode was out of scope of my patch.
+
+
+Cheers,
+
+Enzo
