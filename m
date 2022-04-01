@@ -2,159 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997F54EF74B
-	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 18:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76CF4EF750
+	for <lists+linux-cifs@lfdr.de>; Fri,  1 Apr 2022 18:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244705AbiDAP4D (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 1 Apr 2022 11:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S1344925AbiDAP4R (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 1 Apr 2022 11:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349807AbiDAPQh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Apr 2022 11:16:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2A24870CC
-        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 07:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1354313AbiDAPux (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 1 Apr 2022 11:50:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7832D1D833E
+        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 08:25:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 687EAB8240F
-        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 14:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC724C3410F
-        for <linux-cifs@vger.kernel.org>; Fri,  1 Apr 2022 14:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648825093;
-        bh=5bJ0R7kg9lR122ZM6ar7pL/PaYbax1ss+GOAlJ99tvU=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=sXFsS77jl7DQ5bNFVHy5PYf19zinSC+YP1rGC0h+ri+2PWXTjC40s+QjgZR70nMh/
-         dYsp4mdO4PvqTZ2W8EGIdXdUhtLBIdFSzsHr4h4jQLL4kRfaZfzwoXs7WUkXzUJcNg
-         +/k49MQ9QhF7YfcA7AkfYE/9pAsGygNCU4OCkFOmyBXEPj4epuFKa86B5wExINmod9
-         u0LNKZ7xAJtsLd6PnpFubOer2slA7lte77IAVkURPwbUUfc/3VDTcHOlPJHwvDUIo5
-         sB2jO3lto3MwFzST8EVVBIc/uZKvgFFjGME1yG4lLpCMuaQHNWTrAg+Mn1dxMHjQb4
-         J/nqPZ2Tx980w==
-Received: by mail-wr1-f44.google.com with SMTP id d7so4623174wrb.7
-        for <linux-cifs@vger.kernel.org>; Fri, 01 Apr 2022 07:58:12 -0700 (PDT)
-X-Gm-Message-State: AOAM533WFWmZlXQ58T/pBgBFZ2hx2aUwEFmmoyogVJgzTegrixW0WVYB
-        sMHa1F2WDwk9gE4BsDpTFIzjtEfO8ufpzysD7BM=
-X-Google-Smtp-Source: ABdhPJyzpImD+J/lNGEXnPZPVXxiCC4xtlUqJYKK+Dko7T9+qGy3ls7JL68HovcBsZ1Zq0c16PPG3/R+Luw+QXbvDgs=
-X-Received: by 2002:a5d:47c4:0:b0:205:8d14:403b with SMTP id
- o4-20020a5d47c4000000b002058d14403bmr8136032wrc.504.1648825091207; Fri, 01
- Apr 2022 07:58:11 -0700 (PDT)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 24CE41FD01;
+        Fri,  1 Apr 2022 15:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648826711; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RUHcQAJtktCENB0eECRS1RQy+FYsu6YNo4v3teg3Cr0=;
+        b=SEVycTwMo6oQfLYQ3+fTnP8FqFeTB7S12myisl0jyQQE7Rd7q1VPbH9Uz9/E9q6eYZA3KE
+        De7NNTj9d6TT//NHPvjkVkGubDCxa4YJyylh9XqbKDowEeAOI9GxAXF2aoy0ZYWQOFi6jq
+        mdXOp3hLsYkjIIHvZvI9tY8bucMvHbI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648826711;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RUHcQAJtktCENB0eECRS1RQy+FYsu6YNo4v3teg3Cr0=;
+        b=X4UYNnEZXn3kTjYPJJSSJ4uEzuKC4Dsam9+kOgoNo6l/CMSt4ysyeDioFQ43+NZkXZR1h5
+        bWuRytrwUAO1zjAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A78B6132C1;
+        Fri,  1 Apr 2022 15:25:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XVFOHFYZR2JtGAAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Fri, 01 Apr 2022 15:25:10 +0000
+Date:   Fri, 1 Apr 2022 12:25:08 -0300
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     Tom Talpey <tom@talpey.com>
+Cc:     linux-cifs@vger.kernel.org, pshilovsky@samba.org,
+        smfrench@gmail.com, pc@cjr.nz
+Subject: Re: [PATCH] mount.cifs.rst: add FIPS information
+Message-ID: <20220401152508.edovgwz5pxn6gnhn@cyberdelia>
+References: <20220331235251.4753-1-ematsumiya@suse.de>
+ <efb1d822-4fcf-dc3b-2861-8394f50aedbe@talpey.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Fri, 1 Apr 2022 07:58:10
- -0700 (PDT)
-In-Reply-To: <Ykb/VH9fvQT0bNiK@zeniv-ca.linux.org.uk>
-References: <CAH2r5mvmUjSpb0hPjMguq8aFKi11JUDMN5JADFqxw5xhNDELCA@mail.gmail.com>
- <CAHk-=whvfwQdpHv0E6UmaSeYKRYFL_CmaiGa8beCXdtX93U32w@mail.gmail.com>
- <YkZTaeF71ZnaF7+e@zeniv-ca.linux.org.uk> <CAKYAXd96PJL26_7xEhbynRG=ZPjLo6gQu-EjvVFup3pBhi2Agg@mail.gmail.com>
- <Ykb/VH9fvQT0bNiK@zeniv-ca.linux.org.uk>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 1 Apr 2022 23:58:10 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8Nu_7+7fpRww87wo44xwv1eVahEdjSiU0VGxB8tO4R5g@mail.gmail.com>
-Message-ID: <CAKYAXd8Nu_7+7fpRww87wo44xwv1eVahEdjSiU0VGxB8tO4R5g@mail.gmail.com>
-Subject: Re: [GIT PULL] ksmbd server fixes
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <efb1d822-4fcf-dc3b-2861-8394f50aedbe@talpey.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-2022-04-01 22:34 GMT+09:00, Al Viro <viro@zeniv.linux.org.uk>:
-> On Fri, Apr 01, 2022 at 09:52:09PM +0900, Namjae Jeon wrote:
->> > take source and new parent and do the following:
->> >
->> > 	if (READ_ONCE(source->d_parent) == new_parent) {
->> > 		inode_lock_nested(new_parent->d_inode, I_MUTEX_PARENT);
->> > 		if (likely(source->d_parent == new_parent))
->> > 			return NULL;
-> and
-> 		inode_unlock(new_parent->d_inode);
-> to do locking in proper order...
-Okay, Let me check it with these codes.
-Thanks for sharing the codes!
+On 04/01, Tom Talpey wrote:
+>Is SMB2 really FIPS compliant? Even if it is, a server that doesn't
+>support anything higher is obviously far out of date.
 
->
->> > 	}
->> > 	// fuck that, looks like a cross-rename one.
->> > 	mutex_lock(&source->d_sb->s_vfs_rename_mutex);
->> > 	// now all ->d_parent are stable
->> > 	if (unlikely(source->d_parent == new_parent)) {
->> > 		inode_lock_nested(new_parent->d_inode, I_MUTEX_PARENT);
->> > 		// we want the same rules as for lock_rename()
->> > 		mutex_unlock(&source->d_sb->s_vfs_rename_mutex);
->> > 		return NULL;
->> > 	}
->> > 	// cross-directory it is...
->> > 	same as lock_rename() after having grabbed ->s_vfs_rename_mutex
->
-> // p1 != p2, p1->d_sb == p2->d_sb, p1->d_sb->s_vfs_rename_mutex held
-> static struct dentry *lock_two_directories(struct dentry *p1, struct dentry
-> *p2)
-> {
->         struct dentry *p;
->
->         p = d_ancestor(p2, p1);
->         if (p) {
->                 inode_lock_nested(p2->d_inode, I_MUTEX_PARENT);
->                 inode_lock_nested(p1->d_inode, I_MUTEX_CHILD);
->                 return p;
->         }
->
->         p = d_ancestor(p1, p2);
->         if (p) {
->                 inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
->                 inode_lock_nested(p2->d_inode, I_MUTEX_CHILD);
->                 return p;
->         }
->
->         inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
->         inode_lock_nested(p2->d_inode, I_MUTEX_PARENT2);
->         return NULL;
-> }
->
-> struct dentry *lock_rename(struct dentry *p1, struct dentry *p2)
-> {
->         if (p1 == p2) {
->                 inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
->                 return NULL;
->         }
->
->         mutex_lock(&p1->d_sb->s_vfs_rename_mutex);
-> 	return lock_two_directories(p1, p2);
-> }
->
-> struct dentry *lock_rename_child(struct dentry *c1, struct dentry *p2)
-> {
-> 	if (READ_ONCE(c1->d_parent) == p2) {
-> 		inode_lock_nested(p2->d_inode, I_MUTEX_PARENT);
-> 		if (likely(c1->d_parent == p2))
-> 			return NULL;
->
-> 		// too bad, we'd raced with another rename
-> 		inode_unlock(p2->d_inode);
-> 	}
->
-> 	// looks like it's cross-directory
-> 	mutex_lock(&c1->d_sb->s_vfs_rename_mutex);
->
-> 	// recheck, now that ->d_parent is stable
-> 	if (likely(c1->d_parent != p2))
-> 		return lock_two_directories(c1->d_parent, p2);
->
-> 	// it's not cross-directory, after all - raced with another rename
-> 	inode_lock_nested(p2->d_inode, I_MUTEX_PARENT);
-> 	// drop ->s_vfs_rename_mutex, so we won't confuse unlock_rename()
-> 	// note that locked p2 alone is enough to prevent moves to or from
-> 	// p2, so c1->d_parent will remain p2 until we unlock p2
-> 	mutex_unlock(&c1->d_sb->s_vfs_rename_mutex);
-> 	return NULL;
-> }
->
+It's more that the crypto stuff used by SMB1 is *not* compliant.
+If SMB2 keeps using FIPS-approved hashing/crypto algorightms, I guess it
+makes it FIPS compliant, and the burden is on their end to disqualify
+older algorithms for their certification.
+
+> I think it
+>would be better to recommend, or maybe even require, SMB3 here.
+
+So, I've added a bit in the SECURITY section saying that mount.cifs
+doesn't enforce anything, and all crypto blocking/allowing is made on
+the kernel.
+
+Do you think we should? An informed user, with particular requirements,
+might want to use SMB2 *and* still be FIPS compliant, but we would be
+enforcing something (non-SMB3) that's not quite right.
+
+And if the kernel is not in FIPS mode, we should only inform the user,
+because we don't actually use/do any crypto computation in mount.cifs.
+
+
+Cheers,
+
+Enzo
