@@ -2,179 +2,70 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB98D4F0023
-	for <lists+linux-cifs@lfdr.de>; Sat,  2 Apr 2022 11:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4EC4F06F6
+	for <lists+linux-cifs@lfdr.de>; Sun,  3 Apr 2022 05:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiDBJe7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 2 Apr 2022 05:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S233617AbiDCDIU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 2 Apr 2022 23:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiDBJe6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Apr 2022 05:34:58 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB31C108;
-        Sat,  2 Apr 2022 02:33:07 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id k14so4251550pga.0;
-        Sat, 02 Apr 2022 02:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oIRSTzpeogZQegTxy3HsXL8f2cTTP9W4dlr8OKiUWvM=;
-        b=MmNDOwVEm9/LVOFVLRabwEeZP2ohnfVDJl4b6rWpmqY7ck/S6PpyIGOmyHKtqdnrB6
-         MmfTPtCYh59zgoCCuotESVOzKCOJ20495cIfFbDPXFXedRy7EgZnpyR0z61XHHDKi7Mt
-         gmO1GhLb9kfH1Lh1ZdRn7shLVz2Ep9pM2fKO/nUXKIyWd+toxIbk4mE8NamZjm/Fx7Ra
-         C+KKcTcPRgmyi3AYRXyJ/9y1Gy43XNHxl4MDcMGP8V6Uokjsfi6ZyrJNHaDMuG3muHUr
-         rCoAARHhh/CuKf93dFKNmSRFUR34oFcKJE/tyq+XjKnmAa3nBzkxqGDpM2BR18YAuaa3
-         Xzxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oIRSTzpeogZQegTxy3HsXL8f2cTTP9W4dlr8OKiUWvM=;
-        b=H3DLIo1QlE3AZyVElpOk3BX6nfiywbF9mp2uxtG4FMgA1C3RvlzDW+jIXeCnCzR9ax
-         w/0mmAgjnVX9QF+E8ZLg91YuswjUX8zfWD5r6xA8k2w/AFrswEJ6jmxCI1LNryXkPVzy
-         xzlPxKqCYI+5IpOUSH7kb/EbU8BzGu1GbaEPv+K+h7m7ZDt1EIepZnv/N5APq/HOVaij
-         cgxY1zd0qez+N1VYx/+YQ/zOWrb+zMX4ysOlr9H2ypdXybxGWuMQClIoy919/37POVA4
-         ztzoEvrzHQ612XYQYP7GK9/9LMRTnb4QnlXmGysEtd9PhJYON5N8U4e1vejznFVjpOv5
-         /9HA==
-X-Gm-Message-State: AOAM531W0IW3nkwPKUvpZePUeOheP8oTx+vNC7RpWZQ59CrtV3+Nb98R
-        G4rz4utIoDN2jvd39siyNAEkm2/yFVAxgQ==
-X-Google-Smtp-Source: ABdhPJwTBN78sVwN2HktnnEhYPi7sExtecHxxHkCS/Jzrfc7VDfZ0PtiiKIkHMUvO3GW0yIF9EAOsg==
-X-Received: by 2002:aa7:8d47:0:b0:4f6:a7f9:1ead with SMTP id s7-20020aa78d47000000b004f6a7f91eadmr14749693pfe.42.1648891987038;
-        Sat, 02 Apr 2022 02:33:07 -0700 (PDT)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id f66-20020a62db45000000b004fa8a7b8ad3sm5593956pfg.77.2022.04.02.02.33.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 02 Apr 2022 02:33:06 -0700 (PDT)
-Date:   Sat, 2 Apr 2022 17:32:21 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     "Yue Hu" <huyue2@coolpad.com>
-Cc:     <dhowells@redhat.com>, <sfrench@samba.org>,
-        <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
-        <linux-cachefs@redhat.com>, <linux-cifs@vger.kernel.org>,
-        <samba-technical@lists.samba.org>, <linux-nfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zbestahu@163.com>,
-        <zhangwen@coolpad.com>
-Subject: Re: [PATCH] fscache: Expose fscache_end_operation() helper
-Message-ID: <20220402173221.00002170.zbestahu@gmail.com>
-In-Reply-To: <20220402021841.22285-1-huyue2@coolpad.com>
-References: <20220402021841.22285-1-huyue2@coolpad.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        with ESMTP id S231661AbiDCDIS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 2 Apr 2022 23:08:18 -0400
+X-Greylist: delayed 346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 20:06:09 PDT
+Received: from mta-out-03.alice.it (mta-out-03.alice.it [217.169.118.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5857E38BE6
+        for <linux-cifs@vger.kernel.org>; Sat,  2 Apr 2022 20:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alice.it; s=20211207; t=1648955169; 
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        h=Reply-To:From:To:Date:Message-ID:MIME-Version;
+        b=aqBqL8iIuJyQ6nV1qMhB/pVufqfX9YTIBTxsN+5pZpid1CpHDPPT/XQXE7fKNeWWAq7RerxHBiGeZx7zj1Ct2rS7i+E41KwubhNvLJoZijJIlFJcjmcqtbb1nDmciS5Ka26dGhlI54xVB441rI/T6q3eMa8LsTToiLSmGOfugQ4QxUoSVQ5UIxe+a9+RCVlR20XNZlXWCP8x5Hq2EBI/df2WSPozrB5x9QZLgNkZlQmUklCTbMU088UMVZuXoC356vSZDxBxwrxTkUzInn5mfGoaqWCV1c8Y4WyIaoNhITFfelrB02aLP0bYHEnfaAyKCvKogEkGkzad0UGVe7oDRQ==
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiledgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvffgnffgvefqoffkvfetnffktedpqfgfvfenuceurghilhhouhhtmecufedtudenucfgmhhpthihuchsuhgsjhgvtghtucdluddtmdengfhmphhthicusghougihucdlhedtmdenucfjughrpehrhffvfffkggestddtfedttddttdenucfhrhhomhephggvuchhrghvvgcurghnuchofhhfvghruchtohcuihhnvhgvshhtuchinhcuhihouhhrucgtohhunhhtrhihuchunhguvghrucgruchjohhinhhtuchvvghnthhurhgvuchprghrthhnvghrshhhihhpuchplhgvrghsvgcurhgvphhlhicufhhorhcumhhorhgvucguvghtrghilhhsuceofhgpphgvnhhnrgesrghlihgtvgdrihhtqeenucggtffrrghtthgvrhhnpeehjeetgefhleetiedtkeelfffgjeeugeegleekueffgfegtdekkeeifedvvdffteenucfkphepudejiedrvddvjedrvdegvddrudeltdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegrlhhitggvrdhithdpihhnvghtpedujeeirddvvdejrddvgedvrdduledtpdhmrghilhhfrhhomhepfhgpphgvnhhnrgesrghlihgtvgdrihhtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqtghifhhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 60
+X-RazorGate-Vade-Classification: clean
+Received: from alice.it (176.227.242.190) by mta-out-03.alice.it (5.8.807.04) (authenticated as f_penna@alice.it)
+        id 623C9D0500EBCB15 for linux-cifs@vger.kernel.org; Sun, 3 Apr 2022 05:00:20 +0200
+Reply-To: dougfield20@inbox.lv
+From:   We have an offer to invest in your country under a
+         joint venture partnership please reply for more
+         details <f_penna@alice.it>
+To:     linux-cifs@vger.kernel.org
+Date:   02 Apr 2022 20:00:19 -0700
+Message-ID: <20220402200019.C9059A0ABADE8B00@alice.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,BODY_EMPTY,
+        DKIM_INVALID,DKIM_SIGNED,EMPTY_MESSAGE,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,MISSING_SUBJECT,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
+        *       low trust
+        *      [217.169.118.9 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5145]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [f_penna[at]alice.it]
+        *  0.0 RCVD_IN_MSPIKE_L3 RBL: Low reputation (-3)
+        *      [217.169.118.9 listed in bl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dougfield20[at]inbox.lv]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts and no
+        *      Subject: text
+        *  1.8 MISSING_SUBJECT Missing Subject: header
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blacklisted
+        *  0.0 BODY_EMPTY No body text in message
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
-
-On Sat, 02 Apr 2022 10:18:55 +0800
-"Yue Hu" <huyue2@coolpad.com> wrote:
-
-> Currently, nfs and cifs have same fscache_end_operaion() as fscache.
-> We may put the helper in linux/fscache.h so that fscache internal
-> and client filesystem can all use it.
-
-Sorry, please ignore the patch due to my earlier code base.
-
-Thanks.
-
-> 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
-> ---
->  fs/cifs/fscache.c       |  8 --------
->  fs/fscache/internal.h   | 11 -----------
->  fs/nfs/fscache.c        |  8 --------
->  include/linux/fscache.h | 12 ++++++++++++
->  4 files changed, 12 insertions(+), 27 deletions(-)
-> 
-> diff --git a/fs/cifs/fscache.c b/fs/cifs/fscache.c
-> index 33af72e0ac0c..b47c2011ce5b 100644
-> --- a/fs/cifs/fscache.c
-> +++ b/fs/cifs/fscache.c
-> @@ -134,14 +134,6 @@ void cifs_fscache_release_inode_cookie(struct inode *inode)
->  	}
->  }
->  
-> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> -{
-> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> -
-> -	if (ops)
-> -		ops->end_operation(cres);
-> -}
-> -
->  /*
->   * Fallback page reading interface.
->   */
-> diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
-> index f121c21590dc..ed1c9ed737f2 100644
-> --- a/fs/fscache/internal.h
-> +++ b/fs/fscache/internal.h
-> @@ -70,17 +70,6 @@ static inline void fscache_see_cookie(struct fscache_cookie *cookie,
->  			     where);
->  }
->  
-> -/*
-> - * io.c
-> - */
-> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> -{
-> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> -
-> -	if (ops)
-> -		ops->end_operation(cres);
-> -}
-> -
->  /*
->   * main.c
->   */
-> diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
-> index cfe901650ab0..39654ca72d3d 100644
-> --- a/fs/nfs/fscache.c
-> +++ b/fs/nfs/fscache.c
-> @@ -249,14 +249,6 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
->  	}
->  }
->  
-> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> -{
-> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> -
-> -	if (ops)
-> -		ops->end_operation(cres);
-> -}
-> -
->  /*
->   * Fallback page reading interface.
->   */
-> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-> index 296c5f1d9f35..79bb40b92e0f 100644
-> --- a/include/linux/fscache.h
-> +++ b/include/linux/fscache.h
-> @@ -557,6 +557,18 @@ int fscache_write(struct netfs_cache_resources *cres,
->  	return ops->write(cres, start_pos, iter, term_func, term_func_priv);
->  }
->  
-> +/*
-> + * Clean up at the end of an operation
-> + */
-> +static inline
-> +void fscache_end_operation(struct netfs_cache_resources *cres)
-> +{
-> +	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> +
-> +	if (ops)
-> +		ops->end_operation(cres);
-> +}
-> +
->  /**
->   * fscache_clear_page_bits - Clear the PG_fscache bits from a set of pages
->   * @cookie: The cookie representing the cache object
 
