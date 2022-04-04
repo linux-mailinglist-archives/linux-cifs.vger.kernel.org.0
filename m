@@ -2,983 +2,930 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F7B4F0E68
-	for <lists+linux-cifs@lfdr.de>; Mon,  4 Apr 2022 06:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D13A4F1B6D
+	for <lists+linux-cifs@lfdr.de>; Mon,  4 Apr 2022 23:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377232AbiDDE7A (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 4 Apr 2022 00:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S238470AbiDDVUN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 4 Apr 2022 17:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377210AbiDDE67 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 4 Apr 2022 00:58:59 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87443464B
-        for <linux-cifs@vger.kernel.org>; Sun,  3 Apr 2022 21:57:00 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i11so7170716plg.12
-        for <linux-cifs@vger.kernel.org>; Sun, 03 Apr 2022 21:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zMZI97ytSnXZ38mR0Beoiewm9vAE5qeJNE63sJYIA4Y=;
-        b=bLKAaY6vcnm7v3iaY0eXiMIYLS4JPeJQXqFSsksu64xK3tBDdfCCSSCjhAdG3wS6pb
-         Xj3BNLh64tstSTPz3ll3FR+FbxHgXAqFtMR8PTqWg3QEIo2INosZt++wimRZgVRT2BI9
-         m2PTyjCebKjFj7vI3Jln61XYK1fknZSd2CqkGkq/gg21IKAtM9QYwwhs6l6mC/u9m9DN
-         IRT1L4T05qqbTJF7KHaURGXetSe+KXZQFzw8Mp/63SVjBTXMhxGmpf2UxTs0IhIDwuRE
-         ztrLR0Dvx8wu25uGoiQkEfSPnAZWJrtL/eqgPyKhBPB0atlqFnBuViOrKT6nExO+DAOs
-         3+fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zMZI97ytSnXZ38mR0Beoiewm9vAE5qeJNE63sJYIA4Y=;
-        b=ErWUiAukJVpT/xTy954moQVLXipqJAZiGcLqvL84rDC3UfMuKzZIwSHtdByRxmphyY
-         Ekq9q2oIXdEjFjUzn/ahNErCHCe7nTEITcIztneGnh783bYtUyVfRRkWHv9mBwZiHCoX
-         eK+SNPSOOnCJzLZObRR0j5uf+SzOUmNglluPSND1ZfMyH5XxSmw6fYPvHhIfkdU2H5oc
-         hBPGy1epDJpoPwFUz+Haytwblb5UTSjN31OH5q+edgHKz+THM1V5P26v0vw0aVy7qDur
-         mH1Npfr/gvzfFpYlrIP4qwDaYB/JwSa7KFDosvT+VGgnzrQkKGZBWwWUJZ96sy00OWs9
-         Shgw==
-X-Gm-Message-State: AOAM531BRNphe1JT6vp6NVSxyGlXKwdsRmaaTpqjcztlYTNETdK3wgb/
-        5BAoiDljd1tZ5uT2qhlZugo+lQYSPeD52Q==
-X-Google-Smtp-Source: ABdhPJyBnQaEEYx1O0D37kDSQ7PBiXO+oLlmG4jL1F99WbcBWSNj9FiluPMYOTB71BRYNMEr002C3Q==
-X-Received: by 2002:a17:902:e5cc:b0:154:1c96:2e5b with SMTP id u12-20020a170902e5cc00b001541c962e5bmr21752344plf.94.1649048219787;
-        Sun, 03 Apr 2022 21:56:59 -0700 (PDT)
-Received: from localhost.localdomain ([125.177.232.58])
-        by smtp.googlemail.com with ESMTPSA id t14-20020a056a00138e00b004fb1d833668sm10866872pfg.33.2022.04.03.21.56.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 21:56:59 -0700 (PDT)
-From:   Hyunchul Lee <hyc.lee@gmail.com>
-To:     linux-cifs@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        with ESMTP id S1379015AbiDDQUE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 4 Apr 2022 12:20:04 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9AC31922;
+        Mon,  4 Apr 2022 09:18:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KoT2qbS2Cvotfev8sAQcdyEfshOzy4FFR0BHZ7Km7wlBIOj5YgHhcFxpTnE2gDdTTWBeyGuWtMnQdPp+NAvLjst/Q0EIGitL3BSvWa/Sl/5jHsV1F1pHnuxzgFNZ2QtxnPR+JwwlPuX4ZMGWpHR/tYr2g38CYYJ/U+MGtagi06llvZqikXLksPpz3P9RbbWmtniQ5D1D1EyEKbMPsYhO5LrQanrmXIlwQ/95H82ZmJkNGGVoHL7/whU92a97JSK+pMljsilrmMP20q3XtHsUoF5SWF+vnz3zTnHaIga725Ic+C25ZoG/HtAZSwOl33RUWrldCwSkRGiPTNhPKICM7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tlM9w6Br2l9+D+RUr/SeY6255lMO0CBOLmyFqkQlIAw=;
+ b=OXL8YNOEFNzRjArWw5aDD3lxPJCtQ+Qp17XzIoTNi3KrOOndb8LnVvfOib1vHGAGKbkfrJBPYVjCfpvhSdXo2bdT5NkmxyuEj0t8DYrHAowQzdXxwu4bqwUR0MYCNBlpPiFkiUqqhDk8OcZJ6LWXMMCfy+yiz+KmP17+kfZgcj1yEb64Kwk4zyTYgSaf2B7HZyO4DFslfZTjVoES94epTnSQAyJpX5C+yv5W8QFpF0ukb6VjTZotNppqCwCDtBY81jKqI4gCMMsNqgoClrCdu5O9cAgfwaZkLDPvsQ72DcpC5QhZ/qT3qYrBKKGg1td5a32c0xeyhCqZW5ZfY8NpLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tlM9w6Br2l9+D+RUr/SeY6255lMO0CBOLmyFqkQlIAw=;
+ b=CuoS9Wlrw32aiMnsF5zuF6n4iTkufjcZ9q/lBWLJhE6HUhpoVBJ9+nDHmrk0O/TAKxZhneI8xEQ5/5uS83rVI+yUsSmttKdUohF9/+47kn0zrpCRXdO/PmX2jyTtZsbI0RRbgYZlgPTy4wGHr1GetLIt7PWeAbYEq6caAtblRwF5TaTKUAxmxry/YOYiX906vxvS/7vPr/hXjQSSc39oqvnjhCyUl3+livEVRbFbUfQLp1SA1rXAUVeDVmlVcES33cSWatVDsSJTx9JxtHbe5j9VJKU8MQ8HhPX6wjMO1LBsHyAecpng0N0eJpidcZVODPrs4SDtwE9UXW9NX1uGFQ==
+Received: from MN2PR12MB3310.namprd12.prod.outlook.com (2603:10b6:208:aa::25)
+ by BL0PR12MB4881.namprd12.prod.outlook.com (2603:10b6:208:1c7::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 16:18:02 +0000
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MN2PR12MB3310.namprd12.prod.outlook.com (2603:10b6:208:aa::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 16:18:02 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%5]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 16:18:01 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Ariel Elior <aelior@marvell.com>, Anna Schumaker <anna@kernel.org>,
+        Jens Axboe <axboe@fb.com>,
+        Christian Benvenuti <benve@cisco.com>,
+        Potnuri Bharat Teja <bharat@chelsio.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-rdma@vger.kernel.org, Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Michal Kalderon <mkalderon@marvell.com>,
+        Mustafa Ismail <mustafa.ismail@intel.com>,
+        Nelson Escobar <neescoba@cisco.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rds-devel@oss.oracle.com,
+        Sagi Grimberg <sagi@grimberg.me>,
+        samba-technical@lists.samba.org,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
         Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>
-Subject: [PATCH v2] ksmbd: smbd: handle multiple Buffer Decriptors
-Date:   Mon,  4 Apr 2022 13:55:49 +0900
-Message-Id: <20220404045549.76547-1-hyc.lee@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        target-devel@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Xiao Yang <yangx.jy@fujitsu.com>
+Subject: [PATCH] RDMA: Split kernel-only global device caps from uvers device caps
+Date:   Mon,  4 Apr 2022 13:18:00 -0300
+Message-Id: <0-v1-47e161ac2db9+80f-kern_caps_jgg@nvidia.com>
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0182.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::7) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 49b52fa9-4d47-456e-17b5-08da1656b0d2
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3310:EE_|BL0PR12MB4881:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB33102EA243B4882323D5C7B7C2E59@MN2PR12MB3310.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EPD0QfRaz+Epb2mjSoezP3GG3Y7SqDkVjyHD3XnOaYJXauza+txcC/Nl0M915RJHdyZ6axm9WDfBEaBNS14r11L30yoodEVIvjgV0irAX10iDx84pC9fwepnN/ele0rWV3v7fHhhh2bpV5GUWhTGTepgOwGyS2hkieOHwWGQeVQoxmCClXEtYfaRv180CGtcRC//6XJ5CwgfSoQ0Jns71bGUk0ficYcgti538CkVOuMku9xXrZ7pJ64iYwmmSOWQWYkk42MIQHQ+uyaxOkK+6IO4X1D5JZ1yaiXj3gaXqU8Tvu8XI6o56ayLPqwV31ctVueEx/beQn/fKgfQD7ymvxyeuBEL+F9FqbuZIscDkMuhKHzDsi4ylk18kZyXpcTfhHSboCtVzeeUurV4kkqaJm0E25NM8qUwY0NFfZsGbS2KIoozw1JRmEnzHnly9xdCNje6qg6H7p747Bh0FMeKa+InwrkiDbnVIGMpk5MeemoyAYZ97ClntRPV0AT6sRwrHLu0H+zjQm+ull0LY2k0QuIJASxVBsWTC4cy0lA3APYFRpvOHDA81Z6SSNsY3mOXUX404QfyZMPF79dY3LbiuNfdFmBQ7CAv88UAyLG5CBqC4z8x72gnEwIHDR7KhGUs7++RDXRBNZPyY28kYEbGfFp3NMXpvPiqXALqhvuSwWcY/9O4G0u42Jrtfjzt2GwtbJsnnWyJpNsh6tWLsdX5nA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3310.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(921005)(83380400001)(7416002)(30864003)(38100700002)(2616005)(5660300002)(8936002)(7406005)(8676002)(36756003)(316002)(6506007)(6512007)(2906002)(508600001)(6486002)(110136005)(86362001)(66946007)(66476007)(66556008)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N9LU0PIYlv6uFlLxyoAegAYmVHHgrDpYbwozgBkqx4uc/iHMS0DvpbPjqsNp?=
+ =?us-ascii?Q?XJdWC7lKPcksYoQRl97e6V3N85u/bGk+4FhULaiukdAOF+UdV97R9MtWG8em?=
+ =?us-ascii?Q?vMDTtxuHHVx3kBvgxK2Mrw0UahErwkLYtGUGFecTlOVuDDL4izMVOJQRAEvB?=
+ =?us-ascii?Q?MxxFkMy+6TtHnt0wpn3lSsbosQ3Tu09dDAPU0oqh6TZE17NIQEgZDpSHEaqY?=
+ =?us-ascii?Q?7XV3Z1xfb9yFDd7OIfJX+kDpDaz3qlIHfnYR+f83fpU2cSUxeEVwQtGgduyY?=
+ =?us-ascii?Q?5+6vpwnLzXOqb640tuvfHY9iNQJ5K5wJnMORbBfpDYaHN/rXkxrI7tWu9SWz?=
+ =?us-ascii?Q?nBiCTu7scoO/V5iCYNVv2ap36sTeRSh+JYBnWt3TFrDX6UA6x5upkXhDFxJn?=
+ =?us-ascii?Q?FvMX3IoMcoNwQ6qZOo+t7KVw0Qqb4OsnOk06ZkLPbEor0YW8fs+gpQpV+hai?=
+ =?us-ascii?Q?eOWQsrB5SfKGoZq9Ff6tMAtb8hKMD8N6HXL1G56HuJd8h02oXGdn4/NgLryR?=
+ =?us-ascii?Q?QhZGSne3ZB0fgekNaSwxodm8TYsLbnmbkUC1BS8uxVFfui53A9QSZtVXah78?=
+ =?us-ascii?Q?W1+oFz3WyTsfMZMwcMaU8OsdRE2jkqOYgeU6CkBIAcppPzS6fI7s8S4pf82+?=
+ =?us-ascii?Q?GGB1RA6rf9kAVhWMO7XNoVqPIvkjiMS0sLjRIK2f5Wosp2Gu0wCNF3SznzjF?=
+ =?us-ascii?Q?621E0w3qLjollk3PBJXoOeQO63JmxWDS1RiSSc3x2/USZLRJ7fclFAMkwDoZ?=
+ =?us-ascii?Q?5SxWIB3KJAYtkV93DgTR5f/EEHUy/dEQsVwCUxp6VB9pXhyXftFtgkVGBEO6?=
+ =?us-ascii?Q?R3kJCzro36dWZgBEdpGBpnJjgPWbW1Os2M9WuWHEQqUeG0pYOUGzI3DQOtx1?=
+ =?us-ascii?Q?zj067A31AXxqzWGuOIWJyfW3yDVujA6WsLa6a83TePdagEYnBOdASzgUzwEI?=
+ =?us-ascii?Q?jZtCEh5t+c+iD+M29qIFtYGTrrNzuIivlNRtHDBkAulG3S1XnkhY0nKu3TWs?=
+ =?us-ascii?Q?fwOfj/lGJ3fit4s9gVbL+RXbuH5jgzG+aPL0oic945DtemPPTJi8XV3rdo9F?=
+ =?us-ascii?Q?JDiN3ZmnijqJm9I8RYQVt4afMePs77Hf9U793JEtU3vSoaPUkyJNXQDwEOTW?=
+ =?us-ascii?Q?Ah355nNfWcKHRO+vzlCDrMeAZdDOX24KLPDYoEpuKEu2xT0fe+jGgW8rrt68?=
+ =?us-ascii?Q?QVdSFqjvvguPH2fOMTCn+X3NwGr4SCqwAYuo//xOVontQinqntPFaqa5yfAY?=
+ =?us-ascii?Q?HNXZmVCf/GoQUFKupniqJuBPid9hWQh/y+PqCYnLbtlCey4Gc6invQSXMGqx?=
+ =?us-ascii?Q?C2zpfxVG0mSKZCySwL0Eb7dOlApzviMjZnHr+PQ8/UB8IUyVhcFHOl2Pp7Qk?=
+ =?us-ascii?Q?gmvfCGKg2kAm2TCab8VJwWP5I324C+2uRPPn6jpW2pZm8hnnoCuirj/bOgSS?=
+ =?us-ascii?Q?/eaj3IfDzg+DphYZdz5LbWC+5vpPSHJevzNYFhq9yObqRspIfbDTUFsYd0Hf?=
+ =?us-ascii?Q?2c3nfnnHlSd4HLje0Bt7KZqe9QqMU2CtSJsPtWQJj0BLcXTjfDRy0hF73/JW?=
+ =?us-ascii?Q?8SSePeezvJMT7eZ3LI/bEyg2MD2uaB5MTc6gf4/vOVkfP16BZUcr5ERx3GKG?=
+ =?us-ascii?Q?lL9RIaTSKP7kjAmW7+oSnX6lGBq/EBfEfPIOU6tiqLBxdOPuOA5QLhwPLK+N?=
+ =?us-ascii?Q?OWGTfYdh8aHmSChpyAEeGm7mVnMUlAwUrFFai5w9l2l/jkN/c64Oihsr58rs?=
+ =?us-ascii?Q?5F/htCqXeg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49b52fa9-4d47-456e-17b5-08da1656b0d2
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 16:18:01.8872
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6BCseTqhjBfd0mbzjSXXfpOmRsFSzpDdrNs40pjNnHoVXrZr5PxjV0UNMkrTq632
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4881
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Make ksmbd handle multiple buffer descriptors
-when reading and writing files using SMB direct:
+Split ib_device::device_cap_flags into kernel_cap_flags that holds the
+flags only used by the kernel.
 
-- Change the prototype of transport's operations
-  to accept a pointer and length of descriptors.
-- Post the work requests of rdma_rw_ctx for
-  RDMA r/w in smb_direct_rdma_xmit(), and
-  the work request for the READ/WRITE response
-  with a remote invaliation in smb_direct_writev().
-- SMB2_READ/WRITE request needs the number of
-  rw credits, (the pages the request wants to
-  transfer / the maximum pages which can be
-  registered with one MR) to read and write
-  a file.
-- Allocate enough RDMA resources for the maximum
-  number of rw credits allowed by ksmbd.
+This cleanly splits out the uverbs flags from the kernel flags to avoid
+confusion in the flags bitmap.
 
-Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
-changes from v1:
-- use le16_to_cpu() instead of le32_to_cpu() to retrieve
-  req->ReadChannelInfoOffset(reported by kernel test bot).
+ drivers/infiniband/core/nldev.c              |  2 +-
+ drivers/infiniband/core/uverbs_cmd.c         |  6 +-
+ drivers/infiniband/core/verbs.c              |  8 +--
+ drivers/infiniband/hw/bnxt_re/ib_verbs.c     |  2 +-
+ drivers/infiniband/hw/cxgb4/iw_cxgb4.h       |  1 -
+ drivers/infiniband/hw/cxgb4/provider.c       |  8 +--
+ drivers/infiniband/hw/hfi1/verbs.c           |  4 +-
+ drivers/infiniband/hw/irdma/hw.c             |  4 --
+ drivers/infiniband/hw/irdma/main.h           |  1 -
+ drivers/infiniband/hw/irdma/verbs.c          |  4 +-
+ drivers/infiniband/hw/mlx4/main.c            |  8 +--
+ drivers/infiniband/hw/mlx5/main.c            | 15 ++---
+ drivers/infiniband/hw/ocrdma/ocrdma_verbs.c  |  2 +-
+ drivers/infiniband/hw/qedr/verbs.c           |  3 +-
+ drivers/infiniband/hw/usnic/usnic_ib_verbs.c |  3 +-
+ drivers/infiniband/sw/rxe/rxe.c              |  1 +
+ drivers/infiniband/sw/rxe/rxe_param.h        |  1 -
+ drivers/infiniband/sw/siw/siw_verbs.c        |  4 +-
+ drivers/infiniband/ulp/ipoib/ipoib.h         |  1 +
+ drivers/infiniband/ulp/ipoib/ipoib_main.c    |  5 +-
+ drivers/infiniband/ulp/ipoib/ipoib_verbs.c   |  6 +-
+ drivers/infiniband/ulp/iser/iscsi_iser.c     |  2 +-
+ drivers/infiniband/ulp/iser/iser_verbs.c     |  8 +--
+ drivers/infiniband/ulp/isert/ib_isert.c      |  2 +-
+ drivers/infiniband/ulp/srp/ib_srp.c          |  8 +--
+ drivers/nvme/host/rdma.c                     |  4 +-
+ drivers/nvme/target/rdma.c                   |  4 +-
+ fs/cifs/smbdirect.c                          |  2 +-
+ include/rdma/ib_verbs.h                      | 69 ++++++--------------
+ include/rdma/opa_vnic.h                      |  3 +-
+ include/uapi/rdma/ib_user_verbs.h            |  4 ++
+ net/rds/ib.c                                 |  4 +-
+ net/sunrpc/xprtrdma/frwr_ops.c               |  2 +-
+ 33 files changed, 85 insertions(+), 116 deletions(-)
 
+Followup from Xiao Yang's series
 
- fs/ksmbd/connection.c     |  32 ++--
- fs/ksmbd/connection.h     |  32 ++--
- fs/ksmbd/ksmbd_work.h     |   4 +-
- fs/ksmbd/smb2pdu.c        |  77 ++++-----
- fs/ksmbd/transport_rdma.c | 344 ++++++++++++++++++++++----------------
- fs/ksmbd/transport_tcp.c  |   5 +-
- 6 files changed, 278 insertions(+), 216 deletions(-)
+Jason
 
-diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
-index 208d2cff7bd3..6f036ea9f43b 100644
---- a/fs/ksmbd/connection.c
-+++ b/fs/ksmbd/connection.c
-@@ -191,10 +191,10 @@ int ksmbd_conn_write(struct ksmbd_work *work)
- 	}
- 
- 	ksmbd_conn_lock(conn);
--	sent = conn->transport->ops->writev(conn->transport, &iov[0],
--					iov_idx, len,
--					work->need_invalidate_rkey,
--					work->remote_key);
-+	sent = conn->transport->ops->writev(conn->transport,
-+					    &iov[0], iov_idx, len,
-+					    work->need_invalidate_rkey,
-+					    work->remote_key);
- 	ksmbd_conn_unlock(conn);
- 
- 	if (sent < 0) {
-@@ -205,31 +205,35 @@ int ksmbd_conn_write(struct ksmbd_work *work)
- 	return 0;
- }
- 
--int ksmbd_conn_rdma_read(struct ksmbd_conn *conn, void *buf,
--			 unsigned int buflen, u32 remote_key, u64 remote_offset,
--			 u32 remote_len)
-+int ksmbd_conn_rdma_read(struct ksmbd_conn *conn,
-+			 void *buf, unsigned int buflen,
-+			 struct smb2_buffer_desc_v1 *desc,
-+			 unsigned int desc_len)
- {
- 	int ret = -EINVAL;
- 
-+	ksmbd_conn_lock(conn);
- 	if (conn->transport->ops->rdma_read)
- 		ret = conn->transport->ops->rdma_read(conn->transport,
- 						      buf, buflen,
--						      remote_key, remote_offset,
--						      remote_len);
-+						      desc, desc_len);
-+	ksmbd_conn_unlock(conn);
- 	return ret;
- }
- 
--int ksmbd_conn_rdma_write(struct ksmbd_conn *conn, void *buf,
--			  unsigned int buflen, u32 remote_key,
--			  u64 remote_offset, u32 remote_len)
-+int ksmbd_conn_rdma_write(struct ksmbd_conn *conn,
-+			  void *buf, unsigned int buflen,
-+			  struct smb2_buffer_desc_v1 *desc,
-+			  unsigned int desc_len)
- {
- 	int ret = -EINVAL;
- 
-+	ksmbd_conn_lock(conn);
- 	if (conn->transport->ops->rdma_write)
- 		ret = conn->transport->ops->rdma_write(conn->transport,
- 						       buf, buflen,
--						       remote_key, remote_offset,
--						       remote_len);
-+						       desc, desc_len);
-+	ksmbd_conn_unlock(conn);
- 	return ret;
- }
- 
-diff --git a/fs/ksmbd/connection.h b/fs/ksmbd/connection.h
-index 7a59aacb5daa..51722d3a8cf6 100644
---- a/fs/ksmbd/connection.h
-+++ b/fs/ksmbd/connection.h
-@@ -119,14 +119,18 @@ struct ksmbd_transport_ops {
- 	void (*disconnect)(struct ksmbd_transport *t);
- 	void (*shutdown)(struct ksmbd_transport *t);
- 	int (*read)(struct ksmbd_transport *t, char *buf, unsigned int size);
--	int (*writev)(struct ksmbd_transport *t, struct kvec *iovs, int niov,
--		      int size, bool need_invalidate_rkey,
-+	int (*writev)(struct ksmbd_transport *t,
-+		      struct kvec *iovs, int niov, int size,
-+		      bool need_invalidate,
- 		      unsigned int remote_key);
--	int (*rdma_read)(struct ksmbd_transport *t, void *buf, unsigned int len,
--			 u32 remote_key, u64 remote_offset, u32 remote_len);
--	int (*rdma_write)(struct ksmbd_transport *t, void *buf,
--			  unsigned int len, u32 remote_key, u64 remote_offset,
--			  u32 remote_len);
-+	int (*rdma_read)(struct ksmbd_transport *t,
-+			 void *buf, unsigned int len,
-+			 struct smb2_buffer_desc_v1 *desc,
-+			 unsigned int desc_len);
-+	int (*rdma_write)(struct ksmbd_transport *t,
-+			  void *buf, unsigned int len,
-+			  struct smb2_buffer_desc_v1 *desc,
-+			  unsigned int desc_len);
- };
- 
- struct ksmbd_transport {
-@@ -148,12 +152,14 @@ struct ksmbd_conn *ksmbd_conn_alloc(void);
- void ksmbd_conn_free(struct ksmbd_conn *conn);
- bool ksmbd_conn_lookup_dialect(struct ksmbd_conn *c);
- int ksmbd_conn_write(struct ksmbd_work *work);
--int ksmbd_conn_rdma_read(struct ksmbd_conn *conn, void *buf,
--			 unsigned int buflen, u32 remote_key, u64 remote_offset,
--			 u32 remote_len);
--int ksmbd_conn_rdma_write(struct ksmbd_conn *conn, void *buf,
--			  unsigned int buflen, u32 remote_key, u64 remote_offset,
--			  u32 remote_len);
-+int ksmbd_conn_rdma_read(struct ksmbd_conn *conn,
-+			 void *buf, unsigned int buflen,
-+			 struct smb2_buffer_desc_v1 *desc,
-+			 unsigned int desc_len);
-+int ksmbd_conn_rdma_write(struct ksmbd_conn *conn,
-+			  void *buf, unsigned int buflen,
-+			  struct smb2_buffer_desc_v1 *desc,
-+			  unsigned int desc_len);
- void ksmbd_conn_enqueue_request(struct ksmbd_work *work);
- int ksmbd_conn_try_dequeue_request(struct ksmbd_work *work);
- void ksmbd_conn_init_server_callbacks(struct ksmbd_conn_ops *ops);
-diff --git a/fs/ksmbd/ksmbd_work.h b/fs/ksmbd/ksmbd_work.h
-index 5ece58e40c97..58bfc661000d 100644
---- a/fs/ksmbd/ksmbd_work.h
-+++ b/fs/ksmbd/ksmbd_work.h
-@@ -69,9 +69,9 @@ struct ksmbd_work {
- 	bool                            encrypted:1;
- 	/* Is this SYNC or ASYNC ksmbd_work */
- 	bool                            syncronous:1;
--	bool                            need_invalidate_rkey:1;
-+	bool				need_invalidate_rkey:1;
- 
--	unsigned int                    remote_key;
-+	unsigned int			remote_key;
- 	/* cancel works */
- 	int                             async_id;
- 	void                            **cancel_argv;
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 3bf6c56c654c..8d41e4966905 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -6115,11 +6115,11 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
- 	return err;
- }
- 
--static int smb2_set_remote_key_for_rdma(struct ksmbd_work *work,
--					struct smb2_buffer_desc_v1 *desc,
--					__le32 Channel,
--					__le16 ChannelInfoOffset,
--					__le16 ChannelInfoLength)
-+static int smb2_validate_rdma_buffer_descs(struct ksmbd_work *work,
-+					   struct smb2_buffer_desc_v1 *desc,
-+					   __le32 Channel,
-+					   __le16 ChannelInfoOffset,
-+					   __le16 ChannelInfoLength)
- {
- 	unsigned int i, ch_count;
- 
-@@ -6136,15 +6136,13 @@ static int smb2_set_remote_key_for_rdma(struct ksmbd_work *work,
- 				le32_to_cpu(desc[i].length));
- 		}
- 	}
--	if (ch_count != 1) {
--		ksmbd_debug(RDMA, "RDMA multiple buffer descriptors %d are not supported yet\n",
--			    ch_count);
-+	if (ch_count < 1)
+diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
+index ca24ce34da7661..b9f0ec155581d3 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1739,7 +1739,7 @@ static int nldev_dellink(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	if (!device)
  		return -EINVAL;
--	}
  
--	work->need_invalidate_rkey =
--		(Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE);
--	work->remote_key = le32_to_cpu(desc->token);
-+	if (Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE) {
-+		work->need_invalidate_rkey = true;
-+		work->remote_key = le32_to_cpu(desc[0].token);
-+	}
- 	return 0;
- }
- 
-@@ -6152,14 +6150,12 @@ static ssize_t smb2_read_rdma_channel(struct ksmbd_work *work,
- 				      struct smb2_read_req *req, void *data_buf,
- 				      size_t length)
- {
--	struct smb2_buffer_desc_v1 *desc =
--		(struct smb2_buffer_desc_v1 *)&req->Buffer[0];
- 	int err;
- 
- 	err = ksmbd_conn_rdma_write(work->conn, data_buf, length,
--				    le32_to_cpu(desc->token),
--				    le64_to_cpu(desc->offset),
--				    le32_to_cpu(desc->length));
-+				    (struct smb2_buffer_desc_v1 *)
-+				    ((char *)req + le16_to_cpu(req->ReadChannelInfoOffset)),
-+				    le16_to_cpu(req->ReadChannelInfoLength));
- 	if (err)
- 		return err;
- 
-@@ -6193,18 +6189,20 @@ int smb2_read(struct ksmbd_work *work)
- 
- 	if (req->Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE ||
- 	    req->Channel == SMB2_CHANNEL_RDMA_V1) {
--		unsigned int ch_offset = le16_to_cpu(req->ReadChannelInfoOffset);
-+		struct smb2_buffer_desc_v1 *descs = (struct smb2_buffer_desc_v1 *)
-+			((char *)req + le16_to_cpu(req->ReadChannelInfoOffset));
- 
--		if (ch_offset < offsetof(struct smb2_read_req, Buffer)) {
-+		if (le16_to_cpu(req->ReadChannelInfoOffset) <
-+		    offsetof(struct smb2_read_req, Buffer)) {
- 			err = -EINVAL;
- 			goto out;
- 		}
--		err = smb2_set_remote_key_for_rdma(work,
--						   (struct smb2_buffer_desc_v1 *)
--						   ((char *)req + ch_offset),
--						   req->Channel,
--						   req->ReadChannelInfoOffset,
--						   req->ReadChannelInfoLength);
-+
-+		err = smb2_validate_rdma_buffer_descs(work,
-+						      descs,
-+						      req->Channel,
-+						      req->ReadChannelInfoOffset,
-+						      req->ReadChannelInfoLength);
- 		if (err)
- 			goto out;
- 	}
-@@ -6252,8 +6250,7 @@ int smb2_read(struct ksmbd_work *work)
- 		work->aux_payload_buf = NULL;
- 		rsp->hdr.Status = STATUS_END_OF_FILE;
- 		smb2_set_err_rsp(work);
--		ksmbd_fd_put(work, fp);
--		return 0;
-+		goto out;
- 	}
- 
- 	ksmbd_debug(SMB, "nbytes %zu, offset %lld mincount %zu\n",
-@@ -6386,21 +6383,18 @@ static ssize_t smb2_write_rdma_channel(struct ksmbd_work *work,
- 				       struct ksmbd_file *fp,
- 				       loff_t offset, size_t length, bool sync)
- {
--	struct smb2_buffer_desc_v1 *desc;
- 	char *data_buf;
- 	int ret;
- 	ssize_t nbytes;
- 
--	desc = (struct smb2_buffer_desc_v1 *)&req->Buffer[0];
--
- 	data_buf = kvmalloc(length, GFP_KERNEL | __GFP_ZERO);
- 	if (!data_buf)
- 		return -ENOMEM;
- 
- 	ret = ksmbd_conn_rdma_read(work->conn, data_buf, length,
--				   le32_to_cpu(desc->token),
--				   le64_to_cpu(desc->offset),
--				   le32_to_cpu(desc->length));
-+				   (struct smb2_buffer_desc_v1 *)
-+				   ((char *)req + le16_to_cpu(req->WriteChannelInfoOffset)),
-+				   le16_to_cpu(req->WriteChannelInfoLength));
- 	if (ret < 0) {
- 		kvfree(data_buf);
- 		return ret;
-@@ -6441,19 +6435,20 @@ int smb2_write(struct ksmbd_work *work)
- 
- 	if (req->Channel == SMB2_CHANNEL_RDMA_V1 ||
- 	    req->Channel == SMB2_CHANNEL_RDMA_V1_INVALIDATE) {
--		unsigned int ch_offset = le16_to_cpu(req->WriteChannelInfoOffset);
-+		struct smb2_buffer_desc_v1 *descs = (struct smb2_buffer_desc_v1 *)
-+			((char *)req + le16_to_cpu(req->WriteChannelInfoOffset));
- 
- 		if (req->Length != 0 || req->DataOffset != 0 ||
--		    ch_offset < offsetof(struct smb2_write_req, Buffer)) {
-+		    le16_to_cpu(req->WriteChannelInfoOffset) <
-+		    offsetof(struct smb2_write_req, Buffer)) {
- 			err = -EINVAL;
- 			goto out;
- 		}
--		err = smb2_set_remote_key_for_rdma(work,
--						   (struct smb2_buffer_desc_v1 *)
--						   ((char *)req + ch_offset),
--						   req->Channel,
--						   req->WriteChannelInfoOffset,
--						   req->WriteChannelInfoLength);
-+		err = smb2_validate_rdma_buffer_descs(work,
-+						      descs,
-+						      req->Channel,
-+						      req->WriteChannelInfoOffset,
-+						      req->WriteChannelInfoLength);
- 		if (err)
- 			goto out;
- 	}
-diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
-index e646d79554b8..1eee4be0fe32 100644
---- a/fs/ksmbd/transport_rdma.c
-+++ b/fs/ksmbd/transport_rdma.c
-@@ -80,9 +80,9 @@ static int smb_direct_max_fragmented_recv_size = 1024 * 1024;
- /*  The maximum single-message size which can be received */
- static int smb_direct_max_receive_size = 8192;
- 
--static int smb_direct_max_read_write_size = 524224;
-+static int smb_direct_max_read_write_size = 8 * 1024 * 1024;
- 
--static int smb_direct_max_outstanding_rw_ops = 8;
-+static int smb_direct_max_outstanding_rw_ops = 1;
- 
- static LIST_HEAD(smb_direct_device_list);
- static DEFINE_RWLOCK(smb_direct_device_lock);
-@@ -147,10 +147,12 @@ struct smb_direct_transport {
- 	atomic_t		send_credits;
- 	spinlock_t		lock_new_recv_credits;
- 	int			new_recv_credits;
--	atomic_t		rw_avail_ops;
-+	int			max_rw_credits;
-+	int			pages_per_rw_credit;
-+	atomic_t		rw_credits;
- 
- 	wait_queue_head_t	wait_send_credits;
--	wait_queue_head_t	wait_rw_avail_ops;
-+	wait_queue_head_t	wait_rw_credits;
- 
- 	mempool_t		*sendmsg_mempool;
- 	struct kmem_cache	*sendmsg_cache;
-@@ -159,8 +161,6 @@ struct smb_direct_transport {
- 
- 	wait_queue_head_t	wait_send_payload_pending;
- 	atomic_t		send_payload_pending;
--	wait_queue_head_t	wait_send_pending;
--	atomic_t		send_pending;
- 
- 	struct delayed_work	post_recv_credits_work;
- 	struct work_struct	send_immediate_work;
-@@ -208,7 +208,9 @@ struct smb_direct_recvmsg {
- struct smb_direct_rdma_rw_msg {
- 	struct smb_direct_transport	*t;
- 	struct ib_cqe		cqe;
-+	int			status;
- 	struct completion	*completion;
-+	struct list_head	list;
- 	struct rdma_rw_ctx	rw_ctx;
- 	struct sg_table		sgt;
- 	struct scatterlist	sg_list[];
-@@ -377,7 +379,7 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
- 	t->reassembly_queue_length = 0;
- 	init_waitqueue_head(&t->wait_reassembly_queue);
- 	init_waitqueue_head(&t->wait_send_credits);
--	init_waitqueue_head(&t->wait_rw_avail_ops);
-+	init_waitqueue_head(&t->wait_rw_credits);
- 
- 	spin_lock_init(&t->receive_credit_lock);
- 	spin_lock_init(&t->recvmsg_queue_lock);
-@@ -388,8 +390,6 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
- 
- 	init_waitqueue_head(&t->wait_send_payload_pending);
- 	atomic_set(&t->send_payload_pending, 0);
--	init_waitqueue_head(&t->wait_send_pending);
--	atomic_set(&t->send_pending, 0);
- 
- 	spin_lock_init(&t->lock_new_recv_credits);
- 
-@@ -419,8 +419,6 @@ static void free_transport(struct smb_direct_transport *t)
- 	ksmbd_debug(RDMA, "wait for all send posted to IB to finish\n");
- 	wait_event(t->wait_send_payload_pending,
- 		   atomic_read(&t->send_payload_pending) == 0);
--	wait_event(t->wait_send_pending,
--		   atomic_read(&t->send_pending) == 0);
- 
- 	cancel_work_sync(&t->disconnect_work);
- 	cancel_delayed_work_sync(&t->post_recv_credits_work);
-@@ -682,10 +680,8 @@ static int smb_direct_read(struct ksmbd_transport *t, char *buf,
- 	struct smb_direct_transport *st = smb_trans_direct_transfort(t);
- 
- again:
--	if (st->status != SMB_DIRECT_CS_CONNECTED) {
--		pr_err("disconnected\n");
-+	if (st->status != SMB_DIRECT_CS_CONNECTED)
- 		return -ENOTCONN;
--	}
- 
- 	/*
- 	 * No need to hold the reassembly queue lock all the time as we are
-@@ -873,13 +869,8 @@ static void send_done(struct ib_cq *cq, struct ib_wc *wc)
- 		smb_direct_disconnect_rdma_connection(t);
- 	}
- 
--	if (sendmsg->num_sge > 1) {
--		if (atomic_dec_and_test(&t->send_payload_pending))
--			wake_up(&t->wait_send_payload_pending);
--	} else {
--		if (atomic_dec_and_test(&t->send_pending))
--			wake_up(&t->wait_send_pending);
--	}
-+	if (atomic_dec_and_test(&t->send_payload_pending))
-+		wake_up(&t->wait_send_payload_pending);
- 
- 	/* iterate and free the list of messages in reverse. the list's head
- 	 * is invalid.
-@@ -911,21 +902,12 @@ static int smb_direct_post_send(struct smb_direct_transport *t,
- {
- 	int ret;
- 
--	if (wr->num_sge > 1)
--		atomic_inc(&t->send_payload_pending);
--	else
--		atomic_inc(&t->send_pending);
--
-+	atomic_inc(&t->send_payload_pending);
- 	ret = ib_post_send(t->qp, wr, NULL);
- 	if (ret) {
- 		pr_err("failed to post send: %d\n", ret);
--		if (wr->num_sge > 1) {
--			if (atomic_dec_and_test(&t->send_payload_pending))
--				wake_up(&t->wait_send_payload_pending);
--		} else {
--			if (atomic_dec_and_test(&t->send_pending))
--				wake_up(&t->wait_send_pending);
--		}
-+		if (atomic_dec_and_test(&t->send_payload_pending))
-+			wake_up(&t->wait_send_payload_pending);
- 		smb_direct_disconnect_rdma_connection(t);
- 	}
- 	return ret;
-@@ -983,18 +965,18 @@ static int smb_direct_flush_send_list(struct smb_direct_transport *t,
- }
- 
- static int wait_for_credits(struct smb_direct_transport *t,
--			    wait_queue_head_t *waitq, atomic_t *credits)
-+			    wait_queue_head_t *waitq, atomic_t *total_credits,
-+			    int needed)
- {
- 	int ret;
- 
- 	do {
--		if (atomic_dec_return(credits) >= 0)
-+		if (atomic_sub_return(needed, total_credits) >= 0)
- 			return 0;
--
--		atomic_inc(credits);
-+		atomic_add(needed, total_credits);
- 		ret = wait_event_interruptible(*waitq,
--					       atomic_read(credits) > 0 ||
--						t->status != SMB_DIRECT_CS_CONNECTED);
-+					       atomic_read(total_credits) >= needed ||
-+					       t->status != SMB_DIRECT_CS_CONNECTED);
- 
- 		if (t->status != SMB_DIRECT_CS_CONNECTED)
- 			return -ENOTCONN;
-@@ -1015,7 +997,19 @@ static int wait_for_send_credits(struct smb_direct_transport *t,
- 			return ret;
- 	}
- 
--	return wait_for_credits(t, &t->wait_send_credits, &t->send_credits);
-+	return wait_for_credits(t, &t->wait_send_credits, &t->send_credits, 1);
-+}
-+
-+static int wait_for_rw_credits(struct smb_direct_transport *t, int credits)
-+{
-+	return wait_for_credits(t, &t->wait_rw_credits, &t->rw_credits, credits);
-+}
-+
-+static int calc_rw_credits(struct smb_direct_transport *t,
-+			   char *buf, unsigned int len)
-+{
-+	return DIV_ROUND_UP(get_buf_page_count(buf, len),
-+			    t->pages_per_rw_credit);
- }
- 
- static int smb_direct_create_header(struct smb_direct_transport *t,
-@@ -1248,7 +1242,8 @@ static int smb_direct_writev(struct ksmbd_transport *t,
- 	iov[0].iov_len -= 4;
- 
- 	remaining_data_length = buflen;
--	ksmbd_debug(RDMA, "Sending smb (RDMA): smb_len=%u\n", buflen);
-+	ksmbd_debug(RDMA, "Sending smb (RDMA): smb_len=%u, inv=%d\n",
-+		    buflen, need_invalidate);
- 
- 	smb_direct_send_ctx_init(st, &send_ctx, need_invalidate, remote_key);
- 	start = i = 0;
-@@ -1318,6 +1313,18 @@ static int smb_direct_writev(struct ksmbd_transport *t,
- 	return ret;
- }
- 
-+static void smb_direct_free_rdma_rw_msg(struct smb_direct_transport *t,
-+					struct smb_direct_rdma_rw_msg *msg,
-+					enum dma_data_direction dir)
-+{
-+	if (msg->sgt.orig_nents) {
-+		rdma_rw_ctx_destroy(&msg->rw_ctx, t->qp, t->qp->port,
-+				    msg->sgt.sgl, msg->sgt.nents, dir);
-+		sg_free_table_chained(&msg->sgt, SG_CHUNK_SIZE);
-+	}
-+	kfree(msg);
-+}
-+
- static void read_write_done(struct ib_cq *cq, struct ib_wc *wc,
- 			    enum dma_data_direction dir)
- {
-@@ -1326,19 +1333,14 @@ static void read_write_done(struct ib_cq *cq, struct ib_wc *wc,
- 	struct smb_direct_transport *t = msg->t;
- 
- 	if (wc->status != IB_WC_SUCCESS) {
-+		msg->status = -EIO;
- 		pr_err("read/write error. opcode = %d, status = %s(%d)\n",
- 		       wc->opcode, ib_wc_status_msg(wc->status), wc->status);
--		smb_direct_disconnect_rdma_connection(t);
-+		if (wc->status != IB_WC_WR_FLUSH_ERR)
-+			smb_direct_disconnect_rdma_connection(t);
- 	}
- 
--	if (atomic_inc_return(&t->rw_avail_ops) > 0)
--		wake_up(&t->wait_rw_avail_ops);
--
--	rdma_rw_ctx_destroy(&msg->rw_ctx, t->qp, t->qp->port,
--			    msg->sg_list, msg->sgt.nents, dir);
--	sg_free_table_chained(&msg->sgt, SG_CHUNK_SIZE);
- 	complete(msg->completion);
--	kfree(msg);
- }
- 
- static void read_done(struct ib_cq *cq, struct ib_wc *wc)
-@@ -1351,94 +1353,141 @@ static void write_done(struct ib_cq *cq, struct ib_wc *wc)
- 	read_write_done(cq, wc, DMA_TO_DEVICE);
- }
- 
--static int smb_direct_rdma_xmit(struct smb_direct_transport *t, void *buf,
--				int buf_len, u32 remote_key, u64 remote_offset,
--				u32 remote_len, bool is_read)
-+static int smb_direct_rdma_xmit(struct smb_direct_transport *t,
-+				void *buf, int buf_len,
-+				struct smb2_buffer_desc_v1 *desc,
-+				unsigned int desc_len,
-+				bool is_read)
- {
--	struct smb_direct_rdma_rw_msg *msg;
--	int ret;
-+	struct smb_direct_rdma_rw_msg *msg, *next_msg;
-+	int i, ret;
- 	DECLARE_COMPLETION_ONSTACK(completion);
--	struct ib_send_wr *first_wr = NULL;
-+	struct ib_send_wr *first_wr;
-+	LIST_HEAD(msg_list);
-+	char *desc_buf;
-+	int credits_needed;
-+	unsigned int desc_buf_len;
-+	size_t total_length = 0;
-+
-+	if (t->status != SMB_DIRECT_CS_CONNECTED)
-+		return -ENOTCONN;
-+
-+	/* calculate needed credits */
-+	credits_needed = 0;
-+	desc_buf = buf;
-+	for (i = 0; i < desc_len / sizeof(*desc); i++) {
-+		desc_buf_len = le32_to_cpu(desc[i].length);
-+
-+		credits_needed += calc_rw_credits(t, desc_buf, desc_buf_len);
-+		desc_buf += desc_buf_len;
-+		total_length += desc_buf_len;
-+		if (desc_buf_len == 0 || total_length > buf_len ||
-+		    total_length > t->max_rdma_rw_size)
-+			return -EINVAL;
-+	}
- 
--	ret = wait_for_credits(t, &t->wait_rw_avail_ops, &t->rw_avail_ops);
-+	ksmbd_debug(RDMA, "RDMA %s, len %#x, needed credits %#x\n",
-+		    is_read ? "read" : "write", buf_len, credits_needed);
-+
-+	ret = wait_for_rw_credits(t, credits_needed);
- 	if (ret < 0)
- 		return ret;
- 
--	/* TODO: mempool */
--	msg = kmalloc(offsetof(struct smb_direct_rdma_rw_msg, sg_list) +
--		      sizeof(struct scatterlist) * SG_CHUNK_SIZE, GFP_KERNEL);
--	if (!msg) {
--		atomic_inc(&t->rw_avail_ops);
--		return -ENOMEM;
--	}
-+	/* build rdma_rw_ctx for each descriptor */
-+	desc_buf = buf;
-+	for (i = 0; i < desc_len / sizeof(*desc); i++) {
-+		msg = kzalloc(offsetof(struct smb_direct_rdma_rw_msg, sg_list) +
-+			      sizeof(struct scatterlist) * SG_CHUNK_SIZE, GFP_KERNEL);
-+		if (!msg) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
- 
--	msg->sgt.sgl = &msg->sg_list[0];
--	ret = sg_alloc_table_chained(&msg->sgt,
--				     get_buf_page_count(buf, buf_len),
--				     msg->sg_list, SG_CHUNK_SIZE);
--	if (ret) {
--		atomic_inc(&t->rw_avail_ops);
--		kfree(msg);
--		return -ENOMEM;
--	}
-+		desc_buf_len = le32_to_cpu(desc[i].length);
- 
--	ret = get_sg_list(buf, buf_len, msg->sgt.sgl, msg->sgt.orig_nents);
--	if (ret <= 0) {
--		pr_err("failed to get pages\n");
--		goto err;
--	}
-+		msg->t = t;
-+		msg->cqe.done = is_read ? read_done : write_done;
-+		msg->completion = &completion;
- 
--	ret = rdma_rw_ctx_init(&msg->rw_ctx, t->qp, t->qp->port,
--			       msg->sg_list, get_buf_page_count(buf, buf_len),
--			       0, remote_offset, remote_key,
--			       is_read ? DMA_FROM_DEVICE : DMA_TO_DEVICE);
--	if (ret < 0) {
--		pr_err("failed to init rdma_rw_ctx: %d\n", ret);
--		goto err;
-+		msg->sgt.sgl = &msg->sg_list[0];
-+		ret = sg_alloc_table_chained(&msg->sgt,
-+					     get_buf_page_count(desc_buf, desc_buf_len),
-+					     msg->sg_list, SG_CHUNK_SIZE);
-+		if (ret) {
-+			kfree(msg);
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
-+		ret = get_sg_list(desc_buf, desc_buf_len,
-+				  msg->sgt.sgl, msg->sgt.orig_nents);
-+		if (ret <= 0) {
-+			sg_free_table_chained(&msg->sgt, SG_CHUNK_SIZE);
-+			kfree(msg);
-+			goto out;
-+		}
-+
-+		ret = rdma_rw_ctx_init(&msg->rw_ctx, t->qp, t->qp->port,
-+				       msg->sgt.sgl,
-+				       get_buf_page_count(desc_buf, desc_buf_len),
-+				       0,
-+				       le64_to_cpu(desc[i].offset),
-+				       le32_to_cpu(desc[i].token),
-+				       is_read ? DMA_FROM_DEVICE : DMA_TO_DEVICE);
-+		if (ret < 0) {
-+			pr_err("failed to init rdma_rw_ctx: %d\n", ret);
-+			sg_free_table_chained(&msg->sgt, SG_CHUNK_SIZE);
-+			kfree(msg);
-+			goto out;
-+		}
-+
-+		list_add_tail(&msg->list, &msg_list);
-+		desc_buf += desc_buf_len;
- 	}
- 
--	msg->t = t;
--	msg->cqe.done = is_read ? read_done : write_done;
--	msg->completion = &completion;
--	first_wr = rdma_rw_ctx_wrs(&msg->rw_ctx, t->qp, t->qp->port,
--				   &msg->cqe, NULL);
-+	/* concatenate work requests of rdma_rw_ctxs */
-+	first_wr = NULL;
-+	list_for_each_entry_reverse(msg, &msg_list, list) {
-+		first_wr = rdma_rw_ctx_wrs(&msg->rw_ctx, t->qp, t->qp->port,
-+					   &msg->cqe, first_wr);
-+	}
- 
- 	ret = ib_post_send(t->qp, first_wr, NULL);
- 	if (ret) {
--		pr_err("failed to post send wr: %d\n", ret);
--		goto err;
-+		pr_err("failed to post send wr for RDMA R/W: %d\n", ret);
-+		goto out;
- 	}
- 
-+	msg = list_last_entry(&msg_list, struct smb_direct_rdma_rw_msg, list);
- 	wait_for_completion(&completion);
--	return 0;
--
--err:
--	atomic_inc(&t->rw_avail_ops);
--	if (first_wr)
--		rdma_rw_ctx_destroy(&msg->rw_ctx, t->qp, t->qp->port,
--				    msg->sg_list, msg->sgt.nents,
--				    is_read ? DMA_FROM_DEVICE : DMA_TO_DEVICE);
--	sg_free_table_chained(&msg->sgt, SG_CHUNK_SIZE);
--	kfree(msg);
-+	ret = msg->status;
-+out:
-+	list_for_each_entry_safe(msg, next_msg, &msg_list, list) {
-+		list_del(&msg->list);
-+		smb_direct_free_rdma_rw_msg(t, msg,
-+					    is_read ? DMA_FROM_DEVICE : DMA_TO_DEVICE);
-+	}
-+	atomic_add(credits_needed, &t->rw_credits);
-+	wake_up(&t->wait_rw_credits);
- 	return ret;
- }
- 
--static int smb_direct_rdma_write(struct ksmbd_transport *t, void *buf,
--				 unsigned int buflen, u32 remote_key,
--				 u64 remote_offset, u32 remote_len)
-+static int smb_direct_rdma_write(struct ksmbd_transport *t,
-+				 void *buf, unsigned int buflen,
-+				 struct smb2_buffer_desc_v1 *desc,
-+				 unsigned int desc_len)
- {
- 	return smb_direct_rdma_xmit(smb_trans_direct_transfort(t), buf, buflen,
--				    remote_key, remote_offset,
--				    remote_len, false);
-+				    desc, desc_len, false);
- }
- 
--static int smb_direct_rdma_read(struct ksmbd_transport *t, void *buf,
--				unsigned int buflen, u32 remote_key,
--				u64 remote_offset, u32 remote_len)
-+static int smb_direct_rdma_read(struct ksmbd_transport *t,
-+				void *buf, unsigned int buflen,
-+				struct smb2_buffer_desc_v1 *desc,
-+				unsigned int desc_len)
- {
- 	return smb_direct_rdma_xmit(smb_trans_direct_transfort(t), buf, buflen,
--				    remote_key, remote_offset,
--				    remote_len, true);
-+				    desc, desc_len, true);
- }
- 
- static void smb_direct_disconnect(struct ksmbd_transport *t)
-@@ -1567,8 +1616,8 @@ static int smb_direct_send_negotiate_response(struct smb_direct_transport *t,
- 		return ret;
- 	}
- 
--	wait_event(t->wait_send_pending,
--		   atomic_read(&t->send_pending) == 0);
-+	wait_event(t->wait_send_payload_pending,
-+		   atomic_read(&t->send_payload_pending) == 0);
- 	return 0;
- }
- 
-@@ -1638,11 +1687,19 @@ static int smb_direct_prepare_negotiation(struct smb_direct_transport *t)
- 	return ret;
- }
- 
-+static unsigned int smb_direct_get_max_fr_pages(struct smb_direct_transport *t)
-+{
-+	return min_t(unsigned int,
-+		     t->cm_id->device->attrs.max_fast_reg_page_list_len,
-+		     256);
-+}
-+
- static int smb_direct_init_params(struct smb_direct_transport *t,
- 				  struct ib_qp_cap *cap)
- {
- 	struct ib_device *device = t->cm_id->device;
--	int max_send_sges, max_pages, max_rw_wrs, max_send_wrs;
-+	int max_send_sges, max_rw_wrs, max_send_wrs;
-+	unsigned int max_sge_per_wr, wrs_per_credit;
- 
- 	/* need 2 more sge. because a SMB_DIRECT header will be mapped,
- 	 * and maybe a send buffer could be not page aligned.
-@@ -1654,25 +1711,31 @@ static int smb_direct_init_params(struct smb_direct_transport *t,
+-	if (!(device->attrs.device_cap_flags & IB_DEVICE_ALLOW_USER_UNREG)) {
++	if (!(device->attrs.kernel_cap_flags & IB_KDEVICE_ALLOW_USER_UNREG)) {
+ 		ib_device_put(device);
  		return -EINVAL;
  	}
+diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
+index a1978a6f8e0c28..046376bd68e27d 100644
+--- a/drivers/infiniband/core/uverbs_cmd.c
++++ b/drivers/infiniband/core/uverbs_cmd.c
+@@ -337,8 +337,7 @@ static void copy_query_dev_fields(struct ib_ucontext *ucontext,
+ 	resp->hw_ver		= attr->hw_ver;
+ 	resp->max_qp		= attr->max_qp;
+ 	resp->max_qp_wr		= attr->max_qp_wr;
+-	resp->device_cap_flags	= lower_32_bits(attr->device_cap_flags &
+-		IB_UVERBS_DEVICE_CAP_FLAGS_MASK);
++	resp->device_cap_flags  = lower_32_bits(attr->device_cap_flags);
+ 	resp->max_sge		= min(attr->max_send_sge, attr->max_recv_sge);
+ 	resp->max_sge_rd	= attr->max_sge_rd;
+ 	resp->max_cq		= attr->max_cq;
+@@ -3619,8 +3618,7 @@ static int ib_uverbs_ex_query_device(struct uverbs_attr_bundle *attrs)
+ 
+ 	resp.timestamp_mask = attr.timestamp_mask;
+ 	resp.hca_core_clock = attr.hca_core_clock;
+-	resp.device_cap_flags_ex = attr.device_cap_flags &
+-		IB_UVERBS_DEVICE_CAP_FLAGS_MASK;
++	resp.device_cap_flags_ex = attr.device_cap_flags;
+ 	resp.rss_caps.supported_qpts = attr.rss_caps.supported_qpts;
+ 	resp.rss_caps.max_rwq_indirection_tables =
+ 		attr.rss_caps.max_rwq_indirection_tables;
+diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
+index a9819c40a14067..b314d9ce072e2b 100644
+--- a/drivers/infiniband/core/verbs.c
++++ b/drivers/infiniband/core/verbs.c
+@@ -281,7 +281,7 @@ struct ib_pd *__ib_alloc_pd(struct ib_device *device, unsigned int flags,
+ 	}
+ 	rdma_restrack_add(&pd->res);
+ 
+-	if (device->attrs.device_cap_flags & IB_DEVICE_LOCAL_DMA_LKEY)
++	if (device->attrs.kernel_cap_flags & IB_KDEVICE_LOCAL_DMA_LKEY)
+ 		pd->local_dma_lkey = device->local_dma_lkey;
+ 	else
+ 		mr_access_flags |= IB_ACCESS_LOCAL_WRITE;
+@@ -308,7 +308,7 @@ struct ib_pd *__ib_alloc_pd(struct ib_device *device, unsigned int flags,
+ 
+ 		pd->__internal_mr = mr;
+ 
+-		if (!(device->attrs.device_cap_flags & IB_DEVICE_LOCAL_DMA_LKEY))
++		if (!(device->attrs.kernel_cap_flags & IB_KDEVICE_LOCAL_DMA_LKEY))
+ 			pd->local_dma_lkey = pd->__internal_mr->lkey;
+ 
+ 		if (flags & IB_PD_UNSAFE_GLOBAL_RKEY)
+@@ -2131,8 +2131,8 @@ struct ib_mr *ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
+ 	struct ib_mr *mr;
+ 
+ 	if (access_flags & IB_ACCESS_ON_DEMAND) {
+-		if (!(pd->device->attrs.device_cap_flags &
+-		      IB_DEVICE_ON_DEMAND_PAGING)) {
++		if (!(pd->device->attrs.kernel_cap_flags &
++		      IB_KDEVICE_ON_DEMAND_PAGING)) {
+ 			pr_debug("ODP support not available\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+diff --git a/drivers/infiniband/hw/bnxt_re/ib_verbs.c b/drivers/infiniband/hw/bnxt_re/ib_verbs.c
+index 3224f18a66e575..b2fcf092f6d519 100644
+--- a/drivers/infiniband/hw/bnxt_re/ib_verbs.c
++++ b/drivers/infiniband/hw/bnxt_re/ib_verbs.c
+@@ -146,13 +146,13 @@ int bnxt_re_query_device(struct ib_device *ibdev,
+ 				    | IB_DEVICE_RC_RNR_NAK_GEN
+ 				    | IB_DEVICE_SHUTDOWN_PORT
+ 				    | IB_DEVICE_SYS_IMAGE_GUID
+-				    | IB_DEVICE_LOCAL_DMA_LKEY
+ 				    | IB_DEVICE_RESIZE_MAX_WR
+ 				    | IB_DEVICE_PORT_ACTIVE_EVENT
+ 				    | IB_DEVICE_N_NOTIFY_CQ
+ 				    | IB_DEVICE_MEM_WINDOW
+ 				    | IB_DEVICE_MEM_WINDOW_TYPE_2B
+ 				    | IB_DEVICE_MEM_MGT_EXTENSIONS;
++	ib_attr->kernel_cap_flags = IB_KDEVICE_LOCAL_DMA_LKEY;
+ 	ib_attr->max_send_sge = dev_attr->max_qp_sges;
+ 	ib_attr->max_recv_sge = dev_attr->max_qp_sges;
+ 	ib_attr->max_sge_rd = dev_attr->max_qp_sges;
+diff --git a/drivers/infiniband/hw/cxgb4/iw_cxgb4.h b/drivers/infiniband/hw/cxgb4/iw_cxgb4.h
+index 12f33467c6728f..50cb2259bf8743 100644
+--- a/drivers/infiniband/hw/cxgb4/iw_cxgb4.h
++++ b/drivers/infiniband/hw/cxgb4/iw_cxgb4.h
+@@ -314,7 +314,6 @@ enum db_state {
+ struct c4iw_dev {
+ 	struct ib_device ibdev;
+ 	struct c4iw_rdev rdev;
+-	u32 device_cap_flags;
+ 	struct xarray cqs;
+ 	struct xarray qps;
+ 	struct xarray mrs;
+diff --git a/drivers/infiniband/hw/cxgb4/provider.c b/drivers/infiniband/hw/cxgb4/provider.c
+index 89f36a3a9af00d..8d08522dc60723 100644
+--- a/drivers/infiniband/hw/cxgb4/provider.c
++++ b/drivers/infiniband/hw/cxgb4/provider.c
+@@ -269,7 +269,10 @@ static int c4iw_query_device(struct ib_device *ibdev, struct ib_device_attr *pro
+ 			    dev->rdev.lldi.ports[0]->dev_addr);
+ 	props->hw_ver = CHELSIO_CHIP_RELEASE(dev->rdev.lldi.adapter_type);
+ 	props->fw_ver = dev->rdev.lldi.fw_vers;
+-	props->device_cap_flags = dev->device_cap_flags;
++	props->device_cap_flags = IB_DEVICE_MEM_WINDOW;
++	props->kernel_cap_flags = IB_KDEVICE_LOCAL_DMA_LKEY;
++	if (fastreg_support)
++		props->device_cap_flags |= IB_DEVICE_MEM_MGT_EXTENSIONS;
+ 	props->page_size_cap = T4_PAGESIZE_MASK;
+ 	props->vendor_id = (u32)dev->rdev.lldi.pdev->vendor;
+ 	props->vendor_part_id = (u32)dev->rdev.lldi.pdev->device;
+@@ -529,9 +532,6 @@ void c4iw_register_device(struct work_struct *work)
+ 	pr_debug("c4iw_dev %p\n", dev);
+ 	addrconf_addr_eui48((u8 *)&dev->ibdev.node_guid,
+ 			    dev->rdev.lldi.ports[0]->dev_addr);
+-	dev->device_cap_flags = IB_DEVICE_LOCAL_DMA_LKEY | IB_DEVICE_MEM_WINDOW;
+-	if (fastreg_support)
+-		dev->device_cap_flags |= IB_DEVICE_MEM_MGT_EXTENSIONS;
+ 	dev->ibdev.local_dma_lkey = 0;
+ 	dev->ibdev.node_type = RDMA_NODE_RNIC;
+ 	BUILD_BUG_ON(sizeof(C4IW_NODE_DESC) > IB_DEVICE_NODE_DESC_MAX);
+diff --git a/drivers/infiniband/hw/hfi1/verbs.c b/drivers/infiniband/hw/hfi1/verbs.c
+index 99d0743133cac7..cdc76342d73725 100644
+--- a/drivers/infiniband/hw/hfi1/verbs.c
++++ b/drivers/infiniband/hw/hfi1/verbs.c
+@@ -1300,8 +1300,8 @@ static void hfi1_fill_device_attr(struct hfi1_devdata *dd)
+ 			IB_DEVICE_BAD_QKEY_CNTR | IB_DEVICE_SHUTDOWN_PORT |
+ 			IB_DEVICE_SYS_IMAGE_GUID | IB_DEVICE_RC_RNR_NAK_GEN |
+ 			IB_DEVICE_PORT_ACTIVE_EVENT | IB_DEVICE_SRQ_RESIZE |
+-			IB_DEVICE_MEM_MGT_EXTENSIONS |
+-			IB_DEVICE_RDMA_NETDEV_OPA;
++			IB_DEVICE_MEM_MGT_EXTENSIONS;
++	rdi->dparms.props.kernel_cap_flags = IB_KDEVICE_RDMA_NETDEV_OPA;
+ 	rdi->dparms.props.page_size_cap = PAGE_SIZE;
+ 	rdi->dparms.props.vendor_id = dd->oui1 << 16 | dd->oui2 << 8 | dd->oui3;
+ 	rdi->dparms.props.vendor_part_id = dd->pcidev->device;
+diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/irdma/hw.c
+index 3dc9b5801da153..ec477c4474cf51 100644
+--- a/drivers/infiniband/hw/irdma/hw.c
++++ b/drivers/infiniband/hw/irdma/hw.c
+@@ -1827,10 +1827,6 @@ int irdma_rt_init_hw(struct irdma_device *iwdev,
+ 			rf->rsrc_created = true;
+ 		}
+ 
+-		iwdev->device_cap_flags = IB_DEVICE_LOCAL_DMA_LKEY |
+-					  IB_DEVICE_MEM_WINDOW |
+-					  IB_DEVICE_MEM_MGT_EXTENSIONS;
+-
+ 		if (iwdev->rf->sc_dev.hw_attrs.uk_attrs.hw_rev == IRDMA_GEN_1)
+ 			irdma_alloc_set_mac(iwdev);
+ 		irdma_add_ip(iwdev);
+diff --git a/drivers/infiniband/hw/irdma/main.h b/drivers/infiniband/hw/irdma/main.h
+index 5123f5feaa2fcb..ef862bced20f31 100644
+--- a/drivers/infiniband/hw/irdma/main.h
++++ b/drivers/infiniband/hw/irdma/main.h
+@@ -338,7 +338,6 @@ struct irdma_device {
+ 	u32 roce_ackcreds;
+ 	u32 vendor_id;
+ 	u32 vendor_part_id;
+-	u32 device_cap_flags;
+ 	u32 push_mode;
+ 	u32 rcv_wnd;
+ 	u16 mac_ip_table_idx;
+diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
+index 46f475394af5f5..bca0b679bcf3bf 100644
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -25,7 +25,9 @@ static int irdma_query_device(struct ib_device *ibdev,
+ 			    iwdev->netdev->dev_addr);
+ 	props->fw_ver = (u64)irdma_fw_major_ver(&rf->sc_dev) << 32 |
+ 			irdma_fw_minor_ver(&rf->sc_dev);
+-	props->device_cap_flags = iwdev->device_cap_flags;
++	props->device_cap_flags = IB_DEVICE_MEM_WINDOW |
++				  IB_DEVICE_MEM_MGT_EXTENSIONS;
++	props->kernel_cap_flags = IB_KDEVICE_LOCAL_DMA_LKEY;
+ 	props->vendor_id = pcidev->vendor;
+ 	props->vendor_part_id = pcidev->device;
+ 
+diff --git a/drivers/infiniband/hw/mlx4/main.c b/drivers/infiniband/hw/mlx4/main.c
+index 93b1650eacfab0..a8824bd60d7bd1 100644
+--- a/drivers/infiniband/hw/mlx4/main.c
++++ b/drivers/infiniband/hw/mlx4/main.c
+@@ -479,8 +479,8 @@ static int mlx4_ib_query_device(struct ib_device *ibdev,
+ 	props->device_cap_flags    = IB_DEVICE_CHANGE_PHY_PORT |
+ 		IB_DEVICE_PORT_ACTIVE_EVENT		|
+ 		IB_DEVICE_SYS_IMAGE_GUID		|
+-		IB_DEVICE_RC_RNR_NAK_GEN		|
+-		IB_DEVICE_BLOCK_MULTICAST_LOOPBACK;
++		IB_DEVICE_RC_RNR_NAK_GEN;
++	props->kernel_cap_flags = IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK;
+ 	if (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_BAD_PKEY_CNTR)
+ 		props->device_cap_flags |= IB_DEVICE_BAD_PKEY_CNTR;
+ 	if (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_BAD_QKEY_CNTR)
+@@ -494,9 +494,9 @@ static int mlx4_ib_query_device(struct ib_device *ibdev,
+ 	if (dev->dev->caps.max_gso_sz &&
+ 	    (dev->dev->rev_id != MLX4_IB_CARD_REV_A0) &&
+ 	    (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_BLH))
+-		props->device_cap_flags |= IB_DEVICE_UD_TSO;
++		props->kernel_cap_flags |= IB_KDEVICE_UD_TSO;
+ 	if (dev->dev->caps.bmme_flags & MLX4_BMME_FLAG_RESERVED_LKEY)
+-		props->device_cap_flags |= IB_DEVICE_LOCAL_DMA_LKEY;
++		props->kernel_cap_flags |= IB_KDEVICE_LOCAL_DMA_LKEY;
+ 	if ((dev->dev->caps.bmme_flags & MLX4_BMME_FLAG_LOCAL_INV) &&
+ 	    (dev->dev->caps.bmme_flags & MLX4_BMME_FLAG_REMOTE_INV) &&
+ 	    (dev->dev->caps.bmme_flags & MLX4_BMME_FLAG_FAST_REG_WR))
+diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
+index 32a0ea82057342..34b305d24914cb 100644
+--- a/drivers/infiniband/hw/mlx5/main.c
++++ b/drivers/infiniband/hw/mlx5/main.c
+@@ -855,13 +855,13 @@ static int mlx5_ib_query_device(struct ib_device *ibdev,
+ 					   IB_DEVICE_MEM_WINDOW_TYPE_2B;
+ 		props->max_mw = 1 << MLX5_CAP_GEN(mdev, log_max_mkey);
+ 		/* We support 'Gappy' memory registration too */
+-		props->device_cap_flags |= IB_DEVICE_SG_GAPS_REG;
++		props->kernel_cap_flags |= IB_KDEVICE_SG_GAPS_REG;
+ 	}
+ 	/* IB_WR_REG_MR always requires changing the entity size with UMR */
+ 	if (!MLX5_CAP_GEN(dev->mdev, umr_modify_entity_size_disabled))
+ 		props->device_cap_flags |= IB_DEVICE_MEM_MGT_EXTENSIONS;
+ 	if (MLX5_CAP_GEN(mdev, sho)) {
+-		props->device_cap_flags |= IB_DEVICE_INTEGRITY_HANDOVER;
++		props->kernel_cap_flags |= IB_KDEVICE_INTEGRITY_HANDOVER;
+ 		/* At this stage no support for signature handover */
+ 		props->sig_prot_cap = IB_PROT_T10DIF_TYPE_1 |
+ 				      IB_PROT_T10DIF_TYPE_2 |
+@@ -870,7 +870,7 @@ static int mlx5_ib_query_device(struct ib_device *ibdev,
+ 				       IB_GUARD_T10DIF_CSUM;
+ 	}
+ 	if (MLX5_CAP_GEN(mdev, block_lb_mc))
+-		props->device_cap_flags |= IB_DEVICE_BLOCK_MULTICAST_LOOPBACK;
++		props->kernel_cap_flags |= IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK;
+ 
+ 	if (MLX5_CAP_GEN(dev->mdev, eth_net_offloads) && raw_support) {
+ 		if (MLX5_CAP_ETH(mdev, csum_cap)) {
+@@ -921,7 +921,7 @@ static int mlx5_ib_query_device(struct ib_device *ibdev,
+ 
+ 	if (MLX5_CAP_GEN(mdev, ipoib_basic_offloads)) {
+ 		props->device_cap_flags |= IB_DEVICE_UD_IP_CSUM;
+-		props->device_cap_flags |= IB_DEVICE_UD_TSO;
++		props->kernel_cap_flags |= IB_KDEVICE_UD_TSO;
+ 	}
+ 
+ 	if (MLX5_CAP_GEN(dev->mdev, rq_delay_drop) &&
+@@ -997,7 +997,7 @@ static int mlx5_ib_query_device(struct ib_device *ibdev,
+ 
+ 	if (IS_ENABLED(CONFIG_INFINIBAND_ON_DEMAND_PAGING)) {
+ 		if (dev->odp_caps.general_caps & IB_ODP_SUPPORT)
+-			props->device_cap_flags |= IB_DEVICE_ON_DEMAND_PAGING;
++			props->kernel_cap_flags |= IB_KDEVICE_ON_DEMAND_PAGING;
+ 		props->odp_caps = dev->odp_caps;
+ 		if (!uhw) {
+ 			/* ODP for kernel QPs is not implemented for receive
+@@ -1018,11 +1018,8 @@ static int mlx5_ib_query_device(struct ib_device *ibdev,
+ 		}
+ 	}
+ 
+-	if (MLX5_CAP_GEN(mdev, cd))
+-		props->device_cap_flags |= IB_DEVICE_CROSS_CHANNEL;
+-
+ 	if (mlx5_core_is_vf(mdev))
+-		props->device_cap_flags |= IB_DEVICE_VIRTUAL_FUNCTION;
++		props->kernel_cap_flags |= IB_KDEVICE_VIRTUAL_FUNCTION;
+ 
+ 	if (mlx5_ib_port_link_layer(ibdev, 1) ==
+ 	    IB_LINK_LAYER_ETHERNET && raw_support) {
+diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+index acf9970ec245fa..4cf73c630ef6fe 100644
+--- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
++++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+@@ -90,8 +90,8 @@ int ocrdma_query_device(struct ib_device *ibdev, struct ib_device_attr *attr,
+ 					IB_DEVICE_RC_RNR_NAK_GEN |
+ 					IB_DEVICE_SHUTDOWN_PORT |
+ 					IB_DEVICE_SYS_IMAGE_GUID |
+-					IB_DEVICE_LOCAL_DMA_LKEY |
+ 					IB_DEVICE_MEM_MGT_EXTENSIONS;
++	attr->kernel_cap_flags = IB_KDEVICE_LOCAL_DMA_LKEY;
+ 	attr->max_send_sge = dev->attr.max_send_sge;
+ 	attr->max_recv_sge = dev->attr.max_recv_sge;
+ 	attr->max_sge_rd = dev->attr.max_rdma_sge;
+diff --git a/drivers/infiniband/hw/qedr/verbs.c b/drivers/infiniband/hw/qedr/verbs.c
+index a53476653b0d9b..7ff7d9e342cd48 100644
+--- a/drivers/infiniband/hw/qedr/verbs.c
++++ b/drivers/infiniband/hw/qedr/verbs.c
+@@ -134,7 +134,8 @@ int qedr_query_device(struct ib_device *ibdev,
+ 	attr->max_qp_wr = max_t(u32, qattr->max_sqe, qattr->max_rqe);
+ 	attr->device_cap_flags = IB_DEVICE_CURR_QP_STATE_MOD |
+ 	    IB_DEVICE_RC_RNR_NAK_GEN |
+-	    IB_DEVICE_LOCAL_DMA_LKEY | IB_DEVICE_MEM_MGT_EXTENSIONS;
++	    IB_DEVICE_MEM_MGT_EXTENSIONS;
++	attr->kernel_cap_flags = IB_KDEVICE_LOCAL_DMA_LKEY;
+ 
+ 	if (!rdma_protocol_iwarp(&dev->ibdev, 1))
+ 		attr->device_cap_flags |= IB_DEVICE_XRC;
+diff --git a/drivers/infiniband/hw/usnic/usnic_ib_verbs.c b/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
+index d3a9670bf9719a..bf41d1b2cdad7b 100644
+--- a/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
++++ b/drivers/infiniband/hw/usnic/usnic_ib_verbs.c
+@@ -305,7 +305,8 @@ int usnic_ib_query_device(struct ib_device *ibdev,
+ 	props->max_qp = qp_per_vf *
+ 		kref_read(&us_ibdev->vf_cnt);
+ 	props->device_cap_flags = IB_DEVICE_PORT_ACTIVE_EVENT |
+-		IB_DEVICE_SYS_IMAGE_GUID | IB_DEVICE_BLOCK_MULTICAST_LOOPBACK;
++		IB_DEVICE_SYS_IMAGE_GUID;
++	props->kernel_cap_flags = IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK;
+ 	props->max_cq = us_ibdev->vf_res_cnt[USNIC_VNIC_RES_TYPE_CQ] *
+ 		kref_read(&us_ibdev->vf_cnt);
+ 	props->max_pd = USNIC_UIOM_MAX_PD_CNT;
+diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
+index 2dae7538a2ea95..fef539910fdb6e 100644
+--- a/drivers/infiniband/sw/rxe/rxe.c
++++ b/drivers/infiniband/sw/rxe/rxe.c
+@@ -46,6 +46,7 @@ static void rxe_init_device_param(struct rxe_dev *rxe)
+ 	rxe->attr.max_qp			= RXE_MAX_QP;
+ 	rxe->attr.max_qp_wr			= RXE_MAX_QP_WR;
+ 	rxe->attr.device_cap_flags		= RXE_DEVICE_CAP_FLAGS;
++	rxe->attr.kernel_cap_flags		= IB_KDEVICE_ALLOW_USER_UNREG;
+ 	rxe->attr.max_send_sge			= RXE_MAX_SGE;
+ 	rxe->attr.max_recv_sge			= RXE_MAX_SGE;
+ 	rxe->attr.max_sge_rd			= RXE_MAX_SGE_RD;
+diff --git a/drivers/infiniband/sw/rxe/rxe_param.h b/drivers/infiniband/sw/rxe/rxe_param.h
+index 918270e34a35cf..a717125f8cf5a5 100644
+--- a/drivers/infiniband/sw/rxe/rxe_param.h
++++ b/drivers/infiniband/sw/rxe/rxe_param.h
+@@ -50,7 +50,6 @@ enum rxe_device_param {
+ 					| IB_DEVICE_RC_RNR_NAK_GEN
+ 					| IB_DEVICE_SRQ_RESIZE
+ 					| IB_DEVICE_MEM_MGT_EXTENSIONS
+-					| IB_DEVICE_ALLOW_USER_UNREG
+ 					| IB_DEVICE_MEM_WINDOW
+ 					| IB_DEVICE_MEM_WINDOW_TYPE_2A
+ 					| IB_DEVICE_MEM_WINDOW_TYPE_2B,
+diff --git a/drivers/infiniband/sw/siw/siw_verbs.c b/drivers/infiniband/sw/siw/siw_verbs.c
+index 54ef367b074aba..842e3b2e2c1b77 100644
+--- a/drivers/infiniband/sw/siw/siw_verbs.c
++++ b/drivers/infiniband/sw/siw/siw_verbs.c
+@@ -132,8 +132,8 @@ int siw_query_device(struct ib_device *base_dev, struct ib_device_attr *attr,
+ 
+ 	/* Revisit atomic caps if RFC 7306 gets supported */
+ 	attr->atomic_cap = 0;
+-	attr->device_cap_flags =
+-		IB_DEVICE_MEM_MGT_EXTENSIONS | IB_DEVICE_ALLOW_USER_UNREG;
++	attr->device_cap_flags = IB_DEVICE_MEM_MGT_EXTENSIONS;
++	attr->kernel_cap_flags = IB_KDEVICE_ALLOW_USER_UNREG;
+ 	attr->max_cq = sdev->attrs.max_cq;
+ 	attr->max_cqe = sdev->attrs.max_cqe;
+ 	attr->max_fast_reg_page_list_len = SIW_MAX_SGE_PBL;
+diff --git a/drivers/infiniband/ulp/ipoib/ipoib.h b/drivers/infiniband/ulp/ipoib/ipoib.h
+index 44d8d151ff9041..35e9c8a330e257 100644
+--- a/drivers/infiniband/ulp/ipoib/ipoib.h
++++ b/drivers/infiniband/ulp/ipoib/ipoib.h
+@@ -411,6 +411,7 @@ struct ipoib_dev_priv {
+ 	struct dentry *path_dentry;
+ #endif
+ 	u64	hca_caps;
++	u64	kernel_caps;
+ 	struct ipoib_ethtool_st ethtool;
+ 	unsigned int max_send_sge;
+ 	const struct net_device_ops	*rn_ops;
+diff --git a/drivers/infiniband/ulp/ipoib/ipoib_main.c b/drivers/infiniband/ulp/ipoib/ipoib_main.c
+index 9934b8bd7f56cf..df079e59be0496 100644
+--- a/drivers/infiniband/ulp/ipoib/ipoib_main.c
++++ b/drivers/infiniband/ulp/ipoib/ipoib_main.c
+@@ -1850,11 +1850,12 @@ static void ipoib_parent_unregister_pre(struct net_device *ndev)
+ static void ipoib_set_dev_features(struct ipoib_dev_priv *priv)
+ {
+ 	priv->hca_caps = priv->ca->attrs.device_cap_flags;
++	priv->kernel_caps = priv->ca->attrs.kernel_cap_flags;
+ 
+ 	if (priv->hca_caps & IB_DEVICE_UD_IP_CSUM) {
+ 		priv->dev->hw_features |= NETIF_F_IP_CSUM | NETIF_F_RXCSUM;
+ 
+-		if (priv->hca_caps & IB_DEVICE_UD_TSO)
++		if (priv->kernel_caps & IB_KDEVICE_UD_TSO)
+ 			priv->dev->hw_features |= NETIF_F_TSO;
+ 
+ 		priv->dev->features |= priv->dev->hw_features;
+@@ -2201,7 +2202,7 @@ int ipoib_intf_init(struct ib_device *hca, u32 port, const char *name,
+ 
+ 	priv->rn_ops = dev->netdev_ops;
+ 
+-	if (hca->attrs.device_cap_flags & IB_DEVICE_VIRTUAL_FUNCTION)
++	if (hca->attrs.kernel_cap_flags & IB_KDEVICE_VIRTUAL_FUNCTION)
+ 		dev->netdev_ops	= &ipoib_netdev_ops_vf;
+ 	else
+ 		dev->netdev_ops	= &ipoib_netdev_ops_pf;
+diff --git a/drivers/infiniband/ulp/ipoib/ipoib_verbs.c b/drivers/infiniband/ulp/ipoib/ipoib_verbs.c
+index 5a150a080ac217..230d9efffd987d 100644
+--- a/drivers/infiniband/ulp/ipoib/ipoib_verbs.c
++++ b/drivers/infiniband/ulp/ipoib/ipoib_verbs.c
+@@ -197,16 +197,16 @@ int ipoib_transport_dev_init(struct net_device *dev, struct ib_device *ca)
+ 	init_attr.send_cq = priv->send_cq;
+ 	init_attr.recv_cq = priv->recv_cq;
+ 
+-	if (priv->hca_caps & IB_DEVICE_UD_TSO)
++	if (priv->kernel_caps & IB_KDEVICE_UD_TSO)
+ 		init_attr.create_flags |= IB_QP_CREATE_IPOIB_UD_LSO;
+ 
+-	if (priv->hca_caps & IB_DEVICE_BLOCK_MULTICAST_LOOPBACK)
++	if (priv->kernel_caps & IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK)
+ 		init_attr.create_flags |= IB_QP_CREATE_BLOCK_MULTICAST_LOOPBACK;
+ 
+ 	if (priv->hca_caps & IB_DEVICE_MANAGED_FLOW_STEERING)
+ 		init_attr.create_flags |= IB_QP_CREATE_NETIF_QP;
+ 
+-	if (priv->hca_caps & IB_DEVICE_RDMA_NETDEV_OPA)
++	if (priv->kernel_caps & IB_KDEVICE_RDMA_NETDEV_OPA)
+ 		init_attr.create_flags |= IB_QP_CREATE_NETDEV_USE;
+ 
+ 	priv->qp = ib_create_qp(priv->pd, &init_attr);
+diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
+index f8d0bab4424cf3..1a6b2bd46f8368 100644
+--- a/drivers/infiniband/ulp/iser/iscsi_iser.c
++++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
+@@ -650,7 +650,7 @@ iscsi_iser_session_create(struct iscsi_endpoint *ep,
+ 						   SHOST_DIX_GUARD_CRC);
+ 		}
+ 
+-		if (!(ib_dev->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG))
++		if (!(ib_dev->attrs.kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG))
+ 			shost->virt_boundary_mask = SZ_4K - 1;
+ 
+ 		if (iscsi_host_add(shost, ib_dev->dev.parent)) {
+diff --git a/drivers/infiniband/ulp/iser/iser_verbs.c b/drivers/infiniband/ulp/iser/iser_verbs.c
+index 5dbad68c739032..4d7bcc07cbffa3 100644
+--- a/drivers/infiniband/ulp/iser/iser_verbs.c
++++ b/drivers/infiniband/ulp/iser/iser_verbs.c
+@@ -115,7 +115,7 @@ iser_create_fastreg_desc(struct iser_device *device,
+ 	if (!desc)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	if (ib_dev->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG)
++	if (ib_dev->attrs.kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG)
+ 		mr_type = IB_MR_TYPE_SG_GAPS;
+ 	else
+ 		mr_type = IB_MR_TYPE_MEM_REG;
+@@ -517,7 +517,7 @@ static void iser_calc_scsi_params(struct iser_conn *iser_conn,
+ 	 * (head and tail) for a single page worth data, so one additional
+ 	 * entry is required.
+ 	 */
+-	if (attr->device_cap_flags & IB_DEVICE_SG_GAPS_REG)
++	if (attr->kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG)
+ 		reserved_mr_pages = 0;
+ 	else
+ 		reserved_mr_pages = 1;
+@@ -562,8 +562,8 @@ static void iser_addr_handler(struct rdma_cm_id *cma_id)
+ 
+ 	/* connection T10-PI support */
+ 	if (iser_pi_enable) {
+-		if (!(device->ib_device->attrs.device_cap_flags &
+-		      IB_DEVICE_INTEGRITY_HANDOVER)) {
++		if (!(device->ib_device->attrs.kernel_cap_flags &
++		      IB_KDEVICE_INTEGRITY_HANDOVER)) {
+ 			iser_warn("T10-PI requested but not supported on %s, "
+ 				  "continue without T10-PI\n",
+ 				  dev_name(&ib_conn->device->ib_device->dev));
+diff --git a/drivers/infiniband/ulp/isert/ib_isert.c b/drivers/infiniband/ulp/isert/ib_isert.c
+index 636d590765f957..2611eac601ffc2 100644
+--- a/drivers/infiniband/ulp/isert/ib_isert.c
++++ b/drivers/infiniband/ulp/isert/ib_isert.c
+@@ -230,7 +230,7 @@ isert_create_device_ib_res(struct isert_device *device)
+ 	}
+ 
+ 	/* Check signature cap */
+-	if (ib_dev->attrs.device_cap_flags & IB_DEVICE_INTEGRITY_HANDOVER)
++	if (ib_dev->attrs.kernel_cap_flags & IB_KDEVICE_INTEGRITY_HANDOVER)
+ 		device->pi_capable = true;
+ 	else
+ 		device->pi_capable = false;
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 285b766e4e7049..12b7793e0eade0 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -430,7 +430,7 @@ static struct srp_fr_pool *srp_create_fr_pool(struct ib_device *device,
+ 	spin_lock_init(&pool->lock);
+ 	INIT_LIST_HEAD(&pool->free_list);
+ 
+-	if (device->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG)
++	if (device->attrs.kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG)
+ 		mr_type = IB_MR_TYPE_SG_GAPS;
+ 	else
+ 		mr_type = IB_MR_TYPE_MEM_REG;
+@@ -3650,7 +3650,7 @@ static ssize_t add_target_store(struct device *dev,
+ 	target_host->max_cmd_len = sizeof ((struct srp_cmd *) (void *) 0L)->cdb;
+ 	target_host->max_segment_size = ib_dma_max_seg_size(ibdev);
+ 
+-	if (!(ibdev->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG))
++	if (!(ibdev->attrs.kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG))
+ 		target_host->virt_boundary_mask = ~srp_dev->mr_page_mask;
+ 
+ 	target = host_to_target(target_host);
+@@ -3706,8 +3706,8 @@ static ssize_t add_target_store(struct device *dev,
+ 	}
+ 
+ 	if (srp_dev->use_fast_reg) {
+-		bool gaps_reg = (ibdev->attrs.device_cap_flags &
+-				 IB_DEVICE_SG_GAPS_REG);
++		bool gaps_reg = ibdev->attrs.kernel_cap_flags &
++				 IB_KDEVICE_SG_GAPS_REG;
+ 
+ 		max_sectors_per_mr = srp_dev->max_pages_per_mr <<
+ 				  (ilog2(srp_dev->mr_page_size) - 9);
+diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
+index d9f19d90131398..7c2d2fe8bf68ac 100644
+--- a/drivers/nvme/host/rdma.c
++++ b/drivers/nvme/host/rdma.c
+@@ -867,8 +867,8 @@ static int nvme_rdma_configure_admin_queue(struct nvme_rdma_ctrl *ctrl,
+ 	ctrl->ctrl.numa_node = ibdev_to_node(ctrl->device->dev);
+ 
+ 	/* T10-PI support */
+-	if (ctrl->device->dev->attrs.device_cap_flags &
+-	    IB_DEVICE_INTEGRITY_HANDOVER)
++	if (ctrl->device->dev->attrs.kernel_cap_flags &
++	    IB_KDEVICE_INTEGRITY_HANDOVER)
+ 		pi_capable = true;
+ 
+ 	ctrl->max_fr_pages = nvme_rdma_get_max_fr_pages(ctrl->device->dev,
+diff --git a/drivers/nvme/target/rdma.c b/drivers/nvme/target/rdma.c
+index 2fab0b219b255d..bbba7843ac33c3 100644
+--- a/drivers/nvme/target/rdma.c
++++ b/drivers/nvme/target/rdma.c
+@@ -1221,8 +1221,8 @@ nvmet_rdma_find_get_device(struct rdma_cm_id *cm_id)
+ 	ndev->inline_data_size = nport->inline_data_size;
+ 	ndev->inline_page_count = inline_page_count;
+ 
+-	if (nport->pi_enable && !(cm_id->device->attrs.device_cap_flags &
+-				  IB_DEVICE_INTEGRITY_HANDOVER)) {
++	if (nport->pi_enable && !(cm_id->device->attrs.kernel_cap_flags &
++				  IB_KDEVICE_INTEGRITY_HANDOVER)) {
+ 		pr_warn("T10-PI is not supported by device %s. Disabling it\n",
+ 			cm_id->device->name);
+ 		nport->pi_enable = false;
+diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
+index 31ef64eb7fbb98..62a516d1f9d92e 100644
+--- a/fs/cifs/smbdirect.c
++++ b/fs/cifs/smbdirect.c
+@@ -649,7 +649,7 @@ static int smbd_ia_open(
+ 		smbd_max_frmr_depth,
+ 		info->id->device->attrs.max_fast_reg_page_list_len);
+ 	info->mr_type = IB_MR_TYPE_MEM_REG;
+-	if (info->id->device->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG)
++	if (info->id->device->attrs.kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG)
+ 		info->mr_type = IB_MR_TYPE_SG_GAPS;
+ 
+ 	info->pd = ib_alloc_pd(info->id->device, 0);
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index ada4a5226dbd91..4cda770e241014 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -236,14 +236,6 @@ enum ib_device_cap_flags {
+ 	IB_DEVICE_SRQ_RESIZE = IB_UVERBS_DEVICE_SRQ_RESIZE,
+ 	IB_DEVICE_N_NOTIFY_CQ = IB_UVERBS_DEVICE_N_NOTIFY_CQ,
  
 -	/*
--	 * allow smb_direct_max_outstanding_rw_ops of in-flight RDMA
--	 * read/writes. HCA guarantees at least max_send_sge of sges for
--	 * a RDMA read/write work request, and if memory registration is used,
--	 * we need reg_mr, local_inv wrs for each read/write.
-+	/* Calculate the number of work requests for RDMA R/W.
-+	 * The maximum number of pages which can be registered
-+	 * with one Memory region can be transferred with one
-+	 * R/W credit. And at least 4 work requests for each credit
-+	 * are needed for MR registration, RDMA R/W, local & remote
-+	 * MR invalidation.
+-	 * This device supports a per-device lkey or stag that can be
+-	 * used without performing a memory registration for the local
+-	 * memory.  Note that ULPs should never check this flag, but
+-	 * instead of use the local_dma_lkey flag in the ib_pd structure,
+-	 * which will always contain a usable lkey.
+-	 */
+-	IB_DEVICE_LOCAL_DMA_LKEY = 1 << 15,
+ 	/* Reserved, old SEND_W_INV = 1 << 16,*/
+ 	IB_DEVICE_MEM_WINDOW = IB_UVERBS_DEVICE_MEM_WINDOW,
+ 	/*
+@@ -254,7 +246,6 @@ enum ib_device_cap_flags {
+ 	 * IPoIB driver may set NETIF_F_IP_CSUM for datagram mode.
  	 */
- 	t->max_rdma_rw_size = smb_direct_max_read_write_size;
--	max_pages = DIV_ROUND_UP(t->max_rdma_rw_size, PAGE_SIZE) + 1;
--	max_rw_wrs = DIV_ROUND_UP(max_pages, SMB_DIRECT_MAX_SEND_SGES);
--	max_rw_wrs += rdma_rw_mr_factor(device, t->cm_id->port_num,
--			max_pages) * 2;
--	max_rw_wrs *= smb_direct_max_outstanding_rw_ops;
-+	t->pages_per_rw_credit = smb_direct_get_max_fr_pages(t);
-+	t->max_rw_credits = smb_direct_max_outstanding_rw_ops *
-+		DIV_ROUND_UP(t->max_rdma_rw_size,
-+			     (t->pages_per_rw_credit - 1) * PAGE_SIZE);
-+
-+	max_sge_per_wr = min_t(unsigned int, device->attrs.max_send_sge,
-+			       device->attrs.max_sge_rd);
-+	wrs_per_credit = max_t(unsigned int, 4,
-+			       DIV_ROUND_UP(t->pages_per_rw_credit,
-+					    max_sge_per_wr) + 1);
-+	max_rw_wrs = t->max_rw_credits * wrs_per_credit;
+ 	IB_DEVICE_UD_IP_CSUM = IB_UVERBS_DEVICE_UD_IP_CSUM,
+-	IB_DEVICE_UD_TSO = 1 << 19,
+ 	IB_DEVICE_XRC = IB_UVERBS_DEVICE_XRC,
  
- 	max_send_wrs = smb_direct_send_credit_target + max_rw_wrs;
- 	if (max_send_wrs > device->attrs.max_cqe ||
- 	    max_send_wrs > device->attrs.max_qp_wr) {
--		pr_err("consider lowering send_credit_target = %d, or max_outstanding_rw_ops = %d\n",
--		       smb_direct_send_credit_target,
--		       smb_direct_max_outstanding_rw_ops);
-+		pr_err("consider lowering send_credit_target = %d\n",
-+		       smb_direct_send_credit_target);
- 		pr_err("Possible CQE overrun, device reporting max_cqe %d max_qp_wr %d\n",
- 		       device->attrs.max_cqe, device->attrs.max_qp_wr);
+ 	/*
+@@ -267,59 +258,38 @@ enum ib_device_cap_flags {
+ 	 * stag.
+ 	 */
+ 	IB_DEVICE_MEM_MGT_EXTENSIONS = IB_UVERBS_DEVICE_MEM_MGT_EXTENSIONS,
+-	IB_DEVICE_BLOCK_MULTICAST_LOOPBACK = 1 << 22,
+ 	IB_DEVICE_MEM_WINDOW_TYPE_2A = IB_UVERBS_DEVICE_MEM_WINDOW_TYPE_2A,
+ 	IB_DEVICE_MEM_WINDOW_TYPE_2B = IB_UVERBS_DEVICE_MEM_WINDOW_TYPE_2B,
+ 	IB_DEVICE_RC_IP_CSUM = IB_UVERBS_DEVICE_RC_IP_CSUM,
+ 	/* Deprecated. Please use IB_RAW_PACKET_CAP_IP_CSUM. */
+ 	IB_DEVICE_RAW_IP_CSUM = IB_UVERBS_DEVICE_RAW_IP_CSUM,
+-	/*
+-	 * Devices should set IB_DEVICE_CROSS_CHANNEL if they
+-	 * support execution of WQEs that involve synchronization
+-	 * of I/O operations with single completion queue managed
+-	 * by hardware.
+-	 */
+-	IB_DEVICE_CROSS_CHANNEL = 1 << 27,
+ 	IB_DEVICE_MANAGED_FLOW_STEERING =
+ 		IB_UVERBS_DEVICE_MANAGED_FLOW_STEERING,
+-	IB_DEVICE_INTEGRITY_HANDOVER = 1 << 30,
+-	IB_DEVICE_ON_DEMAND_PAGING = 1ULL << 31,
+-	IB_DEVICE_SG_GAPS_REG = 1ULL << 32,
+-	IB_DEVICE_VIRTUAL_FUNCTION = 1ULL << 33,
+ 	/* Deprecated. Please use IB_RAW_PACKET_CAP_SCATTER_FCS. */
+ 	IB_DEVICE_RAW_SCATTER_FCS = IB_UVERBS_DEVICE_RAW_SCATTER_FCS,
+-	IB_DEVICE_RDMA_NETDEV_OPA = 1ULL << 35,
+ 	/* The device supports padding incoming writes to cacheline. */
+ 	IB_DEVICE_PCI_WRITE_END_PADDING =
+ 		IB_UVERBS_DEVICE_PCI_WRITE_END_PADDING,
+-	IB_DEVICE_ALLOW_USER_UNREG = 1ULL << 37,
+ };
+ 
+-#define IB_UVERBS_DEVICE_CAP_FLAGS_MASK	(IB_UVERBS_DEVICE_RESIZE_MAX_WR | \
+-		IB_UVERBS_DEVICE_BAD_PKEY_CNTR | \
+-		IB_UVERBS_DEVICE_BAD_QKEY_CNTR | \
+-		IB_UVERBS_DEVICE_RAW_MULTI | \
+-		IB_UVERBS_DEVICE_AUTO_PATH_MIG | \
+-		IB_UVERBS_DEVICE_CHANGE_PHY_PORT | \
+-		IB_UVERBS_DEVICE_UD_AV_PORT_ENFORCE | \
+-		IB_UVERBS_DEVICE_CURR_QP_STATE_MOD | \
+-		IB_UVERBS_DEVICE_SHUTDOWN_PORT | \
+-		IB_UVERBS_DEVICE_PORT_ACTIVE_EVENT | \
+-		IB_UVERBS_DEVICE_SYS_IMAGE_GUID | \
+-		IB_UVERBS_DEVICE_RC_RNR_NAK_GEN | \
+-		IB_UVERBS_DEVICE_SRQ_RESIZE | \
+-		IB_UVERBS_DEVICE_N_NOTIFY_CQ | \
+-		IB_UVERBS_DEVICE_MEM_WINDOW | \
+-		IB_UVERBS_DEVICE_UD_IP_CSUM | \
+-		IB_UVERBS_DEVICE_XRC | \
+-		IB_UVERBS_DEVICE_MEM_MGT_EXTENSIONS | \
+-		IB_UVERBS_DEVICE_MEM_WINDOW_TYPE_2A | \
+-		IB_UVERBS_DEVICE_MEM_WINDOW_TYPE_2B | \
+-		IB_UVERBS_DEVICE_RC_IP_CSUM | \
+-		IB_UVERBS_DEVICE_RAW_IP_CSUM | \
+-		IB_UVERBS_DEVICE_MANAGED_FLOW_STEERING | \
+-		IB_UVERBS_DEVICE_RAW_SCATTER_FCS | \
+-		IB_UVERBS_DEVICE_PCI_WRITE_END_PADDING)
++enum ib_kernel_cap_flags {
++	/*
++	 * This device supports a per-device lkey or stag that can be
++	 * used without performing a memory registration for the local
++	 * memory.  Note that ULPs should never check this flag, but
++	 * instead of use the local_dma_lkey flag in the ib_pd structure,
++	 * which will always contain a usable lkey.
++	 */
++	IB_KDEVICE_LOCAL_DMA_LKEY = 1 << 0,
++	IB_KDEVICE_UD_TSO = 1 << 1,
++	IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK = 1 << 2,
++	IB_KDEVICE_INTEGRITY_HANDOVER = 1 << 3,
++	IB_KDEVICE_ON_DEMAND_PAGING = 1ULL << 4,
++	IB_KDEVICE_SG_GAPS_REG = 1ULL << 5,
++	IB_KDEVICE_VIRTUAL_FUNCTION = 1ULL << 6,
++	IB_KDEVICE_RDMA_NETDEV_OPA = 1ULL << 7,
++	IB_KDEVICE_ALLOW_USER_UNREG = 1ULL << 8,
++};
+ 
+ enum ib_atomic_cap {
+ 	IB_ATOMIC_NONE,
+@@ -417,6 +387,7 @@ struct ib_device_attr {
+ 	int			max_qp;
+ 	int			max_qp_wr;
+ 	u64			device_cap_flags;
++	u64			kernel_cap_flags;
+ 	int			max_send_sge;
+ 	int			max_recv_sge;
+ 	int			max_sge_rd;
+@@ -4344,7 +4315,7 @@ static inline int ib_check_mr_access(struct ib_device *ib_dev,
  		return -EINVAL;
-@@ -1707,7 +1770,7 @@ static int smb_direct_init_params(struct smb_direct_transport *t,
  
- 	t->send_credit_target = smb_direct_send_credit_target;
- 	atomic_set(&t->send_credits, 0);
--	atomic_set(&t->rw_avail_ops, smb_direct_max_outstanding_rw_ops);
-+	atomic_set(&t->rw_credits, t->max_rw_credits);
- 
- 	t->max_send_size = smb_direct_max_send_size;
- 	t->max_recv_size = smb_direct_max_receive_size;
-@@ -1715,12 +1778,10 @@ static int smb_direct_init_params(struct smb_direct_transport *t,
- 
- 	cap->max_send_wr = max_send_wrs;
- 	cap->max_recv_wr = t->recv_credit_max;
--	cap->max_send_sge = SMB_DIRECT_MAX_SEND_SGES;
-+	cap->max_send_sge = max_sge_per_wr;
- 	cap->max_recv_sge = SMB_DIRECT_MAX_RECV_SGES;
- 	cap->max_inline_data = 0;
--	cap->max_rdma_ctxs =
--		rdma_rw_mr_factor(device, t->cm_id->port_num, max_pages) *
--		smb_direct_max_outstanding_rw_ops;
-+	cap->max_rdma_ctxs = t->max_rw_credits;
+ 	if (flags & IB_ACCESS_ON_DEMAND &&
+-	    !(ib_dev->attrs.device_cap_flags & IB_DEVICE_ON_DEMAND_PAGING))
++	    !(ib_dev->attrs.kernel_cap_flags & IB_KDEVICE_ON_DEMAND_PAGING))
+ 		return -EINVAL;
  	return 0;
  }
+diff --git a/include/rdma/opa_vnic.h b/include/rdma/opa_vnic.h
+index cbe3c281145501..f4867bcbe4f3c9 100644
+--- a/include/rdma/opa_vnic.h
++++ b/include/rdma/opa_vnic.h
+@@ -90,8 +90,7 @@ struct opa_vnic_stats {
  
-@@ -1813,7 +1874,8 @@ static int smb_direct_create_qpair(struct smb_direct_transport *t,
- 	}
- 
- 	t->send_cq = ib_alloc_cq(t->cm_id->device, t,
--				 t->send_credit_target, 0, IB_POLL_WORKQUEUE);
-+				 smb_direct_send_credit_target + cap->max_rdma_ctxs,
-+				 0, IB_POLL_WORKQUEUE);
- 	if (IS_ERR(t->send_cq)) {
- 		pr_err("Can't create RDMA send CQ\n");
- 		ret = PTR_ERR(t->send_cq);
-@@ -1822,8 +1884,7 @@ static int smb_direct_create_qpair(struct smb_direct_transport *t,
- 	}
- 
- 	t->recv_cq = ib_alloc_cq(t->cm_id->device, t,
--				 cap->max_send_wr + cap->max_rdma_ctxs,
--				 0, IB_POLL_WORKQUEUE);
-+				 t->recv_credit_max, 0, IB_POLL_WORKQUEUE);
- 	if (IS_ERR(t->recv_cq)) {
- 		pr_err("Can't create RDMA recv CQ\n");
- 		ret = PTR_ERR(t->recv_cq);
-@@ -1852,17 +1913,12 @@ static int smb_direct_create_qpair(struct smb_direct_transport *t,
- 
- 	pages_per_rw = DIV_ROUND_UP(t->max_rdma_rw_size, PAGE_SIZE) + 1;
- 	if (pages_per_rw > t->cm_id->device->attrs.max_sgl_rd) {
--		int pages_per_mr, mr_count;
--
--		pages_per_mr = min_t(int, pages_per_rw,
--				     t->cm_id->device->attrs.max_fast_reg_page_list_len);
--		mr_count = DIV_ROUND_UP(pages_per_rw, pages_per_mr) *
--			atomic_read(&t->rw_avail_ops);
--		ret = ib_mr_pool_init(t->qp, &t->qp->rdma_mrs, mr_count,
--				      IB_MR_TYPE_MEM_REG, pages_per_mr, 0);
-+		ret = ib_mr_pool_init(t->qp, &t->qp->rdma_mrs,
-+				      t->max_rw_credits, IB_MR_TYPE_MEM_REG,
-+				      t->pages_per_rw_credit, 0);
- 		if (ret) {
- 			pr_err("failed to init mr pool count %d pages %d\n",
--			       mr_count, pages_per_mr);
-+			       t->max_rw_credits, t->pages_per_rw_credit);
- 			goto err;
- 		}
- 	}
-diff --git a/fs/ksmbd/transport_tcp.c b/fs/ksmbd/transport_tcp.c
-index 8fef9de787d3..4892b0d66a25 100644
---- a/fs/ksmbd/transport_tcp.c
-+++ b/fs/ksmbd/transport_tcp.c
-@@ -352,8 +352,9 @@ static int ksmbd_tcp_read(struct ksmbd_transport *t, char *buf, unsigned int to_
- 	return ksmbd_tcp_readv(TCP_TRANS(t), &iov, 1, to_read);
+ static inline bool rdma_cap_opa_vnic(struct ib_device *device)
+ {
+-	return !!(device->attrs.device_cap_flags &
+-		  IB_DEVICE_RDMA_NETDEV_OPA);
++	return !!(device->attrs.kernel_cap_flags & IB_KDEVICE_RDMA_NETDEV_OPA);
  }
  
--static int ksmbd_tcp_writev(struct ksmbd_transport *t, struct kvec *iov,
--			    int nvecs, int size, bool need_invalidate,
-+static int ksmbd_tcp_writev(struct ksmbd_transport *t,
-+			    struct kvec *iov, int nvecs, int size,
-+			    bool need_invalidate,
- 			    unsigned int remote_key)
+ #endif /* _OPA_VNIC_H */
+diff --git a/include/uapi/rdma/ib_user_verbs.h b/include/uapi/rdma/ib_user_verbs.h
+index 06a4897c4958a5..7dd903d932e54f 100644
+--- a/include/uapi/rdma/ib_user_verbs.h
++++ b/include/uapi/rdma/ib_user_verbs.h
+@@ -1298,6 +1298,10 @@ struct ib_uverbs_ex_modify_cq {
  
- {
+ #define IB_DEVICE_NAME_MAX 64
+ 
++/*
++ * bits 9, 15, 16, 19, 22, 27, 30, 31, 32, 33, 35 and 37 may be set by old
++ * kernels and should not be used.
++ */
+ enum ib_uverbs_device_cap_flags {
+ 	IB_UVERBS_DEVICE_RESIZE_MAX_WR = 1 << 0,
+ 	IB_UVERBS_DEVICE_BAD_PKEY_CNTR = 1 << 1,
+diff --git a/net/rds/ib.c b/net/rds/ib.c
+index 24c9a9005a6fba..2ff04c7c7b2660 100644
+--- a/net/rds/ib.c
++++ b/net/rds/ib.c
+@@ -154,8 +154,8 @@ static int rds_ib_add_one(struct ib_device *device)
+ 	rds_ibdev->max_sge = min(device->attrs.max_send_sge, RDS_IB_MAX_SGE);
+ 
+ 	rds_ibdev->odp_capable =
+-		!!(device->attrs.device_cap_flags &
+-		   IB_DEVICE_ON_DEMAND_PAGING) &&
++		!!(device->attrs.kernel_cap_flags &
++		   IB_KDEVICE_ON_DEMAND_PAGING) &&
+ 		!!(device->attrs.odp_caps.per_transport_caps.rc_odp_caps &
+ 		   IB_ODP_SUPPORT_WRITE) &&
+ 		!!(device->attrs.odp_caps.per_transport_caps.rc_odp_caps &
+diff --git a/net/sunrpc/xprtrdma/frwr_ops.c b/net/sunrpc/xprtrdma/frwr_ops.c
+index 3fcd8e1b255088..e7eea81a5bd61b 100644
+--- a/net/sunrpc/xprtrdma/frwr_ops.c
++++ b/net/sunrpc/xprtrdma/frwr_ops.c
+@@ -195,7 +195,7 @@ int frwr_query_device(struct rpcrdma_ep *ep, const struct ib_device *device)
+ 	ep->re_attr.cap.max_recv_sge = 1;
+ 
+ 	ep->re_mrtype = IB_MR_TYPE_MEM_REG;
+-	if (attrs->device_cap_flags & IB_DEVICE_SG_GAPS_REG)
++	if (attrs->kernel_cap_flags & IB_KDEVICE_SG_GAPS_REG)
+ 		ep->re_mrtype = IB_MR_TYPE_SG_GAPS;
+ 
+ 	/* Quirk: Some devices advertise a large max_fast_reg_page_list_len
 
-base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+base-commit: f543a3e82bb275349961f8507ee195f34132ffb4
 -- 
-2.25.1
+2.35.1
 
