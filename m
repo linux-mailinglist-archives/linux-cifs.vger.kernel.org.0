@@ -2,62 +2,70 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86754F4C68
-	for <lists+linux-cifs@lfdr.de>; Wed,  6 Apr 2022 03:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E153C4F4C2F
+	for <lists+linux-cifs@lfdr.de>; Wed,  6 Apr 2022 03:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiDEXTq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 5 Apr 2022 19:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S235118AbiDEXMm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 5 Apr 2022 19:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446332AbiDEPo3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Apr 2022 11:44:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAFF889310
-        for <linux-cifs@vger.kernel.org>; Tue,  5 Apr 2022 07:14:14 -0700 (PDT)
+        with ESMTP id S1448078AbiDEPrh (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Apr 2022 11:47:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44706167F89
+        for <linux-cifs@vger.kernel.org>; Tue,  5 Apr 2022 07:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649168053;
+        s=mimecast20190719; t=1649168729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ccLcaJ3XQxZ5dFaHiCvLp0wwEvmie9vn1E+DpQO2p/o=;
-        b=fSxuCZYD38c80yyC4/53hdKKeZdAne63hb6UTBXaDHTSDRXBXLWFLOkCEA1rNCVd3IwdJj
-        fPoE6OBprXeccOJx718d/zhCucElC7WuTW06z6ZkEbL87pibKNPtyr4QtBArRyLO998SIx
-        Tf+gWiq9xYISqfPfV1Ay5BC9ig+WjaQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lXEk4r5B+cka/wL2y/xk5o9ZYEMsta/GUz68S3KhUi0=;
+        b=BVsgJPvgkvZjJ9j6o5cidkGc24k78x1TwmNnXWwPSznnSi/Xrm/4nNLNHB0o7MXQAwPVs8
+        GNHsHBHyexGNpp28Os0yLzDdyATGS5VIsAfiDR0SHWDrRy5lS0a7Uudi4LVIWHBvLCgnff
+        g1vw3p3l8HPFXwG3owMmUuLT25TaCQQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-ibJSl2VjMui2_DlmxbGNog-1; Tue, 05 Apr 2022 10:14:12 -0400
-X-MC-Unique: ibJSl2VjMui2_DlmxbGNog-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B7B2899EE2;
-        Tue,  5 Apr 2022 14:14:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 32B6740CF8E5;
-        Tue,  5 Apr 2022 14:14:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220405134649.6579-1-dwysocha@redhat.com>
-References: <20220405134649.6579-1-dwysocha@redhat.com>
-To:     Dave Wysochanski <dwysocha@redhat.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, jlayton@kernel.org,
-        smfrench@gmail.com, linux-cifs@vger.kernel.org
-Subject: Re: [PATCH] cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xattr
+ us-mta-262-BxHDYp6wND642uvPbDLhJQ-1; Tue, 05 Apr 2022 10:25:27 -0400
+X-MC-Unique: BxHDYp6wND642uvPbDLhJQ-1
+Received: by mail-ej1-f71.google.com with SMTP id jg2-20020a170907970200b006e7eebce76cso3176379ejc.0
+        for <linux-cifs@vger.kernel.org>; Tue, 05 Apr 2022 07:25:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lXEk4r5B+cka/wL2y/xk5o9ZYEMsta/GUz68S3KhUi0=;
+        b=GQKJJXe09KWFA7wnHUf+99WTpK1ofoyx2UBsCU4PZ18ctUEXE51wYJ3Kak/7/9QJj4
+         JfY0DvQ3ix0chcvb8Nj9p2tD2soSiCTox5pwxfIm4E7nHlr8lCQMAymwb5wzX85TVmGj
+         VQNXCSs/8FZ4bUzuYn1bITC05ZkjK0zeh3u0INXbmLBUbR6ALxIREhJcUxTDolatO3KZ
+         ASdPCkiu1hr0RorsRUZAG+FeYYQ9zrS99y9pe6AQJ3tjeWeBp+2qDJKgtQ48t4p+EOy8
+         h0ob0O6+UVLEB/9BsrLNY/YeFEFwBPxS8LdUr9u4q8z8U29dsmrhgLZhjIrczh9nG3Xn
+         1OQw==
+X-Gm-Message-State: AOAM531UEufuZ5TMJ0K7M4wg0f6dohYN6b8BzwIk5F8XuVt6OQ12eykp
+        FUIrAjd9e+MaMwVLy6kpNmb0VxQq6dfS15eWaK/IBJK8gx4MUzNTT/LQkhEqCCsomhQfpfFT5Rq
+        7J21ZZV09+EYT1bKhwQjS84jyecenBgCRJSoICA==
+X-Received: by 2002:a17:906:730e:b0:6e0:2ad8:12c8 with SMTP id di14-20020a170906730e00b006e02ad812c8mr3746285ejc.623.1649168726709;
+        Tue, 05 Apr 2022 07:25:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz68uG1mxG0zhvCsWepmJDyuPxO7TopiduJMPOjqh2x+Ha7oAKYaIKPvrRT/trlUlFs3Vw8MNMJ0xIMK077r28=
+X-Received: by 2002:a17:906:730e:b0:6e0:2ad8:12c8 with SMTP id
+ di14-20020a170906730e00b006e02ad812c8mr3746254ejc.623.1649168726397; Tue, 05
+ Apr 2022 07:25:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1788450.1649168050.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 05 Apr 2022 15:14:10 +0100
-Message-ID: <1788451.1649168050@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+References: <20220405134649.6579-1-dwysocha@redhat.com> <1788451.1649168050@warthog.procyon.org.uk>
+In-Reply-To: <1788451.1649168050@warthog.procyon.org.uk>
+From:   David Wysochanski <dwysocha@redhat.com>
+Date:   Tue, 5 Apr 2022 10:24:50 -0400
+Message-ID: <CALF+zOn+JEB7F30wMEcs3Zm=2HFMXS+8vfiQP9HW26OtwXUHGg@mail.gmail.com>
+Subject: Re: [PATCH] cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xattr
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs <linux-cachefs@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Steve French <smfrench@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,22 +73,26 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dave Wysochanski <dwysocha@redhat.com> wrote:
+On Tue, Apr 5, 2022 at 10:14 AM David Howells <dhowells@redhat.com> wrote:
+>
+> Dave Wysochanski <dwysocha@redhat.com> wrote:
+>
+> > @@ -203,7 +203,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+> >       if (!buf)
+> >               return false;
+> >       buf->reserved = cpu_to_be32(0);
+> > -     memcpy(buf->data, p, len);
+> > +     memcpy(buf->data, p, volume->vcookie->coherency_len);
+>
+> Good catch.  However, I think it's probably better to change things a bit
+> further up, eg.:
+>
+>         -       len += sizeof(*buf);
+>         -       buf = kmalloc(len, GFP_KERNEL);
+>         +       buf = kmalloc(sizeof(*buf) + len, GFP_KERNEL);
+>
+> David
+>
 
-> @@ -203,7 +203,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_v=
-olume *volume)
->  	if (!buf)
->  		return false;
->  	buf->reserved =3D cpu_to_be32(0);
-> -	memcpy(buf->data, p, len);
-> +	memcpy(buf->data, p, volume->vcookie->coherency_len);
-
-Good catch.  However, I think it's probably better to change things a bit
-further up, eg.:
-
-	-	len +=3D sizeof(*buf);
-	-	buf =3D kmalloc(len, GFP_KERNEL);
-	+	buf =3D kmalloc(sizeof(*buf) + len, GFP_KERNEL);
-
-David
+Agree with the above.  I'll send a v2.  Thanks!
 
