@@ -2,97 +2,144 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E153C4F4C2F
-	for <lists+linux-cifs@lfdr.de>; Wed,  6 Apr 2022 03:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251744F4C6E
+	for <lists+linux-cifs@lfdr.de>; Wed,  6 Apr 2022 03:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbiDEXMm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 5 Apr 2022 19:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S233841AbiDEXUD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 5 Apr 2022 19:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448078AbiDEPrh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Apr 2022 11:47:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44706167F89
-        for <linux-cifs@vger.kernel.org>; Tue,  5 Apr 2022 07:25:30 -0700 (PDT)
+        with ESMTP id S1448489AbiDEPsU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Apr 2022 11:48:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 174CA1A8C0A
+        for <linux-cifs@vger.kernel.org>; Tue,  5 Apr 2022 07:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649168729;
+        s=mimecast20190719; t=1649168893;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lXEk4r5B+cka/wL2y/xk5o9ZYEMsta/GUz68S3KhUi0=;
-        b=BVsgJPvgkvZjJ9j6o5cidkGc24k78x1TwmNnXWwPSznnSi/Xrm/4nNLNHB0o7MXQAwPVs8
-        GNHsHBHyexGNpp28Os0yLzDdyATGS5VIsAfiDR0SHWDrRy5lS0a7Uudi4LVIWHBvLCgnff
-        g1vw3p3l8HPFXwG3owMmUuLT25TaCQQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2HftyXrFUGXnaP4rfcZb6D7hK+A7IkfBIMeUs8IzsCc=;
+        b=EfmgJOqrTPXw3YBmhgliZl2Ysi8EciRmyxFYT5HbutHRzU0ESq0igKPfHlVEHqCXtHMBit
+        qJi1TxhEPTmhcdFRmymWoF3cPztStCkyhOBNpYUIgazDdru/+dNLKEELV49bRUbtLymZjx
+        cAcaVR9vtLT+iKI8A2aTXJvEVOb+fpc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-BxHDYp6wND642uvPbDLhJQ-1; Tue, 05 Apr 2022 10:25:27 -0400
-X-MC-Unique: BxHDYp6wND642uvPbDLhJQ-1
-Received: by mail-ej1-f71.google.com with SMTP id jg2-20020a170907970200b006e7eebce76cso3176379ejc.0
-        for <linux-cifs@vger.kernel.org>; Tue, 05 Apr 2022 07:25:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lXEk4r5B+cka/wL2y/xk5o9ZYEMsta/GUz68S3KhUi0=;
-        b=GQKJJXe09KWFA7wnHUf+99WTpK1ofoyx2UBsCU4PZ18ctUEXE51wYJ3Kak/7/9QJj4
-         JfY0DvQ3ix0chcvb8Nj9p2tD2soSiCTox5pwxfIm4E7nHlr8lCQMAymwb5wzX85TVmGj
-         VQNXCSs/8FZ4bUzuYn1bITC05ZkjK0zeh3u0INXbmLBUbR6ALxIREhJcUxTDolatO3KZ
-         ASdPCkiu1hr0RorsRUZAG+FeYYQ9zrS99y9pe6AQJ3tjeWeBp+2qDJKgtQ48t4p+EOy8
-         h0ob0O6+UVLEB/9BsrLNY/YeFEFwBPxS8LdUr9u4q8z8U29dsmrhgLZhjIrczh9nG3Xn
-         1OQw==
-X-Gm-Message-State: AOAM531UEufuZ5TMJ0K7M4wg0f6dohYN6b8BzwIk5F8XuVt6OQ12eykp
-        FUIrAjd9e+MaMwVLy6kpNmb0VxQq6dfS15eWaK/IBJK8gx4MUzNTT/LQkhEqCCsomhQfpfFT5Rq
-        7J21ZZV09+EYT1bKhwQjS84jyecenBgCRJSoICA==
-X-Received: by 2002:a17:906:730e:b0:6e0:2ad8:12c8 with SMTP id di14-20020a170906730e00b006e02ad812c8mr3746285ejc.623.1649168726709;
-        Tue, 05 Apr 2022 07:25:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz68uG1mxG0zhvCsWepmJDyuPxO7TopiduJMPOjqh2x+Ha7oAKYaIKPvrRT/trlUlFs3Vw8MNMJ0xIMK077r28=
-X-Received: by 2002:a17:906:730e:b0:6e0:2ad8:12c8 with SMTP id
- di14-20020a170906730e00b006e02ad812c8mr3746254ejc.623.1649168726397; Tue, 05
- Apr 2022 07:25:26 -0700 (PDT)
+ us-mta-661-UpPub7RhNRWdgV9xlcureQ-1; Tue, 05 Apr 2022 10:28:12 -0400
+X-MC-Unique: UpPub7RhNRWdgV9xlcureQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD0921010360;
+        Tue,  5 Apr 2022 14:28:11 +0000 (UTC)
+Received: from dwysocha.rdu.csb (unknown [10.22.11.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D6B9141512B;
+        Tue,  5 Apr 2022 14:28:11 +0000 (UTC)
+From:   Dave Wysochanski <dwysocha@redhat.com>
+To:     dhowells@redhat.com
+Cc:     linux-cachefs@redhat.com, jlayton@kernel.org, smfrench@gmail.com,
+        linux-cifs@vger.kernel.org
+Subject: [PATCH v2] cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xattr
+Date:   Tue,  5 Apr 2022 10:28:10 -0400
+Message-Id: <20220405142810.8208-1-dwysocha@redhat.com>
 MIME-Version: 1.0
-References: <20220405134649.6579-1-dwysocha@redhat.com> <1788451.1649168050@warthog.procyon.org.uk>
-In-Reply-To: <1788451.1649168050@warthog.procyon.org.uk>
-From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Tue, 5 Apr 2022 10:24:50 -0400
-Message-ID: <CALF+zOn+JEB7F30wMEcs3Zm=2HFMXS+8vfiQP9HW26OtwXUHGg@mail.gmail.com>
-Subject: Re: [PATCH] cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xattr
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs <linux-cachefs@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 10:14 AM David Howells <dhowells@redhat.com> wrote:
->
-> Dave Wysochanski <dwysocha@redhat.com> wrote:
->
-> > @@ -203,7 +203,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
-> >       if (!buf)
-> >               return false;
-> >       buf->reserved = cpu_to_be32(0);
-> > -     memcpy(buf->data, p, len);
-> > +     memcpy(buf->data, p, volume->vcookie->coherency_len);
->
-> Good catch.  However, I think it's probably better to change things a bit
-> further up, eg.:
->
->         -       len += sizeof(*buf);
->         -       buf = kmalloc(len, GFP_KERNEL);
->         +       buf = kmalloc(sizeof(*buf) + len, GFP_KERNEL);
->
-> David
->
+Use the actual length of volume coherency data when setting the
+xattr to avoid the following KASAN report.
 
-Agree with the above.  I'll send a v2.  Thanks!
+ BUG: KASAN: slab-out-of-bounds in cachefiles_set_volume_xattr+0xa0/0x350 [cachefiles]
+ Write of size 4 at addr ffff888101e02af4 by task kworker/6:0/1347
+
+ CPU: 6 PID: 1347 Comm: kworker/6:0 Kdump: loaded Not tainted 5.18.0-rc1-nfs-fscache-netfs+ #13
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-4.fc34 04/01/2014
+ Workqueue: events fscache_create_volume_work [fscache]
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x45/0x5a
+  print_report.cold+0x5e/0x5db
+  ? __lock_text_start+0x8/0x8
+  ? cachefiles_set_volume_xattr+0xa0/0x350 [cachefiles]
+  kasan_report+0xab/0x120
+  ? cachefiles_set_volume_xattr+0xa0/0x350 [cachefiles]
+  kasan_check_range+0xf5/0x1d0
+  memcpy+0x39/0x60
+  cachefiles_set_volume_xattr+0xa0/0x350 [cachefiles]
+  cachefiles_acquire_volume+0x2be/0x500 [cachefiles]
+  ? __cachefiles_free_volume+0x90/0x90 [cachefiles]
+  fscache_create_volume_work+0x68/0x160 [fscache]
+  process_one_work+0x3b7/0x6a0
+  worker_thread+0x2c4/0x650
+  ? process_one_work+0x6a0/0x6a0
+  kthread+0x16c/0x1a0
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+ Allocated by task 1347:
+  kasan_save_stack+0x1e/0x40
+  __kasan_kmalloc+0x81/0xa0
+  cachefiles_set_volume_xattr+0x76/0x350 [cachefiles]
+  cachefiles_acquire_volume+0x2be/0x500 [cachefiles]
+  fscache_create_volume_work+0x68/0x160 [fscache]
+  process_one_work+0x3b7/0x6a0
+  worker_thread+0x2c4/0x650
+  kthread+0x16c/0x1a0
+  ret_from_fork+0x22/0x30
+
+ The buggy address belongs to the object at ffff888101e02af0
+ which belongs to the cache kmalloc-8 of size 8
+ The buggy address is located 4 bytes inside of
+ 8-byte region [ffff888101e02af0, ffff888101e02af8)
+
+ The buggy address belongs to the physical page:
+ page:00000000a2292d70 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x101e02
+ flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
+ raw: 0017ffffc0000200 0000000000000000 dead000000000001 ffff888100042280
+ raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
+ page dumped because: kasan: bad access detected
+
+ Memory state around the buggy address:
+ ffff888101e02980: fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc
+ ffff888101e02a00: 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc 00
+ >ffff888101e02a80: fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc 04 fc
+                                                            ^
+ ffff888101e02b00: fc fc fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc
+ ffff888101e02b80: fc fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc
+ ==================================================================
+
+Fixes: 413a4a6b0b55 "cachefiles: Fix volume coherency attribute"
+Signed-off-by: Dave Wysochanski <dwysocha@redhat.com>
+---
+ fs/cachefiles/xattr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
+index 35465109d9c4..f13b642c1d14 100644
+--- a/fs/cachefiles/xattr.c
++++ b/fs/cachefiles/xattr.c
+@@ -198,8 +198,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+ 
+ 	_enter("%x,#%d", volume->vcookie->debug_id, len);
+ 
+-	len += sizeof(*buf);
+-	buf = kmalloc(len, GFP_KERNEL);
++	buf = kmalloc(sizeof(*buf) + len, GFP_KERNEL);
+ 	if (!buf)
+ 		return false;
+ 	buf->reserved = cpu_to_be32(0);
+-- 
+2.27.1
 
