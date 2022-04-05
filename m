@@ -2,71 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03AD4F1B68
-	for <lists+linux-cifs@lfdr.de>; Mon,  4 Apr 2022 23:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749604F2232
+	for <lists+linux-cifs@lfdr.de>; Tue,  5 Apr 2022 06:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376635AbiDDVUR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 4 Apr 2022 17:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S229835AbiDEEri (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 5 Apr 2022 00:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379048AbiDDQZH (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 4 Apr 2022 12:25:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA35BC0B
-        for <linux-cifs@vger.kernel.org>; Mon,  4 Apr 2022 09:23:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ED47D1F388;
-        Mon,  4 Apr 2022 16:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649089389; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sEd+u18OqQZLt80MHeV41VOOCW5YZRNRevMs/+Ozlkk=;
-        b=vm35pTSgFvmAUDKDHa6twkiSIhk2TMzgynL1JXeEtuoU8qv9zsfxqsoj0vR7T/2VoX9qlZ
-        jkaNzASGPcMAwaWvRS61bf9NnlEZ7WK+slvTRK7TBPF8f7Z0tBF4YrsYTxj9JIPxv6F34L
-        Z+jklzR/Po4v3bwZdFqAJa8V8HTNveU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649089389;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sEd+u18OqQZLt80MHeV41VOOCW5YZRNRevMs/+Ozlkk=;
-        b=A/Wbxuc+8X5kXCVUL/e6AOQdGd1nC7YMCW7Eug6/JUyh2HV6wEHhT3Q8VusC4rqyMBKiKw
-        NF5Omtcfb2uz3RAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BF9913216;
-        Mon,  4 Apr 2022 16:23:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7zhrEW0bS2IZdQAAMHmgww
-        (envelope-from <ematsumiya@suse.de>); Mon, 04 Apr 2022 16:23:09 +0000
-Date:   Mon, 4 Apr 2022 13:23:07 -0300
-From:   Enzo Matsumiya <ematsumiya@suse.de>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Tom Talpey <tom@talpey.com>, CIFS <linux-cifs@vger.kernel.org>,
-        Pavel Shilovsky <pshilovsky@samba.org>,
-        Paulo Alcantara <pc@cjr.nz>
-Subject: Re: [PATCH] mount.cifs.rst: add FIPS information
-Message-ID: <20220404162307.34xrmdfran3mvnvb@cyberdelia>
-References: <20220331235251.4753-1-ematsumiya@suse.de>
- <efb1d822-4fcf-dc3b-2861-8394f50aedbe@talpey.com>
- <20220401152508.edovgwz5pxn6gnhn@cyberdelia>
- <d5648e12-c5b9-07de-a20b-afd49adc5f56@talpey.com>
- <20220401174145.6x443h555ch7kspd@cyberdelia>
- <CAH2r5mvG3-TT2YG28zPx_7AzvG3MYvWHh1XVYqvLY8FpYW_4vQ@mail.gmail.com>
+        with ESMTP id S230181AbiDEErM (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Apr 2022 00:47:12 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E31F9FD9;
+        Mon,  4 Apr 2022 21:43:37 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 71A6168AFE; Tue,  5 Apr 2022 06:43:31 +0200 (CEST)
+Date:   Tue, 5 Apr 2022 06:43:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Ariel Elior <aelior@marvell.com>, Anna Schumaker <anna@kernel.org>,
+        Jens Axboe <axboe@fb.com>,
+        Christian Benvenuti <benve@cisco.com>,
+        Potnuri Bharat Teja <bharat@chelsio.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-rdma@vger.kernel.org, Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Michal Kalderon <mkalderon@marvell.com>,
+        Mustafa Ismail <mustafa.ismail@intel.com>,
+        Nelson Escobar <neescoba@cisco.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rds-devel@oss.oracle.com,
+        Sagi Grimberg <sagi@grimberg.me>,
+        samba-technical@lists.samba.org,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Steve French <sfrench@samba.org>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        target-devel@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Xiao Yang <yangx.jy@fujitsu.com>
+Subject: Re: [PATCH] RDMA: Split kernel-only global device caps from uvers
+ device caps
+Message-ID: <20220405044331.GA22322@lst.de>
+References: <0-v1-47e161ac2db9+80f-kern_caps_jgg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAH2r5mvG3-TT2YG28zPx_7AzvG3MYvWHh1XVYqvLY8FpYW_4vQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <0-v1-47e161ac2db9+80f-kern_caps_jgg@nvidia.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +69,40 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On 04/03, Steve French wrote:
->SMB2.1 or later is probably fine (and we note SMB2.1 or 3) for most
->cases in our mount warning message.
->
->But this FIPS compliance issue reminds me that we should get the other
->auth mechanisms working that are 'peer to peer' (so not forced to be
->domain joined).   krb5 is great, but Macs support 'peer-to-peer
->kerberos' and also SCRAM (RFC 7677) so we could also presumably get
->FIPS compliant login for peer-to-peer cases if we implement on or both
->of those other auth mechanisms.
+On Mon, Apr 04, 2022 at 01:18:00PM -0300, Jason Gunthorpe wrote:
+> Split ib_device::device_cap_flags into kernel_cap_flags that holds the
+> flags only used by the kernel.
+> 
+> This cleanly splits out the uverbs flags from the kernel flags to avoid
+> confusion in the flags bitmap.
 
-Thanks, Steve. AFAIK, as I mentioned earlier, I don't see FIPS
-disapproving particular auth mechanisms, but if those you mention uses
-algorithms that are not on FIPS-validated crypto modules, we're out of
-luck there as well.
+> Followup from Xiao Yang's series
 
-(full disclosure: I'm not yet familiar with "peer-to-peer kerberos")
+Can you point me to this series?
 
-On-topic: I'd just like to have this patch merged for informational
-purposese only. I then can start working on your's and Tom's
-suggestions.
+> -	if (!(device->attrs.device_cap_flags & IB_DEVICE_ALLOW_USER_UNREG)) {
+> +	if (!(device->attrs.kernel_cap_flags & IB_KDEVICE_ALLOW_USER_UNREG)) {
 
->Anyone have some Macs or Mac VMs to test against ...?
+Maybe shorten the prefix to IBD_ ?
 
-Yes. But let's move this one privately please.
+> +enum ib_kernel_cap_flags {
+> +	/*
+> +	 * This device supports a per-device lkey or stag that can be
+> +	 * used without performing a memory registration for the local
+> +	 * memory.  Note that ULPs should never check this flag, but
+> +	 * instead of use the local_dma_lkey flag in the ib_pd structure,
+> +	 * which will always contain a usable lkey.
+> +	 */
+> +	IB_KDEVICE_LOCAL_DMA_LKEY = 1 << 0,
+> +	IB_KDEVICE_UD_TSO = 1 << 1,
+> +	IB_KDEVICE_BLOCK_MULTICAST_LOOPBACK = 1 << 2,
+> +	IB_KDEVICE_INTEGRITY_HANDOVER = 1 << 3,
+> +	IB_KDEVICE_ON_DEMAND_PAGING = 1ULL << 4,
+> +	IB_KDEVICE_SG_GAPS_REG = 1ULL << 5,
+> +	IB_KDEVICE_VIRTUAL_FUNCTION = 1ULL << 6,
+> +	IB_KDEVICE_RDMA_NETDEV_OPA = 1ULL << 7,
+> +	IB_KDEVICE_ALLOW_USER_UNREG = 1ULL << 8,
+> +};
 
-
-Cheers,
-
-Enzo
+And maybe not in this patch, but if you touch this anyway please add
+comments to document allthe flags.
