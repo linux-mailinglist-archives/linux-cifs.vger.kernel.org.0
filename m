@@ -2,47 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C824FEB39
-	for <lists+linux-cifs@lfdr.de>; Wed, 13 Apr 2022 01:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99744FEAEE
+	for <lists+linux-cifs@lfdr.de>; Wed, 13 Apr 2022 01:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiDLXWC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 12 Apr 2022 19:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S229729AbiDLXV6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 12 Apr 2022 19:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiDLXVz (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 12 Apr 2022 19:21:55 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223BAC
-        for <linux-cifs@vger.kernel.org>; Tue, 12 Apr 2022 15:57:57 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id n18so347557plg.5
-        for <linux-cifs@vger.kernel.org>; Tue, 12 Apr 2022 15:57:57 -0700 (PDT)
+        with ESMTP id S229814AbiDLXVj (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 12 Apr 2022 19:21:39 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E43629CB7
+        for <linux-cifs@vger.kernel.org>; Tue, 12 Apr 2022 15:58:25 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id bg24so163608pjb.1
+        for <linux-cifs@vger.kernel.org>; Tue, 12 Apr 2022 15:58:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6fpi9+6i2JTacQ7rMNVJ9Obj/8AzF4nmEWWPzoLmxKk=;
-        b=PjeQbfiQhKGOIw0Dspk8kzqyJNjOWx/BAFR3VFGsWYATCc0LGMPzTSxy6rNxehYu0d
-         c9eF/JoSOn1msDFcGSeihwXuI/27iiQcQt9jFOLcRY802/rpAxB5w3ex2U1L7jIuwFFN
-         efsK5RsZ8llVc1gOW0uDVKWaiIm48kNK/1sESmlih0Rb7x98TkZnHed+bHLhZTOpBH/Y
-         najhBbG8kC4cn1Fsnc7FZUc/teeGjtHG2iZ6kJl8iLPVukZLGPeUWjdm1lqrgi4ytwfY
-         AmW0axlnQjcv1NG4McjYQxSsRo5Slc4xkOmuy+ec9PNRfNJaxaz0DcXGJM5kwCI/AF6a
-         9MSg==
-X-Gm-Message-State: AOAM531m1B2ClFT/klnN80Z0StJyXi5DuP370m3hjrrYCqHmmlTQkZPG
-        hIP18M0C+Q16pwOYowEZ1hfOYh02oxKgcg==
-X-Google-Smtp-Source: ABdhPJxwg/O38XteeYp6rzZLQBf5dQkehcge1LubKB2iqQ/HhUAi4tqEXMa5IMl7zn7CE8fbaxDkfA==
-X-Received: by 2002:a17:90b:1d04:b0:1c7:b10f:e33d with SMTP id on4-20020a17090b1d0400b001c7b10fe33dmr7591940pjb.165.1649804276966;
-        Tue, 12 Apr 2022 15:57:56 -0700 (PDT)
+        bh=THod0Czgnjk9ipDQhXswUowKCRhMUwvBlfyirjGjZ/Y=;
+        b=qEyG6R//Ixw99v1dfI3gr9KQnjNxSRL5EE1kwssSnIfVszbvz8tflaDuIBd0jTDuuD
+         eUyjj5afpS69LbdwSFj1ZoYqt/+WQxz0ntpk5lt7WYKj6yZUHYKWQfc8IvuyOGV/pW1K
+         fVG4x6Bo00F2wHFhF2yWV7t2/yuFcR/d/qNY/AaLYeBQw2FzM8OKz+UhEDPKqraMWhbs
+         B6NvfhuiuD865F7uqb3G7yg45Uzhew6Ve3/H96/Lua9HOe9YZqLKA9YXEvE+ALKjPH+6
+         gaT5f9ca3bdMSCNlsVtH7Mich0ZJ2b7XOinEVNOtl008X69r6D6XTyzVagzbYhMc8Bid
+         QhnA==
+X-Gm-Message-State: AOAM533HQhrTK1ELleuLfPqbJQnucHrZ+01H1hnJGKB/B3/U5/v9KbJC
+        //637nNYRkL7yR1FqLcNADJ+m8UV6aQdoA==
+X-Google-Smtp-Source: ABdhPJy9x7Gu5peG7zi/ObDOF4lRG3AKZoAMuI50dy7AS4wQzNgS+CUPcbv5ZsB/fo/gBus6DTUwjw==
+X-Received: by 2002:a17:902:d2d0:b0:158:761e:c165 with SMTP id n16-20020a170902d2d000b00158761ec165mr9231687plc.59.1649804304279;
+        Tue, 12 Apr 2022 15:58:24 -0700 (PDT)
 Received: from localhost.localdomain ([61.74.27.164])
-        by smtp.gmail.com with ESMTPSA id m6-20020aa79006000000b00505bf6f2b36sm8522337pfo.205.2022.04.12.15.57.54
+        by smtp.gmail.com with ESMTPSA id i5-20020aa787c5000000b00505b322a952sm9731920pfo.114.2022.04.12.15.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:57:56 -0700 (PDT)
+        Tue, 12 Apr 2022 15:58:23 -0700 (PDT)
 From:   Namjae Jeon <linkinjeon@kernel.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     smfrench@gmail.com, hyc.lee@gmail.com, senozhatsky@chromium.org,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH RESEND] ksmbd: increment reference count of parent fp
-Date:   Wed, 13 Apr 2022 07:57:43 +0900
-Message-Id: <20220412225743.5590-1-linkinjeon@kernel.org>
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH] ksmbd: set fixed sector size to FS_SECTOR_SIZE_INFORMATION
+Date:   Wed, 13 Apr 2022 07:58:06 +0900
+Message-Id: <20220412225806.5647-1-linkinjeon@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,42 +58,46 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Add missing increment reference count of parent fp in
-ksmbd_lookup_fd_inode().
+Currently ksmbd is using ->f_bsize from vfs_statfs() as sector size.
+If fat/exfat is a local share, ->f_bsize is a cluster size that is too
+large to be used as a sector size. Sector sizes larger than 4K cause
+problem occurs when mounting an iso file through windows client.
 
+The error message can be obtained using Mount-DiskImage command,
+ the error is:
+"Mount-DiskImage : The sector size of the physical disk on which the
+virtual disk resides is not supported."
+
+This patch reports fixed sector size as 512B logical/4K physical to
+windows client to avoid poking into the block device.
+
+Cc: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/ksmbd/smb2pdu.c   | 2 ++
- fs/ksmbd/vfs_cache.c | 1 +
- 2 files changed, 3 insertions(+)
+ fs/ksmbd/smb2pdu.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index e38fb68ded21..62cc0f95ab87 100644
+index 62cc0f95ab87..28ff7c058bc4 100644
 --- a/fs/ksmbd/smb2pdu.c
 +++ b/fs/ksmbd/smb2pdu.c
-@@ -5758,8 +5758,10 @@ static int set_rename_info(struct ksmbd_work *work, struct ksmbd_file *fp,
- 	if (parent_fp) {
- 		if (parent_fp->daccess & FILE_DELETE_LE) {
- 			pr_err("parent dir is opened with delete access\n");
-+			ksmbd_fd_put(work, parent_fp);
- 			return -ESHARE;
- 		}
-+		ksmbd_fd_put(work, parent_fp);
- 	}
- next:
- 	return smb2_rename(work, fp, user_ns, rename_info,
-diff --git a/fs/ksmbd/vfs_cache.c b/fs/ksmbd/vfs_cache.c
-index 0974d2e972b9..c4d59d2735f0 100644
---- a/fs/ksmbd/vfs_cache.c
-+++ b/fs/ksmbd/vfs_cache.c
-@@ -496,6 +496,7 @@ struct ksmbd_file *ksmbd_lookup_fd_inode(struct inode *inode)
- 	list_for_each_entry(lfp, &ci->m_fp_list, node) {
- 		if (inode == file_inode(lfp->filp)) {
- 			atomic_dec(&ci->m_count);
-+			lfp = ksmbd_fp_get(lfp);
- 			read_unlock(&ci->m_lock);
- 			return lfp;
- 		}
+@@ -4998,12 +4998,11 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 
+ 		info = (struct smb3_fs_ss_info *)(rsp->Buffer);
+ 
+-		info->LogicalBytesPerSector = cpu_to_le32(stfs.f_bsize);
+-		info->PhysicalBytesPerSectorForAtomicity =
+-				cpu_to_le32(stfs.f_bsize);
+-		info->PhysicalBytesPerSectorForPerf = cpu_to_le32(stfs.f_bsize);
++		info->LogicalBytesPerSector = cpu_to_le32(512);
++		info->PhysicalBytesPerSectorForAtomicity = cpu_to_le32(4096);
++		info->PhysicalBytesPerSectorForPerf = cpu_to_le32(4096);
+ 		info->FSEffPhysicalBytesPerSectorForAtomicity =
+-				cpu_to_le32(stfs.f_bsize);
++				cpu_to_le32(4096);
+ 		info->Flags = cpu_to_le32(SSINFO_FLAGS_ALIGNED_DEVICE |
+ 				    SSINFO_FLAGS_PARTITION_ALIGNED_ON_DEVICE);
+ 		info->ByteOffsetForSectorAlignment = 0;
 -- 
 2.25.1
 
