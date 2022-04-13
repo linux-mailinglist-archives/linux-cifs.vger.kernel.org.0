@@ -2,84 +2,101 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59534FF2D8
-	for <lists+linux-cifs@lfdr.de>; Wed, 13 Apr 2022 11:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9F14FF5FA
+	for <lists+linux-cifs@lfdr.de>; Wed, 13 Apr 2022 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbiDMJDb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 13 Apr 2022 05:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S230358AbiDMLp5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 13 Apr 2022 07:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiDMJDa (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 13 Apr 2022 05:03:30 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B65252AA
-        for <linux-cifs@vger.kernel.org>; Wed, 13 Apr 2022 02:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=0AWihOo9KBWbNXHR8avXUiBWZbosX+McY/wetX2knuI=; b=oXLADYG0aT1/9j5W6y6GTJEInh
-        sSlCNU6PaiiWS04gt83RyTq4/Jq2rdA+G2qOdF4f7lUK+TykfJ3+P1Zb4VdhEM+rJsKXpLTvwQVW3
-        Y9yxuO2HNM2Yx5XAoc976ey76j3TFmAUwGYxVuddt0g1C+Qhhz3AcYkgfG3SrJYfRdDD9cArH8KAn
-        gy8suAxCsEfN6R34/NX7c519T45EJQSgSImtQ9sOTUKRDqptXyhXEfVoegTHJjVPNzBAU85SLHKSs
-        8XcGUinLME0s5aMO8DhVgFTfybALTxMSeeL4vRZaZQseWoS1FHwR2cy+8HqZMptsdv+WzQ5MEpWyN
-        EU1DxPMwo5RoAL3HsK/NC6NMmebaWqCQeml3Tm4dK5YyPWK/zt1Wx6+0OvG2bqbgJfKNcbjbA6sJx
-        MFSzSjzK0hJ4RKhggTH/zz6XyYtSH79sxrwc9LR3TZpKKvsT4AQkH9YJL0dN56LWV2YlpFNFw7tTo
-        2vPOEdZfnxnAoohkmqY3To7O;
-Received: from [2a01:4f8:192:486::6:0] (port=41076 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1neYs6-000JBx-0W
-        for cifs-qa@samba.org; Wed, 13 Apr 2022 09:01:06 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1neYs5-000AuP-M5
-        for cifs-qa@samba.org; Wed, 13 Apr 2022 09:01:05 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 15025] CVE-2022-27239: Buffer overflow in mount.cifs options
- parser
-Date:   Wed, 13 Apr 2022 09:01:05 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: user space tools
-X-Bugzilla-Version: 5.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ddiss@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: ddiss@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-15025-10630-ZVMmaXH811@https.bugzilla.samba.org/>
-In-Reply-To: <bug-15025-10630@https.bugzilla.samba.org/>
-References: <bug-15025-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229481AbiDMLp5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 13 Apr 2022 07:45:57 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63F25B3F5;
+        Wed, 13 Apr 2022 04:43:32 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23D9xvYW032238;
+        Wed, 13 Apr 2022 11:43:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=snGXKT5n6XDtwCnQA9MLkATepstbNlkspFrk9ndNi6U=;
+ b=BdRk1rkD6rINJkZWx1YEFObZL3ohwLy3ETlWjYD74GLgaRxfePw6HROebBZ38+h6xO/8
+ Ptu3sw4vsoBLLqSjblsLcS3yUp9VtzIashOTd04ncEcijRplK3TH1mbfdvOVESj/LK3W
+ bWkquRBU5NcDAP8OLgUXnjON/VP77pvrTe1S2BFj0D5E6cXx/IWheuWkw0BzqGxfgvw0
+ eaM1a+JJnqHpss1lytLXAvbG+gJLXbtO7h4fib1g3IoQB2CPLVuWGmdXIn/9uE2LmZjI
+ STOAEaWjxJE1FjEjQ4POeQa5qZamYPoK9Z27XcY8RmxLvvrrZZA+789h5iJUhHL7FGEM BA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd9da7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 11:43:17 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DBfRRL010353;
+        Wed, 13 Apr 2022 11:43:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k3wau6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 11:43:16 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 23DBhG65016664;
+        Wed, 13 Apr 2022 11:43:16 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k3watn-1;
+        Wed, 13 Apr 2022 11:43:16 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
+        smfrench@gmail.com, Steve French <sfrench@samba.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] cifs: potential buffer overflow in handling symlinks
+Date:   Wed, 13 Apr 2022 04:42:51 -0700
+Message-Id: <20220413114251.73083-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: pmHfV1bQBRIjOkb1odkxWsvclPwJw5bw
+X-Proofpoint-GUID: pmHfV1bQBRIjOkb1odkxWsvclPwJw5bw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D15025
+Smatch printed a warning:
+	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
+	__memcpy() 'dctx->buf' too small (16 vs u32max)
 
-David Disseldorp <ddiss@samba.org> changed:
+It's caused because Smatch marks 'link_len' as untrusted since it comes
+from sscanf(). Add a check to ensure that 'link_len' is not larger than
+the size of the 'link_str' buffer.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jbe@improsec.com
+Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+v2: make use of CIFS_MF_SYMLINK_LINK_MAXLEN (same but cleaner).
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+ fs/cifs/link.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/cifs/link.c b/fs/cifs/link.c
+index 852e54e..bbdf328 100644
+--- a/fs/cifs/link.c
++++ b/fs/cifs/link.c
+@@ -85,6 +85,9 @@
+ 	if (rc != 1)
+ 		return -EINVAL;
+ 
++	if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
++		return -EINVAL;
++
+ 	rc = symlink_hash(link_len, link_str, md5_hash);
+ 	if (rc) {
+ 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+-- 
+1.8.3.1
+
