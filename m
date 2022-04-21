@@ -2,90 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B9650940E
-	for <lists+linux-cifs@lfdr.de>; Thu, 21 Apr 2022 02:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741AA509496
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Apr 2022 03:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356685AbiDUAI5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 20 Apr 2022 20:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S1379015AbiDUBSh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 20 Apr 2022 21:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378889AbiDUAIx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 20 Apr 2022 20:08:53 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF0E14018
-        for <linux-cifs@vger.kernel.org>; Wed, 20 Apr 2022 17:06:05 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id EBAA77FD1E;
-        Thu, 21 Apr 2022 00:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1650499564;
+        with ESMTP id S233373AbiDUBSh (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 20 Apr 2022 21:18:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A335C12AF0
+        for <linux-cifs@vger.kernel.org>; Wed, 20 Apr 2022 18:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650503748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tMWf1vhuoTh+UGFMSx7I6vB3r8Xrxp9WqudHc9bqt0E=;
-        b=qiaDDnwBsOtAyaYMletAwwj3XpHeM+RcKO51WsXAbEG+maMOvCsv18ylUmbUJ8j4jd2MVC
-        2PmnTO3mAuFmsV61c6PzBUckd2zY9n1EuOKwuFyMJ9pGzUBV8kvNB65PBdOzn5GlyUh8dJ
-        IUtHfHpxF3/mNzx7Bl+yfoq4aLNcKtCHI/fNfY2yGQd/qDCkJivK9BMeSYdL8i4k5G3ccp
-        6w1Qx1v7SXsd3VpkZ/4PdaraEEthSIVfGYjZjWzU40nVwfcJZiFR5cXusZH0t9Wovg7isT
-        OKFHPHvo6C7gCP3Kq2jeuVF8yqmB4MQ71iQe47LTzYX497qHTKQt30M3mgpRlA==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     linux-cifs@vger.kernel.org, smfrench@gmail.com
-Cc:     Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH 2/2] cifs: use correct lock type in cifs_reconnect()
-Date:   Wed, 20 Apr 2022 21:05:46 -0300
-Message-Id: <20220421000546.5129-2-pc@cjr.nz>
-In-Reply-To: <20220421000546.5129-1-pc@cjr.nz>
-References: <20220421000546.5129-1-pc@cjr.nz>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a8bzPDlwDWXP/F1oEBFvZBfAexg9wGiS45fFVla7tIE=;
+        b=J7Zz9u/BNhyCw5MCvYjh+/GjBcszinkgenc+iJunmFMpKDYQPjvx+sEAX3sIjDlmzQOct7
+        02cB1iIcrxszIfU+ZZVk3S3OxVTlgIh0oqBoaUBldpVpTw1d6zpVUxWYcQ+7kj+jKw6ZmV
+        itlwmMWkc5aMSH1NKH8AZ9H82k6O5oo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-230-jtJ4H04OMPqBvKuPZag8SQ-1; Wed, 20 Apr 2022 21:15:44 -0400
+X-MC-Unique: jtJ4H04OMPqBvKuPZag8SQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C126F811E75;
+        Thu, 21 Apr 2022 01:15:43 +0000 (UTC)
+Received: from thinkpad (vpn2-54-19.bne.redhat.com [10.64.54.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 414E37B7C;
+        Thu, 21 Apr 2022 01:15:43 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: [PATCH] cifs: destage any unwritten data to the server before calling copychunk_write
+Date:   Thu, 21 Apr 2022 11:15:36 +1000
+Message-Id: <20220421011536.1859398-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,DOS_RCVD_IP_TWICE_B,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-TCP_Server_Info::origin_fullpath and TCP_Server_Info::leaf_fullpath
-are protected by refpath_lock mutex and not cifs_tcp_ses_lock
-spinlock.
+because the copychunk_write might cover a region of the file that has not yet
+been sent to the server and thus fail.
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+A simple way to reproduce this is:
+truncate -s 0 /mnt/testfile; strace -f -o x -ttT xfs_io -i -f -c 'pwrite 0k 128k' -c 'fcollapse 16k 24k' /mnt/testfile
+
+the issue is that the 'pwrite 0k 128k' becomes rearranged on the wire with
+the 'fcollapse 16k 24k' due to write-back caching.
+
+fcollapse is implemented in cifs.ko as a SMB2 IOCTL(COPYCHUNK_WRITE) call
+and it will fail serverside since the file is still 0b in size serverside
+until the writes have been destaged.
+To avoid this we must ensure that we destage any unwritten data to the
+server before calling COPYCHUNK_WRITE.
+
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1997373
+Reported-by: Xiaoli Feng <xifeng@redhat.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/connect.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/cifs/smb2ops.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 2c24d433061a..42e14f408856 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -534,12 +534,19 @@ int cifs_reconnect(struct TCP_Server_Info *server, bool mark_smb_session)
- {
- 	/* If tcp session is not an dfs connection, then reconnect to last target server */
- 	spin_lock(&cifs_tcp_ses_lock);
--	if (!server->is_dfs_conn || !server->origin_fullpath || !server->leaf_fullpath) {
-+	if (!server->is_dfs_conn) {
- 		spin_unlock(&cifs_tcp_ses_lock);
- 		return __cifs_reconnect(server, mark_smb_session);
- 	}
- 	spin_unlock(&cifs_tcp_ses_lock);
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index a67df8eaf702..d6aaeff4a30a 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -1858,9 +1858,17 @@ smb2_copychunk_range(const unsigned int xid,
+ 	int chunks_copied = 0;
+ 	bool chunk_sizes_updated = false;
+ 	ssize_t bytes_written, total_bytes_written = 0;
++	struct inode *inode;
  
-+	mutex_lock(&server->refpath_lock);
-+	if (!server->origin_fullpath || !server->leaf_fullpath) {
-+		mutex_unlock(&server->refpath_lock);
-+		return __cifs_reconnect(server, mark_smb_session);
-+	}
-+	mutex_unlock(&server->refpath_lock);
+ 	pcchunk = kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
+ 
++	/*
++	 * We need to flush all unwritten data before we can send the
++	 * copychunk ioctl to the server.
++	 */
++	inode = d_inode(trgtfile->dentry);
++	filemap_write_and_wait(inode->i_mapping);
 +
- 	return reconnect_dfs_server(server);
- }
- #else
+ 	if (pcchunk == NULL)
+ 		return -ENOMEM;
+ 
 -- 
-2.35.3
+2.30.2
 
