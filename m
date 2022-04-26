@@ -2,48 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FA45107F9
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Apr 2022 21:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4A9510836
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Apr 2022 21:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353690AbiDZTFT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 26 Apr 2022 15:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S1353758AbiDZTFo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 26 Apr 2022 15:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353581AbiDZTFS (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Apr 2022 15:05:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C57719980B;
-        Tue, 26 Apr 2022 12:02:10 -0700 (PDT)
+        with ESMTP id S1353754AbiDZTFc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Apr 2022 15:05:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A101999D5;
+        Tue, 26 Apr 2022 12:02:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E54FEB8224A;
-        Tue, 26 Apr 2022 19:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CE5C385AF;
-        Tue, 26 Apr 2022 19:02:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D99619C4;
+        Tue, 26 Apr 2022 19:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E848C385AD;
+        Tue, 26 Apr 2022 19:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650999727;
-        bh=xZZ2i1Rlmt1chjOQcZ+PBoeIkXNP2liprcvgy86RiRc=;
+        s=k20201202; t=1650999742;
+        bh=pH8kHLg29q84DA3lAKF1knzAlPKUewGQtsmALlQhDkw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U4R1oAaatDF0AbaBReudTiZuTFQUtsrhqM5jMUIi/7r2PgLeaKzKL59wUGvdeCzK2
-         GJdTSReQvN87gz1Nrii4WIESlHUikEQTgjm4GEq9JXx3Krvtx0lBBhRWHRLgkbNfRT
-         s7gec9HoMTYsem05wfoEVOpkyjJM5qria9CAcVh2JmQx8fYNw6oMFzsB5pqKTnk7CS
-         X7hnsW2bcRi66IupQGZYucbZjToVty2xpGV09Ecbbf3k7Mien47PYVyIZAfC6XuD3v
-         nZxL6OwkzkVPf4fYqmFKKjPTfO418n+/AmWTWcj0uWgjsTihb8q8qRmtnkXBrinGzS
-         KoPg1DjNVvXnQ==
+        b=sUv44KYMyRgUcmKqs/27GHZ/Y71e5ZCVC0uIqBeuSRj5yiVapBrKYFQC5UhGzBuQZ
+         wZhD/aovSLGSI3C7awdN+oSxT/82X3XMgC2icnNsRPjICN2vU/uHYA2U2aSaCrt2J1
+         Ebrk4YfaeVho8QM14xJZE8Y5ptU4tQX0U5PZXM92XbPIDxsmIYyu/OZQxnSx6GgtO4
+         7VIvV1QgLWQKtwGICLStKG3WLJvXUG1twJA7M1teO/NpiKE6ih+bqTkG/rtSpM9DKr
+         g0utMUEQE3Ce+OnN+qexbY2aftP7Q1JPJKCEhGsnpjM5Jb7eRirplsiUA2b6fOk3c/
+         HoW6nwRe5+ilA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        Xiaoli Feng <xifeng@redhat.com>,
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.17 16/22] cifs: destage any unwritten data to the server before calling copychunk_write
-Date:   Tue, 26 Apr 2022 15:01:39 -0400
-Message-Id: <20220426190145.2351135-16-sashal@kernel.org>
+        linux-cifs@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 05/15] ksmbd: increment reference count of parent fp
+Date:   Tue, 26 Apr 2022 15:02:04 -0400
+Message-Id: <20220426190216.2351413-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220426190145.2351135-1-sashal@kernel.org>
-References: <20220426190145.2351135-1-sashal@kernel.org>
+In-Reply-To: <20220426190216.2351413-1-sashal@kernel.org>
+References: <20220426190216.2351413-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,56 +57,49 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-[ Upstream commit f5d0f921ea362636e4a2efb7c38d1ead373a8700 ]
+[ Upstream commit 8510a043d334ecdf83d4604782f288db6bf21d60 ]
 
-because the copychunk_write might cover a region of the file that has not yet
-been sent to the server and thus fail.
+Add missing increment reference count of parent fp in
+ksmbd_lookup_fd_inode().
 
-A simple way to reproduce this is:
-truncate -s 0 /mnt/testfile; strace -f -o x -ttT xfs_io -i -f -c 'pwrite 0k 128k' -c 'fcollapse 16k 24k' /mnt/testfile
-
-the issue is that the 'pwrite 0k 128k' becomes rearranged on the wire with
-the 'fcollapse 16k 24k' due to write-back caching.
-
-fcollapse is implemented in cifs.ko as a SMB2 IOCTL(COPYCHUNK_WRITE) call
-and it will fail serverside since the file is still 0b in size serverside
-until the writes have been destaged.
-To avoid this we must ensure that we destage any unwritten data to the
-server before calling COPYCHUNK_WRITE.
-
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1997373
-Reported-by: Xiaoli Feng <xifeng@redhat.com>
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2ops.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/ksmbd/smb2pdu.c   | 2 ++
+ fs/ksmbd/vfs_cache.c | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 5d120cd8bc78..13080d6a140b 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -1861,9 +1861,17 @@ smb2_copychunk_range(const unsigned int xid,
- 	int chunks_copied = 0;
- 	bool chunk_sizes_updated = false;
- 	ssize_t bytes_written, total_bytes_written = 0;
-+	struct inode *inode;
- 
- 	pcchunk = kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
- 
-+	/*
-+	 * We need to flush all unwritten data before we can send the
-+	 * copychunk ioctl to the server.
-+	 */
-+	inode = d_inode(trgtfile->dentry);
-+	filemap_write_and_wait(inode->i_mapping);
-+
- 	if (pcchunk == NULL)
- 		return -ENOMEM;
- 
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 192d8308afc2..a9fdb47c2791 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -5768,8 +5768,10 @@ static int set_rename_info(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 	if (parent_fp) {
+ 		if (parent_fp->daccess & FILE_DELETE_LE) {
+ 			pr_err("parent dir is opened with delete access\n");
++			ksmbd_fd_put(work, parent_fp);
+ 			return -ESHARE;
+ 		}
++		ksmbd_fd_put(work, parent_fp);
+ 	}
+ next:
+ 	return smb2_rename(work, fp, user_ns, rename_info,
+diff --git a/fs/ksmbd/vfs_cache.c b/fs/ksmbd/vfs_cache.c
+index 29c1db66bd0f..8b873d92d785 100644
+--- a/fs/ksmbd/vfs_cache.c
++++ b/fs/ksmbd/vfs_cache.c
+@@ -497,6 +497,7 @@ struct ksmbd_file *ksmbd_lookup_fd_inode(struct inode *inode)
+ 	list_for_each_entry(lfp, &ci->m_fp_list, node) {
+ 		if (inode == file_inode(lfp->filp)) {
+ 			atomic_dec(&ci->m_count);
++			lfp = ksmbd_fp_get(lfp);
+ 			read_unlock(&ci->m_lock);
+ 			return lfp;
+ 		}
 -- 
 2.35.1
 
