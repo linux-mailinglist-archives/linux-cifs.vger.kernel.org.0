@@ -2,155 +2,69 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E90519392
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 03:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F395194E4
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 03:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbiEDBsJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 3 May 2022 21:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S1343866AbiEDCAV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 May 2022 22:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbiEDBsJ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 21:48:09 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CE628E3D
-        for <linux-cifs@vger.kernel.org>; Tue,  3 May 2022 18:44:33 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id h10so125405ybc.4
-        for <linux-cifs@vger.kernel.org>; Tue, 03 May 2022 18:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9EVMIlQwh4xBkzBQyFXhj70Xf9sRW3wT/frdEId3Ojc=;
-        b=d4sniXll+teUsF3R01C3WPOPHjrhFhruYSAIM5x1Uxo+99GMtyTSJs0WwYtq1ylyo8
-         Yw1zP5Tz8HAchc61rE0C+Heu4LkYzrVBA2EqWGRnOCJH5zeArGEojkJmnKOim18TAO/e
-         63DNn1T7ibH0EOZm9r5UVtHlaOYnByW1c1ap+BGF3b6K27KxuI6wNPLMOOESirnKOkQI
-         Yks2+5V96Wn1OIr6bCOZ1878kulQt6Q1u6llFiZb1pzQzZV83vjRG0FQR2D2myEDz+AN
-         KVnCGygZibZ9RFSQjcy1vRGf7SeCdh/+3xUx0BZ6oVfjUeAAgRyUzdcaDJFnjRtwlrKA
-         FxLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9EVMIlQwh4xBkzBQyFXhj70Xf9sRW3wT/frdEId3Ojc=;
-        b=5tlQPLszjWwqY/lgT4vy8BxRUufEgwXOtkfZlLmHYFIPkB9PVM6FFw1HCjn5wIcgXC
-         XvOinGeAYX4Uc8Ka6nf9I36jNDkdEAFLlD1Xnk2WMqRUUU89YH8D7ntiH/xq56IG2EjT
-         s0PqA3XW50OuIoEy/8MA6+N9J8UcV1Bx9fuLbE0pxyZaH2Qu6yYWN9YBEXB5U9EKFt73
-         wOnM2VMqFdEGcXGeboVFHZzFkl3fbjJmxPbgvtxS7rmz11p0P4qqIqPVeti9iAA2xaMq
-         93/fNmuvuG5xvIi0pA9aoMdnPEpNL2Od5UqVXomhH77nf55yLN3x4cNrPBxthuWq0ucA
-         /XyQ==
-X-Gm-Message-State: AOAM5303R4ISdRtBBVUdoDW2cgMGPZoCDK1NdWINCY9/OjXftaekaD4p
-        me6Mg3UQW5Jy0iTPz9EKdPGDpOXo+GBPyNdIFiqKu6id
-X-Google-Smtp-Source: ABdhPJyULIR1Adaq4qgyDqkm+Qc4D2RZOUs/zyjMFs1uD0tksbfjqbImKbiQNX/d0mAN5dobzIljur7WNmKbC3yNOdU=
-X-Received: by 2002:a05:6902:84:b0:63d:4a3d:eb5 with SMTP id
- h4-20020a056902008400b0063d4a3d0eb5mr15853364ybs.145.1651628673037; Tue, 03
- May 2022 18:44:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220503070959.2276616-1-lsahlber@redhat.com> <20220503070959.2276616-2-lsahlber@redhat.com>
- <87bkwe2mtf.fsf@cjr.nz>
-In-Reply-To: <87bkwe2mtf.fsf@cjr.nz>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Wed, 4 May 2022 11:44:21 +1000
-Message-ID: <CAN05THQ3r5sY9Ro3-Rf4Td+ucXSJhj+bBEoa7XBVOAXQoPWzRQ@mail.gmail.com>
+        with ESMTP id S1344196AbiEDB7T (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 21:59:19 -0400
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A007B397
+        for <linux-cifs@vger.kernel.org>; Tue,  3 May 2022 18:55:07 -0700 (PDT)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 0758F7FC20;
+        Wed,  4 May 2022 01:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1651629305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dwNFwCRChxlF1KBbAXAX4++Fz1Y4biDFvUf4yQwdrfU=;
+        b=m2WfpqzPHFL4/HL0RpBO6/sKPv5f4pIw2JcDW7FW/XzG8ktGFDUUaMdDLHcaSE1p7B+SoO
+        Y6yMM/gZDLp/cOeHjIbFIpFi03GSsg5cCLUdTiIgcDyidEl3JZIRTbKPDXphqQI3369fRg
+        oE9N3HE6yF1vdOUp/KwELsyF12wPYd/WiclSJpgyvBCJogqs0hyFiHEzDk1uq+41e/6hLe
+        bDn92IJOtDFjT/yrOeulHirT0xJFD6T9+zzu3vD5w7fxmZc0kGOti7F40OJFqq0I8TvXI/
+        P1jga+ijvwAKd5GqpWoTJ9C71TWYKeOToiJtT1YcPZWa4N9CYLq3T4tDeIl5vw==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
 Subject: Re: [PATCH] cifs: cache dirent names for cached directories
-To:     Paulo Alcantara <pc@cjr.nz>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220504014407.2301906-2-lsahlber@redhat.com>
+References: <20220504014407.2301906-1-lsahlber@redhat.com>
+ <20220504014407.2301906-2-lsahlber@redhat.com>
+Date:   Tue, 03 May 2022 22:55:01 -0300
+Message-ID: <8735hq2hai.fsf@cjr.nz>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Good idea,   will resend. Thanks.
+Ronnie Sahlberg <lsahlber@redhat.com> writes:
 
-On Wed, 4 May 2022 at 11:08, Paulo Alcantara <pc@cjr.nz> wrote:
+> Cache the names of entries for cached-directories while we have a lease held.
+> This allows us to avoid expensive calls to the server when re-scanning
+> a cached directory.
 >
-> Hi Ronnie,
->
-> Ronnie Sahlberg <lsahlber@redhat.com> writes:
->
-> > diff --git a/fs/cifs/readdir.c b/fs/cifs/readdir.c
-> > index 1929e80c09ee..8b3fbe6b3580 100644
-> > --- a/fs/cifs/readdir.c
-> > +++ b/fs/cifs/readdir.c
-> > @@ -840,9 +840,112 @@ find_cifs_entry(const unsigned int xid, struct cifs_tcon *tcon, loff_t pos,
-> >       return rc;
-> >  }
-> >
-> > +static bool emit_cached_dirents(struct cached_dirents *cde,
-> > +                             struct dir_context *ctx)
-> > +{
-> > +     struct list_head *tmp;
-> > +     struct cached_dirent *dirent;
-> > +     int rc;
-> > +
-> > +     list_for_each(tmp, &cde->entries) {
-> > +             dirent = list_entry(tmp, struct cached_dirent, entry);
->
-> What about list_for_each_entry()?
->
-> > +static void add_cached_dirent(struct cached_dirents *cde,
-> > +                           struct dir_context *ctx,
-> > +                           const char *name, int namelen,
-> > +                           struct cifs_fattr *fattr)
-> > +{
-> > +     struct cached_dirent *de;
-> > +
-> > +     if (cde->ctx != ctx)
-> > +             return;
-> > +     if (cde->is_valid || cde->is_failed)
-> > +             return;
-> > +     if (ctx->pos != cde->pos) {
-> > +             cde->is_failed = 1;
-> > +             return;
-> > +     }
-> > +     de = kzalloc(sizeof(*de), GFP_ATOMIC);
-> > +     if (de == NULL) {
-> > +             cde->is_failed = 1;
-> > +             return;
-> > +     }
-> > +     de->name = kzalloc(namelen + 1, GFP_ATOMIC);
-> > +     if (de->name == NULL) {
-> > +             kfree(de);
-> > +             cde->is_failed = 1;
-> > +             return;
-> > +     }
-> > +     memcpy(de->name, name, namelen);
->
-> Replace the above kzalloc() & memcpy() with kstrndup()?
->
-> > diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> > index d6aaeff4a30a..10170266f44b 100644
-> > --- a/fs/cifs/smb2ops.c
-> > +++ b/fs/cifs/smb2ops.c
-> > @@ -699,6 +699,8 @@ smb2_close_cached_fid(struct kref *ref)
-> >  {
-> >       struct cached_fid *cfid = container_of(ref, struct cached_fid,
-> >                                              refcount);
-> > +     struct list_head *pos, *q;
-> > +     struct cached_dirent *dirent;
-> >
-> >       if (cfid->is_valid) {
-> >               cifs_dbg(FYI, "clear cached root file handle\n");
-> > @@ -718,6 +720,21 @@ smb2_close_cached_fid(struct kref *ref)
-> >               dput(cfid->dentry);
-> >               cfid->dentry = NULL;
-> >       }
-> > +     /*
-> > +      * Delete all cached dirent names
-> > +      */
-> > +     mutex_lock(&cfid->dirents.de_mutex);
-> > +     list_for_each_safe(pos, q, &cfid->dirents.entries) {
-> > +             dirent = list_entry(pos, struct cached_dirent, entry);
->
-> list_for_each_entry_safe()?
->
-> Nice job!  Looks good to me,
->
-> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> ---
+>  fs/cifs/cifsglob.h |  84 ++++++++++++++--------
+>  fs/cifs/misc.c     |   2 +
+>  fs/cifs/readdir.c  | 173 ++++++++++++++++++++++++++++++++++++++++++---
+>  fs/cifs/smb2ops.c  |  18 ++++-
+>  4 files changed, 236 insertions(+), 41 deletions(-)
+
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
