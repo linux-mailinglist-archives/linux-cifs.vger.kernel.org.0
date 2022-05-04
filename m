@@ -2,114 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8847551B238
-	for <lists+linux-cifs@lfdr.de>; Thu,  5 May 2022 00:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE4251B413
+	for <lists+linux-cifs@lfdr.de>; Thu,  5 May 2022 02:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbiEDWvr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 4 May 2022 18:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S232903AbiEEAGA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 4 May 2022 20:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiEDWvq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 4 May 2022 18:51:46 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50260527E3
-        for <linux-cifs@vger.kernel.org>; Wed,  4 May 2022 15:48:08 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id w4so3825160wrg.12
-        for <linux-cifs@vger.kernel.org>; Wed, 04 May 2022 15:48:08 -0700 (PDT)
+        with ESMTP id S1359807AbiEDX5m (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 4 May 2022 19:57:42 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003CB506FD
+        for <linux-cifs@vger.kernel.org>; Wed,  4 May 2022 16:54:00 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so1928240ots.11
+        for <linux-cifs@vger.kernel.org>; Wed, 04 May 2022 16:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y5ZW9wfARE35+mzpPBdQ/WwQHvHMPvRL2CC5yRh5lbs=;
-        b=3KCR+VDZAh7975nHLf51P5iad1NxKBkIxBDP7oyomf2dk+In/64XyuCTJhDZKUlIOv
-         7jN2cQIWbYM/hXN7LXZVO3McIAZ/dQwr5QAmWwix8l5mKopQl+Smb1/Dm83ZVYlAmJYS
-         I0BMLnpWebPl1DgDp0MzW8sI6BM964bD/juZqRPBYnXu0eYcO6U1o42gmrzmr3iodvpT
-         ux5d6N96wKZZ4VWdEcG8nBmnxefwQiQwbxqHN4uI6y/lFI8dBw5Gyks9aDyCZ1Og9Heg
-         t/n91tmlJiq3YLCeINk5xmzYLHUSe1u+u/KI46oGqu/lFdAsFGRHTBVwfX874AdsXW05
-         SM8A==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
+        b=Dn1MT8x7p4Rbn+pctwVkt7IgIdUxT0LRLjox/JaF9ttsZ2N8sUUglHFRxQa3sl75aK
+         h1U1JpCoOjPff8rV+LL0edQuBh+YvYlTbZ4zx127Qa80qMcS49J0d2nS2s7mVVadwp/M
+         vGp6wV8qQhR9tMRiQjyWHIJslgvG4HigF7p24aLxixJ1l99K68kLikab9Y0HgtSpkDYW
+         0+riuhXlj9dAnGs04evyYz4sFXKtm0FlJKiBI2Dtbo7ebvKr6E7XJkxgxzCXhReMwL1D
+         yv9OUeo9KjH+/RIlVXefhsYivAQRdlwo604eWoXrrvRFVxcSgXwgPis+UtVhyLpBWx3z
+         WyWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y5ZW9wfARE35+mzpPBdQ/WwQHvHMPvRL2CC5yRh5lbs=;
-        b=GhPOjloeRH1/IVW0XHf6WP6NVRXd7A3AOviJyKB4walJzWJAVEzX0kxcSX2XuvGQD+
-         JPSSSP4A0ndeyYStSx6NpCX3leE8oe59oGyfbG9JLyJqUYggDX/6un4qGQlBKJFMkTfP
-         4yV/xyo0auBDiOT2EmJiI7PrzsH8aTEnWakEVls2JNXkAqKFlkOmhhSuELmtgJ4Oa/m5
-         w/TrxQpDObmvYYLdt5bkPpeHAVqDn9vzBA4LaeLoRxvpVwRx83efHJ/AeD4bRtbmnrDe
-         6GhkA4Jqxpms7msB8AlCJTGnwIxYmXiRmE2h+QuA/gnKUp/zK5FtMEMmOKA/j+ffrIvS
-         BC6w==
-X-Gm-Message-State: AOAM530oZETgcRVINwyXrND7gcAQfQ5xd32aF2t1CQ0GT2mhw+GjR1wd
-        zp0rdLU4ZF59HkYlgH6pOHh21Pe5GtnDzy6R
-X-Google-Smtp-Source: ABdhPJyVBb2qiF2uuR0k8UZy4cc/jPQS12AREismuOpQsUkJqnoYMKKp9au7KG/1FkfQrUhknaXQ/A==
-X-Received: by 2002:a5d:6949:0:b0:20a:e021:f8e0 with SMTP id r9-20020a5d6949000000b0020ae021f8e0mr18772980wrw.231.1651704486781;
-        Wed, 04 May 2022 15:48:06 -0700 (PDT)
-Received: from marios-t5500.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id t1-20020adfba41000000b0020c6fa5a797sm6512127wrg.91.2022.05.04.15.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 15:48:06 -0700 (PDT)
-From:   Marios Makassikis <mmakassikis@freebox.fr>
-To:     linux-cifs@vger.kernel.org
-Cc:     Marios Makassikis <mmakassikis@freebox.fr>
-Subject: [PATCH] ksmbd: validate length in fsctl_pipe_transceive()
-Date:   Thu,  5 May 2022 00:48:01 +0200
-Message-Id: <20220504224801.2900034-1-mmakassikis@freebox.fr>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
+        b=woix9WyIPWKfKIckdPdc3b7+SYthFYUYM5XZE4vmlVgESSuVCOqWzsu9jXDcgNFpoc
+         O++w+d+VsXKRX5Tu84s/+sqynHMTiTETbgr192z9XDllccPu38DjYUlUWNo7PUgkoM/T
+         f4/XrmOL6ZnrOFlP/SoLYcAHb/I/YKw9V+Roka5rudFJjFK26+86vk63laxaldmOH1Kr
+         6fRZyL+MSdZIXd2Aq+rDiwIAMRO2OuONoJrRPNOWN7LmfRWSnZELahcBrtmCD/F3KJw3
+         NlgRuZAWXxdHfm4Uq7bd8ECnc2KypeSJGodrLVe+whL8kRkCZwQ0TaX+K2Sh79ORE/a8
+         eLpQ==
+X-Gm-Message-State: AOAM5311fIj9w7cInDwGvLu70U8tTz0W6sRkvFoa5xPJldezpKhAAtSX
+        Jvm7TMD6QF6847OIBX0Nhcww2VU+FjSTjJHp9Fg=
+X-Google-Smtp-Source: ABdhPJyXbFHNtxfp8+qt+M9kuv/iG7XfFeFFPd7I4/fmpdxuycMtmf6dIJw5ghtZAT2CwgvAVE/kUl0HxsirxLIU8v0=
+X-Received: by 2002:a9d:6b16:0:b0:605:e0eb:d3d6 with SMTP id
+ g22-20020a9d6b16000000b00605e0ebd3d6mr8263208otp.213.1651708440302; Wed, 04
+ May 2022 16:54:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:53:59
+ -0700 (PDT)
+Reply-To: ortegainvestmmentforrealinvest@gmail.com
+From:   Info <joybhector64@gmail.com>
+Date:   Thu, 5 May 2022 05:23:59 +0530
+Message-ID: <CAP7KLYgH9LcKHS-KgR0zObHAgC6Fr3D+dOJSbDKurTc_12+iFw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:344 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [joybhector64[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [joybhector64[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The InputCount field contains the number of bytes that should be copied
-from the buffer, starting at the InputOffset.
-
-Change to code to:
- - validate InputCount with regards to the buffer length
- - read data from InputOffset, rather than ->Buffer, as there may be
- padding present
-
-Signed-off-by: Marios Makassikis <mmakassikis@freebox.fr>
----
- fs/ksmbd/smb2pdu.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 23b47e505e2b..7e4051479993 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -7432,12 +7432,23 @@ static int fsctl_pipe_transceive(struct ksmbd_work *work, u64 id,
- 				 struct smb2_ioctl_req *req,
- 				 struct smb2_ioctl_rsp *rsp)
- {
--	struct ksmbd_rpc_command *rpc_resp;
--	char *data_buf = (char *)&req->Buffer[0];
-+	struct ksmbd_rpc_command *rpc_resp = NULL;
-+	char *data_buf;
- 	int nbytes = 0;
-+	size_t length;
- 
--	rpc_resp = ksmbd_rpc_ioctl(work->sess, id, data_buf,
--				   le32_to_cpu(req->InputCount));
-+	length = le32_to_cpu(req->InputCount);
-+
-+	if ((u64)le32_to_cpu(req->InputOffset) + length >
-+	    get_rfc1002_len(work->request_buf) - 4) {
-+		rsp->hdr.Status = STATUS_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	data_buf = (char *)(((char *)&req->hdr.ProtocolId) +
-+			   le32_to_cpu(req->InputOffset));
-+
-+	rpc_resp = ksmbd_rpc_ioctl(work->sess, id, data_buf, length);
- 	if (rpc_resp) {
- 		if (rpc_resp->flags == KSMBD_RPC_SOME_NOT_MAPPED) {
- 			/*
 -- 
-2.25.1
+I am an investor. I came from the USA and I have many investments all
+over the world.
 
+I want you to partner with me to invest in your country I am into many
+investment such as real Estate or buying of properties i can also
+invest money in any of existing business with equity royalty or by %
+percentage so on,
+Warm regards
