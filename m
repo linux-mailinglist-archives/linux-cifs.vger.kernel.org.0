@@ -2,46 +2,47 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA361519279
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 01:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680AD519394
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 03:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiECX7Z (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 3 May 2022 19:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S243200AbiEDBs0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 May 2022 21:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiECX7V (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 19:59:21 -0400
+        with ESMTP id S237189AbiEDBsZ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 21:48:25 -0400
+X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 18:44:51 PDT
 Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F312A1AA
-        for <linux-cifs@vger.kernel.org>; Tue,  3 May 2022 16:55:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19441AF22;
+        Tue,  3 May 2022 18:44:50 -0700 (PDT)
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 27F487FC20;
-        Tue,  3 May 2022 23:55:43 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 0E5CB7FC20;
+        Wed,  4 May 2022 01:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1651622145;
+        t=1651628148;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OB17PS86umE8Lzurri+ELnsu000t2609mjV1pbwg12M=;
-        b=0d2cxk1GeJaT18TeZM0/MamcLdvTLLzyEVPacNQB5e2V0OtdIdr3WaDwqas4w05UqUts6t
-        HQVSv9IsqqoLyq9rEpoeRcW+c6gCowtTmpixZyqwqNwC3cmybVnkh14D8/ZduAiqVfF3re
-        cvhSeuFXaZU3pRItCxByHqLzJyQcifTP+QcSA26zNOLQ5rXqXPS1Z0IlW2Su7l8Ooe0YkV
-        5FbfawERb2jbIw6Ag5VPg99731t54Wlvv4XpbfrHDg9AjFnh8piQ7OwmwCGr4/xcuvfDgE
-        R7FS+ldQYBqMie3FYWfLmGHQXL23M8qcVjoCIUj9z2TFL3V58K9se4PmEoAi0g==
+        bh=8i5okGkEbwGEAVhwahD/P5DzkyrCRNwKvZVtcLyVENY=;
+        b=o1s59jr7ki2Zcrx9IZLlhAd6BxaSM68EQhXtCoWuRQDU3bCYLZmzB00KSL2LpXXBHTqVDM
+        D5sr3DUejfUdckgKqQIIMQWeNO/CaApEimZXAx1vNPp92+59ZxgbTyCoqt+7CW0TqClLvB
+        W+NRNrn6DzB9Oo74irtd32gRYBCbv0U2kmYwBdyhdywSDfiie1ukOi9m+pBYu/vo6qL2Qn
+        U9ck6oUOtnaZfkpeOr8/hBIudK6SBmLgje08/TNUP0WKyZYeW5amsW++HV2L0JBzTE7cf/
+        VhaY4OK5qorJnCNmlVTtskjN0YfBjLfJN8Hr0xmTTmU6I12352hAbhZL21FckQ==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>
-Subject: Re: [PATCH] cifs: cache dirent names for cached directories
-In-Reply-To: <20220503070959.2276616-2-lsahlber@redhat.com>
-References: <20220503070959.2276616-1-lsahlber@redhat.com>
- <20220503070959.2276616-2-lsahlber@redhat.com>
-Date:   Tue, 03 May 2022 20:55:40 -0300
-Message-ID: <87bkwe2mtf.fsf@cjr.nz>
+To:     Byron Stanoszek <gandalf@winds.org>,
+        Steve French <sfrench@samba.org>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
+ long
+In-Reply-To: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
+References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
+Date:   Tue, 03 May 2022 22:35:43 -0300
+Message-ID: <878rri2i6o.fsf@cjr.nz>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,86 +54,41 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi Ronnie,
+Byron Stanoszek <gandalf@winds.org> writes:
 
-Ronnie Sahlberg <lsahlber@redhat.com> writes:
+> I would like to report a regression in the CIFS fs. Sometime between Linux 4.14
+> and 5.16, mounting CIFS with option vers=1.0 (and
+> CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y set appropriately) with security type
+> NTLMSSP stopped working for me. The server side is a Windows 2003 Server.
+>
+> I found that this behavior depends on the length of the Linux client's
+> host+domain name (e.g. utsname()->nodename), where the mount works as long as
+> the name is 16 characters or less. Anything 17 or above returns -EIO, per the
+> following example:
 
-> diff --git a/fs/cifs/readdir.c b/fs/cifs/readdir.c
-> index 1929e80c09ee..8b3fbe6b3580 100644
-> --- a/fs/cifs/readdir.c
-> +++ b/fs/cifs/readdir.c
-> @@ -840,9 +840,112 @@ find_cifs_entry(const unsigned int xid, struct cifs_tcon *tcon, loff_t pos,
->  	return rc;
->  }
->  
-> +static bool emit_cached_dirents(struct cached_dirents *cde,
-> +				struct dir_context *ctx)
-> +{
-> +	struct list_head *tmp;
-> +	struct cached_dirent *dirent;
-> +	int rc;
-> +
-> +	list_for_each(tmp, &cde->entries) {
-> +		dirent = list_entry(tmp, struct cached_dirent, entry);
+Looks like your server is expecting the WorkstationName field in
+AUTHENTICATE_MESSAGE payload to be 16 bytes long.  That is, NetBIOS name
+length as per rfc1001.
 
-What about list_for_each_entry()?
+> I implemented a workaround using the following patch:
+>
+> Signed-off-by: Byron Stanoszek <gandalf@winds.org>
+> ---
+> --- a/fs/cifs/cifsglob.h
+> +++ b/fs/cifs/cifsglob.h
+> @@ -101,7 +101,7 @@
+>   #define XATTR_DOS_ATTRIB "user.DOSATTRIB"
+>   #endif
+>
+> -#define CIFS_MAX_WORKSTATION_LEN  (__NEW_UTS_LEN + 1)  /* reasonable max for client */
+> +#define CIFS_MAX_WORKSTATION_LEN 16
+>
+>   /*
+>    * CIFS vfs client Status information (based on what we know.)
+>
+> I don't know if this patch is correct or will have any real effect outside of
+> the NTLMSSP session connect sequence, but it worked in my case.
 
-> +static void add_cached_dirent(struct cached_dirents *cde,
-> +			      struct dir_context *ctx,
-> +			      const char *name, int namelen,
-> +			      struct cifs_fattr *fattr)
-> +{
-> +	struct cached_dirent *de;
-> +
-> +	if (cde->ctx != ctx)
-> +		return;
-> +	if (cde->is_valid || cde->is_failed)
-> +		return;
-> +	if (ctx->pos != cde->pos) {
-> +		cde->is_failed = 1;
-> +		return;
-> +	}
-> +	de = kzalloc(sizeof(*de), GFP_ATOMIC);
-> +	if (de == NULL) {
-> +		cde->is_failed = 1;
-> +		return;
-> +	}
-> +	de->name = kzalloc(namelen + 1, GFP_ATOMIC);
-> +	if (de->name == NULL) {
-> +		kfree(de);
-> +		cde->is_failed = 1;
-> +		return;
-> +	}
-> +	memcpy(de->name, name, namelen);
-
-Replace the above kzalloc() & memcpy() with kstrndup()?
-
-> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> index d6aaeff4a30a..10170266f44b 100644
-> --- a/fs/cifs/smb2ops.c
-> +++ b/fs/cifs/smb2ops.c
-> @@ -699,6 +699,8 @@ smb2_close_cached_fid(struct kref *ref)
->  {
->  	struct cached_fid *cfid = container_of(ref, struct cached_fid,
->  					       refcount);
-> +	struct list_head *pos, *q;
-> +	struct cached_dirent *dirent;
->  
->  	if (cfid->is_valid) {
->  		cifs_dbg(FYI, "clear cached root file handle\n");
-> @@ -718,6 +720,21 @@ smb2_close_cached_fid(struct kref *ref)
->  		dput(cfid->dentry);
->  		cfid->dentry = NULL;
->  	}
-> +	/*
-> +	 * Delete all cached dirent names
-> +	 */
-> +	mutex_lock(&cfid->dirents.de_mutex);
-> +	list_for_each_safe(pos, q, &cfid->dirents.entries) {
-> +		dirent = list_entry(pos, struct cached_dirent, entry);
-
-list_for_each_entry_safe()?
-
-Nice job!  Looks good to me,
-
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Perhaps we should be use TCP_Server_Info::workstation_RFC1001_name in
+fs/cifs/sess.c:build_ntlmssp_auth_blob() instead only when connecting to
+old servers by using insecure dialects -- like SMB1, in your case.
