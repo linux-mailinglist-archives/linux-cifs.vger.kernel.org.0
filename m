@@ -2,93 +2,62 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680AD519394
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 03:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B59519390
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 May 2022 03:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243200AbiEDBs0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 3 May 2022 21:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S234308AbiEDBr5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 3 May 2022 21:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbiEDBsZ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 21:48:25 -0400
-X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 18:44:51 PDT
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19441AF22;
-        Tue,  3 May 2022 18:44:50 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 0E5CB7FC20;
-        Wed,  4 May 2022 01:35:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1651628148;
+        with ESMTP id S233223AbiEDBr4 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 3 May 2022 21:47:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C0228E3D
+        for <linux-cifs@vger.kernel.org>; Tue,  3 May 2022 18:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651628657;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8i5okGkEbwGEAVhwahD/P5DzkyrCRNwKvZVtcLyVENY=;
-        b=o1s59jr7ki2Zcrx9IZLlhAd6BxaSM68EQhXtCoWuRQDU3bCYLZmzB00KSL2LpXXBHTqVDM
-        D5sr3DUejfUdckgKqQIIMQWeNO/CaApEimZXAx1vNPp92+59ZxgbTyCoqt+7CW0TqClLvB
-        W+NRNrn6DzB9Oo74irtd32gRYBCbv0U2kmYwBdyhdywSDfiie1ukOi9m+pBYu/vo6qL2Qn
-        U9ck6oUOtnaZfkpeOr8/hBIudK6SBmLgje08/TNUP0WKyZYeW5amsW++HV2L0JBzTE7cf/
-        VhaY4OK5qorJnCNmlVTtskjN0YfBjLfJN8Hr0xmTTmU6I12352hAbhZL21FckQ==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Byron Stanoszek <gandalf@winds.org>,
-        Steve French <sfrench@samba.org>
-Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
- long
-In-Reply-To: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
-References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
-Date:   Tue, 03 May 2022 22:35:43 -0300
-Message-ID: <878rri2i6o.fsf@cjr.nz>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JG4nQbhkIb1QoHfZI8Py7ylnm1ydXNGoEWttGn5gVhE=;
+        b=Phsq+t118G8QlKJHfqFvB7Cc/tm5J9eWemSvelJCz1arxKhMeZdy7/yLQII++CFXcO/Rb6
+        ezqQSit2VFsBC8oipI6upGtSmfPxSQ00Uoz7vjyeHVgHd3u1K/m0bPyLXN0RU1FUsBs+U5
+        1fuk4ZIvzVjae3HbG9QXNJHJfVymKE4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-314-HN9uw2cQPN-KdWf0KZO5WQ-1; Tue, 03 May 2022 21:44:16 -0400
+X-MC-Unique: HN9uw2cQPN-KdWf0KZO5WQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12C19811E76;
+        Wed,  4 May 2022 01:44:16 +0000 (UTC)
+Received: from thinkpad (vpn2-54-170.bne.redhat.com [10.64.54.170])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CFCBC27D8F;
+        Wed,  4 May 2022 01:44:15 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: cache dirent names for the cached directory while we hold a lease
+Date:   Wed,  4 May 2022 11:44:06 +1000
+Message-Id: <20220504014407.2301906-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Byron Stanoszek <gandalf@winds.org> writes:
+List, Steve, Paulo,
 
-> I would like to report a regression in the CIFS fs. Sometime between Linux 4.14
-> and 5.16, mounting CIFS with option vers=1.0 (and
-> CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y set appropriately) with security type
-> NTLMSSP stopped working for me. The server side is a Windows 2003 Server.
->
-> I found that this behavior depends on the length of the Linux client's
-> host+domain name (e.g. utsname()->nodename), where the mount works as long as
-> the name is 16 characters or less. Anything 17 or above returns -EIO, per the
-> following example:
+v2: Update with Paulos suggestions.
 
-Looks like your server is expecting the WorkstationName field in
-AUTHENTICATE_MESSAGE payload to be 16 bytes long.  That is, NetBIOS name
-length as per rfc1001.
 
-> I implemented a workaround using the following patch:
->
-> Signed-off-by: Byron Stanoszek <gandalf@winds.org>
-> ---
-> --- a/fs/cifs/cifsglob.h
-> +++ b/fs/cifs/cifsglob.h
-> @@ -101,7 +101,7 @@
->   #define XATTR_DOS_ATTRIB "user.DOSATTRIB"
->   #endif
->
-> -#define CIFS_MAX_WORKSTATION_LEN  (__NEW_UTS_LEN + 1)  /* reasonable max for client */
-> +#define CIFS_MAX_WORKSTATION_LEN 16
->
->   /*
->    * CIFS vfs client Status information (based on what we know.)
->
-> I don't know if this patch is correct or will have any real effect outside of
-> the NTLMSSP session connect sequence, but it worked in my case.
 
-Perhaps we should be use TCP_Server_Info::workstation_RFC1001_name in
-fs/cifs/sess.c:build_ntlmssp_auth_blob() instead only when connecting to
-old servers by using insecure dialects -- like SMB1, in your case.
