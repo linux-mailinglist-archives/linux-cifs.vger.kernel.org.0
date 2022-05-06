@@ -2,76 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936BA51D9CC
-	for <lists+linux-cifs@lfdr.de>; Fri,  6 May 2022 16:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2380B51E0BA
+	for <lists+linux-cifs@lfdr.de>; Fri,  6 May 2022 23:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiEFOJT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 6 May 2022 10:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S1444267AbiEFVKr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 6 May 2022 17:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441985AbiEFOI5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 6 May 2022 10:08:57 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8757356762;
-        Fri,  6 May 2022 07:05:14 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 77F3E7FD1E;
-        Fri,  6 May 2022 14:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1651845912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D8PQ6ZppMbJK9YEvYymT3s+2KUmz/2wUmtRG/KrTmGs=;
-        b=CJBM90vLK6FF2svC+lLCwWg2iAirFM6fOiHi8TIVN3G2nxHPaSNWMyImI0bPdsMmbL6twx
-        4x2+2Cpv6RQThUO5mVPNz015VONId9XpbLlkc2Tf7Atjrr+ITArrDaehUNbU+O+0pZxysW
-        I4mxs9P5l5ubHiTJ2MgoKt+6Ho/RGVtCQXHWbA+MEjrhnifN3Ja704P0b20oPnrg91Gmvt
-        Lnrih5mC2eqtNraXIct3IjViODxkbqLGNlGoth5lKqFW7KWaUHcCvn1YrxCgLqFqG0c0RC
-        nCtNNhSOYaKArFODDeDqMY7nbQjPsQz6eRTAnj1/2SVbeD3XfF0KeLUpjZSfew==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc:     Tom Talpey <tom@talpey.com>, Steven French <sfrench@samba.org>,
-        Byron Stanoszek <gandalf@winds.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
- long
-In-Reply-To: <CAN05THQYKRChdR_4T86dGtCO=xY+cWpfa6_fOVNh9WSB=RNE-A@mail.gmail.com>
-References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
- <878rri2i6o.fsf@cjr.nz> <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
- <87tua51550.fsf@cjr.nz> <df763cb0-83f2-35a5-a381-57cfd040becf@talpey.com>
- <87r15910c1.fsf@cjr.nz>
- <CAN05THQYKRChdR_4T86dGtCO=xY+cWpfa6_fOVNh9WSB=RNE-A@mail.gmail.com>
-Date:   Fri, 06 May 2022 11:05:06 -0300
-Message-ID: <87wneyah9p.fsf@cjr.nz>
+        with ESMTP id S1444208AbiEFVKq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 6 May 2022 17:10:46 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3B6F486
+        for <linux-cifs@vger.kernel.org>; Fri,  6 May 2022 14:07:02 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 15so7030793pgf.4
+        for <linux-cifs@vger.kernel.org>; Fri, 06 May 2022 14:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=iE9UxHskNYHOO3H6FjKnavEf/Vjcp2jY3sbm6CS/ddTi0T1p6m5/UtB6ZYUa6tFOB2
+         Ig8MnUmvdShFqU/t2V3sf0VxI8F53A5RIByqyjJykSn8ieXmDiZN6wT5vQH17OT9KbV4
+         Wh6XO1gXfmv4kNjTEU5onYMXqtZZ759010DMiwUoke6171scdH4NQYAQ2WJmXpXeG4Hx
+         8WzegUtGwAYUuhUrXXfSp/zkWruEJ7Z5A5TDKpIT1zEJL+9Sg719xYm6kAzxSW7LmgU3
+         rMPBwREKO585DxQEooB8vVmb1j5yZMIcxbhHz4sA3NqN5AJHa06hHhGOrrSvcrwggGhf
+         VOhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=oYlN1vsrTPybDsdC6AAcCBKXq5CtjVJwwntEFv69Tm/W6bqS8jbYWeaz7Gr7/XXh/U
+         1EDYHraBd6pmVAnb//DIs+Z05EbrSEfimhYiHMsTtC9mnElufnfw63G3jBDdu82fjHbh
+         tEcaglFjok41DqzQW4/IIzAshEqYoInhcrCAhqa5PHteoWEQksoRjv6HpxU+QTI0EQ5E
+         QlC2YyD7vYFL8AU+WBQfCOxNztOGmKu6ymE2InRX8zzENEhXsl2ByjdbAcRRLjV6kwBG
+         1zo7XVRkeLf/9ZqdNyUQTD88jDYV7ZptuHTHi9pxsATFOU54qQGWZ5/iJZdC7IYEkuni
+         wCzg==
+X-Gm-Message-State: AOAM532m5gxGAp8TWdwH969B4WW8pAyyz0badz263c06YfAdA/VEG/7U
+        a2HuN3zsuW90ybNtSD2ki7tWdfpSXqCPLeOdVQ==
+X-Google-Smtp-Source: ABdhPJxA4tMTEq7P/0jtu2Ff22tn6HCkzNtMoobPUYPQu2Irf9FYCU0bHU5vCBrv2yRsX8AKw6Ct5aygp3lg0aibY4c=
+X-Received: by 2002:a63:6984:0:b0:398:8db9:7570 with SMTP id
+ e126-20020a636984000000b003988db97570mr4188221pgc.373.1651871221680; Fri, 06
+ May 2022 14:07:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_PBL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:07:00 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:07:00 +0000
+Message-ID: <CAD_xG_rvFPU0i04q43u4Eqz-KE8g9V=rM_WOZ+=1a4JauU5OEQ@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4985]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-ronnie sahlberg <ronniesahlberg@gmail.com> writes:
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-> This regression should be easy to fix, but maybe we should not have
-> done the initial change in the first place.
-> If things is broken and do not work under SMB1, that is a good thing.
-> Instead of adding features or fixing
-> missing parts to SMB1 we should just tell people to switch to SMB2 instead.
->
-> I think if things do not work correctly or things are missing in smb1,
-> that is a GOOD THING.
-> :-)
-
-LOL - couldn't agree more :-)
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
