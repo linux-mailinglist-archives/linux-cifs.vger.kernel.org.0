@@ -2,97 +2,129 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2380B51E0BA
-	for <lists+linux-cifs@lfdr.de>; Fri,  6 May 2022 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B192E51E382
+	for <lists+linux-cifs@lfdr.de>; Sat,  7 May 2022 04:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444267AbiEFVKr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 6 May 2022 17:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S1356890AbiEGCXA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 6 May 2022 22:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444208AbiEFVKq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 6 May 2022 17:10:46 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3B6F486
-        for <linux-cifs@vger.kernel.org>; Fri,  6 May 2022 14:07:02 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 15so7030793pgf.4
-        for <linux-cifs@vger.kernel.org>; Fri, 06 May 2022 14:07:02 -0700 (PDT)
+        with ESMTP id S245684AbiEGCW7 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 6 May 2022 22:22:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF86B69700
+        for <linux-cifs@vger.kernel.org>; Fri,  6 May 2022 19:19:13 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id k27so10534218edk.4
+        for <linux-cifs@vger.kernel.org>; Fri, 06 May 2022 19:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=iE9UxHskNYHOO3H6FjKnavEf/Vjcp2jY3sbm6CS/ddTi0T1p6m5/UtB6ZYUa6tFOB2
-         Ig8MnUmvdShFqU/t2V3sf0VxI8F53A5RIByqyjJykSn8ieXmDiZN6wT5vQH17OT9KbV4
-         Wh6XO1gXfmv4kNjTEU5onYMXqtZZ759010DMiwUoke6171scdH4NQYAQ2WJmXpXeG4Hx
-         8WzegUtGwAYUuhUrXXfSp/zkWruEJ7Z5A5TDKpIT1zEJL+9Sg719xYm6kAzxSW7LmgU3
-         rMPBwREKO585DxQEooB8vVmb1j5yZMIcxbhHz4sA3NqN5AJHa06hHhGOrrSvcrwggGhf
-         VOhw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0rc1iRJ23vuI+LNL7tsvrCNLhd/F2RTpsTz08f1Oknc=;
+        b=Yo3QDvgLdw9z/ZnHxY2VPJ/19wSuEvsvjHSgns4LgsRSY/Wrhnbv2s9OHBYwEY2wnj
+         dcQZCGz0h9QJlXeLrTKFfXX3r5CPlgYLJ8+DLOESSfOHA1KTKf70BulHo9Orz1wrGbVG
+         BHIs/cNFB9OIys9OUGro4MYalWrNirviJSJSZVukxlF7X2H6DkrVw2FGiZVJEvpgeuVp
+         r5S0zn4++ztuW28fXbQx9QqQgV6f8+9EkZmivG6rcIKkjsm/q3OUGALvJ66BBW0b60FB
+         4Awg8oJ7dTX0SrkKf2ZsmZw7pKavH/gY3UxAHMZiiNoE6xxCH7Xg+ROKQ+rphRCIlTBB
+         wD9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=oYlN1vsrTPybDsdC6AAcCBKXq5CtjVJwwntEFv69Tm/W6bqS8jbYWeaz7Gr7/XXh/U
-         1EDYHraBd6pmVAnb//DIs+Z05EbrSEfimhYiHMsTtC9mnElufnfw63G3jBDdu82fjHbh
-         tEcaglFjok41DqzQW4/IIzAshEqYoInhcrCAhqa5PHteoWEQksoRjv6HpxU+QTI0EQ5E
-         QlC2YyD7vYFL8AU+WBQfCOxNztOGmKu6ymE2InRX8zzENEhXsl2ByjdbAcRRLjV6kwBG
-         1zo7XVRkeLf/9ZqdNyUQTD88jDYV7ZptuHTHi9pxsATFOU54qQGWZ5/iJZdC7IYEkuni
-         wCzg==
-X-Gm-Message-State: AOAM532m5gxGAp8TWdwH969B4WW8pAyyz0badz263c06YfAdA/VEG/7U
-        a2HuN3zsuW90ybNtSD2ki7tWdfpSXqCPLeOdVQ==
-X-Google-Smtp-Source: ABdhPJxA4tMTEq7P/0jtu2Ff22tn6HCkzNtMoobPUYPQu2Irf9FYCU0bHU5vCBrv2yRsX8AKw6Ct5aygp3lg0aibY4c=
-X-Received: by 2002:a63:6984:0:b0:398:8db9:7570 with SMTP id
- e126-20020a636984000000b003988db97570mr4188221pgc.373.1651871221680; Fri, 06
- May 2022 14:07:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0rc1iRJ23vuI+LNL7tsvrCNLhd/F2RTpsTz08f1Oknc=;
+        b=AxEwU+5ZHkq9wkTP/GiPJewrSH8N1IX1JmDAWtaV8iXesSSP3Ug+483l/09Z2vyT+E
+         rt0jT7lDJWokjXNyrosuVw24pQSKlWmxkpqlG8uBrJX8GWBLveJH1QrBEpK3Z6M4+0VH
+         1JtcGhcxN/c5KRwtEL28r0ihdty2gKTXZ++E59gjGEGFm5P5Vd3lBGs6ESVrznuWCzoH
+         Moc+lWLKBRmU75QeE4EANJoCrJETxS3idUwewh8Oq7MoybH3xvVQU3CUeDk1eb/btY/l
+         Z8KrubDW64vi1jffHebiN0Lr9bL9Yd/0CPiib0I8Xly0kdxpg1iCmiHxcwNZreJuxP8l
+         KlZQ==
+X-Gm-Message-State: AOAM533c4VimHLUeJTun+tGlJwF7FOxzW/gtFacpHN0vvKAJFgxACZP6
+        dljrk+sMZVjPhrGFy20BBj+WdUyd4N8j6JdZUfs=
+X-Google-Smtp-Source: ABdhPJzfEM05KIzYsdAyF67mUA8Pd0EP4ufEIrv8G70whGUK+BZY7bnBUY6E7KRDK+U5q6DWWyCKsJuUuiODIv+QpBQ=
+X-Received: by 2002:a05:6402:4249:b0:427:cfac:fd43 with SMTP id
+ g9-20020a056402424900b00427cfacfd43mr6575117edb.92.1651889952181; Fri, 06 May
+ 2022 19:19:12 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
- 14:07:00 -0700 (PDT)
-Reply-To: warren001buffett@gmail.com
-In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-From:   Warren Buffett <guidayema@gmail.com>
-Date:   Fri, 6 May 2022 21:07:00 +0000
-Message-ID: <CAD_xG_rvFPU0i04q43u4Eqz-KE8g9V=rM_WOZ+=1a4JauU5OEQ@mail.gmail.com>
-Subject: Fwd: My name is Warren Buffett, an American businessman.
-To:     undisclosed-recipients:;
+References: <CANT5p=rgt8bcy4PrEP8r-KXFwu2msTk2pRNFSbHrpVSFrAYkaQ@mail.gmail.com>
+ <efb4251a-d203-2783-7590-afc25580e9ce@talpey.com>
+In-Reply-To: <efb4251a-d203-2783-7590-afc25580e9ce@talpey.com>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Sat, 7 May 2022 07:49:00 +0530
+Message-ID: <CANT5p=p=oatzKNdo8DwxXnBDNxZQRjh7k5rPws9UCVRwvecHAA@mail.gmail.com>
+Subject: Re: Improving perf for async i/o path
+To:     Tom Talpey <tom@talpey.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Pavel Shilovsky <piastryyy@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Steve French <smfrench@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4985]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [guidayema[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-My name is Warren Buffett, an American businessman and investor I have
-something important to discuss with you.
+On Fri, May 6, 2022 at 5:44 PM Tom Talpey <tom@talpey.com> wrote:
+>
+> On 5/6/2022 7:28 AM, Shyam Prasad N wrote:
+> > Hi,
+> >
+> > This is a question for anyone who understands the async I/O codepath
+> > better than I do:
+> >
+> > Today, we have the esize mount option, which delegates the task of
+> > decryption to worker threads. But the task of encryption still happens
+> > in the context of the i/o thread.
+> >
+> > If the i/o process does synchronous read/write, it isn't such a big
+> > deal. But if it's an async i/o, there is a potentially significant
+> > perf gain that we can make if we can offload the heavy lifting to
+> > worker threads, and let the main thread move on to the next request.
+>
+> How do you measure "perf gain"? Won't the extra context switching
+> increase the client CPU load? Generally speaking, an application
+> doing async i/o is already carefully managing parallelism. Are you
+> certain that adding more will always be a win? Will the application
+> performance overall actually improve?
+>
 
-Mr. Warren Buffett
-warren001buffett@gmail.com
-Chief Executive Officer: Berkshire Hathaway
-aphy/Warren-Edward-Buffett
+Hi Tom,
+
+I'm actually profiling cifs.ko performance for a customer who's
+running a set of benchmark tests which tries to capture their actual
+workloads.
+One such workload is the one with a single application process that is
+pumping random async writes to a handful of files on the system.
+So the app expects that the request is queued asap before being
+unblocked, so that it can move on to the next request. Seems like a
+fair ask.
+
+On profiling cifs.ko, I found that all the other CPUs are fairly idle,
+when one cpu is kept busy in queuing up requests.
+And because it does encryption and tcp send as a part of queuing up
+requests, I feel that it is not as fast as it should be.
+I feel that if this task is spread out across the other CPUs (by the
+way of delegation), the I/Os can unblock much more quickly, thereby
+keeping many more requests in-flight quickly,
+
+Note that this is only theoretical so far. I will try it out and see
+if that is actually what happens, but I wanted to collect opinions on
+whether there are any down-sides to this approach.
+
+> > What do you all feel about moving the server->ops->async_writev (and
+> > async_readv) to a worker thread? Do you see any potential challenges
+> > if we go that route?
+>
+> Need more data.
+>
+> Tom.
+
+
+
+-- 
+Regards,
+Shyam
