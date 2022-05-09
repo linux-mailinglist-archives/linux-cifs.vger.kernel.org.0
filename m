@@ -2,52 +2,52 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8C652099B
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 May 2022 01:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6710D52099C
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 May 2022 01:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiEIXs0 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 9 May 2022 19:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S233626AbiEIXs1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 9 May 2022 19:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiEIXrn (ORCPT
+        with ESMTP id S233337AbiEIXrn (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Mon, 9 May 2022 19:47:43 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE6AF1FCD7
-        for <linux-cifs@vger.kernel.org>; Mon,  9 May 2022 16:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDEF624D582
+        for <linux-cifs@vger.kernel.org>; Mon,  9 May 2022 16:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652139747;
+        s=mimecast20190719; t=1652139745;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F48/Y3uQOD7Eu5H015Rw4xIjlnPb9WEBVNhMztY2aDA=;
-        b=JZx14KmpX+OziGOto6pkL1RDCUBg5FWE+Jm2uRMDxkzYc/HDV4uURDvbni6T2frv+H+WFy
-        7pIPeIQ+eYRgXnNdm7J5kM9sFjF5nuSOAPUcPaH27edKeae16XzAWpNXxsmVHgHCxuM5dZ
-        ri6EpwPvcNHmVD1qBdce4ZYgFyUT6zM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0xkymvY8JbCicQiNHW1ZV/vC9xg9m0aPvHGoAwurZi8=;
+        b=MzlnFvtGC+zbutn3PoAaSOyJGjZBmtvsu33AVtEspkXUravG44zVavFqSvjOJKUP61zwBI
+        XTr2h27sTUQ7SwmpNKBhv6MyL3euuj11rle0vm0MRFxNAHZtriPp0nGyAhP69L1tAfhkxR
+        z3h1GAxLvLlm+Gu8QvR73ef9tKNiS1g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-CdAfgujrOmKfcjXC5FqroA-1; Mon, 09 May 2022 19:42:24 -0400
-X-MC-Unique: CdAfgujrOmKfcjXC5FqroA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-648-OJ2z0YofPMu5XECwYx-Fxw-1; Mon, 09 May 2022 19:42:21 -0400
+X-MC-Unique: OJ2z0YofPMu5XECwYx-Fxw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02DA51C05AA4;
-        Mon,  9 May 2022 23:42:24 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 228C7185A7A4;
+        Mon,  9 May 2022 23:42:21 +0000 (UTC)
 Received: from thinkpad (vpn2-54-168.bne.redhat.com [10.64.54.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B2B62166B2F;
-        Mon,  9 May 2022 23:42:22 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 003A07C58;
+        Mon,  9 May 2022 23:42:19 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
 Cc:     Steve French <smfrench@gmail.com>
-Subject: [PATCH 2/4] cifs: check for smb1 in open_cached_dir()
-Date:   Tue, 10 May 2022 09:42:05 +1000
-Message-Id: <20220509234207.2469586-3-lsahlber@redhat.com>
+Subject: [PATCH 3/4] cifs: set the CREATE_NOT_FILE when opening the directory in use_cached_dir()
+Date:   Tue, 10 May 2022 09:42:06 +1000
+Message-Id: <20220509234207.2469586-4-lsahlber@redhat.com>
 In-Reply-To: <20220509234207.2469586-1-lsahlber@redhat.com>
 References: <20220509234207.2469586-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,33 +58,60 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Check protocol version in open_cached_dir() and return not supported
-for SMB1.  This allows us to call open_cached_dir() from code that
-is common to both smb1 and smb2/3 in future patches without having to
-do this check in the call-site.
-At the same time, add a check if tcon is valid or not for the same reason.
+This enforces that we can only do this for directories and not normal files
+or else the server will return an error.
+This means that we will have conditionally check IF the path refers
+to a directory or not in all the call-sites where we are unsure.
+Right now this check is for "" i.e. root.
 
 Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
 Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
 ---
- fs/cifs/smb2ops.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/cifs/smb2inode.c | 5 ++++-
+ fs/cifs/smb2ops.c   | 5 +++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
+diff --git a/fs/cifs/smb2inode.c b/fs/cifs/smb2inode.c
+index fe5bfa245fa7..0c3e4d2c6207 100644
+--- a/fs/cifs/smb2inode.c
++++ b/fs/cifs/smb2inode.c
+@@ -514,8 +514,11 @@ smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	if (smb2_data == NULL)
+ 		return -ENOMEM;
+ 
++	if (strcmp(full_path, ""))
++		rc = -ENOENT;
++	else
++		rc = open_cached_dir(xid, tcon, full_path, cifs_sb, &cfid);
+ 	/* If it is a root and its handle is cached then use it */
+-	rc = open_cached_dir(xid, tcon, full_path, cifs_sb, &cfid);
+ 	if (!rc) {
+ 		if (tcon->crfid.file_all_info_is_valid) {
+ 			move_smb2_info_to_cifs(data,
 diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index d6aaeff4a30a..2c93ee27d54d 100644
+index 2c93ee27d54d..cbe56ed35694 100644
 --- a/fs/cifs/smb2ops.c
 +++ b/fs/cifs/smb2ops.c
-@@ -776,7 +776,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 	struct cifs_fid *pfid;
- 	struct dentry *dentry;
+@@ -825,7 +825,7 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	rqst[0].rq_nvec = SMB2_CREATE_IOV_SIZE;
  
--	if (tcon->nohandlecache)
-+	if (tcon == NULL || tcon->nohandlecache ||
-+	    is_smb1_server(tcon->ses->server))
- 		return -ENOTSUPP;
+ 	oparms.tcon = tcon;
+-	oparms.create_options = cifs_create_options(cifs_sb, 0);
++	oparms.create_options = cifs_create_options(cifs_sb, CREATE_NOT_FILE);
+ 	oparms.desired_access = FILE_READ_ATTRIBUTES;
+ 	oparms.disposition = FILE_OPEN;
+ 	oparms.fid = pfid;
+@@ -2696,7 +2696,8 @@ smb2_query_info_compound(const unsigned int xid, struct cifs_tcon *tcon,
+ 	resp_buftype[0] = resp_buftype[1] = resp_buftype[2] = CIFS_NO_BUFFER;
+ 	memset(rsp_iov, 0, sizeof(rsp_iov));
  
- 	if (cifs_sb->root == NULL)
+-	rc = open_cached_dir(xid, tcon, path, cifs_sb, &cfid);
++	if (!strcmp(path, ""))
++		rc = open_cached_dir(xid, tcon, path, cifs_sb, &cfid);
+ 
+ 	memset(&open_iov, 0, sizeof(open_iov));
+ 	rqst[0].rq_iov = open_iov;
 -- 
 2.30.2
 
