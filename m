@@ -2,98 +2,76 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A85952090E
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 May 2022 01:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B384352099D
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 May 2022 01:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbiEIXjQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 9 May 2022 19:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S231164AbiEIXs2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 9 May 2022 19:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbiEIXhx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 9 May 2022 19:37:53 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFD422B3BD
-        for <linux-cifs@vger.kernel.org>; Mon,  9 May 2022 16:33:24 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i11so5732358ybq.9
-        for <linux-cifs@vger.kernel.org>; Mon, 09 May 2022 16:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nJ705cFGeJ3ke+5mkUPrPEewNX7yrE75qmvJ2KVZf0s=;
-        b=Id8h4Jfxx0Tato37+T4c7FtNNZZsIGQix+P7tghZfeFEHS0wq3U2saCP062iKezOQ7
-         u0rU2pF5eBaMpyMu/cDssJ8mnBmYCWlKS6x2WZPuE+6PInlY5x0dh7xm0snWUn2h1oEb
-         +0Q7pOpBmaBSseT1iiGdAQxG3rzLX6Yv9WGScr49O7sFREK1aPSMJTruGw8Xx1PUbCPj
-         v9meUF82HjiUrL39SKas/T03J5BlEDKk2UTy+chZCyFz9i+0or0tytACDCHWfIv/zdMm
-         Gr7B4wGje2R3hUWch1r/WUWpXX3oQL6s2xAro61cCVgJOf9xA3mEWjmQHWL8uu1yYplk
-         h3mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nJ705cFGeJ3ke+5mkUPrPEewNX7yrE75qmvJ2KVZf0s=;
-        b=7yIUZ12D17k3grJptnWMqGtlL2RRQsUnVlSpuOZUB///otDazeiAiaaeqUT5diDkpd
-         XFHjSisEuaVqAwmbvXV2SgUzVps+p0RtwlqnQlukKiTpmdH+JTN1amI/tHBMvmPFIcLQ
-         n9BDdk1A9xtjG+AeFwhEfPy6RwciCz1X+3290pGWmY6eqpCW1IB7U+d+ZsoWTP3d8omP
-         +8hmMn10980/brxCgrkUe3z3LnspLfRyXb3VDsTNxCdsqDt2PxgvXRS493qpNxvytOXC
-         TCdOX0pddYkHXqkhp9KJFQJ7c9D47lkjuvx/xpGRu6gIDvduBm+VgWjCwN4JWuQNgeYg
-         869A==
-X-Gm-Message-State: AOAM531Lg73TC9Ph4u/MlZCc/+JekfwN5Fh8yikwujoqBX0v6YkVMrYj
-        KoFUK3JHsO4yk7ZsG2keKsWY8zEjJd2NYlVo9aQ=
-X-Google-Smtp-Source: ABdhPJz/e3egqCbCacf/2s7SXDdiT7qVUZzwzLAkBPenhuOf2a2o0iGFrC2ZngESbSJwUQpRGCVjQcayhwtt3N8kIaU=
-X-Received: by 2002:a05:6902:709:b0:64a:99b:3594 with SMTP id
- k9-20020a056902070900b0064a099b3594mr16133992ybt.493.1652139204034; Mon, 09
- May 2022 16:33:24 -0700 (PDT)
+        with ESMTP id S233351AbiEIXro (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 9 May 2022 19:47:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA31826FA57
+        for <linux-cifs@vger.kernel.org>; Mon,  9 May 2022 16:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652139755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NmCwGT/Vdls1bGsADt4fWNjUaaGJ7fe9iuKRbYQXlxs=;
+        b=A94u1RMejeOlW+D1gwQjgo7n+Y9I+shK8keHJiQJsT+Q7IVvFw430ZQJlrbvmH5uB0mkPG
+        C2IDrcZmIeL4Fmc6dFCTE/dyC6k56G/P3S6Td+iUQ/y7iJ7ahQsiA6mfcKnpXOg+t4SEK8
+        ZaN9EItwW+mr3qmIW0stpFyQRe7Da84=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-ommzgQyrORe8Raoxer0bEw-1; Mon, 09 May 2022 19:42:31 -0400
+X-MC-Unique: ommzgQyrORe8Raoxer0bEw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D42B101AA42;
+        Mon,  9 May 2022 23:42:31 +0000 (UTC)
+Received: from thinkpad (vpn2-54-168.bne.redhat.com [10.64.54.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8618B2166B2F;
+        Mon,  9 May 2022 23:42:30 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: Cifs: cache entries for the cached directory
+Date:   Tue, 10 May 2022 09:42:03 +1000
+Message-Id: <20220509234207.2469586-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-References: <20220504014407.2301906-1-lsahlber@redhat.com> <20220504014407.2301906-2-lsahlber@redhat.com>
- <20220504165430.xptspu37vmhwwesj@cyberdelia>
-In-Reply-To: <20220504165430.xptspu37vmhwwesj@cyberdelia>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Tue, 10 May 2022 09:33:12 +1000
-Message-ID: <CAN05THTE3ZZzUhL6tqzy_bs0RLLnLxmG9HK8Sx3uQSkg6yTJQA@mail.gmail.com>
-Subject: Re: [PATCH] cifs: cache dirent names for cached directories
-To:     Enzo Matsumiya <ematsumiya@suse.de>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        Steve French <smfrench@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, 6 May 2022 at 16:21, Enzo Matsumiya <ematsumiya@suse.de> wrote:
->
-> On 05/04, Ronnie Sahlberg wrote:
-> >+struct cached_dirents {
-> >+      bool is_valid:1;
-> >+      bool is_failed:1;
->
-> Does it make sense to have both? Do you expect a situation where
-> is_valid && is_failed happens? From the patch, I don't see such case and
-> the code could be adjusted to use !is_valid where appropriate.
-> But let me know if I missed something.
+Steve, List
 
-The reason to have both is to handle cases where we fail populating
-the cache partway through readdir.
+Updated version of the patch to add caching of directory entries for the cached
+dir.
+I have updated with all the suggestions from Enzo and Paulo.
+In this patch, once you have done the initial 'ls /mnt' and future 
+listings of the root of the share will be served straight out of cache
+until the lease is broken.
+The first three patches are small and isolated for easy review
+and the fourth patch is what actually adds the caching of entries.
 
-The idea is that is_valid is set once we have fully populated the
-cache successfully
-and is_failed is set on failure during the population of the cache and
-once it is set there is no point in even trying to add new entries to
-the cache.
+These functions are now at a stage that we should be able to start looking at
+replacing the "single cached direcotry" that is linked to the tcon
+to be a list of <=n most recent directories we have accessed.
+Thus expanding it to cache a lot more directories than just the root.
+But that will come later once this is stabilized and road-tested.
+At least I think with these all changes it should be fairly easy to expand
+the use to more directories.
 
->
-> This is just a cosmetic nitpick, but other than that,
->
-> Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
->
->
-> Cheers,
->
-> Enzo
+
