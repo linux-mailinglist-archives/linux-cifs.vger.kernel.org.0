@@ -2,74 +2,84 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DBF523ECA
-	for <lists+linux-cifs@lfdr.de>; Wed, 11 May 2022 22:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6BA524372
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 May 2022 05:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344273AbiEKUUc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 11 May 2022 16:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S1343673AbiELDdY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 11 May 2022 23:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347431AbiEKUUY (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 11 May 2022 16:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D6A6D941;
-        Wed, 11 May 2022 13:20:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE50B61A66;
-        Wed, 11 May 2022 20:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DD71C34116;
-        Wed, 11 May 2022 20:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652300423;
-        bh=QuAzmQUWAdTF3kVEFtlEvcYEsAV85ZHmZfYX+FkiBu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A8sqDYc9f/b3VIPjxf8biiuGjLxfdnp9wBEtfHavR6AwNGrefagGZdiOLNIKkY6UH
-         6G1RGrwLCJxnUIJrVYt8XLSgVrqfDo5bFAuesausqpqHZ/zhKKyYy0ga0apFS8IJWN
-         WA1vXVi45gHdjH6EqigkjlbEXR2wpDFuJgNFSbwQj4w7TiEqFyqIEi0XvY6z8v4Aq5
-         EB3jVIsLw2eTq+/nWiCURnhRtxzFjkr2I90scOEItPXwP0RBGwu12VXS2DD1redAvg
-         oION6uU1H48J0+7/11LFZM+lBrizeFsjwGBVXdnoh4UBCvOyDK6sNx8x1140n7+cAA
-         I2hkHscnJ00Ag==
-Date:   Wed, 11 May 2022 13:20:22 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Steve French <smfrench@gmail.com>
-Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: misreported st_blocks (AllocationSize)
-Message-ID: <20220511202022.GA1841530@magnolia>
-References: <CAH2r5mvoQskGmY5SkgktzS1ZALeq7uk29EpLELLjVwcwYRwT1g@mail.gmail.com>
+        with ESMTP id S245183AbiELDdV (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 11 May 2022 23:33:21 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14C7612AF
+        for <linux-cifs@vger.kernel.org>; Wed, 11 May 2022 20:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=5jRqQcDbckc2l2lutk3zSYvz3AvRd2rEBeMTLRHtqak=; b=00hRFSpE59uhh/p1PkDWAPcHFI
+        pPyUYYYv14kqdEOQ4XKOhPDW27JcOkoznGioS/mDy31Bn7Loys5SBAuGymGvPXDMqLdwLzrJYLTyU
+        VDD70lyMGdeIVpHpk4htuMVfUc8om4HqvUA/MoC2yprnsVzEwEN3iO1kMaYU/zMMG2sQJw7TuJp0G
+        ttbUMYzu5jVpJUynrT8IfBYPW9WYyoOJU7aW0Y0EAgGfNq/E+05J3fpLfQRRafzCIJY2jA8XdXdi2
+        sSbdVYgSxj+JkXOmQxxGXTiNnbiq/6b/rSua7CH7AGgOYJ98T2sjvhYrA4nkt9jacMIyrs+dJiDUj
+        UBNAiiUDj8dxsnQ3rqYNf+uXfj9ty5H9m5e/OFLA5/AeSMkfiUozYWiJ1KBBBPE+2uF7mMPDiy0ZC
+        bJEUdnHmFJnuk7b0g6Yx2jZPBROnBBlPucdxcrNU9sAjo5APES+rYwFRZsu7OKXUw0HvTuwy0mjC+
+        quDiFoem0BMBQM2hgrt08xtF;
+Received: from [2a01:4f8:192:486::6:0] (port=39260 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1nozZk-000RpX-FN
+        for cifs-qa@samba.org; Thu, 12 May 2022 03:33:16 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1nozZj-000LEx-Lw
+        for cifs-qa@samba.org; Thu, 12 May 2022 03:33:15 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15051] EBADF/EIO errors in rename/open caused by race condition
+ in smb2_compound_op
+Date:   Thu, 12 May 2022 03:33:15 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sfrench@samba.org
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status
+Message-ID: <bug-15051-10630-JnYZZgv7qv@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15051-10630@https.bugzilla.samba.org/>
+References: <bug-15051-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH2r5mvoQskGmY5SkgktzS1ZALeq7uk29EpLELLjVwcwYRwT1g@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:33:01PM -0500, Steve French wrote:
-> Was investigating trying to fix emulation of some fallocate flags, and
-> was wondering how common is it for a fs to very loosely report
-> allocation size (st_blocks) for a file - ie the allocation sizes does
-> not match the allocate ranges returned by fiemap (or
-> SEEK_HOLE/SEEK_DATA).   Presumably there are Linux fs that coalesce
-> ranges on the fly so allocation sizes may be a 'guess' for some fs.
-> 
-> How common is this for it to be off?
+https://bugzilla.samba.org/show_bug.cgi?id=3D15051
 
-Very common -- XFS reports /all/ file block usage in st_blocks,
-including the extent mapping trees and staging areas for copy on write.
+Steve French <sfrench@samba.org> changed:
 
---D
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-> -- 
-> Thanks,
-> 
-> Steve
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
