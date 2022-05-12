@@ -2,91 +2,109 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C6E5244EC
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 May 2022 07:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C366B524778
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 May 2022 09:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiELFbW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 12 May 2022 01:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S1348335AbiELH4P (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 12 May 2022 03:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349948AbiELFbO (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 12 May 2022 01:31:14 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F306C33EB4
-        for <linux-cifs@vger.kernel.org>; Wed, 11 May 2022 22:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=BLLUhuwWUVPyYR1BOGKmDXJB024IY0GFz1K+7lJACNo=; b=LhoNvpRJTe1G2rwmoaDf8xvpqx
-        +d2cboJCEb+lVicSCghUrjm9qWVdh5zgidcTgVtk7nKJA/ls8QGzTCMFDXhfQGx5bRG0gCpiA97Zb
-        k68N2T65cF9UNJfkZ4Yw3s4RJO9fD5lLMPORCGZaogi0RrX1SxSZNzF7PvAu3yy3zhGdqLAFP3cbk
-        x6k5vberEdUAxqT1NKh03a/n+viMVGg5atlUYMqMshn3spX2EaLK0K94eVPo5SdIDZhU8lUOOnjpn
-        47DnoY+e/Pdp3v9ZSenB2VmNySoSEwio8VCmMfvluS/KBO76szrg7Kw93LiQ5nLbcfAIP79MN0IX0
-        DD3aW/1nuJ1qQAmsYEjzhmLNbMvJkuw2HjbB6jlqzd6eRM+yUCl8F105uje2Q5qNiUGOuNiAMlxJB
-        0bJCdi0ucZbWt2YUYdPfgW67L0LV3M5pRLZurTNKZl69O3njoY6uxePd2jXJNNmU4AdEI13MiniSJ
-        920swbeCg8SzFEvOaaCBQm0s;
-Received: from [2a01:4f8:192:486::6:0] (port=39286 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1np1Pp-000SZ2-46
-        for cifs-qa@samba.org; Thu, 12 May 2022 05:31:09 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1np1Po-000Lq7-QI
-        for cifs-qa@samba.org; Thu, 12 May 2022 05:31:08 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 4194] Can't read directories with many files+directories
-Date:   Thu, 12 May 2022 05:31:08 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bjacke@samba.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: samba-bugs@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: target_milestone product qa_contact version
- component
-Message-ID: <bug-4194-10630-30mBqDOFTo@https.bugzilla.samba.org/>
-In-Reply-To: <bug-4194-10630@https.bugzilla.samba.org/>
-References: <bug-4194-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1351278AbiELH4M (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 12 May 2022 03:56:12 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A0D396BE;
+        Thu, 12 May 2022 00:56:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VCzyo8E_1652342166;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VCzyo8E_1652342166)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 12 May 2022 15:56:07 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     linkinjeon@kernel.org
+Cc:     sfrench@samba.org, hyc.lee@gmail.com, senozhatsky@chromium.org,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] ksmbd: Fix some kernel-doc comments
+Date:   Thu, 12 May 2022 15:56:05 +0800
+Message-Id: <20220512075605.34240-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D4194
+Remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-Bj=C3=B6rn Jacke <bjacke@samba.org> changed:
+fs/ksmbd/misc.c:30: warning: Function parameter or member 'str' not
+described in 'match_pattern'
+fs/ksmbd/misc.c:30: warning: Excess function parameter 'string'
+description in 'match_pattern'
+fs/ksmbd/misc.c:163: warning: Function parameter or member 'share' not
+described in 'convert_to_nt_pathname'
+fs/ksmbd/misc.c:163: warning: Function parameter or member 'path' not
+described in 'convert_to_nt_pathname'
+fs/ksmbd/misc.c:163: warning: Excess function parameter 'filename'
+description in 'convert_to_nt_pathname'
+fs/ksmbd/misc.c:163: warning: Excess function parameter 'sharepath'
+description in 'convert_to_nt_pathname'
+fs/ksmbd/misc.c:259: warning: Function parameter or member 'share' not
+described in 'convert_to_unix_name'
+fs/ksmbd/misc.c:259: warning: Function parameter or member 'name' not
+described in 'convert_to_unix_name'
+fs/ksmbd/misc.c:259: warning: Excess function parameter 'path'
+description in 'convert_to_unix_name'
+fs/ksmbd/misc.c:259: warning: Excess function parameter 'tid'
+description in 'convert_to_unix_name'
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|none                        |---
-            Product|Samba 3.0                   |CifsVFS
-         QA Contact|samba-qa@samba.org          |cifs-qa@samba.org
-            Version|3.0.23c                     |3.x
-          Component|Client Tools                |kernel fs
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/ksmbd/misc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- Comment #6 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
-moving to cifsvfs. I guess this is long fixed and should be closed, right?
+diff --git a/fs/ksmbd/misc.c b/fs/ksmbd/misc.c
+index 1e2076a53bed..df991107ad2c 100644
+--- a/fs/ksmbd/misc.c
++++ b/fs/ksmbd/misc.c
+@@ -20,7 +20,7 @@
+  * wildcard '*' and '?'
+  * TODO : implement consideration about DOS_DOT, DOS_QM and DOS_STAR
+  *
+- * @string:	string to compare with a pattern
++ * @str:	string to compare with a pattern
+  * @len:	string length
+  * @pattern:	pattern string which might include wildcard '*' and '?'
+  *
+@@ -152,8 +152,8 @@ int parse_stream_name(char *filename, char **stream_name, int *s_type)
+ /**
+  * convert_to_nt_pathname() - extract and return windows path string
+  *      whose share directory prefix was removed from file path
+- * @filename : unix filename
+- * @sharepath: share path string
++ * @share: ksmbd_share_config pointer
++ * @path: path to report
+  *
+  * Return : windows path string or error
+  */
+@@ -250,8 +250,8 @@ char *ksmbd_extract_sharename(char *treename)
+ 
+ /**
+  * convert_to_unix_name() - convert windows name to unix format
+- * @path:	name to be converted
+- * @tid:	tree id of mathing share
++ * @share:	ksmbd_share_config pointer
++ * @name:	file name that is relative to share
+  *
+  * Return:	converted name on success, otherwise NULL
+  */
+-- 
+2.20.1.7.g153144c
 
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
