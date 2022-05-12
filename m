@@ -2,72 +2,80 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82843525496
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 May 2022 20:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C9A5257C7
+	for <lists+linux-cifs@lfdr.de>; Fri, 13 May 2022 00:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357415AbiELSTj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 12 May 2022 14:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S1349708AbiELWaL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 12 May 2022 18:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357547AbiELSTi (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 12 May 2022 14:19:38 -0400
-Received: from mail.pekanbaru.go.id (mail.pekanbaru.go.id [103.131.245.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC30238879;
-        Thu, 12 May 2022 11:19:34 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id 0644598ADB2;
-        Thu, 12 May 2022 10:45:40 +0700 (WIB)
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Yz8fyWEZZQwt; Thu, 12 May 2022 10:45:39 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id 4ED4292E0DD;
-        Thu, 12 May 2022 10:45:38 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pekanbaru.go.id 4ED4292E0DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pekanbaru.go.id;
-        s=EA5C5C9E-4206-11EC-835B-1ADACEA726A0; t=1652327138;
-        bh=WgQd2bW8hb2KeIDNbeIeW1Bb4lp6m29iibMhAQT/egc=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=WPG8Nd8/WYH0y7QxsbwV8+MtUArxnvjSDpAmiU0x0hSvmTT1bYWmwtxT4xjfKUTvR
-         Yj463RAadRVhVvVWVJeryMlX4MUfMOJrhML4waHZuEcLQsqls0kicyuOi/EWCo3kcr
-         +AThh/Y2YKHdZp8Lalt252+KtTZvBdXQJy8sA5qt2sJWVL5FRrlDxD7tCB2Ygs29TQ
-         idT1ksbbosaia93Bs+GY5FqyGo6UC8MzUAdH9z6WhUG2vWXgKnznqqrJtNh6umyqck
-         LNFyf5d+KpGJqztiGL2qIV9inpzcmp//X7qmoessAn4fjHDF44xXWnVU5DEgk/rK5/
-         lhxZ9VQpZQ34Q==
-X-Virus-Scanned: amavisd-new at mail.pekanbaru.go.id
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gQhfC3_Yzgmy; Thu, 12 May 2022 10:45:38 +0700 (WIB)
-Received: from [192.168.15.101] (unknown [41.79.219.176])
-        by mail.pekanbaru.go.id (Postfix) with ESMTPSA id 917C198ADFA;
-        Thu, 12 May 2022 10:45:30 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
+        with ESMTP id S1345057AbiELWaG (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 12 May 2022 18:30:06 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC14B281369
+        for <linux-cifs@vger.kernel.org>; Thu, 12 May 2022 15:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=Oz5ymPO9+DBh72JCqh/gtQ+mjTF/ca+y7Xk0EhRabUo=; b=xTpJ6HlZBnHOvz84QZPmDGMhkM
+        vrRmpWGyGlZ/vhWp1H/UkEa4JZZIINW6Wi1ERE1mKKhJis9bbRD//RnS2HwOJoa9FbbvCmeHFnqov
+        eqluIZOoANueoFUmx9k/eV8xO456QFBrzYMq2YzgxWFd+iFsIl3LnlGkZjT11XlOf03KL4XxsLohI
+        JMlA90Mi0stGsdSd48TER/BZQRKE4piR6p0PaTkqEVelq3HOINov9OWlXsRDL0yk3mZbMl2SHT6b/
+        svAkl98L411zC9GmWXzpb+XxVUwQXPpEl55lyWOhKMSSOG+WoTH3cLc3sW49xp7IvubKL3HgGFES3
+        OWbF/6wYDGHD4ektBVFqwYw002eJ7BjcRo8LQ5guhdldbVH7Mxeg0ZSdmi/vSlXRLJNAWIca5hevJ
+        SmZA8fNpA0iz+q1kCSItGAO0+bJhNwfcxeGqXzOem0aFZTd+J2ueZIdS6wfK3mJdKjzThtxGzCOl3
+        0p5Bu935j4yo7rTKNNhgZ07W;
+Received: from [2a01:4f8:192:486::6:0] (port=39328 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1npHJp-000b7K-Lz
+        for cifs-qa@samba.org; Thu, 12 May 2022 22:30:01 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1npHJp-000Myo-Af
+        for cifs-qa@samba.org; Thu, 12 May 2022 22:30:01 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 4194] Can't read directories with many files+directories
+Date:   Thu, 12 May 2022 22:30:00 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ronniesahlberg@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: samba-bugs@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-4194-10630-Q0CM194dV6@https.bugzilla.samba.org/>
+In-Reply-To: <bug-4194-10630@https.bugzilla.samba.org/>
+References: <bug-4194-10630@https.bugzilla.samba.org/>
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Awaiting your response 
-To:     Recipients <waterproject@pekanbaru.go.id>
-From:   waterproject@pekanbaru.go.id
-Date:   Thu, 12 May 2022 04:45:22 +0100
-Reply-To: test@hostnextdoor.com
-Message-Id: <20220512034530.917C198ADFA@mail.pekanbaru.go.id>
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset="UTF-8"
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hi =
+https://bugzilla.samba.org/show_bug.cgi?id=3D4194
 
+--- Comment #7 from Ronnie Sahlberg <ronniesahlberg@gmail.com> ---
+This was fixed more than a decade ago. Lets close it.
 
-Did you get my previous email? I have attempted over 3 times to open up com=
-munication with you. Please acknowledge if you receive this email. =
-
-
-Regards
-Morten Friis
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
