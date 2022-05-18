@@ -2,82 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02AF52C655
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 May 2022 00:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8860752C6EB
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 May 2022 00:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiERWfL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 May 2022 18:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
+        id S230058AbiERW5P (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 May 2022 18:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiERWfK (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 May 2022 18:35:10 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE282222403
-        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:35:09 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id v71so6092013ybi.4
-        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:35:09 -0700 (PDT)
+        with ESMTP id S231175AbiERW47 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 May 2022 18:56:59 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01D95FF6
+        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id d137so6088588ybc.13
+        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BT1PmGnLzGQUDAGj1oC2KxZF6wzZgd3uYkdEqSCvarg=;
-        b=hBzUh8y9+K2jPK1/ZoS1zB7S3nmAAhDi3bMm4FTjbvaU3wK7iHF4gFmNjL1MKR2XXn
-         Vy/VmmB7G/tDDGFd/JqL6jTfa8cg6V27vtjve61EnqQpg1JZVmTQDAuoICc/yubdZL9C
-         iCEKWyKX3zXVgAiDu6sSQq5C76ACRM1l8R8Tu/JFfmIMoJu62+eQNCx+Jls+i8NhF5M+
-         su2G/TZrvy8csl0u1Eb+rcViLIRgUNtVZetC5fx68WzSBfyZl5abX6YJOz0pzzXqEBKx
-         mntQRfFSjZ/FhE1mQ+fyDhdkAz8Zcx67xxKbNFUEWaLIINMOWpyME1wOZq4224PxORYr
-         MsMA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
+         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
+         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
+         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
+         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
+         q7TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BT1PmGnLzGQUDAGj1oC2KxZF6wzZgd3uYkdEqSCvarg=;
-        b=nuQWeIYj8D8JmptipWNRDocPG2aSSSgvS4xeJhsh6O58lf+TV18GEG6XSLxpwAs4e4
-         X6YVHuk8qJ82OaWIiTJRZqFU036iaVY0KOCUiIpEHvJ3A6xvCsANSUMtg6svE2Xii7ZM
-         9DtCkoJP6C0Irw3N0Di0gQP2eNPHNUYuBeujutN04o/oJYQnWU6kZ5ANvv2ygRoBRsyV
-         OFpTbxL0zxoUl814FKSrTiv5bWnSpA1iUA5lP3v4gllNVzUXUsqSpZIzb3jinUVIOi6a
-         wv+3JjffWowlVwiijfaTDirSuwnFySOum4xRd+G0/mkERgIpha4o1xAuwED7aP9OTBw9
-         oa4A==
-X-Gm-Message-State: AOAM532hALjxKPDOlnNLjIwobdRZN5Ag7SLmNEB9Zr+k1cNc8y4cg/X4
-        uacvtgcIXJB44UswUEMIcM+2CzpR09vX0Y+yGnWQWZuj
-X-Google-Smtp-Source: ABdhPJwdrCqgp/VEDutHQrqnDB5eRVnWs20jNatCvWCTtnTpLMxQuGECvdov5Wdc1o5CUHprpVCnM5jLzXgCIy15paI=
-X-Received: by 2002:a5b:c8d:0:b0:64b:a4c6:b4fd with SMTP id
- i13-20020a5b0c8d000000b0064ba4c6b4fdmr1732308ybq.150.1652913309175; Wed, 18
- May 2022 15:35:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=fyCBSwsRkhAKGSs2AdpeCO8AjOkvcnOmW+awFAG9KFbvyavRHuG8KnQzlXpjuPqeI5
+         X3zMSnyW8aJaEw6xwPOwJnkBoA8SF0RgP5fegAUz6a4n6WmN+/MePNh2iT2k+bMbuQhq
+         S/ZPtJlcax0wCvnQEWaB/xcbm8iDJX3ael0SpdyAcwL3IdM1xarvr3oaJ/C21c+I6qRR
+         AwBH1nwQ2MCGqc9q/Hg9w0+buVaUjQNqq8nrGVAuCO0c5bdy3tG+NDCZXgcJjDDmg0W2
+         DtOxFZgmaBpBf+CuB2B2HZ13GxUy4of1kSxIbkVGy2e/5hSlBoS+UTLgx//805stikQZ
+         BuUA==
+X-Gm-Message-State: AOAM533KWJq3IBDn7TJ06F2u7yZf7wVGohasisbbiq0wr9KiLpNewHQD
+        mjN0IRrVyLcgFdC/Di192eHJ7J8GipyyGmLcM9U=
+X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
+X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
+ q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
+ May 2022 15:56:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAH2r5mtk36dm00uH+Y0bYu0c6J_k7LcEQUBa2H0SLEX4RLXUPg@mail.gmail.com>
-In-Reply-To: <CAH2r5mtk36dm00uH+Y0bYu0c6J_k7LcEQUBa2H0SLEX4RLXUPg@mail.gmail.com>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Thu, 19 May 2022 08:34:57 +1000
-Message-ID: <CAN05THQVbcEJJkhzgcdav9FBjdXx2tPV9Ze1aEJZqoF9M4TdeQ@mail.gmail.com>
-Subject: Re: [PATCH][SMB3] add dynamic trace point for debugging lease break
- not found
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:56:53 +0800
+Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4933]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-LGTM
-
-Acked-by me
-
-On Thu, 19 May 2022 at 07:35, Steve French <smfrench@gmail.com> wrote:
->
-> Looks like we don't have a dynamic trace point to catch the case where
-> the server sends a lease break we don't recognize.  Attached is a WIP
-> patch for doing this.  Thoughts?
->
->
->
-> --
-> Thanks,
->
-> Steve
+Can I engage your services?
