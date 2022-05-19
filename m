@@ -2,92 +2,196 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8860752C6EB
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 May 2022 00:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA68052C8C7
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 May 2022 02:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiERW5P (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 May 2022 18:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S232411AbiESAkP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 May 2022 20:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiERW47 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 May 2022 18:56:59 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01D95FF6
-        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id d137so6088588ybc.13
-        for <linux-cifs@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
-         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
-         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
-         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
-         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
-         q7TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=fyCBSwsRkhAKGSs2AdpeCO8AjOkvcnOmW+awFAG9KFbvyavRHuG8KnQzlXpjuPqeI5
-         X3zMSnyW8aJaEw6xwPOwJnkBoA8SF0RgP5fegAUz6a4n6WmN+/MePNh2iT2k+bMbuQhq
-         S/ZPtJlcax0wCvnQEWaB/xcbm8iDJX3ael0SpdyAcwL3IdM1xarvr3oaJ/C21c+I6qRR
-         AwBH1nwQ2MCGqc9q/Hg9w0+buVaUjQNqq8nrGVAuCO0c5bdy3tG+NDCZXgcJjDDmg0W2
-         DtOxFZgmaBpBf+CuB2B2HZ13GxUy4of1kSxIbkVGy2e/5hSlBoS+UTLgx//805stikQZ
-         BuUA==
-X-Gm-Message-State: AOAM533KWJq3IBDn7TJ06F2u7yZf7wVGohasisbbiq0wr9KiLpNewHQD
-        mjN0IRrVyLcgFdC/Di192eHJ7J8GipyyGmLcM9U=
-X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
-X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
- q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
- May 2022 15:56:54 -0700 (PDT)
+        with ESMTP id S232465AbiESAkH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 May 2022 20:40:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960D824F01;
+        Wed, 18 May 2022 17:40:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB074617C7;
+        Thu, 19 May 2022 00:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57FF3C385A5;
+        Thu, 19 May 2022 00:40:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652920801;
+        bh=MQYayIkcVf8uNV7weKqH2da9K6OhYAyNCYQ3HtuYpBQ=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=qw5ycYmV4TY94aCrsKJoDOoznKeRwGDWGDNv8pwzk5eY682ga1PYCJ8UXP9dxS5tV
+         KD+Gd+YJGg1rAiUfFwWzUcf5say+pdFd7AmuLx9qy/5Q+IMsow9dc6l4ksUx0yOlPw
+         80xQrZva4q04Nz1g7NNnxjYtafDC/tK7uty9dmFxeeKlWVpDtx5lv1sscNth14825o
+         GATB8R+MCQXHiTSJgYkQoudmOC/kCf/X6f7FOFJld+8P+qBWE9dhosodwhuQuke6/R
+         LzkhF2yOTPUgnVjwoqkIq9utak+A8m4Y4fPjVxhPEgbVD/1kccJUhQ6EAYft2g2JsF
+         iRYVUs0/brUNg==
+Received: by mail-wm1-f50.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso2923304wmq.1;
+        Wed, 18 May 2022 17:40:01 -0700 (PDT)
+X-Gm-Message-State: AOAM533vhRGkx2LhLx3TgVyJwPGDlTa+8gDWAWwHuuoqR3QR/XsB8cnT
+        8AtHyOOLtV18Mu9dK+pmMA+f038tkMDyYA4aWtk=
+X-Google-Smtp-Source: ABdhPJyD4RpWGJQv/5V4vOgI1dq+P36bo2e3VhSbqTWop6bw7Xrnp7EikZZjKhUJQe0TL6Rfo1ppwQU/AuNWY/ovqBw=
+X-Received: by 2002:a05:600c:19cf:b0:394:96c4:8959 with SMTP id
+ u15-20020a05600c19cf00b0039496c48959mr2066254wmq.9.1652920799534; Wed, 18 May
+ 2022 17:39:59 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
+Received: by 2002:adf:f344:0:0:0:0:0 with HTTP; Wed, 18 May 2022 17:39:58
  -0700 (PDT)
-Reply-To: tonywenn@asia.com
-From:   Tony Wen <weboutloock4@gmail.com>
-Date:   Thu, 19 May 2022 06:56:53 +0800
-Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
-Subject: engage
-To:     undisclosed-recipients:;
+In-Reply-To: <YoQRypdyLcN60F+X@zeniv-ca.linux.org.uk>
+References: <20220427023245.7327-1-linkinjeon@kernel.org> <20220427023245.7327-3-linkinjeon@kernel.org>
+ <YoQRypdyLcN60F+X@zeniv-ca.linux.org.uk>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Thu, 19 May 2022 09:39:58 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8Df03mZZJMqUt2FNjhnug3aSMPd8jbCR6xZYW-JR0u+Q@mail.gmail.com>
+Message-ID: <CAKYAXd8Df03mZZJMqUt2FNjhnug3aSMPd8jbCR6xZYW-JR0u+Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ksmbd: fix racy issue from using ->d_parent and ->d_name
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        smfrench@gmail.com, hyc.lee@gmail.com, senozhatsky@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b2d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4933]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [weboutloock4[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [weboutloock4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Can I engage your services?
+2022-05-18 6:21 GMT+09:00, Al Viro <viro@zeniv.linux.org.uk>:
+> On Wed, Apr 27, 2022 at 11:32:45AM +0900, Namjae Jeon wrote:
+>> Al pointed out that ksmbd has racy issue from using ->d_parent and
+>> ->d_name
+>> in ksmbd_vfs_unlink and smb2_vfs_rename(). and use new
+>> lock_rename_child()
+>> to lock stable parent while underlying rename racy.
+>> Introduce vfs_path_parent_lookup helper to avoid out of share access and
+>> export vfs functions like the following ones to use
+>> vfs_path_parent_lookup().
+>>  - export __lookup_hash().
+>>  - export getname_kernel() and putname().
+>>
+>> vfs_path_parent_lookup() is used for parent lookup of destination file
+>> using absolute pathname given from FILE_RENAME_INFORMATION request.
+>
+> First of all, this is seriously broken:
+>
+>> -int ksmbd_vfs_lock_parent(struct user_namespace *user_ns, struct dentry
+>> *parent,
+>> -			  struct dentry *child)
+>> +struct dentry *ksmbd_vfs_lock_parent(struct dentry *child)
+>>  {
+>> -	struct dentry *dentry;
+>> -	int ret = 0;
+>> +	struct dentry *parent;
+>>
+>> +	parent = dget(child->d_parent);
+>>  	inode_lock_nested(d_inode(parent), I_MUTEX_PARENT);
+>
+> Do that in parallel with host rename() and you are risking this:
+>
+> you: fetch child->d_parent
+> 	get preempted away
+> another thread: move child elsewhere
+> another thread: drop (the last) reference to old parent
+> 	memory pressure evicts that dentry and reuses memory
+> you: regain the timeslice and bump what you think is parent->d_count.
+> 	In reality, it's 4 bytes in completely different data structure.
+> 	At that point you already have a memory corruptor.  Worse,
+> 	there's a decent chance that subsequent code will revert the
+> 	corruption, so it would be hell to debug - you need a race
+> 	to reproduce the thing in the first place *and* you need
+> 	something else to notice the temporary memory corruption.
+>
+> you: fetch what you think is ->d_inode of that dentry.  It actually
+> 	isn't anything of that sort.
+> you: grab rwsem at hell knows what address (might or might not point
+> 	to an rwsem).  Here's another chance to get something
+> 	reproducible - e.g. if what you thought was ->d_inode actually
+> 	points to unmapped memory, you'll get an oops here.  Won't
+> 	be consistent, though.
+>
+>> +	if (child->d_parent != parent) {
+> you:	->d_parent doesn't point there anymore
+>
+>> +		dput(parent);
+>
+> you:	decrement those 4 bytes in whatever object it is; if you are
+> 	lucky, it won't hit zero and nobody had noticed the temporary
+> 	increment.  If you are not, well...
+>
+>> +		inode_unlock(d_inode(parent));
+>
+> you:	fetch ->d_inode of parent (mind you, it's a bug in its own right -
+> 	even if parent hadn't gotten freed before your dget(), after dput()
+> 	above it's fair game for getting freed; placing that dput()
+> 	before unlocking d_inode() is wrong).  Assuming you've got
+> 	the same pointer as the first time around, you proceed to
+> 	drop rwsem at the same address where you've grabbed it.
+>
+> IOW, you really don't want that in the tree in this form.
+>
+> It *might* be partially recoverable if you replace the first dget() with
+> dget_parent() and reorder dput() and inode_unlock() in failure case, but...
+> some of the callers of that thing are also rather dubious.
+Okay.
+
+>
+> Look: you have smb2_open() calling ksmbd_vfs_may_delete(), which calls
+> that thing.  Downstream of this:
+> 	if (!file_present) {
+> 	...
+> 	} else if (!already_permitted) {
+>
+> If the parent is *NOT* already locked by that point, just how much is
+> your 'file_present' worth?  And if it is, you'd obviously deadlock
+> right there and then...
+It doesn't lock the parent for this. I'll improve it on another patch.
+
+>
+> I'm not sure I like what you've done with added exports - e.g.
+> __lookup_hash had been OK as a name of static function, but exporting
+> it is asking for clashes.  And honestly, what would you say when running
+> into a name like that?  OK, it sounds like it's a (probably low-level)
+> lookup in some hash table.  _Maybe_ it would've been fine if we had one
+> and only implementation of hash tables in the entire tree and that
+> had been a part of it, but it's nothing of that sort.  And "hash" in
+> the name is not about doing a hash lookup as opposed to some other
+> work (it *does* handle hash misses, allocating dentry, asking filesystem
+> to do real on-disk lookup, etc.) - it's actually about "hash function
+> of the name is already calculated".  My fault, that - predecessor of
+> that thing had been called lookup_one(); it took a string, calculated
+> its length and computed hash, then proceeded to do lookups.  The latter
+> part could be reused in handling of rmdir et.al., where we already had
+> the component length and hash precalculated, so the tail of lookup_one()
+> had been carved out into a separate helper.  Circa 2.3.99...
+>
+> Anyway, the name is _not_ fit for an export; I'm not sure what to call
+> it - lookup_one_qstr(), perhaps?  Additional fun is due to the fact
+> that these days it is slightly different from the lookup_one() et.al.
+> Those can be called with directory held shared; that allows parallel
+> lookups, but it's not free of cost - if we run into a cache miss and need
+> to allocate a new dentry and talk to filesystem, we have to recheck the
+> hash table after allocation.  __lookup_hash() is called only with parent
+> held exclusive and it can skip that fun - hash miss is going to remain
+> a miss; nobody else will be able to insert stuff into dcache in that
+> directory until we unlock it.
+Okay.
+>
+> What I'm worried about is that renaming it to lookup_one_qstr() will
+> be an invitation for "oh, we happen to have hash/len already known by the
+> time of that lookup_one() call; let's just convert it to lookup_one_qsrt()"
+> and if that happens in a place where the parent is held only shared, we'll
+> be in trouble.  OTOH, lookup_one_qstr_excl() sounds like an invitation to
+> do something painful to whoever's responsible for such name...
+lookup_one_qstr_excl() doesn't look bad... but I'll use it if another
+better name is suggested.
+>
+> Suggestions, anyone?
+>
