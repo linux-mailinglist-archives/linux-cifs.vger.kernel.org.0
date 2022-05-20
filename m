@@ -2,116 +2,78 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE5452E4A1
-	for <lists+linux-cifs@lfdr.de>; Fri, 20 May 2022 08:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9191A52E4EA
+	for <lists+linux-cifs@lfdr.de>; Fri, 20 May 2022 08:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345698AbiETGBm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 20 May 2022 02:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S236403AbiETGUY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 20 May 2022 02:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345695AbiETGBl (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 May 2022 02:01:41 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2975255A9
-        for <linux-cifs@vger.kernel.org>; Thu, 19 May 2022 23:01:39 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id s28so9887422wrb.7
-        for <linux-cifs@vger.kernel.org>; Thu, 19 May 2022 23:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9vKvj5ixse2ZnZgaoUH8EcMy54dSLmjq7AkgvKEB5JU=;
-        b=ZaMgWAY+DGgeWycgksilKguNNHECWPtJSg+Nqc4zqcbkn3jpDlUFNYTDEPNzNB/pZM
-         1GTru5aVHTutpBAgWmw4MkHsUDmtvX70v46Bne1NZ79iGLMJjzCz/83/eBRAZWen6sEl
-         /MjTqIglcdamg68uiHiz3TghklQGQ9of549VVnbfBXcq8ybK7lhJqoj7gjEL78IijBEr
-         IUF9J/KFMlIK/D9CS57hFVig9B2SKwBeyhnTLrModPhxSZh/1jTU2f3lCy60zRhgvR0b
-         8UTBpwX4xhrg9dL+MkIotzffadinelSY2ycD5j2l8C40LheZ57ARN1y7kDVdYemOZemq
-         XQvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9vKvj5ixse2ZnZgaoUH8EcMy54dSLmjq7AkgvKEB5JU=;
-        b=U+Yh8Xyri4ggHQuyKFAK9PyxrFwWsu5m5pcNY/+FgZX13ZXr3j8SPxhwvX6mQFvNnp
-         MZP4awJNnqsMa0TZl1tq153ztckCdxGaV4kgnH17MX40g1iwtSyVLbQhvGH4JjW00Dg/
-         NB7SfUbAMxnKK9FW5YHzkC27EzEulNMOKAOP7NrVL7I/VoyCwhDLVKbFothQXsLdaZbw
-         81+d1j7RaFVKbuFV4w/m/XUyY35NAUOJkt0koPMYu38MmRaplFBn1qbm84/jRLgDDzK8
-         rVVJe+hAOyBU643U7WJuoCmB5UL2OVrZpScJPzqHcQp9+TQslwadO5QdeAH2jo5/iHjj
-         ciLQ==
-X-Gm-Message-State: AOAM532Nnoqzj7avRrA9655H6IcfVB23ksVjuO4satMxzz+OriJxRTGM
-        FHpwzY6rYDInUMb5Ioz7qjCimg/YwFjBNn2uZjQ=
-X-Google-Smtp-Source: ABdhPJyKtqaC7sB5sj6QyLnAGS42X4xL0qPjrgJR0F6gocFIttNrJ5D1/cqDd5p+QdYepbJnSP4a2rPirbwK8Yq35qs=
-X-Received: by 2002:a5d:4b92:0:b0:20e:5d73:7546 with SMTP id
- b18-20020a5d4b92000000b0020e5d737546mr7066615wrt.322.1653026498136; Thu, 19
- May 2022 23:01:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAH2r5muPyxpBwKyka4NDJa+dLdxgj5BoU=h-_UT0-FdKxvLyRA@mail.gmail.com>
- <CAKYAXd8X2nYzSqm9=hAtdaDZ=z7fRsUe2T41HQ_zK9JX2=mwVA@mail.gmail.com>
+        with ESMTP id S1345791AbiETGUS (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 20 May 2022 02:20:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29F7414C764
+        for <linux-cifs@vger.kernel.org>; Thu, 19 May 2022 23:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653027616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QAvrBXcqA1u/Q5DFwXZOWE06I0j8Giurss8RKXKHuxA=;
+        b=GDCP8Tu6rx4ho6cK9O29FsDjil2rcQ8YYGNZGpdVugGdIEuv/UbSDSljr18BdUtLcQLJk0
+        2dvftrfWFvJrfmUt4XV3c6y8sBr/vq3x7n/gKXG9qDMwRfZ8iqzskEhm1W9vxHZSrcNa9R
+        FpgWYqGzWeS8qwrNdBYhXIyvRfmMimM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-BVUIwVYpP_uVelSv8VN4jw-1; Fri, 20 May 2022 02:20:13 -0400
+X-MC-Unique: BVUIwVYpP_uVelSv8VN4jw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D42A63C0218B;
+        Fri, 20 May 2022 06:20:12 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DBD672026D6A;
+        Fri, 20 May 2022 06:20:11 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
 In-Reply-To: <CAKYAXd8X2nYzSqm9=hAtdaDZ=z7fRsUe2T41HQ_zK9JX2=mwVA@mail.gmail.com>
-From:   Hyunchul Lee <hyc.lee@gmail.com>
-Date:   Fri, 20 May 2022 15:01:27 +0900
-Message-ID: <CANFS6bb_jYLznTOpCm=wvRCTBg2GnoUu8+O4Cs6Wa_=MML=9Nw@mail.gmail.com>
+References: <CAKYAXd8X2nYzSqm9=hAtdaDZ=z7fRsUe2T41HQ_zK9JX2=mwVA@mail.gmail.com> <CAH2r5muPyxpBwKyka4NDJa+dLdxgj5BoU=h-_UT0-FdKxvLyRA@mail.gmail.com>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
+        Hyeoncheol Lee <hyc.lee@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>, Long Li <longli@microsoft.com>
 Subject: Re: RDMA (smbdirect) testing
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3738076.1653027611.1@warthog.procyon.org.uk>
+Date:   Fri, 20 May 2022 07:20:11 +0100
+Message-ID: <3738077.1653027611@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hello Steve,
+Namjae Jeon <linkinjeon@kernel.org> wrote:
 
-Please refer to the page below to configure soft-ROCE:
-https://support.mellanox.com/s/article/howto-configure-soft-roce
+> You seem to be asking about soft-ROCE(or soft-iWARP). Hyunchul had been
+> testing RDMA of ksmbd with it before.
 
-These kernel configs have to be turned on:
-CONFIG_CIFS_SMB_DIRECT
-CONFIG_SMB_SERVER
-CONFIG_SMB_SERVER_SMBDIRECT
+Yep.  I don't have any RDMA-capable cards.  I have managed to use soft-IWarp
+with NFS.
 
-And you can mount cifs with SMB-direct:
-mount -t cifs -o rdma,... //<IP address of ethernet interface coupled
-with soft-ROCE>/<share> ...
+Also, if you know how to make Samba do RDMA, that would be useful.
 
-
-2022=EB=85=84 5=EC=9B=94 20=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 8:06, N=
-amjae Jeon <linkinjeon@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> 2022-05-20 5:41 GMT+09:00, Steve French <smfrench@gmail.com>:
-> Hi Steve,
-> > Namjae and Hyeoncheol,
-> > Have you had any luck setting up virtual RDMA devices for testing ksmbd
-> > RDMA?
-> You seem to be asking about soft-ROCE(or soft-iWARP). Hyunchul had
-> been testing RDMA
->  of ksmbd with it before.
-> Hyunchul, please explain how to set-up it.
->
-> Thanks!
-> >
-> > (similar to "/usr/sbin/rdma link add siw0 type siw netdev etho" then
-> > mount with "rdma" mount option)
-> >
-> >
-> >
-> > --
-> > Thanks,
-> >
-> > Steve
-> >
-
-
-
---=20
 Thanks,
-Hyunchul
+David
+
