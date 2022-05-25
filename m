@@ -2,109 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781685344E9
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 May 2022 22:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48041534667
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 May 2022 00:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243636AbiEYUd4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 25 May 2022 16:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S240637AbiEYWY3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 25 May 2022 18:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343655AbiEYUdy (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 25 May 2022 16:33:54 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CB740E53
-        for <linux-cifs@vger.kernel.org>; Wed, 25 May 2022 13:33:52 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id m20so43908608ejj.10
-        for <linux-cifs@vger.kernel.org>; Wed, 25 May 2022 13:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=jF4MxsPSKKSAh34A0y7fWqFeFSCCDQ9NCjS0um7aELU=;
-        b=iVWBVhb8XTv9Lw8Bi8opvkVedouKvUdAPVSBGKIzH07pEyntxt4ANgdkWWuocjAIZz
-         MO43lmlKIrrkZhr4T/7i+TCmexG5NDirvIPm6/xOrY3llK3oD+5qstAT4kdEhgvxUpgg
-         4TjG87reXckaQPRTQPo+KOPtSiD4soeVj1vJ9lPrjauVi1YgNRFyNuqMaBfo4pMXJK6w
-         p0F0DF8acwdSylIUOa8FQFcZtlvv/g3H7mbb778ouxMiUn5hoZWoPXvT7Xk7cMFXX15n
-         i5fioeJqZ3ZbvRZPzRUHsMn7PMa/Gqg27qfqoa3xk/1HaeaIesvC7Nz/4Rf+WNoOj5a5
-         RIgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=jF4MxsPSKKSAh34A0y7fWqFeFSCCDQ9NCjS0um7aELU=;
-        b=d2gEXxbwsy3xbW/KHignGgu9WP6tUA3AzfZ9/lMakiM09uC55wwO9Pvscvcx91tQcD
-         Cw5Um0vKd9zjtwGd7yBlYJwRB0Sjk/0f20fry4F/Z+pYV2tD6xKQl/iwiBTX0sPCGCD/
-         O42qAjlK2oNtCo52BQunZHdm5SwhUdaxdOvQB+t+dFoLDKVDV1DS30bHiwkQdmAT3Vo1
-         bw+2QmEpHCI7rFnyaqNNZComidWH2qB3OxmbM9czbDfil0kqzVyBkhd22lqetf/fkXXZ
-         Vk7xczWYZUpKeLbLUxp5kCKs/6dcwigW+nCAvXVy6dlFar7cTawB/zlTOl3E/iwrT92w
-         XRsw==
-X-Gm-Message-State: AOAM532DeS9FyLzs2vKQtj719yuXqLPy8hSEuOoY7DkI+bZ8YRvLU6U5
-        P5G9MWcoOZjMewR8glB+lCt6UsHN+j7mJcuw5LM=
-X-Google-Smtp-Source: ABdhPJzh1eIlvgHQMP3jfMU+cJRui7kNAvUFimc7+Wuq/i2uDmnMNV60BYqz6hIuJbit5rZaV7pgdF6OjV+D3ckPnuU=
-X-Received: by 2002:a17:907:a06f:b0:6f4:d336:6baa with SMTP id
- ia15-20020a170907a06f00b006f4d3366baamr30629545ejc.638.1653510830953; Wed, 25
- May 2022 13:33:50 -0700 (PDT)
+        with ESMTP id S233263AbiEYWY2 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 25 May 2022 18:24:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC63BA99C;
+        Wed, 25 May 2022 15:24:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7lwj5Z1Bz4xYN;
+        Thu, 26 May 2022 08:24:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653517461;
+        bh=GcX1zrOslcSNVPuexCtnllZ4TxAh4B75ZOdxWYYivCE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DkXT4v6cH1j9iN4srmywiCpQ4lNNzHZwLjF3PQS8w80r8svq2RkBJVQ6dN7x9JcEp
+         rtkoTR6cANTCTDi25RrDarYGuRrL9XsvjngPuyDkzpEAbMv25CpesObP9qNcHFbrZ9
+         eofnzzIPWc99OFL7w8FilscGwT+x+NbExQ/CW3s5o2W6S5+mf4rT9JvzN6W68XGW89
+         0neoReuYioTitAlerlyhjTDcxj5mnA4rbkZys4qE/ZZkME4rtnCH5Dq/Ut/EidguST
+         NxMPI7ZP6e91T8FYJV6BTpCB+H/wc5pV1aZctpQTYEqbOIJPyRYDL440GcaWgUpuLu
+         Ce3tflQa7zOqw==
+Date:   Thu, 26 May 2022 08:24:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20220526082420.0717c1f4@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:ab4:a26b:0:0:0:0:0 with HTTP; Wed, 25 May 2022 13:33:50
- -0700 (PDT)
-From:   Luisa Donstin <luisadonstin@gmail.com>
-Date:   Wed, 25 May 2022 22:33:50 +0200
-Message-ID: <CA+QBM2p8PZ1AOO0FjZutJGjwONQOXbUY6eirM9yZYAVweWRNdQ@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_//JY2oR0yxyzAzNk9jrfEofX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Guten Tag,
+--Sig_//JY2oR0yxyzAzNk9jrfEofX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+Hi all,
 
-haben ?
+Commits
 
-Ich habe versucht, Sie per E-Mail zu erreichen.
+  a92c6daedb08 ("cifs: Remove unused code")
+  d0c4bb4b3c12 ("cifs: Change the I/O paths to use an iterator rather than =
+a page list")
+  da59e9982665 ("cifs: Add a function to read into an iter from a socket")
+  13ae847ba07e ("cifs: Add some helper functions")
 
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+are missing a Signed-off-by from their committer.
 
-Danke
+--=20
+Cheers,
+Stephen Rothwell
 
-Luisa Donstin
+--Sig_//JY2oR0yxyzAzNk9jrfEofX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-luisadonstin@gmail.com
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKOrJQACgkQAVBC80lX
+0GwFUgf/RP+nXfORLMUFrIUoJRxJbFD2qX2590trrgmZmSXDircgQM+UOx1s8iWq
+ndO+kJLpnLdzqGLqGcH32QRbceM/aJr6nzmGw4c7VV0BTFFo7logN6R9i9Q595Jf
+lpaDZbpHsLj2t4GcCni7ix4qoboDmzvU5tg7x6577pIM8kgzVUjrZT5rX0IBqfK+
+86h+eDNEA96/f2z+htbU6maOEV2Ps+s1dq/b97G334aFU8awKn3XS3F/38CumcQC
+PyZtyxWRCkieqVZc/+MQLAq1W+0XbCOKDjHMlXlAkzODgvunfzOpVhn6dk/8YXlu
+daV3ZmZ+stVNPm0pFtv66mCmzYyGhw==
+=cfgT
+-----END PGP SIGNATURE-----
 
-
-
-
-
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Luisa Donstin
-
-luisadonstin@gmail.com
+--Sig_//JY2oR0yxyzAzNk9jrfEofX--
