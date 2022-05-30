@@ -2,77 +2,153 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C796953806A
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 May 2022 16:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD3653B286
+	for <lists+linux-cifs@lfdr.de>; Thu,  2 Jun 2022 06:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238581AbiE3Nwc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 30 May 2022 09:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229751AbiFBEVv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 2 Jun 2022 00:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238784AbiE3Nuv (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 May 2022 09:50:51 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC8BAFB21
-        for <linux-cifs@vger.kernel.org>; Mon, 30 May 2022 06:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1653917708;
-  x=1685453708;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FMMMt5kRuClSe3/A/m7K7zXLosMlSbUOozVze5gZS08=;
-  b=hVatIC5PWKbywwfvceiD6kXxzp6IfOmcwi4Cmh02RFNRlvLXXGDaFFg7
-   JUVAY9Wn/vE8yA6HsdrBj5scOjdYIiAxCFNovLEUo6/rNN16WHZtyezBr
-   Wh7BebYw05Y3kQGIbylylMxjV77C3f23SudLNDtSV0JAEv1EPszJo7cpN
-   nuLpdyHtgiAKjDtwgFnM+dTM08KyyAIQHiO2eXCMOGGfL/9+ZU9dfZ2wD
-   wrkVrX2YsB1Wmjuew/c7bpswt/MQ+PjSNWBw8EJ6DjQtbMSe5Q6uosMux
-   9SMc9+bxhnqerqskw7OpmqspYqSMzzLkguLpfLedP2pMb2k6FAicGuINL
-   g==;
-Date:   Mon, 30 May 2022 15:34:48 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-CC:     Steve French <smfrench@gmail.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: lockdep deadlock warning
-Message-ID: <20220530133443.GA3563@axis.com>
-References: <CANT5p=rqcYfYMVHirqvdnnca4Mo+JQSw5Qu12v=kPfpk5yhhmg@mail.gmail.com>
- <20220523123755.GA13668@axis.com>
+        with ESMTP id S229660AbiFBEVu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 2 Jun 2022 00:21:50 -0400
+Received: from mx.elcon.hu (mx.elcon.hu [94.21.1.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE40CBAA
+        for <linux-cifs@vger.kernel.org>; Wed,  1 Jun 2022 21:21:46 -0700 (PDT)
+Received: from mail.elcon.hu ([192.168.2.155]:41838 helo=webmail.elcon.hu)
+        by mx.elcon.hu with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kzoltan@elcon.hu>)
+        id 1nvmyI-0004t7-E6; Mon, 30 May 2022 23:30:42 +0200
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.elcon.hu (Postfix) with ESMTP id 1674B65E1BE9F;
+        Mon, 30 May 2022 23:30:42 +0200 (CEST)
+Received: from webmail.elcon.hu ([127.0.0.1])
+        by localhost (webmail.elcon.hu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ZBX-oOI5kfnn; Mon, 30 May 2022 23:30:41 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.elcon.hu (Postfix) with ESMTP id B6A4D71456394;
+        Mon, 30 May 2022 23:29:18 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.elcon.hu B6A4D71456394
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=elcon.hu;
+        s=02528220-7315-11E8-A9F0-3A51BF6A9B2E; t=1653946158;
+        bh=R6rQ0NozwjtOIX2+hZKSFSFGEfR0ePpvDBiEDyEYo1g=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=KM62knwHG33tyAaeTwQiIPdQ3ggUTg6ruRhBfu7q7J/yk6t3nh2vBs0945mOwf3Q8
+         U2jEkJrLbUuTCUsbEL61/Gh5VU+Qe1ouciuYczQjDTdiaIPGjMO10ngCUm8QrUVnt2
+         sEGrJfQwtLNeDTQu8LIcgZqUum61wlzeYJK/46ee5OUHr8NK0JQi1ehzcAnhNiN3oW
+         TsjidX7Vy1xljq0z7N/14hkOvd8R4pQipTBLeq3oFZ1qPyP1Mn7MZ3z6O4ylommUeu
+         tu+IsPR8t4EKE0GIvZ6OZy9VIamxkVzDEP+XPaOdaSlU5UoQZ/HW36jlcLRzHKggsa
+         5Oz79b0t/zIuw==
+X-Virus-Scanned: amavisd-new at webmail.elcon.hu
+Received: from webmail.elcon.hu ([127.0.0.1])
+        by localhost (webmail.elcon.hu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZKsgjpprzwHE; Mon, 30 May 2022 23:29:18 +0200 (CEST)
+Received: from [10.0.1.227] (unknown [185.252.223.39])
+        by webmail.elcon.hu (Postfix) with ESMTPSA id C00C965DFC630;
+        Mon, 30 May 2022 23:28:12 +0200 (CEST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220523123755.GA13668@axis.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <kzoltan@elcon.hu>
+From:   ''Gloria Mackenzie'' <kzoltan@elcon.hu>
+Date:   Tue, 31 May 2022 05:28:05 +0800
+Reply-To: Gloriamackenziespende@gmail.com
+Message-Id: <20220530212812.C00C965DFC630@webmail.elcon.hu>
+X-Sophos-OBS: success
+X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2021.8.26.161515
+X-SASI-RCODE: 200
+X-SASI-SpamProbability: 88%
+X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
+ BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
+ BODY_SIZE_7000_LESS 0.000000, BODY_SIZE_900_999 0.000000,
+ DKIM_ALIGNS 0.000000, DKIM_SIGNATURE 0.000000, ECARD_KNOWN_DOMAINS 0.000000,
+ FRAUD_WEBMAIL_R_NOT_F 0.100000, FROM_SAME_AS_TO_DOMAIN 0.000000,
+ HTML_00_01 0.050000, HTML_00_10 0.050000, OUTBOUND 0.000000,
+ OUTBOUND_SOPHOS 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
+ SENDER_NO_AUTH 0.000000, SINGLE_URI_IN_BODY 0.000000,
+ SUPERLONG_LINE 0.050000, SXL_PARA_SIG 8.000000, URI_WITH_PATH_ONLY 0.000000,
+ UTF8_SUBJ_OBFU 0.100000, WEBMAIL_REPLYTO_NOT_FROM 0.500000,
+ __ANY_URI 0.000000, __BODY_NO_MAILTO 0.000000, __CP_URI_IN_BODY 0.000000,
+ __CT 0.000000, __CTE 0.000000, __CT_TEXT_PLAIN 0.000000,
+ __DATE_TZ_HK 0.000000, __DKIM_ALIGNS_1 0.000000, __DKIM_ALIGNS_2 0.000000,
+ __DQ_NEG_HEUR 0.000000, __DQ_NEG_IP 0.000000, __FRAUD_BODY_WEBMAIL 0.000000,
+ __FRAUD_INTRO 0.000000, __FRAUD_MONEY 0.000000,
+ __FRAUD_MONEY_BIG_COIN 0.000000, __FRAUD_MONEY_BIG_COIN_DIG 0.000000,
+ __FRAUD_MONEY_CURRENCY 0.000000, __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000,
+ __FRAUD_MONEY_CURRENCY_EURO 0.000000, __FRAUD_MONEY_DENOMINATION 0.000000,
+ __FRAUD_MONEY_VALUE 0.000000, __FRAUD_WEBMAIL 0.000000,
+ __FRAUD_WEBMAIL_REPLYTO 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
+ __FROM_DOMAIN_NOT_IN_BODY 0.000000, __FROM_NAME_NOT_IN_ADDR 0.000000,
+ __FROM_NAME_NOT_IN_BODY 0.000000, __FUR_RDNS_SOPHOS 0.000000,
+ __HAS_FROM 0.000000, __HAS_MSGID 0.000000, __HAS_REPLYTO 0.000000,
+ __HEADER_ORDER_FROM 0.000000, __HIGHBITS 0.000000, __HTTPS_URI 0.000000,
+ __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000,
+ __MIME_VERSION 0.000000, __NO_HTML_TAG_RAW 0.000000,
+ __OUTBOUND_SOPHOS_FUR 0.000000, __OUTBOUND_SOPHOS_FUR_IP 0.000000,
+ __OUTBOUND_SOPHOS_FUR_RDNS 0.000000, __PHISH_SPEAR_GREETING 0.000000,
+ __PHISH_SPEAR_STRUCTURE_2 0.000000, __RCVD_FROM_DOMAIN 0.000000,
+ __REPLYTO_GMAIL 0.000000, __SANE_MSGID 0.000000, __SINGLE_URI_TEXT 0.000000,
+ __STOCK_PHRASE_7 0.000000, __SUBJ_ALPHA_END 0.000000,
+ __SUBJ_ALPHA_END2 0.000000, __SUBJ_HIGHBIT 0.000000,
+ __TO_DOMAIN_IN_FROM 0.000000, __TO_DOMAIN_IN_MSGID 0.000000,
+ __TO_HOST_IN_FROM 0.000000, __TO_MALFORMED_2 0.000000, __TO_NAME 0.000000,
+ __TO_NAME_DIFF_FROM_ACC 0.000000, __TO_REAL_NAMES 0.000000,
+ __URI_IN_BODY 0.000000, __URI_MAILTO 0.000000, __URI_NOT_IMG 0.000000,
+ __URI_NS 0.000000, __URI_WITH_PATH 0.000000, __UTF8_SUBJ 0.000000
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,NIXSPAM_IXHASH,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, May 23, 2022 at 02:38:02PM +0200, Vincent Whitchurch wrote:
-> On Mon, Feb 14, 2022 at 10:19:30PM +0530, Shyam Prasad N wrote:
-> > It's about a circular dependency locking fs_reclaim lock with srv_mutex held.
-> > Does someone here understand this dependency?
-> 
-> The crypto shash allocation does allocations with GFP_KERNEL (i.e.,
-> GFP_NOFS is not set and so fs reclaim can be triggered) and this is
-> called under the CIFS srv_mutex.  However, the CIFS srv_mutex is also
-> used in the reclaim path as the splat shows.  This is the dependency
-> which lockdep is complaining about.
-> 
-> A way to remove this particular dependency is to make CIFS do a
-> memalloc_nofs_save/restore() around the places it takes the srv_mutex.
-> However, doing this does not solve the lockdep splats completely since
-> there is another dependency via some internal locks in crypto, see the
-> log below.
+Lieber Freund,
 
-I have now sent out a patch to use memalloc_nofs_*.  There are other
-GFP_KERNEL allocations in CIFS done under the srv_mutex (such as the one
-in SMB2_sess_auth_rawntlmssp_negotiate()) besides the shash allocations,
-so that patch is needed even if something is done later to move the
-crypto shash allocations out of that mutex.
+Ich bin Gloria mackenzie, FLORIDA, Vereinigte Staaten von Amerika, der Mega=
+-Gewinner von $590million In Mega Millions Jackpot, spende ich an 5 zuf=C3=
+=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail n=
+ach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil mein=
+es Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen und =
+Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summ=
+e von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu spe=
+nden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine You T=
+ube Seite unten.
 
- https://lore.kernel.org/linux-cifs/20220530132155.4019006-1-vincent.whitchurch@axis.com/
+UHR MICH HIER: https://www.youtube.com/watch?v=3DW818_eG4V9s
+
+Das ist dein Spendencode: [GM395820]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+Gloriamackenziespende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Gloria Mackenzie
