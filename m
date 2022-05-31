@@ -2,153 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD3653B286
-	for <lists+linux-cifs@lfdr.de>; Thu,  2 Jun 2022 06:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD065389B7
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 May 2022 03:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiFBEVv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 2 Jun 2022 00:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S240201AbiEaBxZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 May 2022 21:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiFBEVu (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 2 Jun 2022 00:21:50 -0400
-Received: from mx.elcon.hu (mx.elcon.hu [94.21.1.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE40CBAA
-        for <linux-cifs@vger.kernel.org>; Wed,  1 Jun 2022 21:21:46 -0700 (PDT)
-Received: from mail.elcon.hu ([192.168.2.155]:41838 helo=webmail.elcon.hu)
-        by mx.elcon.hu with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kzoltan@elcon.hu>)
-        id 1nvmyI-0004t7-E6; Mon, 30 May 2022 23:30:42 +0200
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.elcon.hu (Postfix) with ESMTP id 1674B65E1BE9F;
-        Mon, 30 May 2022 23:30:42 +0200 (CEST)
-Received: from webmail.elcon.hu ([127.0.0.1])
-        by localhost (webmail.elcon.hu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ZBX-oOI5kfnn; Mon, 30 May 2022 23:30:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.elcon.hu (Postfix) with ESMTP id B6A4D71456394;
-        Mon, 30 May 2022 23:29:18 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.elcon.hu B6A4D71456394
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=elcon.hu;
-        s=02528220-7315-11E8-A9F0-3A51BF6A9B2E; t=1653946158;
-        bh=R6rQ0NozwjtOIX2+hZKSFSFGEfR0ePpvDBiEDyEYo1g=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=KM62knwHG33tyAaeTwQiIPdQ3ggUTg6ruRhBfu7q7J/yk6t3nh2vBs0945mOwf3Q8
-         U2jEkJrLbUuTCUsbEL61/Gh5VU+Qe1ouciuYczQjDTdiaIPGjMO10ngCUm8QrUVnt2
-         sEGrJfQwtLNeDTQu8LIcgZqUum61wlzeYJK/46ee5OUHr8NK0JQi1ehzcAnhNiN3oW
-         TsjidX7Vy1xljq0z7N/14hkOvd8R4pQipTBLeq3oFZ1qPyP1Mn7MZ3z6O4ylommUeu
-         tu+IsPR8t4EKE0GIvZ6OZy9VIamxkVzDEP+XPaOdaSlU5UoQZ/HW36jlcLRzHKggsa
-         5Oz79b0t/zIuw==
-X-Virus-Scanned: amavisd-new at webmail.elcon.hu
-Received: from webmail.elcon.hu ([127.0.0.1])
-        by localhost (webmail.elcon.hu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ZKsgjpprzwHE; Mon, 30 May 2022 23:29:18 +0200 (CEST)
-Received: from [10.0.1.227] (unknown [185.252.223.39])
-        by webmail.elcon.hu (Postfix) with ESMTPSA id C00C965DFC630;
-        Mon, 30 May 2022 23:28:12 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229458AbiEaBxY (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 May 2022 21:53:24 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407609154B
+        for <linux-cifs@vger.kernel.org>; Mon, 30 May 2022 18:53:23 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id 68so12262070vse.11
+        for <linux-cifs@vger.kernel.org>; Mon, 30 May 2022 18:53:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=psFSP3VPv08Y22xJMmD3Ac3eD4Nn8qeV033aVe5UV6Q=;
+        b=iIvwXK5w4+3nUMBF8+J8KWJLebmoy+RJLNQ2IDynuJ7am4ZpUFkHJjaCXhk2OjNhOB
+         7zBYcPJg9Mi2TpZbcV88otQE9hh6qopmVYSRFadb6Ee99dLJa50S/A4aCFv2trTO9nPY
+         dNOdOz10/TaJg5LWTXeZbGcxLZM0MSu3UywY44oJhxlANhzWXM6ziAFhl0v9W1nZn8h9
+         XUYkEk+7cqeJj66krR5fR/UyRriOMdGt4aLdwbqePJPf3QzT9FTcrdjQ0eYhDodBIbgY
+         jjAHZS4urltF4bfDIWJPYjgdg1Duc49Ob+CdlQ1UBmTxhVeJdNdHI90fWZy2r7gka6w3
+         MUTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=psFSP3VPv08Y22xJMmD3Ac3eD4Nn8qeV033aVe5UV6Q=;
+        b=pDlm8lDfLWvE7z3QlLLM0ivhWJeYtFsJQsMFH2hDFl+xuaTq7npZBy8hSINxesCDyM
+         eEM66zho3lceiSL9HKWdL1rcb/21GArtqpXCU4fH9Qmwk/htcNnupXiBgfGo0V92EsW5
+         7My+Gf7YGEdaeDHNpk8vaFdVoGe5++zfMjLu1OTwYv2LEazvhQRI+lTLqhacpfTVTH+T
+         GDWGfL34tw388c+hKYQCBF+GBGFkhd8q9kYsmCdv5jPWviC2nKx07xBVGhdBnSTR0pyy
+         LWhqq2/vkvePQxUoi3EDnDXgGTyk84QHAnDseYUH+2Npx7G8QA5kTq2I4I4CgrYVxO/c
+         uyvQ==
+X-Gm-Message-State: AOAM5309E3mxVYsP4lGP9F5gtZwIaef9UGm52b91gZA+VK9DVS8Io9vA
+        SvQQkL4/VPUVWWjv7OMDa7CbccQZLsY05DtlSNrgBgJ+jx4=
+X-Google-Smtp-Source: ABdhPJzxN0g2vAtiYWpJaeiZOZzXeHbRd273ZZc4Eql8P8JSMgrEhr3UbMkmDyYhzZPBXunv8ewhQJwxuJXgZSsctJI=
+X-Received: by 2002:a67:1787:0:b0:337:d8cd:35b2 with SMTP id
+ 129-20020a671787000000b00337d8cd35b2mr13411234vsx.29.1653962002178; Mon, 30
+ May 2022 18:53:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <kzoltan@elcon.hu>
-From:   ''Gloria Mackenzie'' <kzoltan@elcon.hu>
-Date:   Tue, 31 May 2022 05:28:05 +0800
-Reply-To: Gloriamackenziespende@gmail.com
-Message-Id: <20220530212812.C00C965DFC630@webmail.elcon.hu>
-X-Sophos-OBS: success
-X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2021.8.26.161515
-X-SASI-RCODE: 200
-X-SASI-SpamProbability: 88%
-X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
- BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
- BODY_SIZE_7000_LESS 0.000000, BODY_SIZE_900_999 0.000000,
- DKIM_ALIGNS 0.000000, DKIM_SIGNATURE 0.000000, ECARD_KNOWN_DOMAINS 0.000000,
- FRAUD_WEBMAIL_R_NOT_F 0.100000, FROM_SAME_AS_TO_DOMAIN 0.000000,
- HTML_00_01 0.050000, HTML_00_10 0.050000, OUTBOUND 0.000000,
- OUTBOUND_SOPHOS 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
- SENDER_NO_AUTH 0.000000, SINGLE_URI_IN_BODY 0.000000,
- SUPERLONG_LINE 0.050000, SXL_PARA_SIG 8.000000, URI_WITH_PATH_ONLY 0.000000,
- UTF8_SUBJ_OBFU 0.100000, WEBMAIL_REPLYTO_NOT_FROM 0.500000,
- __ANY_URI 0.000000, __BODY_NO_MAILTO 0.000000, __CP_URI_IN_BODY 0.000000,
- __CT 0.000000, __CTE 0.000000, __CT_TEXT_PLAIN 0.000000,
- __DATE_TZ_HK 0.000000, __DKIM_ALIGNS_1 0.000000, __DKIM_ALIGNS_2 0.000000,
- __DQ_NEG_HEUR 0.000000, __DQ_NEG_IP 0.000000, __FRAUD_BODY_WEBMAIL 0.000000,
- __FRAUD_INTRO 0.000000, __FRAUD_MONEY 0.000000,
- __FRAUD_MONEY_BIG_COIN 0.000000, __FRAUD_MONEY_BIG_COIN_DIG 0.000000,
- __FRAUD_MONEY_CURRENCY 0.000000, __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000,
- __FRAUD_MONEY_CURRENCY_EURO 0.000000, __FRAUD_MONEY_DENOMINATION 0.000000,
- __FRAUD_MONEY_VALUE 0.000000, __FRAUD_WEBMAIL 0.000000,
- __FRAUD_WEBMAIL_REPLYTO 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
- __FROM_DOMAIN_NOT_IN_BODY 0.000000, __FROM_NAME_NOT_IN_ADDR 0.000000,
- __FROM_NAME_NOT_IN_BODY 0.000000, __FUR_RDNS_SOPHOS 0.000000,
- __HAS_FROM 0.000000, __HAS_MSGID 0.000000, __HAS_REPLYTO 0.000000,
- __HEADER_ORDER_FROM 0.000000, __HIGHBITS 0.000000, __HTTPS_URI 0.000000,
- __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000,
- __MIME_VERSION 0.000000, __NO_HTML_TAG_RAW 0.000000,
- __OUTBOUND_SOPHOS_FUR 0.000000, __OUTBOUND_SOPHOS_FUR_IP 0.000000,
- __OUTBOUND_SOPHOS_FUR_RDNS 0.000000, __PHISH_SPEAR_GREETING 0.000000,
- __PHISH_SPEAR_STRUCTURE_2 0.000000, __RCVD_FROM_DOMAIN 0.000000,
- __REPLYTO_GMAIL 0.000000, __SANE_MSGID 0.000000, __SINGLE_URI_TEXT 0.000000,
- __STOCK_PHRASE_7 0.000000, __SUBJ_ALPHA_END 0.000000,
- __SUBJ_ALPHA_END2 0.000000, __SUBJ_HIGHBIT 0.000000,
- __TO_DOMAIN_IN_FROM 0.000000, __TO_DOMAIN_IN_MSGID 0.000000,
- __TO_HOST_IN_FROM 0.000000, __TO_MALFORMED_2 0.000000, __TO_NAME 0.000000,
- __TO_NAME_DIFF_FROM_ACC 0.000000, __TO_REAL_NAMES 0.000000,
- __URI_IN_BODY 0.000000, __URI_MAILTO 0.000000, __URI_NOT_IMG 0.000000,
- __URI_NS 0.000000, __URI_WITH_PATH 0.000000, __UTF8_SUBJ 0.000000
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,NIXSPAM_IXHASH,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+References: <CAH2r5muLr-UKAhcoP-s2Hn=U=Hbe2PtTLKODD+biSzQS8FkfZg@mail.gmail.com>
+ <CAKYAXd-k6t+CL3DiZCPNyW6F10JbGnBrXmddAEMsVxaBrzbsBw@mail.gmail.com>
+In-Reply-To: <CAKYAXd-k6t+CL3DiZCPNyW6F10JbGnBrXmddAEMsVxaBrzbsBw@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 30 May 2022 20:53:11 -0500
+Message-ID: <CAH2r5mvATTm7izD_wR-Mz41J4sa5F8X+x9h5ADX3Njo=vHw-DA@mail.gmail.com>
+Subject: Re: xfstests passed for current mainline against current ksmbd-for-next
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Lieber Freund,
+Added four more tests to the last run (and 9 more just before that) ...
 
-Ich bin Gloria mackenzie, FLORIDA, Vereinigte Staaten von Amerika, der Mega=
--Gewinner von $590million In Mega Millions Jackpot, spende ich an 5 zuf=C3=
-=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail n=
-ach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil mein=
-es Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen und =
-Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summ=
-e von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu spe=
-nden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine You T=
-ube Seite unten.
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/110
 
-UHR MICH HIER: https://www.youtube.com/watch?v=3DW818_eG4V9s
+Improving regression testing ... there are a few bugs (e.g. test 615)
+that if we fix we can add even more ... good progress.
 
-Das ist dein Spendencode: [GM395820]
+On Sat, May 28, 2022 at 11:04 PM Namjae Jeon <linkinjeon@kernel.org> wrote:
+>
+> 2022-05-29 12:53 GMT+09:00, Steve French <smfrench@gmail.com>:
+> > http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/108
+> Thanks for your test!
+>
+> >
+> > --
+> > Thanks,
+> >
+> > Steve
+> >
 
 
-Antworten Sie mit dem SPENDE-CODE an diese
 
-Gloriamackenziespende@gmail.com
+-- 
+Thanks,
 
-
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
-
-Gr=C3=BC=C3=9Fe
-Gloria Mackenzie
+Steve
