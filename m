@@ -2,135 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C032539417
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 May 2022 17:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4190953956F
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 May 2022 19:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243775AbiEaPhY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 31 May 2022 11:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S1346543AbiEaR10 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 31 May 2022 13:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiEaPhX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 31 May 2022 11:37:23 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CABE220C8
-        for <linux-cifs@vger.kernel.org>; Tue, 31 May 2022 08:37:20 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id q14so3147167vsr.12
-        for <linux-cifs@vger.kernel.org>; Tue, 31 May 2022 08:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=KIXDr92uQ+6JY68D5wvxSS/bbjUZ6aIKnxSMfoKxw+Q=;
-        b=hQ6Ifiol3YcTtduW15IrVX2wlEKbUSUfHcA5CXT84dwF0R2lzxU4CLkZjufy4eq84D
-         IAa6p0eEIJdJj1kU4eVG/rE3oGKABpJLr9vVNwkfRx0Mn5y0yQU0cEYdOM/yP49pfcja
-         w/InffaC0kBIRAoL30wq3XtL7uizUzaFaC3jKbppF4br0mqwRsZH7I34Y94JjCslEWnX
-         v+TILdzNG7/RmgwgOehH6PVJtlR1fGneObf6WeNqtjskYBioAjCQihDOQRwfS/7r9juW
-         68YXvnzsSgPQl2D8knUv46T+mimc/b8566wqMXbtCiHRpzR5J/TNGVf8yDd0lqeDtVzx
-         QDiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=KIXDr92uQ+6JY68D5wvxSS/bbjUZ6aIKnxSMfoKxw+Q=;
-        b=7O4C1OcUB76s/2IBIWGOJclT3zrnkNwo3dFC7pFq+3yFqWZoMi+Dg1Pl0ptXRiO1GJ
-         /P6PaiaJm5bI2NSJwtnWAZHrhJfX/xJmId4EJt+GSRXgTbEAbtbh/sej/thiZSwtskgR
-         2n8vS4d8CuTHglQAT3w7YZ8gPmDNcMdx5Zs3P4s4JWCTr96eP9gpHy2/TQxh2KGyEHad
-         u5ONjssPMQiBxAC5II028zhTZlAF6d6f8h8LEf1FT/N47lmyLqDUk1QpQep85PZQieOt
-         lVIPxrWV0Q8yS41LAHyodIlkZBPHOff5xLJgb3OWvYLHJCn8FkT1MPDs2javHgzOmsx3
-         /Aqw==
-X-Gm-Message-State: AOAM531zE4Z/kKzycroWM/mlraIqRVZ8V2xcVH8ngVQxcfmmvoCU4lUw
-        PbiYPhBlIys1bRDBZ/aXSeN/LZ9BI484s8neB1U=
-X-Google-Smtp-Source: ABdhPJxDoT/W1fgWwK9HKNaCYhJ4xf8NxDhlhZ7BuDXZ/1Tf1iRKDc3kqETwLlk/hRYjpND+fW5BmesWBlzdDrEJR1U=
-X-Received: by 2002:a67:fe57:0:b0:335:ef50:1b94 with SMTP id
- m23-20020a67fe57000000b00335ef501b94mr22866023vsr.6.1654011439231; Tue, 31
- May 2022 08:37:19 -0700 (PDT)
+        with ESMTP id S229930AbiEaR1Z (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 31 May 2022 13:27:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47F45523C
+        for <linux-cifs@vger.kernel.org>; Tue, 31 May 2022 10:27:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2F58E211C3;
+        Tue, 31 May 2022 17:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654018042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=eRk1pPeMOnUShLvsqijsjDp+4pmIxOm2jFUpSW+Zl3I=;
+        b=ZZ/17DtnYlUY1iu8JSD5GXoEH3k/0TPpYhWFSTCBUEo2970s9uDs3qK0XdMHtxGMaxvPu4
+        nPrFDSzoCiYvvSdqpSEP9riLIXwsemTnAPYZQ/zoCjCkFzDvxPr+HJNkTzEHBDLMiHSkuB
+        IhXRK4wh0vPymD8uOPDbCggpmPJQe3I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654018042;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=eRk1pPeMOnUShLvsqijsjDp+4pmIxOm2jFUpSW+Zl3I=;
+        b=jq24Y4IhlmqGvUoQQAIOSDv2V6Jabp9X9+Z4PYo1XyGcBqMQil9ErckzaZdRCpDGJSLvyp
+        Fz++09vzCa5B9uAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AAAA213AA2;
+        Tue, 31 May 2022 17:27:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fmvMG/lPlmKzDQAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Tue, 31 May 2022 17:27:21 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, pc@cjr.nz, ronniesahlberg@gmail.com,
+        nspmangalore@gmail.com, Enzo Matsumiya <ematsumiya@suse.de>
+Subject: [PATCH] cifs: remove repeated debug message on cifs_put_smb_ses()
+Date:   Tue, 31 May 2022 14:27:18 -0300
+Message-Id: <20220531172718.12982-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Sender: kalueke51@gmail.com
-Received: by 2002:a05:6102:5089:0:0:0:0 with HTTP; Tue, 31 May 2022 08:37:18
- -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Tue, 31 May 2022 17:37:18 +0200
-X-Google-Sender-Auth: pwobsYnY3DfBPShmCtapaCGcvSw
-Message-ID: <CAKCfqfgwBi-XRhEELOaZrxNiMeWKuXtzpep+XGFY8oX_Pu+5ig@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
-        HK_RANDOM_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e33 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8460]
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  0.5 FROM_LOCAL_NOVOWEL From: localpart has series of non-vowel
-        *      letters
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kalueke51[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kalueke51[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-May the peace of God be with you ,
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+---
+ fs/cifs/connect.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-   This letter might be a surprise to you, But I believe that you will
-be honest to fulfill my final wish. I bring peace and love to you. It
-is by the grace of god, I had no choice than to do what is lawful and
-right in the sight of God for eternal life and in the sight of man for
-witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
-mail praying it will find you in a good condition, since I myself am
-in a very critical health condition in which I sleep every night
-without knowing if I may be alive to see the next day. I am Mrs.Sophia
-Erick, a widow suffering from a long time illness. I have some funds I
-inherited from my late husband, the sum of ($11,000,000.00) my Doctor
-told me recently that I have serious sickness which is a cancer
-problem. What disturbs me most is my stroke sickness. Having known my
-condition, I decided to donate this fund to a good person that will
-utilize it the way I am going to instruct herein. I need a very honest
-and God fearing person who can claim this money and use it for Charity
-works, for orphanages and gives justice and help to the poor, needy
-and widows says The Lord." Jeremiah 22:15-16.and also build schools
-for less privilege that will be named after my late husband if
-possible and to promote the word of god and the effort that the house
-of god is maintained.
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 53373a3649e1..f54409f6370a 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -1845,7 +1845,6 @@ void cifs_put_smb_ses(struct cifs_ses *ses)
+ 	unsigned int rc, xid;
+ 	unsigned int chan_count;
+ 	struct TCP_Server_Info *server = ses->server;
+-	cifs_dbg(FYI, "%s: ses_count=%d\n", __func__, ses->ses_count);
+ 
+ 	spin_lock(&cifs_tcp_ses_lock);
+ 	if (ses->ses_status == SES_EXITING) {
+-- 
+2.35.3
 
- I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death,
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincere and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of god be with you and all those that you
-love and  care for.
-
-I am waiting for your reply.
-May God Bless you,
-Mrs. Sophia Erick.
