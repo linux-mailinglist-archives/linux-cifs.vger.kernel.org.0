@@ -2,44 +2,44 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3515153A759
-	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jun 2022 16:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E41953A762
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jun 2022 16:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353903AbiFAOBp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 1 Jun 2022 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S1354029AbiFAOBq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 1 Jun 2022 10:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354200AbiFAOAG (ORCPT
+        with ESMTP id S1354208AbiFAOAG (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Jun 2022 10:00:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3593CA30B9;
-        Wed,  1 Jun 2022 06:56:22 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88308A3382;
+        Wed,  1 Jun 2022 06:56:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1BD45CE1A24;
-        Wed,  1 Jun 2022 13:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A13C341C0;
-        Wed,  1 Jun 2022 13:55:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB629615CD;
+        Wed,  1 Jun 2022 13:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5E8C385A5;
+        Wed,  1 Jun 2022 13:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091743;
-        bh=8jW+wbclhVLRiL+4mYuuTKPY9fQZfW+0lZRvZfuv6to=;
+        s=k20201202; t=1654091748;
+        bh=kGzeiVBfGM4Xs0vqQEuCoPASUVQyswjYSK386OEbxt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RGoGxXd+W/SE6jVbGzEBkmZUCNtRP1RYh8o+IeLNceTISQJmSq2ElVgyhfW+yzrmw
-         J3LtKddvevoWAl2fWgx0U8c8Kfpx6TTcrGgL1oYZh+5SuqLjO7mG6u9+l+mx3+5HvD
-         IAJpkGeTk7F7CcmznHov2aoXlfZ/f3c5zLc0wCcayq8I47S40/XU3VybPRlyuclaA/
-         PFEJHshIw9/a3GBfqVvt2jeZCy9fz/27hx6humQGiHmRVZJaKA6OmwwaySGCC7283l
-         64ipRu+fpf/JNKQA0arsGGOflb05nQ9GiM3AOT/LX5LFbw+VHb1+V6Sg75NMjFhr14
-         2k/hg5F0LEZ5Q==
+        b=GyeZZbxy7Kf9b6e4S+0Kz0Xcf2Ul+X4r5s5syuWOR8GYMd3ZgukhRUoWb1wNyxNBN
+         inGF945w1NIb0Ak21UX6wfG8JhStHxNtPOCfTYGq015seNHnq/mCQPHcuAFJpLxnjw
+         37+Cx/ZYe9fgUS8gc2Xlr2rgIgkHsH3fC9LA3N6i2FK7OewoOSUZCovp67XhXXyIE5
+         JzMBn5dc1iNUYTDAQlbaMoTRZe2z8DVtWO2LPbBouS8hGe5NsHwmNe9VZDRm33kKRI
+         vbtu2V8AGeogZRp6buqjQvqSq3a4M47/5BNATFAxkOY8MA1xNpVenLMbz1UbwkxbCn
+         sPtat+iOPIZ3Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paulo Alcantara <pc@cjr.nz>, Ronnie Sahlberg <lsahlber@redhat.com>,
+Cc:     Enzo Matsumiya <ematsumiya@suse.de>, Paulo Alcantara <pc@cjr.nz>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
         linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.17 35/48] cifs: fix signed integer overflow when fl_end is OFFSET_MAX
-Date:   Wed,  1 Jun 2022 09:54:08 -0400
-Message-Id: <20220601135421.2003328-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.17 37/48] cifs: return ENOENT for DFS lookup_cache_entry()
+Date:   Wed,  1 Jun 2022 09:54:10 -0400
+Message-Id: <20220601135421.2003328-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220601135421.2003328-1-sashal@kernel.org>
 References: <20220601135421.2003328-1-sashal@kernel.org>
@@ -57,127 +57,105 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Paulo Alcantara <pc@cjr.nz>
+From: Enzo Matsumiya <ematsumiya@suse.de>
 
-[ Upstream commit d80c69846ddfddf437167b31ab4cd0de12f61001 ]
+[ Upstream commit 337b8b0e4343567221ef8d88aac5e418208d4ac1 ]
 
-This fixes the following when running xfstests generic/504:
+EEXIST didn't make sense to use when dfs_cache_find() couldn't find a
+cache entry nor retrieve a referral target.
 
-[  134.394698] CIFS: Attempting to mount \\win16.vm.test\Share
-[  134.420905] CIFS: VFS: generate_smb3signingkey: dumping generated
-AES session keys
-[  134.420911] CIFS: VFS: Session Id    05 00 00 00 00 c4 00 00
-[  134.420914] CIFS: VFS: Cipher type   1
-[  134.420917] CIFS: VFS: Session Key   ea 0b d9 22 2e af 01 69 30 1b
-15 74 bf 87 41 11
-[  134.420920] CIFS: VFS: Signing Key   59 28 43 5c f0 b6 b1 6f f5 7b
-65 f2 9f 9e 58 7d
-[  134.420923] CIFS: VFS: ServerIn Key  eb aa 58 c8 95 01 9a f7 91 98
-e4 fa bc d8 74 f1
-[  134.420926] CIFS: VFS: ServerOut Key 08 5b 21 e5 2e 4e 86 f6 05 c2
-58 e0 af 53 83 e7
-[  134.771946]
-================================================================================
-[  134.771953] UBSAN: signed-integer-overflow in fs/cifs/file.c:1706:19
-[  134.771957] 9223372036854775807 + 1 cannot be represented in type
-'long long int'
-[  134.771960] CPU: 4 PID: 2773 Comm: flock Not tainted 5.11.22 #1
-[  134.771964] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[  134.771966] Call Trace:
-[  134.771970]  dump_stack+0x8d/0xb5
-[  134.771981]  ubsan_epilogue+0x5/0x50
-[  134.771988]  handle_overflow+0xa3/0xb0
-[  134.771997]  ? lockdep_hardirqs_on_prepare+0xe8/0x1b0
-[  134.772006]  cifs_setlk+0x63c/0x680 [cifs]
-[  134.772085]  ? _get_xid+0x5f/0xa0 [cifs]
-[  134.772085]  cifs_flock+0x131/0x400 [cifs]
-[  134.772085]  __x64_sys_flock+0xfc/0x120
-[  134.772085]  do_syscall_64+0x33/0x40
-[  134.772085]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[  134.772085] RIP: 0033:0x7fea4f83b3fb
-[  134.772085] Code: ff 48 8b 15 8f 1a 0d 00 f7 d8 64 89 02 b8 ff ff
-ff ff eb da e8 16 0b 02 00 66 0f 1f 44 00 00 f3 0f 1e fa b8 49 00 00
-00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 5d 1a 0d 00 f7 d8 64 89
-01 48
+It also doesn't make sense cifs_dfs_query_info_nonascii_quirk() to
+emulate ENOENT anymore.
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsglob.h | 5 +++++
- fs/cifs/cifssmb.c  | 3 ++-
- fs/cifs/file.c     | 8 ++++----
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ fs/cifs/connect.c   | 6 ++++--
+ fs/cifs/dfs_cache.c | 6 +++---
+ fs/cifs/misc.c      | 6 +-----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index 560ecc4ad87d..3c7865186e5e 100644
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -1983,4 +1983,9 @@ static inline bool cifs_is_referral_server(struct cifs_tcon *tcon,
- 	return is_tcon_dfs(tcon) || (ref && (ref->flags & DFSREF_REFERRAL_SERVER));
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index c3a26f06fdaa..1ec77ebc71a0 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3420,8 +3420,9 @@ cifs_are_all_path_components_accessible(struct TCP_Server_Info *server,
  }
  
-+static inline u64 cifs_flock_len(struct file_lock *fl)
-+{
-+	return fl->fl_end == OFFSET_MAX ? 0 : fl->fl_end - fl->fl_start + 1;
-+}
-+
- #endif	/* _CIFS_GLOB_H */
-diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
-index aca9338b0877..83820205d644 100644
---- a/fs/cifs/cifssmb.c
-+++ b/fs/cifs/cifssmb.c
-@@ -2558,7 +2558,8 @@ CIFSSMBPosixLock(const unsigned int xid, struct cifs_tcon *tcon,
+ /*
+- * Check if path is remote (e.g. a DFS share). Return -EREMOTE if it is,
+- * otherwise 0.
++ * Check if path is remote (i.e. a DFS share).
++ *
++ * Return -EREMOTE if it is, otherwise 0 or -errno.
+  */
+ static int is_path_remote(struct mount_ctx *mnt_ctx)
+ {
+@@ -3703,6 +3704,7 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx)
+ 	if (!isdfs)
+ 		goto out;
  
- 			pLockData->fl_start = le64_to_cpu(parm_data->start);
- 			pLockData->fl_end = pLockData->fl_start +
--					le64_to_cpu(parm_data->length) - 1;
-+				(le64_to_cpu(parm_data->length) ?
-+				 le64_to_cpu(parm_data->length) - 1 : 0);
- 			pLockData->fl_pid = -le32_to_cpu(parm_data->pid);
++	/* proceed as DFS mount */
+ 	uuid_gen(&mnt_ctx.mount_id);
+ 	rc = connect_dfs_root(&mnt_ctx, &tl);
+ 	dfs_cache_free_tgts(&tl);
+diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
+index 956f8e5cf3e7..c5dd6f7305bd 100644
+--- a/fs/cifs/dfs_cache.c
++++ b/fs/cifs/dfs_cache.c
+@@ -654,7 +654,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
+ 			return ce;
  		}
  	}
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index a2723f7cb5e9..b8a4b43870fe 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -1395,7 +1395,7 @@ cifs_push_posix_locks(struct cifsFileInfo *cfile)
- 			cifs_dbg(VFS, "Can't push all brlocks!\n");
- 			break;
- 		}
--		length = 1 + flock->fl_end - flock->fl_start;
-+		length = cifs_flock_len(flock);
- 		if (flock->fl_type == F_RDLCK || flock->fl_type == F_SHLCK)
- 			type = CIFS_RDLCK;
- 		else
-@@ -1511,7 +1511,7 @@ cifs_getlk(struct file *file, struct file_lock *flock, __u32 type,
- 	   bool wait_flag, bool posix_lck, unsigned int xid)
- {
- 	int rc = 0;
--	__u64 length = 1 + flock->fl_end - flock->fl_start;
-+	__u64 length = cifs_flock_len(flock);
- 	struct cifsFileInfo *cfile = (struct cifsFileInfo *)file->private_data;
- 	struct cifs_tcon *tcon = tlink_tcon(cfile->tlink);
- 	struct TCP_Server_Info *server = tcon->ses->server;
-@@ -1609,7 +1609,7 @@ cifs_unlock_range(struct cifsFileInfo *cfile, struct file_lock *flock,
- 	struct cifs_tcon *tcon = tlink_tcon(cfile->tlink);
- 	struct cifsInodeInfo *cinode = CIFS_I(d_inode(cfile->dentry));
- 	struct cifsLockInfo *li, *tmp;
--	__u64 length = 1 + flock->fl_end - flock->fl_start;
-+	__u64 length = cifs_flock_len(flock);
- 	struct list_head tmp_llist;
+-	return ERR_PTR(-EEXIST);
++	return ERR_PTR(-ENOENT);
+ }
  
- 	INIT_LIST_HEAD(&tmp_llist);
-@@ -1713,7 +1713,7 @@ cifs_setlk(struct file *file, struct file_lock *flock, __u32 type,
- 	   unsigned int xid)
+ /*
+@@ -662,7 +662,7 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
+  *
+  * Use whole path components in the match.  Must be called with htable_rw_lock held.
+  *
+- * Return ERR_PTR(-EEXIST) if the entry is not found.
++ * Return ERR_PTR(-ENOENT) if the entry is not found.
+  */
+ static struct cache_entry *lookup_cache_entry(const char *path)
  {
- 	int rc = 0;
--	__u64 length = 1 + flock->fl_end - flock->fl_start;
-+	__u64 length = cifs_flock_len(flock);
- 	struct cifsFileInfo *cfile = (struct cifsFileInfo *)file->private_data;
- 	struct cifs_tcon *tcon = tlink_tcon(cfile->tlink);
- 	struct TCP_Server_Info *server = tcon->ses->server;
+@@ -710,7 +710,7 @@ static struct cache_entry *lookup_cache_entry(const char *path)
+ 		while (e > s && *e != sep)
+ 			e--;
+ 	}
+-	return ERR_PTR(-EEXIST);
++	return ERR_PTR(-ENOENT);
+ }
+ 
+ /**
+diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
+index afaf59c22193..a5b5b15e658a 100644
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1309,7 +1309,7 @@ int cifs_update_super_prepath(struct cifs_sb_info *cifs_sb, char *prefix)
+  * for "\<server>\<dfsname>\<linkpath>" DFS reference,
+  * where <dfsname> contains non-ASCII unicode symbols.
+  *
+- * Check such DFS reference and emulate -ENOENT if it is actual.
++ * Check such DFS reference.
+  */
+ int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
+ 				       struct cifs_tcon *tcon,
+@@ -1341,10 +1341,6 @@ int cifs_dfs_query_info_nonascii_quirk(const unsigned int xid,
+ 		cifs_dbg(FYI, "DFS ref '%s' is found, emulate -EREMOTE\n",
+ 			 dfspath);
+ 		rc = -EREMOTE;
+-	} else if (rc == -EEXIST) {
+-		cifs_dbg(FYI, "DFS ref '%s' is not found, emulate -ENOENT\n",
+-			 dfspath);
+-		rc = -ENOENT;
+ 	} else {
+ 		cifs_dbg(FYI, "%s: dfs_cache_find returned %d\n", __func__, rc);
+ 	}
 -- 
 2.35.1
 
