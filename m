@@ -2,44 +2,44 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA9853A6E7
-	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jun 2022 15:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889CD53A6C3
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jun 2022 15:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353802AbiFAN4n (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 1 Jun 2022 09:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S1353667AbiFANzk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 1 Jun 2022 09:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353794AbiFANz5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Jun 2022 09:55:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B828E1BE;
-        Wed,  1 Jun 2022 06:54:50 -0700 (PDT)
+        with ESMTP id S1353809AbiFANzI (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Jun 2022 09:55:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD61880F3;
+        Wed,  1 Jun 2022 06:54:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDE8AB81806;
-        Wed,  1 Jun 2022 13:54:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2943C385B8;
-        Wed,  1 Jun 2022 13:54:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9070CB81AF7;
+        Wed,  1 Jun 2022 13:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D51C385A5;
+        Wed,  1 Jun 2022 13:54:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091652;
-        bh=33xmMUUu2yyaxwek5Otu/Ihv7PjXK0y8lP29hOMLgw0=;
+        s=k20201202; t=1654091655;
+        bh=yVrqBRl9ZOVGBnNMvoMUcvApocWVpxzJ2Q1PE/8m8wA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M7Erp5BaM8BnmElMsSyDgYPWnRAylHRBvovENPpMy9I0m3rDIIr8PqorI2KFUuQzI
-         NB9kn+lHepVg4zbj4BLYXwavllpRkGhcvZnERwQ1ifdqVvCAdQRMAiPQId7LFiAd8r
-         a3TX4LexxlmCPKDDPBbvGrfDaJLe2n8/K/AoLObKEb0qIlzlXgL1M9/Ll1Cgcm8b7f
-         vTaH6txVCAr2KXRHVlJWi70O69yxoq4XndVSvDi4Unl+T0iFXroXzfgNL5O8ppmntt
-         26KCY3bmX5b/v/VKc64Bq4GstYQ98aI/sWqDalcHdT2jjn9icc1iZUQpcWsXYpwpY+
-         wqTahwb98lIrw==
+        b=nnsdBJZ5Z03E5jCb6rVlZ+MdIguXN/vg165TjsQCa37TBUwDJki77F7WVcmxpCxmM
+         Wrla1twtTN+V3ErxCw9iYp+0Xlf2z7XOZvYfsL6KRxUKIozKB+8MgDFgsBpKpm96i0
+         W09wwS7jpUyQZZC6ZbQmVuUJ2+VxUKoLVahdUJ3H6Sas167kcX/kVR/SoTAkoO8pMm
+         7j+vQWqoNkM2ZQ5LlDkJhReC0O9bqu3FA7fiMnmrIQn9EbHt8qQ3kllwITvvnvpFwb
+         ErkwBjUAhgzZ00c6y3OyO0FFgs4cbX7Uf9QcgTCkU1y7u0HvHxhch6RBI1VzCfPVuK
+         DK9ZREoRHnawg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve French <stfrench@microsoft.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
+Cc:     Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
         linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 5.18 45/49] smb3: check for null tcon
-Date:   Wed,  1 Jun 2022 09:52:09 -0400
-Message-Id: <20220601135214.2002647-45-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 47/49] cifs: do not use tcpStatus after negotiate completes
+Date:   Wed,  1 Jun 2022 09:52:11 -0400
+Message-Id: <20220601135214.2002647-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220601135214.2002647-1-sashal@kernel.org>
 References: <20220601135214.2002647-1-sashal@kernel.org>
@@ -57,47 +57,114 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit bbdf6cf56c88845fb0b713cbf5c6623c53fe40d8 ]
+[ Upstream commit 1a6a41d4cedd9b302e2200e6f0e3c44dbbe13689 ]
 
-Although unlikely to be null, it is confusing to use a pointer
-before checking for it to be null so move the use down after
-null check.
+Recent changes to multichannel to allow channel reconnects to
+work in parallel and independent of each other did so by
+making use of tcpStatus for the connection, and status for the
+session. However, this did not take into account the multiuser
+scenario, where same connection is used by multiple connections.
 
-Addresses-Coverity: 1517586 ("Null pointer dereferences  (REVERSE_INULL)")
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+However, tcpStatus should be tracked only till the end of
+negotiate exchange, and not used for session setup. This change
+fixes this.
+
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2ops.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/cifs/connect.c       | 23 +++++++++++------------
+ fs/cifs/smb2pdu.c       |  3 ++-
+ fs/cifs/smb2transport.c |  3 ++-
+ 3 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index d6aaeff4a30a..16aeb37636e5 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -760,8 +760,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 		struct cifs_sb_info *cifs_sb,
- 		struct cached_fid **cfid)
- {
--	struct cifs_ses *ses = tcon->ses;
--	struct TCP_Server_Info *server = ses->server;
-+	struct cifs_ses *ses;
-+	struct TCP_Server_Info *server;
- 	struct cifs_open_parms oparms;
- 	struct smb2_create_rsp *o_rsp = NULL;
- 	struct smb2_query_info_rsp *qi_rsp = NULL;
-@@ -779,6 +779,9 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 	if (tcon->nohandlecache)
- 		return -ENOTSUPP;
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 8e3fa59813e7..46ac08f3e09b 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -3962,7 +3962,7 @@ cifs_negotiate_protocol(const unsigned int xid, struct cifs_ses *ses,
+ 	if (rc == 0) {
+ 		spin_lock(&cifs_tcp_ses_lock);
+ 		if (server->tcpStatus == CifsInNegotiate)
+-			server->tcpStatus = CifsNeedSessSetup;
++			server->tcpStatus = CifsGood;
+ 		else
+ 			rc = -EHOSTDOWN;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+@@ -3985,19 +3985,18 @@ cifs_setup_session(const unsigned int xid, struct cifs_ses *ses,
+ 	bool is_binding = false;
  
-+	ses = tcon->ses;
-+	server = ses->server;
+ 	/* only send once per connect */
++	spin_lock(&ses->chan_lock);
++	is_binding = !CIFS_ALL_CHANS_NEED_RECONNECT(ses);
++	spin_unlock(&ses->chan_lock);
 +
- 	if (cifs_sb->root == NULL)
- 		return -ENOENT;
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if ((server->tcpStatus != CifsNeedSessSetup) &&
+-	    (ses->status == CifsGood)) {
++	if (ses->status == CifsExiting) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return 0;
+ 	}
+-	server->tcpStatus = CifsInSessSetup;
++	ses->status = CifsInSessSetup;
+ 	spin_unlock(&cifs_tcp_ses_lock);
  
+-	spin_lock(&ses->chan_lock);
+-	is_binding = !CIFS_ALL_CHANS_NEED_RECONNECT(ses);
+-	spin_unlock(&ses->chan_lock);
+-
+ 	if (!is_binding) {
+ 		ses->capabilities = server->capabilities;
+ 		if (!linuxExtEnabled)
+@@ -4021,13 +4020,13 @@ cifs_setup_session(const unsigned int xid, struct cifs_ses *ses,
+ 	if (rc) {
+ 		cifs_server_dbg(VFS, "Send error in SessSetup = %d\n", rc);
+ 		spin_lock(&cifs_tcp_ses_lock);
+-		if (server->tcpStatus == CifsInSessSetup)
+-			server->tcpStatus = CifsNeedSessSetup;
++		if (ses->status == CifsInSessSetup)
++			ses->status = CifsNeedSessSetup;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 	} else {
+ 		spin_lock(&cifs_tcp_ses_lock);
+-		if (server->tcpStatus == CifsInSessSetup)
+-			server->tcpStatus = CifsGood;
++		if (ses->status == CifsInSessSetup)
++			ses->status = CifsGood;
+ 		/* Even if one channel is active, session is in good state */
+ 		ses->status = CifsGood;
+ 		spin_unlock(&cifs_tcp_ses_lock);
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 1b7ad0c09566..f5321a3500f3 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3899,7 +3899,8 @@ SMB2_echo(struct TCP_Server_Info *server)
+ 	cifs_dbg(FYI, "In echo request for conn_id %lld\n", server->conn_id);
+ 
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if (server->tcpStatus == CifsNeedNegotiate) {
++	if (server->ops->need_neg &&
++	    server->ops->need_neg(server)) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		/* No need to send echo on newly established connections */
+ 		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
+diff --git a/fs/cifs/smb2transport.c b/fs/cifs/smb2transport.c
+index 2af79093b78b..01b732641edb 100644
+--- a/fs/cifs/smb2transport.c
++++ b/fs/cifs/smb2transport.c
+@@ -641,7 +641,8 @@ smb2_sign_rqst(struct smb_rqst *rqst, struct TCP_Server_Info *server)
+ 	if (!is_signed)
+ 		return 0;
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if (server->tcpStatus == CifsNeedNegotiate) {
++	if (server->ops->need_neg &&
++	    server->ops->need_neg(server)) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return 0;
+ 	}
 -- 
 2.35.1
 
