@@ -2,92 +2,41 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC96253D2DC
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jun 2022 22:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CDE53D4B3
+	for <lists+linux-cifs@lfdr.de>; Sat,  4 Jun 2022 03:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiFCUfV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 3 Jun 2022 16:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S242134AbiFDBwn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Fri, 3 Jun 2022 21:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiFCUfV (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Jun 2022 16:35:21 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B6E517C0
-        for <linux-cifs@vger.kernel.org>; Fri,  3 Jun 2022 13:35:18 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 253KZIUq003077
-        for <linux-cifs@vger.kernel.org>; Fri, 3 Jun 2022 15:35:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654288518;
-        bh=gDcnU4MEw0cJQkHHeLdmO6TIrrCVdNPzvwd7My4An/o=;
-        h=From:To:CC:Subject:Date;
-        b=ii6n8Kx/BZCn3rb7wFtpcaHeCpN0CG6s5E055t0endfL6z6r8+i+L8pisrhyzYx2o
-         xDv2YOx96F8YOeUyLOzNew5aGXfa3r00kIQeIqAgVDCful9jFbPudd7nuNDr/0SbUJ
-         0pO7mASXH4pXcKqhfpPZUgaq1/JF4l3oRTdw2EAA=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 253KZIVY114780
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL)
-        for <linux-cifs@vger.kernel.org>; Fri, 3 Jun 2022 15:35:18 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Jun 2022 15:35:17 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Jun 2022 15:35:17 -0500
-Received: from uda0500628.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 253KZHlU004709;
-        Fri, 3 Jun 2022 15:35:17 -0500
-From:   Daniel Parks <danielrparks@ti.com>
-To:     <linux-cifs@vger.kernel.org>
-CC:     Daniel Parks <danielrparks@ti.com>
-Subject: [PATCH] cifs-utils: Make automake treat /sbin as exec, not data
-Date:   Fri, 3 Jun 2022 15:34:59 -0500
-Message-ID: <20220603203459.21422-1-danielrparks@ti.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S232100AbiFDBwn (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 3 Jun 2022 21:52:43 -0400
+X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Jun 2022 18:52:41 PDT
+Received: from srv-correo.valvulasarco.es (srv-correo.valvulasarco.es [217.130.82.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 180B916581;
+        Fri,  3 Jun 2022 18:52:40 -0700 (PDT)
+Received: from [103.153.79.240] (103.153.79.240) by SRV-MAIL.jferrer.es
+ (172.16.22.8) with Microsoft SMTP Server (TLS) id 8.3.348.2; Sat, 4 Jun 2022
+ 03:35:24 +0200
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Hi...
+To:     Recipients <mbravo@valvulasarco.es>
+From:   MIKE TAILOR INVESTMENT <mbravo@valvulasarco.es>
+Date:   Fri, 3 Jun 2022 18:20:36 -0700
+Reply-To: <investmentdept2022@miketailorinv.us>
+Message-ID: <b3cabe0c-e19b-49cf-bc17-a8e684117d7a@SRV-MAIL.jferrer.es>
+X-EXCLAIMER-MD-CONFIG: 34136305-f895-4c7a-ba04-06adf52f1cb6
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,NIXSPAM_IXHASH,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Otherwise, $(DESTDIR)/sbin doesn't get created until install-data on a
--j1 build and install-exec-hook can fail because it might not exist.
-
-Steps to reproduce this bug:
-$ autoreconf -i
-$ ./configure
-$ mkdir image
-$ make DESTDIR=image install -j1
-
-Signed-off-by: Daniel Parks <danielrparks@ti.com>
----
- Makefile.am | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile.am b/Makefile.am
-index 84dd119..b1444f6 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,8 +1,8 @@
- AM_CFLAGS = -Wall -Wextra -D_FORTIFY_SOURCE=2 $(PIE_CFLAGS) $(RELRO_CFLAGS)
- ACLOCAL_AMFLAGS = -I aclocal
- 
--root_sbindir = $(ROOTSBINDIR)
--root_sbin_PROGRAMS = mount.cifs
-+root_exec_sbindir = $(ROOTSBINDIR)
-+root_exec_sbin_PROGRAMS = mount.cifs
- mount_cifs_SOURCES = mount.cifs.c mtab.c resolve_host.c util.c
- mount_cifs_LDADD = $(LIBCAP) $(CAPNG_LDADD) $(RT_LDADD)
- include_HEADERS = cifsidmap.h
--- 
-2.17.1
-
+Mike Tailor INV is currently doing a great investment Promo, You have the opportunity to invest at least $250 USD and earn $2,500 USD in 4 working days. Contact the investment company via this email: ( investmentdept2022@miketailorinv.us ). The higher you invest the higher your profit value.
