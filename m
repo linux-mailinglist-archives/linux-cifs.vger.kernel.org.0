@@ -2,153 +2,137 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBA054012A
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Jun 2022 16:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11798540335
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Jun 2022 17:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245292AbiFGOWc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 7 Jun 2022 10:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S1344632AbiFGP7K (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 7 Jun 2022 11:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbiFGOWb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Jun 2022 10:22:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45468C9655;
-        Tue,  7 Jun 2022 07:22:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D455B82024;
-        Tue,  7 Jun 2022 14:22:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A7EC36AFE;
-        Tue,  7 Jun 2022 14:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654611747;
-        bh=cdW6Y4w/Alw2MtSKkp2MAQF/yoWm8bl718vnVRc2CbY=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=bW/FLgr1LyhV3jDbHxzsrvCo4c0sgFl1RlLreeNJ94XDaY0R2juLz5c6aU66y+pqd
-         YI85rwNd49jnBrmgaJsFDeXMRC8G8L3TMUluWMlCK5l0vwBbvr9ariZ/agcqwoMPUS
-         zebvvWklShjshP/h6qFsn/fbY9bednjgc1++mUCbA4laS3flarG5b9v8oaHTdZoOgC
-         HlaioDJyKxqa/9Sbiib7zNunrLv/XPtkQMIxwGWHS5CU6D/FsoNl40otFpVMLlVUUr
-         EObl+mpzXagwyC6EV8k8sTp4WYp1hKUCYuJ4zboACApQNCOZKCegxlcjOGeT7NxvzN
-         FJbis+kWnT77A==
-Received: by mail-wr1-f47.google.com with SMTP id q26so14034573wra.1;
-        Tue, 07 Jun 2022 07:22:27 -0700 (PDT)
-X-Gm-Message-State: AOAM530UgUzsfDR35bNSomB+WmLQMab2Dx0CdJi4koO2JJCo5QIZUCeI
-        XSWq7nYLqBBxqBUpdM77PduQCJzSBKbSbUV9zJY=
-X-Google-Smtp-Source: ABdhPJx+rv87thEe0EVZFgAZYv9Q7r/BhNorSt4RG0j/nTusqQT2mh9ZwbUgh+4BipT2bndYTCgds2+cXyAAxgI3gZc=
-X-Received: by 2002:a5d:4a85:0:b0:215:ae89:5925 with SMTP id
- o5-20020a5d4a85000000b00215ae895925mr19144535wrq.401.1654611745462; Tue, 07
- Jun 2022 07:22:25 -0700 (PDT)
+        with ESMTP id S1344639AbiFGP7H (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 7 Jun 2022 11:59:07 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0F86351E
+        for <linux-cifs@vger.kernel.org>; Tue,  7 Jun 2022 08:59:03 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id q14so17052855vsr.12
+        for <linux-cifs@vger.kernel.org>; Tue, 07 Jun 2022 08:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=94FE0xqKYNBQJ8bbUNfhKNNPOc38KM25jE5hqWXLeJ4=;
+        b=ikUXGsjnj9SbF/QxJIMEM2S9J+i3/5cToGY/TJYeDdtMkhIlQr+ICSTUciHz1/1zDC
+         efC2YYmdPxdbG2lfjepyiZ3aT3iKURi9+aP6Ge9AJBmP1OLxMSjCoH/kfSFPm39YLwdr
+         A3K1nNuKWsBxuBEgqCKqYa+9m1metfwKvTnmkJzjkUjJAUDwZPIaPWgd6VsbS0kPrKA6
+         U4VhM/SaJz7M5aablSRtl7lY/SGMFkUOq5KHCk26hdw4d1jecogrPdFKWleftbTbiDGN
+         Qcu4OHBLYYfOIU75/hrCOLyNzvqENO2ZTio4shfgiLZL44/1ONdmrNBy1XS+O+e4uvO6
+         09wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=94FE0xqKYNBQJ8bbUNfhKNNPOc38KM25jE5hqWXLeJ4=;
+        b=OVtfTB19wKETgg+MUxwAUwLHplmePiU5oJUZUedABqBV1iEpGD/avcIiJeMWSqQFUS
+         LKICmtyA9KFapS9Oo2P/+Gw5vsrxA/EwpD/NgQD5eP5fMfnxrY1+4gU3Iflh5HPs5MBR
+         mxrLYgj4mYO2itDzTrwGJQu41UoO2gd4oCvRAkxS6pZWwyMBg3j80HKuVvyCRzDnPPuA
+         +Igp3JEXF/2+mmBuNlEnsvLGs0oSxTLoimrfgI1Gl/khAo236FlBWU2zToVIXuKM8Nvc
+         KNubQUpnT7gOAE9SP94wI2ScynSK8s2KAyBjQnJgzPo09LM+k1crEKVBmmWjl5lt2fK9
+         hTLQ==
+X-Gm-Message-State: AOAM5321peIsgEDAdXn+ZK7YQSGivuqB/SvaZPxw4a2AdGPrW8V6WfSE
+        akD+9y+j+lCXIqCOIfPeBBvPs7Ku03Pu59f5qYA=
+X-Google-Smtp-Source: ABdhPJyk6JgS/KMTOxybULzEEGetc+trkH458lXl7Yfjwe18PvxYC/LzrqXNT7iKFWYfdift/BmXWE0auwNW4wk9CSE=
+X-Received: by 2002:a67:f102:0:b0:34b:9de8:5ef3 with SMTP id
+ n2-20020a67f102000000b0034b9de85ef3mr9296995vsk.43.1654617542637; Tue, 07 Jun
+ 2022 08:59:02 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a5d:4c4a:0:0:0:0:0 with HTTP; Tue, 7 Jun 2022 07:22:24 -0700 (PDT)
-In-Reply-To: <20220606134608.684131-1-amir73il@gmail.com>
-References: <20220606134608.684131-1-amir73il@gmail.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Tue, 7 Jun 2022 23:22:24 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_JguZBb51LCdR8OAUmKuCtKOTJFw1WLE8J2Y_ajXXa5Q@mail.gmail.com>
-Message-ID: <CAKYAXd_JguZBb51LCdR8OAUmKuCtKOTJFw1WLE8J2Y_ajXXa5Q@mail.gmail.com>
-Subject: Re: [PATCH v14] vfs: fix copy_file_range() regression in cross-fs copies
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        Olga Kornievskaia <olga.kornievskaia@gmail.com>,
-        Luis Henriques <lhenriques@suse.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        He Zhe <zhe.he@windriver.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, Luis Henriques <lhenriques@suse.de>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        kernel test robot <oliver.sang@intel.com>
+Sender: donnamcines@gmail.com
+Received: by 2002:a59:1d43:0:b0:2c9:df44:bbb7 with HTTP; Tue, 7 Jun 2022
+ 08:59:02 -0700 (PDT)
+From:   Dina Mckenna <dinamckenna1894@gmail.com>
+Date:   Tue, 7 Jun 2022 15:59:02 +0000
+X-Google-Sender-Auth: zL92RgowyNCQiUjEfZ32xsVhT6c
+Message-ID: <CADM2P8m3_jXEyLR+ygsvo3RwotZH7PgLe3MY40XBaHOEXBCauA@mail.gmail.com>
+Subject: Please need your urgent assistance,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_95,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e43 listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9733]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [donnamcines[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-2022-06-06 22:46 GMT+09:00, Amir Goldstein <amir73il@gmail.com>:
-> From: Luis Henriques <lhenriques@suse.de>
->
-> A regression has been reported by Nicolas Boichat, found while using the
-> copy_file_range syscall to copy a tracefs file.  Before commit
-> 5dae222a5ff0 ("vfs: allow copy_file_range to copy across devices") the
-> kernel would return -EXDEV to userspace when trying to copy a file across
-> different filesystems.  After this commit, the syscall doesn't fail anymore
-> and instead returns zero (zero bytes copied), as this file's content is
-> generated on-the-fly and thus reports a size of zero.
->
-> Another regression has been reported by He Zhe - the assertion of
-> WARN_ON_ONCE(ret == -EOPNOTSUPP) can be triggered from userspace when
-> copying from a sysfs file whose read operation may return -EOPNOTSUPP.
->
-> Since we do not have test coverage for copy_file_range() between any
-> two types of filesystems, the best way to avoid these sort of issues
-> in the future is for the kernel to be more picky about filesystems that
-> are allowed to do copy_file_range().
->
-> This patch restores some cross-filesystem copy restrictions that existed
-> prior to commit 5dae222a5ff0 ("vfs: allow copy_file_range to copy across
-> devices"), namely, cross-sb copy is not allowed for filesystems that do
-> not implement ->copy_file_range().
->
-> Filesystems that do implement ->copy_file_range() have full control of
-> the result - if this method returns an error, the error is returned to
-> the user.  Before this change this was only true for fs that did not
-> implement the ->remap_file_range() operation (i.e. nfsv3).
->
-> Filesystems that implement only ->remap_file_range() (i.e. xfs) may still
-> fall-back to the generic_copy_file_range() implementation when the copy
-> is within the same sb, but filesystem cannot handle the reuqested copied
-> range.  This helps the kernel can maintain a more consistent story about
-> which filesystems support copy_file_range().
->
-> nfsd and ksmbd servers are modified to fall-back to the
-> generic_copy_file_range() implementation in case vfs_copy_file_range()
-> fails with -EOPNOTSUPP or -EXDEV, which preserves behavior of
-> server-side-copy.
->
-> fall-back to generic_copy_file_range() is not implemented for the smb
-> operation FSCTL_DUPLICATE_EXTENTS_TO_FILE, which is arguably a correct
-> change of behavior.
->
-> Fixes: 5dae222a5ff0 ("vfs: allow copy_file_range to copy across devices")
-> Link:
-> https://lore.kernel.org/linux-fsdevel/20210212044405.4120619-1-drinkcat@chromium.org/
-> Link:
-> https://lore.kernel.org/linux-fsdevel/CANMq1KDZuxir2LM5jOTm0xx+BnvW=ZmpsG47CyHFJwnw7zSX6Q@mail.gmail.com/
-> Link:
-> https://lore.kernel.org/linux-fsdevel/20210126135012.1.If45b7cdc3ff707bc1efa17f5366057d60603c45f@changeid/
-> Link:
-> https://lore.kernel.org/linux-fsdevel/20210630161320.29006-1-lhenriques@suse.de/
-> Reported-by: Nicolas Boichat <drinkcat@chromium.org>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Luis Henriques <lhenriques@suse.de>
-> Fixes: 64bf5ff58dff ("vfs: no fallback for ->copy_file_range")
-> Link:
-> https://lore.kernel.org/linux-fsdevel/20f17f64-88cb-4e80-07c1-85cb96c83619@windriver.com/
-> Reported-by: He Zhe <zhe.he@windriver.com>
-> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-> ---
->
-> Hi Steve, Namje,
->
-> I was going to ping Al about this patch when I remembered that we have
-> another kernel file server that supports server side copy and needs to
-> be adjusted. I also realized that v13 wrongly (?) falls back to
-> generic_copy_file_range() in nfs/smb client code.
->
-> It would be great if you could review my ksmbd change and run the fstests
-> as below in your test setup.
-I have run xfstests against ksmbd. All tests are passed.
-You can add my tags for ksmbd.
+Hello my dear.,
 
-Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
-Tested-by: Namjae Jeon <linkinjeon@kernel.org>
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you.. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for..
 
-Thanks!
+I'm waiting for your immediate reply..
+
+May God Bless you.,
+Mrs. Dina Howley Mckenna..
