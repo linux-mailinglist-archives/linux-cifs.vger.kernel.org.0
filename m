@@ -2,79 +2,152 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B2854DEEC
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jun 2022 12:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD14854E5A0
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jun 2022 17:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376505AbiFPKZ2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Jun 2022 06:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S1377758AbiFPPEP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jun 2022 11:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376480AbiFPKZZ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jun 2022 06:25:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD215DA1D
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 03:25:19 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id y32so1521286lfa.6
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 03:25:19 -0700 (PDT)
+        with ESMTP id S1377763AbiFPPEO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jun 2022 11:04:14 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5989B3EBA2
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 08:04:11 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-fe51318ccfso2245103fac.0
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 08:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=W910NhxhsjMJh8xmTqiBb+n/d8vNhkQvEK3uQsx019H/NVF/HsRkR91Mwgf5NoOA2o
-         +G9NG8HKS3dufLn4HoWATUwViMwR/sm7gdhYVGjSBp65IoH9/VzeePSRwsxtnWyD2IYd
-         /P+anhEIznyuyfYSv0fd8QvDY0LuzCx2TbyvmZF5dM2Nj4uA7+9FyoHxvD1xuHmQyiMU
-         TCzjnL3q1oIV583xyWy0s+D4KRyb2LgtwArAnNeV+m1AO8ORaxA26nm4VB9kA/9NXW1T
-         yHcu0NzK0YGRQb2+53awbQan+6daAbhIX2qCkYqY9Qavm2WmKJIEIH3npl/ZhVNAwvQV
-         qPgg==
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zoPzQU7tFCHKbazE96n62nKhOYL6lpl30iCKAfHWF3k=;
+        b=hzB+iWkLegyX/YVU4Z4Uk20/fD5mQ12Bb87V6Eh8E5BihrifNpR/2Kid3c5IL3kULj
+         /Kav66ARa+qN/N67YFml7VO4vjU3H+d51tIoMenFO1qIG1cNa0TEMy6orpmxvFp0gMGw
+         /kiER4gc6alC0Jl/FnyoXaEN+XA94MiTxlaik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=4nrfw8VR90p7tKRYAy0UnFc5GUhGMfrIXHFqzVYQjlIs3SWyCIea4DAIsnc0fdx0Ms
-         Yz6ognwQnNbjuyYU4IChA+yc3rq9RlShpmWMM7fAoyM4yOlwchbrrsUqxD3M4kvfpLZz
-         m289OUhDJCqWPs5O1/WjrS7SJSEhNqeoCWLq9uL1E/XiQJQspJaqmbktGZbehd+FVsQv
-         iZEMk9TuE1gy/k9Llj3ZxOFEELGZO36XRai3ORmHEtfGZE2Hc4kRJt4XOkJU2pvc0pUu
-         draftq3iENTL5nEZjOm1kKNMij9QaqwUO57k5LarD/23IHhHN0WO6LoKfh/AJVB+2IqT
-         erow==
-X-Gm-Message-State: AJIora8MP0NS+l+RZOskrzoEyxTHRW3IYatXkmWOUowYWFrm5LEb1PZV
-        JZ3doIRGhXnRtCjnG+K+lLx5ztNj8Fze9EzxgiQ=
-X-Google-Smtp-Source: AGRyM1v2MTXGyROmKEYPPr3IJqOTubJyWU9u6UFQYhvDngD40bhPycsNsVME02FGDV5945mXaS61m+8B4cqbLiC7v1U=
-X-Received: by 2002:a05:6512:3448:b0:479:10f0:11c7 with SMTP id
- j8-20020a056512344800b0047910f011c7mr2248569lfr.521.1655375117521; Thu, 16
- Jun 2022 03:25:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zoPzQU7tFCHKbazE96n62nKhOYL6lpl30iCKAfHWF3k=;
+        b=CTehCkS6g9KneogjyDyYF51/7f0zpqDKhYmyEhMytzt3D3m38sgBEfF8tn/Ck/JZzU
+         +SoVmRm1AwWgE6Z1oUmCwg59uKJJm2/3KuBuV8mShV0jtZ2CwGbsKNpd2fvAQn79ZgnP
+         kRggSe2RDAT5q0EvPMNDBSDahYp2LbM2M/c6aVy84BQGl8qw+6/GD9moVfBWaofMGuSC
+         0vWbLasD0omKP/+9iOBzJcjwq+jh5z/ngEYPOnyBb2rROk0Z+NCkRWLIO7zsViG5D6tl
+         tSyFVGUVwwQIKhM94a1LQ9B+ZMRFuu8IHAfuUHaTQ8FAfKcQuNUdCbRTM8yzsUgi37YL
+         cIwg==
+X-Gm-Message-State: AJIora8swcNRC5yyknekqXX00+rUdbMNW8dVx/CrfXbVZ9ECToLi7hnq
+        qHVJZxsNriGJzX84WBIwPhMVkA==
+X-Google-Smtp-Source: AGRyM1t/ql2JMv1ewpAojMoM3/cs4LVSN9IuvwaxwKyqaHE21iNNhZqbPJBxqQN/Cljh9oFWXsyihg==
+X-Received: by 2002:a05:6870:c181:b0:f1:ea2f:f7f7 with SMTP id h1-20020a056870c18100b000f1ea2ff7f7mr8618905oad.18.1655391849854;
+        Thu, 16 Jun 2022 08:04:09 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id n5-20020a4ab345000000b0035eb4e5a6d6sm1098587ooo.44.2022.06.16.08.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 08:04:08 -0700 (PDT)
+Message-ID: <9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com>
+Date:   Thu, 16 Jun 2022 10:04:07 -0500
 MIME-Version: 1.0
-Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
- 03:25:16 -0700 (PDT)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
-Date:   Thu, 16 Jun 2022 11:25:16 +0100
-Message-ID: <CAGOBX5aJ01nW_foH2aLY6UF6s28QePJ4_J3aCt=hjQSuJNsdog@mail.gmail.com>
-Subject: DARLEHENSANGEBOT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ignat Korchagin <ignat@cloudflare.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, serge@hallyn.com, amir73il@gmail.com,
+        kernel-team <kernel-team@cloudflare.com>,
+        Jeff Moyer <jmoyer@redhat.com>
+References: <20220608150942.776446-1-fred@cloudflare.com>
+ <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+ <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
+ <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
+ <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com>
+ <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
+ <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com>
+ <20220615103031.qkzae4xr34wysj4b@wittgenstein>
+ <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com>
+ <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
+ <CAHC9VhRSzXeAZmBdNSAFEh=6XR57ecO7Ov+6BV9b0xVN1YR_Qw@mail.gmail.com>
+ <1c4b1c0d-12f6-6e9e-a6a3-cdce7418110c@schaufler-ca.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <1c4b1c0d-12f6-6e9e-a6a3-cdce7418110c@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+On 6/15/22 10:55 AM, Casey Schaufler wrote:
+> On 6/15/2022 8:33 AM, Paul Moore wrote:
+>> On Wed, Jun 15, 2022 at 11:06 AM Ignat Korchagin 
+>> <ignat@cloudflare.com> wrote:
+>>> On Wed, Jun 15, 2022 at 3:14 PM Paul Moore <paul@paul-moore.com> wrote:
+>>>> On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner 
+>>>> <brauner@kernel.org> wrote:
+>> ...
+>>
+>>>>> Fwiw, from this commit it wasn't very clear what you wanted to achieve
+>>>>> with this. It might be worth considering adding a new security hook 
+>>>>> for
+>>>>> this. Within msft it recently came up SELinux might have an 
+>>>>> interest in
+>>>>> something like this as well.
+>>>> Just to clarify things a bit, I believe SELinux would have an interest
+>>>> in a LSM hook capable of implementing an access control point for user
+>>>> namespaces regardless of Microsoft's current needs.  I suspect due to
+>>>> the security relevant nature of user namespaces most other LSMs would
+>>>> be interested as well; it seems like a well crafted hook would be
+>>>> welcome by most folks I think.
+>>> Just to get the full picture: is there actually a good reason not to
+>>> make this hook support this scenario? I understand it was not
+>>> originally intended for this, but it is well positioned in the code,
+>>> covers multiple subsystems (not only user namespaces), doesn't require
+>>> changing the LSM interface and it already does the job - just the
+>>> kernel internals need to respect the error code better. What bad
+>>> things can happen if we extend its use case to not only allocate
+>>> resources in LSMs?
+>> My concern is that the security_prepare_creds() hook, while only
+>> called from two different functions, ends up being called for a
+>> variety of different uses (look at the prepare_creds() and
+>> perpare_kernel_cred() callers) and I think it would be a challenge to
+>> identify the proper calling context in the LSM hook implementation
+>> given the current hook parameters.  One might be able to modify the
+>> hook to pass the necessary information, but I don't think that would
+>> be any cleaner than adding a userns specific hook.  I'm also guessing
+>> that the modified security_prepare_creds() hook implementations would
+>> also be more likely to encounter future maintenance issues as
+>> overriding credentials in the kernel seems only to be increasing, and
+>> each future caller would risk using the modified hook wrong by passing
+>> the wrong context and triggering the wrong behavior in the LSM.
+> 
+> We don't usually have hooks that do both attribute management and
+> access control. Some people seem excessively concerned about "cluttering"
+> calling code with security_something() instances, but for the most
+> part I think we're past that. I agree that making security_prepare_creds()
+> multi-purpose is a bad idea. Shared cred management isn't simple, and
+> adding access checks there is only going to make it worse.
+> 
 
-*Vollst=C3=A4ndiger Name:
-* Ben=C3=B6tigte Menge:
-*Leihdauer:
-*Mobiltelefon:
-*Land:
+Sounds like we've reached the conclusion not to proceed with a v4 of 
+this patch. I'll pivot to propose a new hook instead.
+
+Thanks for the feedback everyone :)
+
+Fred
