@@ -2,66 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2654054DC70
-	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jun 2022 10:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B2854DEEC
+	for <lists+linux-cifs@lfdr.de>; Thu, 16 Jun 2022 12:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358959AbiFPIF1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Jun 2022 04:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S1376505AbiFPKZ2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Jun 2022 06:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359610AbiFPIF1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jun 2022 04:05:27 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D1E5D64D
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 01:05:26 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id d39so528997vsv.7
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 01:05:26 -0700 (PDT)
+        with ESMTP id S1376480AbiFPKZZ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Jun 2022 06:25:25 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD215DA1D
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 03:25:19 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id y32so1521286lfa.6
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Jun 2022 03:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
-        b=Gh0odiyxs+Hx1TIH7bnm6JWpbwZtm5JmXCUFNEXZC8AsSdEfyvsUoW7+lgYcUVPhYS
-         sl6gm02Tllh4iXw5p5p6n6/GakPgbG5psPEG0xLfJrTxyqtwc+gIqQqro3RWnCCOIu1H
-         Zs6rje4nUrZSaEmSeiQErUlst0bg3cVQe1uoXIgvXieTbG1XR9gNLRlFcQpqPi/gC9pQ
-         G0SVKSj5CCBbKPXu+1SAhRixvH6WrFNcr2QFAW+RGWtvk1sYsKHgqe2K3iBZ0BzRjfIA
-         1miEfnnyfidwN3zTgC/k5t5ysXbGmHm9WK15DXEzug9yAGKqKtiAWv1KBt4ByFB+Pqkn
-         LXvA==
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=W910NhxhsjMJh8xmTqiBb+n/d8vNhkQvEK3uQsx019H/NVF/HsRkR91Mwgf5NoOA2o
+         +G9NG8HKS3dufLn4HoWATUwViMwR/sm7gdhYVGjSBp65IoH9/VzeePSRwsxtnWyD2IYd
+         /P+anhEIznyuyfYSv0fd8QvDY0LuzCx2TbyvmZF5dM2Nj4uA7+9FyoHxvD1xuHmQyiMU
+         TCzjnL3q1oIV583xyWy0s+D4KRyb2LgtwArAnNeV+m1AO8ORaxA26nm4VB9kA/9NXW1T
+         yHcu0NzK0YGRQb2+53awbQan+6daAbhIX2qCkYqY9Qavm2WmKJIEIH3npl/ZhVNAwvQV
+         qPgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
-        b=UAggCjsZfRvkKUqv21y8Vpot12Mxta73UySmmeasFsc3CPxv6mO1cL4Zv5yGFz6IJ7
-         ASFrYSOU7Kd+XcIQQQmJ3A2S/pM/4N4lOAkzNG0wmvcT44Nskw54F+1HaE2U8gaWJAhj
-         xIybvHo196E1/BYBqCUdRc47vox/MvVAdNADxq16hoetSbudmcLgsABvk2KLs1kgpyL9
-         5gXiXv93jDIeEkJ468peAM8AE2lm+ki7wG0a6XiBQN4cQhAKT622wXkHDPGvWMm0xow3
-         bHHzuIiq+DqDVT6OtAbgqcFWlLLDN0utT0WqDSEOfHh/QmWAmoiSvQxtjD33uBnJbcvI
-         nFnA==
-X-Gm-Message-State: AJIora86wxaRD+AJscE2en7Px/OAQL17mMr1LB/29GOYQj2+n8HA1Kwb
-        ra5Em9daYGZJYXGZG4lMlSSNd77f94cqt4pTnbQ=
-X-Google-Smtp-Source: AGRyM1sELq2QonT9OLUtV9GNvBglf2gEuB5MCp2yMoaq53XHlXHOfUlb2OF7r+4/d+430118gODKXzoXk5WKN4m5cRk=
-X-Received: by 2002:a05:6102:7c8:b0:349:e0ea:16d0 with SMTP id
- y8-20020a05610207c800b00349e0ea16d0mr1429647vsg.36.1655366725424; Thu, 16 Jun
- 2022 01:05:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=4nrfw8VR90p7tKRYAy0UnFc5GUhGMfrIXHFqzVYQjlIs3SWyCIea4DAIsnc0fdx0Ms
+         Yz6ognwQnNbjuyYU4IChA+yc3rq9RlShpmWMM7fAoyM4yOlwchbrrsUqxD3M4kvfpLZz
+         m289OUhDJCqWPs5O1/WjrS7SJSEhNqeoCWLq9uL1E/XiQJQspJaqmbktGZbehd+FVsQv
+         iZEMk9TuE1gy/k9Llj3ZxOFEELGZO36XRai3ORmHEtfGZE2Hc4kRJt4XOkJU2pvc0pUu
+         draftq3iENTL5nEZjOm1kKNMij9QaqwUO57k5LarD/23IHhHN0WO6LoKfh/AJVB+2IqT
+         erow==
+X-Gm-Message-State: AJIora8MP0NS+l+RZOskrzoEyxTHRW3IYatXkmWOUowYWFrm5LEb1PZV
+        JZ3doIRGhXnRtCjnG+K+lLx5ztNj8Fze9EzxgiQ=
+X-Google-Smtp-Source: AGRyM1v2MTXGyROmKEYPPr3IJqOTubJyWU9u6UFQYhvDngD40bhPycsNsVME02FGDV5945mXaS61m+8B4cqbLiC7v1U=
+X-Received: by 2002:a05:6512:3448:b0:479:10f0:11c7 with SMTP id
+ j8-20020a056512344800b0047910f011c7mr2248569lfr.521.1655375117521; Thu, 16
+ Jun 2022 03:25:17 -0700 (PDT)
 MIME-Version: 1.0
-Sender: stgmonicabrown01@gmail.com
-Received: by 2002:a05:6102:374f:0:0:0:0 with HTTP; Thu, 16 Jun 2022 01:05:25
- -0700 (PDT)
-From:   Frances Patrick <francespatrick49@gmail.com>
-Date:   Thu, 16 Jun 2022 01:05:25 -0700
-X-Google-Sender-Auth: T0XPxyoI6pC4WFGMTNfSO81nQUE
-Message-ID: <CAOZrF2K40pOuaA+c53+FBn1seZwFZ0mS_ZdmcOw1geMUQ5fSXw@mail.gmail.com>
-Subject: Donation to you
+Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
+ 03:25:16 -0700 (PDT)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
+Date:   Thu, 16 Jun 2022 11:25:16 +0100
+Message-ID: <CAGOBX5aJ01nW_foH2aLY6UF6s28QePJ4_J3aCt=hjQSuJNsdog@mail.gmail.com>
+Subject: DARLEHENSANGEBOT
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,10 +69,12 @@ List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
 --=20
-Hello, Dearest Friend,
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-Two Million Euros has been donated to you by Frances and Patrick
-Connolly, we are from County Armagh in Northern Ireland, We won the
-New Year's Day EuroMillions draw of  =C2=A3115 million Euros Lottery
-jackpot which was drawn on New Year=E2=80=99s Day. Email for more details:
-francespatrick49@gmail.com Looking forward to hearing from you soon,
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Mobiltelefon:
+*Land:
