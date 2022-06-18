@@ -2,77 +2,102 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C105A55030F
-	for <lists+linux-cifs@lfdr.de>; Sat, 18 Jun 2022 07:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292E7550759
+	for <lists+linux-cifs@lfdr.de>; Sun, 19 Jun 2022 00:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiFRFmn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 18 Jun 2022 01:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S231538AbiFRWjJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 18 Jun 2022 18:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiFRFmm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 18 Jun 2022 01:42:42 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08435DFB
-        for <linux-cifs@vger.kernel.org>; Fri, 17 Jun 2022 22:42:41 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x5so8643763edi.2
-        for <linux-cifs@vger.kernel.org>; Fri, 17 Jun 2022 22:42:40 -0700 (PDT)
+        with ESMTP id S231506AbiFRWjJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 18 Jun 2022 18:39:09 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6031B845;
+        Sat, 18 Jun 2022 15:39:06 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id c11so3547211vkn.5;
+        Sat, 18 Jun 2022 15:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
-        b=hrlKCI4xqbP2TwLusgW+vW+uIuEhbxu11STeYZfGRjrkqf5+ojtCMS2aL1+foOI2l/
-         wysNa9/1PHsu2uJfdJiM8L4tmcbWBFvvQl1TgKma9VTb1vvfoCG+FJ2rahhqf9/SU9tO
-         UvuShMhaQWAeqOQRoby2WduOK3x7tkdZchyLNvucb6MWedT5Dz1UvLn3+1jytIhz7en2
-         NMRbDqQiulj1s2v/dMoHWwPPobnT0q4pK1/AGkRLwXNBe88a3JAdKuaOXiXbk1RIWYJN
-         GYEBhloIX3ikKIx/FIaV9tekV3gHXzUgWq+DH7J9j/6f/jTk18qwqJWZ0K0GZT/UjyPV
-         8QCw==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=mWm3075zUyjZdm5Pr3I4IXYgBYEeEKabUfevN6De2+c=;
+        b=SeU09hxP6cWVa5NOL8KUaKNDu2/W3aC9MAFhCe53ZTzDl6O8eWQj7PjKf6j8Bc52dT
+         PoIpodjM7QxRTppxqUeTYN5yydJ7xw8YUQfaow2D5h6xxGP1V8ZqktTlXqqfLvdFhWuj
+         oHqeatWhsWRIZP2zfBQMZj2HhGMjVmcYq38dP4W6Zbz7ABXeSvjLzxXlZnces2xLADuB
+         7VOGJM9l+W+1NGlsCEcuhAu2UhYXxjKDFy8krXuRevA7LRJSIWxDeTBFJtmko/wkRB7b
+         KLloUysSm2ADs4Bzq6edvqIHxBqlgG+4HtdTKdL0kEVwF7AbZQQ66hAVU0qIQ3YvQYWi
+         470w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
-        b=CYi+r4Sq25e+g/iLfTG3NBlIC1r5FcTxSnCWgc3502qLhMpIt6X0TAVKXW37asP4s3
-         yDCCtpodsq14Zoh2gZDcrqbRwkSoGX04VCPabffcKL4GmNFldLmjXlsn1ItsL576JlKy
-         lYbYvb6usexLZoIQHu0DxrmkCuI/FjcyTqgx+vKnRlUBWFzvYIkF6GQ/AxasVrRKssTe
-         vgGyebzH6aL0++gyBStYN5g36USV8N46RXQQ+hVVnW2IPD6GmCDG0pIjlkbvCW+Rj/nD
-         fQ0wofT8b34FbnXhAZfs1I0ukRUsUAzorkTha2YuLRVJWTVIz99XB6QUd5FfIIJTwFPc
-         0q4w==
-X-Gm-Message-State: AJIora96xn7UVMKRn1dhIBOGMzaJmD1OtgiGPs90bnIOoG/XfTmXE/d5
-        JCZuzQDkXOuS5bedF0u/7ZiAcgDI4+/M1a9wXDU=
-X-Google-Smtp-Source: AGRyM1tj2En52NoHwJDwOGg3GGlVCgPNdGZpfXSVUgocNLwdYathvp51oKw+NIrEmwDhfiQmBaH24rMF/UWR6il2Vvc=
-X-Received: by 2002:a05:6402:542:b0:42d:c7d6:4121 with SMTP id
- i2-20020a056402054200b0042dc7d64121mr16400468edx.302.1655530959529; Fri, 17
- Jun 2022 22:42:39 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=mWm3075zUyjZdm5Pr3I4IXYgBYEeEKabUfevN6De2+c=;
+        b=PDTdweLd+EEqzvhrz9K9Py0z4l9EdaC5l1ZR52I06y5fH+mAUjDHYihDVueH8/Y/wH
+         mLfuQBZgVLqFS+u0LB6q2JlBM4CmIFy5vVjfDmnCmT5zQWzc934Q746ZtcdoHHNMDzrI
+         BgzcWDTlKN2o/cz1Lpx3+Ljcxf+SOc3eJvPH7LcUkpO1pWaXi2XKGdhRVp9VdSilUvPo
+         Z51UFrmVwzrosua4tqgYNklrQjtXK175XT6s0ueClU4t8/euh2JnyhPZEXjeSOwX0jKu
+         voF6voOiTuWMmm/LHiHnTrIuTQNNTPzCD9X0QgKL79nC6s29SkbFEX9fPQxIVZvn0uOC
+         VDeg==
+X-Gm-Message-State: AJIora/tdY0N7yi60C1odeGYEN69VxNr0+53fDSG4eYPsSJTqlrzvG6p
+        TAWl3D3QXXcl1pOzK0cyJla0kZSTuvfLNhYwZwrFe7n3DeM=
+X-Google-Smtp-Source: AGRyM1uCZJ225/VpReNjFcSZlrd2YXp/8Ij7WF2q0FMHRLjn5v41CMcCG1Jj/ozGFj3K14m+TEOrTUTfiNiFuO9Wxr4=
+X-Received: by 2002:a1f:6d04:0:b0:36c:125:2edf with SMTP id
+ i4-20020a1f6d04000000b0036c01252edfmr63817vkc.38.1655591945548; Sat, 18 Jun
+ 2022 15:39:05 -0700 (PDT)
 MIME-Version: 1.0
-Sender: elizabeth.hoisington1@gmail.com
-Received: by 2002:a05:6400:4210:0:0:0:0 with HTTP; Fri, 17 Jun 2022 22:42:39
- -0700 (PDT)
-From:   Frances Patrick <francespatrick101@gmail.com>
-Date:   Fri, 17 Jun 2022 22:42:39 -0700
-X-Google-Sender-Auth: 9WuzNPnZARBm8IxcIQU9l5vwTqI
-Message-ID: <CANhm-9sePJiyA-prGf=suE-3N4BNGx5PbnKOmaVQ1zmzOsvrCw@mail.gmail.com>
-Subject: Donation to you
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 18 Jun 2022 17:38:54 -0500
+Message-ID: <CAH2r5mtJnW8Uq2Dk2xjid4Au9rM=g9_oBJC5ojJMd-Qksne+6g@mail.gmail.com>
+Subject: [GIT PULL] SMB3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---=20
-Hello, Dearest Friend,
+Please pull the following changes since commit
+b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
-Two Million Euros has been donated to you by Frances and Patrick
-Connolly, we are from County Armagh in Northern Ireland, We won the
-New Year's Day EuroMillions draw of  =C2=A3115 million Euros Lottery
-jackpot which was drawn on New Year=E2=80=99s Day. Email for more details:
-francespatrick49@gmail.com Looking forward to hearing from you soon,
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc2-smb3-client-fixes
+
+for you to fetch changes up to 5d24968f5b7e00bae564b1646c3b9e0e3750aabe:
+
+  cifs: when a channel is not found for server, log its connection id
+(2022-06-18 14:55:06 -0500)
+
+----------------------------------------------------------------
+2 smb3 debugging improvements
+- one found to deal with debugging a multichannel problem and one for
+a recent fallocate issue
+
+Did not include the two larger multichannel reconnect (dynamically
+adjusting interfaces on reconnect) patches in this P/R, because
+recently found an additional problem with multichannel  to one server
+type that I want to include at the same time.
+----------------------------------------------------------------
+Shyam Prasad N (1):
+      cifs: when a channel is not found for server, log its connection id
+
+Steve French (1):
+      smb3: add trace point for SMB2_set_eof
+
+ fs/cifs/sess.c    |  3 +++
+ fs/cifs/smb2pdu.c |  2 ++
+ fs/cifs/trace.h   | 38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+
+
+-- 
+Thanks,
+
+Steve
