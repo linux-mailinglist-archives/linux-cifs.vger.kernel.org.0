@@ -2,79 +2,77 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0E654FA8C
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Jun 2022 17:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C105A55030F
+	for <lists+linux-cifs@lfdr.de>; Sat, 18 Jun 2022 07:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382793AbiFQPlZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 17 Jun 2022 11:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S229948AbiFRFmn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 18 Jun 2022 01:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbiFQPlY (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 Jun 2022 11:41:24 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 08:41:21 PDT
-Received: from sv220.xserver.jp (sv220.xserver.jp [202.226.39.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A15F4F1E2;
-        Fri, 17 Jun 2022 08:41:21 -0700 (PDT)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw2.xserver.jp)
-Received: from webmail.xserver.ne.jp (webmail.xserver.ne.jp [210.188.201.183])
-        by sv220.xserver.jp (Postfix) with ESMTPA id 038CD12025F434;
-        Sat, 18 Jun 2022 00:16:31 +0900 (JST)
+        with ESMTP id S229551AbiFRFmm (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 18 Jun 2022 01:42:42 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08435DFB
+        for <linux-cifs@vger.kernel.org>; Fri, 17 Jun 2022 22:42:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id x5so8643763edi.2
+        for <linux-cifs@vger.kernel.org>; Fri, 17 Jun 2022 22:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
+        b=hrlKCI4xqbP2TwLusgW+vW+uIuEhbxu11STeYZfGRjrkqf5+ojtCMS2aL1+foOI2l/
+         wysNa9/1PHsu2uJfdJiM8L4tmcbWBFvvQl1TgKma9VTb1vvfoCG+FJ2rahhqf9/SU9tO
+         UvuShMhaQWAeqOQRoby2WduOK3x7tkdZchyLNvucb6MWedT5Dz1UvLn3+1jytIhz7en2
+         NMRbDqQiulj1s2v/dMoHWwPPobnT0q4pK1/AGkRLwXNBe88a3JAdKuaOXiXbk1RIWYJN
+         GYEBhloIX3ikKIx/FIaV9tekV3gHXzUgWq+DH7J9j/6f/jTk18qwqJWZ0K0GZT/UjyPV
+         8QCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=kuEgcMgVDUHYFfJyXF9gOzSC47A94xAWGdocmAZibCA=;
+        b=CYi+r4Sq25e+g/iLfTG3NBlIC1r5FcTxSnCWgc3502qLhMpIt6X0TAVKXW37asP4s3
+         yDCCtpodsq14Zoh2gZDcrqbRwkSoGX04VCPabffcKL4GmNFldLmjXlsn1ItsL576JlKy
+         lYbYvb6usexLZoIQHu0DxrmkCuI/FjcyTqgx+vKnRlUBWFzvYIkF6GQ/AxasVrRKssTe
+         vgGyebzH6aL0++gyBStYN5g36USV8N46RXQQ+hVVnW2IPD6GmCDG0pIjlkbvCW+Rj/nD
+         fQ0wofT8b34FbnXhAZfs1I0ukRUsUAzorkTha2YuLRVJWTVIz99XB6QUd5FfIIJTwFPc
+         0q4w==
+X-Gm-Message-State: AJIora96xn7UVMKRn1dhIBOGMzaJmD1OtgiGPs90bnIOoG/XfTmXE/d5
+        JCZuzQDkXOuS5bedF0u/7ZiAcgDI4+/M1a9wXDU=
+X-Google-Smtp-Source: AGRyM1tj2En52NoHwJDwOGg3GGlVCgPNdGZpfXSVUgocNLwdYathvp51oKw+NIrEmwDhfiQmBaH24rMF/UWR6il2Vvc=
+X-Received: by 2002:a05:6402:542:b0:42d:c7d6:4121 with SMTP id
+ i2-20020a056402054200b0042dc7d64121mr16400468edx.302.1655530959529; Fri, 17
+ Jun 2022 22:42:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 17 Jun 2022 23:16:31 +0800
-From:   Steve Dibenedetto <y-kitsuya@bell-group.co.jp>
+Sender: elizabeth.hoisington1@gmail.com
+Received: by 2002:a05:6400:4210:0:0:0:0 with HTTP; Fri, 17 Jun 2022 22:42:39
+ -0700 (PDT)
+From:   Frances Patrick <francespatrick101@gmail.com>
+Date:   Fri, 17 Jun 2022 22:42:39 -0700
+X-Google-Sender-Auth: 9WuzNPnZARBm8IxcIQU9l5vwTqI
+Message-ID: <CANhm-9sePJiyA-prGf=suE-3N4BNGx5PbnKOmaVQ1zmzOsvrCw@mail.gmail.com>
+Subject: Donation to you
 To:     undisclosed-recipients:;
-Subject: THIS IS VERY CONFIDENTIAL
-Reply-To: stevedibenedetto17@gmail.com
-Mail-Reply-To: stevedibenedetto17@gmail.com
-Message-ID: <ec1bb68d0d72aa3e007bad8b0e72f08f@bell-group.co.jp>
-X-Sender: y-kitsuya@bell-group.co.jp
-User-Agent: Roundcube Webmail/1.2.0
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
-        SPF_HELO_PASS,SPF_SOFTFAIL,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [stevedibenedetto17[at]gmail.com]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.6 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+--=20
+Hello, Dearest Friend,
 
-
--- 
-Hello,
-
-My name is Steve Dibenedetto.I apologize to have contacted you this way
-without a direct relationship. There is an opportunity to collaborate
-with me in the sourcing of some materials needed by our company for
-production of the different medicines we are researching.
-
-I'm aware that this might be totally outside your professional
-specialization, but it will be a great source for generating extra
-revenue. I  discovered a manufacturer who can supply us at a lower rate
-than our company's previous purchases.
-I will give you more specific details when/if I receive feedback from
-you showing interest.
-
-Warm Regards
-Steve Dibenedetto
-Production & Control Manager,
-Green Field Laboratories
-Gothic House, Barker Gate,
-Nottingham, NG1 1JU,
-United Kingdom.
+Two Million Euros has been donated to you by Frances and Patrick
+Connolly, we are from County Armagh in Northern Ireland, We won the
+New Year's Day EuroMillions draw of  =C2=A3115 million Euros Lottery
+jackpot which was drawn on New Year=E2=80=99s Day. Email for more details:
+francespatrick49@gmail.com Looking forward to hearing from you soon,
