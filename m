@@ -2,97 +2,82 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8826657470E
-	for <lists+linux-cifs@lfdr.de>; Thu, 14 Jul 2022 10:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9FF57551D
+	for <lists+linux-cifs@lfdr.de>; Thu, 14 Jul 2022 20:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiGNIhH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S232432AbiGNSed (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 14 Jul 2022 14:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbiGNIg6 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 14 Jul 2022 04:36:58 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E983E3FA09
-        for <linux-cifs@vger.kernel.org>; Thu, 14 Jul 2022 01:36:51 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id o7so1622221lfq.9
-        for <linux-cifs@vger.kernel.org>; Thu, 14 Jul 2022 01:36:51 -0700 (PDT)
+        with ESMTP id S240711AbiGNSeb (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 14 Jul 2022 14:34:31 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28E454CB3
+        for <linux-cifs@vger.kernel.org>; Thu, 14 Jul 2022 11:34:16 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id mf4so4961456ejc.3
+        for <linux-cifs@vger.kernel.org>; Thu, 14 Jul 2022 11:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=XrPG1uZaQRn1UCA0WJJ2pmJQ1csZW3HabgB7E+QXuACfRhko5FjAocWwoGAFMQM+4K
-         maoBv4gTZQXqu9EJzYUg27HWYGn7H4ps8X1YfFKAamIhhLSUESO1F6QG9mJgGHe0KMpr
-         yS6EmWRT7znGhWAi5CHDysnG1OxosqIxRYFf098GB0Xs4T6zMcBwQ+Ijt6ciUPeVVUwm
-         NwEO+Wz1v4Oa+mBtHNRupxuLErGpDho6oqFPRIm2MU+57eHEreDtv9TWX6BBq17KbV3w
-         UCTpqQeOnk576xhvUmMdcgTy5b4PgstjqS11/4Py/0diTc9tD3MngzVuJ3uMtq9Qr/CL
-         qkvw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IqYZBmeUsaJiDrPDnwdrO1TyojMly/IYpZnkKBrChTo=;
+        b=Uk8r1h0dDI69+5IH2XRon08rvJXZZD5N4ch9x6PYg/hcWZYK9kXPWJWyrBJI98tCEV
+         Rv7nARX9+m9pytkl+411YJMzGJh+QTuXwd3vmuecTfAUch0NUrZEtCux4joYjVnIf14C
+         RkrUv7VWkmEXYhQG9OUGIO2d7Wsw0Cb8Deb0c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=JCl9dNxEHwh93JY1aumNhatHi0bKDl1+hkiZIyPJmwsODkHBGwdo5i+lgo01meppc2
-         njoFJh4G0oAb7K751DEWI3Z2YiT9mGgSbew9aLlIJoTwsYISToY5ydiJKROdNximDZ5Y
-         +yPdId/egBC8tt4Tn+hZf50mzI5BOenks+lvMPanBMz3UV9X3fhXBDLb2GRB/Qm9o9KT
-         Jw0xuThObfvQ+hNI1sW0ZdKA7lESRuq44+xbC9kuYNjjEW1XpUtOhl7r6OukyXLInxeL
-         VSNbzYVb3++0WBO7/NQHV0X41c2SxU/HQk6sAdSvZYt52HsW0Hk71LsBtcjAbKcKoQ9/
-         wNmg==
-X-Gm-Message-State: AJIora9Cnhc0b7y9CFaHr5uaG3O8AOxiUXhucPuwNGMyf0Zds5mmlweP
-        xpJe4taj0G7PYcbWk/tRKQwX4qD2ZYH8BY1gSt0=
-X-Google-Smtp-Source: AGRyM1u3j4Kh8ROf600mZ9n+2mzPHZx1NFVtrSntlSiwIK2NP6HVto6IIpM3hlWxyt39lgmrdSwWdCXGiGrSzCPb6JE=
-X-Received: by 2002:a05:6512:3d27:b0:489:e623:f244 with SMTP id
- d39-20020a0565123d2700b00489e623f244mr4930609lfv.236.1657787809582; Thu, 14
- Jul 2022 01:36:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IqYZBmeUsaJiDrPDnwdrO1TyojMly/IYpZnkKBrChTo=;
+        b=wzYdqFDBkKZJ5RQPNNYXon1sXIDdzOxCv0rdBTYC/zs6aeGoVGt2ZX2f8+BPLn7ITn
+         HmztksgNPRJCbC88QP3GRsPMvJxp/T7OqhfLYhndXGI4tkgfBJGTMFg+icYl2r11tnkk
+         G7dlGyrIt2F7lVF0yqIqXqDmbvqTr4wB+Kod7BmQ4y0BvSFTcZ8yVbQcHb7frB6LW4Q+
+         cmALdgoFZBF/FKIHzDfz4yHoC/r7e3QWY55a4CYlDIU00YQKPPlmcRSlZRE+yaqjzPOW
+         nFHfrSitm1ru9LLkgJeO6ely4I9hWRrQVynxuNRm6YdCF85cC0LJwPzaa9N9+HnE9J/1
+         R+Og==
+X-Gm-Message-State: AJIora8CTQvTatyGbmT2uRWlJYcDcO7Y5dHXfCUS+hxQXpEZnNaO7cmc
+        tm4WkgMAnSx9Mwa6n3LGmLIbqfxzdpP5id1Z17A=
+X-Google-Smtp-Source: AGRyM1uIK1BCuEcgvgaD05PqGaw4FEe3312wNCUJB8ZvPnQJ9jiqDOYkesqsXrDrX6CWinj0WsZQJQ==
+X-Received: by 2002:a17:906:d54b:b0:72e:ece1:2956 with SMTP id cr11-20020a170906d54b00b0072eece12956mr810760ejc.156.1657823654975;
+        Thu, 14 Jul 2022 11:34:14 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa7d691000000b0043577da51f1sm1463930edr.81.2022.07.14.11.34.14
+        for <linux-cifs@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 11:34:14 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so1716459wmb.3
+        for <linux-cifs@vger.kernel.org>; Thu, 14 Jul 2022 11:34:14 -0700 (PDT)
+X-Received: by 2002:a05:600c:2d07:b0:3a3:585:5d96 with SMTP id
+ x7-20020a05600c2d0700b003a305855d96mr2740169wmf.38.1657823653896; Thu, 14 Jul
+ 2022 11:34:13 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:36:48
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:36:48 +0100
-Message-ID: <CAFC-3ifKFkAVLmD=8z4VAKFLX0pV+_h5OJ=Ks62m+0uk+DimKQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
+References: <CAH2r5mtQwDNtprMOXog3Az8av3hjdFWOCVfk8xmaP4vKJO0tdg@mail.gmail.com>
+In-Reply-To: <CAH2r5mtQwDNtprMOXog3Az8av3hjdFWOCVfk8xmaP4vKJO0tdg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 14 Jul 2022 11:33:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjOMyh4mWTAp-o_402EHLsJ4MMY4d7ja+Ec0x0=B=UKAw@mail.gmail.com>
+Message-ID: <CAHk-=wjOMyh4mWTAp-o_402EHLsJ4MMY4d7ja+Ec0x0=B=UKAw@mail.gmail.com>
+Subject: Re: [GIT PULL] smb3 client fixes
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4795]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+On Wed, Jul 13, 2022 at 8:36 PM Steve French <smfrench@gmail.com> wrote:
+>
+> Three smb3 client fixes:
+
+You don't even point to a git tree..
+
+Please use the whole "git request-pull" thing, and include everything.
+
+              Linus
