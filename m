@@ -2,105 +2,185 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBFE57CEE2
-	for <lists+linux-cifs@lfdr.de>; Thu, 21 Jul 2022 17:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686AC57D533
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Jul 2022 22:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiGUP2U (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 21 Jul 2022 11:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S229613AbiGUUyn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-cifs@lfdr.de>); Thu, 21 Jul 2022 16:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGUP2T (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 21 Jul 2022 11:28:19 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC24A7E834;
-        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id o10so879923vkl.3;
-        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
-        b=dBP3D2j7Zbfyd9lBMrfA3+rBVYUf1xyi3KeCVbhGycv18vrz+uD2EUIG/ljS0fQ5ii
-         gQGN18QnCtOtTaoNVF24jzmPKWWy41TxcwDAA2KtIRtKSufoN7g+HcUk1VAUF4iQqS/l
-         QOfxLMMChEtlQaS37rk0/fRxItkRu/6XKXWWgqEyDuns5jC72HuKUCBp6Wc+6tWhs1fy
-         oea4UuyrjTpJAGftjfEgY+nhUHLAR2ZJyC9mrNRm4sC0YSyxucCfkCs8SH7+n0CPUBer
-         b6Gm1PSZJB9mqbBgPITOkYAsCavkWlwU62tvQUb+x5um7PczfjyFyG9zgjg4xojJIbFp
-         x1tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
-        b=TP7WSfPjcB/mQddHl8by3Cbgm83pAwgyHHTah4KqXEh8wvQwKMumjs3s/yAY3nCwyS
-         xtRse0wAsmwDp2F9Q7eGMPIOWxgsk5f7qog9CifCv1nYiWnWoYPYriYxcO4kjkGaaTeF
-         22W5RhqRlbghOprwaqFZ+ZSN9uqqyuYkEEojpFrix6nIRmSJdcMvgR61x6XeM5R+SPx5
-         RBqHGov9yQbgK3zgyNU5zvuK+r/O1qFRp198lC1u57qEhGdRraho5338x2XnrgisyzT1
-         w/lexvR82aMfmD04+8fxxFlOattXabCacJZFknx8p/IKJT0uWP9kU4QaafD0KBV2SAlo
-         W+QQ==
-X-Gm-Message-State: AJIora9fvqJhtq0jQ0jaHI+jRm+/mLMrdz2Z/vc5leCJKThg9IcTCFnQ
-        Gj+om3pd2f4KzFkBIgR9p+ODxBXAjDmHgkv2AcfDn1MurIPA4A==
-X-Google-Smtp-Source: AGRyM1vNMcqyiN2b4w6Eng0CYE9EaMj0cXEOhZIVlptz/ytKraa77603uWNjtnllPoz3OreWA3lwHzbbHZ0gcAFn0mo=
-X-Received: by 2002:a05:6122:11a9:b0:374:8a3d:ba60 with SMTP id
- y9-20020a05612211a900b003748a3dba60mr15397442vkn.24.1658417297616; Thu, 21
- Jul 2022 08:28:17 -0700 (PDT)
+        with ESMTP id S229579AbiGUUyn (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 21 Jul 2022 16:54:43 -0400
+X-Greylist: delayed 569 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 13:54:41 PDT
+Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB63D8FD76
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Jul 2022 13:54:41 -0700 (PDT)
+Received: from comms3.kousu.ca (comms3.kousu.ca [46.23.90.174])
+        by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 26LKj51q006100
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Jul 2022 16:45:10 -0400
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 26LKj51q006100
+Received: from comms.kousu.ca (localhost [127.0.0.1])
+        by comms3.kousu.ca (OpenSMTPD) with ESMTP id 0c7b1788
+        for <linux-cifs@vger.kernel.org>;
+        Thu, 21 Jul 2022 22:45:03 +0200 (CEST)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 21 Jul 2022 10:28:06 -0500
-Message-ID: <CAH2r5msxJU+nTN14LSd6tmFtpgRY4o+-SVktHoqoeD03XepUPw@mail.gmail.com>
-Subject: [PATCH][CIFS] update MAINTAINERS files with reviewers for cifs.ko
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000ea5d4205e4525dba"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 21 Jul 2022 20:45:03 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: RainLoop/1.16.0
+From:   "Nick Guenther" <nick.guenther@polymtl.ca>
+Message-ID: <774233f766bf26976c0d923cc1dc53c7@polymtl.ca>
+Subject: pam_cifscreds, tmux and session keyrings
+To:     linux-cifs@vger.kernel.org
+X-Poly-FromMTA: (comms3.kousu.ca [46.23.90.174]) at Thu, 21 Jul 2022 20:45:05 +0000
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---000000000000ea5d4205e4525dba
-Content-Type: text/plain; charset="UTF-8"
+I have set up pam_cifscreds and multiuser samba mounts for my users, which seemed to work well, until some of my users started complaining that their overnight batch jobs were failing.
 
-And also correct the URL for the project web site. See attached.
+The common feature is running their jobs in tmux.
+
+It seems tmux sometimes has access to the keyring that pam_cifscreds uses, but isn't able to put a lock on it. So, only overnight when no one is looking (which is of course the worst time to debug), when mount.cifs's connection drops, it isn't able to reconnect because it has no password available.
+
+I would like to have your wisdom on this situation. Can I configure pam_cifscreds to set a longer expiry on the credentials? Can I put something in tmux's startup script to make it lock in the session keyring? Is this a bug in pam_cifscreds?
 
 
 
--- 
-Thanks,
+Here's the setup:
 
-Steve
+$ cat /etc/pam.d/sshd
+[...]
+# Create a new session keyring.
+session    optional     pam_keyinit.so force revoke
+[...]
 
---000000000000ea5d4205e4525dba
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l5v6tt6s0>
-X-Attachment-Id: f_l5v6tt6s0
+$ cat /etc/pam.d/common-session
+[...]
+session [default=1]                     pam_permit.so
+session requisite                       pam_deny.so
+session required                        pam_permit.so
+session optional                        pam_umask.so
+session required        pam_unix.so 
+session optional                        pam_sss.so 
+session optional    pam_cifscreds.so host=duke.neuro.polymtl.ca
+session optional        pam_systemd.so 
+session optional                        pam_mkhomedir.so umask=0077
 
-RnJvbSA1NzY1NjQ4NzQ2M2IzN2E5MzE0ZjM5ZDczY2QwZmNlNjM3MTM3NzIyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IFRodSwgMjEgSnVsIDIwMjIgMTA6MjI6NDggLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
-aWZzOiB1cGRhdGUgTUFJTlRBSU5FUlMgZmlsZSB3aXRoIHJldmlld2VycwoKQW5kIGFsc28gY29y
-cmVjdCB0aGUgVVJMIGZvciB0aGUgcHJvamVjdCB3ZWIgc2l0ZS4KClNpZ25lZC1vZmYtYnk6IFN0
-ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0LmNvbT4KLS0tCiBNQUlOVEFJTkVSUyB8IDcg
-KysrKystLQogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
-CmRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTCmluZGV4IDY1MTYxNmVkOGFl
-Mi4uODVmMWRkODUxODEyIDEwMDY0NAotLS0gYS9NQUlOVEFJTkVSUworKysgYi9NQUlOVEFJTkVS
-UwpAQCAtNTA1NSwxMiArNTA1NSwxNSBAQCBGOglpbmNsdWRlL2xpbnV4L2Nsay8KIEY6CWluY2x1
-ZGUvbGludXgvb2ZfY2xrLmgKIFg6CWRyaXZlcnMvY2xrL2Nsa2Rldi5jCiAKLUNPTU1PTiBJTlRF
-Uk5FVCBGSUxFIFNZU1RFTSBDTElFTlQgKENJRlMpCitDT01NT04gSU5URVJORVQgRklMRSBTWVNU
-RU0gQ0xJRU5UIChDSUZTIGFuZCBTTUIzKQogTToJU3RldmUgRnJlbmNoIDxzZnJlbmNoQHNhbWJh
-Lm9yZz4KK1I6CVBhdWxvIEFsY2FudGFyYSA8cGNAY2pyLm56PiAoREZTLCBnbG9iYWwgbmFtZSBz
-cGFjZSkKK1I6CVJvbm5pZSBTYWhsYmVyZyA8bHNhaGxiZXJAcmVkaGF0LmNvbT4gKGRpcmVjdG9y
-eSBsZWFzZXMsIHNwYXJzZSBmaWxlcykKK1I6CVNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1pY3Jv
-c29mdC5jb20+IChtdWx0aWNoYW5uZWwpCiBMOglsaW51eC1jaWZzQHZnZXIua2VybmVsLm9yZwog
-TDoJc2FtYmEtdGVjaG5pY2FsQGxpc3RzLnNhbWJhLm9yZyAobW9kZXJhdGVkIGZvciBub24tc3Vi
-c2NyaWJlcnMpCiBTOglTdXBwb3J0ZWQKLVc6CWh0dHA6Ly9saW51eC1jaWZzLnNhbWJhLm9yZy8K
-K1c6CWh0dHBzOi8vd2lraS5zYW1iYS5vcmcvaW5kZXgucGhwL0xpbnV4Q0lGUwogVDoJZ2l0IGdp
-dDovL2dpdC5zYW1iYS5vcmcvc2ZyZW5jaC9jaWZzLTIuNi5naXQKIEY6CURvY3VtZW50YXRpb24v
-YWRtaW4tZ3VpZGUvY2lmcy8KIEY6CWZzL2NpZnMvCi0tIAoyLjM0LjEKCg==
---000000000000ea5d4205e4525dba--
+
+$ cat /etc/fstab
+[...]
+//duke.neuro.polymtl.ca/projects /mnt/duke/projects cifs vers=3.0,nobrl,file_mode=0644,multiuser,credentials=/etc/activedirectory-credentials,nofail,_netdev 0 0
+//duke.neuro.polymtl.ca/temp /mnt/duke/temp cifs vers=3.0,nobrl,file_mode=0644,multiuser,credentials=/etc/polygrames-credentials,nofail,_netdev 0 0
+
+
+
+Here's a demo:
+
+If someone sshes in, pam_cifscreds stashes their password in the keyring
+
+p115628@davis:~$ keyctl list @s
+2 keys in keyring:
+452396344: --alswrv 703204575 65534 keyring: _uid.703204575
+626459666: ----sw-v     0     0 logon: cifs:a:132.207.65.200
+
+and it forwards their password to the CIFS server so they can access its contents:
+ 
+p115628@davis:~$ ls -l /mnt/duke/projects/pmj/pmj_csa/results.txt 
+-rw-r--r-- 1 p115628 domain users 831 Jul  5  2021 /mnt/duke/projects/pmj/pmj_csa/results.txt
+
+
+Both commands work inside of a tmux session as well.
+
+However if I make a tmux session, _detach_ it, and then log out
+
+p115628@davis:~$ keyctl list @s
+2 keys in keyring:
+452396344: --alswrv 703204575 65534 keyring: _uid.703204575
+293860075: ----sw-v     0     0 logon: cifs:a:132.207.65.200
+p115628@davis:~$ tmux
+[detached (from session 0)]
+p115628@davis:~$ 
+logout
+Shared connection to davis.neuro.polymtl.ca closed.
+
+
+and then **wait** for the CIFS connection to time out (or, plan to access the CIFS share that is not yet open) and then back in again:
+
+[kousu@laptop ]$ ssh davis
+p115628@davis:~$ tmux attach
+p115628@davis:~$ keyctl list @s
+keyctl_read_alloc: Key has been revoked
+p115628@davis:~$ ls -l /mnt/duke/temp 
+ls: cannot access '/mnt/duke/temp': Permission denied
+^Bd
+
+But outside of tmux, the connection works, because it has access to the reinitialized keyring:
+
+[detached (from session 0)]
+p115628@davis:~$ keyctl list @s
+2 keys in keyring:
+452396344: --alswrv 703204575 65534 keyring: _uid.703204575
+462100230: ----sw-v     0     0 logon: cifs:a:132.207.65.200
+p115628@davis:~$ ls -l /mnt/duke/temp 
+total 0
+drwxr-xr-x 2 p115628 domain users 0 Jun  7 18:10 user1
+drwxr-xr-x 2 p115628 domain users 0 Jun 20 18:14 user2
+
+
+which then makes the share temporarily available inside of tmux as well, at least until it times out again.
+
+
+
+Lennart Poettering and co. have the same problem, because `systemd --user` sessions also lose access to the pam_cifscreds keyring: https://github.com/systemd/systemd/issues/1299. They think it's your bug. They offered a fix too, but I want to hear your opinion on it: use user-keyring(7) instead of user-session-keyring(7), or:
+
+
+diff --git a/cifscreds.c b/cifscreds.c
+index 32f2ee4..9ba298d 100644
+--- a/cifscreds.c
++++ b/cifscreds.c
+@@ -446,7 +446,7 @@ check_session_keyring(void)
+        }
+ 
+        /* A problem querying the user-session keyring isn't fatal. */
+-       uses_key = keyctl_get_keyring_ID(KEY_SPEC_USER_SESSION_KEYRING, 0);
++       uses_key = keyctl_get_keyring_ID(KEY_SPEC_USER_KEYRING, 0);
+        if (uses_key == -1)
+                return 0;
+ 
+diff --git a/pam_cifscreds.c b/pam_cifscreds.c
+index 5d99c2d..3c127bb 100644
+--- a/pam_cifscreds.c
++++ b/pam_cifscreds.c
+@@ -473,7 +473,7 @@ PAM_EXTERN int pam_sm_open_session(pam_handle_t *ph, int flags __attribute__((un
+        }
+ 
+        /* A problem querying the user-session keyring isn't fatal. */
+-       uses_key = keyctl_get_keyring_ID(KEY_SPEC_USER_SESSION_KEYRING, 0);
++       uses_key = keyctl_get_keyring_ID(KEY_SPEC_USER_KEYRING, 0);
+        if ((uses_key >= 0) && (ses_key == uses_key))
+                pam_syslog(ph, LOG_ERR, "you have no persistent session "
+                                "keyring. cifscreds keys will not persist.");
+
+
+I see in this old thread https://www.spinics.net/lists/linux-cifs/msg18249.html that you actually want to go the _other_ direction, and isolate your sessions even more:
+
+> > multiuser SMB connections should also be initiated per session, same like the
+> > keyring. Currently the cifs SMB connections are accessible also from other all
+> > sessions.
+>
+> That needs to be implemented indeed.
+
+but that doesn't sound like it would make my users happy. In their perspective, tmux should be the same environment as ssh or as the GUI, just more persistent. And I tend to agree.
+
+Anyway, I hope this isn't too intricate or confusing for you. I would really appreciate a second opinion, and maybe a consideration of that patch, if that patch is actually the right answer.
+
+-Nick Guenther
+Associé de Recherche
+NeuroPoly, Polytechnique de Montréal
