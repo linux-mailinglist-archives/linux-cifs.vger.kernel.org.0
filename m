@@ -2,68 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B51457D506
-	for <lists+linux-cifs@lfdr.de>; Thu, 21 Jul 2022 22:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F195657D56D
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Jul 2022 23:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiGUUra (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 21 Jul 2022 16:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        id S233732AbiGUVCa (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 21 Jul 2022 17:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiGUUr3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 21 Jul 2022 16:47:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F230F8F510
-        for <linux-cifs@vger.kernel.org>; Thu, 21 Jul 2022 13:47:28 -0700 (PDT)
+        with ESMTP id S233705AbiGUVC0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 21 Jul 2022 17:02:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADF190D85
+        for <linux-cifs@vger.kernel.org>; Thu, 21 Jul 2022 14:02:25 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A4851FD9B;
-        Thu, 21 Jul 2022 20:47:27 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1C3DB1FDC9;
+        Thu, 21 Jul 2022 21:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658436447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1658437344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=73lzAwXRSv0ZF6TFI5a9UkyHtnxsNhLwNEDLV+y9pTw=;
-        b=d5CTtu9+FbsqaBl8PWKWw78oPWsO6aVvtie3agg+F58NR8FvwhSygiZ1O28CXPiJeXa3oq
-        56TUHDOE/2GNlqD9+Ub4srsbxS7Ibzw8EMB/j+ZTyCHeUWf5Q0QGTpnB7S8SarA9w+VNfd
-        oJ4Q2ofPt4FYW5csB+8ynyPlIDuQKP4=
+        bh=pL5PpBTQmGNcS6y8ZtTSB5O3tSOErdFXGPqbN3eq3r8=;
+        b=v8ER8cpPejTLTFT7adyuEsdHKW57YbApVnq3OmQUDqy/1hKkWtcy4kosC+GUtdlZtkPDmZ
+        vX2D///E9KuPEg2D/3Iss1TWLgi7QAo4HvCfRFJL/WRpZCiuGq7eIgYAcgA3KeR7EaFNyX
+        tHqew1yf/gqstMUtps3PUsSC9UDdFhQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658436447;
+        s=susede2_ed25519; t=1658437344;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=73lzAwXRSv0ZF6TFI5a9UkyHtnxsNhLwNEDLV+y9pTw=;
-        b=FBNvopexkYuTisW3mxh5K3jyh2I6jqeMnrVWia83TWQuuhDuuHjEovVWMgIqGBnkGx0sx9
-        ktlCpG3ddsEyTfCg==
+        bh=pL5PpBTQmGNcS6y8ZtTSB5O3tSOErdFXGPqbN3eq3r8=;
+        b=CcwW16swrDx3ZsUxiRjDgNXxWe8lOSGxCcWiyZX2EeUBwKvDwwGdIg2Ze2ND82vnv56Cwp
+        MGhFtruHA7VZI/DQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C2B513A1B;
-        Thu, 21 Jul 2022 20:47:26 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 907C313A1B;
+        Thu, 21 Jul 2022 21:02:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id SOMvMF672WICVQAAMHmgww
-        (envelope-from <ematsumiya@suse.de>); Thu, 21 Jul 2022 20:47:26 +0000
-Date:   Thu, 21 Jul 2022 17:47:24 -0300
+        id od6rFN++2WL3WQAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Thu, 21 Jul 2022 21:02:23 +0000
+Date:   Thu, 21 Jul 2022 18:02:21 -0300
 From:   Enzo Matsumiya <ematsumiya@suse.de>
 To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@cjr.nz>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>
-Subject: Re: [PATCH] smb2: small refactor in smb2_check_message()
-Message-ID: <20220721204548.vkuxqyx3qpyruvme@cyberdelia>
+Cc:     rohiths msft <rohiths.msft@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [PATCH] smb2: simplify mid handling/dequeueing code
+Message-ID: <20220721210221.aazvt57zrbwz4v45@cyberdelia>
 References: <20220719173151.12068-1-ematsumiya@suse.de>
- <20220719173151.12068-2-ematsumiya@suse.de>
- <CAH2r5msRkJLLL2my8PstV=MatuY-6dWmqmEZFEuJq-mfRDz7qQ@mail.gmail.com>
+ <CAH2r5mtgMdFqqopgKDXOnGR0zAEcOB-wW_1OxZRmix78WTdfkQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAH2r5msRkJLLL2my8PstV=MatuY-6dWmqmEZFEuJq-mfRDz7qQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAH2r5mtgMdFqqopgKDXOnGR0zAEcOB-wW_1OxZRmix78WTdfkQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,32 +69,29 @@ List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
 On 07/20, Steve French wrote:
->I don't have any objections to this but wondering what prompted the
->patch? Did you see an error logged with ioctls? You mention:
->
->"SMB2_IOCTL, OutputLength and OutputContext are optional and can be zero"
+>Can you give some context as to why only smb2_find_dequeue_mid()
+>set the "dequeue" flag to true and why it doesn't need to be
+>distinguished from the other find_mid cases?
+>I think Rohith wrote this - Rohith does the change make sense to you? Thoughts?
 
-No errors, it's just that when the IOCTL have a 0 len, there can be
-several messages printed when debugging. It wasn't that much, but enough
-to get me confused several times.
+The way I see it, it's better to be explicit and do a find_mid()
+followed by a dequeue_mid(), than to have a function that do both,
+especially when that function is used only in one place
+(smb2_decrypt_offload()).
+Tho @Rohith please clarify if I missed something here.
 
-Since they were completely unnecessary, I thought it was ok to not print it.
+>Also Enzo can you explain a little what the callers were who set
+>"malformed" (and why it now no longer needs to be used)?
 
->And did you want to change the pr_warn_once to a pr_warn on the
->mismatch since you had a case where server was frequently returning
->frame with bad length and you want to debug it?
+This is, again, to be explicit. It makes no sense to me to have a
+"malformed" parameter in a function named "dequeue_mid", e.g. when
+reading the code I stumbled upon:
 
-Yes. I'm always getting a lot of those mismatched length calculations
-(Windows Server 2019). After investigating, I found that they were not
-real mismatches (see below).
+dequeue_mid(mid, false);
+and
+dequeue_mid(mid, rdata->result);
 
->I am a little worried that it could cause log spam if some server has
->a bug in smb3 response length.
-
-Yes, it could, but as I mention in the commit message, this would only
-happen on the *real* mismatched cases, i.e. after passing all the checks
-inside the "if (len != calc_len)" check. In those cases, I'd prefer to
-really be aware of them then risk it getting lost in dmesg.
+Let me know if this doesn't make sense to you.
 
 
 Cheers,
