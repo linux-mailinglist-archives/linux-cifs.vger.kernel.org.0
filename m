@@ -2,52 +2,52 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102F657F1FB
-	for <lists+linux-cifs@lfdr.de>; Sun, 24 Jul 2022 00:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE6857F1FA
+	for <lists+linux-cifs@lfdr.de>; Sun, 24 Jul 2022 00:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238920AbiGWWwC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 23 Jul 2022 18:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S238916AbiGWWwA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 23 Jul 2022 18:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236550AbiGWWwB (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 23 Jul 2022 18:52:01 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F49DEBF
+        with ESMTP id S236550AbiGWWv7 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 23 Jul 2022 18:51:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65085E0AF
         for <linux-cifs@vger.kernel.org>; Sat, 23 Jul 2022 15:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1658616718; x=1690152718;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Sq8VSrpH8mADgVhehoXwXzgZctNWhJaAT58teun3Jl0=;
-  b=hJR5DsiJWtf1N3fr9RofFZzfCZlNjSSIl1+QM/cfyJgNj7/Mu41Rr9Lp
-   Rlco0/GDS2blVycb04c2ViSTXOB8uqQfpLT3hMieeOy107JPmm1xAOpOP
-   tP+ZNraMt8pNfX1CKTRTjvCpEsV+T/42/GkPTGQHZWswCMoXpiiDXtwgF
-   LoAYDulmGWlnNosVkUErXp8S2HKK1kjqZLvx03y4M+tBga399cT1wCFhc
-   6+dnsR1oKSGPDgJwbHTgumxFk3L6SN9dN52vY4LrdJ0sFqs5DeMkmPjN3
-   mK7B/NfLWUARIMK7hM8dzUMC1QiG8N63kcoLufMHtAZO5xhYAlaoKuNi4
+  bh=jZMMBSO6XzRENTPVXqmNrupg0vbWMzz6op6MGiXOTNU=;
+  b=Z/vjmjQAanHTS3aZSjdoFBAGawr/EIHUOumloN2nerP3WxM68GNmp8B/
+   sK4SQSNQGWEC70mT7z7vwm/+g3mPozI740bkVHooVG29Q2IwrFTXXUlu9
+   pT6cEj9Fh+cefxyDECdp8XAgzg7CvG7yPyuTVq889leD1rNI3lqzRVUfr
+   x1gi1nKLO5PlIsRbyiWLrK7HCVCV7+M5vVKuZdQaVH2GOBVkjvfsOc67f
+   DTlMiM6Gqsbf0U3w1vZptxiEMy67yH3NYpPydzAH96zXUdUHFX4Ixdt8n
+   HDpgBrg8P2wxIw0BSPKr9nszcfr/S2/+CVEiTkWfB0X02N3pZ0mwUjYzn
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288256341"
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="349196290"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="288256341"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 15:51:57 -0700
+   d="scan'208";a="349196290"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 15:51:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="775570420"
+   d="scan'208";a="603001687"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jul 2022 15:51:55 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jul 2022 15:51:55 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oFNyU-0003C7-2J;
+        id 1oFNyU-0003C9-2N;
         Sat, 23 Jul 2022 22:51:54 +0000
-Date:   Sun, 24 Jul 2022 06:51:00 +0800
+Date:   Sun, 24 Jul 2022 06:51:01 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, smfrench@gmail.com,
         pc@cjr.nz, ronniesahlberg@gmail.com, nspmangalore@gmail.com
 Subject: Re: [PATCH] cifs: remove some more dead code
-Message-ID: <202207240645.7IYWNiqd-lkp@intel.com>
+Message-ID: <202207240608.0JmhVpYu-lkp@intel.com>
 References: <20220723205901.16678-1-ematsumiya@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -55,8 +55,7 @@ Content-Disposition: inline
 In-Reply-To: <20220723205901.16678-1-ematsumiya@suse.de>
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,18 +74,20 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
 base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220724/202207240645.7IYWNiqd-lkp@intel.com/config)
+config: arm-randconfig-r013-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240608.0JmhVpYu-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/intel-lab-lkp/linux/commit/6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
         git checkout 6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
@@ -98,7 +99,7 @@ All warnings (new ones prefixed by >>):
                                                ^
    1 warning generated.
 --
->> fs/cifs/misc.c:366:9: warning: unused variable 'mid' [-Wunused-variable]
+   fs/cifs/misc.c:366:9: warning: unused variable 'mid' [-Wunused-variable]
                    __u16 mid = get_mid(smb);
                          ^
 >> fs/cifs/misc.c:413:35: warning: variable 'pnotify' set but not used [-Wunused-but-set-variable]
@@ -109,42 +110,12 @@ All warnings (new ones prefixed by >>):
                                      ^
    3 warnings generated.
 --
->> fs/cifs/sess.c:364:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
-                               ^
->> fs/cifs/sess.c:365:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
-                                ^
-   2 warnings generated.
---
 >> fs/cifs/smb2misc.c:512:6: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
            int rc = 0;
                ^
 >> fs/cifs/smb2misc.c:812:27: warning: variable 'server' set but not used [-Wunused-but-set-variable]
                    struct TCP_Server_Info *server = NULL;
                                            ^
-   2 warnings generated.
---
->> fs/cifs/cifs_swn.c:261:7: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-                   int ret;
-                       ^
-   fs/cifs/cifs_swn.c:271:7: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-                   int ret;
-                       ^
->> fs/cifs/cifs_swn.c:511:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)addr;
-                               ^
->> fs/cifs/cifs_swn.c:512:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)addr;
-                                ^
-   4 warnings generated.
---
->> fs/cifs/sess.c:365:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
-                                ^
->> fs/cifs/sess.c:364:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
-                               ^
    2 warnings generated.
 
 
