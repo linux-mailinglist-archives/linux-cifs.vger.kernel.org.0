@@ -2,87 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE035814A6
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jul 2022 15:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAFE58156A
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Jul 2022 16:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbiGZN4u (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 26 Jul 2022 09:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S239389AbiGZOf3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 26 Jul 2022 10:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239279AbiGZN42 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Jul 2022 09:56:28 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B502870E
-        for <linux-cifs@vger.kernel.org>; Tue, 26 Jul 2022 06:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=I1BXhPCDW3D68OMFx5FiotuTRbykGmO6EhXNHfi8WgU=; b=3v9IwLWZCbqgmgKTJaWg5bly7u
-        YNZeYH+942xItVMHAxS/GKzhkECgOlTKzilkdpOMwiBfUCn6N/ZiLz83AyujAe+70t+RRuaoQghVo
-        NupuJoxCK5/K3qjWVUghyUWDolGEQmntp8EbW6HU0txPy+aRCPJ4z1ouOR7iLwWPKYsSVOFBKrDQz
-        6kYSWO2qyl/llu2OTYPJDCLGI6z0R+hhwFb3GIzkjOHMeOy3imloUjkPoKAwc7ScOsMz7ObbjJW0q
-        ziFDCTniBTK8j0wWf/DVQpeQBEvVyEbFGhE3zcgHAV2cshPseCrILBHL9b6Y3QhyqPe0Ub3YJ7+lA
-        JNNeAroqzDBHUHIWx4UnLtt7Mba9R+l0glo28nkLkSxTvqeenjm3FlLpZAn6h+bt+XLCfNUMo3dWM
-        fsH7GzUnC13SPfRnTK3HW0WiDPKIkvBg7KkEBBJbUUWnIP9ts7ic/q0cuDIPH9IrdyFDFfjem/B4O
-        yb4CBQwA5ughZ2kDHa9Hrfm/;
-Received: from [2a01:4f8:192:486::6:0] (port=54782 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1oGL2U-006aMl-4r
-        for cifs-qa@samba.org; Tue, 26 Jul 2022 13:55:58 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1oGL2T-001rdr-Lg
-        for cifs-qa@samba.org; Tue, 26 Jul 2022 13:55:57 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 14201] DFS mount does not pass context option to actual share
- mounts
-Date:   Tue, 26 Jul 2022 13:55:57 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: CifsVFS
-X-Bugzilla-Component: kernel fs
-X-Bugzilla-Version: 3.x
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: patrick.boeker@haltec.de
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-14201-10630-8Hdh6HrhVa@https.bugzilla.samba.org/>
-In-Reply-To: <bug-14201-10630@https.bugzilla.samba.org/>
-References: <bug-14201-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S232137AbiGZOf2 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 26 Jul 2022 10:35:28 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0848413FB2
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jul 2022 07:35:26 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fy29so26429842ejc.12
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Jul 2022 07:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=Nh6yhuk/aIMnslDUOuPndz9/LdCefExgEmHC2GvZaS074idlrWCFK9IXVr75sC4COi
+         77cqtdopPbdNkT6x5uaheIxm63AZ0QTxIEvCUQElsg9UEWc73kVMg30jbSXbYNGLUV8U
+         RJNAaPZiXc+0D5EVVGweRRqDQtVZN/jrxCIYwzeCR/tHLMU4KWqCrjp3Y3sx4N1morOg
+         3lEpX6f9qn7FXW1b+s459oZ4D6zNytZ5sa3aAiR/+AJ+o21Bh92d+7fp8/Mzg1L1Q6L+
+         z7/QGfNLHNk5t5EwGPdt5jm85ZUZc99wfuq7m9zTpC8ElSPSEQlFW1OU1ttSuPYfZ0uH
+         1OKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=nW1w3xzXHnCBOQkr1hmVr/eMjuGd41FPz8cYrxyrCkuJF7VnHjrYxRRt/m6JfAXtqU
+         x4WlIMDY4AmeBbUHEyvCkvxKkjoPWKMX84OsuIZlj8wRX80Y37qkRHQ7RMn4iRcg9VBk
+         Ez0QdT16M4D8R+Yta4X5kOMdA6QrwDZhwijPVBG1b2ywU9nkay1NELcMC0/D6JW6G9ME
+         2mlj9xQEo9Wj9Fk+iZk/XEjgqXO6hm/J8ebbjUqiLS8rJvkpbUqtnRwKXfSBJJBYo/BH
+         Ucm7ziXeaDfyxg7lkxOcr3/5vb2MX5pNASdN1xeod3SkGtM0+lmv3K2vIwusZVlvp/KL
+         DKpw==
+X-Gm-Message-State: AJIora8gq4v/dDhFjVttHSiVJRGUmg67U2jeEMo/wF18mNTF1cFjYl1M
+        nQkX0CQZNaNvsY9ZZl6g5xCUyBplc+1FrTPkDr8=
+X-Google-Smtp-Source: AGRyM1vqfDqPYbhSiZkLjp0yyYCQf2pkn5dqaqNe1JVfehbsMWdhIBxQj4kdS+qEU7x7+1rXX+MFudzpfpTsmnGz0RQ=
+X-Received: by 2002:a17:906:6a1c:b0:72f:2174:13db with SMTP id
+ qw28-20020a1709066a1c00b0072f217413dbmr13425982ejc.687.1658846124567; Tue, 26
+ Jul 2022 07:35:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:241b:0:0:0:0 with HTTP; Tue, 26 Jul 2022 07:35:23
+ -0700 (PDT)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <zayyanusaidu009@gmail.com>
+Date:   Tue, 26 Jul 2022 15:35:23 +0100
+Message-ID: <CADM+8wR9Tg=hsdnNiedSSRWbgV8hrksz2nrTMjTskPnhfi_Qbw@mail.gmail.com>
+Subject: SICHERES KREDITANGEBOT BEI 2%
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:636 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [clmloans9[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [zayyanusaidu009[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [zayyanusaidu009[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D14201
-
-Patrick B=C3=B6ker <patrick.boeker@haltec.de> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #5 from Patrick B=C3=B6ker <patrick.boeker@haltec.de> ---
-Works on 5.17.5. So I assume it got fixed in the meantime.
-
 --=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
+
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Mobiltelefon:
+*Land:
