@@ -2,126 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1E159A3E1
-	for <lists+linux-cifs@lfdr.de>; Fri, 19 Aug 2022 20:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D4959A5B5
+	for <lists+linux-cifs@lfdr.de>; Fri, 19 Aug 2022 20:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354592AbiHSRcP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 19 Aug 2022 13:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S231772AbiHSSrz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 19 Aug 2022 14:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354597AbiHSRcC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 19 Aug 2022 13:32:02 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C299159C29
-        for <linux-cifs@vger.kernel.org>; Fri, 19 Aug 2022 09:50:40 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id v128so5000779vsb.10
-        for <linux-cifs@vger.kernel.org>; Fri, 19 Aug 2022 09:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=1X2k0fk5hloTVsC4l1/RYGlXdOMhJKvIY9ZL2oQVQ0k=;
-        b=gdwlwj8rXWkcJa62+0K6/wJYR6J4UuvT6qiu5+SHtkTTGyRxGSckEuuBkfXNptrxic
-         2UHMgo0+WwuHZrcwKMxhxjab5yBPNclZ81F7ZNKYLQeJJihS96pWOCFz8/DYuFe0fYnG
-         GLn3AbEnsEKDN79+vG0i/m0+q7vLtRYT+nFRR8xVZIqlohaFsq9OmogqLGLL7w+L5EQl
-         g6UlusFmOE/MkPQq4ofUZjRaHPd5W2yBpLwGZmSItmZwuynrO/RGJLXMw0/bL6RyAHre
-         JV+Lp4nkJf4uNecghU4l2T8zx41nozd0vBb/DbGBlB8STylyetBMUTeBiFCzsYxDOnVn
-         RK4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=1X2k0fk5hloTVsC4l1/RYGlXdOMhJKvIY9ZL2oQVQ0k=;
-        b=ck0Z+iv8j7cOVWjHhM9uGBbs6/tHu2xBa+JrhIqUmUEaD7OjRvmZYIb3eXvnU+GB37
-         4X7u23j0o7WFARURmLYGWo9C8uyQcgtLOchXoTfjmtgBVh1etkWfcG7G97kFtINMgA/A
-         Q+JXdt6vnVVDYrtDa0b+JqVlr3Cuh++aXLtGQkqsI9YksZccA48ROhXeKL4Wf4Zsmhmb
-         ezweLrXwP7jyGGR5+Gc+1Ei5e82DesO0rxqgBTWe5Rm8MKBc/57lBwkDDPSaLu/eBNFG
-         rlYIfBfCzd5cP+LHuyIYyxbr9UrYCsLhZwDdyQXwc3h53MHlhCY0kehO46csOTuWxCjP
-         SdgQ==
-X-Gm-Message-State: ACgBeo1kLRtRWK4/WQqHXItmrCLPP7qK6wLNWaF1yRTuwQ+gCaL3OMFJ
-        hrA/cV0OZ5FGHedeHfMYlQdqtDk98DY5fUA2ZjlifGDrACqRNg==
-X-Google-Smtp-Source: AA6agR7Idcw/vICURq8+wOiXzPG7scSXApSWW2+vn0TH2pITUHSm1gOVzewTSirfj7YFHxDAUt3HcmLmzGUA8MPo/3Q=
-X-Received: by 2002:a05:6102:1626:b0:390:2616:663e with SMTP id
- cu38-20020a056102162600b003902616663emr1159311vsb.6.1660927741751; Fri, 19
- Aug 2022 09:49:01 -0700 (PDT)
+        with ESMTP id S1349248AbiHSSry (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 19 Aug 2022 14:47:54 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC13DC0B1
+        for <linux-cifs@vger.kernel.org>; Fri, 19 Aug 2022 11:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=Ig50zYIqibixa783TtTxu5zXNYvuP3e79XrSDJAQHHc=; b=hf0LG5sKWrBn2PQB+NNhmRcJhi
+        k/zRshe307mrcDQB6VSe3XdUepyhDW1qT8ZRmBL0uxfEeX/08LBV4eoFB41ZGYpe1gFrvLtsTM53l
+        fJpYYHQbwspiO+BbCFpd8GBxKC5oMp32DxGZ6lhn8sj8zzANqqO9aXIcxu54GlPe1LEkvx63Inxk4
+        INwH5L77hs4tiivtrfwr8O43XKBJdgcr2SpSzxK9+wumrxAWvVobXpgBGJh1QkeoDojf2/pXSP7BH
+        qpDUOvXpk4z024f6FiohuSQ2Wg8AkLmBepAjHyNPjIhn8iKmAYXGUfNN7VXolegtXGaGiXCsZ4LLA
+        RUTLtFhsudFiMsRRsIqoyvkJzWjIpA5XkpVTm7kUUJdxc5EwPUjYX+ZREosGbB3s+uBi/3JxnxiTB
+        hta90J7+ioFJtesFLg05DwlR23wncQB8bzcsannZVPVeLC+2cDtCmdsa8S+W+xLxlAfBqkVPGh7lK
+        0S16PovyqjK1GjdqLBzVOPuK;
+Received: from [2a01:4f8:192:486::6:0] (port=32616 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oP724-000t48-3k
+        for cifs-qa@samba.org; Fri, 19 Aug 2022 18:47:48 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1oP71z-000Xdv-6S
+        for cifs-qa@samba.org; Fri, 19 Aug 2022 18:47:43 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 13570] CIFS Mount Used Size descrepancy
+Date:   Fri, 19 Aug 2022 18:47:43 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Samba 4.1 and newer
+X-Bugzilla-Component: File services
+X-Bugzilla-Version: 4.15.9
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kato223@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: product version component
+Message-ID: <bug-13570-10630-1YFUfIMjTg@https.bugzilla.samba.org/>
+In-Reply-To: <bug-13570-10630@https.bugzilla.samba.org/>
+References: <bug-13570-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 19 Aug 2022 11:48:51 -0500
-Message-ID: <CAH2r5mvShnJidFDQkdULTDQFteSKimcphT_GGfVb0zXx9PkNcQ@mail.gmail.com>
-Subject: missing update to deferred_close_scheduled field
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     rohiths msft <rohiths.msft@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>
-Content-Type: multipart/mixed; boundary="0000000000000b88ec05e69ae090"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---0000000000000b88ec05e69ae090
-Content-Type: text/plain; charset="UTF-8"
+https://bugzilla.samba.org/show_bug.cgi?id=3D13570
 
-> we are missing a line like this:
->
->        cfile->deferred_close_scheduled = false;
->
-> in cifs_open here:
->
->         /* Get the cached handle as SMB2 close is deferred */
->         rc = cifs_get_readable_path(tcon, full_path, &cfile);
->         if (rc == 0) {
->                 if (file->f_flags == cfile->f_flags) {
->                         file->private_data = cfile;
->                         spin_lock(&CIFS_I(inode)->deferred_lock);
->                         cifs_del_deferred_close(cfile);
->                         spin_unlock(&CIFS_I(inode)->deferred_lock);
->                         goto use_cache;
+Terrance <kato223@gmail.com> changed:
 
-So move set of deferred_close_scheduled = false into cifs_del_deferred_close
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Product|CifsVFS                     |Samba 4.1 and newer
+            Version|2.6                         |4.15.9
+          Component|kernel fs                   |File services
 
-See attached
-
--- 
-Thanks,
-
-Steve
-
---0000000000000b88ec05e69ae090
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smb3-missing-update-to-whether-a-close-is-deferred-i.patch"
-Content-Disposition: attachment; 
-	filename="0001-smb3-missing-update-to-whether-a-close-is-deferred-i.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l70phg4n0>
-X-Attachment-Id: f_l70phg4n0
-
-RnJvbSA5MDE1M2VkNTM1MTU3NmIzZjFhNDk0MzU5MzY2NGQ1MmM3ZjhkODJjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IEZyaSwgMTkgQXVnIDIwMjIgMTE6MzM6NDQgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
-bWIzOiBtaXNzaW5nIHVwZGF0ZSB0byB3aGV0aGVyIGEgY2xvc2UgaXMgZGVmZXJyZWQgaW4gYQog
-cmVvcGVuIHBhdGgKCldoZW4gZGVsZXRpbmcgYSBmaWxlIGhhbmRsZSBmcm9tIHRoZSBkZWZlcnJl
-ZCBjbG9zZSBsaXN0IHdlCndlcmUgbWlzc2luZyB1cGRhdGUgdG8gY2ZpbGUtPmRlZmVycmVkX2Ns
-b3NlX3NjaGVkdWxlZAoKUmV2aWV3ZWQtYnk6IFNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1pY3Jv
-c29mdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0
-LmNvbT4KLS0tCiBmcy9jaWZzL2ZpbGUuYyB8IDEgLQogZnMvY2lmcy9taXNjLmMgfCAxICsKIDIg
-ZmlsZXMgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
-YS9mcy9jaWZzL2ZpbGUuYyBiL2ZzL2NpZnMvZmlsZS5jCmluZGV4IGZhNzM4YWRjMDMxZi4uMTJi
-ZjA0MTRkYzg0IDEwMDY0NAotLS0gYS9mcy9jaWZzL2ZpbGUuYworKysgYi9mcy9jaWZzL2ZpbGUu
-YwpAQCAtOTMwLDcgKzkzMCw2IEBAIHZvaWQgc21iMl9kZWZlcnJlZF93b3JrX2Nsb3NlKHN0cnVj
-dCB3b3JrX3N0cnVjdCAqd29yaykKIAogCXNwaW5fbG9jaygmQ0lGU19JKGRfaW5vZGUoY2ZpbGUt
-PmRlbnRyeSkpLT5kZWZlcnJlZF9sb2NrKTsKIAljaWZzX2RlbF9kZWZlcnJlZF9jbG9zZShjZmls
-ZSk7Ci0JY2ZpbGUtPmRlZmVycmVkX2Nsb3NlX3NjaGVkdWxlZCA9IGZhbHNlOwogCXNwaW5fdW5s
-b2NrKCZDSUZTX0koZF9pbm9kZShjZmlsZS0+ZGVudHJ5KSktPmRlZmVycmVkX2xvY2spOwogCV9j
-aWZzRmlsZUluZm9fcHV0KGNmaWxlLCB0cnVlLCBmYWxzZSk7CiB9CmRpZmYgLS1naXQgYS9mcy9j
-aWZzL21pc2MuYyBiL2ZzL2NpZnMvbWlzYy5jCmluZGV4IDg3ZjYwZjczNjczMS4uM2U5OWRkNDA4
-NWViIDEwMDY0NAotLS0gYS9mcy9jaWZzL21pc2MuYworKysgYi9mcy9jaWZzL21pc2MuYwpAQCAt
-NzE4LDYgKzcxOCw3IEBAIGNpZnNfZGVsX2RlZmVycmVkX2Nsb3NlKHN0cnVjdCBjaWZzRmlsZUlu
-Zm8gKmNmaWxlKQogCWlzX2RlZmVycmVkID0gY2lmc19pc19kZWZlcnJlZF9jbG9zZShjZmlsZSwg
-JmRjbG9zZSk7CiAJaWYgKCFpc19kZWZlcnJlZCkKIAkJcmV0dXJuOworCWRlZmVycmVkX2Nsb3Nl
-X3NjaGVkdWxlZCA9IGZhbHNlOwogCWxpc3RfZGVsKCZkY2xvc2UtPmRsaXN0KTsKIAlrZnJlZShk
-Y2xvc2UpOwogfQotLSAKMi4zNC4xCgo=
---0000000000000b88ec05e69ae090--
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
