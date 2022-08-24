@@ -2,72 +2,149 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DDB59EC12
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Aug 2022 21:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52E059F01B
+	for <lists+linux-cifs@lfdr.de>; Wed, 24 Aug 2022 02:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiHWTTQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 23 Aug 2022 15:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S232046AbiHXAKy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 23 Aug 2022 20:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbiHWTS7 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Aug 2022 15:18:59 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10310128D32
-        for <linux-cifs@vger.kernel.org>; Tue, 23 Aug 2022 10:57:01 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229603AbiHXAKx (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 23 Aug 2022 20:10:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3751754A5
+        for <linux-cifs@vger.kernel.org>; Tue, 23 Aug 2022 17:10:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id DA91580273;
-        Tue, 23 Aug 2022 17:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1661277419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3J2etJ3POCzpgYkik3JW0CwEg6/ZUwjXQXZl7DCNwbk=;
-        b=aXauAMZJ7j0pS/UFdyAk7XfNaHYfU0n4lZq7XYwG+rvkhal08tlSwwB5TjaJKl/OmaF/i6
-        Wxc544LX970y4fbye+U5G16TRqn57p4Yxgvp0prJdkq3IJfG8ooaAB/loBPrDUgLfqUhvv
-        gbH2mOwc5ZwLy0czZj+VZaryU4kmJ/4O213koSvNO0bmcLDrKfmoBHH6fY4ZxBPGgAhovP
-        DRNT3ttpPi8/c/47/JriHlYau7bJMVrrDTh0nFEsdgath5V6lsKwu74UjOP7dPKxZpsJZx
-        4rn+R/EMcwSwB1u6P6AtBEiLrHwCK8xyuyjkggq3/q8dy2m/cbmZcS574/f8Eg==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>, linux-cifs@vger.kernel.org,
-        zhangxiaoxu5@huawei.com, sfrench@samba.org, lsahlber@redhat.com,
-        sprasad@microsoft.com, rohiths@microsoft.com, smfrench@gmail.com
-Subject: Re: [PATCH -next 0/2] add release callback to cifs_writedata
-In-Reply-To: <20220823130637.1164764-1-zhangxiaoxu5@huawei.com>
-References: <20220823130637.1164764-1-zhangxiaoxu5@huawei.com>
-Date:   Tue, 23 Aug 2022 14:57:17 -0300
-Message-ID: <87zgfuhmgy.fsf@cjr.nz>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58FCCB8223C
+        for <linux-cifs@vger.kernel.org>; Wed, 24 Aug 2022 00:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1314AC433B5
+        for <linux-cifs@vger.kernel.org>; Wed, 24 Aug 2022 00:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661299850;
+        bh=iFD2O07plg5rISJzKqzScAzT4KZ+8SFcUxbbwlon8Dw=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=j7UorFX4Uqa6YoObrRm+4O+GfIv4M9xbrHmz1YN5JCmAIIofVuEYjLYvENBP1De2K
+         7F3c+okmbSMNe4lnUPfpbNot/HKY6Qhujx3VaPyCOezL9R8lwZNzYy8KwYGUVrtyIc
+         s9vqC2DSlDkgxWZn397mk7WzUgQClaKZKjWzKKgmm7Rl7R4OwVryXEZjt3EjXnokp5
+         f09mte59KO5kJ9ab3kCPVMKYo/6Kz1DjdLARsCxE6Ji7HjLula8XH1Z9rdvvv8nVhd
+         qM43VKdVl1V6E/xnOsUD9+uuRvZtt06VyMk2xKkhAzIBaUsyToaRwLqkJJwUNseu8P
+         i9Rok6vQgrhwg==
+Received: by mail-oi1-f178.google.com with SMTP id j5so17887775oih.6
+        for <linux-cifs@vger.kernel.org>; Tue, 23 Aug 2022 17:10:50 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2g0hzYiRxZi0XXIIvKNnpLpEe947S1icY2U6GE3nGixrHIpeyn
+        4QQ2a5bMBOJFFU2OKj1RejzDNG172gmPwAvlnj0=
+X-Google-Smtp-Source: AA6agR4Hvx9LRJk6+GJNfjcbRH3q18DH5LXNguQCkbOA0McC/JPkwumR9F1OkXYSNgHtuW2io9QmLOJCRrZSpevLtXQ=
+X-Received: by 2002:a05:6808:14d5:b0:344:8f50:1f0f with SMTP id
+ f21-20020a05680814d500b003448f501f0fmr2379103oiw.257.1661299849100; Tue, 23
+ Aug 2022 17:10:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6838:27c7:0:0:0:0 with HTTP; Tue, 23 Aug 2022 17:10:48
+ -0700 (PDT)
+In-Reply-To: <CANFS6bbwZDGhB4Dp+A192U=S1VfWa0091OBvmxhTB_C4BPz7sA@mail.gmail.com>
+References: <20220819043557.26745-1-hyc.lee@gmail.com> <CAKYAXd-18=_Yv1LAG=cqAQMORVD3mdA=9OP1t6+PxM+bUxLM2Q@mail.gmail.com>
+ <CANFS6bZ1Xh+BTFDpWQdChcoY_5t5MwT5UMQ=tQupXmEeSO3kPw@mail.gmail.com>
+ <CAKYAXd_Qd3jf_GwvzmZ+V+s--k-+T8HBD9HfvDvAesuv1vth2g@mail.gmail.com>
+ <CANFS6ba3zUFW3Cju6zXiAoQ0jU_-oq=1EZLfwBCf9uGyqVzOKA@mail.gmail.com>
+ <CAKYAXd9iP8h-rxju-JG9=9QJbVTpMqsMhySGMeZzHrkA4JnC_g@mail.gmail.com>
+ <CANFS6bbMYjn9kw574vpKPj74Zs6oQYiCdPEknMbCQf77_30v6Q@mail.gmail.com>
+ <CAKYAXd9yiTOg2FPtCtyZn+4fdCbXOU2edDk2L-9Vv5ehJ+w=jA@mail.gmail.com> <CANFS6bbwZDGhB4Dp+A192U=S1VfWa0091OBvmxhTB_C4BPz7sA@mail.gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 24 Aug 2022 09:10:48 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_7p1gmV+3HZE9v+biUxRPzoNL7-cqRpfY8yCFHik7M5g@mail.gmail.com>
+Message-ID: <CAKYAXd_7p1gmV+3HZE9v+biUxRPzoNL7-cqRpfY8yCFHik7M5g@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: fix incorrect handling of iterate_dir
+To:     Hyunchul Lee <hyc.lee@gmail.com>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>,
+        Steve French <smfrench@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Zhang Xiaoxu <zhangxiaoxu5@huawei.com> writes:
-
-> The release function of struct cifs_writedata is determined when its
-> allocated, so add it to the struct and remove the extra parameter about
-> async_writev
+2022-08-23 17:26 GMT+09:00, Hyunchul Lee <hyc.lee@gmail.com>:
+> 2022=EB=85=84 8=EC=9B=94 23=EC=9D=BC (=ED=99=94) =EC=98=A4=EC=A0=84 11:45=
+, Namjae Jeon <linkinjeon@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>>
+>> >> >> >> > diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+>> >> >> >> > index 53c91ab02be2..6716c4e3c16d 100644
+>> >> >> >> > --- a/fs/ksmbd/smb2pdu.c
+>> >> >> >> > +++ b/fs/ksmbd/smb2pdu.c
+>> >> >> >> > @@ -3970,11 +3970,9 @@ int smb2_query_dir(struct ksmbd_work
+>> >> >> >> > *work)
+>> >> >> >> >        */
+>> >> >> >> >       if (!d_info.out_buf_len && !d_info.num_entry)
+>> >> >> >> >               goto no_buf_len;
+>> >> >> >> > -     if (rc =3D=3D 0)
+>> >> >> >> > -             restart_ctx(&dir_fp->readdir_data.ctx);
+>> >> >> >> > -     if (rc =3D=3D -ENOSPC)
+>> >> >> >> > +     if (rc > 0 || rc =3D=3D -ENOSPC)
+>> >> >> >> Do you know why -ENOSPC error is ignored ?
+>> >> >> >>
+>> >> >> >
+>> >> >> > I don't know why and can't find the commit history
+>> >> >> > for this.
+>> >> >> After checking if -ENOSPC error is returned, there is no need to
+>> >> >> leave
+>> >> >> it if it is not needed.
+>> >> >
+>> >> > In most cases, -ENOSPC is not returned. Because the value
+>> >> > is set to the return value from filesystems' iterate or
+>> >> > iterate_share,
+>> >> > and most file systems don't allocate disk space for this operation.
+>> >> >
+>> >> > But we cannot guarantee this. So how about changing handling
+>> >> > iterate_dir
+>> >> > like gendents system call. Even if an error code is returned by
+>> >> > iterate_dir,
+>> >> > it treats as normal if several child files are iterated and the
+>> >> > buffer
+>> >> > is filled with
+>> >> > information about those.
+>> >> Among the errors of the smb2 query directory in the specification,
+>> >> there is a file corruption error response
+>> >> type(STATUS_FILE_CORRUPT_ERROR).
+>> >> Can you check when smb server return that error response for smb2
+>> >> query directory?
+>> >>
+>> >
+>> > According to MS-REREF, it means "The file or directory is corrupt and
+>> > unreadable.
+>> > Run the chkdsk utility". And there is no function to return the error
+>> > in
+>> > Samba.
+>> Is samba not able to know corruption errors using getdents syscall as yo=
+u
+>> said?
 >
-> Zhang Xiaoxu (2):
->   cifs: Add release function to cifs_writedata
->   cifs: remove the release parameter form async_writev
+> If iterate_dir returns an error and there are files iterated, getdents
+> syscall will succeed.
+> But if a client requests SMB2_QUERY_DIR again due to STATUS_NO_MORE_FILES
+> absence of the last response, iterate_dir returns an error again and
+> there are no
+> files iterated, getdents syscall will fail. Samba can send a response
+> with an error.
+Sorry, can't understand. What error ?
 >
->  fs/cifs/cifsglob.h  |  4 ++--
->  fs/cifs/cifsproto.h |  9 +++----
->  fs/cifs/cifssmb.c   |  5 ++--
->  fs/cifs/file.c      | 58 +++++++++++++++++++++++----------------------
->  fs/cifs/smb2pdu.c   |  5 ++--
->  fs/cifs/smb2proto.h |  3 +--
->  6 files changed, 42 insertions(+), 42 deletions(-)
-
-Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+>> There is no reason to follow it. I think that ksmbd is able to return
+>> this error.
+>
+> Can we determine we should return a response with STATUS_FILE_CORRUPT_ERR=
+OR
+> if iterate_dir returns -EIO?
+STATUS_FILE_CORRUPT_ERROR is still not cleared. want to know how
+windows server handle it.
+>
+> --
+> Thanks,
+> Hyunchul
+>
