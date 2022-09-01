@@ -2,68 +2,63 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605605AA27F
-	for <lists+linux-cifs@lfdr.de>; Fri,  2 Sep 2022 00:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3A85AA2FD
+	for <lists+linux-cifs@lfdr.de>; Fri,  2 Sep 2022 00:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiIAWGN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 1 Sep 2022 18:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S235289AbiIAW1x (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 1 Sep 2022 18:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiIAWE3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 1 Sep 2022 18:04:29 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF6B9D661;
-        Thu,  1 Sep 2022 15:03:08 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id p18so94146plr.8;
-        Thu, 01 Sep 2022 15:03:08 -0700 (PDT)
+        with ESMTP id S234854AbiIAW1i (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 1 Sep 2022 18:27:38 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B598F3FA11
+        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 15:25:30 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id n18so202587uaq.5
+        for <linux-cifs@vger.kernel.org>; Thu, 01 Sep 2022 15:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=AZ1Gh+wOtBhSiXkUQoUoHrl/CllEH0S/F6SZN+G8cU8utWIxzXrnoFihXwwy0eoaqG
-         ZtZ6nYtih0NHVOG/x9bUxgLJC0EeQZankUp2pEA7g6KYwaTJf9CocEAG7w7ibYh1DFhx
-         2HQQyt2JiKisIfFxLEcRmhLgtYoadDjglGDJ/UnVuA3tBxC76X4AHHv5Kq+Ie9VJwofJ
-         AspbI9B41dZhIaTKwUcp4Vr/pjxO1RO2X+wSsB0xbuIWNYtsF5wtGAA1UbZGQNpu9lWz
-         7b8hoU1c9a8OqeUDqCd00/2NCsmjk5Y7NtnPYtn8ybzFuBSqIhxSE2lBKoRWqNV7Eixi
-         EGTA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5mqh9UXmkuXOTh6qYvVQLpFrtlmJnOHBDf6chgx9Gms=;
+        b=SRSzX6gckrUhKLOa91bgoJbeBGC3dNL0HqY/pwBhFhR7SHvI+PF89S6L0PE7QgN79o
+         haHhUoP/g7dLlM1UgsSzuys83EgBCeN9PEaXSX9ihDFRHBeh5uMDiPnV6okS9FF9e8DU
+         BUB89Lu/m7H1y8bj644tQVDrq22RcdBBNeCecr5b/Tp8MsxDB3HYio3tYoiB38/yKpOA
+         0F68HjZY6I1aYe9rMVjA+hLaw5/TdgYzv3U3TzkoHalPUUuN3bwMlDh/kBt+QNcgYkpU
+         ClOhQ7uwWPnD5OaWoMqxO0HwRsmOj6JcBOhsJ8ZuLrPMtpWc/7faeH7gVpkJeFW1IZyD
+         Y0Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=k4/DRufdCHs1kZeA0ieEv6dshzOlVXk/TV8F6AKV0sWZmUbCuzKHvRQim1l2ADkgXh
-         qDFFzb59B/bhCA2zwX7aQVC+gsFPowxOYJ++uqO+3GBxeuEYPExggvSpaRR098AgPwgs
-         ygWw5ZfY6nwUX+q4VGRwI6NNVvXECflgTs5oB/WPzSqk2WJc+JeIXaD7UegxdSvv7ThY
-         2gYH4Tr6lgUet7J3/XbonvnvHV5I2dgisoJ3KgaFFcoU+J2AkE1+gkVLIFZeatDIWfk1
-         MIjGx/z4FmVaN62BMvTvANegvfw/gRStwxhYVPEV5tqxEUH+SkZVPhNUGqGxQiRzIieh
-         JjZw==
-X-Gm-Message-State: ACgBeo39yKClnbkN+m77DGhKksneN4K5o8Q10ZWvYRUxAzB0xynfidBo
-        eqlbAD2x3hL4CY2WwCgypGHVXvZ/TAbizw==
-X-Google-Smtp-Source: AA6agR6M4KV1/uy50J3RjGncA9GjGMYBIQY9N46Ltdjsdv79/QyPq5LWrP53sFKtBy9pAOIegAIevw==
-X-Received: by 2002:a17:903:41d0:b0:174:d8e0:b0f1 with SMTP id u16-20020a17090341d000b00174d8e0b0f1mr19365682ple.74.1662069787634;
-        Thu, 01 Sep 2022 15:03:07 -0700 (PDT)
-Received: from vmfolio.. (c-73-189-111-8.hsd1.ca.comcast.net. [73.189.111.8])
-        by smtp.googlemail.com with ESMTPSA id fv4-20020a17090b0e8400b001fb350026f1sm128894pjb.4.2022.09.01.15.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 15:03:07 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 23/23] filemap: Remove find_get_pages_range_tag()
-Date:   Thu,  1 Sep 2022 15:01:38 -0700
-Message-Id: <20220901220138.182896-24-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220901220138.182896-1-vishal.moola@gmail.com>
-References: <20220901220138.182896-1-vishal.moola@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5mqh9UXmkuXOTh6qYvVQLpFrtlmJnOHBDf6chgx9Gms=;
+        b=emJCu2K79rH/ybStV6gSdbRlQyQLqte/eH7e1PO4p8dcCwwrHEEAshfI1IcAIuwcXI
+         NPsQ1dWbaV3uZTYZRxs4PNnwQ12znTdxZpOI4qw34YJHJGuJ9HlYgnmuj6d6GuF974R4
+         Ta6v53OQRzILDSArhUn06LSxM/K8i66siWYYS5PjuE8fdfWQaVk9R5UjFCNBU5Nm46ym
+         EXCNioDFqxUh7bZTGpL1O1RdkzLO51/iQ+jLTpSAHVQntL/trj8wjXJ2GKEVOc5DODmX
+         bmZwfGE4AQuNtl1mmU4VaWC/+2NNjs10lgekJvGA8vQMW3FPi1BzHELBP1WlQpBnE95U
+         iggw==
+X-Gm-Message-State: ACgBeo3+0M+gQg0yTUmulr3m0zP3sRA0woOdu107vUahtGjoVDwhYNo/
+        f4oRxxX0WrNGKdaMgToZpMMmWovmPPUHAdRwxrQ=
+X-Google-Smtp-Source: AA6agR5QrBk9yqKvxBE0C8o5s5NzsUYSpoN0EU6YWVbOC3PxiEE8Ba8XSx/ZK/SBETtXTWcOCfom0vydxJRcvFTMhE0=
+X-Received: by 2002:a05:6130:10b:b0:37f:a52:99fd with SMTP id
+ h11-20020a056130010b00b0037f0a5299fdmr9584161uag.96.1662071071115; Thu, 01
+ Sep 2022 15:24:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YxDaZxljVqC/4Riu@jeremy-acer> <20220901174108.24621-1-atteh.mailbox@gmail.com>
+ <YxD6SEN9/3rEWaNR@jeremy-acer> <b6a1bc91-0aae-2520-9fb8-dfe6caa46315@talpey.com>
+In-Reply-To: <b6a1bc91-0aae-2520-9fb8-dfe6caa46315@talpey.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 1 Sep 2022 17:24:20 -0500
+Message-ID: <CAH2r5muR48e+x1DNiV3=oRvwBC6exW6Xg_bGVfu2OGQovqUoQA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ksmbd: update documentation
+To:     Tom Talpey <tom@talpey.com>
+Cc:     Jeremy Allison <jra@samba.org>, atheik <atteh.mailbox@gmail.com>,
+        Hyeoncheol Lee <hyc.lee@gmail.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,149 +69,78 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-All callers to find_get_pages_range_tag(), find_get_pages_tag(),
-pagevec_lookup_range_tag(), and pagevec_lookup_tag() have been removed.
+I do think that one obvious thing that is missing is a simple python
+script or slightly more complex GUI tool that would allow better
+autoconfiguring a share for ksmbd without having to understand the
+ksmbd.conf/smb.conf format (and a different tool for Samba - although
+to be fair for Samba various vendors and some distros have tools to do
+this), but in the short term, a few more example smb.conf/ksmbd.conf
+files might help (maybe in the wiki?)
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- include/linux/pagemap.h | 10 -------
- include/linux/pagevec.h |  8 ------
- mm/filemap.c            | 60 -----------------------------------------
- mm/swap.c               | 10 -------
- 4 files changed, 88 deletions(-)
+On Thu, Sep 1, 2022 at 1:52 PM Tom Talpey <tom@talpey.com> wrote:
+>
+> On 9/1/2022 2:30 PM, Jeremy Allison wrote:
+> > On Thu, Sep 01, 2022 at 08:41:08PM +0300, atheik wrote:
+> >> On Thu, 1 Sep 2022 09:14:31 -0700, Jeremy Allison wrote:
+> >>> On Thu, Sep 01, 2022 at 09:06:07AM -0400, Tom Talpey wrote:
+> >>>>
+> >>>> Ok, two things. What I found strange is the "man smb.conf.5ksmbd", and
+> >>>> as you say that should be man 5k smb.conf. Sounds ok to me.
+> >>>>
+> >>>> But the second thing I'm concerned about is the reuse of the smb.conf
+> >>>> filename. It's perfectly possible to install both Samba and ksmbd on
+> >>>> a system, they can be configured to use different ports, listen on
+> >>>> different interfaces, or any number of other deployment approaches.
+> >>>>
+> >>>> And, Samba provides MUCH more than an SMB server, and configures many
+> >>>> other services in smb.conf. So I feel ksmbd should avoid such filename
+> >>>> conflicts. To me, calling it "ksmbd.conf" is much more logical.
+> >>>
+> >>> +1 from me. Having 2 conflicting file contents both wanting
+> >>> to be called smb.conf is a disaster waiting to happen.
+> >>
+> >> ksmbd-tools clearly has a goal of being compatible with smb.conf(5) of
+> >> Samba when it comes to the common subset of functionality they share.
+> >> ksmbd-tools has 7 global parameters that Samba does not have, but other
+> >> than, share parameters and global parameters of ksmbd-tools are subset
+> >> of those in Samba. Samba and ksmbd-tools do not have any conflicting
+> >> file locations. The smb.conf(5ksmbd) man page of ksmbd-tools does not
+> >> collide with and never overshadows smb.conf(5) of Samba. Please, help
+> >> me understand what sort of disaster this could lead to.
+> >
+> > Samba adds and or changes functionality in smb.conf all
+> > the time, without coordination with ksmbd. If you call
+> > your config file smb.conf then we would have to coordinate
+> > with you before any changes.
+>
+> And vice-versa. For example, ksmbd supports RDMA and can be
+> configured to use interfaces with kernel-internal names,
+> for example "enp2s0" or "mlx5/1". These files do not in fact
+> subset one another, in either direction.
+>
+> > Over time, the meaning/use/names of parameters will drift
+> > apart leading to possible conflicts.
+>
+> Personally I think they're already in conflict, having taken
+> several days to work them all out wile setting up my new
+> machines. And, um, I think I know what I'm doing. Heaven
+> help the newbie.
+>
+> > Plus it leads to massive user confusion (am I running
+> > smbd or ksmbd ? How do I tell ? etc.).
+>
+> +1
+>
+> Tom.
+>
+> > It is simple hygene to keep these names separate.
+> >
+> > Please do so.
+> >
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 85cc96c82c2c..b8ea33751a66 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -742,16 +742,6 @@ unsigned find_get_pages_contig(struct address_space *mapping, pgoff_t start,
- 			       unsigned int nr_pages, struct page **pages);
- unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, xa_mark_t tag, struct folio_batch *fbatch);
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages);
--static inline unsigned find_get_pages_tag(struct address_space *mapping,
--			pgoff_t *index, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	return find_get_pages_range_tag(mapping, index, (pgoff_t)-1, tag,
--					nr_pages, pages);
--}
- 
- struct page *grab_cache_page_write_begin(struct address_space *mapping,
- 			pgoff_t index);
-diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
-index 215eb6c3bdc9..a520632297ac 100644
---- a/include/linux/pagevec.h
-+++ b/include/linux/pagevec.h
-@@ -26,14 +26,6 @@ struct pagevec {
- };
- 
- void __pagevec_release(struct pagevec *pvec);
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag);
--static inline unsigned pagevec_lookup_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, xa_mark_t tag)
--{
--	return pagevec_lookup_range_tag(pvec, mapping, index, (pgoff_t)-1, tag);
--}
- 
- static inline void pagevec_init(struct pagevec *pvec)
- {
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 435fc53b3f2f..b986f246a6ae 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2309,66 +2309,6 @@ unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- }
- EXPORT_SYMBOL(filemap_get_folios_tag);
- 
--/**
-- * find_get_pages_range_tag - Find and return head pages matching @tag.
-- * @mapping:	the address_space to search
-- * @index:	the starting page index
-- * @end:	The final page index (inclusive)
-- * @tag:	the tag index
-- * @nr_pages:	the maximum number of pages
-- * @pages:	where the resulting pages are placed
-- *
-- * Like find_get_pages_range(), except we only return head pages which are
-- * tagged with @tag.  @index is updated to the index immediately after the
-- * last page we return, ready for the next iteration.
-- *
-- * Return: the number of pages which were found.
-- */
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	XA_STATE(xas, &mapping->i_pages, *index);
--	struct folio *folio;
--	unsigned ret = 0;
--
--	if (unlikely(!nr_pages))
--		return 0;
--
--	rcu_read_lock();
--	while ((folio = find_get_entry(&xas, end, tag))) {
--		/*
--		 * Shadow entries should never be tagged, but this iteration
--		 * is lockless so there is a window for page reclaim to evict
--		 * a page we saw tagged.  Skip over it.
--		 */
--		if (xa_is_value(folio))
--			continue;
--
--		pages[ret] = &folio->page;
--		if (++ret == nr_pages) {
--			*index = folio->index + folio_nr_pages(folio);
--			goto out;
--		}
--	}
--
--	/*
--	 * We come here when we got to @end. We take care to not overflow the
--	 * index @index as it confuses some of the callers. This breaks the
--	 * iteration when there is a page at index -1 but that is already
--	 * broken anyway.
--	 */
--	if (end == (pgoff_t)-1)
--		*index = (pgoff_t)-1;
--	else
--		*index = end + 1;
--out:
--	rcu_read_unlock();
--
--	return ret;
--}
--EXPORT_SYMBOL(find_get_pages_range_tag);
--
- /*
-  * CD/DVDs are error prone. When a medium error occurs, the driver may fail
-  * a _large_ part of the i/o request. Imagine the worst scenario:
-diff --git a/mm/swap.c b/mm/swap.c
-index 9cee7f6a3809..7b8c1c8024a1 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -1055,16 +1055,6 @@ void folio_batch_remove_exceptionals(struct folio_batch *fbatch)
- 	fbatch->nr = j;
- }
- 
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag)
--{
--	pvec->nr = find_get_pages_range_tag(mapping, index, end, tag,
--					PAGEVEC_SIZE, pvec->pages);
--	return pagevec_count(pvec);
--}
--EXPORT_SYMBOL(pagevec_lookup_range_tag);
--
- /*
-  * Perform any setup for the swap system
-  */
+
+
 -- 
-2.36.1
+Thanks,
 
+Steve
