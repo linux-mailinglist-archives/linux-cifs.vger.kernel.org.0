@@ -2,43 +2,43 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D609E5A9868
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF1D5A9867
 	for <lists+linux-cifs@lfdr.de>; Thu,  1 Sep 2022 15:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiIANW4 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 1 Sep 2022 09:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S233735AbiIANWz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 1 Sep 2022 09:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiIANWa (ORCPT
+        with ESMTP id S233754AbiIANWa (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Thu, 1 Sep 2022 09:22:30 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83BDE029
-        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 06:21:12 -0700 (PDT)
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BF5120A4
+        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 06:21:13 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MJM8K6G3dz6T5dm
-        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 21:19:29 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJM8c53KfzlDjW
+        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 21:19:44 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.170])
-        by APP1 (Coremail) with SMTP id cCh0CgBnNSnAsRBjnEreAA--.15661S6;
+        by APP1 (Coremail) with SMTP id cCh0CgBnNSnAsRBjnEreAA--.15661S7;
         Thu, 01 Sep 2022 21:21:11 +0800 (CST)
 From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 To:     linux-cifs@vger.kernel.org, zhangxiaoxu5@huawei.com,
         sfrench@samba.org, pc@cjr.nz, lsahlber@redhat.com,
         sprasad@microsoft.com, rohiths@microsoft.com, smfrench@gmail.com,
         tom@talpey.com, linkinjeon@kernel.org, hyc.lee@gmail.com
-Subject: [PATCH v3 2/5] ksmbd: Remove the wrong message length check of FSCTL_VALIDATE_NEGOTIATE_INFO
-Date:   Thu,  1 Sep 2022 22:22:13 +0800
-Message-Id: <20220901142216.3351155-3-zhangxiaoxu5@huawei.com>
+Subject: [PATCH v3 3/5] ksmbd: Fix wrong return value in smb2_ioctl() when wrong out_buf_len
+Date:   Thu,  1 Sep 2022 22:22:14 +0800
+Message-Id: <20220901142216.3351155-4-zhangxiaoxu5@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220901142216.3351155-1-zhangxiaoxu5@huawei.com>
 References: <20220901142216.3351155-1-zhangxiaoxu5@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBnNSnAsRBjnEreAA--.15661S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3WF4DGF4xZrWrtryftFb_yoWfuFb_ZF
-        yFyrs3W34UJF4fJw4Dta1IvFn8Jw4rGr18WFWIyFWjya4DtryfZw10q393GFy7uwsxWr48
-        uwn8ZF1j9rW8ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: cCh0CgBnNSnAsRBjnEreAA--.15661S7
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3ZryDGryUtr4xWFWxWFg_yoWfuFX_Xa
+        9Yvrs5W34UJF4rJw4Dt3W0vF95Jw4rJw1xWayxtFW5Ja9rJrnavw1kXa93WFyUuw45WrWk
+        Cwn8u3W7ZrW2gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbqAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_JrI_JrWl1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
+        Y4v20xvaj40_JrI_JrWl1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r1rM2
         8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
         021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
         4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
@@ -50,7 +50,7 @@ X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3WF4DGF4xZrWrtryftFb_yoWfuFb_ZF
         ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
         xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
         4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-        oUUUUUUUU
+        OpBTUUUUU
 Sender: zhangxiaoxu@huaweicloud.com
 X-CM-SenderInfo: x2kd0wp0ld053x6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
@@ -63,33 +63,34 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The struct validate_negotiate_info_req change from variable-length array
-to reguler array, but the message length check is unchanged.
+When the out_buf_len is less than the size of struct
+validate_negotiate_info_rsp, should goto out to initialize the
+status in the response header.
 
-The fsctl_validate_negotiate_info() already check the message length, so
-remove it from smb2_ioctl().
-
-Fixes: c7803b05f74b ("smb3: fix ksmbd bigendian bug in oplock break, and move its struct to smbfs_common")
+Fixes: f7db8fd03a4bc ("ksmbd: add validation in smb2_ioctl")
 Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 Cc: <stable@vger.kernel.org>
 ---
- fs/ksmbd/smb2pdu.c | 3 ---
- 1 file changed, 3 deletions(-)
+ fs/ksmbd/smb2pdu.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index c49f65146ab3..c9f400bbb814 100644
+index c9f400bbb814..7da0ec466887 100644
 --- a/fs/ksmbd/smb2pdu.c
 +++ b/fs/ksmbd/smb2pdu.c
-@@ -7640,9 +7640,6 @@ int smb2_ioctl(struct ksmbd_work *work)
+@@ -7640,8 +7640,10 @@ int smb2_ioctl(struct ksmbd_work *work)
  			goto out;
  		}
  
--		if (in_buf_len < sizeof(struct validate_negotiate_info_req))
+-		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp))
 -			return -EINVAL;
--
- 		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp))
- 			return -EINVAL;
++		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp)) {
++			ret = -EINVAL;
++			goto out;
++		}
  
+ 		ret = fsctl_validate_negotiate_info(conn,
+ 			(struct validate_negotiate_info_req *)&req->Buffer[0],
 -- 
 2.31.1
 
