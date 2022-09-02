@@ -2,106 +2,92 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D919A5AA57A
-	for <lists+linux-cifs@lfdr.de>; Fri,  2 Sep 2022 04:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C8D5AB24C
+	for <lists+linux-cifs@lfdr.de>; Fri,  2 Sep 2022 15:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiIBCLg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 1 Sep 2022 22:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S237385AbiIBNzd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 2 Sep 2022 09:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiIBCLf (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 1 Sep 2022 22:11:35 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F74EA0261
-        for <linux-cifs@vger.kernel.org>; Thu,  1 Sep 2022 19:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Cc:To:From:Date;
-        bh=cYfzX9LH+4u8VePx2YmIAyPHrXngMcybQBy8QM+0nCs=; b=JGBDe9NZHk7ElKTBaXZ2uDBCtG
-        WOFjxE8eRP5D+1yiw8dP1FtLa5oW3zNE03RfCt0Z3INm5C1G+/liwTHXjY5QQP82o1P+VZAY9TE2L
-        Hayi/3ajN8FnAQXmdoyI0/ZddrCKlNVxHcDxUR+RmR+wc8y4+ZeysAFXVZCB0DgMwesHQ6/7TEvEX
-        aat6RXxvrgTW+ykqCE8E+HoQ5LpNMBN8EOnN9Lsr0/egFnA+GingHAawqADAY5Y6j8pxVLmdsjkvD
-        /vYMUvVRVzMNfuTukP3Doe9FCnOUYNEDMBXr5nDbNs9yV/F7OubelPi5cF5Vcr6acNaiy16n8/wkh
-        rtr6E++No8wcbFYH0mEnCdvXbTesvFDNzomF2cF5QlkQFdVJCB2KKCsMUsOpnAaPptQMxgrLWN6dQ
-        piWTtG1vd4GaqG33LKDgM62cxRolYKh3iZ2z9ntJLpJ/z/jbEG7I7ClHSGiBhgGyUr/RJtwk75z2x
-        nI+iBC7z5SHlyq+etuyF/ruR;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1oTw9a-002ike-8U; Fri, 02 Sep 2022 02:11:30 +0000
-Date:   Thu, 1 Sep 2022 19:11:24 -0700
-From:   Jeremy Allison <jra@samba.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        atheik <atteh.mailbox@gmail.com>,
-        Hyeoncheol Lee <hyc.lee@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>
-Subject: Re: [PATCH 1/2] ksmbd: update documentation
-Message-ID: <YxFmTIpsYTcCHSwn@jeremy-acer>
-Reply-To: Jeremy Allison <jra@samba.org>
-References: <YxDaZxljVqC/4Riu@jeremy-acer>
- <20220901174108.24621-1-atteh.mailbox@gmail.com>
- <YxD6SEN9/3rEWaNR@jeremy-acer>
- <CAN05THRgWMEejOMTozrf0F4sENxJEQYu2i-9CKWO+Qh0kvjveg@mail.gmail.com>
- <CAH2r5mvUzbp8RcM7+XFbJsoiba964vpKQiMRmGeQovGabe+j=Q@mail.gmail.com>
- <YxEot6I5d4PWtrz9@jeremy-acer>
- <CAKYAXd8SSQ+GpL=Na0OSFxOGSy-r7TW8Q+X-ZLaH-uLZQ1XauQ@mail.gmail.com>
+        with ESMTP id S237418AbiIBNzD (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 2 Sep 2022 09:55:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85243E9AAD;
+        Fri,  2 Sep 2022 06:29:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6BC1C345C5;
+        Fri,  2 Sep 2022 12:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662122035;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+jpnO5WGU41jzsfLpSuXHy9sFbG9yNfncDVPRsohl2M=;
+        b=dKOpAPRGGbiosk2vfP4sbjBaI5m8lQFe+z7FpTyWw9pEnj0bEiWiDPnO1UeKqaZYUVF7GC
+        ONk4tq9i9RomYL73tc0i75G+W/Y2WurBqQm1X0ZnNdCyY6+A3tfjQIULxRDW7sVSNHDLVK
+        B4nOJyx0osNlSRLidjvyKAcuC+5ig5g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662122035;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+jpnO5WGU41jzsfLpSuXHy9sFbG9yNfncDVPRsohl2M=;
+        b=qk0qxrr0n9Qkr7w2j/qhhhqoaKRZLn5cucefTX6b4AiNFX5ESRDBTgsDgN8onErCkEW3tI
+        iDveCGWCyj8cdjDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27A3C13328;
+        Fri,  2 Sep 2022 12:33:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DkwhCDP4EWPTaAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 02 Sep 2022 12:33:55 +0000
+Date:   Fri, 2 Sep 2022 14:28:35 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 06/23] btrfs: Convert btree_write_cache_pages() to use
+ filemap_get_folio_tag()
+Message-ID: <20220902122835.GU13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220901220138.182896-1-vishal.moola@gmail.com>
+ <20220901220138.182896-7-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKYAXd8SSQ+GpL=Na0OSFxOGSy-r7TW8Q+X-ZLaH-uLZQ1XauQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220901220138.182896-7-vishal.moola@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 09:56:57AM +0900, Namjae Jeon wrote:
->2022-09-02 6:48 GMT+09:00, Jeremy Allison <jra@samba.org>:
->> On Thu, Sep 01, 2022 at 04:37:21PM -0500, Steve French wrote:
->>>
->>>I do like that Namjae et al made the format of the .conf file very similar
->>>to the format of Samba's smb.conf file though.   I realize there some
->>>users complain that there are too many smb.conf parameters for Samba,
->>>but he seemed to pick a reasonably subset of them for ksmbd.
->>>Samba is a much larger project with many more smb.conf parameters
->>>but it does reduce confusion making the parameter names similar
->>>where possible e.g. "workgroup", "guest account", (share) path, read only,
->>> etc.
->>>and fortunately the default directories for the two smb.conf files are
->>>different so at least the daemons don't use the same file.
->>
->> Sure, I think the formats and parameter names being as close
->> as possible is a great idea to allow users to move between
->> servers as they wish. But making the files the same name
->> is not a good idea.
->This is the first time I've heard that it is problem that ksmbd's
->config filename is same with samba's one. Reading the mail threads, I
->don't understand exactly what the real problem is... I thought that
->using same smb.conf name make users aware that it was forked from
->samba's one. I'm a little surprised, I thought that you will say that
->we should use the same name. This seems to contradict your previous
->opinion that ksmbd's dos attribute and stream xattr format should be
->the same with samba's one. It's not difficult to change config
->filename of ksmbd if you agree with it. If we think about adding the
->ksmbd integration feature in samba recently, I think it would be
->better to use the same name for future.
+On Thu, Sep 01, 2022 at 03:01:21PM -0700, Vishal Moola (Oracle) wrote:
+> Converted function to use folios throughout. This is in preparation for
+> the removal of find_get_pages_range_tag().
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-Well as Tom said, it gets very confusing to have the
-same name config file.
-
-The file system attributes etc. certainly should be
-the same, to allow a user to swap between the two
-servers based on need and not lose any meta-data.
-
-But as the features diverge, trying to keep a common
-config will get harder and harder.
-
-Better to take the pain now, rather than try and
-postpone for later. It'll hurt *worse* later :-).
+Acked-by: David Sterba <dsterba@suse.com>
