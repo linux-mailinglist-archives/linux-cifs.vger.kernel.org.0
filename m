@@ -2,158 +2,103 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A628F5AC040
-	for <lists+linux-cifs@lfdr.de>; Sat,  3 Sep 2022 19:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796925AC11E
+	for <lists+linux-cifs@lfdr.de>; Sat,  3 Sep 2022 21:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiICRij (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 3 Sep 2022 13:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S229901AbiICTWs (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 3 Sep 2022 15:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiICRi0 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 3 Sep 2022 13:38:26 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9153D2B;
-        Sat,  3 Sep 2022 10:38:25 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b19so5233073ljf.8;
-        Sat, 03 Sep 2022 10:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xX2O58QMupv9rWIX/wz0TD9J8Ed7HqVnisBNPZl6V04=;
-        b=P/hsH1QKS4072Gai1EmOGCnjPTQWZiiOiE+P26T80mgV0tbTOnkDXKC3nEWi1Xoe/A
-         Hs7LLFSp+fCaJRWZVqv/8C2xzImMvLQoTDYUfx6u9PmIwXRQtB9n4gGmx+GH0S1f7zYT
-         EpKdDfbdqDAHgNmhwbrPGp06lVMfmsEbewBLDb/B+dQfW30xzF8F2l2F/gidKFJKBG6M
-         xlYX6S3WMrWsrSfVCDpCmKqprjSkUDidSKYHiXrhQ6jx9rWQ1os07RE+QbroswHSap0D
-         gOYyJOlFnRdNpKj+sEkb2UqwaGfM6EvoZTNoU3eDmRl2MoAiXkF/RCfX0IxvBDH8/V+n
-         XD8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xX2O58QMupv9rWIX/wz0TD9J8Ed7HqVnisBNPZl6V04=;
-        b=imTLFN8Eux+H9bfSleRewZH/5DsXR08iBnirAYp8x+S0JfQBmlHrGXNN1Nh3DlOYwp
-         iSeScOiatLAIcV2QQXWsycH5nExk+rxB7Gkx6Ev0k1BvXc21ku/gWYj5FLIY1t5mlZja
-         TSwe0rI583L76zVdWL3yggKQ37/9MuBrEevDRIVGFOno+Jhq5scwA/9LE8kAMCWjgaTj
-         PfK7Bok2vlWQQRKSOAMgPnfhlim5fcJjXBJ3UOt4hNNz76LLd0JTGIQj75rnqGhWgnF+
-         q7lscpM8EwUz1wAj239CIOgDRmwmY13nyjxc4Rx2pG73MR5Tn50WhfRZn4YPo818v1Vy
-         uf3w==
-X-Gm-Message-State: ACgBeo3Cc2Y2VegKEuKQ/9rp0/0ZPZVf1OZ2nGmHq1yGZ41nC/+3e2Gx
-        dLQxqi1fUAL/Rjn/aDiOfT5enZ6HDPLHglijCyY=
-X-Google-Smtp-Source: AA6agR7+UPXECkLr9xecEnlHY9jJP9Sk53/z1csaRMZh+iBcI4PkxC6eajktqUCZxUcf8SInATP1uw7iY4QjQlwWETk=
-X-Received: by 2002:a2e:b8d5:0:b0:25f:e94d:10a2 with SMTP id
- s21-20020a2eb8d5000000b0025fe94d10a2mr13425885ljp.274.1662226704352; Sat, 03
- Sep 2022 10:38:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220901220138.182896-1-vishal.moola@gmail.com> <20220901220138.182896-19-vishal.moola@gmail.com>
-In-Reply-To: <20220901220138.182896-19-vishal.moola@gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sun, 4 Sep 2022 02:38:06 +0900
-Message-ID: <CAKFNMo=YwdFOQNUuwNvYn6u41C8A2M905-nDkEFRejPZ2_svYg@mail.gmail.com>
-Subject: Re: [PATCH 18/23] nilfs2: Convert nilfs_lookup_dirty_data_buffers()
- to use filemap_get_folios_tag()
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org
+        with ESMTP id S229698AbiICTWs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 3 Sep 2022 15:22:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C332C4DB5C
+        for <linux-cifs@vger.kernel.org>; Sat,  3 Sep 2022 12:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=wPbplubGwqz9s5S8xLyQxucNAZl4d5qWFH+D2xv0PeU=; b=XfSqrLG+cgQZ4GOq4/Sm99lPxs
+        aGQb3tz+HIP//RVFtwqXDmYNjjFo9qvpY7zNieiBqom9tEBoXPc2+Mn64Wx4Sqrm1WHMoNgvDqOZL
+        pYR4y7chyoAMe38LPw9qdez8po+Gc61Z7mntiTlumT7SKZ8q5gJGxaVF1IftZcGpnzGQ7dyabwnjB
+        J+YM+WnoD/0SbiGLxvs36OJSmnKjYJkl9g2yQvVIQCyC+0p5uyKUdjoAIWDosHJcOd9p+9Jug/0vA
+        rIMrMpI8zub+gMf6l5dxHrtRTP9BqaRSPP7oAIHCRdk7QQIXjEX2SVu70piu4JGxWLUDTjYgjfSBS
+        gKvd1ABq2oG8tHpVE78Orj3uI8kdFxGZsVO7Vb77sKbIGoZKjC0gd1qmgrlJkjg6jmbzZICjmLlAZ
+        PtXOaOTw/8Yn7OCu4Ofw21FyrErv6xSNSfZKYvyYuJVsCkldJVwPuwUpKkB6ZP8JHziEbimkTONqB
+        t30XaehdbX9FKnomm1GRajc8;
+Received: from [2a01:4f8:192:486::6:0] (port=36192 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oUYj6-002wVQ-Kc
+        for cifs-qa@samba.org; Sat, 03 Sep 2022 19:22:44 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1oUYix-000AqX-At
+        for cifs-qa@samba.org; Sat, 03 Sep 2022 19:22:35 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 13570] CIFS Mount Used Size descrepancy
+Date:   Sat, 03 Sep 2022 19:22:34 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Samba 4.1 and newer
+X-Bugzilla-Component: File services
+X-Bugzilla-Version: 4.15.9
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ematsumiya@suse.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-13570-10630-5jBBbuYWhw@https.bugzilla.samba.org/>
+In-Reply-To: <bug-13570-10630@https.bugzilla.samba.org/>
+References: <bug-13570-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 7:07 AM Vishal Moola (Oracle) wrote:
->
-> Convert function to use folios throughout. This is in preparation for
-> the removal of find_get_pages_range_tag().
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  fs/nilfs2/segment.c | 29 ++++++++++++++++-------------
->  1 file changed, 16 insertions(+), 13 deletions(-)
->
-> diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
-> index 0afe0832c754..e95c667bdc8f 100644
-> --- a/fs/nilfs2/segment.c
-> +++ b/fs/nilfs2/segment.c
-> @@ -680,7 +680,7 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                                               loff_t start, loff_t end)
->  {
->         struct address_space *mapping = inode->i_mapping;
-> -       struct pagevec pvec;
-> +       struct folio_batch fbatch;
->         pgoff_t index = 0, last = ULONG_MAX;
->         size_t ndirties = 0;
->         int i;
-> @@ -694,23 +694,26 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                 index = start >> PAGE_SHIFT;
->                 last = end >> PAGE_SHIFT;
->         }
-> -       pagevec_init(&pvec);
-> +       folio_batch_init(&fbatch);
->   repeat:
->         if (unlikely(index > last) ||
-> -           !pagevec_lookup_range_tag(&pvec, mapping, &index, last,
-> -                               PAGECACHE_TAG_DIRTY))
-> +             !filemap_get_folios_tag(mapping, &index, last,
-> +                     PAGECACHE_TAG_DIRTY, &fbatch))
->                 return ndirties;
->
-> -       for (i = 0; i < pagevec_count(&pvec); i++) {
-> +       for (i = 0; i < folio_batch_count(&fbatch); i++) {
->                 struct buffer_head *bh, *head;
-> -               struct page *page = pvec.pages[i];
-> +               struct folio *folio = fbatch.folios[i];
->
-> -               lock_page(page);
-> -               if (!page_has_buffers(page))
-> -                       create_empty_buffers(page, i_blocksize(inode), 0);
-> -               unlock_page(page);
+https://bugzilla.samba.org/show_bug.cgi?id=3D13570
 
-> +               head = folio_buffers(folio);
-> +               folio_lock(folio);
+--- Comment #6 from Enzo Matsumiya <ematsumiya@suse.de> ---
+You can do something like this, with tcpdump package installed:
 
-Could you please swap these two lines to keep the "head" check in the lock?
+<in terminal 1>
+> $ sudo mount.cifs <...mount options...> //10.0.0.220/storage /cifs/server
 
-Thanks,
-Ryusuke Konishi
+<in terminal 2>
+> $ sudo tcpdump -i eth0 -s 0 -w wrong-df.pcap port 445
 
+(of course, replace "eth0" with the network interface that connects to
+10.0.0.220)
 
-> +               if (!head) {
-> +                       create_empty_buffers(&folio->page, i_blocksize(inode), 0);
-> +                       head = folio_buffers(folio);
-> +               }
-> +               folio_unlock(folio);
->
-> -               bh = head = page_buffers(page);
-> +               bh = head;
->                 do {
->                         if (!buffer_dirty(bh) || buffer_async_write(bh))
->                                 continue;
-> @@ -718,13 +721,13 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                         list_add_tail(&bh->b_assoc_buffers, listp);
->                         ndirties++;
->                         if (unlikely(ndirties >= nlimit)) {
-> -                               pagevec_release(&pvec);
-> +                               folio_batch_release(&fbatch);
->                                 cond_resched();
->                                 return ndirties;
->                         }
->                 } while (bh = bh->b_this_page, bh != head);
->         }
-> -       pagevec_release(&pvec);
-> +       folio_batch_release(&fbatch);
->         cond_resched();
->         goto repeat;
->  }
-> --
-> 2.36.1
->
+<back to terminal 1>
+> $ df -h
+
+<go back to terminal 2>
+> press ctrl-c to terminate tcpdump capture
+
+Then you attach the new file "wrong-df.pcap" here please, along with the si=
+ze
+shown by "df -h" in terminal 1, and the size you expected to see.
+
+A "df -h" output from the server side at the same time you see the discrepa=
+ncy
+would be nice as well.
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
