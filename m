@@ -2,84 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DB45ABF47
-	for <lists+linux-cifs@lfdr.de>; Sat,  3 Sep 2022 16:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41D25AC038
+	for <lists+linux-cifs@lfdr.de>; Sat,  3 Sep 2022 19:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiICORr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 3 Sep 2022 10:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S231927AbiICRiZ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 3 Sep 2022 13:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiICORq (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 3 Sep 2022 10:17:46 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497EA120BC
-        for <linux-cifs@vger.kernel.org>; Sat,  3 Sep 2022 07:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Date:To:From:CC;
-        bh=moh9C90Cusd6MvyttpxZ/LjKb4VKc1fulaLZ9RgQYRw=; b=w9iDqAc2KF/EcYiJo7mYii6Ub8
-        /CatBgmP6Bu3AQmDymCHTDukvemoPKB80c4LPUaX5ChZz9tRkmKleN5eBgFo8nQUMgOShqPrnMt6X
-        /KhQ6Tco+ECevA0qywq2rG7rvwsgJuOm/RrSDfp8H0hpjfF8IcZuVcb2Qj7XlDQl0OXPTefnD9qfh
-        AaEXt4qT+BC3Rz46AjdCkfpIECuI3da53ZHAspgfSLOUxcWypIibxxSCA9T/DefoqE8YvIZwpYwsw
-        DGbMuY/vDvKEMw0b9hr3XxdcEK4VK6wjc+oatllnQK8rZI8PLLNHcVYmm3XeeaxRHB3cvY6vX5AfW
-        GJKy6yCX8WhnUMYPqkV9zb8LgCy5TUbcrpNMHmHu4Q0s1LN8OfeQk8fBbIhRW26DxTQhUpCRKiyjK
-        G+uvNXgDlLMDoveeou1HHv/bp7qU47aJRs/mY7bg2YXTs75faakzz9KvoN3BGGtWeEElVDOmYUMQ+
-        z4GCe+sOXguRSLL/BasQFdTn;
-Received: from [2a01:4f8:192:486::6:0] (port=36186 helo=hr6.samba.org) 
-        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1oUTxu-002vS0-Lq
-        for cifs-qa@samba.org; Sat, 03 Sep 2022 14:17:42 +0000
-Received: from www-data by hr6.samba.org with local (Exim 4.93)
-        (envelope-from <www-data@samba.org>)
-        id 1oUTxm-000AXz-BT
-        for cifs-qa@samba.org; Sat, 03 Sep 2022 14:17:34 +0000
-From:   samba-bugs@samba.org
-To:     cifs-qa@samba.org
-Subject: [Bug 13570] CIFS Mount Used Size descrepancy
-Date:   Sat, 03 Sep 2022 14:17:34 +0000
-X-Bugzilla-Reason: QAcontact
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Samba 4.1 and newer
-X-Bugzilla-Component: File services
-X-Bugzilla-Version: 4.15.9
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kato223@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: sfrench@samba.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-13570-10630-lhRe5SYow0@https.bugzilla.samba.org/>
-In-Reply-To: <bug-13570-10630@https.bugzilla.samba.org/>
-References: <bug-13570-10630@https.bugzilla.samba.org/>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Bugzilla-URL: https://bugzilla.samba.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231976AbiICRiR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 3 Sep 2022 13:38:17 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A5957563;
+        Sat,  3 Sep 2022 10:38:03 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id b26so5206040ljk.12;
+        Sat, 03 Sep 2022 10:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=T9PB00G8n49mkQ5GqTry0cp+XpHMmRJWkRcveZs969s=;
+        b=fIOMCu7AITN9Pt+nFN8BJTaa3K5P3d8RThC1MmB5xW6+aCOf4ziM11dh3PVY8ChogI
+         2In7ghfavyCyWtgzUXJdWJbLcoFt8im2w1QA4Z8PA+4nH1IpLvWqzc4K3XXoKDtzZut+
+         zrPXw4Xgu7XAc/zA8NHyqWGScGc/Vw+ZfkvXQsEFQsWc2nQpj9tj4wlMemyYzJexkbQZ
+         tGfwIBaPTWxhz6U3HENtbDZhuNci6vVbLotA4cnZW4d6tLzMaxSeSrJVmoSXVaGAym04
+         0TdYH9bByMpa7AqY2/rQEU0ONx3kmD/re/WCnYtxpF1wiZp12OHS1//jc0Wu8MCo7ffF
+         I/MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=T9PB00G8n49mkQ5GqTry0cp+XpHMmRJWkRcveZs969s=;
+        b=5CDKYqN4J/Gh96GYEZ7AcH68OQzLn8jRvdp1+V46vkcRtkuYllzKmKVZ+A/pD3XUeF
+         47Ocy0h5uy1EmuayaW3j330TjYTJ+9BRN/sJ1w+Op6zjLP1jZFwNPVvFT18QrdBC/SW9
+         06Cz8NxR5+4M1XEd5gS8w6t83Jb2rH22AEnvW1LQbkycUIfPgl433M02D51XTnlJJvaK
+         /Zzc8loR3+CiSN7zi/be9FybW1UyfFINRkOSWuy56KQEsEL7LEJkeZwaKWr1Srgp+YCQ
+         dtUxLr8BjIJSGbLzGf2i8YyjwTS6AlfuLZZSrrYdHyCCRyje0cD8J3CWfuKskGQQGMoZ
+         782Q==
+X-Gm-Message-State: ACgBeo16TUzEuuVhRFUF/Lr3nRrFi2W4CVITuaeUSD8qGtwrrxhQc77W
+        8FPCfpG/Ky8kHvP+dKE3lVop0ZZ3xwDfKk3Kwm5lhpQ9jb8MMg==
+X-Google-Smtp-Source: AA6agR70Jzdv99OIWtBI+Fq39YHvU0oO+xeoqhKJN9rejAsxAabkcRwmiauhY/c5RKQZKtQjTgpBf1Dezn5qMhA8Xac=
+X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id
+ u1-20020a2e8541000000b00261b44b1a8bmr13288406ljj.46.1662226680495; Sat, 03
+ Sep 2022 10:38:00 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220901220138.182896-1-vishal.moola@gmail.com> <20220901220138.182896-20-vishal.moola@gmail.com>
+In-Reply-To: <20220901220138.182896-20-vishal.moola@gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sun, 4 Sep 2022 02:37:43 +0900
+Message-ID: <CAKFNMon3fuhwv32mtP_yV1agLUQkOePOfAN0yBH2X669YgonCA@mail.gmail.com>
+Subject: Re: [PATCH 19/23] nilfs2: Convert nilfs_lookup_dirty_node_buffers()
+ to use filemap_get_folios_tag()
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-https://bugzilla.samba.org/show_bug.cgi?id=3D13570
+On Fri, Sep 2, 2022 at 7:07 AM Vishal Moola (Oracle) wrote:
+>
+> Convert function to use folios throughout. This is in preparation for
+> the removal of find_get_pages_range_tag().
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/nilfs2/segment.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 
---- Comment #5 from Terrance <kato223@gmail.com> ---
-Hi Enzo!
+Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-What command output are you looking for?  I don't think I am familiar with
-doing a network trace of the timeframe for df.  Can you please tell me a
-command that I can run so that I can get you that output?
-
---=20
-You are receiving this mail because:
-You are the QA Contact for the bug.=
+Thanks,
+Ryusuke Konishi
