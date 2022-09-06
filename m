@@ -2,51 +2,52 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBFA5ADDEF
-	for <lists+linux-cifs@lfdr.de>; Tue,  6 Sep 2022 05:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE6F5ADF02
+	for <lists+linux-cifs@lfdr.de>; Tue,  6 Sep 2022 07:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbiIFDZ5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 5 Sep 2022 23:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S232597AbiIFFm7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Sep 2022 01:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiIFDZy (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 5 Sep 2022 23:25:54 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EED013FA14;
-        Mon,  5 Sep 2022 20:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QAbFV
-        mFnZEYCK9bR4JBdapC1qdET+Fj8spsT+JJTRWg=; b=eQW6CVoxaNm5mkh2bOxDa
-        8rZoZ5zcTy1n0oAqbk0HwydLsrdGk/b6oG8IVqyaaXVjYiyEuYUxHeIbcyPw+6be
-        YqgkSu1/wTJDZE8Cut9qKR/c94ZParLidSiLPdA8jj4IzIRSWskBSzv5gRKAOabI
-        i3LsCbwvj5MG9tQjGyTdPc=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp5 (Coremail) with SMTP id HdxpCgBHISCJvRZjVCHJaA--.36756S2;
-        Tue, 06 Sep 2022 11:24:59 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     sfrench@samba.org
-Cc:     pc@cjr.nz, lsahlber@redhat.com, sprasad@microsoft.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] cifs: misc: fix spelling typo in comment
-Date:   Tue,  6 Sep 2022 11:24:35 +0800
-Message-Id: <20220906032435.932451-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230060AbiIFFm5 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Sep 2022 01:42:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282AF5927D
+        for <linux-cifs@vger.kernel.org>; Mon,  5 Sep 2022 22:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662442976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6CwZKGvzGp2WooUEJnwTJ5MbKiBATBhpjC8iOWw5e2s=;
+        b=EQYGsibLu3YWMh+20TbFVrFbLS++WhxPHS3KdytviIPI4H66fraEJXPf3zkOi4VjgE5dBM
+        docAXajqJrC5onZm1CQSpJqO0urvV8yV5y4ZBO+R38h1y4cIwTyvQTjqLIBRAd72hbpHIR
+        G16s+bvHSbr6c/EBEIfY2BgzOITL7a8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-237-HnXCKp0oOiGV92olkQGPMw-1; Tue, 06 Sep 2022 01:42:53 -0400
+X-MC-Unique: HnXCKp0oOiGV92olkQGPMw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B797299E740;
+        Tue,  6 Sep 2022 05:42:52 +0000 (UTC)
+Received: from localhost.localdomain (vpn2-52-20.bne.redhat.com [10.64.52.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0138EC15BBD;
+        Tue,  6 Sep 2022 05:42:51 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: CIFS: attempt to fix kernel bugzilla 215375
+Date:   Tue,  6 Sep 2022 15:42:39 +1000
+Message-Id: <20220906054240.4148159-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgBHISCJvRZjVCHJaA--.36756S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5JF47tryfCrg_yoW3XrX_Gw
-        4kC3yqgrWUuF1Skw13Kw4S9F10ya15K395Cr1fArZ8Gay5Ca98Ga95tr4Sya4DWr4ktry3
-        Jw45JF9FyrnrKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbEoGtUUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivgt0+1Zcem5YyAAAs0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +55,14 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+Steve, 
+Here is an attempt to fix kernel bz 215375.
+I can not test it, since I don't have access to servers this old but the change
+should be safe for modern users as it only affects the password field for
+"share mode" security, which we do not support anyway.
 
-Fix spelling typo in comment.
-
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- fs/cifs/misc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
-index 87f60f736731..c6679398fff9 100644
---- a/fs/cifs/misc.c
-+++ b/fs/cifs/misc.c
-@@ -824,7 +824,7 @@ cifs_close_deferred_file_under_dentry(struct cifs_tcon *tcon, const char *path)
- 	free_dentry_path(page);
- }
- 
--/* parses DFS refferal V3 structure
-+/* parses DFS referral V3 structure
-  * caller is responsible for freeing target_nodes
-  * returns:
-  * - on success - 0
--- 
-2.25.1
+It is only tested for regressions with user mode security on win98 and later systems, using ntlmssp
+authentication.
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
 
