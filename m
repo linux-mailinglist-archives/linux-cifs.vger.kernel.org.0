@@ -2,68 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8785B60CA
-	for <lists+linux-cifs@lfdr.de>; Mon, 12 Sep 2022 20:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D985B628E
+	for <lists+linux-cifs@lfdr.de>; Mon, 12 Sep 2022 23:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiILS3U (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 12 Sep 2022 14:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S229730AbiILVLv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 12 Sep 2022 17:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiILS2c (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 12 Sep 2022 14:28:32 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7999845989;
-        Mon, 12 Sep 2022 11:26:11 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id c198so9411747pfc.13;
-        Mon, 12 Sep 2022 11:26:11 -0700 (PDT)
+        with ESMTP id S229598AbiILVLk (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 12 Sep 2022 17:11:40 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA764A138
+        for <linux-cifs@vger.kernel.org>; Mon, 12 Sep 2022 14:11:38 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 134so4856616vkz.11
+        for <linux-cifs@vger.kernel.org>; Mon, 12 Sep 2022 14:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=EWGIRsO0TQUjPA4NSpZhNtSF7U+oKW/75ivrprFYH3eLHknbNiJPBdeCKksthsDvHT
-         p9VH4PtpUnMCZMAwx7DROHJWr7/Ah4rYynxtW5b0gtNTnCM4g+ZV4bimi/kEwOfXUOXL
-         EXIuMFeQwxRjR7MDPmqZQPy8kFIte1xrKjKO9fkYlSO5ZAjVS/9lTh3/HcYUBxYfnCnS
-         jffCNppR34pmyz4LTtsc95g9B1bfbwyW8e6tLM0fHOhkZ1IGhLZWN6p2Wmpdp9pivf+d
-         BucUVnUqP/QnQXL7spYnWTmGi4J2gdTskcKPVzFxg/cASCQyhX2H2dZKyy9J1njNgD5p
-         iMew==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=OCzUBFDjZ9LDdzFT/vq01ardY8WFuVe7fdACs/gZjGI=;
+        b=SQPxz6cF2tHwTiY2mY+R5z2Dcrlakc8plLsk1G3xMr/FSLXpt3qDSTVHHUaHZ2wBjf
+         sHSx4GNqFgyDv6e1qJNvpNSWB1ukpvXWJB6iidQ9D0wMTq0zopkmIMbcX0Xzs7w/p2zH
+         tM5Ne+aCy5rRwtUoGyEBhBqLkyFVSc4cvMc5tOFN/3KLeKBp8mB4XcbdgBot0975fO5f
+         WVwQRcGWcWzRJD7WFHZ7sOuycNe75VlETVG8/mx9+KICaTAH3d6fGZ1u2V3pIzu0s6R9
+         4LKu5BMOPxGZUff9fBmBYYsEyYcrlT23ZLZrKlVi+Pox0PB4zZlXi0M3qGL8TCk4xwck
+         zQLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=7FB0d0I/9wPr1d2RlK5CXtblZ9hySuIvP0tB4s8xvQ0c6kzjrIb9vGMJp/Zxge+USY
-         BDKk2oIp4cdB/1+DvypbNceYhQ6JgzLq5S7aGUpDzc2rCHfKQ5IRZxYt9z49HpB5xOBe
-         YYIS3+EqAxEtE2LCwr1luXsXBYKMeDcLwYfu0ED6I/3uTgEDX4GL9YJDpsRPGFdWRrG+
-         tuBczo9PlsUIN3ksIxmdynAgPd3OxRH5wV3271SsnTjfvTaA7sgZLMsysan86gS/a8MP
-         +F5J4HePEbiQFguAl0QxJPQOsamzwzayigj5t1PQrW7bbekoaZRwSOiwxoUxEcOcx3f8
-         3HPA==
-X-Gm-Message-State: ACgBeo2QxP99UiTEYHGVmApJYR6z56Tvq3KJhVrNRMt0CAXmYum3x2os
-        dcr987CP2ZPpOW92D5PMl+7udy0PBMr6Tw==
-X-Google-Smtp-Source: AA6agR5zoGRPcJJ1BMErXHewDDt0vJdvoM167lmthDP3+E0KxFpRx9Na4XeqBQAsnEhH1ytuVdZJxQ==
-X-Received: by 2002:a63:5d4e:0:b0:41d:2966:74e7 with SMTP id o14-20020a635d4e000000b0041d296674e7mr24037987pgm.526.1663007160214;
-        Mon, 12 Sep 2022 11:26:00 -0700 (PDT)
-Received: from vmfolio.. (c-73-189-111-8.hsd1.ca.comcast.net. [73.189.111.8])
-        by smtp.googlemail.com with ESMTPSA id x127-20020a626385000000b0053b2681b0e0sm5916894pfb.39.2022.09.12.11.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 11:25:59 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH v2 23/23] filemap: Remove find_get_pages_range_tag()
-Date:   Mon, 12 Sep 2022 11:22:24 -0700
-Message-Id: <20220912182224.514561-24-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220912182224.514561-1-vishal.moola@gmail.com>
-References: <20220912182224.514561-1-vishal.moola@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=OCzUBFDjZ9LDdzFT/vq01ardY8WFuVe7fdACs/gZjGI=;
+        b=nIi8omsFFlPWiwfAWO4FC5oe3OA0d59Rb+RTuWz3PoenYJOZ+hC0tC2PX9/DvjY3Xp
+         2Injyh/s4RaWUwQH+jG7ktn0iufT5btfCFAP7GiBzdggpTfMOFbF8x2o71pc1iBMIBpR
+         rI2C8AofTSwWIVvbKLIhPKgmnTfiCB58L2LI/toMY7mtFnBO1cmTAUpGDdJzWuJvs4/k
+         wcFCJSIotmrcVmigqQd8+Arhk0f8OWLCCXFR5C4s1qkxl04HgZDMzemPw75d3gEfTTlS
+         FoLovA4pYNtxCNSr0W/ctiRHY8REP5W1BeT41GswcPkKKIGo98S0+Tx8pbfhD1Lua+nT
+         b+Jw==
+X-Gm-Message-State: ACgBeo2JI3zeIFvzf12KqgZu4a2q+hFNSDP7Gbd0MjutKdhs9ttACMrX
+        v/YXEJCwnOj4gA1km+QBgrIui4+5XT/z0qAbMAw=
+X-Google-Smtp-Source: AA6agR6IwwLmZBsGzfz65V1vWx8xt64MdJAMQX2IV+CShMb1M3QbAqvRy58sAYR6RLD/dBseJ74t/luJgzzrB87eGxc=
+X-Received: by 2002:a1f:918d:0:b0:3a1:e376:7463 with SMTP id
+ t135-20020a1f918d000000b003a1e3767463mr6048642vkd.38.1663017097634; Mon, 12
+ Sep 2022 14:11:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAH2r5mvC5sqwuLyLt=3PXYvPegOm-8rqSMYcCpjM3+T64fv2sg@mail.gmail.com>
+ <f19d2bf6-6b05-f782-fcfa-1c09c867dcb2@samba.org>
+In-Reply-To: <f19d2bf6-6b05-f782-fcfa-1c09c867dcb2@samba.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 12 Sep 2022 16:11:25 -0500
+Message-ID: <CAH2r5mucwiYKjVSOCggeNJCTor2krV7UneZaVuDvF7wB2WhZ4g@mail.gmail.com>
+Subject: Re: [PATCH][SMB3.1.1 client] fallback to query fs all info if posix
+ query fs not supported
+To:     Stefan Metzmacher <metze@samba.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: multipart/mixed; boundary="0000000000005ca3b005e88157ad"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,149 +67,107 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-All callers to find_get_pages_range_tag(), find_get_pages_tag(),
-pagevec_lookup_range_tag(), and pagevec_lookup_tag() have been removed.
+--0000000000005ca3b005e88157ad
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- include/linux/pagemap.h | 10 -------
- include/linux/pagevec.h |  8 ------
- mm/filemap.c            | 60 -----------------------------------------
- mm/swap.c               | 10 -------
- 4 files changed, 88 deletions(-)
+updated the patch to remove the fall back - and simply do the
+compounding for this code path (when statfs is posix query fs info) as
+we already do for the non-POSIX statfs code path.
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 85cc96c82c2c..b8ea33751a66 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -742,16 +742,6 @@ unsigned find_get_pages_contig(struct address_space *mapping, pgoff_t start,
- 			       unsigned int nr_pages, struct page **pages);
- unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, xa_mark_t tag, struct folio_batch *fbatch);
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages);
--static inline unsigned find_get_pages_tag(struct address_space *mapping,
--			pgoff_t *index, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	return find_get_pages_range_tag(mapping, index, (pgoff_t)-1, tag,
--					nr_pages, pages);
--}
- 
- struct page *grab_cache_page_write_begin(struct address_space *mapping,
- 			pgoff_t index);
-diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
-index 215eb6c3bdc9..a520632297ac 100644
---- a/include/linux/pagevec.h
-+++ b/include/linux/pagevec.h
-@@ -26,14 +26,6 @@ struct pagevec {
- };
- 
- void __pagevec_release(struct pagevec *pvec);
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag);
--static inline unsigned pagevec_lookup_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, xa_mark_t tag)
--{
--	return pagevec_lookup_range_tag(pvec, mapping, index, (pgoff_t)-1, tag);
--}
- 
- static inline void pagevec_init(struct pagevec *pvec)
- {
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 435fc53b3f2f..b986f246a6ae 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2309,66 +2309,6 @@ unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- }
- EXPORT_SYMBOL(filemap_get_folios_tag);
- 
--/**
-- * find_get_pages_range_tag - Find and return head pages matching @tag.
-- * @mapping:	the address_space to search
-- * @index:	the starting page index
-- * @end:	The final page index (inclusive)
-- * @tag:	the tag index
-- * @nr_pages:	the maximum number of pages
-- * @pages:	where the resulting pages are placed
-- *
-- * Like find_get_pages_range(), except we only return head pages which are
-- * tagged with @tag.  @index is updated to the index immediately after the
-- * last page we return, ready for the next iteration.
-- *
-- * Return: the number of pages which were found.
-- */
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	XA_STATE(xas, &mapping->i_pages, *index);
--	struct folio *folio;
--	unsigned ret = 0;
--
--	if (unlikely(!nr_pages))
--		return 0;
--
--	rcu_read_lock();
--	while ((folio = find_get_entry(&xas, end, tag))) {
--		/*
--		 * Shadow entries should never be tagged, but this iteration
--		 * is lockless so there is a window for page reclaim to evict
--		 * a page we saw tagged.  Skip over it.
--		 */
--		if (xa_is_value(folio))
--			continue;
--
--		pages[ret] = &folio->page;
--		if (++ret == nr_pages) {
--			*index = folio->index + folio_nr_pages(folio);
--			goto out;
--		}
--	}
--
--	/*
--	 * We come here when we got to @end. We take care to not overflow the
--	 * index @index as it confuses some of the callers. This breaks the
--	 * iteration when there is a page at index -1 but that is already
--	 * broken anyway.
--	 */
--	if (end == (pgoff_t)-1)
--		*index = (pgoff_t)-1;
--	else
--		*index = end + 1;
--out:
--	rcu_read_unlock();
--
--	return ret;
--}
--EXPORT_SYMBOL(find_get_pages_range_tag);
--
- /*
-  * CD/DVDs are error prone. When a medium error occurs, the driver may fail
-  * a _large_ part of the i/o request. Imagine the worst scenario:
-diff --git a/mm/swap.c b/mm/swap.c
-index 9cee7f6a3809..7b8c1c8024a1 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -1055,16 +1055,6 @@ void folio_batch_remove_exceptionals(struct folio_batch *fbatch)
- 	fbatch->nr = j;
- }
- 
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag)
--{
--	pvec->nr = find_get_pages_range_tag(mapping, index, end, tag,
--					PAGEVEC_SIZE, pvec->pages);
--	return pagevec_count(pvec);
--}
--EXPORT_SYMBOL(pagevec_lookup_range_tag);
--
- /*
-  * Perform any setup for the swap system
-  */
+On Mon, Sep 12, 2022 at 12:51 AM Stefan Metzmacher <metze@samba.org> wrote:
+>
+> Am 12.09.22 um 07:36 schrieb Steve French via samba-technical:
+> > A version of Samba that I was testing, supported POSIX extensions, but
+> > not the query fs info
+> > level.  Fall back to query fs all info if POSIX query fs info not
+> > supported.
+> >
+> > Also fixes the problem that compounding wasn't being used for posix
+> > qfs info in this path (statfs) but was being used in others, so
+> > improves performance of posix query fs info.
+>
+> I don't think having hacks to work with work in progress branches should be
+> added, instead the server should be fixed.
+>
+> metze
+>
+
+
 -- 
-2.36.1
+Thanks,
 
+Steve
+
+--0000000000005ca3b005e88157ad
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb311-compound-SMB311-posix-query-fs-info-for-statf.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb311-compound-SMB311-posix-query-fs-info-for-statf.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l7z9filz0>
+X-Attachment-Id: f_l7z9filz0
+
+RnJvbSA0YzUzM2E4MjAwY2EyODg5MTE3YTYwNDU5OTcwMTlmMGVhM2UzZDE5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IFN1biwgMTEgU2VwIDIwMjIgMTk6NDk6MDQgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
+bWIzMTE6IGNvbXBvdW5kIFNNQjMxMSBwb3NpeCBxdWVyeSBmcyBpbmZvIGZvciBzdGF0ZnMKCkZp
+eGVzIHRoZSBwcm9ibGVtIHRoYXQgY29tcG91bmRpbmcgd2Fzbid0IGJlaW5nIHVzZWQgZm9yIHBv
+c2l4CnFmcyBpbmZvIGluIHRoaXMgcGF0aCAoc3RhdGZzKSBidXQgd2FzIGJlaW5nIHVzZWQgaW4g
+b3RoZXJzLCBzbwppbXByb3ZlcyBwZXJmb3JtYW5jZSBvZiBwb3NpeCBxdWVyeSBmcyBpbmZvLgoK
+U2lnbmVkLW9mZi1ieTogU3RldmUgRnJlbmNoIDxzdGZyZW5jaEBtaWNyb3NvZnQuY29tPgotLS0K
+IGZzL2NpZnMvc21iMm9wcy5jICAgfCA0MCArKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0t
+LS0tLS0tLS0tCiBmcy9jaWZzL3NtYjJwZHUuYyAgIHwgIDIgKy0KIGZzL2NpZnMvc21iMnByb3Rv
+LmggfCAgMiArKwogMyBmaWxlcyBjaGFuZ2VkLCAyNiBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS9mcy9jaWZzL3NtYjJvcHMuYyBiL2ZzL2NpZnMvc21iMm9wcy5j
+CmluZGV4IDQyMWJlNDNhZjQyNS4uZDZkZDgzOWNhMWJiIDEwMDY0NAotLS0gYS9mcy9jaWZzL3Nt
+YjJvcHMuYworKysgYi9mcy9jaWZzL3NtYjJvcHMuYwpAQCAtMjU1NywzMSArMjU1NywzNyBAQCBz
+dGF0aWMgaW50CiBzbWIzMTFfcXVlcnlmcyhjb25zdCB1bnNpZ25lZCBpbnQgeGlkLCBzdHJ1Y3Qg
+Y2lmc190Y29uICp0Y29uLAogCSAgICAgICBzdHJ1Y3QgY2lmc19zYl9pbmZvICpjaWZzX3NiLCBz
+dHJ1Y3Qga3N0YXRmcyAqYnVmKQogeworCXN0cnVjdCBzbWIyX3F1ZXJ5X2luZm9fcnNwICpyc3A7
+CisJc3RydWN0IGt2ZWMgcnNwX2lvdiA9IHtOVUxMLCAwfTsKKwlGSUxFX1NZU1RFTV9QT1NJWF9J
+TkZPICppbmZvID0gTlVMTDsKKwlpbnQgYnVmdHlwZSA9IENJRlNfTk9fQlVGRkVSOwogCWludCBy
+YzsKLQlfX2xlMTYgc3JjaF9wYXRoID0gMDsgLyogTnVsbCAtIG9wZW4gcm9vdCBvZiBzaGFyZSAq
+LwotCXU4IG9wbG9jayA9IFNNQjJfT1BMT0NLX0xFVkVMX05PTkU7Ci0Jc3RydWN0IGNpZnNfb3Bl
+bl9wYXJtcyBvcGFybXM7Ci0Jc3RydWN0IGNpZnNfZmlkIGZpZDsKIAogCWlmICghdGNvbi0+cG9z
+aXhfZXh0ZW5zaW9ucykKIAkJcmV0dXJuIHNtYjJfcXVlcnlmcyh4aWQsIHRjb24sIGNpZnNfc2Is
+IGJ1Zik7CiAKLQlvcGFybXMudGNvbiA9IHRjb247Ci0Jb3Bhcm1zLmRlc2lyZWRfYWNjZXNzID0g
+RklMRV9SRUFEX0FUVFJJQlVURVM7Ci0Jb3Bhcm1zLmRpc3Bvc2l0aW9uID0gRklMRV9PUEVOOwot
+CW9wYXJtcy5jcmVhdGVfb3B0aW9ucyA9IGNpZnNfY3JlYXRlX29wdGlvbnMoY2lmc19zYiwgMCk7
+Ci0Jb3Bhcm1zLmZpZCA9ICZmaWQ7Ci0Jb3Bhcm1zLnJlY29ubmVjdCA9IGZhbHNlOwotCi0JcmMg
+PSBTTUIyX29wZW4oeGlkLCAmb3Bhcm1zLCAmc3JjaF9wYXRoLCAmb3Bsb2NrLCBOVUxMLCBOVUxM
+LAotCQkgICAgICAgTlVMTCwgTlVMTCk7CisJcmMgPSBzbWIyX3F1ZXJ5X2luZm9fY29tcG91bmQo
+eGlkLCB0Y29uLCAiIiwKKwkJCQkgICAgICBGSUxFX1JFQURfQVRUUklCVVRFUywKKwkJCQkgICAg
+ICBGU19QT1NJWF9JTkZPUk1BVElPTiwKKwkJCQkgICAgICBTTUIyX09fSU5GT19GSUxFU1lTVEVN
+LAorCQkJCSAgICAgIHNpemVvZihGSUxFX1NZU1RFTV9QT1NJWF9JTkZPKSwKKwkJCQkgICAgICAm
+cnNwX2lvdiwgJmJ1ZnR5cGUsIGNpZnNfc2IpOwogCWlmIChyYykKLQkJcmV0dXJuIHJjOworCQln
+b3RvIHBxZnNfZXhpdDsKIAotCXJjID0gU01CMzExX3Bvc2l4X3Fmc19pbmZvKHhpZCwgdGNvbiwg
+ZmlkLnBlcnNpc3RlbnRfZmlkLAotCQkJCSAgIGZpZC52b2xhdGlsZV9maWQsIGJ1Zik7CisJcnNw
+ID0gKHN0cnVjdCBzbWIyX3F1ZXJ5X2luZm9fcnNwICopcnNwX2lvdi5pb3ZfYmFzZTsKIAlidWYt
+PmZfdHlwZSA9IFNNQjJfU1VQRVJfTUFHSUM7Ci0JU01CMl9jbG9zZSh4aWQsIHRjb24sIGZpZC5w
+ZXJzaXN0ZW50X2ZpZCwgZmlkLnZvbGF0aWxlX2ZpZCk7CisJaW5mbyA9IChGSUxFX1NZU1RFTV9Q
+T1NJWF9JTkZPICopKAorCQlsZTE2X3RvX2NwdShyc3AtPk91dHB1dEJ1ZmZlck9mZnNldCkgKyAo
+Y2hhciAqKXJzcCk7CisJcmMgPSBzbWIyX3ZhbGlkYXRlX2lvdihsZTE2X3RvX2NwdShyc3AtPk91
+dHB1dEJ1ZmZlck9mZnNldCksCisJCQkgICAgICAgbGUzMl90b19jcHUocnNwLT5PdXRwdXRCdWZm
+ZXJMZW5ndGgpLAorCQkJICAgICAgICZyc3BfaW92LAorCQkJICAgICAgIHNpemVvZihGSUxFX1NZ
+U1RFTV9QT1NJWF9JTkZPKSk7CisJaWYgKCFyYykKKwkJY29weV9wb3NpeF9mc19pbmZvX3RvX2tz
+dGF0ZnMoaW5mbywgYnVmKTsKKworcHFmc19leGl0OgorCWZyZWVfcnNwX2J1ZihidWZ0eXBlLCBy
+c3BfaW92Lmlvdl9iYXNlKTsKIAlyZXR1cm4gcmM7CiB9CiAKZGlmZiAtLWdpdCBhL2ZzL2NpZnMv
+c21iMnBkdS5jIGIvZnMvY2lmcy9zbWIycGR1LmMKaW5kZXggNjM1MmFiMzJjN2U3Li4wMWYwY2Mx
+NjIwYmQgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvc21iMnBkdS5jCisrKyBiL2ZzL2NpZnMvc21iMnBk
+dS5jCkBAIC01MjUxLDcgKzUyNTEsNyBAQCBzbWIyX2NvcHlfZnNfaW5mb190b19rc3RhdGZzKHN0
+cnVjdCBzbWIyX2ZzX2Z1bGxfc2l6ZV9pbmZvICpwZnNfaW5mLAogCXJldHVybjsKIH0KIAotc3Rh
+dGljIHZvaWQKK3ZvaWQKIGNvcHlfcG9zaXhfZnNfaW5mb190b19rc3RhdGZzKEZJTEVfU1lTVEVN
+X1BPU0lYX0lORk8gKnJlc3BvbnNlX2RhdGEsCiAJCQlzdHJ1Y3Qga3N0YXRmcyAqa3N0KQogewpk
+aWZmIC0tZ2l0IGEvZnMvY2lmcy9zbWIycHJvdG8uaCBiL2ZzL2NpZnMvc21iMnByb3RvLmgKaW5k
+ZXggM2Y3NDBmMjRiOTZhLi5jOTZjNmNhZDkwYTQgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvc21iMnBy
+b3RvLmgKKysrIGIvZnMvY2lmcy9zbWIycHJvdG8uaApAQCAtMjY3LDYgKzI2Nyw4IEBAIGV4dGVy
+biBpbnQgc21iMl92YWxpZGF0ZV9hbmRfY29weV9pb3YodW5zaWduZWQgaW50IG9mZnNldCwKIGV4
+dGVybiB2b2lkIHNtYjJfY29weV9mc19pbmZvX3RvX2tzdGF0ZnMoCiAJIHN0cnVjdCBzbWIyX2Zz
+X2Z1bGxfc2l6ZV9pbmZvICpwZnNfaW5mLAogCSBzdHJ1Y3Qga3N0YXRmcyAqa3N0KTsKK2V4dGVy
+biB2b2lkIGNvcHlfcG9zaXhfZnNfaW5mb190b19rc3RhdGZzKEZJTEVfU1lTVEVNX1BPU0lYX0lO
+Rk8gKnJlc3BvbnNlX2RhdGEsCisJCQkJCSAgc3RydWN0IGtzdGF0ZnMgKmtzdCk7CiBleHRlcm4g
+aW50IHNtYjMxMV9jcnlwdG9fc2hhc2hfYWxsb2NhdGUoc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAq
+c2VydmVyKTsKIGV4dGVybiBpbnQgc21iMzExX3VwZGF0ZV9wcmVhdXRoX2hhc2goc3RydWN0IGNp
+ZnNfc2VzICpzZXMsCiAJCQkJICAgICAgc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAqc2VydmVyLAot
+LSAKMi4zNC4xCgo=
+--0000000000005ca3b005e88157ad--
