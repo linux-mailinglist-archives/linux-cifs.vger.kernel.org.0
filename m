@@ -2,71 +2,108 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBAA5BA3B7
-	for <lists+linux-cifs@lfdr.de>; Fri, 16 Sep 2022 03:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C325BA656
+	for <lists+linux-cifs@lfdr.de>; Fri, 16 Sep 2022 07:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiIPBK2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 15 Sep 2022 21:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S229959AbiIPFZP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 16 Sep 2022 01:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiIPBKY (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 15 Sep 2022 21:10:24 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156F54D244
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Sep 2022 18:10:23 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so8422584otu.7
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Sep 2022 18:10:22 -0700 (PDT)
+        with ESMTP id S229846AbiIPFZO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 16 Sep 2022 01:25:14 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0928276F
+        for <linux-cifs@vger.kernel.org>; Thu, 15 Sep 2022 22:25:13 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id o123so21568884vsc.3
+        for <linux-cifs@vger.kernel.org>; Thu, 15 Sep 2022 22:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=6nehn4SZ+N5DitBflpC+8AB9tkDm5FI3qla1CH9afZQ=;
-        b=np4RaCUtWX8kie5xR3+NYRsf86Lvh7VeIAMxOuIq718CXvBEpzkcQxvmj9NFJbbq6S
-         rB/KC14woUsMii5QWF8gKo11UarH7mCNVB+g4RJwC535+AKQow90KfkgMhuaMWXgbP11
-         DgDbOqunTyDTmVVwvrVuZEPV6eVd3I+2j657yHv3/HRNvKL9Pn8d4NjU5G0YxDKpCZ7i
-         dOoR26svVf91E2XQHe55THbDma6dsOKMZ+B3IzFmpZrO077svkYkBTCsQq9RlI2IaExA
-         RxixVRRIMS+s/o1vUzPVc3r+BqjLTesNL+87vTP6SaKdWJe3/zbEiv8G6UT05U3iFOht
-         +9NA==
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=Sa3Z0fZXwN05d22orNyRUP3vLx9yrPD+vOj+S6s/4pg=;
+        b=F2CbE57mXvwL7gLuRHrvyf9m7RIJGvDAWIyJX1wcrXlnhwvFhMVvQo906wnhP2YAC0
+         wqffEIAofbriDgxdgTlqyD+kGrbjnid+Rt+RC8I5Cnwat+KVdNa4Drm4u303wYlGM/Bu
+         m6rY0W9wNC4TPLhfIK40u8+FxYkcNW41o1CCI6XAzQF3ANGzfIWXiOT0bOZH3Yj6tq9I
+         bkPoEETJD0B1ksn1RdRFvu3CFq/vmTTX2tqepdHvwnzGJRguJDZiseuWPy56VaF+MsbT
+         M1EzEGaALnx8OwEXgbXUouqdG8DL54cIKwwWHsUy7bFa84neBMatGpYUtmKZEML3XPQ0
+         4Xwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6nehn4SZ+N5DitBflpC+8AB9tkDm5FI3qla1CH9afZQ=;
-        b=ZkhXw7LX+8dsDLjb6WOBN7LFWrav9TjVhTKcKlK6PXQ3ohTedUeamjCo6ByDATrkNX
-         Tee0xze53MdtIDqdozqGxhkXNO2TC2t0IsQdIQY79TuOqOlsK3S6ZmTuIqMRSfKVLXtd
-         qsamAOTQ9z+pQtft/dZkzvz3lSvrskQH874ARId+7NzC4aQXyYwcmF2CH0LRDHqdGepB
-         ED0iFdKcgjKHDbj8nZnarRLAz6EuGrZ358mVAOM7ccCYyCwB3Sqly7KSMpP5KURvbaKa
-         Jy2pH12qBSEgzrndAeQn+xXLWxVG3JomwXrtYebR9B0EW1FRn7aP4Bn8Fva6akB6sgiJ
-         BXLw==
-X-Gm-Message-State: ACrzQf0cK/9aIZpqhS0pPlqz1MIuF6y0a4PABPuu83p+UYqiLv+r8Sbd
-        Q5ZLn+p+kybHxHtT09jHRnAoBMIvQ6ZRr4yx7Q==
-X-Google-Smtp-Source: AMsMyM6Ip9eJ7x168CMGYhYckHP8WIm7hEZDQ0vUIDP7Xb5FYoinF0pKq2hsipyTSj1ypuXP/4z64t1g9QETj1D31sc=
-X-Received: by 2002:a9d:75d8:0:b0:658:fff4:371a with SMTP id
- c24-20020a9d75d8000000b00658fff4371amr1186676otl.314.1663290620391; Thu, 15
- Sep 2022 18:10:20 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Sa3Z0fZXwN05d22orNyRUP3vLx9yrPD+vOj+S6s/4pg=;
+        b=mHGe4SNkE3Z8ObKNqOk5MNLiJHPfEX9ukU+99dd8199TVcY6zeJkqbLm1Ujs+k1iBM
+         jDDzBtWx4uYkNgzhnWeQDzmlTRSYUFCIfM9prDn/gu7N+PfJGvsL7igXU20YB2AE3Tjs
+         nAUSAuFCBoVw86pok/D0URfIBvPrPrbCgGGamueHdZElIIB2EiXYQB6jXlDQkSWka9zH
+         /3rvetaU8qvdaJny9sC4794dW1PIQreSy6AQUVxmABWwRmXITDqY1xzRCVrWZ3Mtne3T
+         klXLoVuVlEu9NOzni5LEHy5vYbFU3WiSumsnLE63o4rYqvqZpXrtRQFzVE20/1vXyhK4
+         OpzQ==
+X-Gm-Message-State: ACrzQf3s4vg1DZKfHiLIJWosa9cuoIacNbOfkLEC5xZQ/coXxwDetAUL
+        m6zNDI1DQDo8ZgtXbKyNwErlfD7+Abxms/fK38g+e1hYZ3o=
+X-Google-Smtp-Source: AMsMyM6ssurN6Dh9Naa7RrLFpBaWyD0UBOSi9FEtNKUBnXsfnoawPXZmvmBbtMmrXchLxhCXJmnsTOsEi/hEzkOJuhQ=
+X-Received: by 2002:a67:ad15:0:b0:398:6aef:316b with SMTP id
+ t21-20020a67ad15000000b003986aef316bmr1672796vsl.17.1663305912784; Thu, 15
+ Sep 2022 22:25:12 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4a:d001:0:0:0:0:0 with HTTP; Thu, 15 Sep 2022 18:10:19
- -0700 (PDT)
-Reply-To: un.loan@unpayloan.com
-From:   Tracy Vornan <graceali1977@gmail.com>
-Date:   Thu, 15 Sep 2022 18:10:19 -0700
-Message-ID: <CAFbUGG8L+5-JUQFZqozCNRsazdebrJoCYaWtFMUsLpK3uABzGQ@mail.gmail.com>
-Subject: Apply for Loan
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 16 Sep 2022 00:25:02 -0500
+Message-ID: <CAH2r5ms3vpm_h3NgzNkoOUCJM+jJYzifMCyZeCyBAtSbDLfXRA@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+Please pull the following changes since commit
+80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.0-rc5-smb3-fixes
+
+for you to fetch changes up to 8af8aed97bebe8b26a340da5236e277c3d84a8ec:
+
+  cifs: update internal module number (2022-09-14 04:00:06 -0500)
+
+----------------------------------------------------------------
+Four fixes for stable
+- important fix to revalidate mapping when doing direct writes
+- missing spinlock
+- two fixes to socket handling
+- and trivial change to update internal version number for cifs.ko
+
+----------------------------------------------------------------
+Paulo Alcantara (1):
+      cifs: add missing spinlock around tcon refcount
+
+Ronnie Sahlberg (1):
+      cifs: revalidate mapping when doing direct writes
+
+Stefan Metzmacher (2):
+      cifs: don't send down the destination address to sendmsg for a SOCK_STREAM
+      cifs: always initialize struct msghdr smb_msg completely
+
+Steve French (1):
+      cifs: update internal module number
+
+ fs/cifs/cifsfs.h    |  4 ++--
+ fs/cifs/connect.c   | 14 ++++++--------
+ fs/cifs/file.c      |  3 +++
+ fs/cifs/transport.c |  6 +-----
+ 4 files changed, 12 insertions(+), 15 deletions(-)
+
+
 -- 
-The United Nations in partnership with various financial bodies is
-giving out loan grants to help qualified individuals and organizations
-reimburse their businesses. This offer is available to everyone across
-the globe and is targeted at helping economies that has been downed by
-the pandemic.
+Thanks,
+
+Steve
