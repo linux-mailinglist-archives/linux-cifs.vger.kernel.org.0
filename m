@@ -2,95 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841B45BC28F
-	for <lists+linux-cifs@lfdr.de>; Mon, 19 Sep 2022 07:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EFF5BCF6F
+	for <lists+linux-cifs@lfdr.de>; Mon, 19 Sep 2022 16:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiISFjU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 19 Sep 2022 01:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S230266AbiISOoG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 19 Sep 2022 10:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiISFjT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 19 Sep 2022 01:39:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D718352
-        for <linux-cifs@vger.kernel.org>; Sun, 18 Sep 2022 22:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663565957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hB2SGjUYo7DOHUAAs7vrKwwFpmfRC1H+SXeT/msLtKA=;
-        b=JqPAx/3y+gO5zhdhfoG8kSEqHrGRYoTgPQI5Rc3QHqmBNNjl9uNI/DaJcZ5fB/+BJrf9sg
-        hBMLyR++AU7Kz6oecuWbOM1u7pa22pVO63Xa1A7C7d6cN7jpVrB/1PFQuP25IhHVyAXI8z
-        qcWVwhNqeLteZb+DnAACVj+Es2PtIyo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-R5n_33_nM2qbC4V_XVztvw-1; Mon, 19 Sep 2022 01:39:09 -0400
-X-MC-Unique: R5n_33_nM2qbC4V_XVztvw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229741AbiISOnx (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 19 Sep 2022 10:43:53 -0400
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A10101F7
+        for <linux-cifs@vger.kernel.org>; Mon, 19 Sep 2022 07:43:50 -0700 (PDT)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B7BF811E67;
-        Mon, 19 Sep 2022 05:39:09 +0000 (UTC)
-Received: from localhost.localdomain (vpn2-52-22.bne.redhat.com [10.64.52.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E0EA42084836;
-        Mon, 19 Sep 2022 05:39:08 +0000 (UTC)
-From:   Ronnie Sahlberg <lsahlber@redhat.com>
-To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] cifs: destage dirty pages before re-reading them for cache=none
-Date:   Mon, 19 Sep 2022 15:39:01 +1000
-Message-Id: <20220919053901.465232-2-lsahlber@redhat.com>
-In-Reply-To: <20220919053901.465232-1-lsahlber@redhat.com>
-References: <20220919053901.465232-1-lsahlber@redhat.com>
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 5FBFD7FC6E;
+        Mon, 19 Sep 2022 14:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1663598628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G7zlPe5q+exfsnE8d9priQdMyzpzIKHD5wvhoSBBPtw=;
+        b=LTUaLOXOfSOCuPwaotMg4aoUfsyEoUejopf+Fi+ZNFCsFQ7nDfwni6cDUoz3lnGViSRWAr
+        9S2xm/1S9XymLisUOYdcPtFg+y4OOHN3SLxoSx9ZyXKgJ24FdHtf9RwvLjOERixSphp6Q2
+        sPjG+NSi1U8CH8zyf/GDvnDTtDTxEeg0J4SR5KZykBPtu1yac+7PpBdZVVoq4hYYS1dVjd
+        qJI2YIGoJL93+7Bbpos1Gt3sL4y0V3YQXZTa8+S3HTcv1hqiT2mCUbyfNeH26/82ADolBc
+        ZFxbJKHc1N5VVjqFyVSiRPSQoXE0bdrBwCwxso4rTHYveY/iKnhwbk1fnLIDgw==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, ronniesahlberg@gmail.com,
+        nspmangalore@gmail.com
+Subject: Re: [PATCH] cifs: check if mid was deleted in async read callback
+In-Reply-To: <20220918235442.2981-1-ematsumiya@suse.de>
+References: <20220918235442.2981-1-ematsumiya@suse.de>
+Date:   Mon, 19 Sep 2022 11:44:19 -0300
+Message-ID: <874jx3l8zg.fsf@cjr.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This is the opposite case of kernel bugzilla 216301.
-If we mmap a file using cache=none and then proceed to update the mmapped
-area these updates are not reflected in a later pread() of that part of the
-file.
-To fix this we must first destage any dirty pages in the range before
-we allow the pread() to proceed.
+Enzo Matsumiya <ematsumiya@suse.de> writes:
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/file.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> There's a race when cifs_readv_receive() might dequeue the mid,
+> and mid->callback(), called from demultiplex thread, will try to
+> access it to verify the signature before the mid is actually
+> released/deleted.
+>
+> Currently the signature verification fails, but the verification
+> shouldn't have happened at all because the mid was deleted because
+> of an error, and hence not really supposed to be passed to
+> ->callback(). There are no further errors because the mid is
+> effectivelly gone by the end of the callback.
+>
+> This patch checks if the mid doesn't have the MID_DELETED flag set (by
+> dequeue_mid()) right before trying to verify the signature. According to
+> my tests, trying to check it earlier, e.g. after the ->receive() call in
+> cifs_demultiplex_thread, will fail most of the time as dequeue_mid()
+> might not have been called yet.
+>
+> This behaviour can be seen in xfstests generic/465, for example, where
+> mids with STATUS_END_OF_FILE (-ENODATA) are dequeued and supposed to be
+> discarded, but instead have their signature computed, but mismatched.
+>
+> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+> ---
+>  fs/cifs/cifssmb.c | 2 +-
+>  fs/cifs/smb2pdu.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 6f38b134a346..b38cebefb0db 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -4271,6 +4271,16 @@ static ssize_t __cifs_readv(
- 		len = ctx->len;
- 	}
- 
-+	if (direct && file->f_inode->i_mapping &&
-+	    file->f_inode->i_mapping->nrpages != 0) {
-+		rc = filemap_write_and_wait_range(file->f_inode->i_mapping,
-+						  offset, offset + len - 1);
-+		if (rc) {
-+			kref_put(&ctx->refcount, cifs_aio_ctx_release);
-+			return rc;
-+		}
-+	}
-+	
- 	/* grab a lock here due to read response handlers can access ctx */
- 	mutex_lock(&ctx->aio_mutex);
- 
--- 
-2.35.3
+Good catch!
 
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
