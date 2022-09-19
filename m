@@ -2,53 +2,49 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BDC5BC1C1
-	for <lists+linux-cifs@lfdr.de>; Mon, 19 Sep 2022 05:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796E45BC290
+	for <lists+linux-cifs@lfdr.de>; Mon, 19 Sep 2022 07:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiISDiG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 18 Sep 2022 23:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S229656AbiISFjX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 19 Sep 2022 01:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiISDiC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 18 Sep 2022 23:38:02 -0400
+        with ESMTP id S229568AbiISFjX (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 19 Sep 2022 01:39:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7314D2F
-        for <linux-cifs@vger.kernel.org>; Sun, 18 Sep 2022 20:38:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4805B18352
+        for <linux-cifs@vger.kernel.org>; Sun, 18 Sep 2022 22:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663558680;
+        s=mimecast20190719; t=1663565961;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=edLQ7tpCGHyPaeHFUyZITLq1lBjmvdHQMBIbGbrimJs=;
-        b=IsU2CYqGc0NoT635WqfLeFWHT8A+GaS8S4Xi51ohSrbRJ9s3QJhfBZfcfWo9qrga8MMan2
-        yB2tBawxshDrH48meTSIHSYmcgZKpsXOxloFzpS/tE8kyINqYqlLDctIafWUpqRTWcBWum
-        FcNk4Pssn6UTJpx+FkRnsIkRfmZwPu4=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7mHlQ2IXbJ7K/KP6bAm2mOLtLXkAvHk+n2uXgfdSUZ8=;
+        b=cQCR7lvrgDNQ0z9L4pggx/76MLkW00Q2JmutH5lC+zALkZY12qvmPjuJQPJxdi/U71Kwd7
+        kHIDKumsavPuZjvJwwcnyv1iSffh4BmZNPle4tP1FhzShm651PMiW8Au59RnRZ5kjqJP2P
+        WMv4BXGEsu5gfERgtzhhyh2Sr1/YuTQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-xwI7GZDsNzmQk5FRpfr-BQ-1; Sun, 18 Sep 2022 23:37:56 -0400
-X-MC-Unique: xwI7GZDsNzmQk5FRpfr-BQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-205-l23gitjiNcaG5P4Yx_0tJQ-1; Mon, 19 Sep 2022 01:39:12 -0400
+X-MC-Unique: l23gitjiNcaG5P4Yx_0tJQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6BEAF185A79C;
-        Mon, 19 Sep 2022 03:37:56 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EBFCA85A59D;
+        Mon, 19 Sep 2022 05:39:11 +0000 (UTC)
 Received: from localhost.localdomain (vpn2-52-22.bne.redhat.com [10.64.52.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BDF31492B04;
-        Mon, 19 Sep 2022 03:37:55 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 555121121314;
+        Mon, 19 Sep 2022 05:39:11 +0000 (UTC)
 From:   Ronnie Sahlberg <lsahlber@redhat.com>
 To:     linux-cifs <linux-cifs@vger.kernel.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [PATCH] cifs: invalidate and destage pages before re-reading them for cache=none
-Date:   Mon, 19 Sep 2022 13:37:47 +1000
-Message-Id: <20220919033747.461583-2-lsahlber@redhat.com>
-In-Reply-To: <20220919033747.461583-1-lsahlber@redhat.com>
-References: <20220919033747.461583-1-lsahlber@redhat.com>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: Improved fix for reading stale data when cache=none
+Date:   Mon, 19 Sep 2022 15:39:00 +1000
+Message-Id: <20220919053901.465232-1-lsahlber@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -58,32 +54,15 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-This is the opposite case of kernel bugzilla 216301.
-If we mmap a file using cache=none and then proceed to update the mmapped
-area these updates are not reflected in a later pread() of that part of the
-file.
-To fix this we must invalidate the mapping, forcing the changed pages to be
-destaged to the server before we allow the pread() to proceed.
+Steve, List
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
----
- fs/cifs/file.c | 3 +++
- 1 file changed, 3 insertions(+)
+Please find a better patch to fix the data corruption issue I posted earlier
+for when doing direct reads to an mmaped file after the mmaped area has changed.
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 6f38b134a346..31ceef22ffe4 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -4314,6 +4314,9 @@ static ssize_t __cifs_readv(
- 
- ssize_t cifs_direct_readv(struct kiocb *iocb, struct iov_iter *to)
- {
-+	struct file *file = iocb->ki_filp;
-+
-+	cifs_revalidate_mapping(file->f_inode);
- 	return __cifs_readv(iocb, to, true);
- }
- 
--- 
-2.35.3
+The main difference is that I now destage and invalidate only the range that
+is affected by the pread() and not the whole file so impact on performance should be reduced.
+(that said, with cache=none there is probably no expectation of high performance in the first place )
+
+
+
 
