@@ -2,45 +2,60 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EBD5E8B2C
-	for <lists+linux-cifs@lfdr.de>; Sat, 24 Sep 2022 11:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8815E90DE
+	for <lists+linux-cifs@lfdr.de>; Sun, 25 Sep 2022 05:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiIXJwQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 24 Sep 2022 05:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S229608AbiIYDkx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 24 Sep 2022 23:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiIXJwO (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 24 Sep 2022 05:52:14 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE4BAF0D5
-        for <linux-cifs@vger.kernel.org>; Sat, 24 Sep 2022 02:52:13 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MZPMj0SLnz1P6sP;
-        Sat, 24 Sep 2022 17:48:01 +0800 (CST)
-Received: from localhost.localdomain (10.175.101.6) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 17:52:11 +0800
-From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
-        <sfrench@samba.org>, <pc@cjr.nz>, <lsahlber@redhat.com>,
-        <sprasad@microsoft.com>, <rohiths@microsoft.com>,
-        <smfrench@gmail.com>, <tom@talpey.com>, <linkinjeon@kernel.org>,
-        <hyc.lee@gmail.com>
-Subject: [PATCH v7 3/3] cifs: Refactor dialects in validate_negotiate_info_req to variable array
-Date:   Sat, 24 Sep 2022 18:52:55 +0800
-Message-ID: <20220924105255.336399-4-zhangxiaoxu5@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220924105255.336399-1-zhangxiaoxu5@huawei.com>
-References: <20220924105255.336399-1-zhangxiaoxu5@huawei.com>
+        with ESMTP id S229573AbiIYDkv (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 24 Sep 2022 23:40:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352452F67E
+        for <linux-cifs@vger.kernel.org>; Sat, 24 Sep 2022 20:40:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF08360FB4
+        for <linux-cifs@vger.kernel.org>; Sun, 25 Sep 2022 03:40:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F051C43141
+        for <linux-cifs@vger.kernel.org>; Sun, 25 Sep 2022 03:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664077249;
+        bh=ppFq5lSeYTjfrVCpTzza8AMMw0G/2ASowM3lLm6eKaY=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=gF27bXeUUfIsAQkdE8n9I1aGCpSdge7t9gwtFsQi/PlvrnVv4+Jnojs4uznDxqmu9
+         bE8sDMiwKbzdrLU5FmlvARhkC1FrRF6pTbtcjSkKs9dzSSqGbrDq3b/y4jmzOFJ6pS
+         LmJHlguu888tCHrX+t7zmh+RWoxKV9CxsOV1X0Lz2Zhjh9/L1Mm9XpfF6cg6uu9pyI
+         Qv+6Ug4McfrZVaQCtAzZVYQymqRDte3KoEW3K3HvLkC98SUnocXTsaL/ovUmk8mYfw
+         ykjx4OS40pTjhIj4wI+Q3YzmCHCbkCxqVl443Cm2P/Louaogi+APueOM9NQ5rIrw5h
+         +/HRlBtd6OlQA==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11e9a7135easo5346492fac.6
+        for <linux-cifs@vger.kernel.org>; Sat, 24 Sep 2022 20:40:49 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0gzK9cBVy0vNOubNjeufaatsuU5sO1tWsfpn3KVuk2UEWN3fPe
+        33HUVYDjHvr5ofuXJjy/drbSvC03Nb7pYWHBP84=
+X-Google-Smtp-Source: AMsMyM47MAvF4/yH3MaoWg/BKTpEsAeddiI2HMLVq0o1POvcEvhSqsNEOliBzwNhBjXLcn9wrdRDiej0vcft5QTurPM=
+X-Received: by 2002:a05:6870:9a26:b0:12d:7e1:e9c7 with SMTP id
+ fo38-20020a0568709a2600b0012d07e1e9c7mr9727942oab.257.1664077248174; Sat, 24
+ Sep 2022 20:40:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Received: by 2002:a05:6838:27c7:0:0:0:0 with HTTP; Sat, 24 Sep 2022 20:40:47
+ -0700 (PDT)
+In-Reply-To: <f5fab678eedae83e79f25e4385bc1381ed554599.1663961449.git.tom@talpey.com>
+References: <cover.1663961449.git.tom@talpey.com> <f5fab678eedae83e79f25e4385bc1381ed554599.1663961449.git.tom@talpey.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Sun, 25 Sep 2022 12:40:47 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd97ZrGVPj3astSWz3ESHKYFQ9JAxeq3z65mB6wmoiujrQ@mail.gmail.com>
+Message-ID: <CAKYAXd97ZrGVPj3astSWz3ESHKYFQ9JAxeq3z65mB6wmoiujrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] Reduce server smbdirect max send/receive segment sizes
+To:     Tom Talpey <tom@talpey.com>
+Cc:     smfrench@gmail.com, linux-cifs@vger.kernel.org,
+        senozhatsky@chromium.org, bmt@zurich.ibm.com, longli@microsoft.com,
+        dhowells@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,161 +63,44 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The length of the message FSCTL_VALIDATE_NEGOTIATE_INFO is
-depends on the count of the dialects, redefine the dialects
-to variable array.
+2022-09-24 6:53 GMT+09:00, Tom Talpey <tom@talpey.com>:
+> Reduce ksmbd smbdirect max segment send and receive size to 1364
+> to match protocol norms. Larger buffers are unnecessary and add
+> significant memory overhead.
+>
+> Signed-off-by: Tom Talpey <tom@talpey.com>
+> ---
+>  fs/ksmbd/transport_rdma.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
+> index 494b8e5af4b3..0315bca3d53b 100644
+> --- a/fs/ksmbd/transport_rdma.c
+> +++ b/fs/ksmbd/transport_rdma.c
+> @@ -62,13 +62,13 @@ static int smb_direct_receive_credit_max = 255;
+>  static int smb_direct_send_credit_target = 255;
+>
+>  /* The maximum single message size can be sent to remote peer */
+> -static int smb_direct_max_send_size = 8192;
+> +static int smb_direct_max_send_size = 1364;
+>
+>  /*  The maximum fragmented upper-layer payload receive size supported */
+>  static int smb_direct_max_fragmented_recv_size = 1024 * 1024;
+>
+>  /*  The maximum single-message size which can be received */
+> -static int smb_direct_max_receive_size = 8192;
+> +static int smb_direct_max_receive_size = 1364;
+Can I know what value windows server set to ?
 
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
----
- fs/cifs/smb2pdu.c         | 94 ++++++++++++++++++---------------------
- fs/smbfs_common/smb2pdu.h |  3 +-
- 2 files changed, 45 insertions(+), 52 deletions(-)
+I can see the following settings for them in MS-SMBD.pdf
+Connection.MaxSendSize is set to 1364.
+Connection.MaxReceiveSize is set to 8192.
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 90ccac18f9f3..d0340af845e9 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -847,6 +847,41 @@ add_posix_context(struct kvec *iov, unsigned int *num_iovec, umode_t mode)
- 	return 0;
- }
- 
-+static int neg_dialect_cnt(struct TCP_Server_Info *server)
-+{
-+	if (!strcmp(server->vals->version_string,
-+		    SMB3ANY_VERSION_STRING))
-+		return 3;
-+	else if (!strcmp(server->vals->version_string,
-+			 SMBDEFAULT_VERSION_STRING))
-+		return 4;
-+
-+	/* otherwise specific dialect was requested */
-+	return 1;
-+}
-+
-+static int
-+build_neg_dialects(struct TCP_Server_Info *server, __le16 *dialects)
-+{
-+	if (!strcmp(server->vals->version_string,
-+		    SMB3ANY_VERSION_STRING)) {
-+		dialects[0] = cpu_to_le16(SMB30_PROT_ID);
-+		dialects[1] = cpu_to_le16(SMB302_PROT_ID);
-+		dialects[2] = cpu_to_le16(SMB311_PROT_ID);
-+		return 3;
-+	} else if (!strcmp(server->vals->version_string,
-+			   SMBDEFAULT_VERSION_STRING)) {
-+		dialects[0] = cpu_to_le16(SMB21_PROT_ID);
-+		dialects[1] = cpu_to_le16(SMB30_PROT_ID);
-+		dialects[2] = cpu_to_le16(SMB302_PROT_ID);
-+		dialects[3] = cpu_to_le16(SMB311_PROT_ID);
-+		return 4;
-+	}
-+
-+	/* otherwise specific dialect was requested */
-+	dialects[0] = cpu_to_le16(server->vals->protocol_id);
-+	return 1;
-+}
- 
- /*
-  *
-@@ -897,27 +932,9 @@ SMB2_negotiate(const unsigned int xid,
- 	memset(server->preauth_sha_hash, 0, SMB2_PREAUTH_HASH_SIZE);
- 	memset(ses->preauth_sha_hash, 0, SMB2_PREAUTH_HASH_SIZE);
- 
--	if (strcmp(server->vals->version_string,
--		   SMB3ANY_VERSION_STRING) == 0) {
--		req->Dialects[0] = cpu_to_le16(SMB30_PROT_ID);
--		req->Dialects[1] = cpu_to_le16(SMB302_PROT_ID);
--		req->Dialects[2] = cpu_to_le16(SMB311_PROT_ID);
--		req->DialectCount = cpu_to_le16(3);
--		total_len += 6;
--	} else if (strcmp(server->vals->version_string,
--		   SMBDEFAULT_VERSION_STRING) == 0) {
--		req->Dialects[0] = cpu_to_le16(SMB21_PROT_ID);
--		req->Dialects[1] = cpu_to_le16(SMB30_PROT_ID);
--		req->Dialects[2] = cpu_to_le16(SMB302_PROT_ID);
--		req->Dialects[3] = cpu_to_le16(SMB311_PROT_ID);
--		req->DialectCount = cpu_to_le16(4);
--		total_len += 8;
--	} else {
--		/* otherwise send specific dialect */
--		req->Dialects[0] = cpu_to_le16(server->vals->protocol_id);
--		req->DialectCount = cpu_to_le16(1);
--		total_len += 2;
--	}
-+	rc = build_neg_dialects(server, req->Dialects);
-+	req->DialectCount = cpu_to_le16(rc);
-+	total_len += rc * sizeof(req->Dialects[0]);
- 
- 	/* only one of SMB2 signing flags may be set in SMB2 request */
- 	if (ses->sign)
-@@ -1124,7 +1141,10 @@ int smb3_validate_negotiate(const unsigned int xid, struct cifs_tcon *tcon)
- 	if (tcon->ses->session_flags & SMB2_SESSION_FLAG_IS_NULL)
- 		cifs_tcon_dbg(VFS, "Unexpected null user (anonymous) auth flag sent by server\n");
- 
--	pneg_inbuf = kmalloc(sizeof(*pneg_inbuf), GFP_NOFS);
-+	inbuflen = sizeof(*pneg_inbuf) +
-+			sizeof(__le16) * neg_dialect_cnt(server);
-+
-+	pneg_inbuf = kmalloc(inbuflen, GFP_NOFS);
- 	if (!pneg_inbuf)
- 		return -ENOMEM;
- 
-@@ -1145,34 +1165,8 @@ int smb3_validate_negotiate(const unsigned int xid, struct cifs_tcon *tcon)
- 	else
- 		pneg_inbuf->SecurityMode = 0;
- 
--
--	if (strcmp(server->vals->version_string,
--		SMB3ANY_VERSION_STRING) == 0) {
--		pneg_inbuf->Dialects[0] = cpu_to_le16(SMB30_PROT_ID);
--		pneg_inbuf->Dialects[1] = cpu_to_le16(SMB302_PROT_ID);
--		pneg_inbuf->Dialects[2] = cpu_to_le16(SMB311_PROT_ID);
--		pneg_inbuf->DialectCount = cpu_to_le16(3);
--		/* SMB 2.1 not included so subtract one dialect from len */
--		inbuflen = sizeof(*pneg_inbuf) -
--				(sizeof(pneg_inbuf->Dialects[0]));
--	} else if (strcmp(server->vals->version_string,
--		SMBDEFAULT_VERSION_STRING) == 0) {
--		pneg_inbuf->Dialects[0] = cpu_to_le16(SMB21_PROT_ID);
--		pneg_inbuf->Dialects[1] = cpu_to_le16(SMB30_PROT_ID);
--		pneg_inbuf->Dialects[2] = cpu_to_le16(SMB302_PROT_ID);
--		pneg_inbuf->Dialects[3] = cpu_to_le16(SMB311_PROT_ID);
--		pneg_inbuf->DialectCount = cpu_to_le16(4);
--		/* structure is big enough for 4 dialects */
--		inbuflen = sizeof(*pneg_inbuf);
--	} else {
--		/* otherwise specific dialect was requested */
--		pneg_inbuf->Dialects[0] =
--			cpu_to_le16(server->vals->protocol_id);
--		pneg_inbuf->DialectCount = cpu_to_le16(1);
--		/* structure is big enough for 4 dialects, sending only 1 */
--		inbuflen = sizeof(*pneg_inbuf) -
--				sizeof(pneg_inbuf->Dialects[0]) * 3;
--	}
-+	rc = build_neg_dialects(server, pneg_inbuf->Dialects);
-+	pneg_inbuf->DialectCount = cpu_to_le16(rc);
- 
- 	rc = SMB2_ioctl(xid, tcon, NO_FILE_ID, NO_FILE_ID,
- 		FSCTL_VALIDATE_NEGOTIATE_INFO,
-diff --git a/fs/smbfs_common/smb2pdu.h b/fs/smbfs_common/smb2pdu.h
-index 2cab413fffee..4780c72e9b3a 100644
---- a/fs/smbfs_common/smb2pdu.h
-+++ b/fs/smbfs_common/smb2pdu.h
-@@ -1388,13 +1388,12 @@ struct reparse_symlink_data_buffer {
- } __packed;
- 
- /* See MS-FSCC 2.1.2.6 and cifspdu.h for struct reparse_posix_data */
--
- struct validate_negotiate_info_req {
- 	__le32 Capabilities;
- 	__u8   Guid[SMB2_CLIENT_GUID_SIZE];
- 	__le16 SecurityMode;
- 	__le16 DialectCount;
--	__le16 Dialects[4]; /* BB expand this if autonegotiate > 4 dialects */
-+	__le16 Dialects[];
- } __packed;
- 
- struct validate_negotiate_info_rsp {
--- 
-2.31.1
-
+Why does the specification describe setting it to 8192?
+>
+>  static int smb_direct_max_read_write_size = SMBD_DEFAULT_IOSIZE;
+>
+> --
+> 2.34.1
+>
+>
