@@ -2,46 +2,47 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72645F498D
-	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 21:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69815F49A3
+	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 21:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJDTDU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 4 Oct 2022 15:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S229705AbiJDTOp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Oct 2022 15:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJDTDT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 15:03:19 -0400
+        with ESMTP id S229563AbiJDTOl (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 15:14:41 -0400
 Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804685724E
-        for <linux-cifs@vger.kernel.org>; Tue,  4 Oct 2022 12:03:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F086F2196
+        for <linux-cifs@vger.kernel.org>; Tue,  4 Oct 2022 12:14:36 -0700 (PDT)
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 2AF438112E;
-        Tue,  4 Oct 2022 19:03:15 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 7478E8112E;
+        Tue,  4 Oct 2022 19:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1664910197;
+        t=1664910874;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9RNNpu28ZwYrDj16EqRWYIwnOaqPlHLiniAE09lH0m4=;
-        b=zdvQcJ1Eo3cJZgM18LzTt4X7cy/DEl8SRzQlFdgiGhnbuq9Jqik2bb3ucuB3bKT5fbXmT6
-        IvCWnjBU9zyhCEFFkGQGcSNpdzEDU63hnGXOeBPJU0D9EBtZb9igOvNX98hT6PKJMD49r6
-        5i+bq1RS4BKgx5Vni7MLEeIYdZUTDWoTgEM+CitHAwVRGuEwvKnrM2bne4IQQFaPVXzE2B
-        CyyYxkd62G8K/R1Z1RPXbNQJwoMdSN23JIh/fdOxry3LSqSPcchjURzYey7OLLltgpzlLb
-        SnO6x2XwxTJDq2q2VHYieXzYzNFWeQsn/AKKEtiOjtcJO6UlM+cbsxXdd1zYvg==
+        bh=pEkkr+bF8FqyShd+dAmUpUHPkDGnyRlBPJzgjNiESws=;
+        b=nFJi4kHfQVaB9VbfTI5oerpx38oxVAkatBNeNjAk8SOzTjxRTHWaHQMjYjfFK508n+8MZi
+        27c+Lph8ufxzBi61JLmB+RXDqt1fbYYYjEuRQSrSLdB98BOk1JHFgCDFMN/44sW6pZB4yM
+        Tjm2Ri6PBUBQ6knZQhtJUwJ79NrcV0o99ip/QwKdmYLs2CSmoookcf+i+QOxhFc3CjaMZM
+        re4MA/jSNTbwPatX8z7BNe0UtH8+vhdAgsUBxqPIEy+S+EHja2faDA3atPuN/vezxja2IX
+        zGRkrRFJ1BSRWIzpjm9CrhDrQ+jnIeJX35tKPsHGcnGPqJY+jRHV/jFC9kdvUQ==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, ronniesahlberg@gmail.com,
-        nspmangalore@gmail.com, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH v3] cifs: replace kfree() with kfree_sensitive() for
- sensitive data
-In-Reply-To: <20220920181035.8845-1-ematsumiya@suse.de>
-References: <20220920181035.8845-1-ematsumiya@suse.de>
-Date:   Tue, 04 Oct 2022 16:04:06 -0300
-Message-ID: <87ilkz4di1.fsf@cjr.nz>
+To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>, linux-cifs@vger.kernel.org,
+        zhangxiaoxu5@huawei.com, sfrench@samba.org, lsahlber@redhat.com,
+        sprasad@microsoft.com, rohiths@microsoft.com, smfrench@gmail.com,
+        tom@talpey.com, linkinjeon@kernel.org, hyc.lee@gmail.com
+Subject: Re: [PATCH v8 0/3] Fix some bug in FSCTL_VALIDATE_NEGOTIATE_INFO
+ handler
+In-Reply-To: <20220926033631.926637-1-zhangxiaoxu5@huawei.com>
+References: <20220926033631.926637-1-zhangxiaoxu5@huawei.com>
+Date:   Tue, 04 Oct 2022 16:15:23 -0300
+Message-ID: <87fsg34cz8.fsf@cjr.nz>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,27 +54,29 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Enzo Matsumiya <ematsumiya@suse.de> writes:
+Zhang Xiaoxu <zhangxiaoxu5@huawei.com> writes:
 
-> Replace kfree with kfree_sensitive, or prepend memzero_explicit() in
-> other cases, when freeing sensitive material that could still be left
-> in memory.
+> v7->v8: update the commit message and smb2_ioctl just ensure the
+> 	DialectCount in the payload.
+> v6->v7: squash 2 and 3; use helper function to get the dialect count
+> v5->v6: use 'static' for 'smbx_neg_dialects'
+> v4->v5: reorder the patch;
+> 	add check in smb2_ioctl() to ensure no oob read to DialectCount
+> v3->v4: Fix the wrong sizeof validate_negotiate_info_req in ksmbd
+> v2->v3: refactor the dialects in struct validate_negotiate_info_req to
+> 	variable array
+> v1->v2: fix some bug in ksmbd when handle FSCTL_VALIDATE_NEGOTIATE_INFO
+> 	message
 >
-> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Link: https://lore.kernel.org/r/202209201529.ec633796-oliver.sang@intel.com
-> ---
-> v3: fix use-after-free reported by kernel test robot (this UAF existed before this patch,
->     actually), adjust commit message slightly
-> v2: remove unnecessary NULL checks before kfree_sensitive()
+> Zhang Xiaoxu (3):
+>   cifs: Fix the error length of VALIDATE_NEGOTIATE_INFO message
+>   ksmbd: Fix wrong return value and message length check in smb2_ioctl()
+>   cifs: Refactor dialects in validate_negotiate_info_req to variable
+>     array
 >
->  fs/cifs/cifsencrypt.c | 12 ++++++------
->  fs/cifs/connect.c     |  6 +++---
->  fs/cifs/fs_context.c  | 12 ++++++++++--
->  fs/cifs/misc.c        |  2 +-
->  fs/cifs/sess.c        | 24 +++++++++++++++---------
->  fs/cifs/smb2ops.c     |  6 +++---
->  fs/cifs/smb2pdu.c     | 19 ++++++++++++++-----
->  7 files changed, 52 insertions(+), 29 deletions(-)
+>  fs/cifs/smb2pdu.c         | 94 ++++++++++++++++++---------------------
+>  fs/ksmbd/smb2pdu.c        | 13 ++++--
+>  fs/smbfs_common/smb2pdu.h |  3 +-
+>  3 files changed, 54 insertions(+), 56 deletions(-)
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
