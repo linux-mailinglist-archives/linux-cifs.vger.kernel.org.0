@@ -1,48 +1,53 @@
 Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344B65F496F
-	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 20:49:46 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id DFCAA5F4992
+	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 21:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJDStX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 4 Oct 2022 14:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S229509AbiJDTI5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Oct 2022 15:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiJDStS (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 14:49:18 -0400
+        with ESMTP id S229436AbiJDTI4 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 15:08:56 -0400
+X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 12:08:55 PDT
 Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C856A4B4
-        for <linux-cifs@vger.kernel.org>; Tue,  4 Oct 2022 11:49:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768E2558E0;
+        Tue,  4 Oct 2022 12:08:55 -0700 (PDT)
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id B8D888079F;
-        Tue,  4 Oct 2022 18:49:10 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id CAACC8079F;
+        Tue,  4 Oct 2022 18:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1664909351;
+        t=1664909946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CJxv3GXPgX4GgZvIZjt1b7bshmGkwvyEYNAudvVw2WY=;
-        b=bAFG7GHsLfYkMeSt3G7r9elXZkZqA45JO6FfrHKItFE1m77hSlvcT3eBFUhsvwdDxIm1L6
-        uIX/US54ZrjaPnxAfjxz12ix7eZly0Zzgr8PW/uHroVXENU/psyfZTRHWTVOe7BEndoOwS
-        Y/YMZ1bzJex7m0OvXPD/ZeB39G/V0iN2lLZfr+CikCykUGRqAakSzuJW0ud+9/sD1vMhNk
-        NWQvVdDyXh+tWyq0mbYbMjyGnXQm572F21JMkscbLOJe9KN7iYclxjAmir+bfEGwkWi5l/
-        MhIG+oXfYD3I3J9xNrzigW06wousmb6T1Jo32AwN4BD2GQjgbuqu59pc3SDg/g==
+        bh=myIGBnfBacIG2+HWik5iZ7600MHQKUlDlQPLoFbcxX8=;
+        b=Z+jJ47GsoCRk3wbcpVcQrV8XfZWlkR8lL3oB+/fogM5z1dR3mNRIGwP6ReWz4Lk0YeX36e
+        oGdtEMAT8m0M6/KP5Eauwre+fIEIQy7QlUOqvW0PnlZU0P+sIYADe+5Ww2ypWiMEIdeLFc
+        HfJPAl6ItKbFOw2BLBfqyDCRVhtVonxNbHSdqyZA115hohF29tSGJgiaiXgSd9CU678qUs
+        a4G8tdM2eaNljBM+NjnoW4vpJFVt8snRqpZ2Mqx4pfoJ+UCGk0agmC+MaITtN2QRuWA7dn
+        vOZZqOBdquVN5yEHr5AF3Un+bhHl1GbTIMdqC4QECmYOhknIIypGzvL6CUzzTg==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, ronniesahlberg@gmail.com,
-        nspmangalore@gmail.com, tom@talpey.com, metze@samba.org
-Subject: Re: [PATCH v4 2/8] cifs: secmech: use shash_desc directly, remove
- sdesc
-In-Reply-To: <20220929203652.13178-3-ematsumiya@suse.de>
-References: <20220929203652.13178-1-ematsumiya@suse.de>
- <20220929203652.13178-3-ematsumiya@suse.de>
-Date:   Tue, 04 Oct 2022 15:50:02 -0300
-Message-ID: <87v8oz4e5h.fsf@cjr.nz>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Steve French <sfrench@samba.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cifs: remove initialization value
+In-Reply-To: <20221004062333.416225-1-usama.anjum@collabora.com>
+References: <20221004062333.416225-1-usama.anjum@collabora.com>
+Date:   Tue, 04 Oct 2022 15:59:55 -0300
+Message-ID: <87o7ur4dp0.fsf@cjr.nz>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,26 +59,14 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Enzo Matsumiya <ematsumiya@suse.de> writes:
+Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
 
-> The struct sdesc is just a wrapper around shash_desc, with exact same
-> memory layout. Replace the hashing TFMs with shash_desc as it's what's
-> passed to the crypto API anyway.
+> Don't initialize the rc as its value is being overwritten before its
+> use.
 >
-> Also remove the crypto_shash pointers as they can be accessed via
-> shash_desc->tfm (and are actually only used in the setkey calls).
->
-> Adapt cifs_{alloc,free}_hash functions to this change.
->
-> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->  fs/cifs/cifsencrypt.c   | 86 +++++++++++++----------------------------
->  fs/cifs/cifsglob.h      | 26 ++++---------
->  fs/cifs/cifsproto.h     |  5 +--
->  fs/cifs/link.c          | 13 +++----
->  fs/cifs/misc.c          | 49 ++++++++++++-----------
->  fs/cifs/smb2misc.c      | 13 +++----
->  fs/cifs/smb2transport.c | 72 +++++++++++++---------------------
->  7 files changed, 98 insertions(+), 166 deletions(-)
+>  fs/cifs/smb2pdu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
