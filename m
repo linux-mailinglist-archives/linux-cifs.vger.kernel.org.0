@@ -2,48 +2,49 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397A75F4916
-	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 20:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF6E5F4959
+	for <lists+linux-cifs@lfdr.de>; Tue,  4 Oct 2022 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiJDSMy (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 4 Oct 2022 14:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S229555AbiJDSlO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 4 Oct 2022 14:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJDSMx (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 14:12:53 -0400
+        with ESMTP id S229472AbiJDSlN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 4 Oct 2022 14:41:13 -0400
 Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6CC3ED7F
-        for <linux-cifs@vger.kernel.org>; Tue,  4 Oct 2022 11:12:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3A265646
+        for <linux-cifs@vger.kernel.org>; Tue,  4 Oct 2022 11:41:13 -0700 (PDT)
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 8E8988079F;
-        Tue,  4 Oct 2022 18:12:49 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 9FFD27FC9E;
+        Tue,  4 Oct 2022 18:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1664907171;
+        t=1664908871;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CA3gSeST++gzDQ+2eYEm2lpX5LJ4jqanAmPWFRIuzkg=;
-        b=fZ42YL7fD2yTadO1oGKAdZM0cLkkTghjVv5sElhV1vlSJpcYmn2Ddqhb6h4Jaw14KDuxgU
-        MssyplF/EyQEsV0eZp/lIZ8n6FtfkfAmOp6gqD0D+UmQhUhPfHpwx1Urwl/Fasfdie7eYV
-        KusmNeETF8dJPADYePeKH5QUkWQDbeMgDlnTvssA2dfFu2GFBqMwitOkIBVt6lC05sURJH
-        uuAo8twVaGzXZB3BCwic2Ie9y31xYhqu2l+EDP13qKpW8PzjZA89r21QNMxTBBRfh+druC
-        5WWeWod9icYNmI0yXJEOcVU4rWP6ml4KZElPffrpvHWCi8bPfBScAD+DobEdpQ==
+        bh=/KDX/9MAr6ov936Xk4H3yooZcb9hicW7SatC8EaltwU=;
+        b=h4V+Y8YaQCeQqqxAvqF3xIawABEiX29+fhTi3nhwvj9+oMLaqTh5oL6xjKL6Ul4mqBQgrN
+        mPK44Kg8srZ+J0DgHHmdFVYwU8Jazl5FshaDN3zUgUWdM2nJ7UzeuBWjuCf+SMvj5zIZbK
+        6AKMiF+iCkfhjlt+PzZ3V8tc0LWaVJPST84pIZdibGs1JeycgLl6+Gip9NLMOWTZJ5xRNx
+        JoHBjKjQBqkv0kv6N68vRiDCSCCwneW846BS15dBIto/fB9JU0WB+YpF74yTLaZ83yVwFZ
+        8YqM+jXsfdsYiI6CItG5pawPyRLCqWnwAfTTLX2Ke7l16x28cbReadWymuwuWQ==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, Paulo Alcantara <pc@cjr.nz>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2 2/2] cifs: fix uninitialised var in smb2_compound_op()
-Date:   Tue,  4 Oct 2022 15:13:25 -0300
-Message-Id: <20221004181325.15207-2-pc@cjr.nz>
-In-Reply-To: <20221004181325.15207-1-pc@cjr.nz>
-References: <20221004181325.15207-1-pc@cjr.nz>
+To:     Tom Talpey <tom@talpey.com>, smfrench@gmail.com,
+        linux-cifs@vger.kernel.org
+Cc:     linkinjeon@kernel.org, senozhatsky@chromium.org,
+        bmt@zurich.ibm.com, longli@microsoft.com, dhowells@redhat.com,
+        Tom Talpey <tom@talpey.com>
+Subject: Re: [PATCH v2 0/6] Reduce SMBDirect RDMA SGE counts and sizes
+In-Reply-To: <cover.1663961449.git.tom@talpey.com>
+References: <cover.1663961449.git.tom@talpey.com>
+Date:   Tue, 04 Oct 2022 15:42:01 -0300
+Message-ID: <871qrn5t3a.fsf@cjr.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,28 +54,32 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Fix uninitialised variable @idata when calling smb2_compound_op() with
-SMB2_OP_POSIX_QUERY_INFO.
+Tom Talpey <tom@talpey.com> writes:
 
-Fixes: 5079f2691f73 ("cifs: improve symlink handling for smb2+")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/smb2inode.c | 1 +
- 1 file changed, 1 insertion(+)
+> Allocate fewer SGEs and standard packet sizes in both kernel SMBDirect
+> implementations.
+>
+> The current maximum values (16 SGEs and 8192 bytes) cause failures on the
+> SoftiWARP provider, and are suboptimal on others. Reduce these to 6 and
+> 1364. Additionally, recode smbd_send() to work with as few as 2 SGEs,
+> and for debug sanity, reformat client-side logging to more clearly show
+> addresses, lengths and flags in the appropriate base.
+>
+> Tested over SoftiWARP and SoftRoCE with shell, Connectathon basic and general.
+>
+> v2: correct an uninitialized value issue found by Coverity
+>
+> Tom Talpey (6):
+>   Decrease the number of SMB3 smbdirect client SGEs
+>   Decrease the number of SMB3 smbdirect server SGEs
+>   Reduce client smbdirect max receive segment size
+>   Reduce server smbdirect max send/receive segment sizes
+>   Handle variable number of SGEs in client smbdirect send.
+>   Fix formatting of client smbdirect RDMA logging
+>
+>  fs/cifs/smbdirect.c       | 227 ++++++++++++++++----------------------
+>  fs/cifs/smbdirect.h       |  14 ++-
+>  fs/ksmbd/transport_rdma.c |   6 +-
+>  3 files changed, 109 insertions(+), 138 deletions(-)
 
-diff --git a/fs/cifs/smb2inode.c b/fs/cifs/smb2inode.c
-index adf71b328f32..a6640e6ea58b 100644
---- a/fs/cifs/smb2inode.c
-+++ b/fs/cifs/smb2inode.c
-@@ -415,6 +415,7 @@ static int smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
- 						tcon->tid);
- 		break;
- 	case SMB2_OP_POSIX_QUERY_INFO:
-+		idata = ptr;
- 		if (rc == 0 && cfile && cfile->symlink_target) {
- 			idata->symlink_target = kstrdup(cfile->symlink_target, GFP_KERNEL);
- 			if (!idata->symlink_target)
--- 
-2.37.3
-
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
