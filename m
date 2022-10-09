@@ -2,138 +2,102 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A615F8709
-	for <lists+linux-cifs@lfdr.de>; Sat,  8 Oct 2022 21:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0875F88B1
+	for <lists+linux-cifs@lfdr.de>; Sun,  9 Oct 2022 03:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiJHTPQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 8 Oct 2022 15:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S229484AbiJIBUl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 8 Oct 2022 21:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJHTPO (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 8 Oct 2022 15:15:14 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957E42A70E
-        for <linux-cifs@vger.kernel.org>; Sat,  8 Oct 2022 12:15:11 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-35ad0584879so70377477b3.7
-        for <linux-cifs@vger.kernel.org>; Sat, 08 Oct 2022 12:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5lxO8NRlzS2dSjSoUrsC92WYk88QzgRlrDr1ZTz9HFw=;
-        b=NFEYSUPymxhJ2vSvA2dpz6EN8aZl+9A9WaoomriA0tAI3p3wmrqG5ZJcCVVO9gfDRF
-         CoXel7hxOYckXItXhrMJD4bsphj9LQUsfb97seuUhjfkoq4gS2VuGdc/o6saEKtmczd2
-         cBv975GahNHSSxjJhGj9Tzy1Qx5VMQGQZuUieg+MBQo/Rui9uizRwbHjnM+KnRg2nhkU
-         S9oCOfErM+f0G8zE6tGBpyY/FmFlRw4I5LTX6Evkfza6pmWJAjo0koEWPM4Tf6GaDb/i
-         886Q5wTXVMCseC0Jrau+u1zoIqcbUmJZu/J1SiY561UgNafWG8BY0lkfsPnbdSzArPdR
-         4AAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5lxO8NRlzS2dSjSoUrsC92WYk88QzgRlrDr1ZTz9HFw=;
-        b=Uj34rpdjomGc1AlyPeC0sEV/02NHav0Ks4e3j6W/oWfnQNm5P9yNAopm4MVAiKvlgn
-         IM4xw0qgM/OyDrrgxEI1MxuNRfLeu8sSF1Tth+xwXYxDbEKjFztb6Dd4BS/FpFGYUHLp
-         r9iPHPHsibbRfeGOV4zbaFSl2v0D0wWbYo6jMWLv3ZqcgFxfz6Uu5kdil6R0gIfBujRU
-         W9+KmD3C//ZwthOVNxSt+eF9QRaWyL9P4oKtaJGYrr9CdgGw2graWiWSXzxk0IZYX4Ct
-         PhJbnTIj3gIYVygI0TMay2adWE71Q6HsV72K9sO0cm5OK0o0AMZg+3v4hRpe2/b9jwIo
-         2+1A==
-X-Gm-Message-State: ACrzQf0STf4QDwifmThTHVCisX4zv4GVtIOeU1Q6Tk6i010bHEFIUlhS
-        0aMJcH+2NZm/LpDO8aLTVJQFkKmwfpbksDL5p/Sn3HnWqbI=
-X-Google-Smtp-Source: AMsMyM6FAn+AimZuvlmliA3qATJdlJedEcwXS8Yyva40052tu2YDJx33/Axj4052lVzBc0R2uN4BcD5ZUywZnx6kpMY=
-X-Received: by 2002:a81:a45:0:b0:360:a89e:a901 with SMTP id
- 66-20020a810a45000000b00360a89ea901mr409676ywk.8.1665256510647; Sat, 08 Oct
- 2022 12:15:10 -0700 (PDT)
-MIME-Version: 1.0
-From:   Dmitry Telegin <dmitry.s.telegin@gmail.com>
-Date:   Sat, 8 Oct 2022 23:14:59 +0400
-Message-ID: <CACVrvT5CMERoJN4fz-MdNOOUV9VpOT_vv764UEgzDdaUEC9nUg@mail.gmail.com>
-Subject: A patch to implement the already documented "sep" option for the CIFS
- file system.
-To:     linux-cifs@vger.kernel.org
+        with ESMTP id S229682AbiJIBUk (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 8 Oct 2022 21:20:40 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D51EAC2
+        for <linux-cifs@vger.kernel.org>; Sat,  8 Oct 2022 18:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=8CiClzylQFdDu1AQwlXTkN+ESK3RcFr7X0LqZrqBSWM=; b=t/20+sG/U9aVpOFzY9rwxHxNIM
+        TrzLHMKn7HmJ04EY9bscqBSXWR5yIHqip4h/Dq4lb4m0HAtuQ3cDSqqq677vRc06b1ZBQiEmMGRM+
+        1sLgzz/LMaGvbrYM9+1aRXJTqYZ5EYQlOeUPGPf+6PdW3RvA5MJXbm1JuzglCjnwrguWZyxBWV6tR
+        lUiKMQv+5+YSxNBGQuNmTL47unIFgaDRJhOIjlKsP6yWfASW3g02n2HV0xC9B66ZaW8Y+/ueHw2Lo
+        OTVXqBV2SyJ8IKBiZECFTK5bOQuE8mqi6DEv/hhuyhmVUD4/azqGw0UigKk7kZOge0lBA67vFrZOQ
+        H/y8wOTl7lHS7AJuo4Jol9ZFsjWQfd7ff+ZRA2vpAsghVH5cI9u3XYu7JJU11/vhzyRUz2ZmsZnLE
+        O/9XJqk+fGvoWQbp5/YQZITP/Oz/4midSFZ2zQOE6R1q15EzOV1h1d4F/jcnHUvZAz8xShzHlK5xV
+        ilpwU/DTjvfp+KltC3QoyZ14;
+Received: from [2a01:4f8:192:486::6:0] (port=60726 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1ohKzc-003XjS-CU
+        for cifs-qa@samba.org; Sun, 09 Oct 2022 01:20:36 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.93)
+        (envelope-from <www-data@samba.org>)
+        id 1ohKzX-0004Rq-Mb
+        for cifs-qa@samba.org; Sun, 09 Oct 2022 01:20:32 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15196] New: O_APPEND not translated to FILE_APPEND_DATA open
+ flag
+Date:   Sun, 09 Oct 2022 01:20:23 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone
+Message-ID: <bug-15196-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-DESCRIPTION OF THE PROBLEM
+https://bugzilla.samba.org/show_bug.cgi?id=3D15196
 
-Some users are accustomed to using shared folders in Windows with a
-comma in the name, for example: "//server3/Block 3,4".
-When they try to migrate to Linux, they cannot mount such paths.
+            Bug ID: 15196
+           Summary: O_APPEND not translated to FILE_APPEND_DATA open flag
+           Product: CifsVFS
+           Version: 5.x
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: kernel fs
+          Assignee: sfrench@samba.org
+          Reporter: bjacke@samba.org
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
-An example of the line generated by "mount.cifs" for the kernel when
-mounting "//server3/Block 3,4":
-"ip=10.0.2.212,unc=\\server3\Block 3,4,iocharset=utf8,user=user1,domain=AD"
-Accordingly, due to the extra comma, we have an error:
-"Sep 7 21:57:18 S1 kernel: [ 795.604821] CIFS: Unknown mount option "4""
+While testing the "append data" ACL permission, I wantted to try this out w=
+ith
+cifs vfs against a Windows 10 machine as server.
 
+"tee -a" is using O_APPEND but it looks like cifs vfs is not translating
+O_APPEND open calls to SMB's FILE_APPEND_DATA. So files that have "append o=
+nly"
+permission but not "write data" permission will not be "append writable" by
+cifs vfs  in cases where they shold.
 
-DOCUMENTATION
-
-https://www.kernel.org/doc/html/latest/admin-guide/cifs/usage.html
-The "sep" parameter is described here to specify a new delimiter
-instead of a comma.
-I quote:
-   "sep
-   if first mount option (after the -o), overrides the comma as the
-separator between the mount parms. e.g.:
-   -o user=myname,password=mypassword,domain=mydom
-   could be passed instead with period as the separator by:
-   -o sep=.user=myname.password=mypassword.domain=mydom
-   this might be useful when comma is contained within username or
-password or domain."
-
-
-RESEARCH WORK
-
-I looked at the "mount.cifs" code. There is no provision for the use
-of a comma by the user, since the comma is used to form the parameter
-string to the kernel (man 2 mount). This line can be seen by adding
-the "--verbose" flag to the mount.
-"mount.cifs --help" lists "sep" as a possible option, but does not
-implement it in the code and does not describe it in "man 8
-mount.cifs".
-
-I looked at the "pam-mount" code - the mount options are assembled
-with a wildcard comma. The result is a text line: "mount -t cifs ...".
-
-The handling of options in the "mount" utility is based on the
-"libmount" library, which is hardcoded to use only a comma as a
-delimiter.
-
-I tried to mount "//server3/Block 3,4" with my own program (man 2
-mount) by specifying "sep=!" - successfully.
-
-
-SOLUTION
-
-It would be nice if we add in "mount.cifs", in "mount" utility and in
-"pam-mount" the ability to set a custom mount option separator. In
-other words, we need to implement the already documented "sep" option.
-
-1. For "mount.cifs" I did it in:
-https://github.com/dmitry-telegin/cifs-utils in branch
-"custom_option_separator". Commit:
-https://github.com/dmitry-telegin/cifs-utils/commit/04325b842a82edf655a14174e763bc0b2a6870e1
-
-2. For "mount" utility I did it in:
-https://github.com/dmitry-telegin/util-linux in branch
-"custom_option_separator". Commit:
-https://github.com/dmitry-telegin/util-linux/commit/5e0ecd2498edae0bf0bcab4ba6a68a9803b34ccf
-
-3. For "pam-mount" I did it in:
-https://sourceforge.net/u/dmitry-t/pam-mount/ci/master/tree/ in branch
-"custom_option_separator". Commit:
-https://sourceforge.net/u/dmitry-t/pam-mount/ci/9860f9234977f1110230482b5d87bdcb8bc6ce03/
-
-I checked the work on the Linux 5.10 kernel.
-
---
-Dmitry Telegin
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
