@@ -2,108 +2,71 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E437601006
-	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7328E601087
+	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiJQNQN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Oct 2022 09:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S230139AbiJQNwt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Oct 2022 09:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJQNQM (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:16:12 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A3E167DE;
-        Mon, 17 Oct 2022 06:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aGtg2Qj2UsZ6c2ADL+W0CG9O1Y771EKXkyHyvj1eDO0=; b=I+MvpcvCzDPis8piDJr5WJCHXZ
-        8osuIpox/vJzj2b2p2TeK14qywkWvP07p0lrq6d+TD/3fYVV1N7hFqmwxB+99V3ABhWIWgt8GAKag
-        hsTszpBAI2lmS8pwjDahw6JDAfE8IFsIhQibctK4XJVsRTWktl9e9DwRyZvU7Nh81mWGFgUN3L0Ow
-        +Ryo7NBlnOtAbJX9iBL6tprVdn8TO16zTzurZeUuycJkL42F1zapbNRmkUZ6CEqrBSMHKWZ6HgwBd
-        NJRjs4ObvIb+5SDZEZq2UiQqckr78+0hTLCya4Mgnmu95vFB1ItKRGBZKzLGugB1Elxx5xZIqPYG/
-        BhjSgSEA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1okPyH-00C5kl-0a; Mon, 17 Oct 2022 13:15:57 +0000
-Date:   Mon, 17 Oct 2022 06:15:56 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        torvalds@linux-foundation.org, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: How to convert I/O iterators to iterators, sglists and RDMA lists
-Message-ID: <Y01VjOE2RrLVA2T6@infradead.org>
-References: <1762414.1665761217@warthog.procyon.org.uk>
+        with ESMTP id S229969AbiJQNwo (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:52:44 -0400
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885EA1E701
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:52:43 -0700 (PDT)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id 5441F7FD02;
+        Mon, 17 Oct 2022 13:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1666014761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=urrCyFqhyOpGSu1lR7xefhRzsMsFKByR2qdyR+1L53Q=;
+        b=2ksIOibKRFq4jmi9CWqMpbGSiGEqJhC60k5c/WFUCQ3U0vHhPveyElK/LwkGZcAWhBrXGa
+        AbAliG5o+3SB5Gktg2AnWO50gKOeXyR4/saZ89dz0ju7haq4tugKt+mFE6JDqBNSgHT3/f
+        zztO5vymQG91uCX2qXT6EpwEiSTQgRXyBhz5oWRxW99EyYeAwcfFaPsc04MgvmL84A1RXK
+        0CunS6i9cQEtgRA/BmSM3YaQLjBjMmk93Pg1KUv0+XwAz4rYH0euXvqcE9/7fRDTU9U2uM
+        yYCnSqPiF7AbZlSqAQUNZY5Q9hHF+KkTBkko30OD7ASxBhptiBEu766PuYxS6w==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>, linux-cifs@vger.kernel.org,
+        zhangxiaoxu5@huawei.com, sfrench@samba.org, smfrench@gmail.com,
+        lsahlber@redhat.com, sprasad@microsoft.com, tom@talpey.com,
+        aaptel@suse.com
+Subject: Re: [PATCH 0/5] cifs: Fix xid leak in cifs
+In-Reply-To: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
+References: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
+Date:   Mon, 17 Oct 2022 10:53:39 -0300
+Message-ID: <87o7uad09o.fsf@cjr.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1762414.1665761217@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 04:26:57PM +0100, David Howells wrote:
->  (1) Async direct I/O.
-> 
->      In the async case direct I/O, we cannot hold on to the iterator when we
->      return, even if the operation is still in progress (ie. we return
->      EIOCBQUEUED), as it is likely to be on the caller's stack.
-> 
->      Also, simply copying the iterator isn't sufficient as virtual userspace
->      addresses cannot be trusted and we may have to pin the pages that
->      comprise the buffer.
+Zhang Xiaoxu <zhangxiaoxu5@huawei.com> writes:
 
-This is very related to the discussion we are having related to pinning
-for O_DIRECT with Ira and Al.  What block file systems do is to take
-the pages from the iter and some flags on what is pinned.  We can
-generalize this to store all extra state in a flags word, or byte the
-bullet and allow cloning of the iter in one form or another.
+> Zhang Xiaoxu (5):
+>   cifs: Fix xid leak in cifs_create()
+>   cifs: Fix xid leak in cifs_copy_file_range()
+>   cifs: Fix xid leak in cifs_flock()
+>   cifs: Fix xid leak in cifs_ses_add_channel()
+>   cifs: Fix xid leak in cifs_get_file_info_unix()
+>
+>  fs/cifs/cifsfs.c |  7 +++++--
+>  fs/cifs/dir.c    |  6 ++++--
+>  fs/cifs/file.c   | 11 +++++++----
+>  fs/cifs/inode.c  |  6 ++++--
+>  fs/cifs/sess.c   |  1 +
+>  5 files changed, 21 insertions(+), 10 deletions(-)
 
->  (2) Crypto.
-> 
->      The crypto interface takes scatterlists, not iterators, so we need to be
->      able to convert an iterator into a scatterlist in order to do content
->      encryption within netfslib.  Doing this in netfslib makes it easier to
->      store content-encrypted files encrypted in fscache.
-
-Note that the scatterlist is generally a pretty bad interface.  We've
-been talking for a while to have an interface that takes a page array
-as an input and return an array of { dma_addr, len } tuples.  Thinking
-about it taking in an iter might actually be an even better idea.
-
->  (3) RDMA.
-> 
->      To perform RDMA, a buffer list needs to be presented as a QPE array.
->      Currently, cifs converts the iterator it is given to lists of pages, then
->      each list to a scatterlist and thence to a QPE array.  I have code to
->      pass the iterator down to the bottom, using an intermediate BVEC iterator
->      instead of a page list if I can't pass down the original directly (eg. an
->      XARRAY iterator on the pagecache), but I still end up converting it to a
->      scatterlist, which is then converted to a QPE.  I'm trying to go directly
->      from an iterator to a QPE array, thus avoiding the need to allocate an
->      sglist.
-
-I'm not sure what you mean with QPE.  The fundamental low-level
-interface in RDMA is the ib_sge.  If you feed it to RDMA READ/WRITE
-requests the interface for that is the RDMA R/W API in
-drivers/infiniband/core/rw.c, which currently takes a scatterlist but
-to which all of the above remarks on DMA interface apply.  For RDMA
-SEND that ULP has to do a dma_map_single/page to fill it, which is a
-quite horrible layering violation and should move into the driver, but
-that is going to a massive change to the whole RDMA subsystem, so
-unlikely to happen anytime soon.
-
-Neither case has anything to do with what should be in common iov_iter
-code, all this needs to live in the RDMA subsystem as a consumer.
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
