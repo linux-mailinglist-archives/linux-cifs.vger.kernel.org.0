@@ -2,33 +2,33 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2060B601060
+	by mail.lfdr.de (Postfix) with ESMTP id 4746C601061
 	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiJQNmQ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Oct 2022 09:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S229618AbiJQNmR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Oct 2022 09:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiJQNmP (ORCPT
+        with ESMTP id S229712AbiJQNmP (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:42:15 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AB2ED71
-        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:42:13 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MrdMt57MCz1P7Br;
-        Mon, 17 Oct 2022 21:37:30 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263364A806
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:42:14 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MrdMv1cNcz1P7D6;
+        Mon, 17 Oct 2022 21:37:31 +0800 (CST)
 Received: from localhost.localdomain (10.175.101.6) by
  dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 21:42:11 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 21:42:12 +0800
 From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
         <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
         <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>,
         <aaptel@suse.com>
-Subject: [PATCH 1/5] cifs: Fix xid leak in cifs_create()
-Date:   Mon, 17 Oct 2022 22:45:21 +0800
-Message-ID: <20221017144525.414313-2-zhangxiaoxu5@huawei.com>
+Subject: [PATCH 2/5] cifs: Fix xid leak in cifs_copy_file_range()
+Date:   Mon, 17 Oct 2022 22:45:22 +0800
+Message-ID: <20221017144525.414313-3-zhangxiaoxu5@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
 References: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
@@ -47,32 +47,33 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-If the cifs already shutdown, we should free the xid before return,
-otherwise, the xid will be leaked.
+If the file is used by swap, before return -EOPNOTSUPP, should
+free the xid, otherwise, the xid will be leaked.
 
-Fixes: 087f757b0129 ("cifs: add shutdown support")
+Fixes: 4e8aea30f775 ("smb3: enable swap on SMB3 mounts")
 Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 ---
- fs/cifs/dir.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/cifs/cifsfs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
-index a5c73c2af3a2..8b1c37158556 100644
---- a/fs/cifs/dir.c
-+++ b/fs/cifs/dir.c
-@@ -543,8 +543,10 @@ int cifs_create(struct user_namespace *mnt_userns, struct inode *inode,
- 	cifs_dbg(FYI, "cifs_create parent inode = 0x%p name is: %pd and dentry = 0x%p\n",
- 		 inode, direntry, direntry);
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index c6ac19223ddc..d0b9fec111aa 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1302,8 +1302,11 @@ static ssize_t cifs_copy_file_range(struct file *src_file, loff_t off,
+ 	ssize_t rc;
+ 	struct cifsFileInfo *cfile = dst_file->private_data;
  
--	if (unlikely(cifs_forced_shutdown(CIFS_SB(inode->i_sb))))
--		return -EIO;
-+	if (unlikely(cifs_forced_shutdown(CIFS_SB(inode->i_sb)))) {
-+		rc = -EIO;
-+		goto out_free_xid;
+-	if (cfile->swapfile)
+-		return -EOPNOTSUPP;
++	if (cfile->swapfile) {
++		rc = -EOPNOTSUPP;
++		free_xid(xid);
++		return rc;
 +	}
  
- 	tlink = cifs_sb_tlink(CIFS_SB(inode->i_sb));
- 	rc = PTR_ERR(tlink);
+ 	rc = cifs_file_copychunk_range(xid, src_file, off, dst_file, destoff,
+ 					len, flags);
 -- 
 2.31.1
 
