@@ -2,71 +2,140 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7328E601087
-	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C10A60105F
+	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiJQNwt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Oct 2022 09:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S229798AbiJQNmP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Oct 2022 09:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiJQNwo (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:52:44 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885EA1E701
-        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:52:43 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 5441F7FD02;
-        Mon, 17 Oct 2022 13:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1666014761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=urrCyFqhyOpGSu1lR7xefhRzsMsFKByR2qdyR+1L53Q=;
-        b=2ksIOibKRFq4jmi9CWqMpbGSiGEqJhC60k5c/WFUCQ3U0vHhPveyElK/LwkGZcAWhBrXGa
-        AbAliG5o+3SB5Gktg2AnWO50gKOeXyR4/saZ89dz0ju7haq4tugKt+mFE6JDqBNSgHT3/f
-        zztO5vymQG91uCX2qXT6EpwEiSTQgRXyBhz5oWRxW99EyYeAwcfFaPsc04MgvmL84A1RXK
-        0CunS6i9cQEtgRA/BmSM3YaQLjBjMmk93Pg1KUv0+XwAz4rYH0euXvqcE9/7fRDTU9U2uM
-        yYCnSqPiF7AbZlSqAQUNZY5Q9hHF+KkTBkko30OD7ASxBhptiBEu766PuYxS6w==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>, linux-cifs@vger.kernel.org,
-        zhangxiaoxu5@huawei.com, sfrench@samba.org, smfrench@gmail.com,
-        lsahlber@redhat.com, sprasad@microsoft.com, tom@talpey.com,
-        aaptel@suse.com
-Subject: Re: [PATCH 0/5] cifs: Fix xid leak in cifs
-In-Reply-To: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
-References: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
-Date:   Mon, 17 Oct 2022 10:53:39 -0300
-Message-ID: <87o7uad09o.fsf@cjr.nz>
+        with ESMTP id S229592AbiJQNmO (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:42:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E99F02F
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:42:13 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MrdPV6n69zpTGF;
+        Mon, 17 Oct 2022 21:38:54 +0800 (CST)
+Received: from localhost.localdomain (10.175.101.6) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 21:42:11 +0800
+From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
+        <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
+        <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>,
+        <aaptel@suse.com>
+Subject: [PATCH 0/5] cifs: Fix xid leak in cifs
+Date:   Mon, 17 Oct 2022 22:45:20 +0800
+Message-ID: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Zhang Xiaoxu <zhangxiaoxu5@huawei.com> writes:
+Found some xid leak with the following cocci script:
 
-> Zhang Xiaoxu (5):
->   cifs: Fix xid leak in cifs_create()
->   cifs: Fix xid leak in cifs_copy_file_range()
->   cifs: Fix xid leak in cifs_flock()
->   cifs: Fix xid leak in cifs_ses_add_channel()
->   cifs: Fix xid leak in cifs_get_file_info_unix()
->
->  fs/cifs/cifsfs.c |  7 +++++--
->  fs/cifs/dir.c    |  6 ++++--
->  fs/cifs/file.c   | 11 +++++++----
->  fs/cifs/inode.c  |  6 ++++--
->  fs/cifs/sess.c   |  1 +
->  5 files changed, 21 insertions(+), 10 deletions(-)
+/usr/bin/spatch -I include -timeout 60 -very_quiet \
+	-sp_file missing-free_xid.cocci fs/cifs
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+@r1@
+identifier xid;
+position p;
+@@
+...
+  xid = get_xid();
+<+... when != free_xid(xid)
+  if (...) {
+    ... when != free_xid(xid)
+        when forall
+    return@p ...;
+  }
+...+>
+  free_xid(xid);
+
+@depends on r1@
+position r1.p;
+@@
++ free_xid(xid);
+  return@p ...;
+
+@r2@
+identifier xid;
+position p;
+@@
+...
+  unsigned int xid = get_xid();
+<+... when != free_xid(xid)
+  if (...) {
+    ... when != free_xid(xid)
+        when forall
+    return@p ...;
+  }
+...+>
+  free_xid(xid);
+
+@depends on r2@
+position r2.p;
+@@
++ free_xid(xid);
+  return@p ...;
+
+@r3@
+identifier xid;
+position p;
+@@
+...
+  xid = get_xid();
+  ... when != \(free_xid\|_free_xid\)(xid);
+  return@p ...;
+
+@depends on r3@
+position r3.p;
+@@
++ free_xid(xid);
+  return@p ...;
+
+@r4@
+identifier xid;
+position p;
+@@
+...
+  unsigned int xid = get_xid();
+  ... when != \(free_xid\|_free_xid\)(xid);
+  return@p ...;
+
+@depends on r4@
+position r4.p;
+@@
++ free_xid(xid);
+  return@p ...;
+
+Zhang Xiaoxu (5):
+  cifs: Fix xid leak in cifs_create()
+  cifs: Fix xid leak in cifs_copy_file_range()
+  cifs: Fix xid leak in cifs_flock()
+  cifs: Fix xid leak in cifs_ses_add_channel()
+  cifs: Fix xid leak in cifs_get_file_info_unix()
+
+ fs/cifs/cifsfs.c |  7 +++++--
+ fs/cifs/dir.c    |  6 ++++--
+ fs/cifs/file.c   | 11 +++++++----
+ fs/cifs/inode.c  |  6 ++++--
+ fs/cifs/sess.c   |  1 +
+ 5 files changed, 21 insertions(+), 10 deletions(-)
+
+-- 
+2.31.1
+
