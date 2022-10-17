@@ -2,33 +2,33 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786E8601063
-	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF103601062
+	for <lists+linux-cifs@lfdr.de>; Mon, 17 Oct 2022 15:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJQNmS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Oct 2022 09:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S229751AbiJQNmR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Oct 2022 09:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJQNmP (ORCPT
+        with ESMTP id S229774AbiJQNmP (ORCPT
         <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 09:42:15 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529B4E42B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0097C4E615
         for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 06:42:14 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MrdMv2djvzmV82;
-        Mon, 17 Oct 2022 21:37:31 +0800 (CST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MrdPX719RzpVbK;
+        Mon, 17 Oct 2022 21:38:56 +0800 (CST)
 Received: from localhost.localdomain (10.175.101.6) by
  dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 21:42:12 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 21:42:13 +0800
 From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
         <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
         <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>,
         <aaptel@suse.com>
-Subject: [PATCH 3/5] cifs: Fix xid leak in cifs_flock()
-Date:   Mon, 17 Oct 2022 22:45:23 +0800
-Message-ID: <20221017144525.414313-4-zhangxiaoxu5@huawei.com>
+Subject: [PATCH 4/5] cifs: Fix xid leak in cifs_ses_add_channel()
+Date:   Mon, 17 Oct 2022 22:45:24 +0800
+Message-ID: <20221017144525.414313-5-zhangxiaoxu5@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
 References: <20221017144525.414313-1-zhangxiaoxu5@huawei.com>
@@ -47,47 +47,27 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-If not flock, before return -ENOLCK, should free the xid,
-otherwise, the xid will be leaked.
+Before return, should free the xid, otherwise, the
+xid will be leaked.
 
-Fixes: d0677992d2af ("cifs: add support for flock")
+Fixes: d70e9fa55884 ("cifs: try opening channels after mounting")
 Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 ---
- fs/cifs/file.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ fs/cifs/sess.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index f6ffee514c34..5b3b308e115c 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -1885,11 +1885,13 @@ int cifs_flock(struct file *file, int cmd, struct file_lock *fl)
- 	struct cifsFileInfo *cfile;
- 	__u32 type;
- 
--	rc = -EACCES;
- 	xid = get_xid();
- 
--	if (!(fl->fl_flags & FL_FLOCK))
--		return -ENOLCK;
-+	if (!(fl->fl_flags & FL_FLOCK)) {
-+		rc = -ENOLCK;
-+		free_xid(xid);
-+		return rc;
-+	}
- 
- 	cfile = (struct cifsFileInfo *)file->private_data;
- 	tcon = tlink_tcon(cfile->tlink);
-@@ -1908,8 +1910,9 @@ int cifs_flock(struct file *file, int cmd, struct file_lock *fl)
- 		 * if no lock or unlock then nothing to do since we do not
- 		 * know what it is
- 		 */
-+		rc = -EOPNOTSUPP;
- 		free_xid(xid);
--		return -EOPNOTSUPP;
-+		return rc;
+diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
+index 0435d1dfa9e1..92e4278ec35d 100644
+--- a/fs/cifs/sess.c
++++ b/fs/cifs/sess.c
+@@ -496,6 +496,7 @@ cifs_ses_add_channel(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses,
+ 		cifs_put_tcp_session(chan->server, 0);
  	}
  
- 	rc = cifs_setlk(file, fl, type, wait_flag, posix_lck, lock, unlock,
++	free_xid(xid);
+ 	return rc;
+ }
+ 
 -- 
 2.31.1
 
