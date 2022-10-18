@@ -2,91 +2,94 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5B56022DA
-	for <lists+linux-cifs@lfdr.de>; Tue, 18 Oct 2022 05:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF08E60215D
+	for <lists+linux-cifs@lfdr.de>; Tue, 18 Oct 2022 04:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiJRDqY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 17 Oct 2022 23:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S229613AbiJRCqG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 17 Oct 2022 22:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJRDqF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 23:46:05 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BD02BD8;
-        Mon, 17 Oct 2022 20:46:04 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id k6so13552000vsp.0;
-        Mon, 17 Oct 2022 20:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gd09phphTcEXggHzCnon6RDCULniijuv9GAHZJRpo90=;
-        b=doJ2fDCB0QuXATfFMnsF7Z6oEsqsQw+ostomkG2z8kutk7hSh21gf8f0UfHkb+/Njz
-         THG1jafgs7Krga0vcE6RBJ+0ILqebCb6t5Db7tIh9Y1MjJ6cQP/DSNkK7Y18isevS2ly
-         IlCxJFVHSiWAtnQTXeiDbnzu9rfAO+w2+WD5AUhIj6+HuierGPUUFD0IYkVijxGDDQkv
-         Rj9sNzuJ3yIuS+ATy/pbfdTLOhEn3N/HVu4i15OjFDd49Cc75YyE5Cgm1X8eEL29sQzU
-         2Jl5AlYlgbeHBnp0JPUkaiV+BAfS/Q/udW4389hkMSR+f726D0OiRKdcHXYjfx8N6zeb
-         xNZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gd09phphTcEXggHzCnon6RDCULniijuv9GAHZJRpo90=;
-        b=oO93G9HVjUvbRXGu/ksEYF3zYsRrEgZSbsmsbq3RAWKil+Qc+hrzRnPU1WiC3VuXH+
-         sOor+nySRyKdEFQPogHQ+QFJxMLBRZj96HftpGoIIB/eBguzL0IHctUUoq2Ut7xGEDmw
-         99sq93bxNP4bwpgRex3piH2lLzYTdlqF878Rlq1lu3KiK57y6WyFiAJhE4aq0TXLtMYB
-         FTxVPikv5KL8xLlY0H//KigmGMYhwa0Oi2OB9WeB3jtX0vnKMTqrFUfQAYRSk6rDWxKu
-         WKWo9EtK7gLfuqq+sjRN8Zpa7xtannUipMmpJ1KunHlX6zSrN7fpZzP9dSGwfHz42N5E
-         xzNg==
-X-Gm-Message-State: ACrzQf1q7XnpFMXdhr3SHPY/dnAZPg8iYUy77Sg6YjxP12PxM91WUaYM
-        t8lVG9OOVXDEnGWDNBkRFf2LeS/4qNyzm7PrcPY=
-X-Google-Smtp-Source: AMsMyM6DFOJ1o4dqI3lPhSrvb0C9QbshgqCX/dXlKDww3++cOrPdN7iB5c2xxd0n1slyE2YUzXecnxKsr5xOHEDl/K4=
-X-Received: by 2002:a05:6102:22d6:b0:3a7:c599:e02c with SMTP id
- a22-20020a05610222d600b003a7c599e02cmr339484vsh.61.1666064763730; Mon, 17 Oct
- 2022 20:46:03 -0700 (PDT)
+        with ESMTP id S230173AbiJRCqC (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 17 Oct 2022 22:46:02 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC67E17894
+        for <linux-cifs@vger.kernel.org>; Mon, 17 Oct 2022 19:45:58 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mrym94SFdz1P72d;
+        Tue, 18 Oct 2022 10:41:13 +0800 (CST)
+Received: from localhost.localdomain (10.175.101.6) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 10:45:55 +0800
+From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
+        <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
+        <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>
+Subject: [PATCH] cifs: Fix memory leak when build ntlmssp negotiate blob failed
+Date:   Tue, 18 Oct 2022 11:49:16 +0800
+Message-ID: <20221018034916.821280-1-zhangxiaoxu5@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221018143814.34815e82@canb.auug.org.au>
-In-Reply-To: <20221018143814.34815e82@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 17 Oct 2022 22:45:52 -0500
-Message-ID: <CAH2r5mtXBgc7jyceq2qKoR=4+Jk-h7_Ztu2_kL-vuLK2EFVKUw@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-fixed
+There is a memory leak when mount cifs:
+  unreferenced object 0xffff888166059600 (size 448):
+    comm "mount.cifs", pid 51391, jiffies 4295596373 (age 330.596s)
+    hex dump (first 32 bytes):
+      fe 53 4d 42 40 00 00 00 00 00 00 00 01 00 82 00  .SMB@...........
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<0000000060609a61>] mempool_alloc+0xe1/0x260
+      [<00000000adfa6c63>] cifs_small_buf_get+0x24/0x60
+      [<00000000ebb404c7>] __smb2_plain_req_init+0x32/0x460
+      [<00000000bcf875b4>] SMB2_sess_alloc_buffer+0xa4/0x3f0
+      [<00000000753a2987>] SMB2_sess_auth_rawntlmssp_negotiate+0xf5/0x480
+      [<00000000f0c1f4f9>] SMB2_sess_setup+0x253/0x410
+      [<00000000a8b83303>] cifs_setup_session+0x18f/0x4c0
+      [<00000000854bd16d>] cifs_get_smb_ses+0xae7/0x13c0
+      [<000000006cbc43d9>] mount_get_conns+0x7a/0x730
+      [<000000005922d816>] cifs_mount+0x103/0xd10
+      [<00000000e33def3b>] cifs_smb3_do_mount+0x1dd/0xc90
+      [<0000000078034979>] smb3_get_tree+0x1d5/0x300
+      [<000000004371f980>] vfs_get_tree+0x41/0xf0
+      [<00000000b670d8a7>] path_mount+0x9b3/0xdd0
+      [<000000005e839a7d>] __x64_sys_mount+0x190/0x1d0
+      [<000000009404c3b9>] do_syscall_64+0x35/0x80
 
-On Mon, Oct 17, 2022 at 10:38 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   1b028682528c ("cifs: set rc to -ENOENT if we can not get a dentry for the cached dir")
->
-> is missing a Signed-off-by from its committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+When build ntlmssp negotiate blob failed, the session setup request
+should be freed.
 
+Fixes: 49bd49f983b5 ("cifs: send workstation name during ntlmssp session setup")
+Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+---
+ fs/cifs/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index a2384509ea84..c930b63bc422 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -1531,7 +1531,7 @@ SMB2_sess_auth_rawntlmssp_negotiate(struct SMB2_sess_data *sess_data)
+ 					  &blob_length, ses, server,
+ 					  sess_data->nls_cp);
+ 	if (rc)
+-		goto out_err;
++		goto out;
+ 
+ 	if (use_spnego) {
+ 		/* BB eventually need to add this */
 -- 
-Thanks,
+2.31.1
 
-Steve
