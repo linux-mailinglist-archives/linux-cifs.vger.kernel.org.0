@@ -2,77 +2,141 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90459608BB9
-	for <lists+linux-cifs@lfdr.de>; Sat, 22 Oct 2022 12:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B1D608EFA
+	for <lists+linux-cifs@lfdr.de>; Sat, 22 Oct 2022 20:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJVKjC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 22 Oct 2022 06:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S229587AbiJVSWM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 22 Oct 2022 14:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiJVKip (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 22 Oct 2022 06:38:45 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089972E00A3
-        for <linux-cifs@vger.kernel.org>; Sat, 22 Oct 2022 02:56:18 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id w196so5876909oiw.8
-        for <linux-cifs@vger.kernel.org>; Sat, 22 Oct 2022 02:56:17 -0700 (PDT)
+        with ESMTP id S229535AbiJVSWL (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 22 Oct 2022 14:22:11 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1581412E0E8
+        for <linux-cifs@vger.kernel.org>; Sat, 22 Oct 2022 11:22:10 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id mx8so4010692qvb.8
+        for <linux-cifs@vger.kernel.org>; Sat, 22 Oct 2022 11:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
-        b=nNMBkCIwl/6gK+toGqNRGG/YLL0fF324bx1qaOH1y4x3OIjxLq/HHYoLEQ6DIXVMhZ
-         yBP/JqjfeKgn2zVw2pvLxCg6MQgOccj9D0PS+BxibSDKUMZPqFuO1BH9rucwVtk0imfk
-         Uf1JB6y6hh5nwSF4l3nIHzMcJeO23qzW5xyKvOUo02NXv/UxA+fb1xfQ7gd0wj97+Png
-         rtJzhayXE1f7/T0HHp6tTaPH4f4DE9rtLLXyoMLmdIeuEqEwHYp6KAIXioE2APt9Vqok
-         QcnzNnKCtevhk7rrd2+8KLFUz2JMtjuKTuyIwbz60pUc4RihSWynNyvtYnVRFpjOFC8v
-         n2WQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xJq9Mhsgg0Y56t8u/KTzivxmrLRVEF+0hJd7xwI/CjQ=;
+        b=h4A/vOYPbgNuPmr+QMuFOUuMTolC/J2mApaWmizx9rAdTgBZ40AI4NdwbxFUtzyAez
+         69fNtfi/urgUdZP3EHeqDum5VdlbPe37nd35GrqGmVDIkVt8+C6TfofyUt/6z12Y8OdS
+         kEK8+ZyZvR3Gc2pHk5lBC3ymdZsq1uRFy/cGHPh7/p4l/Nbp7qWWoQywi+AXvl6oAPAY
+         T97Ft47QYnOaKh/iNtfvInWvgMqErjtvIJDH7Wilkax6IkSvpHrYLGjxmQu6BYNv3poe
+         XDRvdIFZ/Ma6gFnJRNFmYLDAR5PL9avTyUWCeZdOx8oOI6dNPpRaCSWbehNPwfQsDuR4
+         WGsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
-        b=FtiaeMLKN7MEc5hkkMFAc30cqqdZUsrDzoI+2+BV2KUWFVUA7aQ4f6GWJy7IGhNtJQ
-         5kq4fs4NcXFS7f1x6oe0sT2EJ3SA7s/0Z+jxCxInLmo6ukb8cA0U362pibTA0MpHoViB
-         rPcdyD0/4W9glCWOrDAPWZ8mtNd0UHpxMSoEEJz0+GlRgkC4HaHKpVLUGcYZwCxRgbRg
-         A9CDjygR0srmLujKZLnjQQz3KwG1rJip5y9Xz/Lr/K6UQegLLRHkGD0MnHOnNbJDxGje
-         wZHKzozFI/BvJ3xGFFaUmzEBfZSPSEog9zSjz7J5yIdcF5zs0XpqoXpXDP9lET++oflU
-         Jv4g==
-X-Gm-Message-State: ACrzQf2ou0UZTgRoCIcc0lF7HYn9U+n3mY3GeOViJpVXnCsYU1D2CZHa
-        qceVuwWo/mvEwiea1iyKtPczGe8LYPgh+QiJUAOsHuVJhOY=
-X-Google-Smtp-Source: AMsMyM7DV/UQjMDmfWUDARQEST583xXUpUhZuwI6Yo6QWpU1NylqbjJLzURvxWrib8B1x1GiMXZKxXX9K7ug1XjFr6Y=
-X-Received: by 2002:a05:6808:13d2:b0:355:1770:c6ef with SMTP id
- d18-20020a05680813d200b003551770c6efmr21666671oiw.284.1666427448022; Sat, 22
- Oct 2022 01:30:48 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xJq9Mhsgg0Y56t8u/KTzivxmrLRVEF+0hJd7xwI/CjQ=;
+        b=atw4djfxL69HkQdQvORst+/nF9OezaCYCf+bW/7uRF7xXwE9hE1OUIf/sx6fe/EZn0
+         4/HBLVbCFsZGBuYjufxzD0hKb8Hj4zBJT+7G25a7/r+B4C1DCq07Aa2oRdaStICwlLa9
+         jGbIi9Bkb/tTOYxPXxB6BuxwkoO8h/YqIopf6pP4rIzVp6Uhg2b1NJ9SlurQbTbIrfFh
+         eHt6GCgfuqqiZDpf54o1q100qGC9P3mOjVOac0fwxvUBai81rNW80PdFMO76jOb6oxVE
+         2nYSdhYT6JXraZWSpP1Om5azgT7MIWw6QBOWa0SacrN6L+xfl1CQxXsxmbPS++DN1/tb
+         w+jQ==
+X-Gm-Message-State: ACrzQf1uM7d1aNr9B+h9286DMEH+Rr1owNt3NnTrz810hyTzl7y40XPE
+        DawCUGZ1+CEGLVuCYEsNDfRR76Wcx9iNDou9XPW2EO2/
+X-Google-Smtp-Source: AMsMyM6OeL9Y9rzTqbMtV9AFeD4Zk2OIrTFFmmxREbq/zD8GT3EAsL7Ggg8hDCV4FiMsebPSlfDCmhChW6n4q2rI9qI=
+X-Received: by 2002:a05:6102:23dc:b0:3a7:9b0c:aa8e with SMTP id
+ x28-20020a05610223dc00b003a79b0caa8emr15000457vsr.60.1666462918118; Sat, 22
+ Oct 2022 11:21:58 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: mrs.susanelwoodhara17@gmail.com
-Sender: mrs.arawayann01@gmail.com
-Received: by 2002:a05:6838:aea5:0:0:0:0 with HTTP; Sat, 22 Oct 2022 01:30:47
- -0700 (PDT)
-From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
-Date:   Sat, 22 Oct 2022 08:30:47 +0000
-X-Google-Sender-Auth: UfMdHY-IGn2vy7vhRxwr3_PMsYw
-Message-ID: <CAAOf0OErkdBB+pkMfQKO+67_RwCPJjBUpQs9uCH=U1CN1QD5=w@mail.gmail.com>
-Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
-To:     undisclosed-recipients:;
+References: <20221022073521.1660841-1-zhangxiaoxu5@huawei.com> <20221022073521.1660841-3-zhangxiaoxu5@huawei.com>
+In-Reply-To: <20221022073521.1660841-3-zhangxiaoxu5@huawei.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 22 Oct 2022 13:21:47 -0500
+Message-ID: <CAH2r5msWoNw0694UjqcOAhFwoFTdVwbUmgCA7MtCTbY-FbqujQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cifs: Fix pages array leak when writedata alloc
+ failed in cifs_writedata_alloc()
+To:     Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+Cc:     linux-cifs@vger.kernel.org, sfrench@samba.org, pc@cjr.nz,
+        lsahlber@redhat.com, sprasad@microsoft.com, tom@talpey.com,
+        longli@microsoft.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-GOD BLESS YOU AS YOU REPLY URGENTLY
+Good catch. Tentatively merged into cifs-2.6.git for-next pending testing.
 
- Hello Dear,
-Greetings, I am contacting you regarding an important information i
-have for you please reply to confirm your email address and for more
-details Thanks
-Regards
-Mrs Susan Elwood Hara.
+On Sat, Oct 22, 2022 at 1:32 AM Zhang Xiaoxu <zhangxiaoxu5@huawei.com> wrote:
+>
+> There is a memory leak when writedata alloc failed:
+>
+>   unreferenced object 0xffff888192364000 (size 8192):
+>     comm "sync", pid 22839, jiffies 4297313967 (age 60.230s)
+>     hex dump (first 32 bytes):
+>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<0000000027de0814>] __kmalloc+0x4d/0x150
+>       [<00000000b21e81ab>] cifs_writepages+0x35f/0x14a0
+>       [<0000000076f7d20e>] do_writepages+0x10a/0x360
+>       [<00000000d6a36edc>] filemap_fdatawrite_wbc+0x95/0xc0
+>       [<000000005751a323>] __filemap_fdatawrite_range+0xa7/0xe0
+>       [<0000000088afb0ca>] file_write_and_wait_range+0x66/0xb0
+>       [<0000000063dbc443>] cifs_strict_fsync+0x80/0x5f0
+>       [<00000000c4624754>] __x64_sys_fsync+0x40/0x70
+>       [<000000002c0dc744>] do_syscall_64+0x35/0x80
+>       [<0000000052f46bee>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+> cifs_writepages+0x35f/0x14a0 is:
+>   kmalloc_array at include/linux/slab.h:628
+>   (inlined by) kcalloc at include/linux/slab.h:659
+>   (inlined by) cifs_writedata_alloc at fs/cifs/file.c:2438
+>   (inlined by) wdata_alloc_and_fillpages at fs/cifs/file.c:2527
+>   (inlined by) cifs_writepages at fs/cifs/file.c:2705
+>
+> If writedata alloc failed in cifs_writedata_alloc(), the pages array
+> should be freed.
+>
+> Fixes: 8e7360f67e75 ("CIFS: Add support for direct pages in wdata")
+> Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+> ---
+>  fs/cifs/file.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index 87be0223a57a..cd9698209930 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -2434,12 +2434,16 @@ cifs_writev_complete(struct work_struct *work)
+>  struct cifs_writedata *
+>  cifs_writedata_alloc(unsigned int nr_pages, work_func_t complete)
+>  {
+> +       struct cifs_writedata *writedata = NULL;
+>         struct page **pages =
+>                 kcalloc(nr_pages, sizeof(struct page *), GFP_NOFS);
+> -       if (pages)
+> -               return cifs_writedata_direct_alloc(pages, complete);
+> +       if (pages) {
+> +               writedata = cifs_writedata_direct_alloc(pages, complete);
+> +               if (!writedata)
+> +                       kvfree(pages);
+> +       }
+>
+> -       return NULL;
+> +       return writedata;
+>  }
+>
+>  struct cifs_writedata *
+> --
+> 2.31.1
+>
+
+
+-- 
+Thanks,
+
+Steve
