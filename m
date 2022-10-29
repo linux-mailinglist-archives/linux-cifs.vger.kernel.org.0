@@ -2,32 +2,32 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917BB61212A
-	for <lists+linux-cifs@lfdr.de>; Sat, 29 Oct 2022 09:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE3A61212D
+	for <lists+linux-cifs@lfdr.de>; Sat, 29 Oct 2022 09:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJ2Hzq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 29 Oct 2022 03:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S229613AbiJ2Hzw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sat, 29 Oct 2022 03:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiJ2Hzn (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 29 Oct 2022 03:55:43 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DB46DAEC
+        with ESMTP id S229670AbiJ2Hzo (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sat, 29 Oct 2022 03:55:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CF56DAE1
         for <linux-cifs@vger.kernel.org>; Sat, 29 Oct 2022 00:55:38 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mzs681ZDdz15M23;
-        Sat, 29 Oct 2022 15:50:40 +0800 (CST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mzs8b5MRPzFqSX;
+        Sat, 29 Oct 2022 15:52:47 +0800 (CST)
 Received: from localhost.localdomain (10.175.101.6) by
  dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 15:55:36 +0800
+ 15.1.2375.31; Sat, 29 Oct 2022 15:55:37 +0800
 From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
         <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
         <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>
-Subject: [PATCH v2 3/7] cifs: Remove the redundant null pointer check in SMB2_sess_setup()
-Date:   Sat, 29 Oct 2022 17:00:07 +0800
-Message-ID: <20221029090011.79367-4-zhangxiaoxu5@huawei.com>
+Subject: [PATCH v2 4/7] cifs: Remove the redundant null pointer check in SMB2_negotiate()
+Date:   Sat, 29 Oct 2022 17:00:08 +0800
+Message-ID: <20221029090011.79367-5-zhangxiaoxu5@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221029090011.79367-1-zhangxiaoxu5@huawei.com>
 References: <20221029090011.79367-1-zhangxiaoxu5@huawei.com>
@@ -46,48 +46,31 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The cifs_setup_session() is the only caller of .sess_setup(),
-and it's already ensure the server and sess not null, so remove
-the redundant nullptr check.
+The smb2_negotiate() is the only caller of function SMB2_negotiate(),
+and it's already ensure the server not null, so remove the redundant
+nullptr check.
 
 Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 ---
- fs/cifs/sess.c    | 5 -----
  fs/cifs/smb2pdu.c | 5 -----
- 2 files changed, 10 deletions(-)
+ 1 file changed, 5 deletions(-)
 
-diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
-index e08c5f547afb..40e4dd42cc2b 100644
---- a/fs/cifs/sess.c
-+++ b/fs/cifs/sess.c
-@@ -1822,11 +1822,6 @@ int CIFS_SessSetup(const unsigned int xid, struct cifs_ses *ses,
- 	int rc = 0;
- 	struct sess_data *sess_data;
- 
--	if (ses == NULL) {
--		WARN(1, "%s: ses == NULL!", __func__);
--		return -EINVAL;
--	}
--
- 	sess_data = kzalloc(sizeof(struct sess_data), GFP_KERNEL);
- 	if (!sess_data)
- 		return -ENOMEM;
 diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 3a0c34e43a9d..5cda7f029b60 100644
+index 5cda7f029b60..11643fb25347 100644
 --- a/fs/cifs/smb2pdu.c
 +++ b/fs/cifs/smb2pdu.c
-@@ -1676,11 +1676,6 @@ SMB2_sess_setup(const unsigned int xid, struct cifs_ses *ses,
+@@ -846,11 +846,6 @@ SMB2_negotiate(const unsigned int xid,
  
- 	cifs_dbg(FYI, "Session Setup\n");
+ 	cifs_dbg(FYI, "Negotiate protocol\n");
  
 -	if (!server) {
 -		WARN(1, "%s: server is NULL!\n", __func__);
 -		return -EIO;
 -	}
 -
- 	sess_data = kzalloc(sizeof(struct SMB2_sess_data), GFP_KERNEL);
- 	if (!sess_data)
- 		return -ENOMEM;
+ 	rc = smb2_plain_req_init(SMB2_NEGOTIATE, NULL, server,
+ 				 (void **) &req, &total_len);
+ 	if (rc)
 -- 
 2.31.1
 
