@@ -2,128 +2,89 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C50B61F069
-	for <lists+linux-cifs@lfdr.de>; Mon,  7 Nov 2022 11:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F99B61F41A
+	for <lists+linux-cifs@lfdr.de>; Mon,  7 Nov 2022 14:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiKGKYT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 7 Nov 2022 05:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S232184AbiKGNRR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 7 Nov 2022 08:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiKGKYR (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Nov 2022 05:24:17 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E01218B2B
-        for <linux-cifs@vger.kernel.org>; Mon,  7 Nov 2022 02:24:03 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso14158698pjc.0
-        for <linux-cifs@vger.kernel.org>; Mon, 07 Nov 2022 02:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=Zv++OJ/ncK2pWuUWAQT+z52+cIoHK/WVJU4bVze52hunD5wDL4D5XJdl5mW2VbRjhi
-         PKA0tQ/z42/ONfUnPJoBfdYRGEG2gwiyoDRW7hecaxcg+/0t0u3g44ISFlpe+B9l1fvu
-         TmkNgtKOyak6WThRMAIvY+g5IgPZxvnz63e21BpajeaX9653GP4qpHUHyfV7BL4cSNb4
-         pCU1fNGxZBn7NlKzWZCMHMxM9LSs8sKofgpQ0FSoeb/qTDQ+CPP+tvlBe/vGQ8T8hOyn
-         vdUZr48/zTuwVxtBDF6IrOR7pT19nf73qD9i1Q8QUWEzM8dVJjwmGS+xVbVCXqFaE09J
-         SKzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=o5kXP25LqoH0g1l7/BNRzGVRhusYTSQIJl+7jWRdY1XEwfpd3o90UZvmZRdsl3DGXY
-         zxVBSpZFZuPrB9TS1/e3rxlc1BVFgSdTO1wZN+6HURf2dF5+ojDYWO3dpsmbr7ZZQQTD
-         5VnI4ZtOFpIf3pg5UO6yiqLBmdipH7LYZVdNWsEFw4YFTth7WoIyAp5tJhkigQae6Rf1
-         dM3zABf7XYMhNWCEOqZbtcKAmugLa8wN1jBnKUuI00cNDxEe6ZMcS9UPe+xLO9lKUhII
-         mVW9/JrdLwc68MKoD14RJZxUkSjzihTY0sVc+xzYfrAZdUlKa7Zj1yf3h+HbzqL3jR5c
-         lCdg==
-X-Gm-Message-State: ACrzQf3DG7M8pF6gY2HAMYyPKJgS7frxJsnC+1n9JoOXtYZaY3bxj536
-        KS2899SJKSU8QVkGK585UdP94jh5aEtrrW63eRmeMX8B71g=
-X-Google-Smtp-Source: AMsMyM7DPjaK7bSeUBIcMTkNZUaqK+NSwCEUfp88ZZDLY5TXShnQ2+B86xH3ryBKqTyGQWW3ozA/96x60VupsK8qo34=
-X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id
- p16-20020a1709028a9000b00186b145f5ecmr50774476plo.103.1667816632274; Mon, 07
- Nov 2022 02:23:52 -0800 (PST)
+        with ESMTP id S231551AbiKGNRR (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 7 Nov 2022 08:17:17 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287BB25DC
+        for <linux-cifs@vger.kernel.org>; Mon,  7 Nov 2022 05:17:16 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1os202-000357-LZ; Mon, 07 Nov 2022 14:17:14 +0100
+Message-ID: <b5badfe1-ccb8-f8b3-90b7-c05689e22776@leemhuis.info>
+Date:   Mon, 7 Nov 2022 14:17:14 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
- 02:23:51 -0800 (PST)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
-Date:   Mon, 7 Nov 2022 11:23:51 +0100
-Message-ID: <CAHAXD+bPNCns8Ez=7iXmPLADMtJgZj3-mFTk3NMhWC-Ca1b9rw@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_20,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] cifs: fix regression in very old smb1 mounts
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <smfrench@gmail.com>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        linux-cifs <linux-cifs@vger.kernel.org>
+References: <20221011231207.1458541-1-lsahlber@redhat.com>
+ <0fb9b48e-3bcc-5a5e-15fb-1d3e2752d80b@leemhuis.info>
+In-Reply-To: <0fb9b48e-3bcc-5a5e-15fb-1d3e2752d80b@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1667827036;0abf725b;
+X-HE-SMSGID: 1os202-000357-LZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1043 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.1801]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [977638ib[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Hei ja miten voit?
-Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
- toivolla
-v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
-leikkaus
-t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
-suudet selviyty=C3=A4.
-Mutta ennen kuin min=C3=A4
-Tee toinen vaarallinen operaatio, annan sen sinulle
-Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
-sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
-voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
-iden auttamista
-ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
-=C3=A4 minulla ei ole niit=C3=A4
-kenelt=C3=A4 perii rahaa.
-Vastaa minulle nopeasti
-terveisi=C3=A4
-Rouva Monika Evereen
-Florida, Amerikan Yhdysvallat
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+On 01.11.22 18:53, Thorsten Leemhuis wrote:
+> On 12.10.22 01:12, Ronnie Sahlberg wrote:
+>> BZ: 215375
+>>
+>> Fixes: 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c ("cifs: remove support for NTLM and weaker authentication algorithms")
+>> Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+> 
+> Ronnie, Steve, did this change create any trouble in 6.1 pre-releases so
+> far? If not: could you please consider submitting this change for
+> inclusion in 6.0 and 5.15, as this is a regression from the 5.15 days
+> that according to the bugzilla ticket seem to annoy some people a lot.
+
+Ronnie, Steve, if you have a minute, I would really appreciate your help
+in this matter, you are the best people to judge here.
+
+Ciao, Thorsten
+
+>> ---
+>>  fs/cifs/connect.c | 11 +++++------
+>>  1 file changed, 5 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+>> index 93e59b3b36c7..c77232096c12 100644
+>> --- a/fs/cifs/connect.c
+>> +++ b/fs/cifs/connect.c
+>> @@ -3922,12 +3922,11 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
+>>  	pSMB->AndXCommand = 0xFF;
+>>  	pSMB->Flags = cpu_to_le16(TCON_EXTENDED_SECINFO);
+>>  	bcc_ptr = &pSMB->Password[0];
+>> -	if (tcon->pipe || (ses->server->sec_mode & SECMODE_USER)) {
+>> -		pSMB->PasswordLength = cpu_to_le16(1);	/* minimum */
+>> -		*bcc_ptr = 0; /* password is null byte */
+>> -		bcc_ptr++;              /* skip password */
+>> -		/* already aligned so no need to do it below */
+>> -	}
+>> +
+>> +	pSMB->PasswordLength = cpu_to_le16(1);	/* minimum */
+>> +	*bcc_ptr = 0; /* password is null byte */
+>> +	bcc_ptr++;              /* skip password */
+>> +	/* already aligned so no need to do it below */
+>>  
+>>  	if (ses->server->sign)
+>>  		smb_buffer->Flags2 |= SMBFLG2_SECURITY_SIGNATURE;
