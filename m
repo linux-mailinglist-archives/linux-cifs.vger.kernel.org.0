@@ -2,97 +2,75 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3FD62165B
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Nov 2022 15:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A0162198E
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Nov 2022 17:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiKHO1I (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 8 Nov 2022 09:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S233654AbiKHQeF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 8 Nov 2022 11:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiKHO0Z (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 8 Nov 2022 09:26:25 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275792192
-        for <linux-cifs@vger.kernel.org>; Tue,  8 Nov 2022 06:25:13 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so13505183pjk.1
-        for <linux-cifs@vger.kernel.org>; Tue, 08 Nov 2022 06:25:13 -0800 (PST)
+        with ESMTP id S234220AbiKHQeE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 8 Nov 2022 11:34:04 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C644B1006F
+        for <linux-cifs@vger.kernel.org>; Tue,  8 Nov 2022 08:34:03 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id s24so21915102ljs.11
+        for <linux-cifs@vger.kernel.org>; Tue, 08 Nov 2022 08:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=qJPWO9SMfKs9CV4DzOtfpg0tG5L2kEZQtV/LBBChMrnKplvig/HcfOA36QzOFbaour
-         tgINSm9CFH0IH0weUkbi8oL7C5P0uFU99A+FANpQrOPV/x2at1b6HjUUAphEgu/Nt2rO
-         YdZzEeguInvIt6hR0YTDbuGc0g6QmBH3JOdUVEiMakuZ8pUv0rSqDGDPPz36WP9L+M70
-         Yi8Qvn61/fVJa/s6+O6bNGj9Vrx81J7VmEWQcrrTipgg1zMWjvYHOXsRX3Tp8F7t1isZ
-         URWNY0E6DDGhkUjSdRf6tRRt6Dm01iRomcQNGIBkoA7vu4q8ZFmcmXCe9DgPR3TaW/OT
-         odpw==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Q1nSFzssGURAQuJbSrXDLQeV7iClBMclGOq8915uKLU=;
+        b=FbmJs7zgiY1+xtqRGEloYQD8fp9wj/kCSvkFNU859ozy63U8ijYKitPBob1/ZG4cmw
+         Bf5zFKK58OppUWFtQxkQJ0nUZGrZlzIYhXAiQPj37+Qqxr+N15SPToYwXI/56PXlO1oL
+         l5lDzMtrqMJpO78OHHrnBnaMnXdcqpI60UBdCVU9Q/pMij15bgCmU+Z0JpDOl7ZL/cvm
+         JmRCVOLAIY81+DbX+HS2rzC239m1r1vkEL0CWT9wDAUy/ncSsaIwnfqymTWYZo9sB2Ky
+         NCHq49sg1D3xqLIQy39qc6zdWq3Rn8joUDz3w/3xOaXW60OgAZmlyUy/cSreJAVHpWb5
+         7xkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=tNDHGK3Ms+nU63jveowOly7f9OaD0pXhlAMbCO3slLqFJxgpP6zyNmbm/7JityVQ+m
-         ihtos9Qy4ep7dAEBpcpVIvvuoUt/Jga8Ug2FaVwzewP+GHVZi/sH6O865M/3Ico8uDwb
-         RldZS8olTNKkkx2pQljXSVFvEFRh/tRTLzVSStIGIiP9N4IiFI2dUAruQJfTNMgPrnwB
-         QjosrsEZpfqdVO7uuuKg/LKSCwImDPng4E9Y/knndL8d4evgb74Pb24Bd3PQhQZegIVv
-         +NVh8q65PkhP1uGty61GsGWUpTao1NFGO6bmJLnkocwsn+m0TKfgcb6JmBWS9KcTeYGg
-         JsEg==
-X-Gm-Message-State: ACrzQf1Tw59n79q13wzJqSGv8bRuc3TErNcaJjFfbuMvsVyumn2aNYmF
-        msbUnn4UAQGO4oeXQNmFIuXIIaeHj3UfmPT0Ohg=
-X-Google-Smtp-Source: AMsMyM7xjnW3BCIcPmRXceI8CMPrgJsNpwknP0oXmxg9pb3hPM8UnVyASTbWsNqLc31U8nSLRepoWwOH4L/DHUye4LA=
-X-Received: by 2002:a17:90b:1d90:b0:213:c798:86f6 with SMTP id
- pf16-20020a17090b1d9000b00213c79886f6mr52558648pjb.84.1667917512394; Tue, 08
- Nov 2022 06:25:12 -0800 (PST)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q1nSFzssGURAQuJbSrXDLQeV7iClBMclGOq8915uKLU=;
+        b=qAzpSrjY4nZNx/TMYPiNo94qdF/XW8Dbx87FcZtLRhl7UBMsq5Y4nX0j+njJun2TrG
+         DGCk118RFlP3MdDWv1Mvgz09qDl+aSnPmrFIg32xAIy7WWNNGwW48odwnFKyLZkd3kIz
+         yPq5MxjUvD4f1E8tmj5ZYPdMy7mlO9K20T6M1kxnd4w++wd6Ip1aiL6YP+/oJxz230dz
+         +SDvkyQafgUNj6rejRQY7KHftNCljb8uuZjm8bMlLqFk9Ef4wSm6mwmiD1XOUa4oBp9I
+         cQLJxPfSK2I4aNeLim72l3lit/zrBymDUppVPb8qD12QESCoVFrJZCZ1Gd8otljcniXR
+         eyEQ==
+X-Gm-Message-State: ACrzQf364XcOxYGRf+exZarEBq9GEWWcDP/czxnDztWz8WVaKcT79o7d
+        mapjsnbDgcvhoXYaTu+E9LaeqQwFE1ymG2gO34c=
+X-Google-Smtp-Source: AMsMyM7cFsBY5gs8LJ2AH94pmQj62hZ4PgEwIEsWDH6vCOggcaDlx42kWkcBnKjP6msbZc+a5/0HpZEeujqwF0jt6VY=
+X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id
+ u1-20020a2e8541000000b00261b44b1a8bmr20717380ljj.46.1667925241931; Tue, 08
+ Nov 2022 08:34:01 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
- 06:25:11 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli11@gmail.com>
-Date:   Tue, 8 Nov 2022 14:25:11 +0000
-Message-ID: <CAPBO+FJ3Nhd2ncX9Z_fDUqYStiGQU821nC6EEFSDx5iCTdXkaQ@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Tue, 8 Nov 2022 22:03:50 +0530
+Message-ID: <CANT5p=pW_CMrD4EacJnwKGK74nW1sRxa2ummheWxujwXtfh0cA@mail.gmail.com>
+Subject: [PATCH] cifs: avoid reconnect race in setting session and tcon status
+To:     Steve French <smfrench@gmail.com>, Paulo Alcantara <pc@cjr.nz>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Bharath S M <bharathsm@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4984]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli11[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Came across a couple of race conditions between cifsd and i/o threads.
+Fixed them here. Please review the changes.
+
+This change should also ensure that binding session requests do not
+race with the primary session request.
+
+https://github.com/sprasad-microsoft/smb3-kernel-client/commit/c4ed4d985488640469acfc621bed5c3a55d67ac6.patch
+
+-- 
+Regards,
+Shyam
