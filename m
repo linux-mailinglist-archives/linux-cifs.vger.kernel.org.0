@@ -2,153 +2,85 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C98D629468
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Nov 2022 10:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D986B629C2D
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Nov 2022 15:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiKOJfD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 15 Nov 2022 04:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S229836AbiKOOfg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 15 Nov 2022 09:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiKOJfB (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Nov 2022 04:35:01 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFB013E8B
-        for <linux-cifs@vger.kernel.org>; Tue, 15 Nov 2022 01:35:00 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NBLcG6rLWz15Mcs;
-        Tue, 15 Nov 2022 17:34:38 +0800 (CST)
-Received: from localhost.localdomain (10.175.101.6) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 17:34:58 +0800
-From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-To:     <linux-cifs@vger.kernel.org>, <zhangxiaoxu5@huawei.com>,
-        <sfrench@samba.org>, <smfrench@gmail.com>, <pc@cjr.nz>,
-        <lsahlber@redhat.com>, <sprasad@microsoft.com>, <tom@talpey.com>
-Subject: [PATCH 3/3] cifs: Move the in_send statistic to __smb_send_rqst()
-Date:   Tue, 15 Nov 2022 18:39:36 +0800
-Message-ID: <20221115103936.3303416-4-zhangxiaoxu5@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221115103936.3303416-1-zhangxiaoxu5@huawei.com>
-References: <20221115103936.3303416-1-zhangxiaoxu5@huawei.com>
+        with ESMTP id S229587AbiKOOff (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 15 Nov 2022 09:35:35 -0500
+X-Greylist: delayed 495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Nov 2022 06:35:29 PST
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEC31401B;
+        Tue, 15 Nov 2022 06:35:29 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 8147F1864269;
+        Tue, 15 Nov 2022 17:27:10 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4-vJmt9wN1H0; Tue, 15 Nov 2022 17:27:10 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 352F4186422F;
+        Tue, 15 Nov 2022 17:27:10 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id y9MG4Fq2LoDP; Tue, 15 Nov 2022 17:27:10 +0300 (MSK)
+Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.20])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 7D4AC1864248;
+        Tue, 15 Nov 2022 17:27:09 +0300 (MSK)
+From:   Anastasia Belova <abelova@astralinux.ru>
+To:     Steve French <sfrench@samba.org>
+Cc:     Anastasia Belova <abelova@astralinux.ru>,
+        Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, Aurelien Aptel <aaptel@suse.com>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] cifs: add check for returning value of SMB2_close_init
+Date:   Tue, 15 Nov 2022 17:27:01 +0300
+Message-Id: <20221115142701.27074-1-abelova@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-When send SMB_COM_NT_CANCEL and RFC1002_SESSION_REQUEST, the
-in_send statistic was lost.
+If the returning value of SMB2_close_init is an error-value,=20
+exit the function.
 
-Let's move the in_send statistic to the send function to avoid
-this scenario.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Fixes: 7ee1af765dfa ("[CIFS]")
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+Fixes: 352d96f3acc6 ("cifs: multichannel: move channel selection above tr=
+ansport layer")
+
+Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
 ---
- fs/cifs/transport.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ fs/cifs/smb2ops.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index dea5228899fb..c2b5335f11c5 100644
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -298,7 +298,7 @@ static int
- __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 		struct smb_rqst *rqst)
- {
--	int rc = 0;
-+	int rc;
- 	struct kvec *iov;
- 	int n_vec;
- 	unsigned int send_length = 0;
-@@ -309,6 +309,7 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 	struct msghdr smb_msg = {};
- 	__be32 rfc1002_marker;
- 
-+	cifs_in_send_inc(server);
- 	if (cifs_rdma_enabled(server)) {
- 		/* return -EAGAIN when connecting or reconnecting */
- 		rc = -EAGAIN;
-@@ -317,14 +318,17 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 		goto smbd_done;
- 	}
- 
-+	rc = -EAGAIN;
- 	if (ssocket == NULL)
--		return -EAGAIN;
-+		goto out;
- 
-+	rc = -ERESTARTSYS;
- 	if (fatal_signal_pending(current)) {
- 		cifs_dbg(FYI, "signal pending before send request\n");
--		return -ERESTARTSYS;
-+		goto out;
- 	}
- 
-+	rc = 0;
- 	/* cork the socket */
- 	tcp_sock_set_cork(ssocket->sk, true);
- 
-@@ -435,7 +439,8 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 			 rc);
- 	else if (rc > 0)
- 		rc = 0;
--
-+out:
-+	cifs_in_send_dec(server);
- 	return rc;
- }
- 
-@@ -855,9 +860,7 @@ cifs_call_async(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 	 * I/O response may come back and free the mid entry on another thread.
- 	 */
- 	cifs_save_when_sent(mid);
--	cifs_in_send_inc(server);
- 	rc = smb_send_rqst(server, 1, rqst, flags);
--	cifs_in_send_dec(server);
- 
- 	if (rc < 0) {
- 		revert_current_mid(server, mid->credits);
-@@ -1151,9 +1154,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 		else
- 			midQ[i]->callback = cifs_compound_last_callback;
- 	}
--	cifs_in_send_inc(server);
- 	rc = smb_send_rqst(server, num_rqst, rqst, flags);
--	cifs_in_send_dec(server);
- 
- 	for (i = 0; i < num_rqst; i++)
- 		cifs_save_when_sent(midQ[i]);
-@@ -1404,9 +1405,7 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
- 
- 	midQ->mid_state = MID_REQUEST_SUBMITTED;
- 
--	cifs_in_send_inc(server);
- 	rc = smb_send(server, in_buf, len);
--	cifs_in_send_dec(server);
- 	cifs_save_when_sent(midQ);
- 
- 	if (rc < 0)
-@@ -1548,9 +1547,7 @@ SendReceiveBlockingLock(const unsigned int xid, struct cifs_tcon *tcon,
- 	}
- 
- 	midQ->mid_state = MID_REQUEST_SUBMITTED;
--	cifs_in_send_inc(server);
- 	rc = smb_send(server, in_buf, len);
--	cifs_in_send_dec(server);
- 	cifs_save_when_sent(midQ);
- 
- 	if (rc < 0)
--- 
-2.31.1
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 880cd494afea..9737296c0fbc 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -1126,6 +1126,8 @@ smb2_set_ea(const unsigned int xid, struct cifs_tco=
+n *tcon,
+ 	rqst[2].rq_nvec =3D 1;
+ 	rc =3D SMB2_close_init(tcon, server,
+ 			     &rqst[2], COMPOUND_FID, COMPOUND_FID, false);
++	if (rc)
++		goto sea_exit;
+ 	smb2_set_related(&rqst[2]);
+=20
+ 	rc =3D compound_send_recv(xid, ses, server,
+--=20
+2.30.2
 
