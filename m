@@ -2,83 +2,90 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE3062C099
-	for <lists+linux-cifs@lfdr.de>; Wed, 16 Nov 2022 15:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE52662C21F
+	for <lists+linux-cifs@lfdr.de>; Wed, 16 Nov 2022 16:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiKPOLM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 16 Nov 2022 09:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S233584AbiKPPRf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 16 Nov 2022 10:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiKPOKn (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Nov 2022 09:10:43 -0500
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8E910F7;
-        Wed, 16 Nov 2022 06:10:39 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id ECF841863FE5;
-        Wed, 16 Nov 2022 17:10:35 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Iq0guvWvdgAR; Wed, 16 Nov 2022 17:10:35 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id A05BC1863E3F;
-        Wed, 16 Nov 2022 17:10:35 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ARbProRY4lWh; Wed, 16 Nov 2022 17:10:35 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.20])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id 0C96C1863CD8;
-        Wed, 16 Nov 2022 17:10:34 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     Steve French <sfrench@samba.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] cifs: add check for returning value of SMB2_set_info_init
-Date:   Wed, 16 Nov 2022 17:10:27 +0300
-Message-Id: <20221116141027.10947-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S233496AbiKPPRc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 16 Nov 2022 10:17:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024EF4FF8E;
+        Wed, 16 Nov 2022 07:17:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2C15B81DC2;
+        Wed, 16 Nov 2022 15:17:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB89C433C1;
+        Wed, 16 Nov 2022 15:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668611849;
+        bh=eVaemk5bRp5UIAhx/BwapOwzeYPJ7UWbBodOfxndur8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F71CUEH5+o5c5rWc3RGIwNq4U9xmYW3X9g6dSZZKUNBri/UgqlEeQC+Cd7Nzbu6Gy
+         VRHH0BudcTr1hgViqIiw5Pk0eVnliQYu0MzP03imkse3UiZ4RgEkWKJQuznzgsRK82
+         eUCDv034JxLJnYSK8+krjpSWroUCUMoQ6LZT1BzoR8K1yChICmcr93oUmBwb2ykc7w
+         5oZYtYyrb8tK6g1GieJyOUMxhyRVI1XzoGcOssg/fwZScexdr+s6Fp1GVZRXX9w7tK
+         qwiBJtgpXWlqShpZabya3/nY8xWM1fp9l7pE+dpHnZDaIrtWMoNG8FXJ0HpNGt2/06
+         u84RlSTCfbelw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, chuck.lever@oracle.com,
+        viro@zeniv.linux.org.uk, hch@lst.de
+Subject: [PATCH 0/7] fs: fix inode->i_flctx accesses
+Date:   Wed, 16 Nov 2022 10:17:19 -0500
+Message-Id: <20221116151726.129217-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-If the returning value of SMB2_set_info_init is an error-value,
-exit the function.
+The inode->i_flctx field is set via a cmpxchg operation, which is a
+release op. This means that most callers need to use an acquire to
+access it.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+This series adds a new helper function for that, and replaces the
+existing accesses of i_flctx with that. The later patches then convert
+the various subsystems that access i_flctx directly to use the new
+helper.
 
-Fixes: 0967e5457954 ("cifs: use a compound for setting an xattr")
+Assuming there are no objectsions, I'll plan to merge this for v6.2 via
+my tree. If any maintainers want to take the subsystem patches in via
+their trees, let me know and we'll work it out.
 
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- fs/cifs/smb2ops.c | 2 ++
- 1 file changed, 2 insertions(+)
+Jeff Layton (7):
+  filelock: add a new locks_inode_context accessor function
+  ceph: use locks_inode_context helper
+  cifs: use locks_inode_context helper
+  ksmbd: use locks_inode_context helper
+  lockd: use locks_inode_context helper
+  nfs: use locks_inode_context helper
+  nfsd: use locks_inode_context helper
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 880cd494afea..c77e49b3fcc6 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -1116,6 +1116,8 @@ smb2_set_ea(const unsigned int xid, struct cifs_tco=
-n *tcon,
- 				COMPOUND_FID, current->tgid,
- 				FILE_FULL_EA_INFORMATION,
- 				SMB2_O_INFO_FILE, 0, data, size);
-+	if (rc)
-+		goto sea_exit;
- 	smb2_set_next_command(tcon, &rqst[1]);
- 	smb2_set_related(&rqst[1]);
-=20
---=20
-2.30.2
+ fs/ceph/locks.c     |  4 ++--
+ fs/cifs/file.c      |  2 +-
+ fs/ksmbd/vfs.c      |  2 +-
+ fs/lockd/svcsubs.c  |  4 ++--
+ fs/locks.c          | 20 ++++++++++----------
+ fs/nfs/delegation.c |  2 +-
+ fs/nfs/nfs4state.c  |  2 +-
+ fs/nfs/pagelist.c   |  2 +-
+ fs/nfs/write.c      |  4 ++--
+ fs/nfsd/nfs4state.c |  6 +++---
+ include/linux/fs.h  | 14 ++++++++++++++
+ 11 files changed, 38 insertions(+), 24 deletions(-)
+
+-- 
+2.38.1
 
