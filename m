@@ -2,48 +2,50 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3270862F853
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Nov 2022 15:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354DA62F82B
+	for <lists+linux-cifs@lfdr.de>; Fri, 18 Nov 2022 15:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234867AbiKROyX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Nov 2022 09:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S241673AbiKROuB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Nov 2022 09:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234724AbiKROyS (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Nov 2022 09:54:18 -0500
-X-Greylist: delayed 444 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 06:54:17 PST
+        with ESMTP id S241828AbiKROt7 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Nov 2022 09:49:59 -0500
 Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F182911C2F;
-        Fri, 18 Nov 2022 06:54:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ECB12607;
+        Fri, 18 Nov 2022 06:49:59 -0800 (PST)
 Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id C526A7FCED;
-        Fri, 18 Nov 2022 14:46:50 +0000 (UTC)
+        by mx.cjr.nz (Postfix) with ESMTPSA id BC4AE7FD25;
+        Fri, 18 Nov 2022 14:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1668782811;
+        t=1668782997;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=i4KIqUADj/IJllVAyObmkbmWGqEBQfr/5CjaR+2wZao=;
-        b=v+gUuexlcJgBUnllEq88k6vkD5GyDzJojlJ/cZgyU993jASZyrhs/bgoURLsUCaKKksrsg
-        yuNVNiUKAqD2G7lm/1b9Ga3AXV5PugeDSXfsQtVexZYriAL1j1y3Hitf1ejerCZNw4gueI
-        iyPS7CUqru7bhjl/ZjkaEPMhqhX/6mTbOV0VTtRShLbNSAxkQmS/XgPxbXUXhAsxJIfAgj
-        EETTeHSg/HFhVT2hFCB9Yd/gr9pvUlp9Swc2cQLD/BIdlliSGftcNr2w6MeT8HNStOnazz
-        1/0/AY5TfTOkGeFM1/WmgVAlkQzqWpfRu3wnh3AWDt66iPdhclJHZG7+pDCRzg==
+        bh=Yr8fQqxOuxgfsh7aSNnZ2DOYglECy5/Eal4thUcsDrg=;
+        b=SMUz7ChDot1X5TtFeHknvJ01g7SHxh3GY2WPHCNbCbPifrwZqCZWO7jJv09cn16Gs4V9M0
+        2O7DUoDkVO+m+jyMRCiThIAgIPEa9dXhYT1ced9lQ8QH8VGI0Vyyb1a88awHuQQpt+S2YD
+        M3XcR7B3JEJIDXXgCCYk5h22tM1bWgdT3cFxM25z3bN0rrmufMaB+fKKX2Pjbs+oW863dG
+        XEQsBEubSCE9OtwQUhGV+CT5mtHo3qhmpJkwhuXZYnn9Y3xmrU9fOv1u5WySEZjpe42kT9
+        MicDg1HVWZrMrd2IeupQwOjG7ALu5A4WmhWjFxfYfpi7IWWwusj+rMMR6yPSZQ==
 From:   Paulo Alcantara <pc@cjr.nz>
-To:     Dan Carpenter <error27@gmail.com>, Steve French <sfrench@samba.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
+To:     Anastasia Belova <abelova@astralinux.ru>,
+        Steve French <sfrench@samba.org>
+Cc:     Anastasia Belova <abelova@astralinux.ru>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
         Shyam Prasad N <sprasad@microsoft.com>,
         Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] cifs: Use after free in debug code
-In-Reply-To: <Y3dw8KLm7MDgACCY@kili>
-References: <Y3dw8KLm7MDgACCY@kili>
-Date:   Fri, 18 Nov 2022 11:48:08 -0300
-Message-ID: <87edu0jp3r.fsf@cjr.nz>
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] cifs: add check for returning value of SMB2_set_info_init
+In-Reply-To: <20221116141027.10947-1-abelova@astralinux.ru>
+References: <20221116141027.10947-1-abelova@astralinux.ru>
+Date:   Fri, 18 Nov 2022 11:51:15 -0300
+Message-ID: <87a64ojoyk.fsf@cjr.nz>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,16 +57,18 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dan Carpenter <error27@gmail.com> writes:
+Anastasia Belova <abelova@astralinux.ru> writes:
 
-> This debug code dereferences "old_iface" after it was already freed by
-> the call to release_iface().  Re-order the debugging to avoid this
-> issue.
+> If the returning value of SMB2_set_info_init is an error-value,
+> exit the function.
 >
-> Fixes: b54034a73baf ("cifs: during reconnect, update interface if necessary")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>
+> Fixes: 0967e5457954 ("cifs: use a compound for setting an xattr")
+>
+> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
 > ---
->  fs/cifs/sess.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  fs/cifs/smb2ops.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
