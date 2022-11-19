@@ -2,73 +2,99 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBA162F831
-	for <lists+linux-cifs@lfdr.de>; Fri, 18 Nov 2022 15:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28428630B8C
+	for <lists+linux-cifs@lfdr.de>; Sat, 19 Nov 2022 04:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbiKROum (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 18 Nov 2022 09:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S233069AbiKSDuf (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 18 Nov 2022 22:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241997AbiKROuU (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Nov 2022 09:50:20 -0500
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751CB903B1;
-        Fri, 18 Nov 2022 06:50:14 -0800 (PST)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 58D2A7FD25;
-        Fri, 18 Nov 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1668783013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/rePAaj+Om/SnbzekquTM/6DwN9lHDTUpeQeQgkp3dc=;
-        b=ALBdruPCG8kg8CYj1aspn86VITy01IRFclshjVb2AwcDl8G1yzf4K5Al5ZT9tY/bLaEOSI
-        QsMHqTCpnef89BxB9MMnSY/wCPcrIvjcjZ5mJA8LKIvl6KxgNX7xPS0qv/ppW8FPu7/tx4
-        eCJz6Qib+sZYvXRMc4qBPho+BTcxdi2fdvtlmWDxwFr76oz/tOzM+/wEl7iVU0TUuAvcAS
-        y37bI7Ut0k3jwPo5FGYoCaeNY3CP6r0OmiZfq2faMsDntPF8BEGakXmwuxMKILpFwPA/kD
-        NHSeR/x3vn1v7ocZstjtUz52mhlyjyIOK6vcILJwqyxMGV6b6OrE8YS19P4CsA==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Anastasia Belova <abelova@astralinux.ru>,
-        Steve French <sfrench@samba.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Aurelien Aptel <aaptel@suse.com>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] cifs: add check for returning value of SMB2_close_init
-In-Reply-To: <20221115142701.27074-1-abelova@astralinux.ru>
-References: <20221115142701.27074-1-abelova@astralinux.ru>
-Date:   Fri, 18 Nov 2022 11:51:31 -0300
-Message-ID: <877czsjoy4.fsf@cjr.nz>
+        with ESMTP id S233050AbiKSDtu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 18 Nov 2022 22:49:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AF6C4969;
+        Fri, 18 Nov 2022 19:47:21 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDfjB1GcJzmVw8;
+        Sat, 19 Nov 2022 11:46:54 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 11:47:19 +0800
+Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 19 Nov
+ 2022 11:47:19 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <sfrench@samba.org>, <pc@cjr.nz>, <dhowells@redhat.com>
+CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
+        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
+        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>,
+        <yanaijie@huawei.com>
+Subject: [PATCH] cifs: fix missing unlock in cifs_file_copychunk_range()
+Date:   Sat, 19 Nov 2022 12:51:59 +0800
+Message-ID: <20221119045159.1400244-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Anastasia Belova <abelova@astralinux.ru> writes:
+xfstests generic/013 and generic/476 reported WARNING as follows:
 
-> If the returning value of SMB2_close_init is an error-value, 
-> exit the function.
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 352d96f3acc6 ("cifs: multichannel: move channel selection above transport layer")
->
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
-> ---
->  fs/cifs/smb2ops.c | 2 ++
->  1 file changed, 2 insertions(+)
+  WARNING: lock held when returning to user space!
+  6.1.0-rc5+ #4 Not tainted
+  ------------------------------------------------
+  fsstress/504233 is leaving the kernel with locks still held!
+  2 locks held by fsstress/504233:
+   #0: ffff888054c38850 (&sb->s_type->i_mutex_key#21){+.+.}-{3:3}, at:
+                        lock_two_nondirectories+0xcf/0xf0
+   #1: ffff8880b8fec750 (&sb->s_type->i_mutex_key#21/4){+.+.}-{3:3}, at:
+                        lock_two_nondirectories+0xb7/0xf0
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+This will lead to deadlock and hungtask.
+
+Fix this by releasing locks when failed to write out on a file range in
+cifs_file_copychunk_range().
+
+Fixes: 3e3761f1ec7d ("smb3: use filemap_write_and_wait_range instead of filemap_write_and_wait")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+---
+ fs/cifs/cifsfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index fe220686bba4..712a43161448 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1281,7 +1281,7 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+ 	rc = filemap_write_and_wait_range(src_inode->i_mapping, off,
+ 					  off + len - 1);
+ 	if (rc)
+-		goto out;
++		goto unlock;
+ 
+ 	/* should we flush first and last page first */
+ 	truncate_inode_pages(&target_inode->i_data, 0);
+@@ -1297,6 +1297,8 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+ 	 * that target is updated on the server
+ 	 */
+ 	CIFS_I(target_inode)->time = 0;
++
++unlock:
+ 	/* although unlocking in the reverse order from locking is not
+ 	 * strictly necessary here it is a little cleaner to be consistent
+ 	 */
+-- 
+2.31.1
+
