@@ -2,78 +2,153 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6876642D97
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Dec 2022 17:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE71A6439BE
+	for <lists+linux-cifs@lfdr.de>; Tue,  6 Dec 2022 01:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiLEQuM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 5 Dec 2022 11:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S231599AbiLFABO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 5 Dec 2022 19:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiLEQtm (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 5 Dec 2022 11:49:42 -0500
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E40021242
-        for <linux-cifs@vger.kernel.org>; Mon,  5 Dec 2022 08:48:54 -0800 (PST)
-Received: by mail-ot1-x344.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so2057859otp.9
-        for <linux-cifs@vger.kernel.org>; Mon, 05 Dec 2022 08:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
-        b=EvWmzEra/azIE+dhpMGnktmqmSoesb8PSCiM/05QKkVO5anMKEbRHSG7nojCSOyYWk
-         9IDI1UgS5rC+uB5j5uOW4no2X6seMos8u1Uby8q6RKzl1vCALcAn7vpiT6rpclAi8Jt0
-         gPKoEl0xikkT9S+7dg4LTBa5X4VHIsnKU2e6OrEO/j4h9xN1NPllzu29Dg0k3gFH+bOt
-         HMDW+rYw/YqhqvZ6y4oXgIeqTNVodnF9zHtiwgFo2Y0tEc6ReoK23o3+Epe6dWg/8ai1
-         Z4r7fWQ42rAk0Fys+lVH3VBvE+2FTvVvceopyfVxKS8DxJV3KaRTE9M5zTY24mYt1gIO
-         /rEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
-        b=TRb8CI3NEWb8m2wXDd0c6MDCJv3TBoyMT1xiVIbbkg8lnuKKY3K2QnNExSR9OD6R91
-         PsISi8qvOIMxMq6NS/7Vk8tBktEfxRzBsSnaaF/0rRxII/6r/H0HUzGE1VpbVrpkrivf
-         D1e3G931xBvIh5iG1eEUqaN+l0f/C5bWnzphF406x8HOeoSvatuwoWmRevI5qm/65mHn
-         t3LKoTHS4B2WY5/gkp0zZSTJzuYkAajHxtmVgJvFNDx2LJs9ZkPqbfrhvJLXFJnEB2Aq
-         PPkUMxOvbh5jMy4kXYT4hQxvSFydFp/c9MI9ca4NKf7uhQ0v5anitWH+Wspg38WEcoYM
-         Lx4w==
-X-Gm-Message-State: ANoB5pkaksMBnaMq94O5Wx3dmMK5dmEFm0tm1TWViGfcW0HlK9Ey2crR
-        aNrIzkt/TRrH3jdH+Smto9wrmGE/hPg3kqsxSk4=
-X-Google-Smtp-Source: AA0mqf6rJpockmAlPLGWb5IdXxyZXi5oeB/VlA7nQtTh5mH5GBjbP93nFRUHbmrw3A3v2AKvxeLYo6EVgAyGoUC2980=
-X-Received: by 2002:a05:6830:61ce:b0:66b:e4e2:8d25 with SMTP id
- cc14-20020a05683061ce00b0066be4e28d25mr41635604otb.152.1670258933537; Mon, 05
- Dec 2022 08:48:53 -0800 (PST)
+        with ESMTP id S231213AbiLFABN (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 5 Dec 2022 19:01:13 -0500
+X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 16:01:12 PST
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E399EF029
+        for <linux-cifs@vger.kernel.org>; Mon,  5 Dec 2022 16:01:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670283944; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=M7uP12WajbP+jO5MSBT8kI3uQueg94eE4KGafD+V0CnvtDKCtGjUlbQ+F+VzxjLzEuEa1b7h6NHMAkVxEICfs/e1RAeyXcBYG5E3gIzfprLBHQf1c/lnEyzydTKmisvYMe1DnrY9KnAUDXq9bAxvtytzUitWnJtf2t2g7abzN7s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670283944; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=AGiFRxdZLW6juIrUoq64NLI4cQyBdJI/u7NhEzTeBC4=; 
+        b=njUaLxzb8NCptfjO4oa6qHjUSM/6E3yHCD3hSQ7fV42PbeuDQPfMgpkFUe24jOIUjIRA5nIC5uI1x1EmBHVAeBpSuEmTng1XdrML6Mow8qEnZcGq7tI5WYR0S0ySuDa3bGpdjXLr9Ma6Yg6zhFLADEgy2ttrkSbh66kfsmKgVb0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=business@elijahpepe.com;
+        dmarc=pass header.from=<business@elijahpepe.com>
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1670283942325782.359895905616; Mon, 5 Dec 2022 15:45:42 -0800 (PST)
+Date:   Mon, 05 Dec 2022 15:45:42 -0800
+From:   Elijah Conners <business@elijahpepe.com>
+To:     "samba-technical" <samba-technical@lists.samba.org>,
+        "linux-cifs" <linux-cifs@vger.kernel.org>
+Cc:     "lsahlber" <lsahlber@redhat.com>, "sfrench" <sfrench@samba.org>,
+        "pc" <pc@cjr.nz>, "sprasad" <sprasad@microsoft.com>,
+        "tom" <tom@talpey.com>
+Message-ID: <184e4ae599e.dafedd623365931.2204914765704117230@elijahpepe.com>
+In-Reply-To: 
+Subject: [PATCH] cifs: add ipv6 parsing
 MIME-Version: 1.0
-Received: by 2002:a05:6358:7211:b0:dd:1fa2:ef73 with HTTP; Mon, 5 Dec 2022
- 08:48:53 -0800 (PST)
-Reply-To: plml47@hotmail.com
-From:   Philip Manul <lometogo1999@gmail.com>
-Date:   Mon, 5 Dec 2022 08:48:53 -0800
-Message-ID: <CAFtqZGFXDNDSmyfAW1goTwuOjaKBWi=RMxR7avPMnWxdOUFKOg@mail.gmail.com>
-Subject: REP:
-To:     in <in@proposal.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---=20
-Guten tag,
-Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
-einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
-teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
-mein verstorbener Kunde, hat hier in meinem Land einen nicht
-beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
-Verfahren.
-Philip Manul.
+CIFS currently lacks IPv6 parsing, presenting complications for CIFS
+over IPv6.
+
+To parse both IPv4 and IPv6 addresses, the parse_srvaddr() function
+was altered; parse_srvaddr() now returns void. To retrieve the IP
+address from parse_srvaddr(), the parameters *out6 and *out32, an
+in6_addr and a __be32 respectively, are provided. The value of
+root_server_addr is determined by if those parameters are set or not.
+
+The parsing in parse_srvaddr() was updated slightly. The character addr
+can hold up to 46 characters, the longest a possible IPv6 address can
+be. In the while loop, isdigit() has been replaced with isxdigit() to
+account for letters present in IPv6 addresses, and *start is also
+checked for being a colon. Finally, the function uses inet_pton() to
+determine if the address is an IPv6 address; if so, *out6 is equal to
+in6, set by inet_pton, otherwise, *out32 is set to in_aton(addr).
+
+Signed-off-by: Elijah Conners <business@elijahpepe.com>
+---
+ fs/cifs/cifsroot.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/fs/cifs/cifsroot.c b/fs/cifs/cifsroot.c
+index 9e91a5a40aae..f0aba7c824dc 100644
+--- a/fs/cifs/cifsroot.c
++++ b/fs/cifs/cifsroot.c
+@@ -14,6 +14,7 @@
+ #include <linux/in.h>
+ #include <linux/inet.h>
+ #include <net/ipconfig.h>
++#include <arpa/inet.h>
+ 
+ #define DEFAULT_MNT_OPTS \
+ 	"vers=1.0,cifsacl,mfsymlinks,rsize=1048576,wsize=65536,uid=0,gid=0," \
+@@ -22,19 +23,24 @@
+ static char root_dev[2048] __initdata = "";
+ static char root_opts[1024] __initdata = DEFAULT_MNT_OPTS;
+ 
+-static __be32 __init parse_srvaddr(char *start, char *end)
+-{
+-	/* TODO: ipv6 support */
+-	char addr[sizeof("aaa.bbb.ccc.ddd")];
++static void __init parse_srvaddr(char *start, char *end, struct in6_addr *out6, __be32 *out32)
++{
++	char addr[INET6_ADDRSTRLEN];
++	struct in6_addr in6;
+ 	int i = 0;
+ 
+ 	while (start < end && i < sizeof(addr) - 1) {
+-		if (isdigit(*start) || *start == '.')
++		if (isxdigit(*start) || *start == '.' || *start == ':')
+			addr[i++] = *start;
+ 		start++;
+ 	}
+ 	addr[i] = '\0';
+-	return in_aton(addr);
++
++ if (inet_pton(AF_INET6, addr, &in6) > 0) {
++ 	*out6 = in6;
++ } else {
++ 	*out32 = in_aton(addr);
++ }
+ }
+ 
+ /* cifsroot=//<server-ip>/<share>[,options] */
+@@ -42,7 +48,8 @@ static int __init cifs_root_setup(char *line)
+ {
+ 	char *s;
+ 	int len;
+-	__be32 srvaddr = htonl(INADDR_NONE);
++	struct in6_addr addr6;
++	__be32 addr32;
+ 
+ 	ROOT_DEV = Root_CIFS;
+ 
+@@ -60,7 +67,7 @@ static int __init cifs_root_setup(char *line)
+ 			return 1;
+ 		}
+ 		strlcpy(root_dev, line, len);
+-		srvaddr = parse_srvaddr(&line[2], s);
++		parse_srvaddr(&line[2], s, &addr6, &addr32);
+ 		if (*s) {
+ 			int n = snprintf(root_opts,
+ 					 sizeof(root_opts), "%s,%s",
+@@ -73,7 +80,11 @@ static int __init cifs_root_setup(char *line)
+ 		}
+ 	}
+ 
+-	root_server_addr = srvaddr;
++	if (addr6.is_set) {
++		root_server_addr = addr6;
++	} else if (addr32.is_set) {
++		root_server_addr = addr32;
++	}
+ 
+ 	return 1;
+ }
+-- 
+2.29.2.windows.2
+
+
