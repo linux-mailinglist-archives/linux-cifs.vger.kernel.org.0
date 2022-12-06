@@ -2,69 +2,95 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B6064449F
-	for <lists+linux-cifs@lfdr.de>; Tue,  6 Dec 2022 14:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BE36444D8
+	for <lists+linux-cifs@lfdr.de>; Tue,  6 Dec 2022 14:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiLFNeS (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 6 Dec 2022 08:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S233466AbiLFNrr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Dec 2022 08:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbiLFNeR (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Dec 2022 08:34:17 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5C56310
-        for <linux-cifs@vger.kernel.org>; Tue,  6 Dec 2022 05:34:16 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3cbdd6c00adso151586797b3.11
-        for <linux-cifs@vger.kernel.org>; Tue, 06 Dec 2022 05:34:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plIPv+lnMIRiOFIe1dV+2tGtFokN2PX8I8Vl98aLxQc9p4eid896+qqRiD3cj5lfhx
-         z1hiGYil0vHTQsGiaUgsnmnfx7Jsn5jop25MSUm4B/gJqMPAdiI+jqYGT4X+agKLBheY
-         M4kLaJ4VYCDPrPdHz+VgEOo7V/8+VLiplXwZ5AxhmuB3ZAIj06bRIm6vVBa+cxsfUC69
-         p7oJjaq1f7uQyzM8lwAnIzamm5TXtetx0xVW4yZv8ZN22bVtgp/BSdTYcvwessuJv/HS
-         +NRVIrLiepTygJiUKe8fSjaB2LODMLrNxWaYxbpkKlISbamBewTovVPI3Q2nv//3DE4C
-         AORg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=Ek2SBHsVnJ8DM+WaxdrRlbT3DHosWMyymMNSIRNfntDuZmvEyCx6FB4kKxm1UGOpnQ
-         Gz19+DULn+4HiDX1KZi/RKdy7EdeCVZu2sD+H9oUChzjSVc7Q0hSaKaY3Lb0Dy8ussCc
-         vFZsu9K2SA4A8dCBoGqz1SzYuGUD3l5tHOMVw/W9ae66pe3k39e6e0qzA8QaTjPqDqR3
-         Iat65DnUj5w+tPM6fvcJPub9Zf2ahiDjPOrMOBma36arw6t3wZMO0C0SBVWJiggkEnOu
-         nReMToqrqG/naAG0TvCWG+3A5JZBmqI1euMzHBkkaKPHm2FC/sNB1d/EbDsbvOvgs/eY
-         U4LQ==
-X-Gm-Message-State: ANoB5pk6ipeKh3aWazMwP4JFJGcUTK4C0hGD53tP/9vyZkcuCXe8MUUJ
-        oIv/Y0Hh6zRlrV75PkJWnXtYDwO00SbZl4s5Kc0=
-X-Google-Smtp-Source: AA0mqf5LIFZdFA8gXtM15wCQVGRPhLW0DnkI1aVHz2d7yBbqXPecX+J2gwBesGTmYMSfngKxp/YLH/vq5s11h8+sSxc=
-X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
- g64-20020a815243000000b003d22098c5fbmr31224498ywb.121.1670333655770; Tue, 06
- Dec 2022 05:34:15 -0800 (PST)
+        with ESMTP id S231434AbiLFNrp (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Dec 2022 08:47:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082086170;
+        Tue,  6 Dec 2022 05:47:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9843161763;
+        Tue,  6 Dec 2022 13:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C23C433D7;
+        Tue,  6 Dec 2022 13:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670334462;
+        bh=3qXkpQ5Oz7bpT3VEqA95fX8I1PdWWrzSQrVPTpdVTxg=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=RDoErpHdigi8RzIzdk5bfXc56IRDcO8lRF1hzBfEWlwYnrLHsjzKPhC8xwS5QVNj4
+         F3KbRV5HBLSe7ig/35CwAK5w8Fsb4HxKyvWFQFLLZmQT2WIv+/kCYhv0lA8scfyuzp
+         d8wEPfJjCvSWrYE04CHDkpFlKPxsWcP1JMOsh4QOeLV0BtH6SzCnBQ49A04qqClV9T
+         +nn4r+yLsv2C+CDGU6/YLEqK9FVVxSg5nFt3DzdQejk14/FeLmm5zAG/22m9nw/bsW
+         82qftxsgIv0LO+/t/erf4B2SlDmWDduK3mtQJBo7s+pyfyMFJYTONiBZitcVFAHgAH
+         Iq5l11kIm1KoQ==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-14455716674so11289808fac.7;
+        Tue, 06 Dec 2022 05:47:42 -0800 (PST)
+X-Gm-Message-State: ANoB5pk3wOzX44UBbyXDknfR65GaHdtk5xRC91ObZrjuiNJB5anAbHm9
+        zTnd5rncEfBr5OTshczAs1vlRgesCGduonTY4cI=
+X-Google-Smtp-Source: AA0mqf73W498Ri/qiT/qJht092b6FijkvmmSJg9fAULL/8Z1IecqJX89gxsOn0GM0hCKElQlRsDM6UhLukn32RsCH9w=
+X-Received: by 2002:a05:6870:430a:b0:13d:5167:43e3 with SMTP id
+ w10-20020a056870430a00b0013d516743e3mr39872537oah.257.1670334462038; Tue, 06
+ Dec 2022 05:47:42 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
- 05:34:15 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
-Date:   Tue, 6 Dec 2022 13:34:15 +0000
-Message-ID: <CACJtp8tgBjrWD7ywREfL1yUK0-utTuArETnYq7P42dWiPJKSBA@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+Received: by 2002:a05:6839:1a4e:0:0:0:0 with HTTP; Tue, 6 Dec 2022 05:47:41
+ -0800 (PST)
+In-Reply-To: <202212051703254109015@zte.com.cn>
+References: <202212051703254109015@zte.com.cn>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 6 Dec 2022 22:47:41 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd86zq=NHC56AduDaWR6yMoM1WGeJq8ThBkDy2vXRc+SOw@mail.gmail.com>
+Message-ID: <CAKYAXd86zq=NHC56AduDaWR6yMoM1WGeJq8ThBkDy2vXRc+SOw@mail.gmail.com>
+Subject: Re: [PATCH linux-next] ksmbd: use sysfs_emit() to instead of scnprintf()
+To:     ye.xingchen@zte.com.cn
+Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+2022-12-05 18:03 GMT+09:00, ye.xingchen@zte.com.cn <ye.xingchen@zte.com.cn>:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  fs/ksmbd/server.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/ksmbd/server.c b/fs/ksmbd/server.c
+> index a0d635304754..b0da15377709 100644
+> --- a/fs/ksmbd/server.c
+> +++ b/fs/ksmbd/server.c
+> @@ -433,7 +433,7 @@ static ssize_t stats_show(struct class *class, struct
+> class_attribute *attr,
+>  		"shutdown"
+>  	};
+>
+> -	ssize_t sz = scnprintf(buf, PAGE_SIZE, "%d %s %d %lu\n", stats_version,
+> +	ssize_t sz = sysfs_emit(buf, "%d %s %d %lu\n", stats_version,
+>  			       state[server_conf.state], server_conf.tcp_port,
+>  			       server_conf.ipc_last_active / HZ);
+It would be great if you remove sz variable and return it directly.
+
+Thanks.
+>  	return sz;
+> --
+> 2.25.1
+>
