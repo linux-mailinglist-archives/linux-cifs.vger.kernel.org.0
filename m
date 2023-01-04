@@ -2,113 +2,148 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A24A65AC68
-	for <lists+linux-cifs@lfdr.de>; Mon,  2 Jan 2023 00:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6853C65CCD8
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Jan 2023 07:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjAAXDA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 1 Jan 2023 18:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S231179AbjADGOO (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 4 Jan 2023 01:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAAXDA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 1 Jan 2023 18:03:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276BE2180;
-        Sun,  1 Jan 2023 15:02:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFCC3B80B50;
-        Sun,  1 Jan 2023 23:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FFDC433EF;
-        Sun,  1 Jan 2023 23:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672614176;
-        bh=+APP+2lLo3YrbHdKAcC0k1slJXQMh+w4XYkOq5/C1X4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CWMwgUweTkeHMK8dctc9B+xEl3YOh4W7RtjJJmB2WK61ive8fBmz5b4hbLBCoOsyR
-         abr0bR9SPGNsvphP3wElRI0rYsIwU25VzSXtdsli5N0hDzLYDH9zPAaqfaFvpSI9Nf
-         RLPtSOc3eaYgaLnxh2fSquwoubmmrs8Z684b5M7pLCc9t4fiapsbDzmCyEyy9oLBNY
-         9Iv2gIVaH3dQa7g9X1MCHWyPRSB9uGHKmHhcrJVLwm8fCXUN9BUZ3AMDVCLjv1omXg
-         eeIJ7gpPcuQ1FNvrmoooKY34E4GWir7PEegHAoU1vmzhfDONozwujueB1qE/+uXGdu
-         wwDn88iFMnbFw==
-Received: by pali.im (Postfix)
-        id 5B302884; Mon,  2 Jan 2023 00:02:53 +0100 (CET)
-Date:   Mon, 2 Jan 2023 00:02:53 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Kari Argillander <kari.argillander@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Dave Kleikamp <shaggy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Viacheslav Dubeyko <slava@dubeyko.com>
-Subject: Re: [RFC PATCH v2 03/18] ntfs: Undeprecate iocharset= mount option
-Message-ID: <20230101230253.qhhku7d42kyrbkst@pali>
-References: <20221226142150.13324-1-pali@kernel.org>
- <20221226142150.13324-4-pali@kernel.org>
- <CAC=eVgS7weRq7S16MpTyx9eZm=2s+OZhm6Ko75Z6bmjsHH-7Yw@mail.gmail.com>
- <20230101190605.s7jyf3umgubwrk3i@pali>
+        with ESMTP id S230423AbjADGON (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 4 Jan 2023 01:14:13 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFE41582F
+        for <linux-cifs@vger.kernel.org>; Tue,  3 Jan 2023 22:14:11 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id v25so1602566lfe.12
+        for <linux-cifs@vger.kernel.org>; Tue, 03 Jan 2023 22:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sDZt+OUEMk33IyjiPH1bLca16LOkhf7ByuRNP9e7gVM=;
+        b=kazS2uhrAAaK0MFzloiuFkles46MYKycn87b0jGuTx/lHc1AyHj3BWTEvTbm5pw9G+
+         JGRgJSV/kI5dQRF1r7uVaPMI7Ex4C395N6IGBtAhu7Dj1gcyWD1U+hQw2Kh2WoUeWKPe
+         wJIZmeYd3bc1ywjnBadu1YNEjyyKRPVbY9TKVWUyzxdIpCwT9kz3Mrue862fKkUCXnpz
+         4GxD6AVTGotoLyWf5tYw4p0h2FIyKAni8AzTyVLNW3UmDTAI6y65ieHYr2ucCceDcph5
+         3yHYk4FYftbw/YYHeAM3kLXAOrdELKPZtM7Rbwr2dKBVDyAZSs65k5KV4vWp5mu3kVGT
+         DhAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sDZt+OUEMk33IyjiPH1bLca16LOkhf7ByuRNP9e7gVM=;
+        b=1g5u6AoQgA290q2Tlq1Zy6xmYIw3asWVGU4CxibVFU+g0haoNkUASrk+xet+GdkdXx
+         69GjdPlDlhcu8g9RXF4X6ncEtWTUqy5pxPPTAzKfw/p8YIhWlSQRiSw6Qh/CuoJtAiWU
+         nsymhKqdma1NbZ6dQXJzh1zwH2APcCQ5Agd2Y+WRN1qQEcVKle+2OBcC/Pulyq0C/2k8
+         vFx4NruOvMMNvUasE+3ghDMMMDZ56q50T4PhgyExv94dJm1c/SGLPcHOFydQfQ4t9xDG
+         /Hz+BZIRXBxHZ1ILoGUTN2vUR8qVrz6CWjRmgoqJsHCycrcKb5dEN3b6D8KJUWX1CE5H
+         LkeA==
+X-Gm-Message-State: AFqh2ko0tO6TBA6H+4azm1+Do2wyJ5pEx35EEJ9SYERfsXGPE9CZaAOV
+        Sp9wp/zOaf9enWHvmIQNpTQSj7UT7i0jkn2a+FoMbUe1
+X-Google-Smtp-Source: AMrXdXsDxtP7rKvJMuEHABanI/t8dWTpPdY1mCgn/0V4sno1XpXwmUvm+D5BDXrmPTUnqZjFnQojzquR/k4/+cFr1B8=
+X-Received: by 2002:a05:6512:14d:b0:4cb:3a2f:26d1 with SMTP id
+ m13-20020a056512014d00b004cb3a2f26d1mr376599lfo.303.1672812849975; Tue, 03
+ Jan 2023 22:14:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230101190605.s7jyf3umgubwrk3i@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229153356.8221-1-pc@cjr.nz> <20221229201029.lajhejwbbtca6poc@suse.de>
+ <CAH2r5mv-2MPzd-zJSxDXh5avC4Bhp-BJG9nmr2f=1FR5m6B3Zg@mail.gmail.com>
+In-Reply-To: <CAH2r5mv-2MPzd-zJSxDXh5avC4Bhp-BJG9nmr2f=1FR5m6B3Zg@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 4 Jan 2023 00:13:58 -0600
+Message-ID: <CAH2r5msnXZXKYQD3sVKig0MWzrRo7rth1BVuFsvboWcO0J7eeg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cifs: ignore ipc reconnect failures during dfs failover
+To:     Enzo Matsumiya <ematsumiya@suse.de>
+Cc:     Paulo Alcantara <pc@cjr.nz>, linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Sunday 01 January 2023 20:06:05 Pali Rohár wrote:
-> On Sunday 01 January 2023 21:02:46 Kari Argillander wrote:
-> > 26.12.2022 klo 16.22 Pali Rohár (pali@kernel.org) wrote:
-> > >
-> > > Other fs drivers are using iocharset= mount option for specifying charset.
-> > > So mark iocharset= mount option as preferred and deprecate nls= mount
-> > > option.
-> > 
-> > snip.
-> > 
-> > > diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
-> > 
-> > snip.
-> > 
-> > > @@ -218,10 +213,10 @@ static bool parse_options(ntfs_volume *vol, char *opt)
-> > >                 } else if (!strcmp(p, "utf8")) {
-> > >                         bool val = false;
-> > >                         ntfs_warning(vol->sb, "Option utf8 is no longer "
-> > > -                                  "supported, using option nls=utf8. Please "
-> > > -                                  "use option nls=utf8 in the future and "
-> > > -                                  "make sure utf8 is compiled either as a "
-> > > -                                  "module or into the kernel.");
-> > > +                                  "supported, using option iocharset=utf8. "
-> > > +                                  "Please use option iocharset=utf8 in the "
-> > > +                                  "future and make sure utf8 is compiled "
-> > > +                                  "either as a module or into the kernel.");
-> > 
-> > We do not have to make sure utf8 is compiled anymore as it "always is" right?
-> 
-> Yes, right, we have always utf8 support compiled-in.
-> Second part of that warning message should be dropped.
+On Wed, Jan 4, 2023 at 12:13 AM Steve French <smfrench@gmail.com> wrote:
+>
+> merged into cifs-2.6.git for-next
+>
+> On Thu, Dec 29, 2022 at 2:10 PM Enzo Matsumiya <ematsumiya@suse.de> wrote:
+>>
+>> On 12/29, Paulo Alcantara wrote:
+>> >If it failed to reconnect ipc used for getting referrals, we can just
+>> >ignore it as it is not required for reconnecting the share.  The worst
+>> >case would be not being able to detect or chase nested links as long
+>> >as dfs root server is unreachable.
+>> >
+>> >Before patch:
+>> >
+>> >  $ mount.cifs //root/dfs/link /mnt -o echo_interval=10,...
+>> >    -> target share: /fs0/share
+>> >
+>> >  disconnect root & fs0
+>> >
+>> >  $ ls /mnt
+>> >  ls: cannot access '/mnt': Host is down
+>> >
+>> >  connect fs0
+>> >
+>> >  $ ls /mnt
+>> >  ls: cannot access '/mnt': Resource temporarily unavailable
+>> >
+>> >After patch:
+>> >
+>> >  $ mount.cifs //root/dfs/link /mnt -o echo_interval=10,...
+>> >    -> target share: /fs0/share
+>> >
+>> >  disconnect root & fs0
+>> >
+>> >  $ ls /mnt
+>> >  ls: cannot access '/mnt': Host is down
+>> >
+>> >  connect fs0
+>> >
+>> >  $ ls /mnt
+>> >  bar.rtf  dir1  foo
+>> >
+>> >Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+>>
+>> Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+>>
+>> >---
+>> > fs/cifs/dfs.c | 3 +--
+>> > 1 file changed, 1 insertion(+), 2 deletions(-)
+>> >
+>> >diff --git a/fs/cifs/dfs.c b/fs/cifs/dfs.c
+>> >index b541e68378f6..30086f2060a1 100644
+>> >--- a/fs/cifs/dfs.c
+>> >+++ b/fs/cifs/dfs.c
+>> >@@ -401,8 +401,7 @@ static int __tree_connect_dfs_target(const unsigned int xid, struct cifs_tcon *t
+>> >               if (ipc->need_reconnect) {
+>> >                       scnprintf(tree, MAX_TREE_SIZE, "\\\\%s\\IPC$", server->hostname);
+>> >                       rc = ops->tree_connect(xid, ipc->ses, tree, ipc, cifs_sb->local_nls);
+>> >-                      if (rc)
+>> >-                              break;
+>> >+                      cifs_dbg(FYI, "%s: reconnect ipc: %d\n", __func__, rc);
+>> >               }
+>> >
+>> >               scnprintf(tree, MAX_TREE_SIZE, "\\%s", share);
+>> >--
+>> >2.39.0
+>> >
+>
+>
+>
+> --
+> Thanks,
+>
+> Steve
 
-Ok, this is truth after patch 15/18. So info about compiled module
-should be dropped in patch 15/18, not in this one.
 
-> > >                         if (!v || !*v)
-> > >                                 val = true;
-> > >                         else if (!simple_getbool(v, &val))
+
+-- 
+Thanks,
+
+Steve
