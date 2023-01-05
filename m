@@ -2,100 +2,111 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F284D65ED54
-	for <lists+linux-cifs@lfdr.de>; Thu,  5 Jan 2023 14:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C3965F2BB
+	for <lists+linux-cifs@lfdr.de>; Thu,  5 Jan 2023 18:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjAENld (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 5 Jan 2023 08:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S234844AbjAERbz (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 5 Jan 2023 12:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbjAENlQ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 5 Jan 2023 08:41:16 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8309E12D02;
-        Thu,  5 Jan 2023 05:41:14 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so1332341wms.2;
-        Thu, 05 Jan 2023 05:41:14 -0800 (PST)
+        with ESMTP id S235210AbjAERbo (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 5 Jan 2023 12:31:44 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603FDFF3
+        for <linux-cifs@vger.kernel.org>; Thu,  5 Jan 2023 09:31:43 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d17so17090734wrs.2
+        for <linux-cifs@vger.kernel.org>; Thu, 05 Jan 2023 09:31:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GyyRdgebspZF1HHBg/x+bnzRDFwvCGUNNQpRJ9GE9NE=;
-        b=gVovIXNCyutrMkt3B7RkQAXY9mkDckwwv0IwDDTcMNXgyGB/xpYBpp07ss+3hnRL4r
-         VNSazoyUN8XC1C5yLkMI1DcBWCH/YA+y2FXM45UghIv6aUPAUBAoFZBnNe4FEUAMegID
-         3c7ZnWO5b0AYdk7acTUBed5ytK1VLXUtsK7B5zybvgrnnHOXdGMKZV75T4f0G+Hh4kbH
-         opPfBEB4SE6UA4OESxQIGCoqAgfjqna0saJ9vGzS2ClRJnzWUEhhOEILucszK8ZIqZHA
-         /CV/27Jtt8du9zkuwBXSoPf57ZxeJN9c0VC+b6XRkLohdWdipAVn9lU4jBJjNe6mgCo7
-         8mKQ==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0RlYLuDmGetdsDeZovB7p+FtBbxQtFVDUeNrnEAwc+s=;
+        b=ERCj68n9SG0zOQ1PN95anDbYfACtwOJYeAzrNa9rQIMLHzeKsowVHAxMyACwNH5CUl
+         L09oApdQdbaHMqA4YlUh2DBHYWhYI+l1RnA8XsoHeHFxzlIw6zifu70BX0/RZEz7Kg5I
+         90f6g7XFkU+vosZSzQ9r0RnumC89iKbm3mcLnMLPlvwjZH47YXrYe/+T7lJO1Rh24BNH
+         kVJFhNjMLkZWywCmRemML+5Sm3Z3NDG5TSPyGwbzfwHkOzCRi8bjL7pNs645SgCDrFPB
+         Te9HeIoXw2T4n6TtcHlj0+DRF0euZe2Ntlyq9zZRg/hCDUQFSz+gtP704H8n9U7IYbuB
+         g5mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GyyRdgebspZF1HHBg/x+bnzRDFwvCGUNNQpRJ9GE9NE=;
-        b=a9idR9MiBNKwb5HIjJxgiuLep+q5KE7ZFvVc5GXZt1WiwLVgQce83R3NBJ8dYINGLd
-         f3VShGEZsBpivS1O9EH7nz2ylRpQ/dZliAqI9Pkx08bboTtJBJ9fsV+ZTE6rNggBQmCI
-         Bbnm2+qfwog5D7l4f3Q7OwX/73XSXv9xCSH1HMQXPdKum6bKacErNgTZXdgRc97iObaM
-         ezWw/ufYxSR0R8QWDRfNCcuSo/4mkOzeUwYx24lohqtyxhHzW9nRsOyAlKRRUMXai2RJ
-         32OU24nfvDDpPXBo9kUz27X9qKEUtOMubA7YLSCPkrEnAd+yhvbLmb6RTnQTilMJ+6Np
-         7GSg==
-X-Gm-Message-State: AFqh2kpnVRfzfw8yWlJMcAQj4Edtu9G06KpRaUCD0Ne503VRQAHHqKIz
-        FldixAtNEgcRF5KqAv7wTiKb8fu8IPjp5Msw
-X-Google-Smtp-Source: AMrXdXv+HroiUbAmYEH/mD+Ekli8hj6yu3IC02jJ00oTFNUO93iv3a1BHfq46uZB6xtnwejHQ1zFMQ==
-X-Received: by 2002:a05:600c:b4d:b0:3d3:5d69:7aa5 with SMTP id k13-20020a05600c0b4d00b003d35d697aa5mr34879221wmr.25.1672926073037;
-        Thu, 05 Jan 2023 05:41:13 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b003d9780466b0sm2689085wmq.31.2023.01.05.05.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 05:41:12 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] cifs: remove redundant assignment to the variable match
-Date:   Thu,  5 Jan 2023 13:41:11 +0000
-Message-Id: <20230105134111.45001-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=0RlYLuDmGetdsDeZovB7p+FtBbxQtFVDUeNrnEAwc+s=;
+        b=Imw0/4Fi857chtHo6op0Cat40oeLNm2AqlBucSX5Mj5EKfNhePie1wsVBIfvgZSygZ
+         F4SNwVAYbaXzDXfgrYMmen5vCwFO7w3ODeuT+cUCFdWsr2uBGZWX70aG99/f3EtnCuCw
+         bvL2jfTywAkyWU6FHm43+VFZY4WSYVvmeuKfAEsdkVFJ/iJvGtd+VpL8FeCBm+i2Y/Sn
+         CbPgJ1PHXhbF1Mx+3kmSUhPiOnOjRo0a7Kg+46L0wPwhnoDVGet4Enzp/gYUAfDAvozC
+         PJDtRO1C6e5QHc0mLF/Jie8M1jffdXV3vYrJjFltmUxGXKjEfkuyjLB2PXgSbkCmbWia
+         1agQ==
+X-Gm-Message-State: AFqh2kolY+ANI0cyj//CeHIfiOOixJ068o3bA86uC0UoUdHyEVeyQ0EF
+        BylcXIDP7ILZcmyqnEB0pa0A5ebd0/NUfP863wU=
+X-Google-Smtp-Source: AMrXdXtgKzkTDcuycr0UBTsWPfBmnK3nqRtf275OnHVU4KHm6SQFCre+YMEVGMCqa45pm6PhU8DYjxw5ah655asMZS0=
+X-Received: by 2002:a05:6000:1b0f:b0:2b6:665:7d90 with SMTP id
+ f15-20020a0560001b0f00b002b606657d90mr58994wrz.646.1672939901808; Thu, 05 Jan
+ 2023 09:31:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:6020:f4ca:b0:249:9e95:fbbe with HTTP; Thu, 5 Jan 2023
+ 09:31:41 -0800 (PST)
+Reply-To: williamsloanfirm540@gmail.com
+From:   John Williams <juliusndiritu3@gmail.com>
+Date:   Thu, 5 Jan 2023 20:31:41 +0300
+Message-ID: <CAOy5vdSaqAQOpPsSWXNKqiUN+_mTObbTG+aBDaK33j9UPHRv3A@mail.gmail.com>
+Subject: Darlehen
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:430 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6981]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [juliusndiritu3[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [williamsloanfirm540[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [juliusndiritu3[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The variable match is being assigned a value that is never read, it
-is being re-assigned a new value later on. The assignment is redundant
-and can be removed.
+--=20
+Ben=C3=B6tigen Sie ein schnelles und garantiertes Darlehen, um Ihre
+Rechnungen zu bezahlen oder ein Unternehmen zu gr=C3=BCnden? Ich biete
+sowohl Privat- als auch Gesch=C3=A4ftskredite an, um Ihre finanziellen
+Bed=C3=BCrfnisse zu einem niedrigen Zinssatz von 3 % zu erf=C3=BCllen.
+Kontaktieren Sie uns noch heute =C3=BCber williamsloanfirm540@gmail.com
 
-Cleans up clang scan-build warning:
-fs/cifs/dfs_cache.c:1302:2: warning: Value stored to 'match' is never read
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/cifs/dfs_cache.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 43ad1176dcb9..e20f8880363f 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -1299,7 +1299,6 @@ static bool target_share_equal(struct TCP_Server_Info *server, const char *s1, c
- 	 * Resolve share's hostname and check if server address matches.  Otherwise just ignore it
- 	 * as we could not have upcall to resolve hostname or failed to convert ip address.
- 	 */
--	match = true;
- 	extract_unc_hostname(s1, &host, &hostlen);
- 	scnprintf(unc, sizeof(unc), "\\\\%.*s", (int)hostlen, host);
- 
--- 
-2.30.2
 
+
+Do you need a Fast and Guarantee loan to pay your bills or start up a
+Business? I offer both personal and business loan services to  meet
+your financial needs at a low interest rate of 3%. Contact us today
+via  williamsloanfirm540@gmail.com
