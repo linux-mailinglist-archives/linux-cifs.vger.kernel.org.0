@@ -2,77 +2,69 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF0F669A3D
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Jan 2023 15:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8141E669D56
+	for <lists+linux-cifs@lfdr.de>; Fri, 13 Jan 2023 17:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjAMObj (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 13 Jan 2023 09:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S230018AbjAMQL1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 13 Jan 2023 11:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjAMOau (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Jan 2023 09:30:50 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C6E84BC6
-        for <linux-cifs@vger.kernel.org>; Fri, 13 Jan 2023 06:23:56 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id o13so10831776ilc.7
-        for <linux-cifs@vger.kernel.org>; Fri, 13 Jan 2023 06:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=JojvgH8XT/5W3Z19zz/xJpsK+UtUfuLOajrP2bUiE0PZHJLaHxyVoS/gdwZ4j1nINn
-         NAhLjtRw5JWhWpQP6cjr/K+IqEq6cG/swjHmgKkU8/bzhvwyjyHr6pxRihWxyvWQ7jH/
-         ycXHQba8H8CGw08mZc2lRnHbsatDyaP7XSi3luhnXRDyANgc7SfZsYR/2kBx67sDkelt
-         N009oKtaqxMaVcV5I8bJGY2a5+MgMpNdeDc6P09VU6v2oJr8B0zV2O/YER8mJLD4Mn1g
-         U9CLRknFXD87iaVRlJkboh6IHCCrAxvZm9BuL/cccG7OGvOaJ6fm9314ARdKvJNPjG9a
-         t4ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=Vuzipv3rt2/kImpDrlX3qQPryZ25oSHYbgKxDrBVkwtF1Rab7zYFUyf93pISQUlCsh
-         TR9osNVa0c26huclYz9SyuX+Fscr/FRcj9WzE3yRsIAz+2AnLUVuFln35QAlzMVSpdLu
-         A5tQoN2Vu9lHRuf0whLyrIn5lRSczB0YtpFEvq1aXCYDbrCn65Zee9yv61l1XHgM/AZm
-         LA+Y32sBQjf9+iRz3DQwiUenV1kRiSiASRBmsK63hLn7TYo0/fO1qkUmz3yvXEaKXFqp
-         h2cJdBLffKyPwE1fbDVbdemQ3BWtzk1U82so/6NJCg0WmgqsMxbcW9M1FNk12SbahP+m
-         Or3w==
-X-Gm-Message-State: AFqh2koHSbcm6aUkhRL/pzOaLXfjx5gRgxulc2iYG2ru1et3g0w62vRn
-        d11fXn3wiDs6om3/61aEsHxbC4hstW2S7fP9MY0=
-X-Google-Smtp-Source: AMrXdXszWXnZUU3mDwuG0prmaP86rTFSkz0+fra775veb5Y7HNHpZxCjxPfSPiWnLxbY0i6yMoRbzmb1JvPTG9uROSM=
-X-Received: by 2002:a92:3601:0:b0:30e:e57f:b106 with SMTP id
- d1-20020a923601000000b0030ee57fb106mr115968ila.304.1673619835751; Fri, 13 Jan
- 2023 06:23:55 -0800 (PST)
+        with ESMTP id S229982AbjAMQKi (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Jan 2023 11:10:38 -0500
+Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FFA065B1;
+        Fri, 13 Jan 2023 08:04:36 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dmbarone.com (Postfix) with ESMTP id EFAE82A5751;
+        Fri, 13 Jan 2023 15:25:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623557; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=UQrQV1mhOCXp8Vdhj5ZMIQ7kECq7tYJuH2AcU2UM1roOkC5jLy5PAkZyiykUCrQDU
+         oYvhKPoWPtMsEkPzXkvZnkX0jaDZs7A8+7AEW1O1JK1NNq/0rVoIjqnUR+Ib40kUKd
+         xAjr4GQW5DjCQ39qCR88WG4hdFzQikQ2LXmUqDaI=
+X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
+Received: from mail.dmbarone.com ([127.0.0.1])
+        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id XwzUcDuaoAWq; Fri, 13 Jan 2023 15:25:56 +0000 (UTC)
+Received: from [172.20.10.6] (unknown [129.205.124.225])
+        (Authenticated sender: admin@dmbarone.com)
+        by mail.dmbarone.com (Postfix) with ESMTPSA id 01AED2A56D9;
+        Fri, 13 Jan 2023 15:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623556; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=Xujr+eOxgJe9jczPL1SNkJ6ozzO2KXVAsBjKy56+11usK6bsjT7tnkQBPePEAUELb
+         OnB+7jlvcNoB+WKkJxqizcTmuTa/6eYD1ySJYpPypvocjJeK30xr4n7PEulwjii9u7
+         JG71oAy0mSUhbaYNLedsvYsO1j3iWsgHN/mZq+PI=
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
- 06:23:55 -0800 (PST)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <atidigahcyril@gmail.com>
-Date:   Fri, 13 Jan 2023 06:23:55 -0800
-Message-ID: <CALHvQ-jffHwgwQxY7MVBOpZpcQX1hUnBOishkcFBMPm+SMZxqA@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5029]
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
+To:     Recipients <admi@dmbarone.com>
+From:   <admi@dmbarone.com>
+Date:   Fri, 13 Jan 2023 16:25:49 +0100
+Reply-To: theresasteven225@gmail.com
+X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230113152556.EFAE82A5751@mail.dmbarone.com>
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7971]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [129.205.124.225 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [5.181.144.66 listed in bl.score.senderscore.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
         *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
         *      digit
-        *      [hitnodeby23[at]yahoo.com]
+        *      [theresasteven225[at]gmail.com]
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [atidigahcyril[at]gmail.com]
         * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
         *      author's domain
         * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
@@ -80,22 +72,20 @@ X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *       valid
         * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
         *      envelope-from domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
--- 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details.
+Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
+en.
 
-Thanks and God Bless You.
-Ms Hinda Itno Deby
+Gr=FC=DFe
+Theresia Steven
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
