@@ -2,90 +2,113 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8141E669D56
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Jan 2023 17:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EC266A81D
+	for <lists+linux-cifs@lfdr.de>; Sat, 14 Jan 2023 02:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjAMQL1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 13 Jan 2023 11:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S230251AbjANBTY (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 13 Jan 2023 20:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjAMQKi (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Jan 2023 11:10:38 -0500
-Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FFA065B1;
-        Fri, 13 Jan 2023 08:04:36 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dmbarone.com (Postfix) with ESMTP id EFAE82A5751;
-        Fri, 13 Jan 2023 15:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623557; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=UQrQV1mhOCXp8Vdhj5ZMIQ7kECq7tYJuH2AcU2UM1roOkC5jLy5PAkZyiykUCrQDU
-         oYvhKPoWPtMsEkPzXkvZnkX0jaDZs7A8+7AEW1O1JK1NNq/0rVoIjqnUR+Ib40kUKd
-         xAjr4GQW5DjCQ39qCR88WG4hdFzQikQ2LXmUqDaI=
-X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
-Received: from mail.dmbarone.com ([127.0.0.1])
-        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id XwzUcDuaoAWq; Fri, 13 Jan 2023 15:25:56 +0000 (UTC)
-Received: from [172.20.10.6] (unknown [129.205.124.225])
-        (Authenticated sender: admin@dmbarone.com)
-        by mail.dmbarone.com (Postfix) with ESMTPSA id 01AED2A56D9;
-        Fri, 13 Jan 2023 15:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623556; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=Xujr+eOxgJe9jczPL1SNkJ6ozzO2KXVAsBjKy56+11usK6bsjT7tnkQBPePEAUELb
-         OnB+7jlvcNoB+WKkJxqizcTmuTa/6eYD1ySJYpPypvocjJeK30xr4n7PEulwjii9u7
-         JG71oAy0mSUhbaYNLedsvYsO1j3iWsgHN/mZq+PI=
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229996AbjANBTX (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 13 Jan 2023 20:19:23 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73AD8BAAE;
+        Fri, 13 Jan 2023 17:19:22 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x40so1354585lfu.12;
+        Fri, 13 Jan 2023 17:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=W6Nb5m59yqglWarTpIWBsMtluzB3GAv0iVhqzRthZkw=;
+        b=odcuyC3Oj+RheC1ROv3uSXzK2A+S4NC1M1qQA5dyP7STuyhiptCmC0KaTBlbg1MDCu
+         9ImWVpN9UIqKfHWZLKLgJXjMgRB8iHEtgMzAePR8OHQIqysVtnSrhWAdTr5P9uq12CT5
+         d0nBOjhn2rI+BGQFeEBKWNYeGPu7N7eqxtMJ07GboBHsRa1hBLCXi9JpiV4eY1fZNo0w
+         Phd5gUwEzORmezPRrcmXf9DLdkPJCRt2XnhA4O8VXxd/ILeko5me6tNX0ILOeUmRnt5x
+         RAOPKdgCi0ZUnI1NXLzmrzUzggaAArgj+XcGI5xLoh8SBQEWpEwbNH2LiX7cNfeY3Yly
+         9Mbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W6Nb5m59yqglWarTpIWBsMtluzB3GAv0iVhqzRthZkw=;
+        b=Q8RMpa5WEf1R4SsvXwdcULqkKArPoKSYdHhrV9edAlQHSxHfL6iLVTMkEHUNW833ck
+         uY1CZz8NQkfnRuJ8GWs0O7WDYX+6MLZE6fTNglkU4s5f3idsgxVrzskw0yO1LCijfXB0
+         Ai4Vhlx0WLM9Kv8JKNbMUj3X9Owqmj4hxXMt25gDm7ZQ6Zb4kazVOCHzjuAmLhBHGNZw
+         yd8T+BPXsA2Hehg3wEhrFkZeixvp8dNFOoaSrFcsTxOyCMdWo4Fivpb8fc3xJTXWMjCq
+         Fih31Q2qfmj+jABLHoT3ALPJdzOeFHb0dIdDnqAezZ9AkdvBiMjkg6CB84iIirEeedSX
+         i53w==
+X-Gm-Message-State: AFqh2krD8+15cKUtNA8+yyYDP6R9P+JAaw0Qsep7f7hXE+L67uvOzoi0
+        M3tLl2Y9OMu0/X+sDi0+icf4U1rhFdNeikiUlYqMozms+18=
+X-Google-Smtp-Source: AMrXdXsUVEyEPjacI1DRBTfcvbbgZSf4IsGFqObU5kQRiuJObNxt+r/tzDslzhDo2cprtEGzetNmTRnzK+Gk6eTfIlw=
+X-Received: by 2002:a05:6512:14d:b0:4cb:3a2f:26d1 with SMTP id
+ m13-20020a056512014d00b004cb3a2f26d1mr2053745lfo.303.1673659160883; Fri, 13
+ Jan 2023 17:19:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
-To:     Recipients <admi@dmbarone.com>
-From:   <admi@dmbarone.com>
-Date:   Fri, 13 Jan 2023 16:25:49 +0100
-Reply-To: theresasteven225@gmail.com
-X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20230113152556.EFAE82A5751@mail.dmbarone.com>
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7971]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [129.205.124.225 listed in zen.spamhaus.org]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [5.181.144.66 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [theresasteven225[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 13 Jan 2023 19:19:09 -0600
+Message-ID: <CAH2r5mvwNTHEfbr2DNW8HCx=pdJxNCG5vSO+qk8qxv6Hbcy9rQ@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
-en.
+Please pull the following changes since commit
+b7bfaa761d760e72a969d116517eaa12e404c262:
 
-Gr=FC=DFe
-Theresia Steven
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc3-smb3-client-fixes
+
+for you to fetch changes up to a152d05ae4a71d802d50cf9177dba34e8bb09f68:
+
+  cifs: Fix uninitialized memory read for smb311 posix symlink create
+(2023-01-12 09:51:48 -0600)
+
+----------------------------------------------------------------
+7 smb3 client fixes, most also for stable
+- memory leak and double free fix
+- two symlink fixes
+- minor cleanup fix
+- two smb1 fixes
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      cifs: remove redundant assignment to the variable match
+
+Paulo Alcantara (5):
+      cifs: fix file info setting in cifs_query_path_info()
+      cifs: fix file info setting in cifs_open_file()
+      cifs: fix double free on failed kerberos auth
+      cifs: do not query ifaces on smb1 mounts
+      cifs: fix potential memory leaks in session setup
+
+Volker Lendecke (1):
+      cifs: Fix uninitialized memory read for smb311 posix symlink create
+
+ fs/cifs/cifsencrypt.c |  1 +
+ fs/cifs/connect.c     |  9 +++++---
+ fs/cifs/dfs_cache.c   |  1 -
+ fs/cifs/link.c        |  1 +
+ fs/cifs/sess.c        |  2 ++
+ fs/cifs/smb1ops.c     | 63 +++++++++++++++++++++++++++------------------------
+ fs/cifs/smb2pdu.c     |  6 ++++-
+ 7 files changed, 49 insertions(+), 34 deletions(-)
+
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
+Thanks,
+
+Steve
