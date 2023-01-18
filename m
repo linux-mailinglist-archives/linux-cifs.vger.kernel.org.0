@@ -2,105 +2,115 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5022C670B8E
-	for <lists+linux-cifs@lfdr.de>; Tue, 17 Jan 2023 23:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D19671012
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Jan 2023 02:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjAQWWl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 17 Jan 2023 17:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S229616AbjARBd5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 17 Jan 2023 20:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjAQWVW (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 17 Jan 2023 17:21:22 -0500
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26089618B6
-        for <linux-cifs@vger.kernel.org>; Tue, 17 Jan 2023 14:01:05 -0800 (PST)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 0F265817D4;
-        Tue, 17 Jan 2023 22:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1673992861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ic9e4+ceYYlZYr/hlG2Eu49hTci5KP8LXbEt0apG5ec=;
-        b=lSj6ctOtE0C5DVNdZvPnqgNlZdQ+kQk/jihLkiFX9cc1JW5NVQgb9n0IrZcIP1TOmApud5
-        39nwJqa5bmXeoZfC6wMi6JbJLuLXtozxmwrlPJqUh1LhzZpWUW4KPZFnIKqadaFELyjMPD
-        QUXgw5k7mTPJtRkJsERdSz5rzlWHgbx/aVdURBP+oQL60aOIrIaWXNITDclpCloF72vHGY
-        7FYPa+JCrKb5H+P9cj+yMom36S6V7k92dWHOvjSlANAXyI+4B4asmpyetsWM2i6JHw6Tnd
-        ILIDpwdTRulEaZPTBC9OXvhKnQUCeoungd6hGiKe0a2z9KHIaH7K70G91gfN4g==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     smfrench@gmail.com
-Cc:     linux-cifs@vger.kernel.org, aurelien.aptel@gmail.com,
-        Paulo Alcantara <pc@cjr.nz>
-Subject: [PATCH v2 5/5] cifs: handle cache lookup errors different than -ENOENT
-Date:   Tue, 17 Jan 2023 19:00:41 -0300
-Message-Id: <20230117220041.15905-6-pc@cjr.nz>
-In-Reply-To: <20230117220041.15905-1-pc@cjr.nz>
-References: <20230117000952.9965-1-pc@cjr.nz>
- <20230117220041.15905-1-pc@cjr.nz>
+        with ESMTP id S229596AbjARBd4 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 17 Jan 2023 20:33:56 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520BA4ED18
+        for <linux-cifs@vger.kernel.org>; Tue, 17 Jan 2023 17:33:55 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id b3so49649410lfv.2
+        for <linux-cifs@vger.kernel.org>; Tue, 17 Jan 2023 17:33:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1K9QCv2UtVsrI07DuqisWinbGf0dbiRb90wADACm0S8=;
+        b=BtG1IMIOM/L8U7vhQ8lfy/JC8g9UFziqUmSFqnDjvZ/SUqkUcZV7igJ1lhX4qrDnPc
+         +bdWxNdMBAaKpuBgL9+mVWUuma3uTxrv/SxVBF4hyBWs4U/gukgl4xYpEzgVP2VNor6J
+         axDFbIFE30ClXRKnUL3uv0V9/xdBtMBFY+5U6JjgEZ4yKFbY7+lp74MlV184XL8lyQ/D
+         xhr3tmCPmDcwKCpKRxVnHtuJt2PlJw+WQVBqWLdSwvr7mRbrhd0KM7ZG4//OoMAtfbRP
+         K5/+40AnUKlxcUfK5GFRM3LnF/U+epbW021oLNR0UX9OeLCIC8ijESe+TUdoHSVkSqW/
+         BXrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1K9QCv2UtVsrI07DuqisWinbGf0dbiRb90wADACm0S8=;
+        b=8FG35vgfY3wAKOfLqn+/GQ2wVFlQ3wTmql+hKPh8klxj+WQRDBEihWn9WYMw5VzwD9
+         P30X1PHbsu1PwCEca8Ca198cupQgofUy5qL/jG8GFZp+JXQRy4hWuW0FKVhz+GhBT1bb
+         jKCZjvkIyK5G1bGaiRSjJ61GtblyUmVZngCn1iFib0fL/hgUdO2SkzuYYZogV47qQKjp
+         nnjxqh9gZtM8e2S7hMzST5xW5XRfef2MmPeml016NIK1FKvH3RxJDGUCYsWOl+UKsCjX
+         6cHjXKpbBEyv+lxIb41SLDMmAmHvl+GOd4h1fqRM0Y9+L/ARb3HE7dXfCrck0ACbBAGP
+         GwsA==
+X-Gm-Message-State: AFqh2kp0q4AXHvEg/6v/aFGaF0yY+0oaL1H/bhC5PLY+7K/+g8Jd6IB4
+        YfBJ94kf8xrSVyXc6iB4usDHl201w5i1keVXE3M=
+X-Google-Smtp-Source: AMrXdXt/OdH4TOhEiOcpiYfe8iF3MtqJ3KuP8RQtztmJvaiYfq9jgHADDezFVZk/qtkzXUQeBuf18immvBffiACbHc8=
+X-Received: by 2002:a05:6512:39cb:b0:4b5:9125:1432 with SMTP id
+ k11-20020a05651239cb00b004b591251432mr272413lfu.204.1674005633603; Tue, 17
+ Jan 2023 17:33:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230117000952.9965-1-pc@cjr.nz> <20230117220041.15905-1-pc@cjr.nz>
+In-Reply-To: <20230117220041.15905-1-pc@cjr.nz>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 17 Jan 2023 19:33:42 -0600
+Message-ID: <CAH2r5muK1FUHq=06McOD+=fC8ttu_UH=9fjFg4bGkK6d2w42MQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] dfs fixes
+To:     Paulo Alcantara <pc@cjr.nz>
+Cc:     linux-cifs@vger.kernel.org, aurelien.aptel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-lookup_cache_entry() might return an error different than -ENOENT
-(e.g. from ->char2uni), so handle those as well in
-cache_refresh_path().
+tentatively merged into cifs-2.6.git for-next pending more review/testing
 
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
----
- fs/cifs/dfs_cache.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+On Tue, Jan 17, 2023 at 4:00 PM Paulo Alcantara <pc@cjr.nz> wrote:
+>
+> Hi Steve,
+>
+> The most important fix is 1/5 that should fix those random hangs that
+> we've observed while running dfs tests on buildbot.
+>
+> I have run twice 50 dfs tests against Windows 2022 and samba 4.16 with
+> these mount options
+>
+>         vers=3.1.1,echo_interval=10,{,hard}
+>         vers=3.0,echo_interval=10,{,hard}
+>         vers=3.0,echo_interval=10,{,sign}
+>         vers=3.0,echo_interval=10,{,seal}
+>         vers=2.1,echo_interval=10,{,hard}
+>         vers=1.0,echo_interval=10,{,hard}
+>
+> The only tests which failed (2%) were with SMB1 UNIX extensions
+> against samba.  readdir(2) was getting STATUS_INVALID_LEVEL from
+> QUERY_PATH_INFO after failover for some reason -- I'll look into that
+> when time allows.  Those failures aren't related to this series,
+> though.
+>
+> I also did some quick tests with kerberos.
+>
+> ---
+> v1 -> v2: add comments in patch 1/5 as suggested by Aurelien
+>
+> Paulo Alcantara (5):
+>   cifs: fix potential deadlock in cache_refresh_path()
+>   cifs: avoid re-lookups in dfs_cache_find()
+>   cifs: don't take exclusive lock for updating target hints
+>   cifs: remove duplicate code in __refresh_tcon()
+>   cifs: handle cache lookup errors different than -ENOENT
+>
+>  fs/cifs/dfs_cache.c | 191 +++++++++++++++++++++++---------------------
+>  1 file changed, 100 insertions(+), 91 deletions(-)
+>
+> --
+> 2.39.0
+>
 
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index 58d11be9d020..308101d90006 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -644,7 +644,9 @@ static struct cache_entry *__lookup_cache_entry(const char *path, unsigned int h
-  *
-  * Use whole path components in the match.  Must be called with htable_rw_lock held.
-  *
-+ * Return cached entry if successful.
-  * Return ERR_PTR(-ENOENT) if the entry is not found.
-+ * Return error ptr otherwise.
-  */
- static struct cache_entry *lookup_cache_entry(const char *path)
- {
-@@ -789,8 +791,13 @@ static struct cache_entry *cache_refresh_path(const unsigned int xid,
- 	down_read(&htable_rw_lock);
- 
- 	ce = lookup_cache_entry(path);
--	if (!IS_ERR(ce) && !force_refresh && !cache_entry_expired(ce))
-+	if (!IS_ERR(ce)) {
-+		if (!force_refresh && !cache_entry_expired(ce))
-+			return ce;
-+	} else if (PTR_ERR(ce) != -ENOENT) {
-+		up_read(&htable_rw_lock);
- 		return ce;
-+	}
- 
- 	/*
- 	 * Unlock shared access as we don't want to hold any locks while getting
-@@ -822,7 +829,7 @@ static struct cache_entry *cache_refresh_path(const unsigned int xid,
- 			if (rc)
- 				ce = ERR_PTR(rc);
- 		}
--	} else {
-+	} else if (PTR_ERR(ce) == -ENOENT) {
- 		ce = add_cache_entry_locked(refs, numrefs);
- 	}
- 
+
 -- 
-2.39.0
+Thanks,
 
+Steve
