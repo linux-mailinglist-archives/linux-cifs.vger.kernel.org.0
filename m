@@ -2,447 +2,348 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A17467251B
-	for <lists+linux-cifs@lfdr.de>; Wed, 18 Jan 2023 18:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D5F672898
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Jan 2023 20:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjARRiH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 Jan 2023 12:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
+        id S229515AbjARTk7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 Jan 2023 14:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjARRiF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Jan 2023 12:38:05 -0500
-Received: from BN6PR00CU002-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11021023.outbound.protection.outlook.com [52.101.57.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89EF46158
-        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 09:38:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MzQxg/gZD+g0NflpYWK/focJcvDb0PMBN3O839ijJMCXovzVMZUaYx5smbwDK+cv7wNPDO5TsS27CiSb9KhmaCvT/a+D+qbE6xRNQdqzzUu27UGD4zx9olMOk1cMigwVomzc6rFDpN1nyUfSRgoQzS07ATSHyXBbNAgtAyvrbncZoMUdBQvyf4V7J3Moscj0z3HDMUuYqgmYb2YWNxcTj5MqyFtI2j2Cqlpgz13ai6+08/s2zQJXU0mVXrpOH7CotIzicl1a/UU5iUsO9KbadHfD25EtWZkElxZt9/sbmhG5D4g15/aWAzSe5WP0vjhiQfxJzNsnRgFBOdjUVcTVEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=orv8pdx7LaIVcoWZV2JEcLA/+T4GdcUMKGs9zih+2xg=;
- b=hYvIS0yMIoo4oYGtTvxq8iPlyHloz8YZ4YD1puHTrwfqJyhl7wfATZ7tvNDOtzB9sEBu9dHMxBvczkIe/7X+j/s3PFV/E7n/4mugDwuQqPPqvd/R4YlNj6ITcTMymJyDm7D4i8MExbLd0fqi1Uv1z9dkgX0wYIqbrGhu2TCXt/Ax+h+oOghxZxEsM9mPv6K7Fjd7nGIW8TM3k3FRychW+kfvXtbd7HKrutgThi3qvqRMrcOuUMSntEw5cXKaE2OfUcL18tl6mMLwCIHOETBt/8R8Q+6iDAxBwQ2hRJqpjtlVRCJPjXBRtT4bQzScaXDrL9VbLD15DPz6Mwkiu4sFJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=orv8pdx7LaIVcoWZV2JEcLA/+T4GdcUMKGs9zih+2xg=;
- b=MbvhrYR2J3NJ2EC4dvVXFuND2PI2KoNBWvOBirNyl4sZEL2vlnucaq5Tjw9bGawgl8wtV87c4qv71eyBHElQ8M0h9kqtY+ZUBokUtiaKKJC6aFM0F6uR3yLFxMqWQs2QqnCJ0sL3qwJfDP+TwRqDrqq/BE8vJCP88fPQ0QkTwjg=
-Received: from DM4PR21MB3441.namprd21.prod.outlook.com (2603:10b6:8:ac::18) by
- BY5PR21MB1394.namprd21.prod.outlook.com (2603:10b6:a03:21c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.5; Wed, 18 Jan
- 2023 17:37:58 +0000
-Received: from DM4PR21MB3441.namprd21.prod.outlook.com
- ([fe80::5daf:d9ee:f136:7d52]) by DM4PR21MB3441.namprd21.prod.outlook.com
- ([fe80::5daf:d9ee:f136:7d52%9]) with mapi id 15.20.6043.000; Wed, 18 Jan 2023
- 17:37:58 +0000
-From:   Steven French <Steven.French@microsoft.com>
-To:     kernel test robot <lkp@intel.com>, pc <pc@cjr.nz>
-CC:     "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>
-Subject: RE: [EXTERNAL] [cifs:for-next 2/7] fs/cifs/dfs_cache.c:1070:7:
- warning: variable 'rc' is used uninitialized whenever 'if' condition is true
-Thread-Topic: [EXTERNAL] [cifs:for-next 2/7] fs/cifs/dfs_cache.c:1070:7:
- warning: variable 'rc' is used uninitialized whenever 'if' condition is true
-Thread-Index: AQHZK1oeqpJkEmBsXUW2ryAx2Q2Qn66kcDWg
-Date:   Wed, 18 Jan 2023 17:37:58 +0000
-Message-ID: <DM4PR21MB3441603BD730F2E36E96206EE4C79@DM4PR21MB3441.namprd21.prod.outlook.com>
-References: <202301190004.bEHvbKG6-lkp@intel.com>
-In-Reply-To: <202301190004.bEHvbKG6-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e51c6527-a924-4705-92c8-6dbb41c65ac0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-18T17:36:54Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR21MB3441:EE_|BY5PR21MB1394:EE_
-x-ms-office365-filtering-correlation-id: 6a53aca0-3c30-4c43-bd46-08daf97abd2d
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Puq5n9uHWyakvbChLD6SAL5w4oI3qVBAqtQB+QKiQzAsWO1pTa3TizuePXCaH1FQqajjIC0PoYcA+TJbJzA3Vmj97zl11DEeLgoy3jrVYw4frtuq4AbBzAj4mVSmmO9QC3YGfUDrJ7GDpDKZ9AIVA6JrH6UywztcqCiIIqmSX5e6n96uJ0MZ5ellJN/NsEjBRzEbGoriwvCCi6WUmC8T3sTcSfQNmxi7dAciGaWIz4nkw+dpj18//blfeR8H6ItT56YIo/p5u5NqOdkDa2YFzFHflyuOKQtBnGnYtWDsGqdaOyPCifIXZpa0unuruSi8bU9eRctK//dS0OblGJfPeUSzpGTMpG13b5PfY3lVnKoQ5NtYYZely8gyxFjiGcw3rzuMl4lnmFj1WFjRlXiwP2rrHNwNCbFkj9czrSZRRA/8UP7SsMeC7SsUEvTa2BsWm8471y3TP16CnHx4cpLwzQ4eWfkboO7QFjh1ebqUOPP+OX/gLS32oHJGIO8j+MvgP4zfmZNjohpkasqqNP0YpyogXUgm4EG5zCHuCBN+ThBK3PVPIGeNSCVUV6VGO6LlK6U4kfbzL8yIwHbXpD8Mw8H7grDfK8Z0CS9RKRQM8M2OIK34P6tnq8kiuiLtAGTvb9FKZ3IV/M+vb86u5RFqldbBeDYzG06F7cYwwT9+4sEWUhWpAZa2BoQx8o7ZdNyheDmwNwDNlae8Zh/uTykeyGa8n621hEKF+dd0fKXPHhWhJYnk77fRzsyrvY+lmZBhW40s1SK1ma5KCpe6PVt0ndiXYN8Q4obccnzg/oX7QIf3hC5RpDEtBqWsElPkIhk8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR21MB3441.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199015)(5660300002)(30864003)(82950400001)(4001150100001)(2906002)(122000001)(82960400001)(38100700002)(8990500004)(8676002)(33656002)(55016003)(7696005)(83380400001)(478600001)(86362001)(10290500003)(71200400001)(66446008)(38070700005)(26005)(52536014)(76116006)(66946007)(66556008)(66476007)(9686003)(316002)(4326008)(64756008)(110136005)(54906003)(186003)(966005)(6506007)(53546011)(41300700001)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?evMYMQRPuUcUyJG5S1zE54S/1wPZR0jaE9REwxmZ1DkY2rGm41I4s3aw61Ld?=
- =?us-ascii?Q?1oK8eSaCSPGdUTvkay1eyprMzJNKJ2fM4CRdWm25HPveq0XyYkIsIxjletAp?=
- =?us-ascii?Q?ZCKs7/W38I7s9+n4fA5lG+FHEFJ/T74kkeaKCIWBZhNdgrqwhDbf1MNUIeFl?=
- =?us-ascii?Q?9MmtIhIniIHvFK+lnwM5kcDJPgC/6HZwps5sVHCKAzQLZUDT9Bw50SxUDLzl?=
- =?us-ascii?Q?YzJ4/T6NO3/YpEE8Pb3eA2qvRPpkQs2dwlpvdJE8D5+bQL8zVNfTDia6dc1Z?=
- =?us-ascii?Q?vSi4ygq/JvQLjMXf6ZJrDCGCLu2XXb+syZwAbE8J3IRw3CVM7wJ4ue4ArjHe?=
- =?us-ascii?Q?MuXFOcdNWNNh6H2QFWInbel9ff97zg97nf08myUPb0XbeWk20mxM2JEgkrU0?=
- =?us-ascii?Q?9f7WoDSF0LYv6ryk1rghrLqHZL5XvxRDZ3Oj2Cj1bpsqyNBIYlJBSV+Wu5zt?=
- =?us-ascii?Q?AvbVZCZ3BkY+YopNJJJHmAqhbU2fUlXQRtaOszmI138BdzpVWhNtGYw3J1Ll?=
- =?us-ascii?Q?qAgzqXzEi+9cqfLqkPe0MMUvdKEcWoq6Fjy0QbPAeTAMUKCquOab8C5EymGV?=
- =?us-ascii?Q?b19/P298PkA90rdI16GdcvcGjTGFILAEJgc1WseJVM/bajaWW131ZyYt05U7?=
- =?us-ascii?Q?z45go5aNxMV7Nwvnf8IZ0yuIMUbhPfu8OFXrbVBWQmkvX7pSDYeZGl9WMQXa?=
- =?us-ascii?Q?m3vvkpLFzyIKCG39P/JFtsNNg7nNtmV4bOLoKmF4Wt0Hubh12yM3rKdnIsUh?=
- =?us-ascii?Q?kWULeTVS+s/FN5y4vHn2/xBG1GtA72hFZB35WGcmnGxC1U3czwBipUrZRaiB?=
- =?us-ascii?Q?cROJ8wuLpTb46NIHJRGM+rzIEjIeL2l70DXw518R3xoEIf21mO0AMmBR/Opk?=
- =?us-ascii?Q?PCRmcjB3WsvaKR0074R3kb7tFLvLiDSIPjjzpEfzQJPGyUNzFeIlbaCySK2s?=
- =?us-ascii?Q?ghX2/+5ImJwhAvL2p12s6dqfg0G6vGO8yvD1hb5TvcQNVm/TtyQbQySj8/KF?=
- =?us-ascii?Q?H+REz7jjlGNAyXfFtMlzWllnOKWoc5qWt1gKrjwN9AzkzjVYk83cE8MaHCv4?=
- =?us-ascii?Q?eWwWDL4NLdEYg0Y1ZG3DZM9EAXbUNWkQHi5UEM28XQ/BrwQOxydk6X01GhV0?=
- =?us-ascii?Q?VFf8+O9SfouEmx3XYxfyesGaXszUJ9lojHP5fyybJAfLELQkRuQVm5ovMxHq?=
- =?us-ascii?Q?SPQuzLwEi5A3HJiUId7wTDC+uX+dEHX+Kf0JDSYGfjcpBh9wAYCqslNYszlv?=
- =?us-ascii?Q?6cIAnXekDCZVYH4HJYGaj8ssMWIS+ozPmmmF+Xjo1GQjASm07HrQiFYisbdg?=
- =?us-ascii?Q?h75gvs1sP6aqLrrtiZee/erK+gDGGL921k7XB8ps2eF+9+4Aa9T56NECoQQ7?=
- =?us-ascii?Q?ZOhIOzVQEzRVmtvb0mJZ70hIOrRIaSZWSjHfjmn6s0JcrYkdJr9IA20pdjfW?=
- =?us-ascii?Q?XraByQNriJKdygL/YrFcr4jUA8F02upz9TOdqKX8Xf7AqGqEY5ZPxRMUi70X?=
- =?us-ascii?Q?pnjTCrgAOtSYGzCAmAca1nwanFSg4ra2d+9iaZxwfFJ0Jal7+jrqiLfAbHyY?=
- =?us-ascii?Q?RzvkBuLD73fFrW3+D/Wd217W2jzJD3Y3cZ7PgmUi?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229479AbjARTk6 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Jan 2023 14:40:58 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779CA5411B
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 11:40:56 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id cf42so53243122lfb.1
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 11:40:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZMnh+jjk1iklNJ3aqDbolIjTufWieYQSOfuSL8Kw0Hg=;
+        b=avSunm2tHsUUOrArDsE+82gLyxbDDuVp7Dk37lkPnTChLHmRqQw6NbqVpymMZEOZDV
+         gGxBseX4zGzP8x1bqHss4PI6T6RqBMZaa88Xd3YdALFyniUGt+VAdGVUR+e0PH2vy8Eb
+         3BeJYUJsOc/SKw0ktd83vrNRYDPoabg1Juwlav39d4fyj9pGx5ynSKBs4nkv3OcteDHn
+         Pu+SALoJvv2ptey4Xf7D0lzKDyQtLC2R7/nheRB5qL2ygfwA51+QWxtSWOqytiyk7iai
+         Kdy1JyOZsGdrIgPuRHegkEfzK1VebAAIYkhhPXxzdaG1NAyvbPnpCfHAEJGC9JLDgWIu
+         O/sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMnh+jjk1iklNJ3aqDbolIjTufWieYQSOfuSL8Kw0Hg=;
+        b=wdvWGZG8O38EylysL3SvjZI0tUqhOw6tsXRR1c0nlw5i6BbqScPitxhOCRVe3eNRAE
+         +m0oPLF3hqq/ld7NtODeYaSxGj6F9MT32ANyAK5/NEdu1LLYLDuXNTVWej7tZQ8k9WFx
+         7dAJAzc7bRcDCt/bvv/bJO11oWRrhruNx1PbqWh8QDxYK2BHVhF3PrwEnKVk9UCa00wV
+         JrVhEE2VF2lNaEPKn7PXSgn5tJVWq+yLT4OJCK+3q3mExk+B/k6hAmsim8RNJjkOyxSb
+         4aE0SuChFfhNP1Pnz7vApbp6/E4jHRwUxK0iJ8XXAiEP/WH71CfXKEhBu5ktGBQrNTNF
+         DU4g==
+X-Gm-Message-State: AFqh2krKLH/hsrXhJO1mOl6YQm/NKkjs/YXLypCeDkvMuaxtJs5ldvQV
+        zRox1XnSMPUOK66Y9VYaRSnuEdr9jMTs2BIWyKP3LPgZ5Yo=
+X-Google-Smtp-Source: AMrXdXs0c/D3d03jggnyXaYZIutwEdjIKKH8/Mr5PF8gq6x0z88VqJm/E0N6zDNs4+CqzkAvWcNjNmPhIvf4FVcv5u0=
+X-Received: by 2002:ac2:4f0f:0:b0:4cc:8a9c:3b14 with SMTP id
+ k15-20020ac24f0f000000b004cc8a9c3b14mr461712lfr.14.1674070854176; Wed, 18 Jan
+ 2023 11:40:54 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR21MB3441.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a53aca0-3c30-4c43-bd46-08daf97abd2d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 17:37:58.1095
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Yx2KBNphdfRtyjyDCNHJKMLHd+IjG94rjppsAUr4Fe0nl3Z9bUYCi3cRbvvtA9BEnHyPkye5RXTjW4aC1XZvfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1394
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 18 Jan 2023 13:40:42 -0600
+Message-ID: <CAH2r5msBopYheAepz_iY0m0vUf2jsXfb4U_E7wY623-rVR1w=w@mail.gmail.com>
+Subject: 
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     Shyam Prasad N <nspmangalore@gmail.com>
+Content-Type: multipart/mixed; boundary="00000000000097f1f605f28efe9f"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Thx for the report - now fixed by Paulo in "cifs: fix return of uninitializ=
-ed rc in dfs_cache_update_tgthint()"
+--00000000000097f1f605f28efe9f
+Content-Type: text/plain; charset="UTF-8"
 
-https://git.samba.org/?p=3Dsfrench/cifs-2.6.git;a=3Dpatch;h=3Dd6a49e8c4ca4d=
-399ed65ac219585187fc8c2e2b1
------Original Message-----
-From: kernel test robot <lkp@intel.com>=20
-Sent: Wednesday, January 18, 2023 10:29 AM
-To: pc <pc@cjr.nz>
-Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; linux-cifs@vger.ke=
-rnel.org; samba-technical@lists.samba.org; Steven French <Steven.French@mic=
-rosoft.com>
-Subject: [EXTERNAL] [cifs:for-next 2/7] fs/cifs/dfs_cache.c:1070:7: warning=
-: variable 'rc' is used uninitialized whenever 'if' condition is true
-
-tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-head:   027c69ea2097550090545e7c539e01a1998f7438
-commit: 9e2e1207815ca38386ab7cb40ebcebc2a3918cb0 [2/7] cifs: avoid re-looku=
-ps in dfs_cache_find()
-config: s390-randconfig-r034-20230116 (https://nam06.safelinks.protection.o=
-utlook.com/?url=3Dhttps%3A%2F%2Fdownload.01.org%2F0day-ci%2Farchive%2F20230=
-119%2F202301190004.bEHvbKG6-lkp%40intel.com%2Fconfig&data=3D05%7C01%7CSteve=
-n.French%40microsoft.com%7C1833e410654f404ca35708daf9713f39%7C72f988bf86f14=
-1af91ab2d7cd011db47%7C1%7C0%7C638096562049062332%7CUnknown%7CTWFpbGZsb3d8ey=
-JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%=
-7C%7C&sdata=3D5LeoPwPYSRBjtu1PmH3OlLgHpFqvibQNUh1Cif%2FJ2JQ%3D&reserved=3D0=
-)
-compiler: clang version 16.0.0 (https://nam06.safelinks.protection.outlook.=
-com/?url=3Dhttps%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project&data=3D05%7C01%7C=
-Steven.French%40microsoft.com%7C1833e410654f404ca35708daf9713f39%7C72f988bf=
-86f141af91ab2d7cd011db47%7C1%7C0%7C638096562049062332%7CUnknown%7CTWFpbGZsb=
-3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300=
-0%7C%7C%7C&sdata=3D7L7bbCEVbaQ3BwNUDH8uhkJNAui0Rel93tLX1XlmD8g%3D&reserved=
-=3D0 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=3D1 build):
-        wget https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A=
-%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.=
-cross&data=3D05%7C01%7CSteven.French%40microsoft.com%7C1833e410654f404ca357=
-08daf9713f39%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C63809656204906233=
-2%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1ha=
-WwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D75yyDPhXVdagZbTTg7fFw7%2BmpS0vSY%=
-2Fyx63EjkawG3k%3D&reserved=3D0 -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add cifs git://git.samba.org/sfrench/cifs-2.6.git
-        git fetch --no-tags cifs for-next
-        git checkout 9e2e1207815ca38386ab7cb40ebcebc2a3918cb0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Ds390 olddefconfig
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Ds390 SHELL=3D/bin/bash drivers/net/ethernet/mellanox=
-/mlx5/core/ fs/cifs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/cifs/dfs_cache.c:15:
-   In file included from fs/cifs/cifsglob.h:14:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val =3D __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + a=
-ddr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from mac=
-ro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from fs/cifs/dfs_cache.c:15:
-   In file included from fs/cifs/cifsglob.h:14:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + a=
-ddr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from mac=
-ro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from fs/cifs/dfs_cache.c:15:
-   In file included from fs/cifs/cifsglob.h:14:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr)=
-;
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr)=
-;
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic =
-on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> fs/cifs/dfs_cache.c:1070:7: warning: variable 'rc' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!strcasecmp(t->name, it->it_name)) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/dfs_cache.c:1082:9: note: uninitialized use occurs here
-           return rc;
-                  ^~
-   fs/cifs/dfs_cache.c:1070:3: note: remove the 'if' if its condition is al=
-ways false
-                   if (!strcasecmp(t->name, it->it_name)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/cifs/dfs_cache.c:1069:2: warning: variable 'rc' is used uninitialized=
- whenever 'for' loop exits because its condition is false [-Wsometimes-unin=
-itialized]
-           list_for_each_entry(t, &ce->tlist, list) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:675:7: note: expanded from macro 'list_for_each_ent=
-ry'
-                !list_entry_is_head(pos, head, member);                    =
-\
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/dfs_cache.c:1082:9: note: uninitialized use occurs here
-           return rc;
-                  ^~
-   fs/cifs/dfs_cache.c:1069:2: note: remove the condition if it is always t=
-rue
-           list_for_each_entry(t, &ce->tlist, list) {
-           ^
-   include/linux/list.h:675:7: note: expanded from macro 'list_for_each_ent=
-ry'
-                !list_entry_is_head(pos, head, member);                    =
-\
-                ^
-   fs/cifs/dfs_cache.c:1066:6: warning: variable 'rc' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (likely(!strcasecmp(it->it_name, t->name)))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:77:20: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/dfs_cache.c:1082:9: note: uninitialized use occurs here
-           return rc;
-                  ^~
-   fs/cifs/dfs_cache.c:1066:2: note: remove the 'if' if its condition is al=
-ways false
-           if (likely(!strcasecmp(it->it_name, t->name)))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/dfs_cache.c:1038:8: note: initialize the variable 'rc' to silenc=
-e this warning
-           int rc;
-                 ^
-                  =3D 0
-   15 warnings generated.
+Three multichannel patches from Shyam attached.  On the patch below, I
+changed the debug text printed from "... seconds back" to "... seconds
+ago"
 
 
-vim +1070 fs/cifs/dfs_cache.c
 
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1015 =20
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1016  /**
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1017   * dfs_cache_update=
-_tgthint - update target hint of a DFS cache entry
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1018   *
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1019   * If it doesn't fi=
-nd the cache entry, then it will get a DFS referral for @path
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1020   * and create a new=
- entry.
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1021   *
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1022   * In case the cach=
-e entry exists but expired, it will get a DFS referral
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1023   * for @path and th=
-en update the respective cache entry.
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1024   *
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1025   * @xid: syscall id
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1026   * @ses: smb sessio=
-n
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1027   * @cp: codepage
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1028   * @remap: type of =
-character remapping for paths
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1029   * @path: path to l=
-ookup in DFS referral cache
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1030   * @it: DFS target =
-iterator
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1031   *
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1032   * Return zero if t=
-he target hint was updated successfully, otherwise non-zero.
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1033   */
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1034  int dfs_cache_updat=
-e_tgthint(const unsigned int xid, struct cifs_ses *ses,
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1035  			     const struc=
-t nls_table *cp, int remap, const char *path,
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1036  			     const struc=
-t dfs_cache_tgt_iterator *it)
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1037  {
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1038  	int rc;
-9cfdb1c12bae26 Al Viro                2021-03-18  1039  	const char *npath;
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04  1040) 	struct cache_entry=
- *ce;
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04  1041) 	struct cache_dfs_t=
-gt *t;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1042 =20
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1043  	npath =3D dfs_cach=
-e_canonical_path(path, cp, remap);
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1044  	if (IS_ERR(npath))
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1045  		return PTR_ERR(np=
-ath);
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1046 =20
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1047) 	cifs_dbg(FYI, "%s:=
- update target hint - path: %s\n", __func__, npath);
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1048)=20
-9e2e1207815ca3 Paulo Alcantara        2023-01-17  1049  	ce =3D cache_refre=
-sh_path(xid, ses, npath);
-9e2e1207815ca3 Paulo Alcantara        2023-01-17  1050  	if (IS_ERR(ce)) {
-9e2e1207815ca3 Paulo Alcantara        2023-01-17  1051  		rc =3D PTR_ERR(ce=
-);
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1052) 		goto out_free_pat=
-h;
-9e2e1207815ca3 Paulo Alcantara        2023-01-17  1053  	}
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1054)=20
-9e2e1207815ca3 Paulo Alcantara        2023-01-17  1055  	up_read(&htable_rw=
-_lock);
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1056) 	down_write(&htable=
-_rw_lock);
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1057 =20
-42caeba713b12e Paulo Alcantara        2021-06-04  1058  	ce =3D lookup_cach=
-e_entry(npath);
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1059  	if (IS_ERR(ce)) {
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1060  		rc =3D PTR_ERR(ce=
-);
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1061) 		goto out_unlock;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1062  	}
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1063 =20
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04  1064) 	t =3D ce->tgthint;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1065 =20
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04  1066) 	if (likely(!strcas=
-ecmp(it->it_name, t->name)))
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1067) 		goto out_unlock;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1068 =20
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04 @1069) 	list_for_each_entr=
-y(t, &ce->tlist, list) {
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04 @1070) 		if (!strcasecmp(t=
-->name, it->it_name)) {
-185352ae6171c8 Paulo Alcantara (SUSE  2019-12-04  1071) 			ce->tgthint =3D =
-t;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1072  			cifs_dbg(FYI, "%=
-s: new target hint: %s\n", __func__,
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1073  				 it->it_name);
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1074  			break;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1075  		}
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1076  	}
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1077 =20
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1078) out_unlock:
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1079) 	up_write(&htable_r=
-w_lock);
-742d8de0186e9f Paulo Alcantara (SUSE  2019-12-04  1080) out_free_path:
-c870a8e70e6827 Paulo Alcantara        2021-06-04  1081  	kfree(npath);
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1082  	return rc;
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1083  }
-54be1f6c1c3749 Paulo Alcantara        2018-11-14  1084 =20
+From 47326562bbe2896f8844db06882f4e09dc070a8e Mon Sep 17 00:00:00 2001
+From: Shyam Prasad N <sprasad@microsoft.com>
+Date: Fri, 23 Dec 2022 10:41:25 +0000
+Subject: [PATCH 1/3] cifs: print last update time for interface list
 
-:::::: The code at line 1070 was first introduced by commit
-:::::: 185352ae6171c845951e21017b2925a6f2795904 cifs: Clean up DFS referral=
- cache
+We store the last updated time for interface list while
+parsing the interfaces. This change is to just print that
+info in DebugData.
 
-:::::: TO: Paulo Alcantara (SUSE) <pc@cjr.nz>
-:::::: CC: Steve French <stfrench@microsoft.com>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+---
+ fs/cifs/cifs_debug.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---=20
-0-DAY CI Kernel Test Service
-https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithub.=
-com%2Fintel%2Flkp-tests&data=3D05%7C01%7CSteven.French%40microsoft.com%7C18=
-33e410654f404ca35708daf9713f39%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7=
-C638096562049062332%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2l=
-uMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D2%2FaMr%2BJRh%2=
-F9Eq1wPTvesvBKIQmq4dVdxboQrKRSHjIk%3D&reserved=3D0
+diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
+index 612f0bb284c9..4b2f7e7641ad 100644
+--- a/fs/cifs/cifs_debug.c
++++ b/fs/cifs/cifs_debug.c
+@@ -456,8 +456,10 @@ static int cifs_debug_data_proc_show(struct
+seq_file *m, void *v)
+
+  spin_lock(&ses->iface_lock);
+  if (ses->iface_count)
+- seq_printf(m, "\n\n\tServer interfaces: %zu",
+-    ses->iface_count);
++ seq_printf(m, "\n\n\tServer interfaces: %zu"
++    "\tLast updated: %lu seconds ago",
++    ses->iface_count,
++    (jiffies - ses->iface_last_update) / HZ);
+  j = 0;
+  list_for_each_entry(iface, &ses->iface_list,
+  iface_head) {
+-- 
+2.34.1
+
+-- 
+Thanks,
+
+Steve
+
+--00000000000097f1f605f28efe9f
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0002-cifs-distribute-channels-across-interfaces-based-on-.patch"
+Content-Disposition: attachment; 
+	filename="0002-cifs-distribute-channels-across-interfaces-based-on-.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ld22inoq0>
+X-Attachment-Id: f_ld22inoq0
+
+RnJvbSAxZTU4NGY0YTBkY2E1NWE3OTk5ZmI5MzZlOGI3NzdkNzE1ZmVkNmY5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
+PgpEYXRlOiBNb24sIDI2IERlYyAyMDIyIDExOjI0OjU2ICswMDAwClN1YmplY3Q6IFtQQVRDSCAy
+LzNdIGNpZnM6IGRpc3RyaWJ1dGUgY2hhbm5lbHMgYWNyb3NzIGludGVyZmFjZXMgYmFzZWQgb24K
+IHNwZWVkCgpUb2RheSwgaWYgdGhlIHNlcnZlciBpbnRlcmZhY2VzIFJTUyBjYXBhYmxlLCB3ZSBz
+aW1wbHkKY2hvb3NlIHRoZSBmYXN0ZXN0IGludGVyZmFjZSB0byBzZXR1cCBhIGNoYW5uZWwuIFRo
+aXMgaXMgbm90CmEgc2NhbGFibGUgYXBwcm9hY2gsIGFuZCBkb2VzIG5vdCBtYWtlIGEgbG90IG9m
+IGF0dGVtcHQgdG8KZGlzdHJpYnV0ZSB0aGUgY29ubmVjdGlvbnMuCgpUaGlzIGNoYW5nZSBkb2Vz
+IGEgd2VpZ2h0ZWQgZGlzdHJpYnV0aW9uIG9mIGNoYW5uZWxzIGFjcm9zcwphbGwgdGhlIGF2YWls
+YWJsZSBzZXJ2ZXIgaW50ZXJmYWNlcywgd2hlcmUgdGhlIHdlaWdodCBpcwphIGZ1bmN0aW9uIG9m
+IHRoZSBhZHZlcnRpc2VkIGludGVyZmFjZSBzcGVlZC4KClNpZ25lZC1vZmYtYnk6IFNoeWFtIFBy
+YXNhZCBOIDxzcHJhc2FkQG1pY3Jvc29mdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5j
+aCA8c3RmcmVuY2hAbWljcm9zb2Z0LmNvbT4KLS0tCiBmcy9jaWZzL2NpZnNfZGVidWcuYyB8IDE2
+ICsrKysrKysrKysrKwogZnMvY2lmcy9jaWZzZ2xvYi5oICAgfCAgMiArKwogZnMvY2lmcy9zZXNz
+LmMgICAgICAgfCA2MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0t
+LQogMyBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKCmRp
+ZmYgLS1naXQgYS9mcy9jaWZzL2NpZnNfZGVidWcuYyBiL2ZzL2NpZnMvY2lmc19kZWJ1Zy5jCmlu
+ZGV4IDRiMmY3ZTc2NDFhZC4uNmNmYTU4MDI3YjA5IDEwMDY0NAotLS0gYS9mcy9jaWZzL2NpZnNf
+ZGVidWcuYworKysgYi9mcy9jaWZzL2NpZnNfZGVidWcuYwpAQCAtMjE5LDYgKzIxOSw4IEBAIHN0
+YXRpYyBpbnQgY2lmc19kZWJ1Z19kYXRhX3Byb2Nfc2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZv
+aWQgKnYpCiAJc3RydWN0IGNpZnNfc2VzICpzZXM7CiAJc3RydWN0IGNpZnNfdGNvbiAqdGNvbjsK
+IAlzdHJ1Y3QgY2lmc19zZXJ2ZXJfaWZhY2UgKmlmYWNlOworCXNpemVfdCBpZmFjZV93ZWlnaHQg
+PSAwLCBpZmFjZV9taW5fc3BlZWQgPSAwOworCXN0cnVjdCBjaWZzX3NlcnZlcl9pZmFjZSAqbGFz
+dF9pZmFjZSA9IE5VTEw7CiAJaW50IGMsIGksIGo7CiAKIAlzZXFfcHV0cyhtLApAQCAtNDYwLDEx
+ICs0NjIsMjUgQEAgc3RhdGljIGludCBjaWZzX2RlYnVnX2RhdGFfcHJvY19zaG93KHN0cnVjdCBz
+ZXFfZmlsZSAqbSwgdm9pZCAqdikKIAkJCQkJICAgIlx0TGFzdCB1cGRhdGVkOiAlbHUgc2Vjb25k
+cyBhZ28iLAogCQkJCQkgICBzZXMtPmlmYWNlX2NvdW50LAogCQkJCQkgICAoamlmZmllcyAtIHNl
+cy0+aWZhY2VfbGFzdF91cGRhdGUpIC8gSFopOworCisJCQlsYXN0X2lmYWNlID0gbGlzdF9sYXN0
+X2VudHJ5KCZzZXMtPmlmYWNlX2xpc3QsCisJCQkJCQkgICAgIHN0cnVjdCBjaWZzX3NlcnZlcl9p
+ZmFjZSwKKwkJCQkJCSAgICAgaWZhY2VfaGVhZCk7CisJCQlpZmFjZV9taW5fc3BlZWQgPSBsYXN0
+X2lmYWNlLT5zcGVlZDsKKwogCQkJaiA9IDA7CiAJCQlsaXN0X2Zvcl9lYWNoX2VudHJ5KGlmYWNl
+LCAmc2VzLT5pZmFjZV9saXN0LAogCQkJCQkJIGlmYWNlX2hlYWQpIHsKIAkJCQlzZXFfcHJpbnRm
+KG0sICJcblx0JWQpIiwgKytqKTsKIAkJCQljaWZzX2R1bXBfaWZhY2UobSwgaWZhY2UpOworCisJ
+CQkJaWZhY2Vfd2VpZ2h0ID0gaWZhY2UtPnNwZWVkIC8gaWZhY2VfbWluX3NwZWVkOworCQkJCXNl
+cV9wcmludGYobSwgIlx0XHRXZWlnaHQgKGN1cix0b3RhbCk6ICglbHUsJWx1KSIKKwkJCQkJICAg
+IlxuXHRcdEFsbG9jYXRlZCBjaGFubmVsczogJXVcbiIsCisJCQkJCSAgIGlmYWNlLT53ZWlnaHRf
+ZnVsZmlsbGVkLAorCQkJCQkgICBpZmFjZV93ZWlnaHQsCisJCQkJCSAgIGlmYWNlLT5udW1fY2hh
+bm5lbHMpOworCiAJCQkJaWYgKGlzX3Nlc191c2luZ19pZmFjZShzZXMsIGlmYWNlKSkKIAkJCQkJ
+c2VxX3B1dHMobSwgIlx0XHRbQ09OTkVDVEVEXVxuIik7CiAJCQl9CmRpZmYgLS1naXQgYS9mcy9j
+aWZzL2NpZnNnbG9iLmggYi9mcy9jaWZzL2NpZnNnbG9iLmgKaW5kZXggY2ZkZDViZjcwMWExLi4z
+ZGEzMDJlYTlkNzYgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvY2lmc2dsb2IuaAorKysgYi9mcy9jaWZz
+L2NpZnNnbG9iLmgKQEAgLTk1Myw2ICs5NTMsOCBAQCBzdHJ1Y3QgY2lmc19zZXJ2ZXJfaWZhY2Ug
+ewogCXN0cnVjdCBsaXN0X2hlYWQgaWZhY2VfaGVhZDsKIAlzdHJ1Y3Qga3JlZiByZWZjb3VudDsK
+IAlzaXplX3Qgc3BlZWQ7CisJc2l6ZV90IHdlaWdodF9mdWxmaWxsZWQ7CisJdW5zaWduZWQgaW50
+IG51bV9jaGFubmVsczsKIAl1bnNpZ25lZCBpbnQgcmRtYV9jYXBhYmxlIDogMTsKIAl1bnNpZ25l
+ZCBpbnQgcnNzX2NhcGFibGUgOiAxOwogCXVuc2lnbmVkIGludCBpc19hY3RpdmUgOiAxOyAvKiB1
+bnNldCBpZiBub24gZXhpc3RlbnQgKi8KZGlmZiAtLWdpdCBhL2ZzL2NpZnMvc2Vzcy5jIGIvZnMv
+Y2lmcy9zZXNzLmMKaW5kZXggYzQ3YjI1NGYwZDFlLi4wZGYwNDIzMWZlOGIgMTAwNjQ0Ci0tLSBh
+L2ZzL2NpZnMvc2Vzcy5jCisrKyBiL2ZzL2NpZnMvc2Vzcy5jCkBAIC0xNjMsNyArMTYzLDkgQEAg
+aW50IGNpZnNfdHJ5X2FkZGluZ19jaGFubmVscyhzdHJ1Y3QgY2lmc19zYl9pbmZvICpjaWZzX3Ni
+LCBzdHJ1Y3QgY2lmc19zZXMgKnNlcykKIAlpbnQgbGVmdDsKIAlpbnQgcmMgPSAwOwogCWludCB0
+cmllcyA9IDA7CisJc2l6ZV90IGlmYWNlX3dlaWdodCA9IDAsIGlmYWNlX21pbl9zcGVlZCA9IDA7
+CiAJc3RydWN0IGNpZnNfc2VydmVyX2lmYWNlICppZmFjZSA9IE5VTEwsICpuaWZhY2UgPSBOVUxM
+OworCXN0cnVjdCBjaWZzX3NlcnZlcl9pZmFjZSAqbGFzdF9pZmFjZSA9IE5VTEw7CiAKIAlzcGlu
+X2xvY2soJnNlcy0+Y2hhbl9sb2NrKTsKIApAQCAtMTkyLDE2ICsxOTQsNiBAQCBpbnQgY2lmc190
+cnlfYWRkaW5nX2NoYW5uZWxzKHN0cnVjdCBjaWZzX3NiX2luZm8gKmNpZnNfc2IsIHN0cnVjdCBj
+aWZzX3NlcyAqc2VzKQogCX0KIAlzcGluX3VubG9jaygmc2VzLT5jaGFuX2xvY2spOwogCi0JLyoK
+LQkgKiBLZWVwIGNvbm5lY3RpbmcgdG8gc2FtZSwgZmFzdGVzdCwgaWZhY2UgZm9yIGFsbCBjaGFu
+bmVscyBhcwotCSAqIGxvbmcgYXMgaXRzIFJTUy4gVHJ5IG5leHQgZmFzdGVzdCBvbmUgaWYgbm90
+IFJTUyBvciBjaGFubmVsCi0JICogY3JlYXRpb24gZmFpbHMuCi0JICovCi0Jc3Bpbl9sb2NrKCZz
+ZXMtPmlmYWNlX2xvY2spOwotCWlmYWNlID0gbGlzdF9maXJzdF9lbnRyeSgmc2VzLT5pZmFjZV9s
+aXN0LCBzdHJ1Y3QgY2lmc19zZXJ2ZXJfaWZhY2UsCi0JCQkJIGlmYWNlX2hlYWQpOwotCXNwaW5f
+dW5sb2NrKCZzZXMtPmlmYWNlX2xvY2spOwotCiAJd2hpbGUgKGxlZnQgPiAwKSB7CiAKIAkJdHJp
+ZXMrKzsKQEAgLTIxNCwxNyArMjA2LDMwIEBAIGludCBjaWZzX3RyeV9hZGRpbmdfY2hhbm5lbHMo
+c3RydWN0IGNpZnNfc2JfaW5mbyAqY2lmc19zYiwgc3RydWN0IGNpZnNfc2VzICpzZXMpCiAJCXNw
+aW5fbG9jaygmc2VzLT5pZmFjZV9sb2NrKTsKIAkJaWYgKCFzZXMtPmlmYWNlX2NvdW50KSB7CiAJ
+CQlzcGluX3VubG9jaygmc2VzLT5pZmFjZV9sb2NrKTsKLQkJCWJyZWFrOworCQkJY2lmc19kYmco
+VkZTLCAic2VydmVyICVzIGRvZXMgbm90IGFkdmVydGlzZSBpbnRlcmZhY2VzXG4iLCBzZXMtPnNl
+cnZlci0+aG9zdG5hbWUpOworCQkJcmV0dXJuIDA7CiAJCX0KIAorCQlpZiAoIWlmYWNlKQorCQkJ
+aWZhY2UgPSBsaXN0X2ZpcnN0X2VudHJ5KCZzZXMtPmlmYWNlX2xpc3QsIHN0cnVjdCBjaWZzX3Nl
+cnZlcl9pZmFjZSwKKwkJCQkJCSBpZmFjZV9oZWFkKTsKKwkJbGFzdF9pZmFjZSA9IGxpc3RfbGFz
+dF9lbnRyeSgmc2VzLT5pZmFjZV9saXN0LCBzdHJ1Y3QgY2lmc19zZXJ2ZXJfaWZhY2UsCisJCQkJ
+CSAgICAgaWZhY2VfaGVhZCk7CisJCWlmYWNlX21pbl9zcGVlZCA9IGxhc3RfaWZhY2UtPnNwZWVk
+OworCiAJCWxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZV9mcm9tKGlmYWNlLCBuaWZhY2UsICZzZXMt
+PmlmYWNlX2xpc3QsCiAJCQkJICAgIGlmYWNlX2hlYWQpIHsKIAkJCS8qIHNraXAgaWZhY2VzIHRo
+YXQgYXJlIHVudXNhYmxlICovCiAJCQlpZiAoIWlmYWNlLT5pc19hY3RpdmUgfHwKIAkJCSAgICAo
+aXNfc2VzX3VzaW5nX2lmYWNlKHNlcywgaWZhY2UpICYmCi0JCQkgICAgICFpZmFjZS0+cnNzX2Nh
+cGFibGUpKSB7CisJCQkgICAgICFpZmFjZS0+cnNzX2NhcGFibGUpKQorCQkJCWNvbnRpbnVlOwor
+CisJCQkvKiBjaGVjayBpZiB3ZSBhbHJlYWR5IGFsbG9jYXRlZCBlbm91Z2ggY2hhbm5lbHMgKi8K
+KwkJCWlmYWNlX3dlaWdodCA9IGlmYWNlLT5zcGVlZCAvIGlmYWNlX21pbl9zcGVlZDsKKworCQkJ
+aWYgKGlmYWNlLT53ZWlnaHRfZnVsZmlsbGVkID49IGlmYWNlX3dlaWdodCkKIAkJCQljb250aW51
+ZTsKLQkJCX0KIAogCQkJLyogdGFrZSByZWYgYmVmb3JlIHVubG9jayAqLwogCQkJa3JlZl9nZXQo
+JmlmYWNlLT5yZWZjb3VudCk7CkBAIC0yNDEsMTAgKzI0NiwxNyBAQCBpbnQgY2lmc190cnlfYWRk
+aW5nX2NoYW5uZWxzKHN0cnVjdCBjaWZzX3NiX2luZm8gKmNpZnNfc2IsIHN0cnVjdCBjaWZzX3Nl
+cyAqc2VzKQogCQkJCWNvbnRpbnVlOwogCQkJfQogCi0JCQljaWZzX2RiZyhGWUksICJzdWNjZXNz
+ZnVsbHkgb3BlbmVkIG5ldyBjaGFubmVsIG9uIGlmYWNlOiVwSVNcbiIsCisJCQlpZmFjZS0+bnVt
+X2NoYW5uZWxzKys7CisJCQlpZmFjZS0+d2VpZ2h0X2Z1bGZpbGxlZCsrOworCQkJY2lmc19kYmco
+VkZTLCAic3VjY2Vzc2Z1bGx5IG9wZW5lZCBuZXcgY2hhbm5lbCBvbiBpZmFjZTolcElTXG4iLAog
+CQkJCSAmaWZhY2UtPnNvY2thZGRyKTsKIAkJCWJyZWFrOwogCQl9CisKKwkJLyogcmVhY2hlZCBl
+bmQgb2YgbGlzdC4gcmVzZXQgd2VpZ2h0X2Z1bGZpbGxlZCAqLworCQlpZiAoaWZhY2UgPT0gbGFz
+dF9pZmFjZSkKKwkJCWxpc3RfZm9yX2VhY2hfZW50cnkoaWZhY2UsICZzZXMtPmlmYWNlX2xpc3Qs
+IGlmYWNlX2hlYWQpCisJCQkJaWZhY2UtPndlaWdodF9mdWxmaWxsZWQgPSAwOwogCQlzcGluX3Vu
+bG9jaygmc2VzLT5pZmFjZV9sb2NrKTsKIAogCQlsZWZ0LS07CkBAIC0yNjMsOCArMjc1LDEwIEBA
+IGludAogY2lmc19jaGFuX3VwZGF0ZV9pZmFjZShzdHJ1Y3QgY2lmc19zZXMgKnNlcywgc3RydWN0
+IFRDUF9TZXJ2ZXJfSW5mbyAqc2VydmVyKQogewogCXVuc2lnbmVkIGludCBjaGFuX2luZGV4Owor
+CXNpemVfdCBpZmFjZV93ZWlnaHQgPSAwLCBpZmFjZV9taW5fc3BlZWQgPSAwOwogCXN0cnVjdCBj
+aWZzX3NlcnZlcl9pZmFjZSAqaWZhY2UgPSBOVUxMOwogCXN0cnVjdCBjaWZzX3NlcnZlcl9pZmFj
+ZSAqb2xkX2lmYWNlID0gTlVMTDsKKwlzdHJ1Y3QgY2lmc19zZXJ2ZXJfaWZhY2UgKmxhc3RfaWZh
+Y2UgPSBOVUxMOwogCWludCByYyA9IDA7CiAKIAlzcGluX2xvY2soJnNlcy0+Y2hhbl9sb2NrKTsK
+QEAgLTI4NCw2ICsyOTgsMTYgQEAgY2lmc19jaGFuX3VwZGF0ZV9pZmFjZShzdHJ1Y3QgY2lmc19z
+ZXMgKnNlcywgc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAqc2VydmVyKQogCXNwaW5fdW5sb2NrKCZz
+ZXMtPmNoYW5fbG9jayk7CiAKIAlzcGluX2xvY2soJnNlcy0+aWZhY2VfbG9jayk7CisJaWYgKCFz
+ZXMtPmlmYWNlX2NvdW50KSB7CisJCXNwaW5fdW5sb2NrKCZzZXMtPmlmYWNlX2xvY2spOworCQlj
+aWZzX2RiZyhWRlMsICJzZXJ2ZXIgJXMgZG9lcyBub3QgYWR2ZXJ0aXNlIGludGVyZmFjZXNcbiIs
+IHNlcy0+c2VydmVyLT5ob3N0bmFtZSk7CisJCXJldHVybiAwOworCX0KKworCWxhc3RfaWZhY2Ug
+PSBsaXN0X2xhc3RfZW50cnkoJnNlcy0+aWZhY2VfbGlzdCwgc3RydWN0IGNpZnNfc2VydmVyX2lm
+YWNlLAorCQkJCSAgICAgaWZhY2VfaGVhZCk7CisJaWZhY2VfbWluX3NwZWVkID0gbGFzdF9pZmFj
+ZS0+c3BlZWQ7CisKIAkvKiB0aGVuIGxvb2sgZm9yIGEgbmV3IG9uZSAqLwogCWxpc3RfZm9yX2Vh
+Y2hfZW50cnkoaWZhY2UsICZzZXMtPmlmYWNlX2xpc3QsIGlmYWNlX2hlYWQpIHsKIAkJaWYgKCFp
+ZmFjZS0+aXNfYWN0aXZlIHx8CkBAIC0yOTEsNiArMzE1LDE1IEBAIGNpZnNfY2hhbl91cGRhdGVf
+aWZhY2Uoc3RydWN0IGNpZnNfc2VzICpzZXMsIHN0cnVjdCBUQ1BfU2VydmVyX0luZm8gKnNlcnZl
+cikKIAkJICAgICAhaWZhY2UtPnJzc19jYXBhYmxlKSkgewogCQkJY29udGludWU7CiAJCX0KKwor
+CQkvKiBjaGVjayBpZiB3ZSBhbHJlYWR5IGFsbG9jYXRlZCBlbm91Z2ggY2hhbm5lbHMgKi8KKwkJ
+aWZhY2Vfd2VpZ2h0ID0gaWZhY2UtPnNwZWVkIC8gaWZhY2VfbWluX3NwZWVkOworCisJCWlmIChp
+ZmFjZS0+cnNzX2NhcGFibGUgJiYKKwkJICAgIGlmYWNlLT5udW1fY2hhbm5lbHMgJiYKKwkJICAg
+IChpZmFjZS0+bnVtX2NoYW5uZWxzICUgaWZhY2Vfd2VpZ2h0KSA9PSAwKQorCQkJY29udGludWU7
+CisKIAkJa3JlZl9nZXQoJmlmYWNlLT5yZWZjb3VudCk7CiAJCWJyZWFrOwogCX0KLS0gCjIuMzQu
+MQoK
+--00000000000097f1f605f28efe9f
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-print-last-update-time-for-interface-list.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-print-last-update-time-for-interface-list.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ld22j3q91>
+X-Attachment-Id: f_ld22j3q91
+
+RnJvbSA0NzMyNjU2MmJiZTI4OTZmODg0NGRiMDY4ODJmNGUwOWRjMDcwYThlIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
+PgpEYXRlOiBGcmksIDIzIERlYyAyMDIyIDEwOjQxOjI1ICswMDAwClN1YmplY3Q6IFtQQVRDSCAx
+LzNdIGNpZnM6IHByaW50IGxhc3QgdXBkYXRlIHRpbWUgZm9yIGludGVyZmFjZSBsaXN0CgpXZSBz
+dG9yZSB0aGUgbGFzdCB1cGRhdGVkIHRpbWUgZm9yIGludGVyZmFjZSBsaXN0IHdoaWxlCnBhcnNp
+bmcgdGhlIGludGVyZmFjZXMuIFRoaXMgY2hhbmdlIGlzIHRvIGp1c3QgcHJpbnQgdGhhdAppbmZv
+IGluIERlYnVnRGF0YS4KClNpZ25lZC1vZmYtYnk6IFNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1p
+Y3Jvc29mdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9z
+b2Z0LmNvbT4KLS0tCiBmcy9jaWZzL2NpZnNfZGVidWcuYyB8IDYgKysrKy0tCiAxIGZpbGUgY2hh
+bmdlZCwgNCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2Np
+ZnMvY2lmc19kZWJ1Zy5jIGIvZnMvY2lmcy9jaWZzX2RlYnVnLmMKaW5kZXggNjEyZjBiYjI4NGM5
+Li40YjJmN2U3NjQxYWQgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvY2lmc19kZWJ1Zy5jCisrKyBiL2Zz
+L2NpZnMvY2lmc19kZWJ1Zy5jCkBAIC00NTYsOCArNDU2LDEwIEBAIHN0YXRpYyBpbnQgY2lmc19k
+ZWJ1Z19kYXRhX3Byb2Nfc2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnYpCiAKIAkJCXNw
+aW5fbG9jaygmc2VzLT5pZmFjZV9sb2NrKTsKIAkJCWlmIChzZXMtPmlmYWNlX2NvdW50KQotCQkJ
+CXNlcV9wcmludGYobSwgIlxuXG5cdFNlcnZlciBpbnRlcmZhY2VzOiAlenUiLAotCQkJCQkgICBz
+ZXMtPmlmYWNlX2NvdW50KTsKKwkJCQlzZXFfcHJpbnRmKG0sICJcblxuXHRTZXJ2ZXIgaW50ZXJm
+YWNlczogJXp1IgorCQkJCQkgICAiXHRMYXN0IHVwZGF0ZWQ6ICVsdSBzZWNvbmRzIGFnbyIsCisJ
+CQkJCSAgIHNlcy0+aWZhY2VfY291bnQsCisJCQkJCSAgIChqaWZmaWVzIC0gc2VzLT5pZmFjZV9s
+YXN0X3VwZGF0ZSkgLyBIWik7CiAJCQlqID0gMDsKIAkJCWxpc3RfZm9yX2VhY2hfZW50cnkoaWZh
+Y2UsICZzZXMtPmlmYWNlX2xpc3QsCiAJCQkJCQkgaWZhY2VfaGVhZCkgewotLSAKMi4zNC4xCgo=
+--00000000000097f1f605f28efe9f
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0003-cifs-account-for-primary-channel-in-the-interface-li.patch"
+Content-Disposition: attachment; 
+	filename="0003-cifs-account-for-primary-channel-in-the-interface-li.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ld22jhxb2>
+X-Attachment-Id: f_ld22jhxb2
+
+RnJvbSBmNDRiNjFiYjAzZWJlZDQ3ZTE0ZjU2ZGMyYmNiYWZkNGU1NzI4YWYzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
+PgpEYXRlOiBUdWUsIDI3IERlYyAyMDIyIDA5OjIyOjA4ICswMDAwClN1YmplY3Q6IFtQQVRDSCAz
+LzNdIGNpZnM6IGFjY291bnQgZm9yIHByaW1hcnkgY2hhbm5lbCBpbiB0aGUgaW50ZXJmYWNlIGxp
+c3QKClRoZSByZWZjb3VudGluZyBvZiBzZXJ2ZXIgaW50ZXJmYWNlcyBzaG91bGQgYWNjb3VudApm
+b3IgdGhlIHByaW1hcnkgY2hhbm5lbCB0b28uIEFsdGhvdWdoIHRoaXMgaXMgbm90CnN0cmljdGx5
+IG5lY2Vzc2FyeSwgZG9pbmcgc28gd2lsbCBhY2NvdW50IGZvciB0aGUgcHJpbWFyeQpjaGFubmVs
+IGluIERlYnVnRGF0YS4KClNpZ25lZC1vZmYtYnk6IFNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1p
+Y3Jvc29mdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9z
+b2Z0LmNvbT4KLS0tCiBmcy9jaWZzL3Nlc3MuYyAgICB8IDM4ICsrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKy0tLS0tCiBmcy9jaWZzL3NtYjJvcHMuYyB8ICA2ICsrKysrKwogMiBmaWxl
+cyBjaGFuZ2VkLCAzOSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
+L2ZzL2NpZnMvc2Vzcy5jIGIvZnMvY2lmcy9zZXNzLmMKaW5kZXggMGRmMDQyMzFmZThiLi4wNzgy
+MmYyYTViN2MgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvc2Vzcy5jCisrKyBiL2ZzL2NpZnMvc2Vzcy5j
+CkBAIC0yODMsMTEgKzI4Myw2IEBAIGNpZnNfY2hhbl91cGRhdGVfaWZhY2Uoc3RydWN0IGNpZnNf
+c2VzICpzZXMsIHN0cnVjdCBUQ1BfU2VydmVyX0luZm8gKnNlcnZlcikKIAogCXNwaW5fbG9jaygm
+c2VzLT5jaGFuX2xvY2spOwogCWNoYW5faW5kZXggPSBjaWZzX3Nlc19nZXRfY2hhbl9pbmRleChz
+ZXMsIHNlcnZlcik7Ci0JaWYgKCFjaGFuX2luZGV4KSB7Ci0JCXNwaW5fdW5sb2NrKCZzZXMtPmNo
+YW5fbG9jayk7Ci0JCXJldHVybiAwOwotCX0KLQogCWlmIChzZXMtPmNoYW5zW2NoYW5faW5kZXhd
+LmlmYWNlKSB7CiAJCW9sZF9pZmFjZSA9IHNlcy0+Y2hhbnNbY2hhbl9pbmRleF0uaWZhY2U7CiAJ
+CWlmIChvbGRfaWZhY2UtPmlzX2FjdGl2ZSkgewpAQCAtMzEwLDYgKzMwNSwxNiBAQCBjaWZzX2No
+YW5fdXBkYXRlX2lmYWNlKHN0cnVjdCBjaWZzX3NlcyAqc2VzLCBzdHJ1Y3QgVENQX1NlcnZlcl9J
+bmZvICpzZXJ2ZXIpCiAKIAkvKiB0aGVuIGxvb2sgZm9yIGEgbmV3IG9uZSAqLwogCWxpc3RfZm9y
+X2VhY2hfZW50cnkoaWZhY2UsICZzZXMtPmlmYWNlX2xpc3QsIGlmYWNlX2hlYWQpIHsKKwkJaWYg
+KCFjaGFuX2luZGV4KSB7CisJCQkvKiBpZiB3ZSdyZSB0cnlpbmcgdG8gZ2V0IHRoZSB1cGRhdGVk
+IGlmYWNlIGZvciBwcmltYXJ5IGNoYW5uZWwgKi8KKwkJCWlmICghY2lmc19tYXRjaF9pcGFkZHIo
+KHN0cnVjdCBzb2NrYWRkciAqKSAmc2VydmVyLT5kc3RhZGRyLAorCQkJCQkgICAgICAgKHN0cnVj
+dCBzb2NrYWRkciAqKSAmaWZhY2UtPnNvY2thZGRyKSkKKwkJCQljb250aW51ZTsKKworCQkJa3Jl
+Zl9nZXQoJmlmYWNlLT5yZWZjb3VudCk7CisJCQlicmVhazsKKwkJfQorCiAJCWlmICghaWZhY2Ut
+PmlzX2FjdGl2ZSB8fAogCQkgICAgKGlzX3Nlc191c2luZ19pZmFjZShzZXMsIGlmYWNlKSAmJgog
+CQkgICAgICFpZmFjZS0+cnNzX2NhcGFibGUpKSB7CkBAIC0zMzQsMTYgKzMzOSwzOSBAQCBjaWZz
+X2NoYW5fdXBkYXRlX2lmYWNlKHN0cnVjdCBjaWZzX3NlcyAqc2VzLCBzdHJ1Y3QgVENQX1NlcnZl
+cl9JbmZvICpzZXJ2ZXIpCiAJCWNpZnNfZGJnKEZZSSwgInVuYWJsZSB0byBmaW5kIGEgc3VpdGFi
+bGUgaWZhY2VcbiIpOwogCX0KIAorCWlmICghY2hhbl9pbmRleCAmJiAhaWZhY2UpIHsKKwkJY2lm
+c19kYmcoVkZTLCAidW5hYmxlIHRvIGdldCB0aGUgaW50ZXJmYWNlIG1hdGNoaW5nOiAlcElTXG4i
+LAorCQkJICZzZXJ2ZXItPmRzdGFkZHIpOworCQlzcGluX3VubG9jaygmc2VzLT5pZmFjZV9sb2Nr
+KTsKKwkJcmV0dXJuIDA7CisJfQorCiAJLyogbm93IGRyb3AgdGhlIHJlZiB0byB0aGUgY3VycmVu
+dCBpZmFjZSAqLwogCWlmIChvbGRfaWZhY2UgJiYgaWZhY2UpIHsKIAkJY2lmc19kYmcoRllJLCAi
+cmVwbGFjaW5nIGlmYWNlOiAlcElTIHdpdGggJXBJU1xuIiwKIAkJCSAmb2xkX2lmYWNlLT5zb2Nr
+YWRkciwKIAkJCSAmaWZhY2UtPnNvY2thZGRyKTsKKwkJaWYgKCFjaGFuX2luZGV4KSB7CisJCQlv
+bGRfaWZhY2UtPm51bV9jaGFubmVscy0tOworCQkJb2xkX2lmYWNlLT53ZWlnaHRfZnVsZmlsbGVk
+LS07CisJCQlpZmFjZS0+bnVtX2NoYW5uZWxzKys7CisJCQlpZmFjZS0+d2VpZ2h0X2Z1bGZpbGxl
+ZCsrOworCQl9CiAJCWtyZWZfcHV0KCZvbGRfaWZhY2UtPnJlZmNvdW50LCByZWxlYXNlX2lmYWNl
+KTsKIAl9IGVsc2UgaWYgKG9sZF9pZmFjZSkgewogCQljaWZzX2RiZyhGWUksICJyZWxlYXNpbmcg
+cmVmIHRvIGlmYWNlOiAlcElTXG4iLAogCQkJICZvbGRfaWZhY2UtPnNvY2thZGRyKTsKKwkJaWYg
+KCFjaGFuX2luZGV4KSB7CisJCQlvbGRfaWZhY2UtPm51bV9jaGFubmVscy0tOworCQkJb2xkX2lm
+YWNlLT53ZWlnaHRfZnVsZmlsbGVkLS07CisJCX0KIAkJa3JlZl9wdXQoJm9sZF9pZmFjZS0+cmVm
+Y291bnQsIHJlbGVhc2VfaWZhY2UpOworCX0gZWxzZSBpZiAoIWNoYW5faW5kZXgpIHsKKwkJLyog
+c3BlY2lhbCBjYXNlOiB1cGRhdGUgaW50ZXJmYWNlIGZvciBwcmltYXJ5IGNoYW5uZWwgKi8KKwkJ
+Y2lmc19kYmcoRllJLCAicmVmZXJlbmNpbmcgcHJpbWFyeSBjaGFubmVsIGlmYWNlOiAlcElTXG4i
+LAorCQkJICZpZmFjZS0+c29ja2FkZHIpOworCQlpZmFjZS0+bnVtX2NoYW5uZWxzKys7CisJCWlm
+YWNlLT53ZWlnaHRfZnVsZmlsbGVkKys7CiAJfSBlbHNlIHsKIAkJV0FSTl9PTighaWZhY2UpOwog
+CQljaWZzX2RiZyhGWUksICJhZGRpbmcgbmV3IGlmYWNlOiAlcElTXG4iLCAmaWZhY2UtPnNvY2th
+ZGRyKTsKZGlmZiAtLWdpdCBhL2ZzL2NpZnMvc21iMm9wcy5jIGIvZnMvY2lmcy9zbWIyb3BzLmMK
+aW5kZXggZTZiY2QyYmFmNDQ2Li41MTllNjEyNGQ3M2QgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvc21i
+Mm9wcy5jCisrKyBiL2ZzL2NpZnMvc21iMm9wcy5jCkBAIC02OTUsNiArNjk1LDcgQEAgU01CM19y
+ZXF1ZXN0X2ludGVyZmFjZXMoY29uc3QgdW5zaWduZWQgaW50IHhpZCwgc3RydWN0IGNpZnNfdGNv
+biAqdGNvbiwgYm9vbCBpbl8KIAl1bnNpZ25lZCBpbnQgcmV0X2RhdGFfbGVuID0gMDsKIAlzdHJ1
+Y3QgbmV0d29ya19pbnRlcmZhY2VfaW5mb19pb2N0bF9yc3AgKm91dF9idWYgPSBOVUxMOwogCXN0
+cnVjdCBjaWZzX3NlcyAqc2VzID0gdGNvbi0+c2VzOworCXN0cnVjdCBUQ1BfU2VydmVyX0luZm8g
+KnBzZXJ2ZXI7CiAKIAlyYyA9IFNNQjJfaW9jdGwoeGlkLCB0Y29uLCBOT19GSUxFX0lELCBOT19G
+SUxFX0lELAogCQkJRlNDVExfUVVFUllfTkVUV09SS19JTlRFUkZBQ0VfSU5GTywKQEAgLTcxMyw2
+ICs3MTQsMTEgQEAgU01CM19yZXF1ZXN0X2ludGVyZmFjZXMoY29uc3QgdW5zaWduZWQgaW50IHhp
+ZCwgc3RydWN0IGNpZnNfdGNvbiAqdGNvbiwgYm9vbCBpbl8KIAlpZiAocmMpCiAJCWdvdG8gb3V0
+OwogCisJLyogY2hlY2sgaWYgaWZhY2UgaXMgc3RpbGwgYWN0aXZlICovCisJcHNlcnZlciA9IHNl
+cy0+Y2hhbnNbMF0uc2VydmVyOworCWlmIChwc2VydmVyICYmICFjaWZzX2NoYW5faXNfaWZhY2Vf
+YWN0aXZlKHNlcywgcHNlcnZlcikpCisJCWNpZnNfY2hhbl91cGRhdGVfaWZhY2Uoc2VzLCBwc2Vy
+dmVyKTsKKwogb3V0OgogCWtmcmVlKG91dF9idWYpOwogCXJldHVybiByYzsKLS0gCjIuMzQuMQoK
+--00000000000097f1f605f28efe9f--
