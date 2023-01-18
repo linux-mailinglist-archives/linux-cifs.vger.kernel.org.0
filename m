@@ -2,71 +2,96 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10CB6728FF
-	for <lists+linux-cifs@lfdr.de>; Wed, 18 Jan 2023 21:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8793A6729BD
+	for <lists+linux-cifs@lfdr.de>; Wed, 18 Jan 2023 21:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjARUHH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 18 Jan 2023 15:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S230203AbjARUwI (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 18 Jan 2023 15:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjARUHD (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Jan 2023 15:07:03 -0500
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B4E3FF15
-        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 12:07:01 -0800 (PST)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 7F7377FC01;
-        Wed, 18 Jan 2023 20:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1674072420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+9vC2s4j7umRA0W/Z7czAm0H8MDNZCf7iAEUsCAkqII=;
-        b=DhPkmjC+CG9UpGhRCQBi47ZiNrCOjQvV2xxwhk7j4JZyDe8H9R6jzbtWI2axtwOlfjISd/
-        6StEW2ReR8OC62DOLBQqRUB7ghfySFM7VrK99MM4Nev1QEzz9U0DvxSp8Fyvog6Trod1H5
-        VstwjxtO/USRA37QMXePdiVdwryjyO8q4QvFnBCRYfGNawGXTMSl7qZhuGO3VOGZrgXJZk
-        syE/OeU55jUzMq1rT4uRzZUJawyP21jVUHJJQ+K9Ww20TyIDR9l5i57YfH4A0yIWHHsjqU
-        WMNGOLUIBUJJqV/xe333K60YfO9VQwK0yyLI0y17oF6cs3i0PyTCQIcaQbkkRQ==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, ronniesahlberg@gmail.com,
-        nspmangalore@gmail.com
-Subject: Re: [PATCH] cifs: do not include page data when checking signature
-In-Reply-To: <20230118170657.17585-1-ematsumiya@suse.de>
-References: <20230118170657.17585-1-ematsumiya@suse.de>
-Date:   Wed, 18 Jan 2023 17:06:56 -0300
-Message-ID: <871qnrvc7z.fsf@cjr.nz>
+        with ESMTP id S230292AbjARUvz (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 18 Jan 2023 15:51:55 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E44B63E25
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 12:51:08 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id p25so31790103ljn.12
+        for <linux-cifs@vger.kernel.org>; Wed, 18 Jan 2023 12:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AQuF1V58l8Zpcydwul0JifjH7G5Ph/qiDaWVDa9YQJc=;
+        b=cI+wAzwcoi/bAyoQjGupOvoLbNukDpuaTTcEF73p+eJNdK96paHs/ZKUyaetZ+Ywy3
+         fyiifnM6cAKb295JhwGZgYdjcPTmieQem1Q6Ql1BEo+SPHjLI2iA+YmpdN9DLW8Qt7k+
+         t3clFdpVyfc9tEX52y0RCwai8LEwXmbOi+ysENkpmyVGlBYYabNRlMz4twPjsm4H+ToK
+         MBK599Aus+2LdiV0zw+44RC2Lm9z9a9AcCKveF1ncD54HpsCGMt8XsJsdoTBFpCs5fho
+         M/lS9tiwTRpBqZCag8Nkb1saj90SqI4iirOiFy5LEC+8slkVh7Hcs0HnQWC2aU0O2A4S
+         HUBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AQuF1V58l8Zpcydwul0JifjH7G5Ph/qiDaWVDa9YQJc=;
+        b=iLoXQ640SvTM8uqhn44r22OG6qFL02m4KzESKIXzaAsIsjpjnLL1TDvxmFuhBO0KUO
+         xK9KIsRpM9CAtwt8aCOVHOn45C/TCe78+zVA7DfJoyKv4RXM1qCIorGkER636rnJTD05
+         ai5KNDPJbcUpF/+B8O98g5akIaIAvOxhrsFiXizQ76Oq5o5X7bB/zcTuPUXY/PppW18b
+         /TQZIBZCX9n+kOUp1CVTZKoUihVSsOGvPL3r8Leiv71UinrX5DPzVbqWSyRl2hOWrLx5
+         1wxi4tDRjtRVMg6GQfmz5IXUZlm5nzETM+DBTwV0u52E6gX8nc0XCSFVCL0uK2mhBRTU
+         buZw==
+X-Gm-Message-State: AFqh2kqAFlTNx4Ex2crV1DBAhuLzlTiFjR0wHB1Hxqjp5SucUMga1bzJ
+        HMh1KU2PkA+mNQ53kWMevqsFavwN4jHH5LnTSNGO3rIf
+X-Google-Smtp-Source: AMrXdXs8cPuIxgW78V1nPO9cR5t8gtF87gCr8y933VaA6218dfnOOFI9x5D46NOSKVfCHpQCX1afucIpLRSahKEVsVs=
+X-Received: by 2002:a2e:96c6:0:b0:28b:7925:3d2 with SMTP id
+ d6-20020a2e96c6000000b0028b792503d2mr458265ljj.229.1674075063647; Wed, 18 Jan
+ 2023 12:51:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20230118170657.17585-1-ematsumiya@suse.de> <871qnrvc7z.fsf@cjr.nz>
+In-Reply-To: <871qnrvc7z.fsf@cjr.nz>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 18 Jan 2023 14:50:52 -0600
+Message-ID: <CAH2r5mvrTcFk_Xha4rdmXA0+61WprZ7LPS5U3H_atK2oJAFM6g@mail.gmail.com>
+Subject: Re: [PATCH] cifs: do not include page data when checking signature
+To:     Paulo Alcantara <pc@cjr.nz>
+Cc:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org,
+        ronniesahlberg@gmail.com, nspmangalore@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Enzo Matsumiya <ematsumiya@suse.de> writes:
+merged into cifs-2.6.git for-next pending additional testing
 
-> On async reads, page data is allocated before sending.  When the
-> response is received but it has no data to fill (e.g.
-> STATUS_END_OF_FILE), __calc_signature() will still include the pages in
-> its computation, leading to an invalid signature check.
+On Wed, Jan 18, 2023 at 2:07 PM Paulo Alcantara <pc@cjr.nz> wrote:
 >
-> This patch fixes this by not setting the async read smb_rqst page data
-> (zeroed by default) if its got_bytes is 0.
+> Enzo Matsumiya <ematsumiya@suse.de> writes:
 >
-> This can be reproduced/verified with xfstests generic/465.
+> > On async reads, page data is allocated before sending.  When the
+> > response is received but it has no data to fill (e.g.
+> > STATUS_END_OF_FILE), __calc_signature() will still include the pages in
+> > its computation, leading to an invalid signature check.
+> >
+> > This patch fixes this by not setting the async read smb_rqst page data
+> > (zeroed by default) if its got_bytes is 0.
+> >
+> > This can be reproduced/verified with xfstests generic/465.
+> >
+> > Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+> > ---
+> >  fs/cifs/smb2pdu.c | 15 +++++++++------
+> >  1 file changed, 9 insertions(+), 6 deletions(-)
 >
-> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-> ---
->  fs/cifs/smb2pdu.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+
+
+-- 
+Thanks,
+
+Steve
