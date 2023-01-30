@@ -2,75 +2,68 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E07680975
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 10:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD244680904
+	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 10:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbjA3J2v (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 30 Jan 2023 04:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S236333AbjA3J0B (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 Jan 2023 04:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235793AbjA3J2Y (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 04:28:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C84F30EA0;
-        Mon, 30 Jan 2023 01:25:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=H1w/sob2deIb9pxt4pAEZWp01So4kETnigr7yzrrzGg=; b=ykPzBC64zt0+24f/idcoY5rPHl
-        IsFgekhQQBB15Wh2AupkIyS/+sF/MEgiCkwkAzgtsu3rOUsznVfVUdBr0/uyOlhk5rx+h6DR0d9Oq
-        gLrt+9Bh4LcQxj8juVhz0PYX3bpL3oDqD7A7afZtVPoATxq+y4I8dtDm7Fx4FySiMWhyJMVEXE5S5
-        IeDwhKFrXApv9OFQJhn1/to8z+gpYIhjxn4yvN9X71cbtbfi5fbILaUAJrrmpPdUhZHmWkHIRSHQb
-        LJjeyTDO81kNei1tQOu95oSLdNf1G2DlmwqbKXJcHxLcuUQRAtvvSjB9dI7ZC0svAqSMARkOGYONl
-        UAzlVl5Q==;
-Received: from [2001:4bb8:19a:272a:732e:e417:47d7:2f4a] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMQNy-002oTE-C6; Mon, 30 Jan 2023 09:23:34 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
+        with ESMTP id S236070AbjA3JZQ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 04:25:16 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD12A2FCE3;
+        Mon, 30 Jan 2023 01:24:17 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q10so10386411wrm.4;
+        Mon, 30 Jan 2023 01:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfICYlOuLoOFLmSVCsv7Ez+Wg1iIfXBt/b5H/P4TiEQ=;
+        b=fAr+gRUQ7tl3KvPS7+xNmBeEAU0Yuce94GDMBv2SkZ7oKen6ZHC2e4T3ix7t3Xzj3d
+         kW5kAA34cUt2REzQ4bDyJwRm6VxuW2uazTE7Yf5mx+BehyY0MEpWwM4759kcl9x3bbg+
+         wKCE07oAsTri8cQ8GN9H7Cbk5mPciyjI12xKAN5dxSr56uGsYhXUDFTVV8bTVR5caF/C
+         gng9jNGVpnXtqgjCzDDcMJvY9duVyY5E/f0YPM2sxABhW+ULHFWTdbbjvWjyRL6QKLNC
+         49OmfCY2ZyOMQVhUhL1eWlPgXdciB9KYaqO4JYv6wCwwWnmrfwtnaMKTdWZmi3efdi8U
+         Zwhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vfICYlOuLoOFLmSVCsv7Ez+Wg1iIfXBt/b5H/P4TiEQ=;
+        b=XKo9i7E0+P2s0O2qgNzvWkjLXPydFg0WHelsYd6PrDvlhV0TPMAKUKSfgmgrwOU4x9
+         F5r6ATQoeJ+ValC078zNKoEg1OxppBd1nBwbJTeJMluN0xsoO+owQ2kmAyziWAYVFMm6
+         MwulukIT8NlfqqV0+APEqZMhIxpCoLFrhV1sdWZ5I+FP9vFc5UT0SSLXGMhr6ZZeGkWI
+         gyszf8ghUZ/6DUFVAvzKfGTwxZ8dWnVvYluDgXvpv7VKrQWX+G6uAqFWeLLGCicPusAZ
+         /NYnP4bbbbnP9OwnB5a6DnOIgIoCgKm2ECCTbQdXhBY76uptgOZgvRl8IuYEr2Bt/7pj
+         jMxQ==
+X-Gm-Message-State: AO0yUKXC6fjgkllt0Mkfc8plgYGpF9Yq37zTdvIQ+r8+pKIACe7KI3yG
+        DYMnynfHfFESWlp9oRuCH28=
+X-Google-Smtp-Source: AK7set+2myVLd06Pu5edYxOwUfsZKmitHbZAGtWszR3c1HZ2HD+vVEMkpKY6OnedR68lQkQl+PpjpA==
+X-Received: by 2002:a05:6000:1448:b0:2bf:decb:ecac with SMTP id v8-20020a056000144800b002bfdecbecacmr8700884wrx.11.1675070638360;
+        Mon, 30 Jan 2023 01:23:58 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm11348862wrw.15.2023.01.30.01.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 01:23:57 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Xiubo Li <xiubli@redhat.com>, Steve French <sfrench@samba.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        devel@lists.orangefs.org, io-uring@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH 23/23] net-ceph: use bvec_set_page to initialize bvecs
-Date:   Mon, 30 Jan 2023 10:21:57 +0100
-Message-Id: <20230130092157.1759539-24-hch@lst.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230130092157.1759539-1-hch@lst.de>
-References: <20230130092157.1759539-1-hch@lst.de>
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ksmbd: Fix spelling mistake "excceed" -> "exceeded"
+Date:   Mon, 30 Jan 2023 09:23:57 +0000
+Message-Id: <20230130092357.36730-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,103 +71,26 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Use the bvec_set_page helper to initialize bvecs.
+There is a spelling mistake in an error message. Fix it.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- net/ceph/messenger_v1.c |  7 ++-----
- net/ceph/messenger_v2.c | 28 +++++++++++-----------------
- 2 files changed, 13 insertions(+), 22 deletions(-)
+ fs/ksmbd/connection.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ceph/messenger_v1.c b/net/ceph/messenger_v1.c
-index d1787d7d33ef9a..d664cb1593a777 100644
---- a/net/ceph/messenger_v1.c
-+++ b/net/ceph/messenger_v1.c
-@@ -40,15 +40,12 @@ static int ceph_tcp_recvmsg(struct socket *sock, void *buf, size_t len)
- static int ceph_tcp_recvpage(struct socket *sock, struct page *page,
- 		     int page_offset, size_t length)
- {
--	struct bio_vec bvec = {
--		.bv_page = page,
--		.bv_offset = page_offset,
--		.bv_len = length
--	};
-+	struct bio_vec bvec;
- 	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_NOSIGNAL };
- 	int r;
+diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
+index 56be077e5d8a..0f7eab5aa04c 100644
+--- a/fs/ksmbd/connection.c
++++ b/fs/ksmbd/connection.c
+@@ -312,7 +312,7 @@ int ksmbd_conn_handler_loop(void *p)
+ 			max_allowed_pdu_size = SMB3_MAX_MSGSIZE;
  
- 	BUG_ON(page_offset + length > PAGE_SIZE);
-+	bvec_set_page(&bvec, page, length, page_offset);
- 	iov_iter_bvec(&msg.msg_iter, ITER_DEST, &bvec, 1, length);
- 	r = sock_recvmsg(sock, &msg, msg.msg_flags);
- 	if (r == -EAGAIN)
-diff --git a/net/ceph/messenger_v2.c b/net/ceph/messenger_v2.c
-index 3009028c4fa28f..301a991dc6a68e 100644
---- a/net/ceph/messenger_v2.c
-+++ b/net/ceph/messenger_v2.c
-@@ -149,10 +149,10 @@ static int do_try_sendpage(struct socket *sock, struct iov_iter *it)
- 
- 	while (iov_iter_count(it)) {
- 		/* iov_iter_iovec() for ITER_BVEC */
--		bv.bv_page = it->bvec->bv_page;
--		bv.bv_offset = it->bvec->bv_offset + it->iov_offset;
--		bv.bv_len = min(iov_iter_count(it),
--				it->bvec->bv_len - it->iov_offset);
-+		bvec_set_page(&bv, it->bvec->bv_page,
-+			      min(iov_iter_count(it),
-+				  it->bvec->bv_len - it->iov_offset),
-+			      it->bvec->bv_offset + it->iov_offset);
- 
- 		/*
- 		 * sendpage cannot properly handle pages with
-@@ -286,9 +286,8 @@ static void set_out_bvec_zero(struct ceph_connection *con)
- 	WARN_ON(iov_iter_count(&con->v2.out_iter));
- 	WARN_ON(!con->v2.out_zero);
- 
--	con->v2.out_bvec.bv_page = ceph_zero_page;
--	con->v2.out_bvec.bv_offset = 0;
--	con->v2.out_bvec.bv_len = min(con->v2.out_zero, (int)PAGE_SIZE);
-+	bvec_set_page(&con->v2.out_bvec, ceph_zero_page,
-+		      min(con->v2.out_zero, (int)PAGE_SIZE), 0);
- 	con->v2.out_iter_sendpage = true;
- 	iov_iter_bvec(&con->v2.out_iter, ITER_SOURCE, &con->v2.out_bvec, 1,
- 		      con->v2.out_bvec.bv_len);
-@@ -863,10 +862,7 @@ static void get_bvec_at(struct ceph_msg_data_cursor *cursor,
- 
- 	/* get a piece of data, cursor isn't advanced */
- 	page = ceph_msg_data_next(cursor, &off, &len);
--
--	bv->bv_page = page;
--	bv->bv_offset = off;
--	bv->bv_len = len;
-+	bvec_set_page(bv, page, len, off);
- }
- 
- static int calc_sg_cnt(void *buf, int buf_len)
-@@ -1855,9 +1851,8 @@ static void prepare_read_enc_page(struct ceph_connection *con)
- 	     con->v2.in_enc_resid);
- 	WARN_ON(!con->v2.in_enc_resid);
- 
--	bv.bv_page = con->v2.in_enc_pages[con->v2.in_enc_i];
--	bv.bv_offset = 0;
--	bv.bv_len = min(con->v2.in_enc_resid, (int)PAGE_SIZE);
-+	bvec_set_page(&bv, con->v2.in_enc_pages[con->v2.in_enc_i],
-+		      min(con->v2.in_enc_resid, (int)PAGE_SIZE), 0);
- 
- 	set_in_bvec(con, &bv);
- 	con->v2.in_enc_i++;
-@@ -2998,9 +2993,8 @@ static void queue_enc_page(struct ceph_connection *con)
- 	     con->v2.out_enc_resid);
- 	WARN_ON(!con->v2.out_enc_resid);
- 
--	bv.bv_page = con->v2.out_enc_pages[con->v2.out_enc_i];
--	bv.bv_offset = 0;
--	bv.bv_len = min(con->v2.out_enc_resid, (int)PAGE_SIZE);
-+	bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
-+		      min(con->v2.out_enc_resid, (int)PAGE_SIZE), 0);
- 
- 	set_out_bvec(con, &bv, false);
- 	con->v2.out_enc_i++;
+ 		if (pdu_size > max_allowed_pdu_size) {
+-			pr_err_ratelimited("PDU length(%u) excceed maximum allowed pdu size(%u) on connection(%d)\n",
++			pr_err_ratelimited("PDU length(%u) exceeded maximum allowed pdu size(%u) on connection(%d)\n",
+ 					pdu_size, max_allowed_pdu_size,
+ 					conn->status);
+ 			break;
 -- 
-2.39.0
+2.30.2
 
