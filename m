@@ -2,95 +2,79 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD244680904
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 10:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0780B680ADC
+	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 11:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbjA3J0B (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 30 Jan 2023 04:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S236290AbjA3KdL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 Jan 2023 05:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236070AbjA3JZQ (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 04:25:16 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD12A2FCE3;
-        Mon, 30 Jan 2023 01:24:17 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q10so10386411wrm.4;
-        Mon, 30 Jan 2023 01:24:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vfICYlOuLoOFLmSVCsv7Ez+Wg1iIfXBt/b5H/P4TiEQ=;
-        b=fAr+gRUQ7tl3KvPS7+xNmBeEAU0Yuce94GDMBv2SkZ7oKen6ZHC2e4T3ix7t3Xzj3d
-         kW5kAA34cUt2REzQ4bDyJwRm6VxuW2uazTE7Yf5mx+BehyY0MEpWwM4759kcl9x3bbg+
-         wKCE07oAsTri8cQ8GN9H7Cbk5mPciyjI12xKAN5dxSr56uGsYhXUDFTVV8bTVR5caF/C
-         gng9jNGVpnXtqgjCzDDcMJvY9duVyY5E/f0YPM2sxABhW+ULHFWTdbbjvWjyRL6QKLNC
-         49OmfCY2ZyOMQVhUhL1eWlPgXdciB9KYaqO4JYv6wCwwWnmrfwtnaMKTdWZmi3efdi8U
-         Zwhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vfICYlOuLoOFLmSVCsv7Ez+Wg1iIfXBt/b5H/P4TiEQ=;
-        b=XKo9i7E0+P2s0O2qgNzvWkjLXPydFg0WHelsYd6PrDvlhV0TPMAKUKSfgmgrwOU4x9
-         F5r6ATQoeJ+ValC078zNKoEg1OxppBd1nBwbJTeJMluN0xsoO+owQ2kmAyziWAYVFMm6
-         MwulukIT8NlfqqV0+APEqZMhIxpCoLFrhV1sdWZ5I+FP9vFc5UT0SSLXGMhr6ZZeGkWI
-         gyszf8ghUZ/6DUFVAvzKfGTwxZ8dWnVvYluDgXvpv7VKrQWX+G6uAqFWeLLGCicPusAZ
-         /NYnP4bbbbnP9OwnB5a6DnOIgIoCgKm2ECCTbQdXhBY76uptgOZgvRl8IuYEr2Bt/7pj
-         jMxQ==
-X-Gm-Message-State: AO0yUKXC6fjgkllt0Mkfc8plgYGpF9Yq37zTdvIQ+r8+pKIACe7KI3yG
-        DYMnynfHfFESWlp9oRuCH28=
-X-Google-Smtp-Source: AK7set+2myVLd06Pu5edYxOwUfsZKmitHbZAGtWszR3c1HZ2HD+vVEMkpKY6OnedR68lQkQl+PpjpA==
-X-Received: by 2002:a05:6000:1448:b0:2bf:decb:ecac with SMTP id v8-20020a056000144800b002bfdecbecacmr8700884wrx.11.1675070638360;
-        Mon, 30 Jan 2023 01:23:58 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm11348862wrw.15.2023.01.30.01.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 01:23:57 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ksmbd: Fix spelling mistake "excceed" -> "exceeded"
-Date:   Mon, 30 Jan 2023 09:23:57 +0000
-Message-Id: <20230130092357.36730-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S235854AbjA3KdJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 05:33:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E9531E0A
+        for <linux-cifs@vger.kernel.org>; Mon, 30 Jan 2023 02:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675074697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CICRFAbCzChYD1znyWS61qGZqh3HfSsIj8zLg6AqEXc=;
+        b=gT1T/vrDd3fQhWdKD7jt0rqoLhp0/l+37I1Se1mtUsi+Lk5oa14gfyCtqmMbXDaCP5WUn4
+        xyL9mVksWSAKL+PlreLM8hdBVbzirhXOaPBFZA+Mq/ug2gfSPldOSguTHVSzAB47UDUBAr
+        3lmHGzS5pckD0pv7txTTlGzxko/kSvE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-m7rZ0bd0PKa4hu7tOJYsfA-1; Mon, 30 Jan 2023 05:31:27 -0500
+X-MC-Unique: m7rZ0bd0PKa4hu7tOJYsfA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 408462999B26;
+        Mon, 30 Jan 2023 10:31:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AA28C15BAD;
+        Mon, 30 Jan 2023 10:31:24 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230130092157.1759539-21-hch@lst.de>
+References: <20230130092157.1759539-21-hch@lst.de> <20230130092157.1759539-1-hch@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dhowells@redhat.com
+Cc:     linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        devel@lists.orangefs.org, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 20/23] rxrpc: use bvec_set_page to initialize a bvec
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3347458.1675074683.1@warthog.procyon.org.uk>
+Date:   Mon, 30 Jan 2023 10:31:23 +0000
+Message-ID: <3347459.1675074683@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-There is a spelling mistake in an error message. Fix it.
+Christoph Hellwig <hch@lst.de> wrote:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/ksmbd/connection.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +		bvec_set_page(&bv, ZERO_PAGE(0), len, 0);
 
-diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
-index 56be077e5d8a..0f7eab5aa04c 100644
---- a/fs/ksmbd/connection.c
-+++ b/fs/ksmbd/connection.c
-@@ -312,7 +312,7 @@ int ksmbd_conn_handler_loop(void *p)
- 			max_allowed_pdu_size = SMB3_MAX_MSGSIZE;
- 
- 		if (pdu_size > max_allowed_pdu_size) {
--			pr_err_ratelimited("PDU length(%u) excceed maximum allowed pdu size(%u) on connection(%d)\n",
-+			pr_err_ratelimited("PDU length(%u) exceeded maximum allowed pdu size(%u) on connection(%d)\n",
- 					pdu_size, max_allowed_pdu_size,
- 					conn->status);
- 			break;
--- 
-2.30.2
+Maybe bvec_set_zero_page()?
+
+David
 
