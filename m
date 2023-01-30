@@ -2,87 +2,96 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AE4681558
-	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 16:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DED5B6815E1
+	for <lists+linux-cifs@lfdr.de>; Mon, 30 Jan 2023 17:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236566AbjA3Pn7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 30 Jan 2023 10:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S230088AbjA3QES (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 30 Jan 2023 11:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbjA3Pn5 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 10:43:57 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677FA3D938;
-        Mon, 30 Jan 2023 07:43:56 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b14so256878ljr.3;
-        Mon, 30 Jan 2023 07:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DilJcfGDasqC97KmooB5AfInxubuvWnnOroxtRaylXo=;
-        b=pviCkOjxQwgB4M2HxUN+JUzEkbHyzEA3VNmug0VwZ4tqoZ7pDBI1C/ipu/m5+1nYST
-         WMw3KjHsWtadF+0ImMm1gv71XWzc0GATZz8M8ya2h8otA4mJxKI+NI51q2/7CZPGMw3D
-         5iiA5IB3SjGuiW3sbKgZoEOcN2nU5i9DADnP6qHkgL+i/JLsG4padKPTDFvv+9qKXSvC
-         xLXZD13BJzI89itbR9/E7bykok+TpHI6t04zwXO+vzN/WlNo98yTxYg1RZFRhlTDM2+B
-         FKpuO5CudX21db0S4Dvu3LQvsAAdF1uKXD8cVmmVoue6O5GPdjA68g3iMpbIxKUtGzX/
-         omog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DilJcfGDasqC97KmooB5AfInxubuvWnnOroxtRaylXo=;
-        b=H8aKdXAN6TyxHqosdNsBfeKlVcyZaM90mW4Hyu7kZvnKYPGqpQyDEcXQ/imSLLr4QP
-         g2liOJG6zwVPtp3WgG4j/my+u9FVgYCSzKYs2o1d0DU60LcVbG4+APlHXwSawXWP3y+y
-         I8y8mY9WtIhaeunzAC8BcJbe+gh+qsEVEZmI6855YWSVzcYdBklLovdxUJdFJSdtCs7y
-         SNihN4dxQ2ab1eeP9o1pdeUf19Cf+cj186MMY51LYPKYVdmy1pAmDmMaVOwk1iBOjYHM
-         xKdQaFI1se3aQtrefZOd7yS5y5VU9Er0x9/QBX7HB8spjo5jRPNibCNdP5CLLaEYoX8d
-         BPKQ==
-X-Gm-Message-State: AFqh2krYHtxH6b68KYWHOMqWrsMjqUAUsihy/EWrPVPn9/CwPc7l3jci
-        5Bdz+rZcracWOfpPwtdkenZvjU4CaTUAhoY11fM=
-X-Google-Smtp-Source: AMrXdXt1gcHUMGP/1TtmrLEEG1lqDpcAxpyANu9CAsIdShc7VsiOjTGTcu6qPdMLuwzJW5KpVjIStNLlxwdV8KIU7qI=
-X-Received: by 2002:a05:651c:481:b0:28b:a09b:b02e with SMTP id
- s1-20020a05651c048100b0028ba09bb02emr3234836ljc.106.1675093434419; Mon, 30
- Jan 2023 07:43:54 -0800 (PST)
+        with ESMTP id S230365AbjA3QES (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 30 Jan 2023 11:04:18 -0500
+X-Greylist: delayed 470 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 08:04:16 PST
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E311156;
+        Mon, 30 Jan 2023 08:04:16 -0800 (PST)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id AF6077FC21;
+        Mon, 30 Jan 2023 15:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1675094184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9mWu6waa/eExAxYRUAnoTwItAGCpuazH4rLKqgG96C8=;
+        b=IUWRXB4ZfZFvP08TAcu46IaSIPcqcOXTl56O8WHSQOaAhhkIQ9u88zYSEpIN2pbiC4jpac
+        jwGLtOnkbS+BV6uGbYvUTH2ghLzufe3qfEFRbAHRz9p2wIlhENt9DpUj0oE60tlK+yywCT
+        paOb0uNIIGHUk9S0XG3mYKsUFRPaYkoUgAjTvyhLEVU5Z9Cvmu7NO+rjrH2opN+EgEjgFa
+        fnzP4VIRAyAwr2ru+CZp9aX3dvfrMSXIvEWmaEh/hC29vO//ntKkMtDT6T0I20V2zRFjSn
+        4AWbxuRM00n7wzPS9dmDdPu7fsBiZbJIvRcLAZa39v75gFyA93kfj3o+j2QjPg==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>, Steve French <sfrench@samba.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        devel@lists.orangefs.org, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 13/23] cifs: use bvec_set_page to initialize bvecs
+In-Reply-To: <20230130092157.1759539-14-hch@lst.de>
+References: <20230130092157.1759539-1-hch@lst.de>
+ <20230130092157.1759539-14-hch@lst.de>
+Date:   Mon, 30 Jan 2023 12:56:16 -0300
+Message-ID: <87357shv8f.fsf@cjr.nz>
 MIME-Version: 1.0
-References: <20230115103209.146002-1-set_pte_at@outlook.com>
- <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <Y9dEZ5IgfwpZNlVm@google.com> <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 30 Jan 2023 09:43:43 -0600
-Message-ID: <CAH2r5mttK-QTZWkVzB=GsdgiKtv4Y+CtFm=sW7JLO6K3U1mFOw@mail.gmail.com>
-Subject: Re: [PATCH 3/6] ksmbd: replace rwlock with rcu for concurrenct access
- on conn list
-To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linkinjeon@kernel.org, sfrench@samba.org, tom@talpey.com,
-        hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:17 AM Dawei Li <set_pte_at@outlook.com> wrote:
-...
-> Steve, Namjae,
-> Please drop this buggy patch from ksmbd-for-next.
+Christoph Hellwig <hch@lst.de> writes:
+
+> Use the bvec_set_page helper to initialize bvecs.
 >
-> Thanks,
->      Dawei
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  fs/cifs/connect.c |  5 +++--
+>  fs/cifs/fscache.c | 16 ++++++----------
+>  fs/cifs/misc.c    |  5 ++---
+>  fs/cifs/smb2ops.c |  6 +++---
+>  4 files changed, 14 insertions(+), 18 deletions(-)
 
-Done
-
-
--- 
-Thanks,
-
-Steve
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
