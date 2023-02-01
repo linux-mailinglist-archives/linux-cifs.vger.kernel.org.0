@@ -2,38 +2,42 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8AD6865AD
-	for <lists+linux-cifs@lfdr.de>; Wed,  1 Feb 2023 13:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D556865B2
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Feb 2023 13:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjBAMFl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 1 Feb 2023 07:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S231612AbjBAMFr (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 1 Feb 2023 07:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBAMFk (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Feb 2023 07:05:40 -0500
+        with ESMTP id S230261AbjBAMFq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 1 Feb 2023 07:05:46 -0500
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499DF2CC60
-        for <linux-cifs@vger.kernel.org>; Wed,  1 Feb 2023 04:05:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E312CC60
+        for <linux-cifs@vger.kernel.org>; Wed,  1 Feb 2023 04:05:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
         s=42; h=Message-Id:Date:Cc:To:From;
-        bh=IMxYJ0tVCTl6eqGyHVw2KnyRPFh2LXUpr+XpcPOHyVg=; b=owU/RjKkGiDny/ROzMtyu1cYlR
-        I1RzcXLOCLBNZt9/inWdeGHMc6z65vm/sGEPDTmyg6WW+xNA8g5gIJCYaadMMRT0qSXBK2wZOPpS+
-        paVV1RZsQXmEryAjARAJrbAMlkaUoQnAJvxRGXV766vZj1ItZYWf7F5uZvFAGCyUHbZi6eADHTFy5
-        QPuW6PE2Kn7jtRjX9O84RGPoJe/ruDtF+uJFuiwch3Y9HKRfDMO0JH+hk5rdXcGrbNZ3lY6cGndB8
-        o53J2B5jS/+39NyCCqkRVE2PGeafl7xzyoXlBY0HyCXI4vkcsX1qew424EyntDIhAtAMMYQcmInSD
-        OitRqAfsBjJBEHYO3uMmBIl9QTtCn7pOOHWGCdW5UW8WrubVlZev/5L8ba2NCcWm/0YMYofR26gbG
-        chVUkmlnlfD5kXBEH4SsXGud48/tXj6iQKXv+OCOJIXOx2UlMhGGJ6B1iFU3sVOL6UgEwFkmCmrQ+
-        M5yT26etAdVZ0VTRUzP7J7wz;
+        bh=/gS+o52Nxg0TkWEyh5LB7+Cdq/QCMDiQwBueylw1go4=; b=uD62bWS4ted3NH9SrMUGEIG8NE
+        k0IhVofaOJkq1yV7w1XqtAW/E1wv1KrAdyrELcXe4FTyzgLeSZhWjTp/2eipmVxLAUn8bJIv/iMYR
+        ER7cJyeMmc2ROnzpb30GReSLc6FtFUhKX/TZUzcNn4rgysiaGjm5yxYWhwY5MZyj0R/Uiu2CLsr3Z
+        rG8PFwF+xwF8MYmUWOtNdoEYuEs1pUmWRO8ibfqVgDXORtHD/E0oMr9LD2Z38yYZXKZTtG9Zi+Ltj
+        ChOF7H2KN76yMdsTUxV60Ps+QEJDcRqf9r/bH9Y4QJlc6lJF+pWwWEHZg7rFXa5pCfBqg04BOMw4+
+        WLTzjQu9DhySRzjoVgWdPTQd4yZCf3qfw3vuseTxLaq194E2Ga+KKp0kxlcnhQj+B5jkG2ePjLPeD
+        kXg+pYlAtckLVbXAA3q14LL+A+ihE2rBSy/4IYxUxs/Odj+eSWziH/V7QTqngQaylZMYrT6EHTUc7
+        i5+C5C4Q4JAl+hV4D0pJ38BB;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
         by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
         (Exim)
-        id 1pNBrq-00BE69-Fe; Wed, 01 Feb 2023 12:05:34 +0000
+        id 1pNBry-00BE6R-Iv; Wed, 01 Feb 2023 12:05:42 +0000
 From:   Stefan Metzmacher <metze@samba.org>
 To:     linux-cifs@vger.kernel.org
-Cc:     Stefan Metzmacher <metze@samba.org>
-Subject: [PATCH 2/3] cifs: split out smb3_use_rdma_offload() helper
-Date:   Wed,  1 Feb 2023 13:04:42 +0100
-Message-Id: <d393687816f6913a026c2c0d66553cc23d3e42b1.1675252643.git.metze@samba.org>
+Cc:     Stefan Metzmacher <metze@samba.org>,
+        Steve French <smfrench@gmail.com>, Tom Talpey <tom@talpey.com>,
+        Long Li <longli@microsoft.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        David Howells <dhowells@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH 3/3] cifs: don't try to use rdma offload on encrypted connections
+Date:   Wed,  1 Feb 2023 13:04:43 +0100
+Message-Id: <ef05bf50cbcd09fee2fc3f85be590b48f3d7f1a6.1675252643.git.metze@samba.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1675252643.git.metze@samba.org>
 References: <cover.1675252643.git.metze@samba.org>
@@ -48,73 +52,45 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-We should have the logic to decide if we want rdma offload
-in a single spot in order to advance it in future.
+The aim of using encryption on a connection is to keep
+the data confidential, so we must not use plaintext rdma offload
+for that data!
+
+It seems that current windows servers and ksmbd would allow
+this, but that's no reason to expose the users data in plaintext!
+And servers hopefully reject this in future.
+
+Note modern windows servers support signed or encrypted offload,
+see MS-SMB2 2.2.3.1.6 SMB2_RDMA_TRANSFORM_CAPABILITIES, but we don't
+support that yet.
 
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Cc: Steve French <smfrench@gmail.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: Long Li <longli@microsoft.com>
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- fs/cifs/smb2pdu.c | 34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ fs/cifs/smb2pdu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 64e2c8b438f4..6a4d621241dd 100644
+index 6a4d621241dd..c5cb2639b3f1 100644
 --- a/fs/cifs/smb2pdu.c
 +++ b/fs/cifs/smb2pdu.c
-@@ -4063,6 +4063,32 @@ SMB2_flush(const unsigned int xid, struct cifs_tcon *tcon, u64 persistent_fid,
- 	return rc;
- }
+@@ -4081,6 +4081,10 @@ static inline bool smb3_use_rdma_offload(struct cifs_io_parms *io_parms)
+ 	if (server->sign)
+ 		return false;
  
-+#ifdef CONFIG_CIFS_SMB_DIRECT
-+static inline bool smb3_use_rdma_offload(struct cifs_io_parms *io_parms)
-+{
-+	struct TCP_Server_Info *server = io_parms->server;
-+	struct cifs_tcon *tcon = io_parms->tcon;
-+
-+	/* we can only offload if we're connected */
-+	if (!server || !tcon)
++	/* we don't support encrypted offload yet */
++	if (smb3_encryption_required(tcon))
 +		return false;
 +
-+	/* we can only offload on an rdma connection */
-+	if (!server->rdma || !server->smbd_conn)
-+		return false;
-+
-+	/* we don't support signed offload yet */
-+	if (server->sign)
-+		return false;
-+
-+	/* offload also has its overhead, so only do it if desired */
-+	if (io_parms->length < server->smbd_conn->rdma_readwrite_threshold)
-+		return false;
-+
-+	return true;
-+}
-+#endif /* CONFIG_CIFS_SMB_DIRECT */
-+
- /*
-  * To form a chain of read requests, any read requests after the first should
-  * have the end_of_chain boolean set to true.
-@@ -4106,9 +4132,7 @@ smb2_new_read_req(void **buf, unsigned int *total_len,
- 	 * If we want to do a RDMA write, fill in and append
- 	 * smbd_buffer_descriptor_v1 to the end of read request
- 	 */
--	if (server->rdma && rdata && !server->sign &&
--		rdata->bytes >= server->smbd_conn->rdma_readwrite_threshold) {
--
-+	if (smb3_use_rdma_offload(io_parms)) {
- 		struct smbd_buffer_descriptor_v1 *v1;
- 		bool need_invalidate = server->dialect == SMB30_PROT_ID;
- 
-@@ -4558,9 +4582,7 @@ smb2_async_writev(struct cifs_writedata *wdata,
- 	 * If we want to do a server RDMA read, fill in and append
- 	 * smbd_buffer_descriptor_v1 to the end of write request
- 	 */
--	if (server->rdma && !server->sign && io_parms->length >=
--		server->smbd_conn->rdma_readwrite_threshold) {
--
-+	if (smb3_use_rdma_offload(io_parms)) {
- 		struct smbd_buffer_descriptor_v1 *v1;
- 		bool need_invalidate = server->dialect == SMB30_PROT_ID;
- 
+ 	/* offload also has its overhead, so only do it if desired */
+ 	if (io_parms->length < server->smbd_conn->rdma_readwrite_threshold)
+ 		return false;
 -- 
 2.34.1
 
