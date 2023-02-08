@@ -2,109 +2,100 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825E068EBDD
-	for <lists+linux-cifs@lfdr.de>; Wed,  8 Feb 2023 10:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6F668EC6D
+	for <lists+linux-cifs@lfdr.de>; Wed,  8 Feb 2023 11:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjBHJlu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 8 Feb 2023 04:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S229930AbjBHKLN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 8 Feb 2023 05:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjBHJln (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 8 Feb 2023 04:41:43 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83D042DD7
-        for <linux-cifs@vger.kernel.org>; Wed,  8 Feb 2023 01:41:16 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id bg10-20020a17090b0d8a00b00230c7f312d4so1718491pjb.3
-        for <linux-cifs@vger.kernel.org>; Wed, 08 Feb 2023 01:41:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IsPBh0g0XI+2QXoTdEsVJFe9AVczky+dTLFIfFOENx4=;
-        b=MSIlSxVC3LqhDk8tbuKgL5Cw/FrqKTr0OaW6R5MOv5tf0wiIUFDjad3mdzo9DZPIOA
-         uMFcDz6DySnhzbOncV73+2yRB8jMHzhsosLe08lDMBV3S2UGZFO2HFCLTfCkgMOR7C4/
-         arOJ00+9i+AqpzyxE6/9zX8kE14y9sSqnmhhzgE0JQOTDRmRggBmsisNs8kVukD1mM+w
-         WV8bDQlzX/WLNy9e4+2H7w6bdTiXNLpzRMNLzMAirKK0WO5oLL7IZOac+DbxBTBk543n
-         HL7n3go7plCjjExfl8QjktsplHF8D1C6LxlEogMAmyUDaXHEIy6ejVXQ6BNdw93zoIrB
-         zitQ==
-X-Gm-Message-State: AO0yUKUxE8VziSKjCzY5KQk6hrrdKdFHqeV3kJNhsOFBC55snLoYTElS
-        p23L3LHcePpt77aVJEuigUA+EHVVV88=
-X-Google-Smtp-Source: AK7set/p/s9pHVaYjKVSDF/AkWldhJyEcQkoh3g0jQInUiuAppv1czU750SBJNomKAxYPvDCvPwCPw==
-X-Received: by 2002:a17:902:c944:b0:196:4652:7cff with SMTP id i4-20020a170902c94400b0019646527cffmr7325035pla.11.1675849275009;
-        Wed, 08 Feb 2023 01:41:15 -0800 (PST)
-Received: from localhost.localdomain ([211.49.23.9])
-        by smtp.gmail.com with ESMTPSA id y17-20020a170902b49100b001993411d66bsm1042976plr.272.2023.02.08.01.41.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 01:41:14 -0800 (PST)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 1/2] ksmbd: do not allow the actual frame length to be smaller than the rfc10024 length
-Date:   Wed,  8 Feb 2023 18:41:04 +0900
-Message-Id: <20230208094104.10766-1-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230443AbjBHKLL (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 8 Feb 2023 05:11:11 -0500
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3B842CFFB;
+        Wed,  8 Feb 2023 02:11:03 -0800 (PST)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id AA2422055F9C;
+        Wed,  8 Feb 2023 19:11:02 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 318AB0tG072967
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 19:11:01 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 318AB0ol317789
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 19:11:00 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Submit) id 318AAvG8317788;
+        Wed, 8 Feb 2023 19:10:57 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Salah Triki <salah.triki@gmail.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, Dave Kleikamp <shaggy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kari Argillander <kari.argillander@gmail.com>,
+        Viacheslav Dubeyko <slava@dubeyko.com>
+Subject: Re: [RFC PATCH v2 01/18] fat: Fix iocharset=utf8 mount option
+In-Reply-To: <20230204105703.pnc6vcy4hvmvvm3b@pali> ("Pali
+ =?iso-8859-1?Q?Roh=E1r=22's?= message of
+        "Sat, 4 Feb 2023 11:57:03 +0100")
+References: <20221226142150.13324-1-pali@kernel.org>
+        <20221226142150.13324-2-pali@kernel.org>
+        <874jsyvje6.fsf@mail.parknet.co.jp>
+        <20230204105703.pnc6vcy4hvmvvm3b@pali>
+Date:   Wed, 08 Feb 2023 19:10:57 +0900
+Message-ID: <874jrwfowe.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-ksmbd allowed the actual frame length to be smaller than the rfc1002
-length. If allowed, it is possible to allocates a large amount of memory
-that can be limited by credit management and can eventually cause memory
-exhaustion problem. This patch do not allow it except SMB2 Negotiate
-request which will be validated when message handling proceeds.
-Also, cifs client pad smb2 tree connect to 2bytes.
+Pali Rohár <pali@kernel.org> writes:
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- fs/ksmbd/smb2misc.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+>> This patch fixes the issue of utf-8 partially only. I think we can't
+>> still recommend only partially working one.
+>
+> With this patch FAT_DEFAULT_IOCHARSET=utf8 is same what was
+> FAT_DEFAULT_UTF8=y without this patch. And option FAT_DEFAULT_UTF8 was
+> recommended in description before "select the next option instead if you
+> would like to use UTF-8 encoded file names by default."
 
-diff --git a/fs/ksmbd/smb2misc.c b/fs/ksmbd/smb2misc.c
-index a717aa9b4af8..fc44f08b5939 100644
---- a/fs/ksmbd/smb2misc.c
-+++ b/fs/ksmbd/smb2misc.c
-@@ -408,20 +408,19 @@ int ksmbd_smb2_check_message(struct ksmbd_work *work)
- 			goto validate_credit;
- 
- 		/*
--		 * windows client also pad up to 8 bytes when compounding.
--		 * If pad is longer than eight bytes, log the server behavior
--		 * (once), since may indicate a problem but allow it and
--		 * continue since the frame is parseable.
-+		 * SMB2 NEGOTIATE request will be validated when message
-+		 * handling proceeds.
- 		 */
--		if (clc_len < len) {
--			ksmbd_debug(SMB,
--				    "cli req padded more than expected. Length %d not %d for cmd:%d mid:%llu\n",
--				    len, clc_len, command,
--				    le64_to_cpu(hdr->MessageId));
--			goto validate_credit;
--		}
-+		if (command == SMB2_NEGOTIATE_HE)
-+			goto validate_credit;
-+
-+		/*
-+		 * cifs client pads smb2 tree connect to 2 bytes.
-+		 */
-+		if (clc_len + 2 == len)
-+			goto validate_credit;
- 
--		ksmbd_debug(SMB,
-+		pr_err_ratelimited(
- 			    "cli req too short, len %d not %d. cmd:%d mid:%llu\n",
- 			    len, clc_len, command,
- 			    le64_to_cpu(hdr->MessageId));
+It is not recommending to use UTF-8 as default, right? I wanted to say
+no warning and recommend has big difference, and I can't recommend the
+incompatible behavior that creates the case sensitive filename.
+
+>> Still broken, so I think we still need the warning here (would be
+>> tweaked warning).
+>
+> There was no warning before for utf8=1. And with this patch
+> iocharset=utf8 should have same behavior as what was utf8=1 before this
+> patch.
+>
+> So if we should show some warning for utf8=1 then it is somehow not
+> related to this patch and it should be done separately, possible also to
+> the current codebase and before this patch.
+
+Sure, you are right.
+
+Thanks.
 -- 
-2.25.1
-
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
