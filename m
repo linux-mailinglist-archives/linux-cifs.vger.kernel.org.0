@@ -2,72 +2,121 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6381769A41B
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Feb 2023 04:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD5A69A464
+	for <lists+linux-cifs@lfdr.de>; Fri, 17 Feb 2023 04:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBQDES (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Feb 2023 22:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S229492AbjBQDgK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 16 Feb 2023 22:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBQDER (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Feb 2023 22:04:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AC953816;
-        Thu, 16 Feb 2023 19:04:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229614AbjBQDgJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Feb 2023 22:36:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E64498BD
+        for <linux-cifs@vger.kernel.org>; Thu, 16 Feb 2023 19:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676604920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rjZXrMa0WadpCuLhWIhGQOhQi11+oBz0hI2g6SreywY=;
+        b=Ev3MCMIZQNuVfLJ5tJKcghGEgBJpLKcNbDnGMcQZFvXi5F+j6dWYAfEt+eG9hEb7Pl0zBh
+        lN3ly3bXnja+YENFR2NTZMjSfHCtlNoPEtnGA8hbExrH4qDvDoN3MhhY9AAVZ6oNiRVOuu
+        yvRA74UE04Jn8ajj/5+8DbBuPqqN2KU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-423-W3M9fmChOoiYeesRWCoFVg-1; Thu, 16 Feb 2023 22:35:13 -0500
+X-MC-Unique: W3M9fmChOoiYeesRWCoFVg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B83E0B82AF2;
-        Fri, 17 Feb 2023 03:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE80C433EF;
-        Fri, 17 Feb 2023 03:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676603054;
-        bh=tnwZHUNV/A6Ohqf/7DM1M/eShouPHHc1DKhnpkFHCH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q3kP69MGqucrdNFfVA9sfK7SZKXlnLHxzCNecX4QorMGw56xDYPqlkLmfBrNM5ESi
-         fo9+TpSFCATip2io+s3YbuZfexRP3UkuB/keMdtDlQ6OYKV3UWlo+L+64+H9tJpKWM
-         86B53aphhQsaDhVD22TWo1HCVbVjNrt55jTiU4+7xpwH8uyG+KAMZbFkxDcRdEx3tH
-         YDSTQSBR3kiz87IVpJMIH0VjoFHdrL545VuTBV0mYB85SgPDGToZfluyPaPLHpyybB
-         4U4EH/pchFibuT0JFWL0oPukXI7ycYim1aE4dJAs9z3oeUIBw5qityrcPFvuOLPh6L
-         3Zh2R2tQHQaBg==
-Date:   Thu, 16 Feb 2023 19:04:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Steve French <sfrench@samba.org>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 11/17] cifs: Add a function to Hash the contents of an
- iterator
-Message-ID: <Y+7urFTFOCXOq5kp@sol.localdomain>
-References: <20230216214745.3985496-1-dhowells@redhat.com>
- <20230216214745.3985496-12-dhowells@redhat.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC3C9821B8C;
+        Fri, 17 Feb 2023 03:35:12 +0000 (UTC)
+Received: from localhost.localdomain (vpn2-52-18.bne.redhat.com [10.64.52.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A65D12166B30;
+        Fri, 17 Feb 2023 03:35:11 +0000 (UTC)
+From:   Ronnie Sahlberg <lsahlber@redhat.com>
+To:     linux-cifs <linux-cifs@vger.kernel.org>
+Cc:     Steve French <smfrench@gmail.com>
+Subject: [PATCH 1/2] cifs: Check the lease context if we actually got a lease
+Date:   Fri, 17 Feb 2023 13:35:00 +1000
+Message-Id: <20230217033501.2591185-1-lsahlber@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216214745.3985496-12-dhowells@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 09:47:39PM +0000, David Howells wrote:
-> Add a function to push the contents of a BVEC-, KVEC- or XARRAY-type
-> iterator into a symmetric hash algorithm.
+Some servers may return that we got a lease in rsp->OplockLevel
+but then in the lease context contradict this and say we got no lease
+at all.  Thus we need to check the context if we have a lease.
+Additionally, IF we do not get a lease we need to make sure we close
+the handle before we return an error to the caller.
 
-I think you mean a "synchronous hash algorithm".
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+---
+ fs/cifs/cached_dir.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-- Eric
+diff --git a/fs/cifs/cached_dir.c b/fs/cifs/cached_dir.c
+index 60399081046a..6672f1a0acd7 100644
+--- a/fs/cifs/cached_dir.c
++++ b/fs/cifs/cached_dir.c
+@@ -220,8 +220,7 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 		}
+ 		goto oshr_free;
+ 	}
+-
+-	atomic_inc(&tcon->num_remote_opens);
++	cfid->is_open = true;
+ 
+ 	o_rsp = (struct smb2_create_rsp *)rsp_iov[0].iov_base;
+ 	oparms.fid->persistent_fid = o_rsp->PersistentFileId;
+@@ -238,7 +237,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 			    &oparms.fid->epoch,
+ 			    oparms.fid->lease_key, &oplock,
+ 			    NULL, NULL);
+-
++	if (!(oplock & SMB2_LEASE_READ_CACHING_HE))
++		goto oshr_free;
+ 	qi_rsp = (struct smb2_query_info_rsp *)rsp_iov[1].iov_base;
+ 	if (le32_to_cpu(qi_rsp->OutputBufferLength) < sizeof(struct smb2_file_all_info))
+ 		goto oshr_free;
+@@ -261,7 +261,6 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	cfid->dentry = dentry;
+ 	cfid->tcon = tcon;
+ 	cfid->time = jiffies;
+-	cfid->is_open = true;
+ 	cfid->has_lease = true;
+ 
+ oshr_free:
+@@ -281,12 +280,17 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	}
+ 	spin_unlock(&cfids->cfid_list_lock);
+ 	if (rc) {
++		if (cfid->is_open)
++			SMB2_close(0, cfid->tcon, cfid->fid.persistent_fid,
++				   cfid->fid.volatile_fid);
+ 		free_cached_dir(cfid);
+ 		cfid = NULL;
+ 	}
+ 
+-	if (rc == 0)
++	if (rc == 0) {
+ 		*ret_cfid = cfid;
++		atomic_inc(&tcon->num_remote_opens);
++	}
+ 
+ 	return rc;
+ }
+-- 
+2.35.3
+
