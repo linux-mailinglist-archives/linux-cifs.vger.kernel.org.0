@@ -2,105 +2,123 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B8969D22A
-	for <lists+linux-cifs@lfdr.de>; Mon, 20 Feb 2023 18:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD39B69D55D
+	for <lists+linux-cifs@lfdr.de>; Mon, 20 Feb 2023 21:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjBTRhi (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 20 Feb 2023 12:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S231785AbjBTUzJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 20 Feb 2023 15:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjBTRhh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Feb 2023 12:37:37 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A351F5C5
-        for <linux-cifs@vger.kernel.org>; Mon, 20 Feb 2023 09:37:36 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id bx43so1737870ljb.12
-        for <linux-cifs@vger.kernel.org>; Mon, 20 Feb 2023 09:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6i/Fa3V15COArboDY64tUFJKNuvSrVEy9eBrXHDHoE=;
-        b=pDQ7ctsKC0ACUOcMudzMHO66iLbkmG4gURkvErY/Y3940OslzVSKm1GdGlvudo4hPA
-         Rf97pLJAsdBbXQL1TjjmNi1pnGnNk9tBoYjmie/y93LFg7igSzO0UgWRD9/G43XWr1rS
-         9NaQ9yNXAFMgxnNhU81UcDDOsWk/8fphFg5hju5aak8W4usc6ePBaAxebBxjLiGZX10h
-         gKMtpMh74+XEgmEE6rSLCRQ9DLYAg6UIWM3DX3Owjq2TsP7o9UBs9/P8y3C/rNAGP/hV
-         zRQousAWPE0LHdPoaZLRB+4fDyOCr4GbEdW/jCgNIHBiGEyvgXGIlex62cagrXLaj0pd
-         h5Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a6i/Fa3V15COArboDY64tUFJKNuvSrVEy9eBrXHDHoE=;
-        b=pIJxkILtm7f0zgIW1PfhKvRI3EXdLLsyG3dk43WMUY0y7+UF3WdXSFT3xHfN8LzxyZ
-         TdlV7gQ8JWRxZSbfiKNkoWiB3ITBsSioC6gHM7PS5Ej/54KjCdLEOtKKDGpGlck5rKsP
-         BKlJW8gpjSORaEStJZ0chbC1PPsyGsZwb8mkgXBTgPn+CysOWVM8cw2GdQ/gOd2zYpHE
-         HjAeGikmjWu8li2HEWYAtHkF0OSrPB6+kxBmkSC4ZllH7Cz1BL1+brZRs1nn4TCrBWc4
-         S/SauoiZARhltZo14omQZWXdNRS1Se2YChXVIEYC50jH0KEXt+9sd3OM2wXOAqvJo3ho
-         K/Vg==
-X-Gm-Message-State: AO0yUKXGTTLCbo/dyqgbd4UwIdR5EfDKyZ3KoMHlmB65UOiN45MWR2za
-        WI4YuI11B25ySwHurjVI4ad7RO84YCxPkfULKMU=
-X-Google-Smtp-Source: AK7set9Y8PFZOlYc1hYVz14KcS+IjvsBrfiAzU1txklVqVZfBPyUWFDWltJsf6IBXm67lBt3tABSeLSxtiHu2ILhX+8=
-X-Received: by 2002:a2e:a269:0:b0:293:535f:2d4c with SMTP id
- k9-20020a2ea269000000b00293535f2d4cmr881649ljm.7.1676914654508; Mon, 20 Feb
- 2023 09:37:34 -0800 (PST)
+        with ESMTP id S229709AbjBTUzI (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Feb 2023 15:55:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7D493D0;
+        Mon, 20 Feb 2023 12:55:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLF6c221tz4x7W;
+        Tue, 21 Feb 2023 07:55:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676926504;
+        bh=TN9MnTzTcDjAtzsjk2SmyoubrMs0S99INEPuVp4NPsw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZD4I3AiuBJeGBrud2+0PKq0uB1HLw22UM//USZFx576j1t4Vwzpi04JlR/b8/FErL
+         /iPWBnv3REnmKegfoW5y5aRy/V952cyT8k7RCzx44vAUPNUAaJvRQ7Dtxb5b5wR6NJ
+         K/N9yXSledcn0PlUhwwuEJ51YqrUSP6huFf67qR5zAtDfy13jSDvLFw6rs7Zzsottn
+         pvnjaVVDtGdeWJJHXSzrb8hKK4MnezRsDx9G4QgwdkLjMPs8ixbJED2OxGH3u1NB0t
+         KHhBGRmod6BLqoNo+4ZvXaB+3Op7Nu+kLF05mHAiOV6c53b+PXxlPB0armeF+hqs/c
+         z+U1t/cBbI7vA==
+Date:   Mon, 20 Feb 2023 19:01:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
+ tree
+Message-ID: <20230220190157.3b43b9a7@canb.auug.org.au>
+In-Reply-To: <Y/N8hVWeR3AjssUC@casper.infradead.org>
+References: <20230220152933.1ab8fa4a@canb.auug.org.au>
+        <Y/N8hVWeR3AjssUC@casper.infradead.org>
 MIME-Version: 1.0
-References: <CANT5p=pOGn4Gc3T1FOQCmhFxM=-Wn_0GcV9owty8NELjQ1r0vA@mail.gmail.com>
-In-Reply-To: <CANT5p=pOGn4Gc3T1FOQCmhFxM=-Wn_0GcV9owty8NELjQ1r0vA@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 20 Feb 2023 11:37:23 -0600
-Message-ID: <CAH2r5msUo2QqxHmyNd69U==XvTG49tRb7A2=2mWWd=mrPiojCQ@mail.gmail.com>
-Subject: Re: Fixes to multichannel reconnects
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Bharath S M <bharathsm@microsoft.com>,
-        Paulo Alcantara <pc@cjr.nz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/mcxutnz+Nri4DIGkdhyuEcP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-What happened to these two patches? I couldn't find them
+--Sig_/mcxutnz+Nri4DIGkdhyuEcP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-ea8c07e0e326 cifs: reuse cifs_match_ipaddr for comparison of dstaddr too
-2cb516a29314 cifs: match even the scope id for ipv6 addresses
+Hi Matthew,
 
-On Mon, Feb 20, 2023 at 7:31 AM Shyam Prasad N <nspmangalore@gmail.com> wrote:
+On Mon, 20 Feb 2023 13:58:29 +0000 Matthew Wilcox <willy@infradead.org> wro=
+te:
 >
-> Stress testing of multichannel reconnect in Microsoft uncovered a few
-> bugs in multichannel reconnect codepath (particularly when reconnects
-> happen in parallel).
->
-> I have fixed those in the following commits:
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/a87bb308b7d126b522d4390dbf37f63e743133ac.patch
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/0a95e989840d2617940ad4670c52b43646b491ad.patch
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/5640b4cd537b70a690e3c1a6aa22afced71c8c87.patch
->
-> Also fixed a couple of regressions:
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/30a563a20e00f99899b703f32feb30793b04bfcb.patch
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/0c1c85c0720ef8fa3bac3819315e8d9311926915.patch
->
-> All the above are critical fixes that we should probably CC stable.
->
-> And a minor fix:
-> https://github.com/sprasad-microsoft/smb3-kernel-client/commit/be94b055601c48f4156e48da7b282d51970bad07.patch
->
-> I've tried to break up the changes into separate patches. Please review.
->
-> --
-> Regards,
-> Shyam
+> On Mon, Feb 20, 2023 at 03:29:33PM +1100, Stephen Rothwell wrote:
+> >=20
+> > Today's linux-next merge of the mm-stable tree got a conflict in:
+> >=20
+> >   fs/cifs/file.c
+> >=20
+> > between commit:
+> >=20
+> >   c8859bc0c129 ("cifs: Remove unused code")
+> >=20
+> > from the cifs tree and commits:
+> >=20
+> >   4cda80f3a7a5 ("cifs: convert wdata_alloc_and_fillpages() to use filem=
+ap_get_folios_tag()")
+> >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
+> >=20
+> > from the mm-stable tree.
+> >=20
+> > This is a real mess :-( =20
+>=20
+> Doesn't look too bad to me.  Dave's commit is just removing the
+> functions, so it doesn't matter how they're being changed.
 
+The problem I see is that an earlier commit in the cifs tree moves the
+use of find_get_pages_range_tag() to another function and 4cda80f3a7a5
+then removes find_get_pages_range_tag().
 
+> The real question in my mind is why for-next is being updated two days
+> before the merge window with new patches.  What's the point in -next
+> if patches are being added at this late point?
 
--- 
-Thanks,
+Indeed :-(
 
-Steve
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mcxutnz+Nri4DIGkdhyuEcP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPzKPYACgkQAVBC80lX
+0GwqTwf+KApjbSG8Xl0o4C2w6Cocc1UIV5YOnL1S8wBaNEAZi3XSqlqsiuWAAhHj
+Sho7KctHIKcMujrLlXeO0A//saPymvT111x8OGsE6EaxsuF9YHACMhwI7LG7TNfd
+ZJpjZOewr+DBTvE1FLJN+KCeo+0/vvrkDtY2Q0wGxLicTvAVZ3ChjujVLuEkmYY2
+QMV4rg0UYRPti3QXi10R2nvOKUWVAy6EGxG4V3tVBwVBH0jmedMAK5SSOKErZtHa
+TJyivJ80+e6kKcWRA71Bkt+RgMgbI8dETQeJ0Msesiw2F2XC/6w7E614wYvNwLg9
+BAQwb8HJctuUHaRoMqKxOo3azPHkQg==
+=1Jt9
+-----END PGP SIGNATURE-----
+
+--Sig_/mcxutnz+Nri4DIGkdhyuEcP--
