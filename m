@@ -2,88 +2,94 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C3D69D71E
-	for <lists+linux-cifs@lfdr.de>; Tue, 21 Feb 2023 00:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DBC69D78E
+	for <lists+linux-cifs@lfdr.de>; Tue, 21 Feb 2023 01:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbjBTXeg (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 20 Feb 2023 18:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S232588AbjBUAiL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 20 Feb 2023 19:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbjBTXef (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Feb 2023 18:34:35 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA974A5E9;
-        Mon, 20 Feb 2023 15:34:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLJfX2c7Zz4x1h;
-        Tue, 21 Feb 2023 10:34:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676936068;
-        bh=PZ+QHxDFdbxKxNJEpTxiivJARGFLCGlmcuBS0i+RWZE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZzYhV+Oi+IIP7tknCcuMomwXr2PxqXR0SngnZrBj7PgqbwvJjzH7Muc4I7Nft7o2y
-         mClDcEiSIxlhcyrg+vhchJpp9zgj94Uvqy9jeX5gy1yOBP5q+NlZ0VVuJpBkZye/pG
-         XYODg4kGFyN3i/0Mg5BRdRFI85RXRWE+33T04kfArTUVDzVG+or1V6B3UWD97j/g4h
-         tb6rpIgQPLqK26Oqh6hG3dLu1rP/jpiUYDAgZY7Ai3hQmjjHFa16WczRyRMOZCA+TM
-         +kvogT25ds19vcEH930vdTGzv2lkslyNybYT2GqigOtxjcyrVFzvTIKE2hB+17O171
-         W/kxUKokPPl/w==
-Date:   Tue, 21 Feb 2023 10:34:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the cifs tree
-Message-ID: <20230221103427.2aba1c37@canb.auug.org.au>
+        with ESMTP id S232574AbjBUAiJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 20 Feb 2023 19:38:09 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808011A67B;
+        Mon, 20 Feb 2023 16:38:08 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id u15so3779605ljo.5;
+        Mon, 20 Feb 2023 16:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jRi7x8B0wTg1qDueH6Ewqy1ECh24eC9Mbf2dVuLE/Eo=;
+        b=gpsbAy8MhRGPz+sBACcBT3G2/g1vNdqqd7R7tRQDAge9C8WD/NkbUn4Sfdis9YkEUv
+         jdiAovcmNbyMLcRKeFBFlGbfs8/ZDPwhWnnNuM7blcqQCph+oYQmT41HqqMSBF8bw2BN
+         uapTV7y8hehGLpSxg0j4d7GiP+LYKg0Cw4sYLdcBqgnBinxwGwHAa60nQ2HxMQuolXL5
+         4uNo3i22GrbYQjMnAPT0/huexdaZheLQHA40FQ59ONVSK6nFYa96g5BTTnvYbxkiGA71
+         IerxlL+t77aWux9xdpl6rOHil7a5qUg+3AvHaFtSMmIk29p7mnD30bxmqULCF16iyN1p
+         QhCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jRi7x8B0wTg1qDueH6Ewqy1ECh24eC9Mbf2dVuLE/Eo=;
+        b=H5dfkK8iTNzWKzpRdtQb4CZFS4kjpExwjQy02k5CG3ryMLYzWnMrx85tzgevB0qX3F
+         W2TbmIE+S3kkNQp2bTw4m3wlpt0SjV0G75TOoGQsIy0Y3moSQ+qsptLvYat10WI/kfcV
+         CRjpqj40W4a/LzwPHkz5/une80HkqG9hTuX5gR1Cxs13jx3buwK0wiQQEMW/8DKBowB3
+         x+/mswGmCUn9TUI5B0VHKp5/f/4frirOQEIA/pLGzxWfeN+mF4hnQDSuoec5vlhQjp5v
+         askVmAQ59AaS/bFufBSEiM4gtJiu88OWxVKJ5f0891qjKeS4bEQA2FTBQ6pdpgJc/2ln
+         d9ug==
+X-Gm-Message-State: AO0yUKX27Nh+gpcWYYy5OnO2hr0wpd9dgJsVSm+uJoRyYno0QP31duwt
+        V3s8/65G/4bNJZAsAn0tJNpLB+EMttcnDcqTKNFHDra0
+X-Google-Smtp-Source: AK7set/646b9DqZoJ7jH7ZDM0ZS5qyAiwgudLa6V7WPnddYsDAEq4eduMuJNysnMuHAaFDB+5MJpVl3LmeLaO/GvXD8=
+X-Received: by 2002:a05:651c:1987:b0:293:4ab4:3bb1 with SMTP id
+ bx7-20020a05651c198700b002934ab43bb1mr1787708ljb.4.1676939886470; Mon, 20 Feb
+ 2023 16:38:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.Tm=1v/2bKj0CpDGqP1y6uQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221103427.2aba1c37@canb.auug.org.au>
+In-Reply-To: <20230221103427.2aba1c37@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 20 Feb 2023 18:37:54 -0600
+Message-ID: <CAH2r5mvW76vBc1ZrpxFzcUkYf43xwbGewjAADMg9DbwQWX0wbQ@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commits in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---Sig_/.Tm=1v/2bKj0CpDGqP1y6uQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fixed
 
-Hi all,
+On Mon, Feb 20, 2023 at 5:34 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   87788bad1133 ("cifs: DIO to/from KVEC-type iterators should now work")
+>   043e4d17b6b4 ("cifs: Remove unused code")
+>   3eb2bd2275e1 ("cifs: Build the RDMA SGE list directly from an iterator")
+>   6b188cd64831 ("cifs: Change the I/O paths to use an iterator rather than a page list")
+>
+> are missing a Signed-off-by from their committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commits
 
-  87788bad1133 ("cifs: DIO to/from KVEC-type iterators should now work")
-  043e4d17b6b4 ("cifs: Remove unused code")
-  3eb2bd2275e1 ("cifs: Build the RDMA SGE list directly from an iterator")
-  6b188cd64831 ("cifs: Change the I/O paths to use an iterator rather than =
-a page list")
 
-are missing a Signed-off-by from their committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.Tm=1v/2bKj0CpDGqP1y6uQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0A4MACgkQAVBC80lX
-0GyqDAf/cojNQ3Fhk994BtCW/PtJ0EIpWYoes8E1y8RdTQlgWtfEbYvXAMQI2oD3
-FYp+I79cvrPlRtXLmdIeXZS0AZIslKqWMCZwfrCKJWKj+WLBWIe2nMS7sorTJyIM
-wRVDoQwZnOgTOrSaR7biVunLLvdOAuNrjoFRXSJO8upRmciYW60jvI7MGmq/krbQ
-yWdMPGD0USOtBwInPSl9fXpr0C1VDPPQlDRbnlOt1FtI4bjevlQBzO0hay4/muG7
-HJb4A/igkoFLBrZmUEXc4LN+s20bWhXpdme6CNIAU8ZDbmXNnGZHD1mf7fhu6wwe
-4UDyoTNdKFFXZTprLFdUcycOW+fUMg==
-=ToTd
------END PGP SIGNATURE-----
-
---Sig_/.Tm=1v/2bKj0CpDGqP1y6uQ--
+Steve
