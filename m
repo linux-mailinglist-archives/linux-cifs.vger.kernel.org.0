@@ -2,62 +2,65 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02A56A11FA
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 Feb 2023 22:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1E16A12E9
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 Feb 2023 23:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjBWV2j (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 23 Feb 2023 16:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S229481AbjBWWnb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 23 Feb 2023 17:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjBWV21 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Feb 2023 16:28:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4201951F90
-        for <linux-cifs@vger.kernel.org>; Thu, 23 Feb 2023 13:27:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677187664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JXkd4bBjOVLioQAy1OHIxQD9rlQn7Lspd9Q3TTjBqx8=;
-        b=Vx/9ESpPQ0/DhvZjEh2ngz49UqPSz1F68lHVMdl/ARBqfVY6Aksvx98kIX4QRbS4FiBzQt
-        93Vqcg8MMPBy24wfJrbxz2WWqoJKYQ272IFyqRuX4CIJRSV3dkJteZRuvHm38cL6SmAlrN
-        l0sLk4FKt4s6Q5h5QOP0qvVNEPNRMS0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-r_RG81CSNVyaNXRF7sOHiQ-1; Thu, 23 Feb 2023 16:27:40 -0500
-X-MC-Unique: r_RG81CSNVyaNXRF7sOHiQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D28E282380D;
-        Thu, 23 Feb 2023 21:27:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BBBAB440D9;
-        Thu, 23 Feb 2023 21:27:38 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230224080931.6433105a@canb.auug.org.au>
-References: <20230224080931.6433105a@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
+        with ESMTP id S229452AbjBWWna (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Feb 2023 17:43:30 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431D71258F;
+        Thu, 23 Feb 2023 14:43:29 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id a10so12447496ljq.1;
+        Thu, 23 Feb 2023 14:43:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnsLkrA5D9GHFeODkBBbFO8tc6DFtrFz35r/rr2GSec=;
+        b=TLl/TBDNHctznhe95HthIpoKnFCKTKDJVTQMn1rAMISr92Lp/A2nW54F3BA55Fzy1q
+         /9I7jeblry1fccNxdRMVNramhYVLNfROzNsdwU97eZmtvPfJzlnywEFJ40PXLkxiXnca
+         ZQTaxC6syDwWJluPpQqpNc+ie4ksU7gplKdmg492gkbfx8H7y7u88dse1Z/jxrAd7rP0
+         PMPQyluhc7S3pgc9InrMYuUyAsx7FqoNks4VeTtg3rtk02NoJsNRWUMT3r+KGPlZmfF1
+         J8ZSfZeDPYLqyeqgXqzuJcOk3VjRWpBYQyYDef7zqz0U8UcBfLoRFUyYjUCGrAGC1fUw
+         7ckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rnsLkrA5D9GHFeODkBBbFO8tc6DFtrFz35r/rr2GSec=;
+        b=vDHwTpHwoQVCFFcWrctZvIp7OqHjYcPHbO9MXmUn6EUrY5wHP/7bNU2K7SyxYYJhyS
+         jjs0dVKV1ZfvRQ1d+v5t87wIjmBr2BfcDgUacnSnzl90kMUHhirOwKESnzauRjDLtusa
+         OKcXri2q+eUf2gRfLdaBcxdPGt4ADQjGLXTkqrye/3fnUJQ++ASBEPkkn/QVpLfcWXVV
+         VKEJVm6YadqlL+RqdBUC23je3ajQHbFXnyFXuwggEzSg9JBhjpo57N3esLwgZyFC0dtL
+         BF7XjRhBxvwq2qQlNDtcO6a/Ma7g1EZePlxZ7351Cb8M9VfPHhjS1EITafLszh5LwE3S
+         IhTw==
+X-Gm-Message-State: AO0yUKW9+4mI7TResfQpuW52l0OWCtcrsU+06OAjqbpMHSguaTpabNYK
+        QMAcnAalSDEV5e2rQFdb/KgjOHY5PDkGshfbkQiOdzYI
+X-Google-Smtp-Source: AK7set9aYHhk9ETSwqKIIxZFGRkD9lyqfLrcfD9IogdIIUeHtPll6jS+NOj/SkAakxSuCsk2/IFpoOoo+D8qNV1HjPc=
+X-Received: by 2002:a2e:a60b:0:b0:294:6de5:e644 with SMTP id
+ v11-20020a2ea60b000000b002946de5e644mr4227826ljp.5.1677192207224; Thu, 23 Feb
+ 2023 14:43:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1659484.1677187658.1@warthog.procyon.org.uk>
-Date:   Thu, 23 Feb 2023 21:27:38 +0000
-Message-ID: <1659485.1677187658@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230224081042.36fa0f2f@canb.auug.org.au>
+In-Reply-To: <20230224081042.36fa0f2f@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 23 Feb 2023 16:43:16 -0600
+Message-ID: <CAH2r5mvGuvmryt=dr9Tm_2OyZ7QZ0QE54Ei2FrybQ0x39dAi_w@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,26 +68,27 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+fixed
+and updated in cifs-2.6.git for-next
 
-> In commit
-> 
->   d7830041d59a ("cifs: Add some missing xas_retry() calls")
-> 
-> Fixes tag
-> 
->   Fixes: 5f0955c98375 ("cifs: Add some helper functions")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: b8713c4dbfa3 ("cifs: Add some helper functions")
+On Thu, Feb 23, 2023 at 3:10 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   23b7e4141de5 ("cifs: reuse cifs_match_ipaddr for comparison of dstaddr too")
+>   c9334cd0edaf ("cifs: match even the scope id for ipv6 addresses")
+>
+> are missing a Signed-off-by from their committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Sorry, yes, I was on my branch and not the one with Steve's applied version of
-the patches.
 
-David
 
+-- 
+Thanks,
+
+Steve
