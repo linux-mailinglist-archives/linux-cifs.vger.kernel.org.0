@@ -2,74 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9525D6A008D
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 Feb 2023 02:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421ED6A03AB
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 Feb 2023 09:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjBWBX2 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 22 Feb 2023 20:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S231849AbjBWIRG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 23 Feb 2023 03:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbjBWBX1 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 22 Feb 2023 20:23:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1718E3A7;
-        Wed, 22 Feb 2023 17:23:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233512AbjBWIRB (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 23 Feb 2023 03:17:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFD74DE13
+        for <linux-cifs@vger.kernel.org>; Thu, 23 Feb 2023 00:15:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677140149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N+RF2+RPgUggwhI+a1oS5LZoLf2bDJ0WzpxSX5IdQfc=;
+        b=C+kFnYdYTTEUhv+cfuks1441Bbnr/uUL6NOd43Dkl6sF7zeXRDaIA0NNFnN3a6+Oax4vx/
+        /AT/alrSq1MAKr0cknMrQw8JU4wX7Nv4IZsGM1ESPf9cQr49txq9JQg0ueD30nLMI89DDY
+        aREdqXNLRrNj7iV+XKe0aoNoAIpsP9A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-D9tfDm8sPjCnsBnBURMyYQ-1; Thu, 23 Feb 2023 03:15:43 -0500
+X-MC-Unique: D9tfDm8sPjCnsBnBURMyYQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E712615C7;
-        Thu, 23 Feb 2023 01:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DF53C433D2;
-        Thu, 23 Feb 2023 01:23:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677115400;
-        bh=yKPk1vHtmhmxOsXv3YtvI0pBPVdSB5Ea9mv+wCUyb+k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BeUB8jBFvtW3Zqk+BMzzcvFFGOgKqOvjno1XWwk78PSlB4lNIOmr1acd3jw0LqDK4
-         8XuyGv7e3etIpYSwIXb39NO3KmoSBR4G1QuBEx1/HiwU3KHY0ZmJXwImB5Jk3AlLHi
-         yY0nSvvKK8Mtu4tZMiV42JF5b3onO5TPEUyCQxOiHAAOyX8Ue03v2LOeu7NoGMHi7u
-         Jog8lBDWu8TR1bh91HYFt+VL88Bktn4KJsEt1VGijAwWkPQYVvyNJQu1XWT1/JB/O0
-         lKaBgXEx56v+6vTMJBh0dlx8JjXjRWyaw60eFtL+BVUYvSPzmoBDQT8o5Ow4C96lu9
-         tAJmX9hPSag5g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85C13C43151;
-        Thu, 23 Feb 2023 01:23:20 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5muxu2YppXOLhwJ7hHjhaUZmEUHyc7O8GKekNnH44nd1EA@mail.gmail.com>
-References: <CAH2r5muxu2YppXOLhwJ7hHjhaUZmEUHyc7O8GKekNnH44nd1EA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5muxu2YppXOLhwJ7hHjhaUZmEUHyc7O8GKekNnH44nd1EA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc-smb3-client-fixes
-X-PR-Tracked-Commit-Id: fdbf807215250217c83f1cb715b883cd910102fa
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 307e14c039063f0c9bd7a18a7add8f940580dcc9
-Message-Id: <167711540053.11664.10409196972256547768.pr-tracker-bot@kernel.org>
-Date:   Thu, 23 Feb 2023 01:23:20 +0000
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33A85299E740;
+        Thu, 23 Feb 2023 08:15:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DAA2140168B5;
+        Thu, 23 Feb 2023 08:15:41 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
 To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     David Howells <dhowells@redhat.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] smb3: Miscellaneous fixes
+Date:   Thu, 23 Feb 2023 08:15:37 +0000
+Message-Id: <20230223081539.970487-1-dhowells@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The pull request you sent on Wed, 22 Feb 2023 18:02:29 -0600:
+Hi Steve,
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc-smb3-client-fixes
+Here are a couple of fix patches for you.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/307e14c039063f0c9bd7a18a7add8f940580dcc9
+I've pushed the patches here also:
 
-Thank you!
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-cifs
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+David
+
+David Howells (2):
+  cifs: Add some missing xas_retry() calls
+  cifs: Fix an uninitialised variable
+
+ fs/cifs/file.c      | 6 ++++++
+ fs/cifs/smbdirect.c | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
