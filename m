@@ -2,67 +2,65 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B2A6BDDF8
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Mar 2023 02:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CAF6BE480
+	for <lists+linux-cifs@lfdr.de>; Fri, 17 Mar 2023 09:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCQBK3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 16 Mar 2023 21:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S231288AbjCQI4u (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 17 Mar 2023 04:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjCQBK3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 16 Mar 2023 21:10:29 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BAA2765C46
-        for <linux-cifs@vger.kernel.org>; Thu, 16 Mar 2023 18:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=TszlS6qyVrsYH4KhEBuiqNdg
-        erz58V5iaA7NUPakp2vwP/T0LdXM8xfQAW9XfbrcDoM85bi7J8pIzzlqa3Ctc06L
-        AzrNNMDIjLqbPXNUK+sCis2A6STkXUtdXWpdoNK7e39H09aJESO2XT3E2bRjzDjk
-        csOsJQQKMzSsHtMQ06UCdfEObV3vJuxej7L4YWiAdKNkYhyhGuQPESExuYq5v96S
-        9IPWCvZHwyg+4Rgr8l205dSxf+lzvmtdJ4zYADQFP9tPYyK8o2Cve8oz4o8fVX8o
-        3M2PfATwguiTii4LfF1AqyST2ti60/DWImOwv58IQbz5s7UeY77NBa2xbH11iQ==
-Received: (qmail 69411 invoked from network); 15 Mar 2023 02:25:32 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 15 Mar 2023 02:25:32 -0000
+        with ESMTP id S231361AbjCQI4r (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 17 Mar 2023 04:56:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C765C46;
+        Fri, 17 Mar 2023 01:56:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C12DB824F4;
+        Fri, 17 Mar 2023 08:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D103AC433EF;
+        Fri, 17 Mar 2023 08:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679043361;
+        bh=Gio1GUXXQujGj5kXLT+lgayppKbjCJJ2ylmSUsEZdb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sbwT+Sgw6SB4naNHeDAUcthAaEz5V+jqBQsQ2UfcFEUZ8kTffhqQeerIuSg10asya
+         8OKN4CMWuq8vRO6HC7J74u+DLC2SIs6yrvgSF+wQTLQmqt/cI3dVpSy3m1UqjJt00j
+         iUW4ajPPnaGeEouPeTAWrqwgq65bwP0x2pvrbFfOCH5kS9Yjp0qPh6HXRUmlz5sJSX
+         RZfeZd/Oh44KT1mQcYEut97rHfV6YXVz+y+eevqfPBpE9lrbhxhD9RWKKKo1WOF5fN
+         Kbc/Tinp4gptC9YxWtkWxRImS5dn6vFmMFsKYRx2tBJ5kZCzoaQDqT80czd/dYb1pv
+         QjSVVrsb178fg==
+Date:   Fri, 17 Mar 2023 09:55:56 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, smfrench@gmail.com,
+        senozhatsky@chromium.org, tom@talpey.com
+Subject: Re: [PATCH v8 1/3] ksmbd: remove internal.h include
+Message-ID: <20230317085556.sprbco6yrd2d2jf2@wittgenstein>
+References: <20230315223435.5139-1-linkinjeon@kernel.org>
+ <20230315223435.5139-2-linkinjeon@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 19:25:31 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <d9dccd2492853c059082e732092fd374@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230315223435.5139-2-linkinjeon@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 07:34:33AM +0900, Namjae Jeon wrote:
+> Since vfs_path_lookup is exported, It should not be internal.
+> Move vfs_path_lookup prototype in internal.h to linux/namei.h.
+> 
+> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+> ---
 
-
--- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
-
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
+Looks good to me,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
