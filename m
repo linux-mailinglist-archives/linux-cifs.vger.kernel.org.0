@@ -2,56 +2,115 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472A16DD155
-	for <lists+linux-cifs@lfdr.de>; Tue, 11 Apr 2023 07:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606ED6DF4EA
+	for <lists+linux-cifs@lfdr.de>; Wed, 12 Apr 2023 14:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjDKFAp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-cifs@lfdr.de>); Tue, 11 Apr 2023 01:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S231207AbjDLMT6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 12 Apr 2023 08:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDKFAo (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 11 Apr 2023 01:00:44 -0400
-X-Greylist: delayed 23216 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Apr 2023 22:00:42 PDT
-Received: from zimbra-dc.paul-scerri.ch (dc.paul-scerri.ch [62.220.130.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C088E6F;
-        Mon, 10 Apr 2023 22:00:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTP id DD7035F41FB;
-        Mon, 10 Apr 2023 22:30:55 +0200 (CEST)
-Received: from zimbra-dc.paul-scerri.ch ([127.0.0.1])
-        by localhost (zimbra-dc.paul-scerri.ch [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BZg7jfTBubZ4; Mon, 10 Apr 2023 22:30:55 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTP id 9C2425873CA;
-        Mon, 10 Apr 2023 22:04:33 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra-dc.paul-scerri.ch
-Received: from zimbra-dc.paul-scerri.ch ([127.0.0.1])
-        by localhost (zimbra-dc.paul-scerri.ch [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K-KwY6zOL5d3; Mon, 10 Apr 2023 22:04:33 +0200 (CEST)
-Received: from [185.169.4.108] (unknown [185.169.4.108])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTPSA id DC8DB591EF0;
-        Mon, 10 Apr 2023 21:34:30 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230328AbjDLMTw (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 12 Apr 2023 08:19:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B53030EE
+        for <linux-cifs@vger.kernel.org>; Wed, 12 Apr 2023 05:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681301943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oDvpuO+outR1fzDI82r+racSPaiTDWT0/eKdzaYnWqM=;
+        b=iyFJ1xz0NAPGUSQEnitdCPlzXkaczjKazrmow+HyOuX8T4xeg1j7QnVVqPTHK5qHqxv7O5
+        kOVJ8pJnqeRZA5e8tCtPBrTLzyvP/w2yvhF+G6LDnH+4cam5w7PhBVyx6z85QyAzphLgBX
+        P3xXuXpt40e/kkZ6p1UVzYwyjo5lU0M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-mTzkuoVFP_29896gGCW_Bg-1; Wed, 12 Apr 2023 08:19:00 -0400
+X-MC-Unique: mTzkuoVFP_29896gGCW_Bg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7959780C8C1;
+        Wed, 12 Apr 2023 12:18:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 378F0492B00;
+        Wed, 12 Apr 2023 12:18:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+cc:     dhowells@redhat.com, Jeff Layton <jlayton@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] netfs: Fix netfs_extract_iter_to_sg() for ITER_UBUF/IOVEC
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re
-To:     Recipients <wiki@paul-scerri.ch>
-From:   "Maria-Elisabeth Schaeffler" <wiki@paul-scerri.ch>
-Date:   Mon, 10 Apr 2023 12:34:29 -0700
-Reply-To: mariaelisabeths457@gmail.com
-Message-Id: <20230410193430.DC8DB591EF0@zimbra-dc.paul-scerri.ch>
-X-Spam-Status: No, score=2.8 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <110099.1681301937.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 12 Apr 2023 13:18:57 +0100
+Message-ID: <110100.1681301937@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Your email account has been selected for a donation of €1,700,000. Please contact for more information.
+Hi Linus,
 
-Mrs Maria Elisabeth Schaeffler
-CEO SCHAEFFLER.
+Could you apply this, please?  It doesn't affect anything yet, but I have
+patches in the works that will use it.
+
+Thanks,
+David
+---
+netfs: Fix netfs_extract_iter_to_sg() for ITER_UBUF/IOVEC
+
+Fix netfs_extract_iter_to_sg() for ITER_UBUF and ITER_IOVEC to set the siz=
+e
+of the page to the part of the page extracted, not the remaining amount of
+data in the extracted page array at that point.
+
+This doesn't yet affect anything as cifs, the only current user, only
+passes in non-user-backed iterators.
+
+Fixes: 018584697533 ("netfs: Add a function to extract an iterator into a =
+scatterlist")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+cc: Steve French <sfrench@samba.org>
+cc: Shyam Prasad N <nspmangalore@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: linux-cachefs@redhat.com
+cc: linux-cifs@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/netfs/iterator.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/netfs/iterator.c b/fs/netfs/iterator.c
+index e9a45dea748a..8a4c86687429 100644
+--- a/fs/netfs/iterator.c
++++ b/fs/netfs/iterator.c
+@@ -139,7 +139,7 @@ static ssize_t netfs_extract_user_to_sg(struct iov_ite=
+r *iter,
+ 			size_t seg =3D min_t(size_t, PAGE_SIZE - off, len);
+ =
+
+ 			*pages++ =3D NULL;
+-			sg_set_page(sg, page, len, off);
++			sg_set_page(sg, page, seg, off);
+ 			sgtable->nents++;
+ 			sg++;
+ 			len -=3D seg;
+
