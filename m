@@ -2,74 +2,138 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678626E58DF
-	for <lists+linux-cifs@lfdr.de>; Tue, 18 Apr 2023 07:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E978E6E6F85
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Apr 2023 00:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjDRF7S (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 18 Apr 2023 01:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S230153AbjDRWlR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 18 Apr 2023 18:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjDRF7Q (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 18 Apr 2023 01:59:16 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D105597
-        for <linux-cifs@vger.kernel.org>; Mon, 17 Apr 2023 22:59:12 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ecb137af7eso1881789e87.2
-        for <linux-cifs@vger.kernel.org>; Mon, 17 Apr 2023 22:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797551; x=1684389551;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=B/lJxYxd9QgPHdTz8Y94+SQwigHwPQz1MSY0HBGE49jeKpZvQ5ridodaJ1/hg5dYTg
-         xfm1UctNbPOooHeryL4EpFSpzLbpfIM/1AP6IiE/eAQ2XC+jiAPE4sjVq/0OLp+s5H64
-         OPszLw7mQaJ1PqKU00ScUiZOb3Ks0WeXpBGa5YCNLjOyLXsRt33eVOV3J7/7jSzM1Fi3
-         /RpCf1VKsRTVD/tqHSDxBWAwYQ/D3zBjMwphUFrVmu8iFcvUlk1YDipJso9tURLsGQAs
-         Kxkqmj8wx1BzA1Zw3ty0py3y/B5zl4OJTEDWjPXGFVRp+Onsg5ZfmKZ52/USaH6DILFS
-         M1fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797551; x=1684389551;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=il2BBUoV/ueVWGN8zJNV5bZQj2Eg0760f/vvfHJhUWQfqBYylxGo1G3NGEu76n4YtT
-         fxZcp5+aQ5fYlmSL3fbbtZhL61G5oHLaQmKJTfuyrXSxazL/lz9J+jPDI8h5GcuLHE1d
-         9bGOQcJLKoAT5JL6LqDmUSxtq2O/wVHhxrkieH2WQAK7zbJvIkfyxv3lzkipNWnnv875
-         /hQuOfGCKWIM2jDyG6zeL13k/eSztP0IC3qYs2O9uyKR8xECVDekjsE/q63KLe6PWHKT
-         K3J7WtxO1bcU/cBoZ7Mx9G7j1HMvlNyTSFOKu2xjoPBTl1fc69+EWQu48/yMMHqkO0J/
-         8nYA==
-X-Gm-Message-State: AAQBX9f7IpbVNjG9am1Wce+c4vNbssC2soQ3t75OmNbnWi7L8353iDl+
-        dBLWdXkxmn4AeQ93uEARkGKZrbZMEeM5DxwTGFA=
-X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
-X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
- v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
- 2023 22:59:10 -0700 (PDT)
+        with ESMTP id S232772AbjDRWlJ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 18 Apr 2023 18:41:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3D9745
+        for <linux-cifs@vger.kernel.org>; Tue, 18 Apr 2023 15:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681857613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=88WLzUQfui8MOyB5NEFokobl+41u8GpMubwgrVgH7UQ=;
+        b=KFcsdEbaMDJvabIpradp/yHzVpp+HxP+Fx1Nb7wLkMo5W/WEeFxJ2Wf1WRm41QFjCzFgE7
+        lthJsVkKC1dSGaZCwJbHz5FW56TgmGCgXcW7gWLF2tYhsp3zzqSZc92WsZfOX2dCOydtub
+        mE8sSFcMHUPACu8VOqR5sJhHnUbzoyM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-ld5D_CZpP5eRYdorAN4ycA-1; Tue, 18 Apr 2023 18:40:09 -0400
+X-MC-Unique: ld5D_CZpP5eRYdorAN4ycA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 290F3101A531;
+        Tue, 18 Apr 2023 22:40:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EE26540BC798;
+        Tue, 18 Apr 2023 22:40:07 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+cc:     dhowells@redhat.com, Paulo Alcantara <pc@manguebit.com>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cifs: Fix unbuffered read
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 22:59:10 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 22:59:10 -0700
-Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 18 Apr 2023 23:40:07 +0100
+Message-ID: <1692048.1681857607@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear,
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+If read() is done in an unbuffered manner, such that, say,
+cifs_strict_readv() goes through cifs_user_readv() and thence
+__cifs_readv(), it doesn't recognise the EOF and keeps indicating to
+userspace that it returning full buffers of data.
 
-Mrs. Mariam Kouame
+This is due to ctx->iter being advanced in cifs_send_async_read() as the
+buffer is split up amongst a number of rdata objects.  The iterator count
+is then used in collect_uncached_read_data() in the non-DIO case to set the
+total length read - and thus the return value of sys_read().  But since the
+iterator normally gets used up completely during splitting, ctx->total_len
+gets overridden to the full amount.
+
+However, prior to that in collect_uncached_read_data(), we've gone through
+the list of rdatas and added up the amount of data we actually received
+(which we then throw away).
+
+Fix this by removing the bit that overrides the amount read in the non-DIO
+case and just going with the total added up in the aforementioned loop.
+
+This was observed by mounting a cifs share with multiple channels, e.g.:
+
+	mount //192.168.6.1/test /test/ -o user=3Dshares,pass=3D...,max_channels=
+=3D6
+
+and then reading a 1MiB file on the share:
+
+	strace cat /xfstest.test/1M  >/dev/null
+
+Through strace, the same data can be seen being read again and again.
+=20=20=20=20
+Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather =
+than a page list")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: Paulo Alcantara <pc@manguebit.com>
+cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+cc: Long Li <longli@microsoft.com>
+cc: Enzo Matsumiya <ematsumiya@suse.de>
+cc: Shyam Prasad N <nspmangalore@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cifs@vger.kernel.org
+---
+ fs/cifs/file.c |    4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 321f9b7c84c9..f8877dc91cc5 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -4010,7 +4010,6 @@ static void
+ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+ {
+ 	struct cifs_readdata *rdata, *tmp;
+-	struct iov_iter *to =3D &ctx->iter;
+ 	struct cifs_sb_info *cifs_sb;
+ 	int rc;
+=20
+@@ -4076,9 +4075,6 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+ 		kref_put(&rdata->refcount, cifs_readdata_release);
+ 	}
+=20
+-	if (!ctx->direct_io)
+-		ctx->total_len =3D ctx->len - iov_iter_count(to);
+-
+ 	/* mask nodata case */
+ 	if (rc =3D=3D -ENODATA)
+ 		rc =3D 0;
+
