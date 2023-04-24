@@ -2,101 +2,74 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCC96EC38D
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Apr 2023 04:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B4A6ECAAD
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Apr 2023 12:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjDXCWl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 23 Apr 2023 22:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S230358AbjDXKv7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 24 Apr 2023 06:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXCWl (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 23 Apr 2023 22:22:41 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D92B19B0
-        for <linux-cifs@vger.kernel.org>; Sun, 23 Apr 2023 19:22:39 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so4169960e87.2
-        for <linux-cifs@vger.kernel.org>; Sun, 23 Apr 2023 19:22:39 -0700 (PDT)
+        with ESMTP id S231438AbjDXKv4 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 24 Apr 2023 06:51:56 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECA33AA8
+        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-552d64d1d2eso50860597b3.1
+        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682302957; x=1684894957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9KYnMkTwxeU2tNH4bOGttDlCSdhds9ufjY0t0SMYcNU=;
-        b=Y4R85GU5UmldO+K67ZwnWmXn38BZ8KvRQO1bC1yK29z3VdYYIijLJAVpJe7d03D12W
-         2FhID/J4DDbFN6KXubtOePu3Vk8cjPzKNMQGPd6SjXvgW0xQo45wiNq0/7bupmb8wL+w
-         k4Cml+yg0MYEW+wID7owhIIiYs0iH7mTH8zHNsjUAvVqtrxuZTVrUyWMc0+gBxggpR8m
-         IJ+c3qx/AyCWzoad3Uqf6jDig9plbsVEJHXYA+q7fezWfhOGcqQO806v0Iw5NdcLE50H
-         rjtat65Nv9lgqTtpJ6fMiyxOgiSMaF9doxI40kpkuAifOSeAMHjsuU42G3/zGNfGmLRu
-         Yaog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682302957; x=1684894957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20221208; t=1682333511; x=1684925511;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9KYnMkTwxeU2tNH4bOGttDlCSdhds9ufjY0t0SMYcNU=;
-        b=XylwhpQIXHWwBtqwvQhuuXIVgZJe0ENpwciRmXdbInEYBz4VZsStj5ZwmrP/BQbSWg
-         CBJi6VduBw2W3D9vOiin3mHLnDTQpiGGthrZDIAqOx1Sweq3po++fcta6rquHM9M8WyN
-         sfFclMqbjyVOUo+2k6BOe2l+Eribkdm7Re2Oa5xWK1krDcGrBKh40rCvvst6+jRjJbdP
-         UiRtFgBw0eXow0nJuKvRhtyppdBYizrdWTYodnywYVQENJ74nUzphdtZKUXnrM/xMbnE
-         7xMsc+tYZxm8KDWYbuuJDfpYnOOu2WY7Zu7iiU1TXwIsr1uy7pU8Is58u6fCN/dxpP5z
-         DhDg==
-X-Gm-Message-State: AAQBX9da3vtW41PPUvvUQv1/1cdBdHejL06SeIlV+Yi/KFuzFCmin4ss
-        Y8ugwi40IaUF79xz2TSAM4bqScRt3SWYRX2MYTzoIcqq
-X-Google-Smtp-Source: AKy350aAUevP8AWM5VRdFg1T+zvunaIbXHzubRsnvkr+WUdhc4MqmodIXnrxfEM0Z5ldlmI3ALzCh2HOW/NqyXtsDEc=
-X-Received: by 2002:a2e:a0d4:0:b0:2a8:ba49:a811 with SMTP id
- f20-20020a2ea0d4000000b002a8ba49a811mr2342938ljm.25.1682302957344; Sun, 23
- Apr 2023 19:22:37 -0700 (PDT)
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=BDOU7+6CjKGfGxohfwPSUG5dvZEz+JIUkSiwN2TDnXREO1m7tnshm1ywQFqtwjCtuy
+         sdc62qMh2n/GKkLEd6inRVKNj3gr719YRClRe48cHw3AS8uelP+ymyFB0srKimerVisT
+         13Xtkz0SBiM8bJqS0byCbOX7vMjZt1uP8WbY7Dvmdpvz4bea0qvNLSFK3Fpq3xaNdk1A
+         qM5VVSk6ocRnmhVuQME3HxgmrkTm+A9wuvOqJRe5jylGoGOAUFMgmutSHMerkJpOSlvK
+         vk/P+3RIGhTNsyHCwljHvfrhHmReD3nCq/AILJxglY3kVglksym9zePn5jHaXsmq1bcD
+         nsfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682333511; x=1684925511;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=GADxPGOkUn1XqHb4lilSs6httJD3YpQuobVVsT7Vt6tv+DbUYfSBA0te2ci2w9dgQ3
+         gVzwyXFfzp9pmqZnUfshA3mGqRy3d09RapZIpTjM0g/65QHdPcyj8ZSeyZpTUnnzrJT6
+         0DpQgxCtxeJYHCXqU3MJm9944WiUT9wZMR1p7hKx6r384lf2duNzTdzlvhxS9xaGdAiF
+         YoTQefC6DiSeoSuTLS8AOFMlIr1gFpQRu0MVsC2DOmNFFFftrp4R7nO823941lbZJKG3
+         /1tin9dFhKRZtwIhVylqSWPzobK68z+4QFsT7vvLy3j2cO8SEGwuvorAzHv2MM5dw+Ze
+         rLUw==
+X-Gm-Message-State: AAQBX9clgPUimZevD71Y17EihZ+45WB/u/gC4NgBbw7W5H9iAwQIWsqA
+        VmykVZkJIq0asHOnx7XLW8qDh+y6LcUCNr2eGtE=
+X-Google-Smtp-Source: AKy350YG4FdHU8gQxPU2msbtN2QdEjv9b6BhW9wIbc0BoX66FKTBxxpsjwaRJQwRDUNbtvTNf1tLcLROs6TnCelMCbI=
+X-Received: by 2002:a81:4809:0:b0:533:9fa7:bbe9 with SMTP id
+ v9-20020a814809000000b005339fa7bbe9mr7936227ywa.8.1682333511052; Mon, 24 Apr
+ 2023 03:51:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1679051552.git.vl@samba.org>
-In-Reply-To: <cover.1679051552.git.vl@samba.org>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 23 Apr 2023 21:22:25 -0500
-Message-ID: <CAH2r5mtACptru6kKCnK58EuksefqhTcVHdK_qEUyUnj7YRpN3A@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Avoid a few casts from void *
-To:     Volker Lendecke <vl@samba.org>
-Cc:     linux-cifs@vger.kernel.org,
-        =?UTF-8?B?UmFscGggQsO2aG1l?= <slow@samba.org>
+Received: by 2002:a05:7010:7499:b0:32d:e51f:dee8 with HTTP; Mon, 24 Apr 2023
+ 03:51:50 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame1990@gmail.com>
+Date:   Mon, 24 Apr 2023 03:51:50 -0700
+Message-ID: <CAKXL+w08stRVVXkGQO0pBQ1x_ozGpGTcLNjscr9ZhQ3xnJgTTA@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-I merged patch one of this series but looks like the other ones were
-obsoleted by the other three cleanup patches you did for
-SMB2_open_init.  Let me know about patches I may have missed, as we
-get this updated for the merge window
+Dear,
 
-On Fri, Mar 17, 2023 at 6:19=E2=80=AFAM Volker Lendecke <vl@samba.org> wrot=
-e:
->
-> We should not go through void * without type-checking if it's not
-> really necessary.
->
-> Volker Lendecke (7):
->   cifs: Avoid a cast in add_lease_context()
->   cifs: Avoid a cast in add_durable_context()
->   cifs: Avoid a cast in add_posix_context()
->   cifs: Avoid a cast in add_sd_context()
->   cifs: Avoid a cast in add_durable_v2_context()
->   cifs: Avoid a cast in add_durable_reconnect_v2_context()
->   cifs: Avoid a cast in add_query_id_context()
->
->  fs/cifs/smb2pdu.c | 55 ++++++++++++++++++++++++++---------------------
->  1 file changed, 30 insertions(+), 25 deletions(-)
->
-> --
-> 2.30.2
->
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
 
-
---=20
-Thanks,
-
-Steve
+Mrs. Mariam Kouame
