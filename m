@@ -2,74 +2,88 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B4A6ECAAD
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Apr 2023 12:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1701D6EDAF1
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Apr 2023 06:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjDXKv7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 24 Apr 2023 06:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S231276AbjDYEnn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 25 Apr 2023 00:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjDXKv4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 24 Apr 2023 06:51:56 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECA33AA8
-        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-552d64d1d2eso50860597b3.1
-        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
+        with ESMTP id S229637AbjDYEnm (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 25 Apr 2023 00:43:42 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3D73AAA
+        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 21:43:41 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2a8db10a5d4so51609611fa.1
+        for <linux-cifs@vger.kernel.org>; Mon, 24 Apr 2023 21:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682333511; x=1684925511;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=BDOU7+6CjKGfGxohfwPSUG5dvZEz+JIUkSiwN2TDnXREO1m7tnshm1ywQFqtwjCtuy
-         sdc62qMh2n/GKkLEd6inRVKNj3gr719YRClRe48cHw3AS8uelP+ymyFB0srKimerVisT
-         13Xtkz0SBiM8bJqS0byCbOX7vMjZt1uP8WbY7Dvmdpvz4bea0qvNLSFK3Fpq3xaNdk1A
-         qM5VVSk6ocRnmhVuQME3HxgmrkTm+A9wuvOqJRe5jylGoGOAUFMgmutSHMerkJpOSlvK
-         vk/P+3RIGhTNsyHCwljHvfrhHmReD3nCq/AILJxglY3kVglksym9zePn5jHaXsmq1bcD
-         nsfg==
+        d=gmail.com; s=20221208; t=1682397819; x=1684989819;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Q//kii23FKRzCG/0pybaXM8J980UgD3/Gh6plkgpeCk=;
+        b=ZvjkoPKprG7Mh4FlXuKeC7O7qi4+QefG3GcEdadxcRuWNLaDfrgE14iKE8RnypAawi
+         lhuPGwWb6DM0qn9h5GOjbc4pUjWUdimLADOtaMFVQWHjOXjC91+VTzXWezIW8ozFDLCn
+         J2ooUOG/LziziuwAf/Z7sbZP/f+0jcfAfw7/mY9vxjzMQYNa28erKwd+4j+UIXzdstsr
+         rSO//VB5rtUaw6zw5R/bKdk0k4wo1LEV6/H+Ogv/mOSNRus6A/nKFRjuxO7aU1nDC3bH
+         jPGv4FloPqxNvpTe26mAtUy6lntXmuRLZSExYq8I3EsC9Y1xI/4EKQErEtevwv9l0J+B
+         hccA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682333511; x=1684925511;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=GADxPGOkUn1XqHb4lilSs6httJD3YpQuobVVsT7Vt6tv+DbUYfSBA0te2ci2w9dgQ3
-         gVzwyXFfzp9pmqZnUfshA3mGqRy3d09RapZIpTjM0g/65QHdPcyj8ZSeyZpTUnnzrJT6
-         0DpQgxCtxeJYHCXqU3MJm9944WiUT9wZMR1p7hKx6r384lf2duNzTdzlvhxS9xaGdAiF
-         YoTQefC6DiSeoSuTLS8AOFMlIr1gFpQRu0MVsC2DOmNFFFftrp4R7nO823941lbZJKG3
-         /1tin9dFhKRZtwIhVylqSWPzobK68z+4QFsT7vvLy3j2cO8SEGwuvorAzHv2MM5dw+Ze
-         rLUw==
-X-Gm-Message-State: AAQBX9clgPUimZevD71Y17EihZ+45WB/u/gC4NgBbw7W5H9iAwQIWsqA
-        VmykVZkJIq0asHOnx7XLW8qDh+y6LcUCNr2eGtE=
-X-Google-Smtp-Source: AKy350YG4FdHU8gQxPU2msbtN2QdEjv9b6BhW9wIbc0BoX66FKTBxxpsjwaRJQwRDUNbtvTNf1tLcLROs6TnCelMCbI=
-X-Received: by 2002:a81:4809:0:b0:533:9fa7:bbe9 with SMTP id
- v9-20020a814809000000b005339fa7bbe9mr7936227ywa.8.1682333511052; Mon, 24 Apr
- 2023 03:51:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682397819; x=1684989819;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q//kii23FKRzCG/0pybaXM8J980UgD3/Gh6plkgpeCk=;
+        b=GX8YFBgAZDQuRPnwMz2EB8oRpS9SGpHhoxrRRUnrmt1h/MCdDWAV8q6AGLIyIQej/J
+         Pyoy/qnKvy7icM1Punaqiy5yTg/1uLuaSKMzLCPhl12zE+xxRizSKpwG0GRDijtfUQ2J
+         k1mAiPCGkeIrX8k1vlJC3TQ2xNvtmUHfJ0l/A4O4iL8t/RIkj2HduSPnzzrSZVQmisg6
+         zYtxIUsdnxAPBGZ0IL/5TZP/5yj3/QefEAABwFDJoI/8EYl2IaM1tVGcesDjuG/Oubgi
+         59lwmL1Tdcx9HPJZtGVU3vHxxuigXzJxkVVRrbJKxf4lv2sUnHXk77TeRypHlvDjxS8D
+         Ji0g==
+X-Gm-Message-State: AAQBX9fAfI4bDtChlCoElLYtejhLouwFcLcRsSz9pHAC2yDV0nCVVxzh
+        cwlcbDSP7VUB1oDfvfycTegHTdbeo2ADZ+1lpPMSFo413Qs=
+X-Google-Smtp-Source: AKy350ZJbvuHMcQDpZ2nW7fH/ocULwdQC8nnXiYM7EpgvKC2ykoPOc2UHe8ypH+0wlp8PVWUAdQVbkFjyBe6XoT6YZE=
+X-Received: by 2002:a2e:95c4:0:b0:2a8:a859:b5c7 with SMTP id
+ y4-20020a2e95c4000000b002a8a859b5c7mr3046182ljh.0.1682397819114; Mon, 24 Apr
+ 2023 21:43:39 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:7499:b0:32d:e51f:dee8 with HTTP; Mon, 24 Apr 2023
- 03:51:50 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1990@gmail.com>
-Date:   Mon, 24 Apr 2023 03:51:50 -0700
-Message-ID: <CAKXL+w08stRVVXkGQO0pBQ1x_ozGpGTcLNjscr9ZhQ3xnJgTTA@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 24 Apr 2023 23:43:27 -0500
+Message-ID: <CAH2r5ms6tY9zqG+rm1Rk2NPCGKUC89FLgjgUtdTbo+NJkJUc-A@mail.gmail.com>
+Subject: Samba POSIX Extensions automated testing
+To:     samba-technical <samba-technical@lists.samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Jeremy Allison <jra@samba.org>,
+        "Volker.Lendecke@sernet.de" <Volker.Lendecke@sernet.de>,
+        David Disseldorp <ddiss@samba.org>,
+        =?UTF-8?B?UmFscGggQsO2aG1l?= <slow@samba.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear,
+With the migration to the new 'buildbot' (smb3.1.1 client test
+automation) progressing, I have added some functional tests to the
+Samba (with POSIX extensions enabled) test target.  We should add more
+ xfstests to this test group as Samba server continues to improve its
+support for POSIX extensions.   Here is the first test run on the new
+infrastructure (server is Samba master branch, client is Linux cifs.ko
+running on the 6.3 kernel):
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+http://smb311-linux-testing.southcentralus.cloudapp.azure.com/#/builders/11/builds/4
 
-Mrs. Mariam Kouame
+Some things that could help:
+- support for clone (reflink) to Samba running on XFS, not just BTRFS
+(reflink is helpful for more than just cloning files, various tests
+require it)
+- support for mknod/mkfifo
+- support for ACLs and mode bits on the same share
+
+-- 
+Thanks,
+
+Steve
