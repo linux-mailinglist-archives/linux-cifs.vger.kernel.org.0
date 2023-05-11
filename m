@@ -2,67 +2,213 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8069C6FEF1A
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 May 2023 11:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EF06FF0C6
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 May 2023 13:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbjEKJrN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 11 May 2023 05:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S237867AbjEKL7w (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 11 May 2023 07:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbjEKJrL (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 11 May 2023 05:47:11 -0400
-Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE862101
-        for <linux-cifs@vger.kernel.org>; Thu, 11 May 2023 02:47:10 -0700 (PDT)
-Received: by mail.feshiecree.pl (Postfix, from userid 1001)
-        id 4C935869FF; Thu, 11 May 2023 10:44:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
-        s=mail; t=1683798324;
-        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=QJ+mrj8N+JSP6rQKwMd/MTOz3qs+AQs4AGRt6g03ZM2QMjWBP1UMav7CnIy4FciFP
-         z41Mld7L6HgPcnISZCgrrDZ5nv1uWUqEWZRokw7TZX0C/N9ch9aEp3w7SHOjWlEh86
-         YOVXWaIEfqpCCMt/9O94melouc1MjBufStlfAe3ZSW+VvPbeWTF7Q3buuZvX+uuMxI
-         Vphgvxtxr1mUpF51y4RGJasNLyaL3oz0pZ7fdhz5cTXEe2DG6Y8CwLDovNRc24e1IU
-         0a0wjGb5Qt9Lwk2eyTJtBUs7tZLgbCh8QO0/V7MOco4ceboRtlR31D0RPVydU42U81
-         iY+ONgdB57BoQ==
-Received: by mail.feshiecree.pl for <linux-cifs@vger.kernel.org>; Thu, 11 May 2023 09:44:07 GMT
-Message-ID: <20230511103853-0.1.2i.hstx.0.lk05cbt8b0@feshiecree.pl>
-Date:   Thu, 11 May 2023 09:44:07 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
-To:     <linux-cifs@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.feshiecree.pl
+        with ESMTP id S237820AbjEKL7v (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 11 May 2023 07:59:51 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4527D55B3
+        for <linux-cifs@vger.kernel.org>; Thu, 11 May 2023 04:59:48 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so9639983e87.3
+        for <linux-cifs@vger.kernel.org>; Thu, 11 May 2023 04:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683806386; x=1686398386;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fRNm+KFUDDN1oQKMlpBJgWHFsPEB2sb8N1qDdTLzrRA=;
+        b=q/t+iF7gcJlLwSFwyWdRVnaOH6DnZ15Hh00D8KDQCVj3czLiXT5DcNm1lg1D63XkNa
+         Pj7xZBHkxALHXET/ZaOVwqFb6EwCwf3dRnmhxU6pcwd8SWBYpQMrJhlGMfdKuUwNFgWP
+         adfl9m0RH4IrxjXpe4B1I+Wh+kNFUTEkijwmETCXnS28KGFkhTO4BdrOSzMloCUJEtSa
+         f2Bgg9QCu7u/mZ8HVRLDEVI1QgOPsZwCF8T3osYHfET+aMPl2+RtI/u7llqrOun4YjTd
+         uoN9KVeCneLQVGqjqCZOUwLprHCLtQbeB4KKpHA7KQtZK0gWwU/3dYookH8iYrMjdaU/
+         0hRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683806386; x=1686398386;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fRNm+KFUDDN1oQKMlpBJgWHFsPEB2sb8N1qDdTLzrRA=;
+        b=MJF2C/tP8EdaUzZpNZ8f+cRzQ7O33Y954Lm7omlHMfbVznjthjB30x6ch0EJy0O/6K
+         DhdrrCwF8mwyN1dNcpFBJMHd7+2VgigfYUHDEYGLh+Psb0pTP0kmnoKYAjWIXtvJbwaL
+         y3RwRZpAzaED/uZFPn7TBMSQE6PJCc3sBVYQnZGP233kApmoq6em1kUMsw015hM2+whd
+         agpy3EYJx2bjSSWIfVKvqypK2K7De0MZDS4MtvWhieQ9pQbR6jZUHbHcZu/qMyR6+hG0
+         AJ7hy7AeVTu3UPuicGdcvoNAvnpuVb4tLypAaAXXKTwdC0nqh3m9ojNbgi2kJJSKtsnO
+         OvXA==
+X-Gm-Message-State: AC+VfDzYmbqcrCwPWwZojtHIMFuWg1LgoIheMlHY/AcWkt6ovFZPfmcK
+        cCTZ/K8IfKPFupAFBKoSTDdKPg==
+X-Google-Smtp-Source: ACHHUZ5buhASnVjeRPaHmKvQyrqmIv8tehj5S8Nqt/PTjDb7bZMSILKyBVZvDPpNIQ1tGpyJ5D9CUw==
+X-Received: by 2002:a05:6512:932:b0:4ef:ef67:65c9 with SMTP id f18-20020a056512093200b004efef6765c9mr2958124lft.23.1683806386456;
+        Thu, 11 May 2023 04:59:46 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id f16-20020ac25090000000b004cb23904bd9sm1100841lfm.144.2023.05.11.04.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 04:59:46 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 00/12] arch: Make virt_to_pfn into a static inline
+Date:   Thu, 11 May 2023 13:59:17 +0200
+Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJXYXGQC/1XOQQqDMBCF4avIrB2JRm3tVUoXMZnobKJMbBDEu
+ ze2qy5/eB+8AyIJU4RHcYBQ4shLyFGXBdjZhImQXW5oVKNVpzQmlg23BVcfMPXYotgaW9/d9EB
+ 31ysHmY4mEo5igp0v/G+qnxFy7/0ar0Ke9++H5+s8P+BE9BOTAAAA
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_DUL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This is an attempt to harden the typing on virt_to_pfn()
+and pfn_to_virt().
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Making virt_to_pfn() a static inline taking a strongly typed
+(const void *) makes the contract of a passing a pointer of that
+type to the function explicit and exposes any misuse of the
+macro virt_to_pfn() acting polymorphic and accepting many types
+such as (void *), (unitptr_t) or (unsigned long) as arguments
+without warnings.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+For symmetry, we do the same with pfn_to_virt().
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+The problem with this inconsistent typing was pointed out by
+Russell King:
+https://lore.kernel.org/linux-arm-kernel/YoJDKJXc0MJ2QZTb@shell.armlinux.org.uk/
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+And confirmed by Andrew Morton:
+https://lore.kernel.org/linux-mm/20220701160004.2ffff4e5ab59a55499f4c736@linux-foundation.org/
 
+So the recognition of the problem is widespread.
 
-Pozdrawiam
-Krystian Wieczorek
+These platforms have been chosen as initial conversion targets:
+
+- ARC
+- ARM
+- ARM64/Aarch64
+- asm-generic (including for example x86)
+- m68k
+
+The idea is that if this goes in, it will block further misuse
+of the function signatures due to the large compile coverage,
+and then I can go in and fix the remaining platforms on a
+one-by-one basis.
+
+Some of the patches have been circulated before but were not
+picked up by subsystem maintainers, so now the arch tree is
+target for this series.
+
+It has passed zeroday builds after a lot of iterations in my
+personal tree, but there could be some randconfig outliers.
+
+The To/Cc list would be too long if I include all the minor
+patches maintainers, so I have trimmed it down to the mailing
+lists since these people certainly have received the patches
+before.
+
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Linus Walleij (12):
+      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
+      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+      ARC: init: Pass a pointer to virt_to_pfn() in init
+      riscv: mm: init: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page() in cifsglob
+      netfs: Pass a pointer to virt_to_page()
+      arm64: vdso: Pass (void *) to virt_to_page()
+      asm-generic/page.h: Make pfn accessors static inlines
+      ARM: mm: Make virt_to_pfn() a static inline
+      arm64: memory: Make virt_to_pfn() a static inline
+      m68k/mm: Make pfn accessors static inlines
+
+ arch/arc/mm/init.c                   |  2 +-
+ arch/arm/common/sharpsl_param.c      |  2 +-
+ arch/arm/include/asm/delay.h         |  2 +-
+ arch/arm/include/asm/io.h            |  2 +-
+ arch/arm/include/asm/memory.h        | 17 ++++++++++++-----
+ arch/arm/include/asm/page.h          |  4 ++--
+ arch/arm/include/asm/pgtable.h       |  2 +-
+ arch/arm/include/asm/proc-fns.h      |  2 --
+ arch/arm/include/asm/sparsemem.h     |  2 +-
+ arch/arm/include/asm/uaccess-asm.h   |  2 +-
+ arch/arm/include/asm/uaccess.h       |  2 +-
+ arch/arm/kernel/asm-offsets.c        |  2 +-
+ arch/arm/kernel/entry-armv.S         |  2 +-
+ arch/arm/kernel/entry-common.S       |  2 +-
+ arch/arm/kernel/entry-v7m.S          |  2 +-
+ arch/arm/kernel/head-nommu.S         |  3 +--
+ arch/arm/kernel/head.S               |  2 +-
+ arch/arm/kernel/hibernate.c          |  2 +-
+ arch/arm/kernel/suspend.c            |  2 +-
+ arch/arm/kernel/tcm.c                |  2 +-
+ arch/arm/kernel/vmlinux-xip.lds.S    |  3 +--
+ arch/arm/kernel/vmlinux.lds.S        |  3 +--
+ arch/arm/mach-berlin/platsmp.c       |  2 +-
+ arch/arm/mach-keystone/keystone.c    |  2 +-
+ arch/arm/mach-omap2/sleep33xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep43xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep44xx.S      |  2 +-
+ arch/arm/mach-pxa/gumstix.c          |  2 +-
+ arch/arm/mach-rockchip/sleep.S       |  2 +-
+ arch/arm/mach-sa1100/pm.c            |  2 +-
+ arch/arm/mach-shmobile/headsmp-scu.S |  2 +-
+ arch/arm/mach-shmobile/headsmp.S     |  2 +-
+ arch/arm/mach-socfpga/headsmp.S      |  2 +-
+ arch/arm/mach-spear/spear.h          |  2 +-
+ arch/arm/mm/cache-fa.S               |  1 -
+ arch/arm/mm/cache-v4wb.S             |  1 -
+ arch/arm/mm/dma-mapping.c            |  2 +-
+ arch/arm/mm/dump.c                   |  2 +-
+ arch/arm/mm/init.c                   |  2 +-
+ arch/arm/mm/kasan_init.c             |  1 -
+ arch/arm/mm/mmu.c                    |  2 +-
+ arch/arm/mm/physaddr.c               |  2 +-
+ arch/arm/mm/pmsa-v8.c                |  2 +-
+ arch/arm/mm/proc-v7.S                |  2 +-
+ arch/arm/mm/proc-v7m.S               |  2 +-
+ arch/arm/mm/pv-fixup-asm.S           |  2 +-
+ arch/arm64/include/asm/memory.h      |  9 ++++++++-
+ arch/arm64/kernel/vdso.c             |  2 +-
+ arch/m68k/include/asm/page_mm.h      | 11 +++++++++--
+ arch/m68k/include/asm/page_no.h      | 11 +++++++++--
+ arch/m68k/mm/motorola.c              |  4 ++--
+ arch/m68k/mm/sun3mmu.c               |  2 +-
+ arch/m68k/sun3/dvma.c                |  2 +-
+ arch/m68k/sun3x/dvma.c               |  2 +-
+ arch/riscv/mm/init.c                 |  4 ++--
+ drivers/memory/ti-emif-sram-pm.S     |  2 +-
+ fs/cifs/cifsglob.h                   |  2 +-
+ fs/cifs/smbdirect.c                  |  2 +-
+ fs/netfs/iterator.c                  |  2 +-
+ fs/proc/kcore.c                      |  2 +-
+ include/asm-generic/page.h           | 12 ++++++++++--
+ 61 files changed, 103 insertions(+), 75 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230503-virt-to-pfn-v6-4-rc1-4f5739e8d60d
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
+
