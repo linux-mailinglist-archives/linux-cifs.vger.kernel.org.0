@@ -2,57 +2,57 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0624A705791
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 May 2023 21:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4DC70585C
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 May 2023 22:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjEPTka (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 16 May 2023 15:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S230080AbjEPUJE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 16 May 2023 16:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEPTk2 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 May 2023 15:40:28 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BECD04C
-        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 12:40:03 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-44fd6524c36so21772e0c.0
-        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 12:40:03 -0700 (PDT)
+        with ESMTP id S229678AbjEPUJE (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 May 2023 16:09:04 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA337682
+        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 13:08:58 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-4361225a745so3150135137.2
+        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 13:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684265957; x=1686857957;
+        d=linaro.org; s=google; t=1684267738; x=1686859738;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bl0KxKY/sUcM54GB5tUsJdCgfaOj1mAl6bkpff/gM1k=;
-        b=dsbLYDRucXeFfy0Q/wCYCvEpNLRRzLYvTikvSdUg55vOz24AO+E/QwEMZYFCLgsIUL
-         TP2kqL/XSO9xo4qYSlxpIMcnDRh93iGsYH1x1Of0ShspCO1GxrShBtdFerCbFQ7XNOOS
-         h1ROfA6eOs4GIHyR6q/h/4u+C8FOWvtUBAr35zxQeSISTQ+fm7utqJjvjB9bP+jW+ys1
-         oT2uZk/G+oUv+KhJPlOiv/tHPy5vl/Y6MWIsLReICSp28OninHw7eMvOT97IJ4XYogrk
-         fq5n2E8l+4lUW3JwfVBNlMCpWk91W3x46+13OI/IntSRkIJHnKz2tn+HbVkm/e/9QXEi
-         ZVSQ==
+        bh=7DBoVho2ELfwf8xFod3p2Xy8hTGWnwzQmWp1BhB8w9o=;
+        b=o9t4f7WwcdoQ/ufMDCYBJxxJoWiDW5b99hO3LW4Ce1Cwer2T6WUpp+kfMFQQ0uT+qE
+         Y3EH15M0VA1ESBSdgY3oduuSTbfbn7tM0exdZfeY7zNIrDMomucT2eiwndZvn/06svnC
+         mFeRrdTZdr4M/BHzNxusseXjUMwOB+iivcQ8qSfSpXnaXh1xNWwjMRLcxLnBBXHYUBcD
+         ez+kdMdBA16XYBvX1o4n7B0AR5aWdQk577fGEgW9BZk1POai7M6gH7y/7ANQ5XVtoXyf
+         5Wspxm7dmTyPDjGWYQStWk13FRwfFxh2j/bkovfedC7PrJU9EBUA7k9MdVsMqykQGl/m
+         laEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684265957; x=1686857957;
+        d=1e100.net; s=20221208; t=1684267738; x=1686859738;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bl0KxKY/sUcM54GB5tUsJdCgfaOj1mAl6bkpff/gM1k=;
-        b=EcmkR+rBS5cbKTm6JnRK0pOPUnvPIi6PQR6UvzouvEAHizK60S72j0IKNbJY6QIj9L
-         kxlqKqWKb5JxqXObtIPuQkGyFXlyJIsInI/IcqETPb/A6+LUrNFXX/rNVQkEWynqkb6y
-         4y6oEaH4DGu0BMEUvDJheDoSBgnledYObtcELk8TxS7LxFHMEBpUwn+0tW44zwvTnSvX
-         1DplC+36sn6sshT4W25XrsdVKU7eVSazwCyabp6mh/VenqJVxSZI5Cza3DoO/rRiIkus
-         BL2+R08BAoNWf3H2i1zF7FNvbhwHDddoqGI2kvARncHw1mS8BOPGqBTarMFEzZfm3BCe
-         TWmQ==
-X-Gm-Message-State: AC+VfDzaFKc2O/ZCvnmF11XR1kf2edA54303BdoLqjQOKznF+V27izaQ
-        4p8BZYuAwCV2y7cCmlIZFJJVaPL0AuSMDOaV/Yr/sQ==
-X-Google-Smtp-Source: ACHHUZ5vIZUSmno0LG6tQNjwPdpLccVbcF3x/foJyasbY5MnT2o8uMNXCaMfo51qg7XyO1B4jwPULmnkSizsP8h04ik=
-X-Received: by 2002:a1f:bf47:0:b0:453:9057:1693 with SMTP id
- p68-20020a1fbf47000000b0045390571693mr7211731vkf.5.1684265956844; Tue, 16 May
- 2023 12:39:16 -0700 (PDT)
+        bh=7DBoVho2ELfwf8xFod3p2Xy8hTGWnwzQmWp1BhB8w9o=;
+        b=cuqhUxFLkvgVyz1orDPJ/NW9CxeM1Vz5FntrsFPNh7hfyyPClszJTL2vEjUakuwjbQ
+         mkO7y35/jxR7naTQDGa/n1NISg1PI6mOCgvx8ZYy81C9L1WXeO4L0BnMd2uXe5Y/iSr9
+         M2iqEMubAcNr6mZ1bSJnfJ4LCYuBLQOMzuOu04HRUDwUjtYNyZOTdbC/8BQnTm0BIBgd
+         /afkSzAt+aruX2uUd0KMO5/+4HsEZsDQyxD8PLmQ3Kp7cRg5IJrLnKDSL3Y+zCfXeTgK
+         4aQzbtGKeHVWlR+r+DumAkqpdCbIwF/FPRlwdH2jL+7kNnemSlo0ySJrNQIqZItmQFRN
+         jInQ==
+X-Gm-Message-State: AC+VfDx80+zDJ1HAOoLL8WYck7JJgXxu5e+4AHGDA4F4wiQQLBw0vM31
+        C7ZegvS/Ua04Y35vbm3yhb1XGBvE4KoadqH3LeFDfA==
+X-Google-Smtp-Source: ACHHUZ4qyeqQ2VF116h5i3lUPhXtdRr98E0TNIbj6xeeFCRymVRG6Qo8zUoadLuHlDfIbPZk39vCIUi319M/Na5Pz9E=
+X-Received: by 2002:a67:e9c6:0:b0:436:18b:6a32 with SMTP id
+ q6-20020a67e9c6000000b00436018b6a32mr13567983vso.30.1684267737751; Tue, 16
+ May 2023 13:08:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515161707.203549282@linuxfoundation.org>
-In-Reply-To: <20230515161707.203549282@linuxfoundation.org>
+References: <20230515161658.228491273@linuxfoundation.org>
+In-Reply-To: <20230515161658.228491273@linuxfoundation.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 17 May 2023 01:09:05 +0530
-Message-ID: <CA+G9fYtjmJS893BLx7ggwMXvqzqpiRU7BrvgRjE8d+epJYLrGQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/191] 4.19.283-rc1 review
+Date:   Wed, 17 May 2023 01:38:46 +0530
+Message-ID: <CA+G9fYthEih_mti7PdjCjif9crHqWV_erk-05iWUgD7wMJTtkQ@mail.gmail.com>
+Subject: Re: [PATCH 4.14 000/116] 4.14.315-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
@@ -60,27 +60,25 @@ Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
         jonathanh@nvidia.com, f.fainelli@gmail.com,
         sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
         linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-cifs@vger.kernel.org
+        linux-cifs@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, 15 May 2023 at 22:09, Greg Kroah-Hartman
+On Mon, 15 May 2023 at 22:03, Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> This is the start of the stable review cycle for the 4.19.283 release.
-> There are 191 patches in this series, all will be posted as a response
+> This is the start of the stable review cycle for the 4.14.315 release.
+> There are 116 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 >
@@ -89,167 +87,121 @@ On Mon, 15 May 2023 at 22:09, Greg Kroah-Hartman
 >
 > The whole patch series can be found in one patch at:
 >         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.283-rc1.gz
+4.14.315-rc1.gz
 > or in the git tree and branch at:
 >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
+-rc.git linux-4.14.y
 > and the diffstat can be found below.
 >
 > thanks,
 >
 > greg k-h
 
+
 Results from Linaro=E2=80=99s test farm.
 Regressions on arm64, arm, x86_64 and i386.
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-1) ltp-syscalls fallocate06 - FAILS on arm and arm64 on 4.19 and 4.14.
-
-2) We have recently upgraded our selftest sources to stable-rc 6.3 and
+We have recently upgraded our selftest sources to stable-rc 6.3 and
 running on stable rc 6.1, 5.15, 5.10, 5.4, 4.19 and 4.14 kernels.
 
 List of test regressions:
 =3D=3D=3D=3D=3D=3D=3D=3D
 
 ltp-syscalls
-  - fallocate06
+  - fallocate06 - FAILS on arm and arm64.
 
-kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-kselftest-memfd
-  - memfd_memfd_test
-
-kselftest-rseq
-  - rseq_basic_test
-
- kselftest-kvm
-  - kvm_xapic_state_test
+kselftest-kvm
+  - kvm_xapic_state_test - FAILS on x86.
 
 =3D=3D=3D=3D=3D=3D
 
 ltp-syscalls
-  - fallocate06 - FAILS on arm and arm64 on 4.19 and 4.14
+  - fallocate06 - FAILS on arm and arm64.
 
 fallocate06.c:155: TFAIL: fallocate(FALLOC_FL_PUNCH_HOLE |
 FALLOC_FL_KEEP_SIZE) failed unexpectedly: ENOSPC (28)
 
 Test log links,
 =3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4=
-.19.282-192-g373cdd8d6123/testrun/17027069/suite/ltp-syscalls/test/fallocat=
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4=
+.14.314-117-g854d9237fbd3/testrun/17026942/suite/ltp-syscalls/test/fallocat=
 e06/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4=
-.19.282-192-g373cdd8d6123/testrun/17027069/suite/ltp-syscalls/test/fallocat=
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4=
+.14.314-117-g854d9237fbd3/testrun/17026942/suite/ltp-syscalls/test/fallocat=
 e06/log
 
-NOTE:
-The logs are the same as reported on other email reports.
-link,
- - https://lore.kernel.org/stable/CA+G9fYu6ZOu_We2GMP0sFnSovOsqd6waW7oKS-Y1=
-VPrjdibu5Q@mail.gmail.com/
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+kselftest-kvm
+  - kvm_xapic_state_test - - FAILS on x86.
+
+# selftests: kvm: xapic_state_test
+# =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
+#   x86_64/xapic_state_test.c:147: apic_id =3D=3D expected
+#   pid=3D4581 tid=3D4581 errno=3D4 - Interrupted system call
+#      1 0x0000000000402bac: ?? ??:0
+#      2 0x00000000004025ba: ?? ??:0
+#      3 0x00007f8bc10e557a: ?? ??:0
+#      4 0x00007f8bc10e562f: ?? ??:0
+#      5 0x0000000000402624: ?? ??:0
+#   APIC_ID not set back to xAPIC format; wanted =3D 1000000, got =3D 1
+not ok 46 selftests: kvm: xapic_state_test # exit=3D254
+
+Test log links,
+=3D=3D=3D=3D=3D=3D=3D=3D
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4=
+.14.314-117-g854d9237fbd3/testrun/17025913/suite/kselftest-kvm/test/kvm_xap=
+ic_state_test/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4=
+.14.314-117-g854d9237fbd3/testrun/17025913/suite/kselftest-kvm/test/kvm_xap=
+ic_state_test/log
 
 ## Build
-* kernel: 4.19.283-rc1
+* kernel: 4.14.315-rc1
 * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 373cdd8d6123d6ed489c5a5b91a0ab5b206ba0e4
-* git describe: v4.19.282-192-g373cdd8d6123
+* git branch: linux-4.14.y
+* git commit: 854d9237fbd3cc4b72183256a0fa5edf2f967d88
+* git describe: v4.14.314-117-g854d9237fbd3
 * test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.282-192-g373cdd8d6123
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.314-117-g854d9237fbd3
 
-## Test Regressions (compared to v4.19.279-173-g8ca3c8d28616)
-
-* dragonboard-410c, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* dragonboard-410c, kselftest-rseq
-  - rseq_basic_test
+## Test Regressions (compared to v4.14.311-134-g05f80276ba11)
 
 * dragonboard-410c, ltp-syscalls
   - fallocate06
 
-* i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* juno-r2, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* juno-r2, kselftest-rseq
-  - rseq_basic_test
-
 * juno-r2, ltp-syscalls
-  - fallocate06
-
-* juno-r2-compat, ltp-syscalls
   - fallocate06
 
 * juno-r2-kasan, ltp-syscalls
   - fallocate06
 
-* qemu_i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* qemu_x86_64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_x86_64, kselftest-rseq
-  - rseq_basic_test
-
-* x15, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x15, kselftest-rseq
-  - rseq_basic_test
-
 * x86, kselftest-kvm
   - kvm_xapic_state_test
 
-* x86, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
+## Metric Regressions (compared to v4.14.311-134-g05f80276ba11)
 
-* x86, kselftest-rseq
-  - rseq_basic_test
+## Test Fixes (compared to v4.14.311-134-g05f80276ba11)
 
-## Metric Regressions (compared to v4.19.279-173-g8ca3c8d28616)
-
-## Test Fixes (compared to v4.19.279-173-g8ca3c8d28616)
-
-## Metric Fixes (compared to v4.19.279-173-g8ca3c8d28616)
+## Metric Fixes (compared to v4.14.311-134-g05f80276ba11)
 
 ## Test result summary
-total: 80130, pass: 68396, fail: 2694, skip: 8901, xfail: 139
+total: 79873, pass: 67657, fail: 2892, skip: 9170, xfail: 154
 
 ## Build Summary
 * arc: 10 total, 10 passed, 0 failed
-* arm: 111 total, 106 passed, 5 failed
-* arm64: 37 total, 32 passed, 5 failed
+* arm: 108 total, 104 passed, 4 failed
+* arm64: 35 total, 31 passed, 4 failed
 * i386: 21 total, 18 passed, 3 failed
-* mips: 22 total, 22 passed, 0 failed
+* mips: 21 total, 21 passed, 0 failed
 * parisc: 6 total, 6 passed, 0 failed
-* powerpc: 24 total, 24 passed, 0 failed
-* s390: 6 total, 6 passed, 0 failed
+* powerpc: 8 total, 7 passed, 1 failed
+* s390: 6 total, 5 passed, 1 failed
 * sh: 12 total, 12 passed, 0 failed
 * sparc: 6 total, 6 passed, 0 failed
-* x86_64: 31 total, 26 passed, 5 failed
+* x86_64: 27 total, 23 passed, 4 failed
 
 ## Test suites summary
 * boot
@@ -282,11 +234,6 @@ total: 80130, pass: 68396, fail: 2694, skip: 8901, xfail: 139
 * kselftest-lib
 * kselftest-livepatch
 * kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
 * kselftest-net
 * kselftest-net-forwarding
 * kselftest-netfilter
