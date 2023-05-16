@@ -2,141 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D327056C2
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 May 2023 21:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C4370580B
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 May 2023 21:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjEPTIG (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 16 May 2023 15:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229665AbjEPTzR (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 16 May 2023 15:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjEPTIF (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 May 2023 15:08:05 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492A5E7A
-        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 12:08:04 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f00d41df22so6295362e87.1
-        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 12:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684264082; x=1686856082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z1Ddzgar7RPOdlkzXuXLkT8rvtt8pUPgnmzCxBA0oDw=;
-        b=JQMSBQ3ZxFvdNHhYDJ+sQMmGmu1m4UV2eNzZQdLUmcKDWICKKDwvBfYwVO28Iqq9Mq
-         ox7AJkR/02hGT5QhcpmcqEc0zt3Np+O8gVTFXZQ1WHXbCuWwNzI5lH0RcMF7KXHMxlTb
-         3B1zdb+7qCtNgcxVlaPB0Oi4HHTtiRn/YS4kQIM1hU50VTgI62vMlGgz+/lb+OkxkMQC
-         As0U92ClPtPPdIhmBd2yHL4CI3ETIqXxujTX8mniy5i6YLxkrAhU8kYdHDGSU/gh4xW4
-         l2xSNWSHld0qjjuL2+O+LZFWG8C5bL4rdjYn144rUymzK1a6ajd8DoKRzMl4NzU/KEFz
-         Dv3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684264082; x=1686856082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z1Ddzgar7RPOdlkzXuXLkT8rvtt8pUPgnmzCxBA0oDw=;
-        b=ha7XQYJTYsQIVBmqBX7UgTsLUvp0XcyjWadwr4XCQ5Wo7mj8kJlEYHIn122C6jeqDX
-         oVUnQNxTV9a0B9m6Lql4kgRszhs650Y9rDQgmrz+b5v+0mFjSMvbLoAhT2h0MBzL/kmu
-         mzg8plL54ayUJQca3LsT/u8lp5U8Hlzhpqw+C2JGIkevKOWFzmvLszUD6xZkfrkhYJdA
-         iZXdbEjS3LRpaxIn9qrlGlYQKpxLDxhzkcv68tYLB/1RTf/6Doy0PZjnwBa4UMuPDdpQ
-         yHMM1aK+3A1WOrRxjO4JL8gDGM4qrLajCkRJ+yyg7dsdsfCzW3V2naD6jVdw4HolEyei
-         6MsA==
-X-Gm-Message-State: AC+VfDydZeBPD92bX9znHJ1cvL6clxz0k4UDw0EJTFnmUxcP8yom6c6M
-        v3PbEfrQ7TkkjFaHqDM0LVSli2Fn2DObv98HUyk=
-X-Google-Smtp-Source: ACHHUZ7kpTiS2+L8tDImS6CeswPwd8IDbkLTRcCYE/5ofogMZEUzxaGcNJdeAmebpz2q34nLHQHW4KGLpXMg7P+6Dsg=
-X-Received: by 2002:a05:6512:33d4:b0:4f0:3e1:9ada with SMTP id
- d20-20020a05651233d400b004f003e19adamr8700365lfg.31.1684264082257; Tue, 16
- May 2023 12:08:02 -0700 (PDT)
+        with ESMTP id S229631AbjEPTzQ (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 16 May 2023 15:55:16 -0400
+X-Greylist: delayed 1702 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 12:55:14 PDT
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE974C2E
+        for <linux-cifs@vger.kernel.org>; Tue, 16 May 2023 12:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Cc:To:From:Date;
+        bh=1bvVwfiEzxcnCPrb8quhPeRFyiotgkIIcOf58sHlh+k=; b=tkVwtMu5fNf2YN9QCjPBh1hRHC
+        pLrIPPUfE/gJ+bpsrUaTqGH9TN1JsDlm9sRfM/Mpvz0+MTEEhaF+gcNKnoWmRgCPP8WGgc4m6ruFK
+        TevNZX52PiZJ4FjxFqm0tiiSJK4xeWCHYqCuyOLIIrf2PGUkn/AZyKArDJ/iB0IcvZx2KLhyhXrEW
+        +EL3wCjXQX/63ejmO+3zEbBO9FMjJN4NUg+8jjCoUnve4rdHS6yhFrNGjHR8KB8qYb0t4fkUzBog0
+        Up8GSTlTabpojhgoHNEAG9gH5ZdoUCPVCBzKunHKYbyczGaVFtfLjzYGxOSnPGPWs4sG8pav5nLyX
+        1AU46zm8ykSvy5tHeM20lpkR8eUxM4SElzWi60ZiFexJuusPJIMNFIBcICpgxf6Occ8Y19PnROwe7
+        W/oqIm7sAl2gJDg380mLwsCdQARGhVCWGP8soul+9RZdt2rAmvi4VCAPhriij34zORTIYGgqZLWUs
+        zZfu1twU9cVgmlSIhGbp0rLE;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1pz0Js-009Ho7-Bv; Tue, 16 May 2023 19:26:48 +0000
+Date:   Tue, 16 May 2023 12:26:42 -0700
+From:   Jeremy Allison <jra@samba.org>
+To:     Tom Talpey <tom@talpey.com>
+Cc:     Ross Lagerwall <ross.lagerwall@citrix.com>,
+        linux-cifs@vger.kernel.org, Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Rohith Surabattula <rohiths@microsoft.com>
+Subject: Re: [PATCH] cifs: Close deferred files that may be open via hard
+ links
+Message-ID: <ZGPY8kuw/v2TD71X@jeremy-rocky-laptop>
+Reply-To: Jeremy Allison <jra@samba.org>
+References: <20230516150153.1864023-1-ross.lagerwall@citrix.com>
+ <55740ab3-e020-df8c-07bc-02386486539f@talpey.com>
 MIME-Version: 1.0
-References: <CAH2r5mvqK0CkcR_DOwUfDVzsWco-SXb4rTt14b-YF5CpqCNrZQ@mail.gmail.com>
- <CAGypqWyuCdiEmuFzefEY05zDiBhP+g7y2e0p-9nts4rM5keRpg@mail.gmail.com> <CANT5p=pWYfn-CGTn3QdgVo4JWh85vqjJQoeZCbmPOOCaYogPXw@mail.gmail.com>
-In-Reply-To: <CANT5p=pWYfn-CGTn3QdgVo4JWh85vqjJQoeZCbmPOOCaYogPXw@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 16 May 2023 14:07:50 -0500
-Message-ID: <CAH2r5ms83NK1FbtTUQdQdT4ES+k8nuVdci3RowRsEddMaebqeA@mail.gmail.com>
-Subject: Re: [PATCH] SMB3: force unmount was failing to close deferred close files
-To:     Shyam Prasad N <nspmangalore@gmail.com>
-Cc:     Bharath SM <bharathsm.hsk@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Bharath S M <bharathsm@microsoft.com>,
-        rohiths msft <rohiths.msft@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <55740ab3-e020-df8c-07bc-02386486539f@talpey.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, May 16, 2023 at 1:51=E2=80=AFAM Shyam Prasad N <nspmangalore@gmail.=
-com> wrote:
+On Tue, May 16, 2023 at 02:41:06PM -0400, Tom Talpey wrote:
+>On 5/16/2023 11:01 AM, Ross Lagerwall wrote:
+>>Windows Server (tested with 2016) disallows opening the same inode via
+>>two different hardlinks at the same time. With deferred closes, this can
+>>result in unexpected behaviour as the following Python snippet shows:
+>>
+>>The final open returns EINVAL due to the server returning
+>>STATUS_INVALID_PARAMETER.
 >
-> On Tue, May 9, 2023 at 1:03=E2=80=AFPM Bharath SM <bharathsm.hsk@gmail.co=
-m> wrote:
-> >
-> > Ack by me.
-> >
-> > On Tue, May 9, 2023 at 12:05=E2=80=AFPM Steve French <smfrench@gmail.co=
-m> wrote:
-> > >
-> > > In investigating a failure with xfstest generic/392 it
-> > > was noticed that mounts were reusing a superblock that should
-> > > already have been freed. This turned out to be related to
-> > > deferred close files keeping a reference count until the
-> > > closetimeo expired.
-> > >
-> > > Currently the only way an fs knows that mount is beginning is
-> > > when force unmount is called, but when this, ie umount_begin(),
-> > > is called all deferred close files on the share (tree
-> > > connection) should be closed immediately (unless shared by
-> > > another mount) to avoid using excess resources on the server
-> > > and to avoid reusing a superblock which should already be freed.
-> > >
-> > > In umount_begin, close all deferred close handles for that
-> > > share if this is the last mount using that share on this
-> > > client (ie send the SMB3 close request over the wire for those
-> > > that have been already closed by the app but that we have
-> > > kept a handle lease open for and have not sent closes to the
-> > > server for yet).
-> > >
-> > > Reported-by: David Howells <dhowells@redhat.com>
-> > > Cc: <stable@vger.kernel.org>
-> > > Fixes: 78c09634f7dc ("Cifs: Fix kernel oops caused by deferred close
-> > > for files.")
+>Good sleuthing. The hardlink behavior is slightly surprising, but
+>it is certainly the case that certain incompatible combinations of
+>open/create flags can conflict with other handles, including
+>cached opens.
 
-> cifs_put_tcon sounds like a more logical place to do this. When the
-> ref count has dropped to 0.
+That certainly sounds like implementation-dependent behavior,
+probably due to running into the same dev/ino numbers via
+a new path :-).
+
+>>This is kind of an RFC. Is the server doing the wrong thing? Is it
+>>correct to work around this in the client?
 >
-> --
-> Regards,
-> Shyam
+>By definition the server is doing what it does, and it's a moot
+>question whether it's appropriate to work around it. However, I don't
+>see this behavior explicitly stated in MS-FSA. And INVALID_PARAMETER
+>is a strange error code to return for this. Do you have a packet
+>trace? We should ask Microsoft.
 
-The problem with waiting till cifs_put_tcon (although it wouldn't hurt
-to also call close_all_deferred_files() there or in cifs_kill_sb) is
-that that is too late.
-
-We don't get notified when umount begins except on force umount
-("umount_begin") so a simple scenario like:
-
-          echo "data in new file" >> /mnt2/newfile ; umount /mnt2
-
-will wait until the deferred close timeout ("closetimeo") before
-closing these files and then sending the tree disconnect, so in that
-example tree discconnect was unnecessarily delayed (although "umount"
-completes immediately, we can't send the tree disconnect until all the
-closetimeouts expire since we will not receive the "kill_sb()" call
-until the deferred close references are released).
-
-Closing deferred files in various scenarios ("umount -f" and calls to
-"shutdown") can help us send the tree disconnect faster and not tie up
-resources on the server longer for files we won't be using
-
-
---=20
-Thanks,
-
-Steve
+A packet trace of this would be really interesting :-).
