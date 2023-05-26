@@ -2,71 +2,59 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E5F71285E
-	for <lists+linux-cifs@lfdr.de>; Fri, 26 May 2023 16:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A358E712897
+	for <lists+linux-cifs@lfdr.de>; Fri, 26 May 2023 16:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243227AbjEZOcV (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 26 May 2023 10:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S243905AbjEZOiw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 26 May 2023 10:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjEZOcN (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 26 May 2023 10:32:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B231E5B
-        for <linux-cifs@vger.kernel.org>; Fri, 26 May 2023 07:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685111481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WtUJzNGs4hI/qozgKZw9Ev1spnarsyg42e3BEFrKZ44=;
-        b=IsXhs/T7bVNgH9shqXExHcetB7QYM03NgPQJ18iyjjAZRJjDywokHyjng6lt0B4904ywpp
-        yfj1jFQXUu1oJ880GTiVnkamuDn6CtzZfcNxTBypvvo9yckhNV9/mzf1CbUYKdGsjz1Us4
-        2i4bUjdUI4sNNjMZjCR1Qi9nNq9Qe40=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-JW7yVrnSMTmdp0eU8oppyA-1; Fri, 26 May 2023 10:31:18 -0400
-X-MC-Unique: JW7yVrnSMTmdp0eU8oppyA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S243933AbjEZOit (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 26 May 2023 10:38:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8592FE6C
+        for <linux-cifs@vger.kernel.org>; Fri, 26 May 2023 07:38:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDF71801182;
-        Fri, 26 May 2023 14:31:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 39ACC2166B2B;
-        Fri, 26 May 2023 14:31:14 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH net-next 2/8] Drop the netfs_ prefix from netfs_extract_iter_to_sg()
-Date:   Fri, 26 May 2023 15:30:58 +0100
-Message-Id: <20230526143104.882842-3-dhowells@redhat.com>
-In-Reply-To: <20230526143104.882842-1-dhowells@redhat.com>
-References: <20230526143104.882842-1-dhowells@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEFA46506E
+        for <linux-cifs@vger.kernel.org>; Fri, 26 May 2023 14:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB96C4339B
+        for <linux-cifs@vger.kernel.org>; Fri, 26 May 2023 14:38:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685111888;
+        bh=MeHkFicxaGcrdBs1sz7wYQJVqcXwZODJPSoterjGWW0=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=R6MHPm74Rt5UJHRClV2cUe2SdJHv+LSFVROfqSIR4dJRR8XGfpG83exJTYq/iLyvi
+         gLnHWegi4COWOzVKPxMyqElmJjOCbAgIB88iQ4zlwaHGn4mrp5P0kq6vTVWX2k0+d3
+         wAyRBOJdxWwYjSENmeBzydy3Equ1mbXlPepxreMXezAcPMVkGHWXc+/XzewluzHoJt
+         DPruQqhaN8K642nZaLx+kCKAcndGrCZ1BT+0k65wvNs2ffGkNHd1D3Dh0mBNNMCF59
+         HkD5Uwok4lH3yC4s1QNJvjf1P0Un0hYlIJWolykkmtKhwmKH4/WsCQwgk5mYfw1nw3
+         7B+sZvWpSLg4w==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-557e66063e8so141519eaf.3
+        for <linux-cifs@vger.kernel.org>; Fri, 26 May 2023 07:38:08 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx53+dCZA7gq7/i5iLiG6qUFyvwamGpghsFMlm0sC4wpuW3C1+M
+        lWFlg+wcwVXpe8OYPFPfDzW1IIk2Ygh4xeKtRDk=
+X-Google-Smtp-Source: ACHHUZ5fquP7ajbNzr3mD/RNSItric49zutX7HmkuquESD+gEbDB/JRFBn6JWgBSYcr3ihaInQWPeMRqvT/N4o9p9qc=
+X-Received: by 2002:a4a:3342:0:b0:555:5ab5:a0e5 with SMTP id
+ q63-20020a4a3342000000b005555ab5a0e5mr932409ooq.7.1685111887271; Fri, 26 May
+ 2023 07:38:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Received: by 2002:a8a:acb:0:b0:4de:afc5:4d13 with HTTP; Fri, 26 May 2023
+ 07:38:06 -0700 (PDT)
+In-Reply-To: <74f5237c-50a4-4117-8e6e-62c2de48c2c8@kili.mountain>
+References: <74f5237c-50a4-4117-8e6e-62c2de48c2c8@kili.mountain>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Fri, 26 May 2023 23:38:06 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_=Y+oA43PFx9Eye_=ERkqhATFBnB_YCd35p8g89Ghjng@mail.gmail.com>
+Message-ID: <CAKYAXd_=Y+oA43PFx9Eye_=ERkqhATFBnB_YCd35p8g89Ghjng@mail.gmail.com>
+Subject: Re: [bug report] cifsd: add server-side procedures for SMB3
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     namjae.jeon@samsung.com, linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,196 +62,59 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Rename netfs_extract_iter_to_sg() and its auxiliary functions to drop the
-netfs_ prefix.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: linux-crypto@vger.kernel.org
-cc: linux-cachefs@redhat.com
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: netdev@vger.kernel.org
----
- fs/cifs/smb2ops.c   |  4 +--
- fs/cifs/smbdirect.c |  2 +-
- include/linux/uio.h |  6 ++---
- lib/scatterlist.c   | 66 ++++++++++++++++++++++-----------------------
- 4 files changed, 39 insertions(+), 39 deletions(-)
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index a295e4c2d54e..196bc49e73b8 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -4335,8 +4335,8 @@ static void *smb2_get_aead_req(struct crypto_aead *tfm, struct smb_rqst *rqst,
- 		}
- 		sgtable.orig_nents = sgtable.nents;
- 
--		rc = netfs_extract_iter_to_sg(iter, count, &sgtable,
--					      num_sgs - sgtable.nents, 0);
-+		rc = extract_iter_to_sg(iter, count, &sgtable,
-+					num_sgs - sgtable.nents, 0);
- 		iov_iter_revert(iter, rc);
- 		sgtable.orig_nents = sgtable.nents;
- 	}
-diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
-index 0362ebd4fa0f..223e17c16b60 100644
---- a/fs/cifs/smbdirect.c
-+++ b/fs/cifs/smbdirect.c
-@@ -2227,7 +2227,7 @@ static int smbd_iter_to_mr(struct smbd_connection *info,
- 
- 	memset(sgt->sgl, 0, max_sg * sizeof(struct scatterlist));
- 
--	ret = netfs_extract_iter_to_sg(iter, iov_iter_count(iter), sgt, max_sg, 0);
-+	ret = extract_iter_to_sg(iter, iov_iter_count(iter), sgt, max_sg, 0);
- 	WARN_ON(ret < 0);
- 	if (sgt->nents > 0)
- 		sg_mark_end(&sgt->sgl[sgt->nents - 1]);
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 09b8b107956e..0ccb983cf645 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -434,8 +434,8 @@ static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
- }
- 
- struct sg_table;
--ssize_t netfs_extract_iter_to_sg(struct iov_iter *iter, size_t len,
--				 struct sg_table *sgtable, unsigned int sg_max,
--				 iov_iter_extraction_t extraction_flags);
-+ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t len,
-+			   struct sg_table *sgtable, unsigned int sg_max,
-+			   iov_iter_extraction_t extraction_flags);
- 
- #endif
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index 31ef86e6a33a..8612b9deaa7e 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -1101,11 +1101,11 @@ EXPORT_SYMBOL(sg_zero_buffer);
-  * Extract and pin a list of up to sg_max pages from UBUF- or IOVEC-class
-  * iterators, and add them to the scatterlist.
-  */
--static ssize_t netfs_extract_user_to_sg(struct iov_iter *iter,
--					ssize_t maxsize,
--					struct sg_table *sgtable,
--					unsigned int sg_max,
--					iov_iter_extraction_t extraction_flags)
-+static ssize_t extract_user_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
- {
- 	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
- 	struct page **pages;
-@@ -1154,11 +1154,11 @@ static ssize_t netfs_extract_user_to_sg(struct iov_iter *iter,
-  * Extract up to sg_max pages from a BVEC-type iterator and add them to the
-  * scatterlist.  The pages are not pinned.
-  */
--static ssize_t netfs_extract_bvec_to_sg(struct iov_iter *iter,
--					ssize_t maxsize,
--					struct sg_table *sgtable,
--					unsigned int sg_max,
--					iov_iter_extraction_t extraction_flags)
-+static ssize_t extract_bvec_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
- {
- 	const struct bio_vec *bv = iter->bvec;
- 	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-@@ -1200,11 +1200,11 @@ static ssize_t netfs_extract_bvec_to_sg(struct iov_iter *iter,
-  * scatterlist.  This can deal with vmalloc'd buffers as well as kmalloc'd or
-  * static buffers.  The pages are not pinned.
-  */
--static ssize_t netfs_extract_kvec_to_sg(struct iov_iter *iter,
--					ssize_t maxsize,
--					struct sg_table *sgtable,
--					unsigned int sg_max,
--					iov_iter_extraction_t extraction_flags)
-+static ssize_t extract_kvec_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
- {
- 	const struct kvec *kv = iter->kvec;
- 	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-@@ -1261,11 +1261,11 @@ static ssize_t netfs_extract_kvec_to_sg(struct iov_iter *iter,
-  * Extract up to sg_max folios from an XARRAY-type iterator and add them to
-  * the scatterlist.  The pages are not pinned.
-  */
--static ssize_t netfs_extract_xarray_to_sg(struct iov_iter *iter,
--					  ssize_t maxsize,
--					  struct sg_table *sgtable,
--					  unsigned int sg_max,
--					  iov_iter_extraction_t extraction_flags)
-+static ssize_t extract_xarray_to_sg(struct iov_iter *iter,
-+				    ssize_t maxsize,
-+				    struct sg_table *sgtable,
-+				    unsigned int sg_max,
-+				    iov_iter_extraction_t extraction_flags)
- {
- 	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
- 	struct xarray *xa = iter->xarray;
-@@ -1307,7 +1307,7 @@ static ssize_t netfs_extract_xarray_to_sg(struct iov_iter *iter,
- }
- 
- /**
-- * netfs_extract_iter_to_sg - Extract pages from an iterator and add ot an sglist
-+ * extract_iter_to_sg - Extract pages from an iterator and add ot an sglist
-  * @iter: The iterator to extract from
-  * @maxsize: The amount of iterator to copy
-  * @sgtable: The scatterlist table to fill in
-@@ -1334,9 +1334,9 @@ static ssize_t netfs_extract_xarray_to_sg(struct iov_iter *iter,
-  * The iov_iter_extract_mode() function should be used to query how cleanup
-  * should be performed.
-  */
--ssize_t netfs_extract_iter_to_sg(struct iov_iter *iter, size_t maxsize,
--				 struct sg_table *sgtable, unsigned int sg_max,
--				 iov_iter_extraction_t extraction_flags)
-+ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t maxsize,
-+			   struct sg_table *sgtable, unsigned int sg_max,
-+			   iov_iter_extraction_t extraction_flags)
- {
- 	if (maxsize == 0)
- 		return 0;
-@@ -1344,21 +1344,21 @@ ssize_t netfs_extract_iter_to_sg(struct iov_iter *iter, size_t maxsize,
- 	switch (iov_iter_type(iter)) {
- 	case ITER_UBUF:
- 	case ITER_IOVEC:
--		return netfs_extract_user_to_sg(iter, maxsize, sgtable, sg_max,
--						extraction_flags);
-+		return extract_user_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
- 	case ITER_BVEC:
--		return netfs_extract_bvec_to_sg(iter, maxsize, sgtable, sg_max,
--						extraction_flags);
-+		return extract_bvec_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
- 	case ITER_KVEC:
--		return netfs_extract_kvec_to_sg(iter, maxsize, sgtable, sg_max,
--						extraction_flags);
-+		return extract_kvec_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
- 	case ITER_XARRAY:
--		return netfs_extract_xarray_to_sg(iter, maxsize, sgtable, sg_max,
--						  extraction_flags);
-+		return extract_xarray_to_sg(iter, maxsize, sgtable, sg_max,
-+					    extraction_flags);
- 	default:
- 		pr_err("%s(%u) unsupported\n", __func__, iov_iter_type(iter));
- 		WARN_ON_ONCE(1);
- 		return -EIO;
- 	}
- }
--EXPORT_SYMBOL_GPL(netfs_extract_iter_to_sg);
-+EXPORT_SYMBOL_GPL(extract_iter_to_sg);
-
+2023-05-26 20:56 GMT+09:00, Dan Carpenter <dan.carpenter@linaro.org>:
+> Hello Namjae Jeon,
+>
+> The patch e2f34481b24d: "cifsd: add server-side procedures for SMB3"
+> from Mar 16, 2021, leads to the following Smatch static checker
+> warning:
+>
+> fs/smb/server/smbacl.c:1296 smb_check_perm_dacl()
+>     error: 'posix_acls' dereferencing possible ERR_PTR()
+> fs/smb/server/vfs.c:1323 ksmbd_vfs_make_xattr_posix_acl()
+>     error: 'posix_acls' dereferencing possible ERR_PTR()
+> fs/smb/server/vfs.c:1830 ksmbd_vfs_inherit_posix_acl()
+>     error: 'acls' dereferencing possible ERR_PTR()
+I will fix it.
+Thanks for your report!
+>
+> fs/smb/server/smbacl.c
+>     1281         if (*pdaccess & FILE_MAXIMAL_ACCESS_LE && found) {
+>     1282                 granted = READ_CONTROL | WRITE_DAC |
+> FILE_READ_ATTRIBUTES |
+>     1283                         DELETE;
+>     1284
+>     1285                 granted |= le32_to_cpu(ace->access_req);
+>     1286
+>     1287                 if (!pdacl->num_aces)
+>     1288                         granted = GENERIC_ALL_FLAGS;
+>     1289         }
+>     1290
+>     1291         if (IS_ENABLED(CONFIG_FS_POSIX_ACL)) {
+>     1292                 posix_acls = get_inode_acl(d_inode(path->dentry),
+> ACL_TYPE_ACCESS);
+>
+> __get_acl() returns a mix of error pointers and NULL.  I don't really
+> understand the rules here.  There are no comments explaining it.
+>
+>     1293                 if (posix_acls && !found) {
+>     1294                         unsigned int id = -1;
+>     1295
+> --> 1296                         pa_entry = posix_acls->a_entries;
+>                                             ^^^^^^^^^^^^
+> Potential error pointer dereference.
+>
+>     1297                         for (i = 0; i < posix_acls->a_count; i++,
+> pa_entry++) {
+>     1298                                 if (pa_entry->e_tag == ACL_USER)
+>     1299                                         id =
+> posix_acl_uid_translate(idmap, pa_entry);
+>     1300                                 else if (pa_entry->e_tag ==
+> ACL_GROUP)
+>     1301                                         id =
+> posix_acl_gid_translate(idmap, pa_entry);
+>     1302                                 else
+>
+> regards,
+> dan carpenter
+>
