@@ -2,83 +2,81 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2235D7162E5
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 16:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74BF71634F
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 16:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjE3OBn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 30 May 2023 10:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S232196AbjE3OMt (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 30 May 2023 10:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjE3OBn (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 10:01:43 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C483EEC
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 07:01:40 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30ae7cc0e86so2540036f8f.1
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 07:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685455299; x=1688047299;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6QyDstE5anjukt6eoV/kZWKhWe+uxVxjos/d/82Gyg=;
-        b=syvhcDptBbQPSmYPArGktGme7Gt0EkLyDEIm1u4+8zVPXqmF/4Lrf9qaIzgJ42KBjg
-         A1KT6lzT57XKq1omqcGCLA7ObyxB9jroO/1bLv1rFlRNM0x+NaOU5UOebA7gxKhGpajk
-         UgQjPJSSyv7v77y9d2okR5+/YdrvzLTFVeoJG6KZw0qyQ09EzInArJQ9zQvgwl8lu0PZ
-         IKKtw2aCfhRh2M4mYGjqZNJLd3rPyKhPJaHt0QImq+5/LFOX4GynNRSUHp4SNb9EOiSO
-         Cx5fwHZsaFFWkCZVLGFFblNZqh0/15o2m+4QzWzyVpqYizwLLCYE2JBdUcfHej6nu3r7
-         n6sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685455299; x=1688047299;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R6QyDstE5anjukt6eoV/kZWKhWe+uxVxjos/d/82Gyg=;
-        b=bz+hdLnXxEuB3rTk8HH6+3XK9xtFqv4v1Pxa+M2jtB4rE4+5BxPrNasc9BCtoycGW/
-         jbNsML60ZbqexUswt90ETh4/v24L9f4EFkVkgAQd7ONGl8JlebW7Xi0pb/hWzXd1qMRt
-         DzCvwJNZC16tBvNDkJCf70x0Nz//pqC77ENVgXwq3ATbVDKmAS26Bp6f+K4Elx5yREM1
-         s/VshYQkWw2ULtFQHZwojKt0BYUjtCqIjUx5VGlkMkaO66b4WoO8EOTB456yj364uTZV
-         zMTMeBRY9w6PuPW7k9lOtoEys6vcgbrM5UP6pa8tbQEZznJEGjxfM4tGqy1nx1nAkdQa
-         VNPA==
-X-Gm-Message-State: AC+VfDxBaIW3Xe/iqAbM5HAkGyM6RjO2WDjB4/4F/8mWczMp3eGC4CGg
-        f5+odgJHhQv3J+zGUtIRNZx4Gw==
-X-Google-Smtp-Source: ACHHUZ4dsGCUcQmLK6RgiPWOSYjSou1751HLkXEFDRIVp1AYAnxBNMMVB3pdCG9UmhnZyulkem1y2Q==
-X-Received: by 2002:adf:ce0a:0:b0:30a:eeff:3e63 with SMTP id p10-20020adfce0a000000b0030aeeff3e63mr2121544wrn.64.1685455299085;
-        Tue, 30 May 2023 07:01:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o13-20020a5d474d000000b0030af54c5f33sm1933830wrs.113.2023.05.30.07.01.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:01:36 -0700 (PDT)
-Date:   Tue, 30 May 2023 17:01:34 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>
+        with ESMTP id S230261AbjE3OMs (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 10:12:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E139B107
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 07:12:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC1C630E1
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 14:12:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E3CC433EF
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 14:12:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685455944;
+        bh=+Pb9ix1wiw+nC9p3HhllbbxrYPtYrZWSc5N1XlwPqQQ=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=Z4pBM3hnTAiU3FyEzpVeJPWW+BZNad9dSrhB2iBSRNepWGvnUVMV+PGnjEGER/5O3
+         MAUkR6HPxPOj3tu1hhpHAmnjnmvmCD7FJa+RMoSe8YSVZkP85/o6hZW1NKJyTFUUhs
+         z81DkMcVJ6H6CUOGz6nvINpZQuomfMSSh7wA4zbLeL6d/FcRVOiyZOYGHrXNJilwv3
+         aIHBNhkIMn0X6imdv2V1erzhXXLwDuzQtFG2b2kHwgv9NzTLjCB0tcwuUvyZNpOk9v
+         EP8f6GbwMKzuhew05ly7raC5VOQzgaUAGYu+OEcLKpxGsQAd/fWSzymMe+ZAuXGLUY
+         9CnuA69wWYAEw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-55554ab909cso2170232eaf.2
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 07:12:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyD30vAPU7Dl1diYenR7ViozCC5hzuU8JyaFppN5oiLZyl7ow6F
+        GgFBmDGSl95pHWfyyQn5tZaKBTXv+Bfd2Wb1R1I=
+X-Google-Smtp-Source: ACHHUZ7sHvNm+s2FC4GR8rw4OBhYyuTl2b+h5isKnBk0NC6LGPR5aCjq8nD/7eiB9vKSggDfIV4PVzYX+rt3HB1JpW8=
+X-Received: by 2002:a4a:2c90:0:b0:552:4a83:6e7d with SMTP id
+ o138-20020a4a2c90000000b005524a836e7dmr1000618ooo.7.1685455943752; Tue, 30
+ May 2023 07:12:23 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a8a:acb:0:b0:4de:afc5:4d13 with HTTP; Tue, 30 May 2023
+ 07:12:23 -0700 (PDT)
+In-Reply-To: <9f7d2528-45e8-45bb-b703-f4f8e1c08ed2@kili.mountain>
+References: <20230530125757.12910-1-linkinjeon@kernel.org> <20230530125757.12910-4-linkinjeon@kernel.org>
+ <9f7d2528-45e8-45bb-b703-f4f8e1c08ed2@kili.mountain>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 30 May 2023 23:12:23 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd-3OqQYP62tX=vfh9Cq4=k4rdmfWe9cTQPoAEjCZ0KPQQ@mail.gmail.com>
+Message-ID: <CAKYAXd-3OqQYP62tX=vfh9Cq4=k4rdmfWe9cTQPoAEjCZ0KPQQ@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: return a literal instead of 'err' in ksmbd_vfs_kern_path_locked()
+To:     Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     linux-cifs@vger.kernel.org, smfrench@gmail.com,
         senozhatsky@chromium.org, tom@talpey.com, atteh.mailbox@gmail.com
-Subject: Re: [PATCH] ksmbd: return a literal instead of 'err' in
- ksmbd_vfs_kern_path_locked()
-Message-ID: <9f7d2528-45e8-45bb-b703-f4f8e1c08ed2@kili.mountain>
-References: <20230530125757.12910-1-linkinjeon@kernel.org>
- <20230530125757.12910-4-linkinjeon@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530125757.12910-4-linkinjeon@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, May 30, 2023 at 09:57:57PM +0900, Namjae Jeon wrote:
-> Return a literal instead of 'err' in ksmbd_vfs_kern_path_locked().
-> 
-> Fixes: 74d7970febf7 ("ksmbd: fix racy issue from using ->d_parent and ->d_name")
+2023-05-30 23:01 GMT+09:00, Dan Carpenter <dan.carpenter@linaro.org>:
+> On Tue, May 30, 2023 at 09:57:57PM +0900, Namjae Jeon wrote:
+>> Return a literal instead of 'err' in ksmbd_vfs_kern_path_locked().
+>>
+>> Fixes: 74d7970febf7 ("ksmbd: fix racy issue from using ->d_parent and
+>> ->d_name")
+>
+> No need for a Fixes tag.
+OK.
 
-No need for a Fixes tag.
-
-regards,
-dan carpenter
-
+Thanks.
+>
+> regards,
+> dan carpenter
+>
+>
