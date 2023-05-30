@@ -2,135 +2,178 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8768D7160D4
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 14:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D6B7160E4
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 15:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjE3M7i (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 30 May 2023 08:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S232445AbjE3NAE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 30 May 2023 09:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjE3M7h (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 08:59:37 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C726F9
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:13 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d341bdedcso3176144b3a.3
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:13 -0700 (PDT)
+        with ESMTP id S232460AbjE3NAD (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 09:00:03 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A04127
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:40 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-64d44b198baso3022071b3a.0
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451492; x=1688043492;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FnNMAiSYagBoQy7G3Rszl8N/LirJbUlAbAH4gMgMbNs=;
-        b=UjQnPs1Wc8cPWnQdlF+G7v9J1uAoKJXpcnrycrdyBA9AN+wcJR/qXE/Uj4SQpirCAl
-         W+ua+h2ZypiQUM/6+XwtmHeI20S469A2ndoIzvVkHWGDJAjtmLJBQ4Ya2KoFItABt+zZ
-         tk4w2GbYnNbU1ir7le5xoK+hpxZ2jKXj/KXuk+MJxurxn98Noq7lBAw0WMA4RMjks4qo
-         QtG+0JgAhi7Aj7LDcRLaj9T+7YIs78vsjnFPMwkmZAnIR4L8ktlqNTWXTeHLHNa3v3UR
-         clDj694FpkgKyHa3euY07XwrSNG5jed5Gep8NZdwUGINpRvQb24jBFwxnKB07W9FLpdG
-         gmVA==
-X-Gm-Message-State: AC+VfDwU42GzogPkx/wAeDXHwH7rKiLD4h2zT6KprBZMvvzEhGzVlalD
-        Y5yCfkVCDjG7vggWKetuc9nNn2xKgJ0=
-X-Google-Smtp-Source: ACHHUZ6LdYPbPOKcniKBCMf0cu3pkagQ4QoV+ZsfN6/fq30WPG1YWjjDVKFyLrMgCJ05ECqwoVotcw==
-X-Received: by 2002:a05:6a00:a0b:b0:64d:42cb:42af with SMTP id p11-20020a056a000a0b00b0064d42cb42afmr2762577pfh.4.1685451492564;
-        Tue, 30 May 2023 05:58:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685451497; x=1688043497;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UpDRXdHm0h78ohDmltjWdcN9Fe7T0riwP8LaYasdf7w=;
+        b=M11y3gv1ybw0WoKx2g+kUGBnJPawj9zyx3Yq4KPdCl0mC3j+RattQ5nz4q7Sw68ArQ
+         h1vqjNN5cdRSK9M3atvdxrVrLaiGt8vs3HbeTVxnjrLIYmVQzwkOV7/8EzE+2F0ELBV3
+         4aF5ZtXZoUmuLsAI5+Va/CJpFZ2CGlM9PwmKamqP/Hby2YbyOrfsxdWn4coimfOdQoGZ
+         PhX8A/SuquWF7gSgRtwbZXTLqp3XOZBqfA9hHoAClu6+OVegU8uCpTS/GrpiEDrJUV7i
+         jr67rXOjjhzXzbI66l/a0x+alSS1qGnQJMph2wv+nvcWO5af2i8YV8AVIg/CjYRymZgu
+         sf2A==
+X-Gm-Message-State: AC+VfDyk9+iwSILxu2khFGmEQeHgp/vl70MaIemXwnu3jSpfUCMRtUv4
+        SGvAMB2rFRa8kypdSdOgxiFFnohy39U=
+X-Google-Smtp-Source: ACHHUZ7sxr5h1c9Fi2YKL4cBQclvtBzHxNWTU/Q2Pt0kdCjSn/X7FUOL+VJowc18ZdJgxS1n78QfTg==
+X-Received: by 2002:a05:6a00:2393:b0:64d:2a87:2596 with SMTP id f19-20020a056a00239300b0064d2a872596mr3698793pfc.10.1685451496698;
+        Tue, 30 May 2023 05:58:16 -0700 (PDT)
 Received: from localhost.localdomain ([211.49.23.9])
-        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0063afb08afeesm1605007pfd.67.2023.05.30.05.58.10
+        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0063afb08afeesm1605007pfd.67.2023.05.30.05.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:58:12 -0700 (PDT)
+        Tue, 30 May 2023 05:58:16 -0700 (PDT)
 From:   Namjae Jeon <linkinjeon@kernel.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
         atteh.mailbox@gmail.com, Namjae Jeon <linkinjeon@kernel.org>,
         Chih-Yen Chang <cc85nod@gmail.com>
-Subject: [PATCH] ksmbd: fix out-of-bound read in deassemble_neg_contexts()
-Date:   Tue, 30 May 2023 21:57:54 +0900
-Message-Id: <20230530125757.12910-1-linkinjeon@kernel.org>
+Subject: [PATCH] ksmbd: fix out-of-bound read in parse_lease_state()
+Date:   Tue, 30 May 2023 21:57:55 +0900
+Message-Id: <20230530125757.12910-2-linkinjeon@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230530125757.12910-1-linkinjeon@kernel.org>
+References: <20230530125757.12910-1-linkinjeon@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-The check in the beginning is
-`clen + sizeof(struct smb2_neg_context) <= len_of_ctxts`,
-but in the end of loop, `len_of_ctxts` will subtract
-`((clen + 7) & ~0x7) + sizeof(struct smb2_neg_context)`, which causes
-integer underflow when clen does the 8 alignment. We should use
-`(clen + 7) & ~0x7` in the check to avoid underflow from happening.
+This bug is in parse_lease_state, and it is caused by the missing check
+of `struct create_context`. When the ksmbd traverses the create_contexts,
+it doesn't check if the field of `NameOffset` and `Next` is valid,
+The KASAN message is following:
 
-Then there are some variables that need to be declared unsigned
-instead of signed.
-
-[   11.671070] BUG: KASAN: slab-out-of-bounds in smb2_handle_negotiate+0x799/0x1610
-[   11.671533] Read of size 2 at addr ffff888005e86cf2 by task kworker/0:0/7
+[    6.664323] BUG: KASAN: slab-out-of-bounds in parse_lease_state+0x7d/0x280
+[    6.664738] Read of size 2 at addr ffff888005c08988 by task kworker/0:3/103
 ...
-[   11.673383] Call Trace:
-[   11.673541]  <TASK>
-[   11.673679]  dump_stack_lvl+0x33/0x50
-[   11.673913]  print_report+0xcc/0x620
-[   11.674671]  kasan_report+0xae/0xe0
-[   11.675171]  kasan_check_range+0x35/0x1b0
-[   11.675412]  smb2_handle_negotiate+0x799/0x1610
-[   11.676217]  ksmbd_smb_negotiate_common+0x526/0x770
-[   11.676795]  handle_ksmbd_work+0x274/0x810
-...
+[    6.666644] Call Trace:
+[    6.666796]  <TASK>
+[    6.666933]  dump_stack_lvl+0x33/0x50
+[    6.667167]  print_report+0xcc/0x620
+[    6.667903]  kasan_report+0xae/0xe0
+[    6.668374]  kasan_check_range+0x35/0x1b0
+[    6.668621]  parse_lease_state+0x7d/0x280
+[    6.668868]  smb2_open+0xbe8/0x4420
+[    6.675137]  handle_ksmbd_work+0x282/0x820
 
-Signed-off-by: Chih-Yen Chang <cc85nod@gmail.com>
+Use smb2_find_context_vals() to find smb2 create request lease context.
+smb2_find_context_vals validate create context fields.
+
+Reported-by: Chih-Yen Chang <cc85nod@gmail.com>
 Tested-by: Chih-Yen Chang <cc85nod@gmail.com>
 Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/smb/server/smb2pdu.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ fs/smb/server/oplock.c | 66 +++++++++++++++---------------------------
+ 1 file changed, 24 insertions(+), 42 deletions(-)
 
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 7a81541de602..25c0ba04c59d 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -963,13 +963,13 @@ static void decode_sign_cap_ctxt(struct ksmbd_conn *conn,
- 
- static __le32 deassemble_neg_contexts(struct ksmbd_conn *conn,
- 				      struct smb2_negotiate_req *req,
--				      int len_of_smb)
-+				      unsigned int len_of_smb)
+diff --git a/fs/smb/server/oplock.c b/fs/smb/server/oplock.c
+index db181bdad73a..844b303baf29 100644
+--- a/fs/smb/server/oplock.c
++++ b/fs/smb/server/oplock.c
+@@ -1415,56 +1415,38 @@ void create_lease_buf(u8 *rbuf, struct lease *lease)
+  */
+ struct lease_ctx_info *parse_lease_state(void *open_req)
  {
- 	/* +4 is to account for the RFC1001 len field */
- 	struct smb2_neg_context *pctx = (struct smb2_neg_context *)req;
- 	int i = 0, len_of_ctxts;
--	int offset = le32_to_cpu(req->NegotiateContextOffset);
--	int neg_ctxt_cnt = le16_to_cpu(req->NegotiateContextCount);
-+	unsigned int offset = le32_to_cpu(req->NegotiateContextOffset);
-+	unsigned int neg_ctxt_cnt = le16_to_cpu(req->NegotiateContextCount);
- 	__le32 status = STATUS_INVALID_PARAMETER;
+-	char *data_offset;
+ 	struct create_context *cc;
+-	unsigned int next = 0;
+-	char *name;
+-	bool found = false;
+ 	struct smb2_create_req *req = (struct smb2_create_req *)open_req;
+-	struct lease_ctx_info *lreq = kzalloc(sizeof(struct lease_ctx_info),
+-		GFP_KERNEL);
++	struct lease_ctx_info *lreq;
++
++	cc = smb2_find_context_vals(req, SMB2_CREATE_REQUEST_LEASE, 4);
++	if (IS_ERR_OR_NULL(cc))
++		return NULL;
++
++	lreq = kzalloc(sizeof(struct lease_ctx_info), GFP_KERNEL);
+ 	if (!lreq)
+ 		return NULL;
  
- 	ksmbd_debug(SMB, "decoding %d negotiate contexts\n", neg_ctxt_cnt);
-@@ -983,7 +983,7 @@ static __le32 deassemble_neg_contexts(struct ksmbd_conn *conn,
- 	while (i++ < neg_ctxt_cnt) {
- 		int clen, ctxt_len;
+-	data_offset = (char *)req + le32_to_cpu(req->CreateContextsOffset);
+-	cc = (struct create_context *)data_offset;
+-	do {
+-		cc = (struct create_context *)((char *)cc + next);
+-		name = le16_to_cpu(cc->NameOffset) + (char *)cc;
+-		if (le16_to_cpu(cc->NameLength) != 4 ||
+-		    strncmp(name, SMB2_CREATE_REQUEST_LEASE, 4)) {
+-			next = le32_to_cpu(cc->Next);
+-			continue;
+-		}
+-		found = true;
+-		break;
+-	} while (next != 0);
++	if (sizeof(struct lease_context_v2) == le32_to_cpu(cc->DataLength)) {
++		struct create_lease_v2 *lc = (struct create_lease_v2 *)cc;
  
--		if (len_of_ctxts < sizeof(struct smb2_neg_context))
-+		if (len_of_ctxts < (int)sizeof(struct smb2_neg_context))
- 			break;
+-	if (found) {
+-		if (sizeof(struct lease_context_v2) == le32_to_cpu(cc->DataLength)) {
+-			struct create_lease_v2 *lc = (struct create_lease_v2 *)cc;
+-
+-			memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
+-			lreq->req_state = lc->lcontext.LeaseState;
+-			lreq->flags = lc->lcontext.LeaseFlags;
+-			lreq->duration = lc->lcontext.LeaseDuration;
+-			memcpy(lreq->parent_lease_key, lc->lcontext.ParentLeaseKey,
+-			       SMB2_LEASE_KEY_SIZE);
+-			lreq->version = 2;
+-		} else {
+-			struct create_lease *lc = (struct create_lease *)cc;
++		memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
++		lreq->req_state = lc->lcontext.LeaseState;
++		lreq->flags = lc->lcontext.LeaseFlags;
++		lreq->duration = lc->lcontext.LeaseDuration;
++		memcpy(lreq->parent_lease_key, lc->lcontext.ParentLeaseKey,
++				SMB2_LEASE_KEY_SIZE);
++		lreq->version = 2;
++	} else {
++		struct create_lease *lc = (struct create_lease *)cc;
  
- 		pctx = (struct smb2_neg_context *)((char *)pctx + offset);
-@@ -1038,9 +1038,8 @@ static __le32 deassemble_neg_contexts(struct ksmbd_conn *conn,
- 		}
- 
- 		/* offsets must be 8 byte aligned */
--		clen = (clen + 7) & ~0x7;
--		offset = clen + sizeof(struct smb2_neg_context);
--		len_of_ctxts -= clen + sizeof(struct smb2_neg_context);
-+		offset = (ctxt_len + 7) & ~0x7;
-+		len_of_ctxts -= offset;
+-			memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
+-			lreq->req_state = lc->lcontext.LeaseState;
+-			lreq->flags = lc->lcontext.LeaseFlags;
+-			lreq->duration = lc->lcontext.LeaseDuration;
+-			lreq->version = 1;
+-		}
+-		return lreq;
++		memcpy(lreq->lease_key, lc->lcontext.LeaseKey, SMB2_LEASE_KEY_SIZE);
++		lreq->req_state = lc->lcontext.LeaseState;
++		lreq->flags = lc->lcontext.LeaseFlags;
++		lreq->duration = lc->lcontext.LeaseDuration;
++		lreq->version = 1;
  	}
- 	return status;
+-
+-	kfree(lreq);
+-	return NULL;
++	return lreq;
  }
+ 
+ /**
 -- 
 2.25.1
 
