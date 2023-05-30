@@ -2,49 +2,49 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A86A7160DA
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 15:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC28E7160E2
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 May 2023 15:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjE3NAA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 30 May 2023 09:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S232469AbjE3NAL (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 30 May 2023 09:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjE3M7p (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 08:59:45 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45A41A2
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d1e96c082so3188105b3a.1
-        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:22 -0700 (PDT)
+        with ESMTP id S232473AbjE3NAH (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 30 May 2023 09:00:07 -0400
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D21E46
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:43 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-64fd7723836so1654041b3a.1
+        for <linux-cifs@vger.kernel.org>; Tue, 30 May 2023 05:59:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451501; x=1688043501;
+        d=1e100.net; s=20221208; t=1685451504; x=1688043504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xMg3SYDPiX3TDwfss9cOOfBTrY4uHuVF7yjcXuPY58s=;
-        b=Ff2VVQh+lV2D7JNLaeibpsB51HqlI07mZunl3k87ii+Gv7pD070rWZTL8HujMdPU6e
-         K4RQcR8VRH9TPHdB78IGXfiLq1aL8FhNFZWLFvgKXQVJKtSmn3XzsXBibqmoIjYZvAOl
-         X2bM4t6mNm0yPOFUhB8FVEoqBh8O0Hhs5cuktUBa0AU5h1Gfr99NKgAlHNbvw9mqckTk
-         +ZnPqJ/gdDQPpMxDdlijo6XiHVj9swbVHQ7oLYHw49KTXmwz5lyiQ8uCPRyeg3J5DHCY
-         m7cq01GFJkFIkmvN317Er0ubp5hlXP4FILHzghace3e/oPmOiaUtFH0Bg3xg5ZrE2Okd
-         FjFA==
-X-Gm-Message-State: AC+VfDwWIMYpByNFD7l2GyllLoP9qsMtnSjs0DQ/q2NPzR4pdUCydVsR
-        Pi8Tc9X1BCOBenSJG7kf8EiPINOGWT0=
-X-Google-Smtp-Source: ACHHUZ7ih376uDQYejzIQR4xACdEL2k0PZnrE6cuKinRze845ShQqbOR6NOOQNiJKSvDbrYY85hLVw==
-X-Received: by 2002:a05:6a00:a8e:b0:644:18fe:91cc with SMTP id b14-20020a056a000a8e00b0064418fe91ccmr2908520pfl.12.1685451500842;
-        Tue, 30 May 2023 05:58:20 -0700 (PDT)
+        bh=EW/lR62yN5QduTryb9HoYLNdTJynDviSdWzzVsd6QJE=;
+        b=CDqZyDRMMohwbDhWy1nG9E/jTYM6/Yp5TgEEvKel+O0Y9AiAIRsv9zynssQL2H4nz7
+         JKYKWLFRtT8pVIcYZJ5BJswDZs0c1AquMiI/mqqcAY4pbmX8Uc2wwMZXATyoQDUaEejs
+         TIqpwWBuIkB7KSjHkG2RJXP4IcqH7ivsp0RrBDXFi74ev/gXH0t33UUM4+zVSVg6ZT0A
+         dUrEI/0qRqjEwDIxEwQAkX/7xJ5nuZeC+T74BsDRy4IsbphkNY4weBXbwySvM71wLtIH
+         Wp9mpjFA2en/5YLItH8mK5xqTReiU05Q2i0QM6d6OegqUS6LZ4lY7SlzVg93Brrv4VC0
+         0G6Q==
+X-Gm-Message-State: AC+VfDxGI4atcsbheqitag1MfIIDroDJr50bZOfaI0u3x/JUW84TflLw
+        knufw8BVK0KkSQZSXwtxuUBzUq3to0o=
+X-Google-Smtp-Source: ACHHUZ4cLNKmXx1Sc9cq30WfBEoWRjBzQKocc2w2a/dH3pDISgaUYiTqFvmyc3lEybhU5TQFAV83nw==
+X-Received: by 2002:a05:6a21:999d:b0:10b:fb01:a72a with SMTP id ve29-20020a056a21999d00b0010bfb01a72amr2353727pzb.60.1685451504330;
+        Tue, 30 May 2023 05:58:24 -0700 (PDT)
 Received: from localhost.localdomain ([211.49.23.9])
-        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0063afb08afeesm1605007pfd.67.2023.05.30.05.58.18
+        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0063afb08afeesm1605007pfd.67.2023.05.30.05.58.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:58:20 -0700 (PDT)
+        Tue, 30 May 2023 05:58:24 -0700 (PDT)
 From:   Namjae Jeon <linkinjeon@kernel.org>
 To:     linux-cifs@vger.kernel.org
 Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
         atteh.mailbox@gmail.com, Namjae Jeon <linkinjeon@kernel.org>,
         Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH] ksmbd: fix posix_acls and acls dereferencing possible ERR_PTR()
-Date:   Tue, 30 May 2023 21:57:56 +0900
-Message-Id: <20230530125757.12910-3-linkinjeon@kernel.org>
+Subject: [PATCH] ksmbd: return a literal instead of 'err' in ksmbd_vfs_kern_path_locked()
+Date:   Tue, 30 May 2023 21:57:57 +0900
+Message-Id: <20230530125757.12910-4-linkinjeon@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230530125757.12910-1-linkinjeon@kernel.org>
 References: <20230530125757.12910-1-linkinjeon@kernel.org>
@@ -52,78 +52,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dan reported the following error message:
+Return a literal instead of 'err' in ksmbd_vfs_kern_path_locked().
 
-fs/smb/server/smbacl.c:1296 smb_check_perm_dacl()
-    error: 'posix_acls' dereferencing possible ERR_PTR()
-fs/smb/server/vfs.c:1323 ksmbd_vfs_make_xattr_posix_acl()
-    error: 'posix_acls' dereferencing possible ERR_PTR()
-fs/smb/server/vfs.c:1830 ksmbd_vfs_inherit_posix_acl()
-    error: 'acls' dereferencing possible ERR_PTR()
-
-__get_acl() returns a mix of error pointers and NULL. This change it
-with IS_ERR_OR_NULL().
-
-Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+Fixes: 74d7970febf7 ("ksmbd: fix racy issue from using ->d_parent and ->d_name")
 Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
 Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/smb/server/smbacl.c | 4 ++--
- fs/smb/server/vfs.c    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ fs/smb/server/vfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/smb/server/smbacl.c b/fs/smb/server/smbacl.c
-index 6d6cfb6957a9..0a5862a61c77 100644
---- a/fs/smb/server/smbacl.c
-+++ b/fs/smb/server/smbacl.c
-@@ -1290,7 +1290,7 @@ int smb_check_perm_dacl(struct ksmbd_conn *conn, const struct path *path,
- 
- 	if (IS_ENABLED(CONFIG_FS_POSIX_ACL)) {
- 		posix_acls = get_inode_acl(d_inode(path->dentry), ACL_TYPE_ACCESS);
--		if (posix_acls && !found) {
-+		if (!IS_ERR_OR_NULL(posix_acls) && !found) {
- 			unsigned int id = -1;
- 
- 			pa_entry = posix_acls->a_entries;
-@@ -1314,7 +1314,7 @@ int smb_check_perm_dacl(struct ksmbd_conn *conn, const struct path *path,
- 				}
- 			}
- 		}
--		if (posix_acls)
-+		if (!IS_ERR_OR_NULL(posix_acls))
- 			posix_acl_release(posix_acls);
- 	}
- 
 diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
-index 6f302919e9f7..f9fb778247e7 100644
+index f9fb778247e7..4f14f111a367 100644
 --- a/fs/smb/server/vfs.c
 +++ b/fs/smb/server/vfs.c
-@@ -1321,7 +1321,7 @@ static struct xattr_smb_acl *ksmbd_vfs_make_xattr_posix_acl(struct mnt_idmap *id
- 		return NULL;
+@@ -1161,7 +1161,7 @@ int ksmbd_vfs_kern_path_locked(struct ksmbd_work *work, char *name,
  
- 	posix_acls = get_inode_acl(inode, acl_type);
--	if (!posix_acls)
-+	if (IS_ERR_OR_NULL(posix_acls))
- 		return NULL;
+ 	err = ksmbd_vfs_path_lookup_locked(share_conf, name, flags, path);
+ 	if (!err)
+-		return err;
++		return 0;
  
- 	smb_acl = kzalloc(sizeof(struct xattr_smb_acl) +
-@@ -1830,7 +1830,7 @@ int ksmbd_vfs_inherit_posix_acl(struct mnt_idmap *idmap,
- 		return -EOPNOTSUPP;
- 
- 	acls = get_inode_acl(parent_inode, ACL_TYPE_DEFAULT);
--	if (!acls)
-+	if (IS_ERR_OR_NULL(acls))
- 		return -ENOENT;
- 	pace = acls->a_entries;
- 
+ 	if (caseless) {
+ 		char *filepath;
 -- 
 2.25.1
 
