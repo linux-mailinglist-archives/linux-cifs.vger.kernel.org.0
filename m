@@ -2,255 +2,169 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156B1720861
-	for <lists+linux-cifs@lfdr.de>; Fri,  2 Jun 2023 19:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2697218BB
+	for <lists+linux-cifs@lfdr.de>; Sun,  4 Jun 2023 19:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbjFBRa5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 2 Jun 2023 13:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S229806AbjFDRB1 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 4 Jun 2023 13:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbjFBRa4 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 2 Jun 2023 13:30:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9991B5;
-        Fri,  2 Jun 2023 10:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685727055; x=1717263055;
-  h=date:from:to:cc:subject:message-id;
-  bh=95NNPKeCDWvKs2XdDPj6/a0IDRIxJ5J5Rri6CmgQVSQ=;
-  b=aX34bsmzLfefQxEbh+/0lxACfnsqiN5k3VMA0SJA917cUvvpiGUE1Yxp
-   oKIAMQ/LhmKrx2j3Ur78A6mML2jovHR8/0AhZ8hLZ9qjtEalVbWi8pIr+
-   PQ2m8DrfMpM1opLQbbUMQX/Wu8V/N+ckh0N6YdqPGqFOV3kkUlUZzbUam
-   nHj17AOqaHnmQAaZDDeO6zO92uDkH9LlacqQ3UhxThYFEmrhC91tKFmIg
-   SDbZFV4Yac8hIYR2EboRPe3G3DV1RhgGceuiQW+Qfcw4NmDboJ9ZBtuqj
-   jrsek8AjmHMfboXU+8J8kd+IH/HWCI1jo//zBBdrAoNvYkDg4arDcZQBp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="421738289"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="421738289"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 10:30:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="954575143"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="954575143"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Jun 2023 10:30:51 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q58by-0000mD-35;
-        Fri, 02 Jun 2023 17:30:50 +0000
-Date:   Sat, 03 Jun 2023 01:30:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-xfs@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [linux-next:master] BUILD REGRESSION
- bc708bbd8260ee4eb3428b0109f5f3be661fae46
-Message-ID: <20230602173029.dm5Hs%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        with ESMTP id S229635AbjFDRB0 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 4 Jun 2023 13:01:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577498
+        for <linux-cifs@vger.kernel.org>; Sun,  4 Jun 2023 10:01:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 135BC60FDD
+        for <linux-cifs@vger.kernel.org>; Sun,  4 Jun 2023 17:01:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB1EC4339E
+        for <linux-cifs@vger.kernel.org>; Sun,  4 Jun 2023 17:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685898084;
+        bh=1s7fQmcfiTaa1uaeNKnvGbdOPEqdBA0dKuEEoQS3+wk=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=mbAdYlP20rUHqusZA0ujPA/oqb59SVfvWLXmdO+FLfYQLdU2pkIsO1zKxKr9mwJVq
+         nvoHbEjx6xi6wIIMdEYVj6aLPmnxRLH/Nx9WiowuoY8WOmlONLx424Z72NaFbbFjAH
+         paHb211f8Ytw5vjLerES3K2rq4ZOhZNkX/ZNOQzRYR3cwxCB2mh4VFEFpCJNTM9VPp
+         hPojVuLeTUMxWRIDCwgI8RvVVHRol1kXQebTeerNx71kuMMTaBtdDMKc1/HuFBIJyD
+         Bg4srVISl90cGHm88MZ5wsd/SzFKr6046wT9cLZ6WG59TXznEH+ARpc6/+ZZvBhSQf
+         WjeaLlesVfimA==
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-39a661bb7f0so2577163b6e.0
+        for <linux-cifs@vger.kernel.org>; Sun, 04 Jun 2023 10:01:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzE+qcRbd8A2XHHYp/PI518cHu8YL1jbyng/SECSvqID/99M7if
+        4WXI8G41SVoz6pMpc8oBdtVXdKA+MdCEYP7P0Kw=
+X-Google-Smtp-Source: ACHHUZ6IIo2gcGJX/3qyYpTnarwj8bGxf/EF+Na8cceweOScnTJH8msmcs1XXbK/8J6bStlrooABVLw4eOXc4BZwadg=
+X-Received: by 2002:aca:f054:0:b0:39a:7233:3340 with SMTP id
+ o81-20020acaf054000000b0039a72333340mr2573692oih.23.1685898083523; Sun, 04
+ Jun 2023 10:01:23 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:ac9:5c44:0:b0:4df:6fd3:a469 with HTTP; Sun, 4 Jun 2023
+ 10:01:22 -0700 (PDT)
+In-Reply-To: <CAAn9K_v-z-V-D+pgQzNzRmEDx4Rt03Fd=BkvpevR4OJqa_-F5g@mail.gmail.com>
+References: <CAAn9K_v-z-V-D+pgQzNzRmEDx4Rt03Fd=BkvpevR4OJqa_-F5g@mail.gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Mon, 5 Jun 2023 02:01:22 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd-7-cWxwx7stFyA9SbHbdbJTKa4RmsWpqXhNcGRj0iWvw@mail.gmail.com>
+Message-ID: <CAKYAXd-7-cWxwx7stFyA9SbHbdbJTKa4RmsWpqXhNcGRj0iWvw@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds in smb2_sess_setup+0x3ac/0x1a70
+To:     =?UTF-8?B?5by15pm66Ku6?= <cc85nod@gmail.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        atteh.mailbox@gmail.com
+Content-Type: multipart/mixed; boundary="000000000000659d9705fd50bcf4"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: bc708bbd8260ee4eb3428b0109f5f3be661fae46  Add linux-next specific files for 20230602
+--000000000000659d9705fd50bcf4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Error/Warning reports:
+2023-06-04 3:44 GMT+09:00, =E5=BC=B5=E6=99=BA=E8=AB=BA <cc85nod@gmail.com>:
+> Hello, Namjae Jeon,
+Hi Chih-Yen,
 
-https://lore.kernel.org/oe-kbuild-all/202306011435.2BxsHFUE-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com
+Could you please check if your issue is fixed ?
 
-Error/Warning: (recently discovered and may have been fixed)
+Thanks!
+>
+> The root cause of this bug is the same as
+> 3ff6bb18ebaa5458a877b47bf7dbe99100a4ff31 (ksmbd: validate smb request
+> protocol id), but it occurs in compound requests.
+>
+> [    8.912659] BUG: KASAN: slab-out-of-bounds in
+> smb2_sess_setup+0x3ac/0x1a70
+> [    8.913081] Read of size 4 at addr ffff88800ac8bb34 by task
+> kworker/0:0/7
+> ...
+> [    8.914963] Call Trace:
+> [    8.915121]  <TASK>
+> [    8.915261]  dump_stack_lvl+0x33/0x50
+> [    8.915498]  print_report+0xcc/0x620
+> [    8.916242]  kasan_report+0xae/0xe0
+> [    8.916717]  kasan_check_range+0x35/0x1b0
+> [    8.916965]  smb2_sess_setup+0x3ac/0x1a70
+> [    8.918634]  handle_ksmbd_work+0x282/0x820
+> [    8.918898]  process_one_work+0x419/0x760
+> [    8.919151]  worker_thread+0x2a2/0x6f0
+> [    8.919655]  kthread+0x187/0x1d0
+> [    8.920165]  ret_from_fork+0x1f/0x30
+> [    8.920397]  </TASK>
+>
+> Thanks. Regards
+>
 
-drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
-include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
-mm/zswap.c:1210:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+--000000000000659d9705fd50bcf4
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-ksmbd-validate-command-payload-size.patch"
+Content-Disposition: attachment; 
+	filename="0001-ksmbd-validate-command-payload-size.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: file0
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-fs/btrfs/volumes.c:6412 btrfs_map_block() error: we previously assumed 'mirror_num_ret' could be null (see line 6250)
-fs/smb/client/cifsfs.c:982 cifs_smb3_do_mount() warn: possible memory leak of 'cifs_sb'
-fs/smb/client/cifssmb.c:4089 CIFSFindFirst() warn: missing error code? 'rc'
-fs/smb/client/cifssmb.c:4216 CIFSFindNext() warn: missing error code? 'rc'
-fs/smb/client/connect.c:2725 cifs_match_super() error: 'tlink' dereferencing possible ERR_PTR()
-fs/smb/client/connect.c:2924 generic_ip_connect() error: we previously assumed 'socket' could be null (see line 2912)
-fs/xfs/scrub/fscounters.c:459 xchk_fscounters() warn: ignoring unreachable code.
-kernel/events/uprobes.c:478 uprobe_write_opcode() warn: passing zero to 'PTR_ERR'
-{standard input}:1078: Error: pcrel too far
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-m021-20230531
-|   |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
-|   |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
-|   |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
-|   |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
-|   |-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
-|   |-- fs-xfs-scrub-fscounters.c-xchk_fscounters()-warn:ignoring-unreachable-code.
-|   `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-|-- sh-allmodconfig
-|   `-- standard-input:Error:pcrel-too-far
-`-- x86_64-randconfig-m001-20230531
-    |-- fs-btrfs-volumes.c-btrfs_map_block()-error:we-previously-assumed-mirror_num_ret-could-be-null-(see-line-)
-    |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
-    |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
-    |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
-    |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
-    |-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
-    |-- fs-xfs-scrub-fscounters.c-xchk_fscounters()-warn:ignoring-unreachable-code.
-    `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-clang_recent_errors
-|-- arm64-randconfig-r012-20230602
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-|-- hexagon-allmodconfig
-|   `-- mm-zswap.c:warning:variable-ret-is-used-uninitialized-whenever-if-condition-is-true
-|-- hexagon-randconfig-r045-20230531
-|   `-- mm-zswap.c:warning:variable-ret-is-used-uninitialized-whenever-if-condition-is-true
-`-- s390-randconfig-r044-20230531
-    `-- mm-zswap.c:warning:variable-ret-is-used-uninitialized-whenever-if-condition-is-true
-
-elapsed time: 726m
-
-configs tested: 122
-configs skipped: 5
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230531   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc          buildonly-randconfig-r005-20230602   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230531   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          gemini_defconfig   gcc  
-arm                            hisi_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                           omap1_defconfig   clang
-arm                  randconfig-r046-20230531   gcc  
-arm                         s5pv210_defconfig   clang
-arm                           sunxi_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230602   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r024-20230531   clang
-csky                             alldefconfig   gcc  
-csky         buildonly-randconfig-r004-20230602   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r005-20230531   gcc  
-hexagon              randconfig-r016-20230601   clang
-hexagon              randconfig-r041-20230531   clang
-hexagon              randconfig-r045-20230531   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230602   gcc  
-i386                 randconfig-i002-20230602   gcc  
-i386                 randconfig-i003-20230602   gcc  
-i386                 randconfig-i004-20230602   gcc  
-i386                 randconfig-i005-20230602   gcc  
-i386                 randconfig-i006-20230602   gcc  
-i386                 randconfig-i051-20230602   gcc  
-i386                 randconfig-i052-20230602   gcc  
-i386                 randconfig-i053-20230602   gcc  
-i386                 randconfig-i054-20230602   gcc  
-i386                 randconfig-i055-20230602   gcc  
-i386                 randconfig-i056-20230602   gcc  
-i386                 randconfig-i061-20230531   gcc  
-i386                 randconfig-i062-20230531   gcc  
-i386                 randconfig-i063-20230531   gcc  
-i386                 randconfig-i064-20230531   gcc  
-i386                 randconfig-i065-20230531   gcc  
-i386                 randconfig-i066-20230531   gcc  
-ia64                            zx1_defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r013-20230601   gcc  
-m68k                 randconfig-r014-20230601   gcc  
-m68k                           sun3_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ci20_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           ip28_defconfig   clang
-mips                           xway_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230531   gcc  
-parisc       buildonly-randconfig-r006-20230602   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230601   gcc  
-parisc               randconfig-r036-20230531   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                        cell_defconfig   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                       holly_defconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                       maple_defconfig   gcc  
-powerpc                     mpc83xx_defconfig   gcc  
-powerpc              randconfig-r006-20230531   gcc  
-powerpc              randconfig-r012-20230601   gcc  
-powerpc                     skiroot_defconfig   clang
-powerpc                     tqm8548_defconfig   gcc  
-powerpc                     tqm8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_virt_defconfig   clang
-riscv                randconfig-r023-20230531   clang
-riscv                randconfig-r034-20230531   gcc  
-riscv                randconfig-r042-20230531   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230531   clang
-sh                               allmodconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh           buildonly-randconfig-r002-20230602   gcc  
-sh                   randconfig-r003-20230531   gcc  
-sh                   randconfig-r015-20230601   gcc  
-sh                   randconfig-r033-20230531   gcc  
-sh                           se7712_defconfig   gcc  
-sh                           se7751_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230531   gcc  
-sparc64              randconfig-r002-20230531   gcc  
-sparc64              randconfig-r032-20230531   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r003-20230602   gcc  
-xtensa               randconfig-r031-20230531   gcc  
-xtensa               randconfig-r035-20230531   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+RnJvbSBiODZiNzQ3ODAxOWM4ZTNhMWM4ZmU2YzM5ZmQ1NmY3NjM2OTk0YmJiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBOYW1qYWUgSmVvbiA8bGlua2luamVvbkBrZXJuZWwub3JnPgpE
+YXRlOiBNb24sIDUgSnVuIDIwMjMgMDE6NTc6MzQgKzA5MDAKU3ViamVjdDogW1BBVENIXSBrc21i
+ZDogdmFsaWRhdGUgY29tbWFuZCBwYXlsb2FkIHNpemUKCi0+U3RydWN0dXJlU2l6ZTIgaW5kaWNh
+dGVzIGNvbW1hbmQgcGF5bG9hZCBzaXplLiBrc21iZCBzaG91bGQgdmFsaWRhdGUKdGhpcyBzaXpl
+IHdpdGggcmZjMTAwMiBsZW5ndGggYmVmb3JlIGFjY2Vzc2luZyBpdC4KVGhpcyBwYXRjaCByZW1v
+dmUgdW5uZWVkZWQgY2hlY2sgYW5kIGFkZCB0aGUgdmFsaWRhdGlvbiBmb3IgdGhpcy4KClsgICAg
+OC45MTI1ODNdIEJVRzogS0FTQU46IHNsYWItb3V0LW9mLWJvdW5kcyBpbiBrc21iZF9zbWIyX2No
+ZWNrX21lc3NhZ2UrMHgxMmEvMHhjNTAKWyAgICA4LjkxMzA1MV0gUmVhZCBvZiBzaXplIDIgYXQg
+YWRkciBmZmZmODg4MDBhYzdkOTJjIGJ5IHRhc2sga3dvcmtlci8wOjAvNwouLi4KWyAgICA4Ljkx
+NDk2N10gQ2FsbCBUcmFjZToKWyAgICA4LjkxNTEyNl0gIDxUQVNLPgpbICAgIDguOTE1MjY3XSAg
+ZHVtcF9zdGFja19sdmwrMHgzMy8weDUwClsgICAgOC45MTU1MDZdICBwcmludF9yZXBvcnQrMHhj
+Yy8weDYyMApbICAgIDguOTE2NTU4XSAga2FzYW5fcmVwb3J0KzB4YWUvMHhlMApbICAgIDguOTE3
+MDgwXSAga2FzYW5fY2hlY2tfcmFuZ2UrMHgzNS8weDFiMApbICAgIDguOTE3MzM0XSAga3NtYmRf
+c21iMl9jaGVja19tZXNzYWdlKzB4MTJhLzB4YzUwClsgICAgOC45MTc5MzVdICBrc21iZF92ZXJp
+Znlfc21iX21lc3NhZ2UrMHhhZS8weGQwClsgICAgOC45MTgyMjNdICBoYW5kbGVfa3NtYmRfd29y
+aysweDE5Mi8weDgyMApbICAgIDguOTE4NDc4XSAgcHJvY2Vzc19vbmVfd29yaysweDQxOS8weDc2
+MApbICAgIDguOTE4NzI3XSAgd29ya2VyX3RocmVhZCsweDJhMi8weDZmMApbICAgIDguOTE5MjIy
+XSAga3RocmVhZCsweDE4Ny8weDFkMApbICAgIDguOTE5NzIzXSAgcmV0X2Zyb21fZm9yaysweDFm
+LzB4MzAKWyAgICA4LjkxOTk1NF0gIDwvVEFTSz4KClJlcG9ydGVkLWJ5OiBDaGloLVllbiBDaGFu
+ZyA8Y2M4NW5vZEBnbWFpbC5jb20+ClNpZ25lZC1vZmYtYnk6IE5hbWphZSBKZW9uIDxsaW5raW5q
+ZW9uQGtlcm5lbC5vcmc+Ci0tLQogZnMvc21iL3NlcnZlci9zbWIybWlzYy5jIHwgMjMgKysrKysr
+KysrKysrLS0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCAxMSBk
+ZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy9zbWIvc2VydmVyL3NtYjJtaXNjLmMgYi9mcy9z
+bWIvc2VydmVyL3NtYjJtaXNjLmMKaW5kZXggMGZmZTY2M2I3NTkwLi41Nzc0OWY0MWI5OTEgMTAw
+NjQ0Ci0tLSBhL2ZzL3NtYi9zZXJ2ZXIvc21iMm1pc2MuYworKysgYi9mcy9zbWIvc2VydmVyL3Nt
+YjJtaXNjLmMKQEAgLTM1MSw2ICszNTEsNyBAQCBpbnQga3NtYmRfc21iMl9jaGVja19tZXNzYWdl
+KHN0cnVjdCBrc21iZF93b3JrICp3b3JrKQogCWludCBjb21tYW5kOwogCV9fdTMyIGNsY19sZW47
+ICAvKiBjYWxjdWxhdGVkIGxlbmd0aCAqLwogCV9fdTMyIGxlbiA9IGdldF9yZmMxMDAyX2xlbih3
+b3JrLT5yZXF1ZXN0X2J1Zik7CisJX191MzIgcmVxX3N0cnVjdF9zaXplOwogCiAJaWYgKGxlMzJf
+dG9fY3B1KGhkci0+TmV4dENvbW1hbmQpID4gMCkKIAkJbGVuID0gbGUzMl90b19jcHUoaGRyLT5O
+ZXh0Q29tbWFuZCk7CkBAIC0zNzMsMTcgKzM3NCw5IEBAIGludCBrc21iZF9zbWIyX2NoZWNrX21l
+c3NhZ2Uoc3RydWN0IGtzbWJkX3dvcmsgKndvcmspCiAJfQogCiAJaWYgKHNtYjJfcmVxX3N0cnVj
+dF9zaXplc1tjb21tYW5kXSAhPSBwZHUtPlN0cnVjdHVyZVNpemUyKSB7Ci0JCWlmIChjb21tYW5k
+ICE9IFNNQjJfT1BMT0NLX0JSRUFLX0hFICYmCi0JCSAgICAoaGRyLT5TdGF0dXMgPT0gMCB8fCBw
+ZHUtPlN0cnVjdHVyZVNpemUyICE9IFNNQjJfRVJST1JfU1RSVUNUVVJFX1NJWkUyX0xFKSkgewot
+CQkJLyogZXJyb3IgcGFja2V0cyBoYXZlIDkgYnl0ZSBzdHJ1Y3R1cmUgc2l6ZSAqLwotCQkJa3Nt
+YmRfZGVidWcoU01CLAotCQkJCSAgICAiSWxsZWdhbCByZXF1ZXN0IHNpemUgJXUgZm9yIGNvbW1h
+bmQgJWRcbiIsCi0JCQkJICAgIGxlMTZfdG9fY3B1KHBkdS0+U3RydWN0dXJlU2l6ZTIpLCBjb21t
+YW5kKTsKLQkJCXJldHVybiAxOwotCQl9IGVsc2UgaWYgKGNvbW1hbmQgPT0gU01CMl9PUExPQ0tf
+QlJFQUtfSEUgJiYKLQkJCSAgIGhkci0+U3RhdHVzID09IDAgJiYKLQkJCSAgIGxlMTZfdG9fY3B1
+KHBkdS0+U3RydWN0dXJlU2l6ZTIpICE9IE9QX0JSRUFLX1NUUlVDVF9TSVpFXzIwICYmCi0JCQkg
+ICBsZTE2X3RvX2NwdShwZHUtPlN0cnVjdHVyZVNpemUyKSAhPSBPUF9CUkVBS19TVFJVQ1RfU0la
+RV8yMSkgeworCQlpZiAoY29tbWFuZCA9PSBTTUIyX09QTE9DS19CUkVBS19IRSAmJgorCQkgICAg
+bGUxNl90b19jcHUocGR1LT5TdHJ1Y3R1cmVTaXplMikgIT0gT1BfQlJFQUtfU1RSVUNUX1NJWkVf
+MjAgJiYKKwkJICAgIGxlMTZfdG9fY3B1KHBkdS0+U3RydWN0dXJlU2l6ZTIpICE9IE9QX0JSRUFL
+X1NUUlVDVF9TSVpFXzIxKSB7CiAJCQkvKiBzcGVjaWFsIGNhc2UgZm9yIFNNQjIuMSBsZWFzZSBi
+cmVhayBtZXNzYWdlICovCiAJCQlrc21iZF9kZWJ1ZyhTTUIsCiAJCQkJICAgICJJbGxlZ2FsIHJl
+cXVlc3Qgc2l6ZSAlZCBmb3Igb3Bsb2NrIGJyZWFrXG4iLApAQCAtMzkyLDYgKzM4NSwxNCBAQCBp
+bnQga3NtYmRfc21iMl9jaGVja19tZXNzYWdlKHN0cnVjdCBrc21iZF93b3JrICp3b3JrKQogCQl9
+CiAJfQogCisJcmVxX3N0cnVjdF9zaXplID0gbGUxNl90b19jcHUocGR1LT5TdHJ1Y3R1cmVTaXpl
+MikgKworCQlfX1NNQjJfSEVBREVSX1NUUlVDVFVSRV9TSVpFOworCWlmIChjb21tYW5kID09IFNN
+QjJfTE9DS19IRSkKKwkJcmVxX3N0cnVjdF9zaXplIC09IHNpemVvZihzdHJ1Y3Qgc21iMl9sb2Nr
+X2VsZW1lbnQpOworCisJaWYgKHJlcV9zdHJ1Y3Rfc2l6ZSA+IGxlbiArIDEpCisJCXJldHVybiAx
+OworCiAJaWYgKHNtYjJfY2FsY19zaXplKGhkciwgJmNsY19sZW4pKQogCQlyZXR1cm4gMTsKIAot
+LSAKMi4yNS4xCgo=
+--000000000000659d9705fd50bcf4--
