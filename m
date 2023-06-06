@@ -2,691 +2,79 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1FA7243DF
-	for <lists+linux-cifs@lfdr.de>; Tue,  6 Jun 2023 15:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E607247D8
+	for <lists+linux-cifs@lfdr.de>; Tue,  6 Jun 2023 17:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238153AbjFFNLD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 6 Jun 2023 09:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S232951AbjFFPf3 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 6 Jun 2023 11:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238097AbjFFNKz (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Jun 2023 09:10:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E36310F8
-        for <linux-cifs@vger.kernel.org>; Tue,  6 Jun 2023 06:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686056967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VjV1Ciimn6pzCandpdZtjXJYCOMjJSyNy1/qiT7b1Ng=;
-        b=JE/QoTj1mA2DM3RhpMcYfFCBeqtFptEXp0g2S4h0rm3P4Ap9hhi1dvkvqz14hm4DjSV/T/
-        Kq3IBRKXx+XIOUcTS1fxl2+2NYfl+qn76KkLr39GiBEvVtHEpqmrDhOih0nnYfGXWJxmau
-        UIlZORSo1lTCQjgmlSf2XDnUbXvkNVE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-7FkqdOiBMkKWNriY8h-FPg-1; Tue, 06 Jun 2023 09:09:25 -0400
-X-MC-Unique: 7FkqdOiBMkKWNriY8h-FPg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30B2F8037AB;
-        Tue,  6 Jun 2023 13:09:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FDD7492B00;
-        Tue,  6 Jun 2023 13:09:20 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH net-next v3 04/10] Move netfs_extract_iter_to_sg() to lib/scatterlist.c
-Date:   Tue,  6 Jun 2023 14:08:50 +0100
-Message-ID: <20230606130856.1970660-5-dhowells@redhat.com>
-In-Reply-To: <20230606130856.1970660-1-dhowells@redhat.com>
-References: <20230606130856.1970660-1-dhowells@redhat.com>
+        with ESMTP id S232228AbjFFPf2 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 6 Jun 2023 11:35:28 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F8801BD;
+        Tue,  6 Jun 2023 08:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+        Content-Type; bh=wSH7uzSKtpphX9UKHyr9xsRWMbdqP//1iixA0OAWzVY=;
+        b=ZMj8R9D7IcW14UTQgSz4uAd6PLera55NzwXWiYAExQHyssv8Z+4uFmtyY7+N5d
+        zk2CygpCIb1+UjBabdqz2rIPG8/u3w5ek1W7JAI6NHC29byKZHg20JhhYCGd9F24
+        PizkOzzSfofU8OG1Rq6l4MYhd4zFuT5d4jaSXsHA9w9BA=
+Received: from home.. (unknown [112.10.202.132])
+        by zwqz-smtp-mta-g5-2 (Coremail) with SMTP id _____wCnG_gjUn9k_bKuBg--.33498S2;
+        Tue, 06 Jun 2023 23:34:59 +0800 (CST)
+From:   "jixianghua@xfusion.com" <jxh218@163.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sfrench@samba.org,
+        jixianghua@xfusion.com, jxh218@163.com
+Subject: [PATCH] smb: remove obsolete comment
+Date:   Tue,  6 Jun 2023 23:34:56 +0800
+Message-Id: <20230606153456.14454-1-jxh218@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wCnG_gjUn9k_bKuBg--.33498S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtr45trykWFy8uF4fZF45Awb_yoWDJrb_CF
+        95ur4xX345Xay7KF1jkwnFvr1DZwnYvr1FkF4Sqa45uw4UXrsxA34vga1xXF1kC3Z8ur1r
+        WwnrKrZavF4fujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRXTm3JUUUUU==
+X-Originating-IP: [112.10.202.132]
+X-CM-SenderInfo: xm0kjiqy6rljoofrz/xtbB0wSGNVXlzblWKAAAse
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NAME_EMAIL_DIFF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Move netfs_extract_iter_to_sg() to lib/scatterlist.c as it's going to be
-used by more than just network filesystems (AF_ALG, for example).
+From: 鑫华 <jixianghua@xfusion.com>
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-crypto@vger.kernel.org
-cc: linux-cachefs@redhat.com
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: netdev@vger.kernel.org
+Because do_gettimeofday has been removed and replaced by ktime_get_real_ts64,
+So just remove the comment as it's not needed now.
+
+Signed-off-by: 鑫华 <jixianghua@xfusion.com>
 ---
- fs/netfs/iterator.c   | 267 -----------------------------------------
- include/linux/netfs.h |   4 -
- include/linux/uio.h   |   5 +
- lib/scatterlist.c     | 269 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 274 insertions(+), 271 deletions(-)
+ fs/smb/client/transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/netfs/iterator.c b/fs/netfs/iterator.c
-index 9f09dc30ceb6..2ff07ba655a0 100644
---- a/fs/netfs/iterator.c
-+++ b/fs/netfs/iterator.c
-@@ -101,270 +101,3 @@ ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
- 	return npages;
- }
- EXPORT_SYMBOL_GPL(netfs_extract_user_iter);
--
--/*
-- * Extract and pin a list of up to sg_max pages from UBUF- or IOVEC-class
-- * iterators, and add them to the scatterlist.
-- */
--static ssize_t extract_user_to_sg(struct iov_iter *iter,
--				  ssize_t maxsize,
--				  struct sg_table *sgtable,
--				  unsigned int sg_max,
--				  iov_iter_extraction_t extraction_flags)
--{
--	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
--	struct page **pages;
--	unsigned int npages;
--	ssize_t ret = 0, res;
--	size_t len, off;
--
--	/* We decant the page list into the tail of the scatterlist */
--	pages = (void *)sgtable->sgl +
--		array_size(sg_max, sizeof(struct scatterlist));
--	pages -= sg_max;
--
--	do {
--		res = iov_iter_extract_pages(iter, &pages, maxsize, sg_max,
--					     extraction_flags, &off);
--		if (res < 0)
--			goto failed;
--
--		len = res;
--		maxsize -= len;
--		ret += len;
--		npages = DIV_ROUND_UP(off + len, PAGE_SIZE);
--		sg_max -= npages;
--
--		for (; npages > 0; npages--) {
--			struct page *page = *pages;
--			size_t seg = min_t(size_t, PAGE_SIZE - off, len);
--
--			*pages++ = NULL;
--			sg_set_page(sg, page, seg, off);
--			sgtable->nents++;
--			sg++;
--			len -= seg;
--			off = 0;
--		}
--	} while (maxsize > 0 && sg_max > 0);
--
--	return ret;
--
--failed:
--	while (sgtable->nents > sgtable->orig_nents)
--		put_page(sg_page(&sgtable->sgl[--sgtable->nents]));
--	return res;
--}
--
--/*
-- * Extract up to sg_max pages from a BVEC-type iterator and add them to the
-- * scatterlist.  The pages are not pinned.
-- */
--static ssize_t extract_bvec_to_sg(struct iov_iter *iter,
--				  ssize_t maxsize,
--				  struct sg_table *sgtable,
--				  unsigned int sg_max,
--				  iov_iter_extraction_t extraction_flags)
--{
--	const struct bio_vec *bv = iter->bvec;
--	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
--	unsigned long start = iter->iov_offset;
--	unsigned int i;
--	ssize_t ret = 0;
--
--	for (i = 0; i < iter->nr_segs; i++) {
--		size_t off, len;
--
--		len = bv[i].bv_len;
--		if (start >= len) {
--			start -= len;
--			continue;
--		}
--
--		len = min_t(size_t, maxsize, len - start);
--		off = bv[i].bv_offset + start;
--
--		sg_set_page(sg, bv[i].bv_page, len, off);
--		sgtable->nents++;
--		sg++;
--		sg_max--;
--
--		ret += len;
--		maxsize -= len;
--		if (maxsize <= 0 || sg_max == 0)
--			break;
--		start = 0;
--	}
--
--	if (ret > 0)
--		iov_iter_advance(iter, ret);
--	return ret;
--}
--
--/*
-- * Extract up to sg_max pages from a KVEC-type iterator and add them to the
-- * scatterlist.  This can deal with vmalloc'd buffers as well as kmalloc'd or
-- * static buffers.  The pages are not pinned.
-- */
--static ssize_t extract_kvec_to_sg(struct iov_iter *iter,
--				  ssize_t maxsize,
--				  struct sg_table *sgtable,
--				  unsigned int sg_max,
--				  iov_iter_extraction_t extraction_flags)
--{
--	const struct kvec *kv = iter->kvec;
--	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
--	unsigned long start = iter->iov_offset;
--	unsigned int i;
--	ssize_t ret = 0;
--
--	for (i = 0; i < iter->nr_segs; i++) {
--		struct page *page;
--		unsigned long kaddr;
--		size_t off, len, seg;
--
--		len = kv[i].iov_len;
--		if (start >= len) {
--			start -= len;
--			continue;
--		}
--
--		kaddr = (unsigned long)kv[i].iov_base + start;
--		off = kaddr & ~PAGE_MASK;
--		len = min_t(size_t, maxsize, len - start);
--		kaddr &= PAGE_MASK;
--
--		maxsize -= len;
--		ret += len;
--		do {
--			seg = min_t(size_t, len, PAGE_SIZE - off);
--			if (is_vmalloc_or_module_addr((void *)kaddr))
--				page = vmalloc_to_page((void *)kaddr);
--			else
--				page = virt_to_page(kaddr);
--
--			sg_set_page(sg, page, len, off);
--			sgtable->nents++;
--			sg++;
--			sg_max--;
--
--			len -= seg;
--			kaddr += PAGE_SIZE;
--			off = 0;
--		} while (len > 0 && sg_max > 0);
--
--		if (maxsize <= 0 || sg_max == 0)
--			break;
--		start = 0;
--	}
--
--	if (ret > 0)
--		iov_iter_advance(iter, ret);
--	return ret;
--}
--
--/*
-- * Extract up to sg_max folios from an XARRAY-type iterator and add them to
-- * the scatterlist.  The pages are not pinned.
-- */
--static ssize_t extract_xarray_to_sg(struct iov_iter *iter,
--				    ssize_t maxsize,
--				    struct sg_table *sgtable,
--				    unsigned int sg_max,
--				    iov_iter_extraction_t extraction_flags)
--{
--	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
--	struct xarray *xa = iter->xarray;
--	struct folio *folio;
--	loff_t start = iter->xarray_start + iter->iov_offset;
--	pgoff_t index = start / PAGE_SIZE;
--	ssize_t ret = 0;
--	size_t offset, len;
--	XA_STATE(xas, xa, index);
--
--	rcu_read_lock();
--
--	xas_for_each(&xas, folio, ULONG_MAX) {
--		if (xas_retry(&xas, folio))
--			continue;
--		if (WARN_ON(xa_is_value(folio)))
--			break;
--		if (WARN_ON(folio_test_hugetlb(folio)))
--			break;
--
--		offset = offset_in_folio(folio, start);
--		len = min_t(size_t, maxsize, folio_size(folio) - offset);
--
--		sg_set_page(sg, folio_page(folio, 0), len, offset);
--		sgtable->nents++;
--		sg++;
--		sg_max--;
--
--		maxsize -= len;
--		ret += len;
--		if (maxsize <= 0 || sg_max == 0)
--			break;
--	}
--
--	rcu_read_unlock();
--	if (ret > 0)
--		iov_iter_advance(iter, ret);
--	return ret;
--}
--
--/**
-- * extract_iter_to_sg - Extract pages from an iterator and add to an sglist
-- * @iter: The iterator to extract from
-- * @maxsize: The amount of iterator to copy
-- * @sgtable: The scatterlist table to fill in
-- * @sg_max: Maximum number of elements in @sgtable that may be filled
-- * @extraction_flags: Flags to qualify the request
-- *
-- * Extract the page fragments from the given amount of the source iterator and
-- * add them to a scatterlist that refers to all of those bits, to a maximum
-- * addition of @sg_max elements.
-- *
-- * The pages referred to by UBUF- and IOVEC-type iterators are extracted and
-- * pinned; BVEC-, KVEC- and XARRAY-type are extracted but aren't pinned; PIPE-
-- * and DISCARD-type are not supported.
-- *
-- * No end mark is placed on the scatterlist; that's left to the caller.
-- *
-- * @extraction_flags can have ITER_ALLOW_P2PDMA set to request peer-to-peer DMA
-- * be allowed on the pages extracted.
-- *
-- * If successful, @sgtable->nents is updated to include the number of elements
-- * added and the number of bytes added is returned.  @sgtable->orig_nents is
-- * left unaltered.
-- *
-- * The iov_iter_extract_mode() function should be used to query how cleanup
-- * should be performed.
-- */
--ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t maxsize,
--			   struct sg_table *sgtable, unsigned int sg_max,
--			   iov_iter_extraction_t extraction_flags)
--{
--	if (maxsize == 0)
--		return 0;
--
--	switch (iov_iter_type(iter)) {
--	case ITER_UBUF:
--	case ITER_IOVEC:
--		return extract_user_to_sg(iter, maxsize, sgtable, sg_max,
--					  extraction_flags);
--	case ITER_BVEC:
--		return extract_bvec_to_sg(iter, maxsize, sgtable, sg_max,
--					  extraction_flags);
--	case ITER_KVEC:
--		return extract_kvec_to_sg(iter, maxsize, sgtable, sg_max,
--					  extraction_flags);
--	case ITER_XARRAY:
--		return extract_xarray_to_sg(iter, maxsize, sgtable, sg_max,
--					    extraction_flags);
--	default:
--		pr_err("%s(%u) unsupported\n", __func__, iov_iter_type(iter));
--		WARN_ON_ONCE(1);
--		return -EIO;
--	}
--}
--EXPORT_SYMBOL_GPL(extract_iter_to_sg);
-diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-index 55e201c3a841..b11a84f6c32b 100644
---- a/include/linux/netfs.h
-+++ b/include/linux/netfs.h
-@@ -300,10 +300,6 @@ void netfs_stats_show(struct seq_file *);
- ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
- 				struct iov_iter *new,
- 				iov_iter_extraction_t extraction_flags);
--struct sg_table;
--ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t len,
--			   struct sg_table *sgtable, unsigned int sg_max,
--			   iov_iter_extraction_t extraction_flags);
- 
- /**
-  * netfs_inode - Get the netfs inode context from the inode
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 044c1d8c230c..0ccb983cf645 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -433,4 +433,9 @@ static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
- 	return user_backed_iter(iter);
- }
- 
-+struct sg_table;
-+ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t len,
-+			   struct sg_table *sgtable, unsigned int sg_max,
-+			   iov_iter_extraction_t extraction_flags);
-+
- #endif
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index 8d7519a8f308..e97d7060329e 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -9,6 +9,8 @@
- #include <linux/scatterlist.h>
- #include <linux/highmem.h>
- #include <linux/kmemleak.h>
-+#include <linux/bvec.h>
-+#include <linux/uio.h>
- 
- /**
-  * sg_next - return the next scatterlist entry in a list
-@@ -1095,3 +1097,270 @@ size_t sg_zero_buffer(struct scatterlist *sgl, unsigned int nents,
- 	return offset;
- }
- EXPORT_SYMBOL(sg_zero_buffer);
-+
-+/*
-+ * Extract and pin a list of up to sg_max pages from UBUF- or IOVEC-class
-+ * iterators, and add them to the scatterlist.
-+ */
-+static ssize_t extract_user_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
-+{
-+	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-+	struct page **pages;
-+	unsigned int npages;
-+	ssize_t ret = 0, res;
-+	size_t len, off;
-+
-+	/* We decant the page list into the tail of the scatterlist */
-+	pages = (void *)sgtable->sgl +
-+		array_size(sg_max, sizeof(struct scatterlist));
-+	pages -= sg_max;
-+
-+	do {
-+		res = iov_iter_extract_pages(iter, &pages, maxsize, sg_max,
-+					     extraction_flags, &off);
-+		if (res < 0)
-+			goto failed;
-+
-+		len = res;
-+		maxsize -= len;
-+		ret += len;
-+		npages = DIV_ROUND_UP(off + len, PAGE_SIZE);
-+		sg_max -= npages;
-+
-+		for (; npages > 0; npages--) {
-+			struct page *page = *pages;
-+			size_t seg = min_t(size_t, PAGE_SIZE - off, len);
-+
-+			*pages++ = NULL;
-+			sg_set_page(sg, page, seg, off);
-+			sgtable->nents++;
-+			sg++;
-+			len -= seg;
-+			off = 0;
-+		}
-+	} while (maxsize > 0 && sg_max > 0);
-+
-+	return ret;
-+
-+failed:
-+	while (sgtable->nents > sgtable->orig_nents)
-+		put_page(sg_page(&sgtable->sgl[--sgtable->nents]));
-+	return res;
-+}
-+
-+/*
-+ * Extract up to sg_max pages from a BVEC-type iterator and add them to the
-+ * scatterlist.  The pages are not pinned.
-+ */
-+static ssize_t extract_bvec_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
-+{
-+	const struct bio_vec *bv = iter->bvec;
-+	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-+	unsigned long start = iter->iov_offset;
-+	unsigned int i;
-+	ssize_t ret = 0;
-+
-+	for (i = 0; i < iter->nr_segs; i++) {
-+		size_t off, len;
-+
-+		len = bv[i].bv_len;
-+		if (start >= len) {
-+			start -= len;
-+			continue;
-+		}
-+
-+		len = min_t(size_t, maxsize, len - start);
-+		off = bv[i].bv_offset + start;
-+
-+		sg_set_page(sg, bv[i].bv_page, len, off);
-+		sgtable->nents++;
-+		sg++;
-+		sg_max--;
-+
-+		ret += len;
-+		maxsize -= len;
-+		if (maxsize <= 0 || sg_max == 0)
-+			break;
-+		start = 0;
-+	}
-+
-+	if (ret > 0)
-+		iov_iter_advance(iter, ret);
-+	return ret;
-+}
-+
-+/*
-+ * Extract up to sg_max pages from a KVEC-type iterator and add them to the
-+ * scatterlist.  This can deal with vmalloc'd buffers as well as kmalloc'd or
-+ * static buffers.  The pages are not pinned.
-+ */
-+static ssize_t extract_kvec_to_sg(struct iov_iter *iter,
-+				  ssize_t maxsize,
-+				  struct sg_table *sgtable,
-+				  unsigned int sg_max,
-+				  iov_iter_extraction_t extraction_flags)
-+{
-+	const struct kvec *kv = iter->kvec;
-+	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-+	unsigned long start = iter->iov_offset;
-+	unsigned int i;
-+	ssize_t ret = 0;
-+
-+	for (i = 0; i < iter->nr_segs; i++) {
-+		struct page *page;
-+		unsigned long kaddr;
-+		size_t off, len, seg;
-+
-+		len = kv[i].iov_len;
-+		if (start >= len) {
-+			start -= len;
-+			continue;
-+		}
-+
-+		kaddr = (unsigned long)kv[i].iov_base + start;
-+		off = kaddr & ~PAGE_MASK;
-+		len = min_t(size_t, maxsize, len - start);
-+		kaddr &= PAGE_MASK;
-+
-+		maxsize -= len;
-+		ret += len;
-+		do {
-+			seg = min_t(size_t, len, PAGE_SIZE - off);
-+			if (is_vmalloc_or_module_addr((void *)kaddr))
-+				page = vmalloc_to_page((void *)kaddr);
-+			else
-+				page = virt_to_page(kaddr);
-+
-+			sg_set_page(sg, page, len, off);
-+			sgtable->nents++;
-+			sg++;
-+			sg_max--;
-+
-+			len -= seg;
-+			kaddr += PAGE_SIZE;
-+			off = 0;
-+		} while (len > 0 && sg_max > 0);
-+
-+		if (maxsize <= 0 || sg_max == 0)
-+			break;
-+		start = 0;
-+	}
-+
-+	if (ret > 0)
-+		iov_iter_advance(iter, ret);
-+	return ret;
-+}
-+
-+/*
-+ * Extract up to sg_max folios from an XARRAY-type iterator and add them to
-+ * the scatterlist.  The pages are not pinned.
-+ */
-+static ssize_t extract_xarray_to_sg(struct iov_iter *iter,
-+				    ssize_t maxsize,
-+				    struct sg_table *sgtable,
-+				    unsigned int sg_max,
-+				    iov_iter_extraction_t extraction_flags)
-+{
-+	struct scatterlist *sg = sgtable->sgl + sgtable->nents;
-+	struct xarray *xa = iter->xarray;
-+	struct folio *folio;
-+	loff_t start = iter->xarray_start + iter->iov_offset;
-+	pgoff_t index = start / PAGE_SIZE;
-+	ssize_t ret = 0;
-+	size_t offset, len;
-+	XA_STATE(xas, xa, index);
-+
-+	rcu_read_lock();
-+
-+	xas_for_each(&xas, folio, ULONG_MAX) {
-+		if (xas_retry(&xas, folio))
-+			continue;
-+		if (WARN_ON(xa_is_value(folio)))
-+			break;
-+		if (WARN_ON(folio_test_hugetlb(folio)))
-+			break;
-+
-+		offset = offset_in_folio(folio, start);
-+		len = min_t(size_t, maxsize, folio_size(folio) - offset);
-+
-+		sg_set_page(sg, folio_page(folio, 0), len, offset);
-+		sgtable->nents++;
-+		sg++;
-+		sg_max--;
-+
-+		maxsize -= len;
-+		ret += len;
-+		if (maxsize <= 0 || sg_max == 0)
-+			break;
-+	}
-+
-+	rcu_read_unlock();
-+	if (ret > 0)
-+		iov_iter_advance(iter, ret);
-+	return ret;
-+}
-+
-+/**
-+ * extract_iter_to_sg - Extract pages from an iterator and add to an sglist
-+ * @iter: The iterator to extract from
-+ * @maxsize: The amount of iterator to copy
-+ * @sgtable: The scatterlist table to fill in
-+ * @sg_max: Maximum number of elements in @sgtable that may be filled
-+ * @extraction_flags: Flags to qualify the request
-+ *
-+ * Extract the page fragments from the given amount of the source iterator and
-+ * add them to a scatterlist that refers to all of those bits, to a maximum
-+ * addition of @sg_max elements.
-+ *
-+ * The pages referred to by UBUF- and IOVEC-type iterators are extracted and
-+ * pinned; BVEC-, KVEC- and XARRAY-type are extracted but aren't pinned; PIPE-
-+ * and DISCARD-type are not supported.
-+ *
-+ * No end mark is placed on the scatterlist; that's left to the caller.
-+ *
-+ * @extraction_flags can have ITER_ALLOW_P2PDMA set to request peer-to-peer DMA
-+ * be allowed on the pages extracted.
-+ *
-+ * If successful, @sgtable->nents is updated to include the number of elements
-+ * added and the number of bytes added is returned.  @sgtable->orig_nents is
-+ * left unaltered.
-+ *
-+ * The iov_iter_extract_mode() function should be used to query how cleanup
-+ * should be performed.
-+ */
-+ssize_t extract_iter_to_sg(struct iov_iter *iter, size_t maxsize,
-+			   struct sg_table *sgtable, unsigned int sg_max,
-+			   iov_iter_extraction_t extraction_flags)
-+{
-+	if (maxsize == 0)
-+		return 0;
-+
-+	switch (iov_iter_type(iter)) {
-+	case ITER_UBUF:
-+	case ITER_IOVEC:
-+		return extract_user_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
-+	case ITER_BVEC:
-+		return extract_bvec_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
-+	case ITER_KVEC:
-+		return extract_kvec_to_sg(iter, maxsize, sgtable, sg_max,
-+					  extraction_flags);
-+	case ITER_XARRAY:
-+		return extract_xarray_to_sg(iter, maxsize, sgtable, sg_max,
-+					    extraction_flags);
-+	default:
-+		pr_err("%s(%u) unsupported\n", __func__, iov_iter_type(iter));
-+		WARN_ON_ONCE(1);
-+		return -EIO;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(extract_iter_to_sg);
+diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+index 24bdd5f4d3bc..0474d0bba0a2 100644
+--- a/fs/smb/client/transport.c
++++ b/fs/smb/client/transport.c
+@@ -55,7 +55,7 @@ alloc_mid(const struct smb_hdr *smb_buffer, struct TCP_Server_Info *server)
+ 	temp->pid = current->pid;
+ 	temp->command = cpu_to_le16(smb_buffer->Command);
+ 	cifs_dbg(FYI, "For smb_command %d\n", smb_buffer->Command);
+-	/*	do_gettimeofday(&temp->when_sent);*/ /* easier to use jiffies */
++	/* easier to use jiffies */
+ 	/* when mid allocated can be before when sent */
+ 	temp->when_alloc = jiffies;
+ 	temp->server = server;
+-- 
+2.34.1
 
