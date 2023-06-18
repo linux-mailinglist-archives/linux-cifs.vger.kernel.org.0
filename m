@@ -2,82 +2,96 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFFB7344D2
-	for <lists+linux-cifs@lfdr.de>; Sun, 18 Jun 2023 05:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA9E73472A
+	for <lists+linux-cifs@lfdr.de>; Sun, 18 Jun 2023 19:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjFRDkB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sat, 17 Jun 2023 23:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S229472AbjFRRFA (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 18 Jun 2023 13:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjFRDkA (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sat, 17 Jun 2023 23:40:00 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBEA198A
-        for <linux-cifs@vger.kernel.org>; Sat, 17 Jun 2023 20:39:58 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-340bba768acso11395245ab.2
-        for <linux-cifs@vger.kernel.org>; Sat, 17 Jun 2023 20:39:58 -0700 (PDT)
+        with ESMTP id S229458AbjFRRFA (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 18 Jun 2023 13:05:00 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC79B7
+        for <linux-cifs@vger.kernel.org>; Sun, 18 Jun 2023 10:04:59 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62ffb475be0so20572226d6.2
+        for <linux-cifs@vger.kernel.org>; Sun, 18 Jun 2023 10:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687059597; x=1689651597;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wWTmMQSsiLodfdKu7C8lcuyX7WesZia949PML8BXbEI=;
-        b=MS58pmUqBMhwOojW/rEqbOtsSErOz3ww0rXm+W+03miki0UYxV72yot6eJJOkhhcix
-         mjIkdWmIMeadYoLrHCQKwASWodweWj5hATdc1lkBKejgY/n8v6NURv+aRvRMPOZeBIJ8
-         fImxZcpiL/VdU1Yea5IiCmk1ablobFUYLsVZaMb19Jyqw3h5HnreQfKPjJ4AdDHc6Qgh
-         wVMXlk0CEZyAeFPrsZY5J/yE63RvPYCCYqe5mpZPzZtkCHm3jlMXiVbalJZyA6fG5K5l
-         5/D1prl3NHMSWE+eVucTsulchcMuPnGLFhfn7qvOJ4L4npS6QAxV5a+PfwHZz/ZZI3Zs
-         Li+A==
+        d=gmail.com; s=20221208; t=1687107898; x=1689699898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UbVgteLTK1kaVWUK7w0K9TrQ2F6c9jLElhoYIBIF+/4=;
+        b=ZYCXHbiAWd/ie4pdqqXTlwiGWT74QKiGacwAwcwgKi1GvtLnFo5DgcZbeMUxLoaDDo
+         N3Aqoqw01442HheOax5rXdLBzf5E5xf+ckVDhFpNr0hvQYa0njGIOdP5OOKI6wZPr6Ja
+         1Oh7+t8HepDL/FJITeuMDMLXjhJLrKtZITj07o/5SN7IS56fHW7/dFvwS7vdwPuw/5qn
+         Z7PV2iKS4T5Jw8jXK+V/8clQSsScccHOd60J4fshuZG6JfW4kAQvER2a2kHkC9uNYS4I
+         xftCKLIwxc+gZch+JkXBEvUOZ86xGSDs9UaTLulCrlxxqTgdEiR8u+IvOpA0DJv9nlaC
+         VpCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687059597; x=1689651597;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wWTmMQSsiLodfdKu7C8lcuyX7WesZia949PML8BXbEI=;
-        b=QsgWvVbqz5yz2BMHYKLlLE0HsAov/O4iWJgv/hriFj+wGMmtV0CFlFO7i3eCACBAvk
-         jnM5yqs0IZAXxSdKXABR0scBdfDBiahQfdNg6qMG9G+GuxaYublsh7mli1wjSkS3cMRp
-         I+1sIbQf+44In/DYrk5tF5vk2S6L7Aie8W/HbyXmwWRV0AQLo6z/XKfmak4/sR1AGVvz
-         OPbPsp8LCvMGyMmENJLr1e6obqRFbb2h8CrDZ++cCEGj0he1yazjB2JzvZUvalckhuzQ
-         /Ej0BhczqgAQzHTW6rVJucS9h/ksXGfod/5/nYabS3Qx+ENm9CQyDPfevrxJsIOr2JPK
-         AixQ==
-X-Gm-Message-State: AC+VfDzVuh3ZQdFC9Oe5Z5Li0m/2oo+sautF7Z1zNS4v+/tLSo5G3yNe
-        KVFWgg7Hb1tAg8p4LppjJGkYzcFM0UublejD60o=
-X-Google-Smtp-Source: ACHHUZ6jOcev/JRjqxHPWavgQ13qYoAVjVXRmkIC5sxX9/SxZ6VH0dWznntc9svs1D7wNvmgHCv5piGRu8+DlUlUOWM=
-X-Received: by 2002:a92:d309:0:b0:33d:3b69:2d23 with SMTP id
- x9-20020a92d309000000b0033d3b692d23mr2013988ila.19.1687059597619; Sat, 17 Jun
- 2023 20:39:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687107898; x=1689699898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UbVgteLTK1kaVWUK7w0K9TrQ2F6c9jLElhoYIBIF+/4=;
+        b=T6Wv70mGUYhyKXuvbaTYhHHCmbEeDFhUihXOi4yToqUHtUechdh5ugRlf54XCd2JuZ
+         Tv3AL4mTHhH2IZfz6kDkPHuknRnE1t7ylPJ977xw6tXk3YoaL4W3dBIY2POcPPxab4TA
+         o1dT+Ra++fPBK61TydYXGjXg2Ki5Jem0/MTAuIWyrGB/rDDDgS1Unwj+It+lj2/9evFg
+         rT/eCc9Hb3QwayQY8bT7qfne/Qb+0btBpTGKJvzjTlyspwFsq3unW3vPY5eZPg8vHi0J
+         3OmTlx5NQ5koleyPoUitDNj+BndcZredxp3vQPs/TGOrz3dzAEbyYyJxobCTkX8Fbl0k
+         BScA==
+X-Gm-Message-State: AC+VfDyKLMU4XhEqWDbRgQGrji+la6WCU6LZ2lJpjSPsKWQjUuI2ll+w
+        t20QsvzLypvJHQ6wufFkjj/t0uuJHVzu8qMUp60=
+X-Google-Smtp-Source: ACHHUZ7LD1I4BoJnKvBj1mHunTomnFE50YdMFSOIxcGQR1piZ9kJugtfNBVRROa83GzCKwazcT1Zo/Y+il+uPBMd7J8=
+X-Received: by 2002:a05:6214:f08:b0:623:6b1a:c5f1 with SMTP id
+ gw8-20020a0562140f0800b006236b1ac5f1mr9268321qvb.4.1687107898495; Sun, 18 Jun
+ 2023 10:04:58 -0700 (PDT)
 MIME-Version: 1.0
-Sender: ciissouf34@gmail.com
-Received: by 2002:ac0:d884:0:b0:2dc:5e5d:14a6 with HTTP; Sat, 17 Jun 2023
- 20:39:57 -0700 (PDT)
-From:   "Mrs. Ruth Roberto" <robertoruth48@gmail.com>
-Date:   Sat, 17 Jun 2023 19:39:57 -0800
-X-Google-Sender-Auth: W5Dt6JfxFofwIjj_K9UB4hDpmFo
-Message-ID: <CAFA2CT=KTsZwxS+bcrxAaCxvQPXY4Hj1GuXDz5NpfsVD=JxSdw@mail.gmail.com>
-Subject: I trust in God
-To:     undisclosed-recipients:;
+References: <20230616103746.87142-1-sprasad@microsoft.com> <CAH2r5ms9MwXs3hBY=OJWRdcTH629Db4rKDGx70MKdqu71yUisA@mail.gmail.com>
+In-Reply-To: <CAH2r5ms9MwXs3hBY=OJWRdcTH629Db4rKDGx70MKdqu71yUisA@mail.gmail.com>
+From:   Bharath SM <bharathsm.hsk@gmail.com>
+Date:   Sun, 18 Jun 2023 22:34:47 +0530
+Message-ID: <CAGypqWyLyECY+UXH7Y67kOYqugN9eHoL6=oGBKX8rbSm3X14VA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cifs: print nosharesock value while dumping mount options
+To:     Steve French <smfrench@gmail.com>
+Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs@vger.kernel.org, pc@cjr.nz, ematsumiya@suse.de,
+        Shyam Prasad N <sprasad@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_3,NA_DOLLARS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dear,
-It is true we do not know each other before but please bear with me,
-I=E2=80=99m writing you this mail from a Hospital bed. My name is Mrs.
-Ruth Roberto. I am a widow and very sick now. I am suffering from
-Endometrial Cancer which my doctor has confirmed that I will not
-survive it because of some damages. Now because of the condition of my
-health I have decided to donate out my late husband hard earn money
-the sum of ($3, 500,000.00) Three Million, Five Hundred Thousand Us
-Dollars on Charity Purpose through your help.if you are interested get
-back for more details.
-Mrs. Ruth Roberto
+> On Fri, Jun 16, 2023 at 5:37=E2=80=AFAM Shyam Prasad N <nspmangalore@gmai=
+l.com> wrote:
+> >
+> > We print most other mount options for a mount when dumping
+> > the mount entries. But miss out the nosharesock value.
+> > This change will print that in addition to the other options.
+> >
+> > Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+> > ---
+> >  fs/smb/client/cifsfs.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
+> > index 43a4d8603db3..86ac620a9615 100644
+> > --- a/fs/smb/client/cifsfs.c
+> > +++ b/fs/smb/client/cifsfs.c
+> > @@ -688,6 +688,8 @@ cifs_show_options(struct seq_file *s, struct dentry=
+ *root)
+> >                 seq_puts(s, ",noautotune");
+> >         if (tcon->ses->server->noblocksnd)
+> >                 seq_puts(s, ",noblocksend");
+> > +       if (tcon->ses->server->nosharesock)
+> > +               seq_puts(s, ",nosharesock");
+
+
+Reviewed by Bharath.
