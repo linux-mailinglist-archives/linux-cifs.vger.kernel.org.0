@@ -2,235 +2,124 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1805B7361E4
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jun 2023 05:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6582373623B
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jun 2023 05:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjFTDDB (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 19 Jun 2023 23:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
+        id S229489AbjFTDmM (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 19 Jun 2023 23:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjFTDCa (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 19 Jun 2023 23:02:30 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A625E1BD5
-        for <linux-cifs@vger.kernel.org>; Mon, 19 Jun 2023 20:01:57 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b47a15ca10so23986851fa.1
-        for <linux-cifs@vger.kernel.org>; Mon, 19 Jun 2023 20:01:57 -0700 (PDT)
+        with ESMTP id S229453AbjFTDmL (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 19 Jun 2023 23:42:11 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A575C6
+        for <linux-cifs@vger.kernel.org>; Mon, 19 Jun 2023 20:42:10 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b45b6adffbso54007891fa.3
+        for <linux-cifs@vger.kernel.org>; Mon, 19 Jun 2023 20:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687230116; x=1689822116;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
-        b=Kf6bu6L4x5lzVBGRCdagk+XWCcWeD97KHAuE9tSb5aoYsnHyamttqunGIKsG4vnnyO
-         C+ndqLWH+6AsikmtI5/qdUwd2H/05ciMWN0S1MVzX51r69HMr8rDo/KVgPRH7m98XrBl
-         ORa4ZcUqWSekNXYF3kz3Y+g+drpmqkEsGckfPb1p1Z1XG89rkb4QhqTX2of9djnQjymi
-         pSHiC632aijqE9GjXR/eQ4xg/w5JbetsC7UNTVkcjf96x+oD+j1phSKFf4QcfqM4ov4x
-         fsOtzEsI64PtfD1dQgbixDkw63w/B3XrJ8FkaCzt5LZkE1Mj+JFJELvDg+xMSPcTE/27
-         MOnQ==
+        d=gmail.com; s=20221208; t=1687232528; x=1689824528;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hFbkYkkrMNNIj4N+I29G2MMgLDIaZKEdSnmWCRzSWo0=;
+        b=ZK7Kr7uP8pvDkzTYd4j2Z72nyj+0WL5lWS5cqdIG0g4M8KJM0YndoIQh/OaYcmEGrz
+         h+G74qGI5I7upJU4ZSAjUJMhNqj6BLW6gbIUdVjwjgdKQNdG8Ex5ObHayKO/NCzuNI7G
+         fngoioUmrZefGcKVgeLFhciYduDG6DocIM5es/Y+xjYL2nb9yymk4EQDrVIQVXG0lcdJ
+         2Uf0EWn2EYmqdZ9gik2khPBPRNh7G6mwcHggXBLGdADiPsypeR4Uf4NQSfYEO3Xd1ysc
+         sQ6oan2dEELPakjm3AczlBcA1N6K0grurAFb/FcTT4pD2ff0HAN3j0iK1XiGXVpfwf+S
+         PfwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687230116; x=1689822116;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
-        b=R7BTrfKQ7Q4p9+Keil5bMCPoXca7Xh2nUutZGndE3vREvVaV/AiPNQJRM77GAp6mWS
-         BgMdMsjPvmGEENCkhrTScKI345ppRGLWeBOwO2QN0wXNdeG8V71O3UGHT6XzWpMt6n9d
-         2HdCdOgMWn8cq7ulW1GyVpIFZViZkZUOUPK2kIZDWcj30fmhoo596LYFNKzisp8kpjwA
-         bUsDx6G+53C3SFpDSa+21OUqUhv5auFiqVLtsTTixao9+h4BbWf0RGWZZst6L9+xntgZ
-         BDWvartPH6WzvtBleV9+eDhyeVVqBeN4E1f/fkhr1KZJf5IFjzBGWtEbyhrSxts0u9XC
-         XdIA==
-X-Gm-Message-State: AC+VfDxu2MJDinrnghvUaMBTIGV+QnxwFarLFo3lp4y/tBS2B3ez2sKE
-        9iV3FB+9OfLXlY9uBzKlnY7/PdR7m7xC+Mo8E5c=
-X-Google-Smtp-Source: ACHHUZ47jNU4wezvDRDndldRHfasabDWENMhXMFfOBu7H1Pts5CzW2qbhu7U+2ZrABW+bcztS498BueSQOsDqrGe5/g=
-X-Received: by 2002:a2e:3210:0:b0:2b4:7559:32b0 with SMTP id
- y16-20020a2e3210000000b002b4755932b0mr3124285ljy.19.1687230115507; Mon, 19
- Jun 2023 20:01:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687232528; x=1689824528;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hFbkYkkrMNNIj4N+I29G2MMgLDIaZKEdSnmWCRzSWo0=;
+        b=iY6ZbYIdz4Yu2LgVZpmU3wb0bP544nKwl70Rl5Z+z7zpaMdxqM9eJPKHDWRZM9FMTY
+         T5+Ilj7kD4tmzeESoDxjWW+zq3Ff6Z5ThZS06F93draX6q94ivMdOrJuQY2CyWTtBvf0
+         ODQRMyrbJHjW2d/Bl+9NODDaBlknCTIf5RD6C68OrBzyGLgzgeQ54nDCNrSQMekyOPaq
+         xiGw9DKh2ifmi1apk3e7pDN0m/Oml53lcnO51j9pR3RYWiYEAg4h10z/eW0wU7PfRIpu
+         g3Jv6isFkCTiMx+95nL6VaZsaaWUk/QJ+4875UzDUtGeAKIvpnpmP+yHcWifmuS/bQfz
+         3bRQ==
+X-Gm-Message-State: AC+VfDwJdLjX72jr3hnEuuLvi3/keNWpqgxlZ+5fybTz4W1pD03WP8CH
+        oML8GVA+EuPt/4PwtJSCwQf4LflTf4LNw8pYJXVDwmuEmOI=
+X-Google-Smtp-Source: ACHHUZ47LaP9OEcbLsRrAPhhj0j31yJe8lm0XjScN/L6sbQvclG021qSrrAdRgoYwFb5baC18TX7xtOY4QxxSU6rnAk=
+X-Received: by 2002:a2e:2c0f:0:b0:2b4:765b:f6f0 with SMTP id
+ s15-20020a2e2c0f000000b002b4765bf6f0mr3097600ljs.28.1687232527735; Mon, 19
+ Jun 2023 20:42:07 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:4a90:b0:986:545c:2dc5 with HTTP; Mon, 19 Jun 2023
- 20:01:55 -0700 (PDT)
-From:   United Nations <cindylove276@gmail.com>
-Date:   Mon, 19 Jun 2023 23:01:55 -0400
-Message-ID: <CANHmF4BP8mwKLmoASmQz2zpk+kTQZ=yA1xdukOs=9JMTpxGK5g@mail.gmail.com>
-Subject: Congratulations
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:236 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cindylove276[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cindylove276[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 19 Jun 2023 22:41:56 -0500
+Message-ID: <CAH2r5mvuuCeQQKN+RRxoELjf9NOfLNOwgOjBbxdUKYiowsbY_w@mail.gmail.com>
+Subject: [SMB CLIENT][PATCH] do not reserve too many oplock credits
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     Shyam Prasad N <nspmangalore@gmail.com>
+Content-Type: multipart/mixed; boundary="0000000000007830d605fe876f64"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-V=C3=A1=C5=BEen=C3=BD vlastn=C3=ADk e-mailu/p=C5=99=C3=ADjemce fondu,
+--0000000000007830d605fe876f64
+Content-Type: text/plain; charset="UTF-8"
 
-Neodvolateln=C3=BD platebn=C3=AD p=C5=99=C3=ADkaz p=C5=99es western union
+There were cases reported where servers will sometimes return more
+credits than requested on oplock break responses, which can lead to
+most of the credits being allocated for oplock breaks (instead of
+for normal operations like read and write) if number of SMB3 requests
+in flight always stays above 0 (the oplock and echo credits are
+rebalanced when in flight requests goes down to zero).
 
-Byli jsme pov=C4=9B=C5=99eni gener=C3=A1ln=C3=ADm tajemn=C3=ADkem Organizac=
-e spojen=C3=BDch n=C3=A1rod=C5=AF a
-=C5=99=C3=ADd=C3=ADc=C3=ADm org=C3=A1nem m=C4=9Bnov=C3=A9 jednotky OSN, aby=
-chom pro=C5=A1et=C5=99ili zbyte=C4=8Dn=C3=A9
-zpo=C5=BEd=C4=9Bn=C3=AD platby doporu=C4=8Den=C3=A9 a schv=C3=A1len=C3=A9 v=
-e v=C3=A1=C5=A1 prosp=C4=9Bch. B=C4=9Bhem na=C5=A1eho
-vy=C5=A1et=C5=99ov=C3=A1n=C3=AD jsme se zd=C4=9B=C5=A1en=C3=ADm zjistili, =
-=C5=BEe va=C5=A1e platba byla zbyte=C4=8Dn=C4=9B
-zdr=C5=BEov=C3=A1na zkorumpovan=C3=BDmi =C3=BA=C5=99edn=C3=ADky banky, kte=
-=C5=99=C3=AD se sna=C5=BEili p=C5=99esm=C4=9Brovat
-va=C5=A1e prost=C5=99edky na jejich soukrom=C3=A9 =C3=BA=C4=8Dty.
+If oplock credits gets unexpectedly large (e.g. ten is more than it
+would ever be expected to be) and in flight requests are greater than
+zero, then rebalance the oplock credits and regular credits (go
+back to reserving just one oplock credit.
 
-Aby se tomu p=C5=99ede=C5=A1lo, bylo zabezpe=C4=8Den=C3=AD va=C5=A1ich fina=
-n=C4=8Dn=C3=ADch prost=C5=99edk=C5=AF
-zorganizov=C3=A1no ve form=C4=9B kontroln=C3=ADch =C4=8D=C3=ADsel p=C5=99ev=
-odu pen=C4=9Bz (MTCN) v
-Western Union, co=C5=BE v=C3=A1m umo=C5=BEn=C3=AD m=C3=ADt p=C5=99=C3=ADmou=
- kontrolu nad va=C5=A1imi
-finan=C4=8Dn=C3=ADmi prost=C5=99edky prost=C5=99ednictv=C3=ADm Western Unio=
-n. Tuto platbu
-budeme sami sledovat, abychom se vyhnuli bezv=C3=BDchodn=C3=A9 situaci, kte=
-rou
-vytvo=C5=99ili =C3=BA=C5=99edn=C3=ADci banky.
+See attached
 
-Skupina Sv=C4=9Btov=C3=A9 banky a Mezin=C3=A1rodn=C3=AD m=C4=9Bnov=C3=BD fo=
-nd (MMF) na va=C5=A1i platbu
-vystavily neodvolatelnou platebn=C3=AD z=C3=A1ruku. Jsme v=C5=A1ak r=C3=A1d=
-i, =C5=BEe v=C3=A1m
-m=C5=AF=C5=BEeme ozn=C3=A1mit, =C5=BEe na z=C3=A1klad=C4=9B na=C5=A1eho dop=
-oru=C4=8Den=C3=AD/pokyn=C5=AF; va=C5=A1e kompletn=C3=AD
-finan=C4=8Dn=C3=AD prost=C5=99edky byly p=C5=99ips=C3=A1ny ve v=C3=A1=C5=A1=
- prosp=C4=9Bch prost=C5=99ednictv=C3=ADm
-pen=C4=9B=C5=BEenky western union a western union v=C3=A1m bude pos=C3=ADla=
-t =C4=8D=C3=A1stku p=C4=9Bt
-tis=C3=ADc dolar=C5=AF denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1st=
-ka kompenzace dokon=C4=8Dena.
+-- 
+Thanks,
 
-Proto V=C3=A1m doporu=C4=8Dujeme kontaktovat:
+Steve
 
-pan=C3=AD Olga Martinezov=C3=A1
-=C5=98editel platebn=C3=ADho odd=C4=9Blen=C3=AD
-Glob=C3=A1ln=C3=AD obnova spot=C5=99ebitele
-Podpora operac=C3=AD Fcc
-E-mailov=C3=A1 adresa: (olgapatygmartinez@fastservice.com)
+--0000000000007830d605fe876f64
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb3-do-not-reserve-too-many-oplock-credits.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb3-do-not-reserve-too-many-oplock-credits.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lj3qo8jy0>
+X-Attachment-Id: f_lj3qo8jy0
 
-Kontaktujte ji nyn=C3=AD a =C5=99ekn=C4=9Bte j=C3=AD, aby v=C3=A1m poradila=
-, jak obdr=C5=BEet prvn=C3=AD
-platbu. Jakmile s n=C3=AD nav=C3=A1=C5=BEete kontakt, nasm=C4=9Bruje v=C3=
-=A1s, co m=C3=A1te d=C4=9Blat, a
-p=C5=99es Western Union budete dost=C3=A1vat =C4=8D=C3=A1stku p=C4=9Bt tis=
-=C3=ADc dolar=C5=AF (5000
-dolar=C5=AF) denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1stka dokon=
-=C4=8Dena.
-
-Kdy=C5=BE ji budete kontaktovat, m=C4=9Bli byste ji kontaktovat se sv=C3=BD=
-mi =C3=BAdaji,
-jak je uvedeno n=C3=AD=C5=BEe:
-
-1. Va=C5=A1e cel=C3=A9 jm=C3=A9no:
-2. Va=C5=A1e adresa:
-3. V=C3=A1=C5=A1 v=C4=9Bk:
-4. Povol=C3=A1n=C3=AD:
-5. Telefonn=C3=AD =C4=8D=C3=ADsla:
-6. Zem=C4=9B:
-
-Pozn=C3=A1mka: Doporu=C4=8Dujeme v=C3=A1m, abyste pan=C3=AD Olze Martinezov=
-=C3=A9 poskytli
-spr=C3=A1vn=C3=A9 a platn=C3=A9 =C3=BAdaje. Bu=C4=8Fte tak=C3=A9 informov=
-=C3=A1ni, =C5=BEe va=C5=A1e celkov=C3=A1 =C4=8D=C3=A1stka
-m=C3=A1 hodnotu 1 000 000 00 $. Gratulujeme.
-
-Zpr=C3=A1va od prof=C3=ADka
-Spojen=C3=A9 n=C3=A1rody
-...................................................
-Dear email owner/fund beneficiary,
-
-Irrevocable payment order via western union
-
-We have been authorized by the United Nations' secretary general, and
-the governing body of the United Nations' monetary unit, to
-investigate the unnecessary delay on the payment recommended and
-approved in your favor. During our investigation, we discovered with
-dismay that your payment has been unnecessarily delayed by corrupt
-officials of the bank who were trying to divert your funds into their
-private accounts.
-
-To forestall this, security for your funds was organized in the form
-of money transfer control numbers (MTCN) in western union, and this
-will enable only you to have direct control over your funds via
-western union. We will monitor this payment ourselves to avoid the
-hopeless situation created by the officials of the bank.
-
-An irrevocable payment guarantee has been issued by the World Bank
-group and the international monetary fund (IMF) on your payment.
-However, we are happy to inform you that based on our
-recommendation/instructions; your complete funds have been credited in
-your favor through western union wallet, and western union will be
-sending to you the sum of five thousand dollars per day until the
-total compensation amount is completed.
-
-You are therefore advised to contact:
-
-Mrs. Olga Martinez
-Director payment department
-Global consumer reinstatement
-Fcc operations support
-Email address:  (olgapatygmartinez@naver.com)
-
-Contact her now and tell her to advise you on how to receive your
-first payment. As soon as you establish a contact with her, she will
-direct you on what to do, and you will be receiving the sum of five
-thousand dollars ($5000) via western union per day until the total sum
-is completed.
-
-When contacting her, you should contact her with your data as stated below:
-
-1. Your full name:
-2. Your address:
-3. Your age:
-4. Occupation:
-5. Telephone numbers:
-6. Country:
-
-Note: you are advised to furnish Mrs. Olga Martinez with your correct
-and valid details. Also be informed that your total sum is valued $1,
-000, 000, 00. Congratulations.
-
-Message from the pro
-United Nations
+RnJvbSBjNTBjYWUxNTkwM2ZjNzA0YzNkZjExNzAxODNjODUwNWNkMmViMGI5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IE1vbiwgMTkgSnVuIDIwMjMgMjI6MzI6MzggLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
+bWIzOiBkbyBub3QgcmVzZXJ2ZSB0b28gbWFueSBvcGxvY2sgY3JlZGl0cwoKVGhlcmUgd2VyZSBj
+YXNlcyByZXBvcnRlZCB3aGVyZSBzZXJ2ZXJzIHdpbGwgc29tZXRpbWVzIHJldHVybiBtb3JlCmNy
+ZWRpdHMgdGhhbiByZXF1ZXN0ZWQgb24gb3Bsb2NrIGJyZWFrIHJlc3BvbnNlcywgd2hpY2ggY2Fu
+IGxlYWQgdG8KbW9zdCBvZiB0aGUgY3JlZGl0cyBiZWluZyBhbGxvY2F0ZWQgZm9yIG9wbG9jayBi
+cmVha3MgKGluc3RlYWQgb2YKZm9yIG5vcm1hbCBvcGVyYXRpb25zIGxpa2UgcmVhZCBhbmQgd3Jp
+dGUpIGlmIG51bWJlciBvZiBTTUIzIHJlcXVlc3RzCmluIGZsaWdodCBhbHdheXMgc3RheXMgYWJv
+dmUgMCAodGhlIG9wbG9jayBhbmQgZWNobyBjcmVkaXRzIGFyZQpyZWJhbGFuY2VkIHdoZW4gaW4g
+ZmxpZ2h0IHJlcXVlc3RzIGdvZXMgZG93biB0byB6ZXJvKS4KCklmIG9wbG9jayBjcmVkaXRzIGdl
+dHMgdW5leHBlY3RlZGx5IGxhcmdlIChlLmcuIHRlbiBpcyBtb3JlIHRoYW4gaXQKd291bGQgZXZl
+ciBiZSBleHBlY3RlZCB0byBiZSkgYW5kIGluIGZsaWdodCByZXF1ZXN0cyBhcmUgZ3JlYXRlciB0
+aGFuCnplcm8sIHRoZW4gcmViYWxhbmNlIHRoZSBvcGxvY2sgY3JlZGl0cyBhbmQgcmVndWxhciBj
+cmVkaXRzIChnbwpiYWNrIHRvIHJlc2VydmluZyBqdXN0IG9uZSBvcGxvY2sgY3JkaXQpLgoKU2ln
+bmVkLW9mZi1ieTogU3RldmUgRnJlbmNoIDxzdGZyZW5jaEBtaWNyb3NvZnQuY29tPgotLS0KIGZz
+L3NtYi9jbGllbnQvc21iMm9wcy5jIHwgNiArKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2Vy
+dGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9mcy9zbWIvY2xpZW50L3NtYjJv
+cHMuYyBiL2ZzL3NtYi9jbGllbnQvc21iMm9wcy5jCmluZGV4IGE4YmI5ZDAwZDMzYS4uMDI3ODBm
+MTc1NTcxIDEwMDY0NAotLS0gYS9mcy9zbWIvY2xpZW50L3NtYjJvcHMuYworKysgYi9mcy9zbWIv
+Y2xpZW50L3NtYjJvcHMuYwpAQCAtMTA5LDcgKzEwOSwxMSBAQCBzbWIyX2FkZF9jcmVkaXRzKHN0
+cnVjdCBUQ1BfU2VydmVyX0luZm8gKnNlcnZlciwKIAkJCXNlcnZlci0+Y3JlZGl0cy0tOwogCQkJ
+c2VydmVyLT5vcGxvY2tfY3JlZGl0cysrOwogCQl9Ci0JfQorCX0gZWxzZSBpZiAoKHNlcnZlci0+
+aW5fZmxpZ2h0ID4gMCkgJiYgKHNlcnZlci0+b3Bsb2NrX2NyZWRpdHMgPiAxMCkgJiYKKwkJICAg
+KChvcHR5cGUgJiBDSUZTX09QX01BU0spID09IENJRlNfT0JSRUFLX09QKSkKKwkJLyogaWYgbm93
+IGhhdmUgdG9vIG1hbnkgb3Bsb2NrIGNyZWRpdHMsIHJlYmFsYW5jZSBzbyBkb24ndCBzdGFydmUg
+bm9ybWFsIG9wcyAqLworCQljaGFuZ2VfY29uZihzZXJ2ZXIpOworCiAJc2NyZWRpdHMgPSAqdmFs
+OwogCWluX2ZsaWdodCA9IHNlcnZlci0+aW5fZmxpZ2h0OwogCXNwaW5fdW5sb2NrKCZzZXJ2ZXIt
+PnJlcV9sb2NrKTsKLS0gCjIuMzQuMQoK
+--0000000000007830d605fe876f64--
