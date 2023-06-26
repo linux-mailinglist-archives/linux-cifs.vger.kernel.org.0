@@ -2,39 +2,39 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D258873D696
-	for <lists+linux-cifs@lfdr.de>; Mon, 26 Jun 2023 05:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2523473D697
+	for <lists+linux-cifs@lfdr.de>; Mon, 26 Jun 2023 05:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjFZDna (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 25 Jun 2023 23:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S229619AbjFZDnd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 25 Jun 2023 23:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFZDn3 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 25 Jun 2023 23:43:29 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF8B188
-        for <linux-cifs@vger.kernel.org>; Sun, 25 Jun 2023 20:43:26 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1687750996tygbpvnd
+        with ESMTP id S229490AbjFZDnc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 25 Jun 2023 23:43:32 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFDD188
+        for <linux-cifs@vger.kernel.org>; Sun, 25 Jun 2023 20:43:29 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1687751000twxojzaf
 Received: from localhost.localdomain ( [113.57.152.160])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 26 Jun 2023 11:43:15 +0800 (CST)
+        id ; Mon, 26 Jun 2023 11:43:20 +0800 (CST)
 X-QQ-SSF: 01400000000000F0H000000A0000000
-X-QQ-FEAT: 3M0okmaRx3jaQPzfpSY30cB71JE3+l7VvClHz0nSRgn8ncW8qHqGSJk/f8oaB
-        +NEURMWYhag5gGtMmfqv3lgL1VYfB/rVqMwEEo55njWBSQLWcBLdPUgkCQX+Be99Ghq/Akr
-        RqfxESq/7hySNBtVrz6HzU9yyxuWmY02PUXbo5f4NMJJxFRwsEZvhKROMlhJGaPcVAi4+3n
-        HljNTB5f/vW1F4EbQUZvjAuVgH8j1qAfQ1QIKPp0nLFDUooRoL5qedHb2R6ILrgC/N4Zlvt
-        xVEiGitjnYTZ+4GIK+N4/F+TU2PnmKJmLVSUrDZXSY/cpl0/0jL+Gm0cbmFjGvOP9+nUYYS
-        lrGIcLms6bJaJ9JRxydzaOiS1MCNCrl1BkoXJQUttppVWym9rWPTuCVEqZFwY/KLlOmkZ6Z
-        omMcsyW7YLIjpCxwEPxw1A==
+X-QQ-FEAT: XBN7tc9DADKXxs760OAG1jn2ehVU5Z3/jKnXCrlsBDF7h33YVS5Sxvemp2c3w
+        5PB7PbsDeOExDxk/PjBagHOaqXCV0zLNq2sXXxGmtayjUVusidc6M2PEE5Js6JTuzlPgdYO
+        QQRiQ/YCo3+vPMhaj98qrySkOLIhCauDC3c5P9OURY0r5p+Ex6tWbHpYOYEs42isRbdJkBQ
+        tRLGQeZf2uuSv+Go9e/nyiAr4za0Do5LU4cOHEZ2YPH4QoEO5fl9QtmSk1RFUFUcPb3z4JI
+        DMaE7rdq1HhT5m1bt+8GYpeyJGyBj8yZ+M7RtTYYtoq9SQKLv+eDe/XjY4gUI4+net1F0J6
+        hrAhrHYOB36FI6FJTuMe5AHKeUm4Cy+FUW/Zx8uVT9POeMLyhm4pvjoBj+x5m3fmv+Fg4Pm
+        gF1haFLdKaE6IsIWinodRA==
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 1665100745496941920
+X-BIZMAIL-ID: 3740028053831755796
 From:   Winston Wen <wentao@uniontech.com>
 To:     sfrench@samba.org, linux-cifs@vger.kernel.org, pc@manguebit.com,
         sprasad@microsoft.com
 Cc:     Winston Wen <wentao@uniontech.com>
-Subject: [PATCH 1/3] cifs: fix session state transition to avoid use-after-free issue
-Date:   Mon, 26 Jun 2023 11:42:55 +0800
-Message-Id: <20230626034257.2078391-2-wentao@uniontech.com>
+Subject: [PATCH 2/3] cifs: fix session state check in reconnect to avoid use-after-free issue
+Date:   Mon, 26 Jun 2023 11:42:56 +0800
+Message-Id: <20230626034257.2078391-3-wentao@uniontech.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230626034257.2078391-1-wentao@uniontech.com>
 References: <20230626034257.2078391-1-wentao@uniontech.com>
@@ -51,74 +51,35 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-We switch session state to SES_EXITING without cifs_tcp_ses_lock now,
-it may lead to potential use-after-free issue.
+Don't collect exiting session in smb2_reconnect_server(), because it
+will be released soon.
 
-Consider the following execution processes:
-
-Thread 1:
-__cifs_put_smb_ses()
-    spin_lock(&cifs_tcp_ses_lock)
-    if (--ses->ses_count > 0)
-        spin_unlock(&cifs_tcp_ses_lock)
-        return
-    spin_unlock(&cifs_tcp_ses_lock)
-        ---> **GAP**
-    spin_lock(&ses->ses_lock)
-    if (ses->ses_status == SES_GOOD)
-        ses->ses_status = SES_EXITING
-    spin_unlock(&ses->ses_lock)
-
-Thread 2:
-cifs_find_smb_ses()
-    spin_lock(&cifs_tcp_ses_lock)
-    list_for_each_entry(ses, ...)
-        spin_lock(&ses->ses_lock)
-        if (ses->ses_status == SES_EXITING)
-            spin_unlock(&ses->ses_lock)
-            continue
-        ...
-        spin_unlock(&ses->ses_lock)
-    if (ret)
-        cifs_smb_ses_inc_refcount(ret)
-    spin_unlock(&cifs_tcp_ses_lock)
-
-If thread 1 is preempted in the gap and thread 2 start executing, thread 2
-will get the session, and soon thread 1 will switch the session state to
-SES_EXITING and start releasing it, even though thread 1 had increased the
-session's refcount and still uses it.
-
-So switch session state under cifs_tcp_ses_lock to eliminate this gap.
+Note that the exiting session will stay in server->smb_ses_list until
+it complete the cifs_free_ipc() and logoff() and then delete itself
+from the list.
 
 Signed-off-by: Winston Wen <wentao@uniontech.com>
 ---
- fs/smb/client/connect.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ fs/smb/client/smb2pdu.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index 9d16626e7a66..165ecb222c19 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -1963,15 +1963,16 @@ void __cifs_put_smb_ses(struct cifs_ses *ses)
- 		spin_unlock(&cifs_tcp_ses_lock);
- 		return;
- 	}
-+	spin_lock(&ses->ses_lock);
-+	if (ses->ses_status == SES_GOOD)
-+		ses->ses_status = SES_EXITING;
-+	spin_unlock(&ses->ses_lock);
- 	spin_unlock(&cifs_tcp_ses_lock);
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index 17fe212ab895..e04766fe6f80 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -3797,6 +3797,12 @@ void smb2_reconnect_server(struct work_struct *work)
  
- 	/* ses_count can never go negative */
- 	WARN_ON(ses->ses_count < 0);
+ 	spin_lock(&cifs_tcp_ses_lock);
+ 	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
++		spin_lock(&ses->ses_lock);
++		if (ses->ses_status == SES_EXITING) {
++			spin_unlock(&ses->ses_lock);
++			continue;
++		}
++		spin_unlock(&ses->ses_lock);
  
- 	spin_lock(&ses->ses_lock);
--	if (ses->ses_status == SES_GOOD)
--		ses->ses_status = SES_EXITING;
--
- 	if (ses->ses_status == SES_EXITING && server->ops->logoff) {
- 		spin_unlock(&ses->ses_lock);
- 		cifs_free_ipc(ses);
+ 		tcon_selected = false;
+ 
 -- 
 2.40.1
 
