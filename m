@@ -2,71 +2,44 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C812673D298
-	for <lists+linux-cifs@lfdr.de>; Sun, 25 Jun 2023 18:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A778073D695
+	for <lists+linux-cifs@lfdr.de>; Mon, 26 Jun 2023 05:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjFYQ7A (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 25 Jun 2023 12:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S229777AbjFZDna (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 25 Jun 2023 23:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFYQ67 (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 25 Jun 2023 12:58:59 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A81C10D;
-        Sun, 25 Jun 2023 09:58:57 -0700 (PDT)
-Message-ID: <c6bdd0651da37fc6be56c269942eaf2f.pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1687712334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8htG7rHHL97H05txH4/SKfeVPifIbRS3sVXBTSrVOSE=;
-        b=D3TQs+t+fqsVCOxjbYzX4cBlkf8bknlCcKts8Uo6HfyveOsXzfP2iPdWV2e69VNPXKF+kX
-        LTQxCiNc9KCxKUPrsO2sr19YJG6S36t+Fixs1CZP9d5bGXzMHo/COmaVHRREPw3sz4iRwA
-        a5AklFyEhTQmjd7DaM/54PwUkYIRSojOGpyEVib75uoYSVAX1BvWNvqFAqN0wDAZpIoVWZ
-        MAfxMIGZxKTUnaBmHIc+yJ9FKQV9xFDUcIXQzz5V1OMT3EDF6U0zLd6rOKLkYqT6ECg/zB
-        Li2ddXXre26pZcPbkPpaEuEy1x3HALetpaewlXQMH5MPHERH4jiYJwAkDJO3LA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1687712334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8htG7rHHL97H05txH4/SKfeVPifIbRS3sVXBTSrVOSE=;
-        b=iRUBwExV1Lvs9hPbjJabR5A9ZJvEWiKRr7aF2LViMB2C3+TNXq32Wy9L4WzYgIVnhMviam
-        Bd7FhhDiIjrPzJ9R/SA/0QYwJe8LfPMy20xqHEKwnR6e15q3s3d1kPEUFCNr7wv0wMX+n9
-        0zx4rYBqZqVGAxLIXRfUrN8Z2Aw3XEWdrbwhPh7wXs0w4sG6RHTvNyp0is3ONFUqj5ufu8
-        mWNt1tdrCFW68hipZIEbidkiw5GOPn1a5fpw9xVXpO2gjbI1zuRRJhEfEVEpS3VmJZJfHm
-        A+mp0s1TtLWAj9hYqB5Ne8FPllaKQ9dDUuPQbGqiouDez1ZB8gLACK6nKV8Zgw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1687712334; a=rsa-sha256;
-        cv=none;
-        b=RE/enp8w7n7guB26rl6danqPfbSofenjJIHR4AXZ0A5p8ftHFsrLfG5HXuoyfDcgxsn0Ka
-        Vrbn/bNKPGSMpNezlEnXKbN7MXFydyZbk5nYM1kNuHGDvUehytDNbUVz3DrpLeqAX2HxG/
-        KMZyNL5uUqsH4pOlgXnhzyH2BaRn3XTSd4oy5a9GQv8TwfO/pwDPwDLTasTUA21v8j+GNe
-        k5SCkZea6kkdHhzPjjPX6fwQ7Q+qUQgrDC6HCAWBbUQGVkvKzsnJVoT6qcQ6/dZj4cVDdB
-        MFaLTsaREE4htp9dJPuXs+CWswRmEvsDyn0FbUbW42XiQoFQOWu7td0xUuoi9g==
-From:   Paulo Alcantara <pc@manguebit.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Rishabh Bhatnagar' <risbhat@amazon.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "pc@cjr.nz" <pc@cjr.nz>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        Aurelien Aptel <aaptel@suse.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: RE: [PATCH 5.4 2/5] cifs: Get rid of kstrdup_const()'d paths
-In-Reply-To: <043b05d64bca40509bab7dd8e368e4e5@AcuMS.aculab.com>
-References: <20230623213406.5596-1-risbhat@amazon.com>
- <20230623213406.5596-3-risbhat@amazon.com>
- <043b05d64bca40509bab7dd8e368e4e5@AcuMS.aculab.com>
-Date:   Sun, 25 Jun 2023 13:58:45 -0300
+        with ESMTP id S229619AbjFZDn3 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 25 Jun 2023 23:43:29 -0400
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ABD189
+        for <linux-cifs@vger.kernel.org>; Sun, 25 Jun 2023 20:43:25 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1687750991t98fphgg
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 26 Jun 2023 11:43:10 +0800 (CST)
+X-QQ-SSF: 01400000000000F0H000000A0000000
+X-QQ-FEAT: 4g9JbZ7lBbEdxKiVdvUE0lRRUtKekc3NXg7csNxZN/HgbCBLhq542jT6pD8UV
+        80FxoqNQ2OaC1aRA5GHeLEGLJNqLCpOOO2f5sLbNArtzEL/uL8rpndnZkyABOCnpflMBpwj
+        SVKkYY0MFviFPH6fUzvXfvrBeRG6D+7HoG59ocxuc+ZSf6PiPz6yZL96tS7jPdk5Z6jC8qw
+        i20hSpHK7ZSyg37SzaVEF+ZQ51cKbA21VN1I/nKatNPdiBZH/U914NY8BYNg8zgKm+xlCZ8
+        Jo++CoqNRveIfvmm/mcWBdm6NYHTAI7KrtcrP59SnRyIHkBHffwWL3vCbjAgf0n9Rypya6D
+        UHVy1ZoywrgDPkWW9tgSrHg2LqqW+3KxRH6dd4THJ05Bud3qhJa2ZqSGqEdJT9VJ/gKJTXC
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 204597781179879045
+From:   Winston Wen <wentao@uniontech.com>
+To:     sfrench@samba.org, linux-cifs@vger.kernel.org, pc@manguebit.com,
+        sprasad@microsoft.com
+Subject: [PATCH 0/3] cifs: fix session state checks to avoid use-after-free issues
+Date:   Mon, 26 Jun 2023 11:42:54 +0800
+Message-Id: <20230626034257.2078391-1-wentao@uniontech.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,22 +47,16 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> writes:
+The patchset has 3 patches that fix some problems related to session state check/transition to avoid use-after-free issues.
 
-> From: Rishabh Bhatnagar
->> Sent: 23 June 2023 22:34
->> From: "Paulo Alcantara (SUSE)" <pc@cjr.nz>
->> 
->> commit 199c6bdfb04b71d88a7765e08285885fbca60df4 upstream.
->> 
->> The DFS cache API is mostly used with heap allocated strings.
->> 
-> ...
->> -	ce->path = kstrdup_const(path, GFP_KERNEL);
->> +	ce->path = kstrndup(path, strlen(path), GFP_KERNEL);
->
-> That is entirely brain-dead.
+Winston Wen (3):
+      cifs: fix session state transition to avoid use-after-free issue
+      cifs: fix session state check in reconnect to avoid use-after-free issue
+      cifs: fix session state check in smb2_find_smb_ses
 
-Yep.  It's got fixed up later by
+ fs/smb/client/connect.c       | 7 ++++---
+ fs/smb/client/smb2pdu.c       | 6 ++++++
+ fs/smb/client/smb2transport.c | 7 +++++++
+ 3 files changed, 17 insertions(+), 3 deletions(-)
 
-        8d7672235533 ("cifs: don't cargo-cult strndup()")
+
