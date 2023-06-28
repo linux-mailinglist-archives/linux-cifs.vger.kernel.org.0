@@ -2,287 +2,159 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7C2740F41
-	for <lists+linux-cifs@lfdr.de>; Wed, 28 Jun 2023 12:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EC7741219
+	for <lists+linux-cifs@lfdr.de>; Wed, 28 Jun 2023 15:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjF1Kt5 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 28 Jun 2023 06:49:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46936 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230458AbjF1Kty (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:49:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687949347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=35xC16dMlQgwE6owW0vdiolQSi7usOC9ELk4zbmo8S8=;
-        b=D17RGDqbp7h2Pcip1Z+hlQw8d4/L3NHrEgaoUp03PlrOHyFP6V71qdfdjQWkF/zJP85s4n
-        cJuPk66xatfzzBnV2S8RqufE6GUNjTvuD5+VPWQK3bj1NNAADCR+RGJeJB8wszqHnACB3D
-        x3jkXXwl8KPLGb/ciB4E2Ls8CCy5fTA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-178-etuXAlI0MLCPNHRgBXUBRA-1; Wed, 28 Jun 2023 06:49:04 -0400
-X-MC-Unique: etuXAlI0MLCPNHRgBXUBRA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3433C3C02B6D;
-        Wed, 28 Jun 2023 10:49:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D68A8C09A07;
-        Wed, 28 Jun 2023 10:49:00 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Ilya Dryomov <idryomov@gmail.com>, linux-mm@kvack.org
-Subject: [PATCH v7 2/2] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
-Date:   Wed, 28 Jun 2023 11:48:52 +0100
-Message-ID: <20230628104852.3391651-3-dhowells@redhat.com>
-In-Reply-To: <20230628104852.3391651-1-dhowells@redhat.com>
-References: <20230628104852.3391651-1-dhowells@redhat.com>
+        id S231633AbjF1NQJ (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 28 Jun 2023 09:16:09 -0400
+Received: from mail-bn8nam11on2041.outbound.protection.outlook.com ([40.107.236.41]:2529
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231698AbjF1NPy (ORCPT <rfc822;linux-cifs@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:15:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jXVl/wKe7FOrmrjAWSgDszX/FnsFhfpU+oOVQ9Ms8yqVlWWxtz+fjlLzuuROMD5zDgeEB1mObmsFW4+f41UAzEJ1d0ev608YKgJd8QPPYVwDbYHF8NRBylhq4qs/jYpcUP4ZsDWAhBTgP7HGbm4foX6Hnpu8BgfzNGPa1EjRq8E7y1EWZAP1TuiV1Q0bzH2PCj5y+kbCCv3/1wXYlTSlkiMQTFF+5ot+b5h3B6tfyXWSEUwUZy8p4b9bhuHqWGrJu5f/19m7VgGJhYgfQgIZYsrEfFGG4fhGcfvZDTL4ZYT3eOB1K4Ow+r7vWumQSbSythYzs0J9ShZJr5AyoMg6eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=umv3tlOcwAKRea9FMCN3hru8uNNmYXLG4rjQkOyr/+0=;
+ b=UhLULac7W1o7mw+7qvHAaxX9gR4cXKcfslmfbMtIhiseE6E47bnA7YgnMhtqvigJJA3ufv8w4h8pIQPFceJW3NTeYM6CFGqQOEZkdTpSA45s6TuK8WmuAmUGTMBeap4rMMpXu2y6kGbXllCBHEDPvY0xLi0L7kyFWymDCh0utAcDncb9BI8qtgl6cGEBlqxEgNN6SNyZv6krubuk/PSl6gV0nOB/Ill6/fm2/nbeOAYu8svA4ou3f2u6zF0NF5b44sS9IDjRNSk5ZDTf7iiiYKQ45j2scTG8VFLobnvplF17dIzco0vMfYjo+SnoYNy8f7Nfrm/JBDuB6XFyAWmg0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=talpey.com; dmarc=pass action=none header.from=talpey.com;
+ dkim=pass header.d=talpey.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=talpey.com;
+Received: from SN6PR01MB4445.prod.exchangelabs.com (2603:10b6:805:e2::33) by
+ SA1PR01MB6784.prod.exchangelabs.com (2603:10b6:806:1a1::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.24; Wed, 28 Jun 2023 13:15:51 +0000
+Received: from SN6PR01MB4445.prod.exchangelabs.com
+ ([fe80::17e9:7e30:6603:23bc]) by SN6PR01MB4445.prod.exchangelabs.com
+ ([fe80::17e9:7e30:6603:23bc%5]) with mapi id 15.20.6521.023; Wed, 28 Jun 2023
+ 13:15:51 +0000
+Message-ID: <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
+Date:   Wed, 28 Jun 2023 09:15:49 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 0/3] dedupe smb unicode files
+Content-Language: en-US
+To:     linux@treblig.org, sfrench@samba.org, linkinjeon@kernel.org,
+        linux-cifs@vger.kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+References: <20230628011439.159678-1-linux@treblig.org>
+From:   Tom Talpey <tom@talpey.com>
+In-Reply-To: <20230628011439.159678-1-linux@treblig.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0176.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::31) To SN6PR01MB4445.prod.exchangelabs.com
+ (2603:10b6:805:e2::33)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR01MB4445:EE_|SA1PR01MB6784:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f1f5a2e-4b2d-47a6-7f9e-08db77d9cb7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1xfIL8URF8Ef6VReg32icpZma3Sd715dwET+M3lrr4yqAXnFBPRNl0LiFDH0BnFHq7jkN+IHtUvB+5eHziGO67kmS7ryb/v1UO5jlUA54zUWL0OGgsNriNqPwzyS1dBlgxPKnmS8JdqgOrPgayQZIzT6KjnJJ/eBF6JdPe1q8Xrjmd0htVgC39XExruvt4sqJEwpkkpAB3xKjMMszQkUQ0EseCjKwBXYhKXUNCBhPjCGiunTxvqemjIB3knG7PcHcs1YjdWgzSCjhBV1Cv3JuATqV1/9pWuB2+5GDjPJhJkvCzrnbjAz5lxznJmKG+uK1MexJpNoEB3bKbGmOl9t4p7Bt1VNSQlWWH11xl6vzzws9rVm2/pMO5w6pg77k4CDFO1iFw7p4zaOntHkKK8+XdfdK2Qu5noZ55a4guSRoBQ0UiEvqvPRp5mfvVQQ7Tbg74GrwKU4Ds4Na5zcO9mRUD4jzoViSKJX9cLGWn101VYnVymwhcqTFDPZYadScZMTP/cHzoJx+ntzmOj9DzNoqtwGjnupHfTGggL/HUkYsseCcPSAd22Xl0Yi+Q+/poKh+fLXPuvdxGcj1aDHR+cJ79WSEmEyRiuxKS7DyvsZrmx/qru3yTaQu14NFu31JgriisbgI5ylsk4gQBKWonWSeQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4445.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(136003)(376002)(346002)(39830400003)(451199021)(31686004)(36756003)(53546011)(6506007)(66476007)(5660300002)(86362001)(316002)(4326008)(66556008)(41300700001)(8936002)(38100700002)(31696002)(66946007)(38350700002)(8676002)(6486002)(966005)(6512007)(2906002)(186003)(26005)(478600001)(52116002)(83380400001)(2616005)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGNrVHEyS05pOXVhUytGRFoveTF0b2RMRDZRejh2cEhKbVM0YzZQSVJ6TFJE?=
+ =?utf-8?B?elhPaldseWMrYXM0Uk1KbnlLdVpZUzI0RlVLTFN6RVpZdkdNS1pOS1U5NFZF?=
+ =?utf-8?B?M1dob1RzaWlTd1RNVUE5cHRFZGNwb0xJc1JUc0hBSk5vaUZIQkhSY1hWZmZa?=
+ =?utf-8?B?dW9sVTV3TlFCbmNOd1MwS1kyMC9YZ1k4Nk00bjRySjE4TjFaaTQ2QzlLblZ0?=
+ =?utf-8?B?dWRaZGtDMWZRa3NZM1ZjdWVYdGFoay9ENDVzZHYrU1VJWk1ReVFuRmZraHA1?=
+ =?utf-8?B?QmwwSUI3TnNjVmQ0VlJpenJialZMRWdrUnU2Z1JwVkFkclNBMGx2dHhIcCty?=
+ =?utf-8?B?NGJvSUpSNklWZFlXNWg1cjdMNU03MjJCQ2ZRRHRzNFlYZmpEbEEwbE5Wakdy?=
+ =?utf-8?B?UUh2OEhRZzkxME9OM0NQRW1CMWx1WkNpR2syb291Z0JGZXdKbFNZL2pJbnlx?=
+ =?utf-8?B?VlJDcWV2R1EzeUtGdlhHOHF4RytSb2h4SWg5aTNuZ0pUUy9qZitUV29QMkEz?=
+ =?utf-8?B?VTJBUnRRcFRieHdsUVZSd0dwVXVhZk1mY2h2cWd1Vkh1NXhEZWpKNXZmbjNI?=
+ =?utf-8?B?a0xzQndKaWRDby82c1FvNS9jMXpkZ1Ixb2pHcHFPNC9CdEd3SUlPMjB5U1FS?=
+ =?utf-8?B?QnUyb0xsdnAvMXNwYUJud25sY04wWWlyZGxWUjF4TGl4RXhOR2Q1NVBUbE92?=
+ =?utf-8?B?RmRWeVZFVVAybkYxVHU1eE9XcDQwT3p1dWw2ZkdZbDBvZnhkRFlaR1p1ZWJs?=
+ =?utf-8?B?bkRIZUFYQWNIMFlLY0hjR2hoQkNoMk1rRlp3Vm9jZE84T01hVjduckRSdTU0?=
+ =?utf-8?B?bWdrd2J3OGxmTDhnQTRXNmxGWGwxZE1mR0d0czR2MGRsQXdNM1dmcm1ycWRD?=
+ =?utf-8?B?cmRmZWJWNkY4Sm1JZzYvR09KSEx4TFJ1bVk1NUtQWEcveG9Rb1UzbjloaERJ?=
+ =?utf-8?B?NG5MV1FJSjF3RVpPSHlwVVN1TVVGUG01RUdSamxwazJMR1FKTnM0K3FrazVW?=
+ =?utf-8?B?cmY4Yytzc3RJQXBoeFNaaXhMd0wrRHJNODk2RnVnVU9McU15N1FVeVhpNzd4?=
+ =?utf-8?B?YUwvZXMzRGg1NC9yOE1mVVJSbXVmYzlMeGUvNjduY2Jaa0l0ZFBpaTE0bEZp?=
+ =?utf-8?B?dStOenYzbko4T0pXNHd0amVXRkM0eWVRUGl3dW9ZQVZ2UTZpRGlzc0wrckda?=
+ =?utf-8?B?MHRQRHU2RDllcTVXaFhmcTF6T3J6M0h6WUczL2QyWmxFTURvbmQyUjFDZHdl?=
+ =?utf-8?B?MFRCOG44S1d4SjErV1VoSHE2aXQ2WmVsbXBOakRvWkQvVFB6MGZmaElJMEVz?=
+ =?utf-8?B?V2JmcWJLb3QvRWxxTUpNNWNWVE9BUmVFWlZGUDBaQXJTWWhZb2IvaXFJbFVP?=
+ =?utf-8?B?ZVFic0dkN0lRL29lY1BmdHpFQkhVbmx2WjFnUllrSzhJMkllOEQvYXlHYVRi?=
+ =?utf-8?B?Uk55OW02N294NTl0K1ZJVFZaSWVLUzgyRjI1TlBsYTNrRDluR0Z5SUc5VGVI?=
+ =?utf-8?B?SVAzNzdGZUFZcmxabWZqYmhTN01LeG4rTE1neDJRbTNYeWFrOEREUUpmTFVV?=
+ =?utf-8?B?NktpOGR2N0E0R2UwdkcrZ3QreEZUTjhKbVFqZW95cG84R3Z3dmJGbWRuNVZV?=
+ =?utf-8?B?QlhQR0hvVVJBRDU5R0NXb0FOT0xTN1d6U1RvbzFRWnhJazZhUms3WWovRTBC?=
+ =?utf-8?B?VEdZQnlhdHUwZkJjYnpndkR4cWZXOERrVngxaFRvUmpOeExSS0pkZm5lckhG?=
+ =?utf-8?B?VHY0TWdwK1dnT1lXVGtDUUlvNnF3OWY3amZGZ2FkQkhBRXdHQjFrM0RFS1Rv?=
+ =?utf-8?B?Zi9SL2d0TlZoR2lHMnloWWk2aUtvNTZWdnM4b2NWNDJ3NitBWEY3WUg5dVZH?=
+ =?utf-8?B?QTFUaHlHUGtLRnRlVmp2ckJYSjluOGlKVWVVNTk5N2p3MFFCSHdwMTFEZ2t4?=
+ =?utf-8?B?MkVtMVAyNkRFc3JxYklqM0w4RGh2Z1pkaUw2U1FueGlJNWZYaDZqOEloekwz?=
+ =?utf-8?B?RkQ0R1ZaNXlJVVArY29lRDhHQmgzS1RxRTB6bmc3RW53RkUvaVJoSERvaWlN?=
+ =?utf-8?B?U0h3TVd2YjYrUnFjSG4xZUJLblJWb0Nub1BOQUhiNUdCakRsL1FIdzkxSlJj?=
+ =?utf-8?Q?g9uiznqCG2sSZGjdmtukphLxr?=
+X-OriginatorOrg: talpey.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f1f5a2e-4b2d-47a6-7f9e-08db77d9cb7e
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4445.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 13:15:50.9976
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 2b2dcae7-2555-4add-bc80-48756da031d5
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5uFo9HEswso7UVRFr8qy1bCrjwSFCD7/YeCFPvJpcRFBMbeleMM0V45ABj3qUHjz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6784
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Fscache has an optimisation by which reads from the cache are skipped until
-we know that (a) there's data there to be read and (b) that data isn't
-entirely covered by pages resident in the netfs pagecache.  This is done
-with two flags manipulated by fscache_note_page_release():
+On 6/27/2023 9:14 PM, linux@treblig.org wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> 
+> The smb client and server code have (mostly) duplicated code
+> for unicode manipulation, in particular upper case handling.
+> 
+> Flatten this lot into shared code.
+> 
+> There's some code that's slightly different between the two, and
+> I've not attempted to share that - this should be strictly a no
+> behaviour change set.
+> 
+> I'd love to also boil out the same code from fs/jfs/ - but that's
+> a thought for another time (and harder since there's no good test
+> for it).
+> 
+> Lightly tested with a module and a monolithic build, and just mounting
+> itself.
+> 
+> This dupe was found using PMD:
+>    https://pmd.github.io/pmd/pmd_userdocs_cpd.html
+> 
+> Dave
+> 
+> Dr. David Alan Gilbert (3):
+>    fs/smb: Remove unicode 'lower' tables
+>    fs/smb: Swing unicode common code from server->common
+>    fs/smb/client: Use common code in client
+> 
+>   fs/smb/client/cifs_unicode.c                  |   1 -
+>   fs/smb/client/cifs_unicode.h                  | 313 +-----------------
+>   fs/smb/client/cifs_uniupr.h                   | 239 -------------
+>   fs/smb/common/Makefile                        |   1 +
+>   .../uniupr.h => common/cifs_unicode_common.c} | 156 +--------
+>   fs/smb/common/cifs_unicode_common.h           | 279 ++++++++++++++++
 
-	if (...
-	    test_bit(FSCACHE_COOKIE_HAVE_DATA, &cookie->flags) &&
-	    test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags))
-		clear_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags);
+So far so good, but please drop the "cifs_" prefix from this new file's
+name, since its contents apply to later smb dialects as well.
 
-where the NO_DATA_TO_READ flag causes cachefiles_prepare_read() to indicate
-that netfslib should download from the server or clear the page instead.
+Tom.
 
-The fscache_note_page_release() function is intended to be called from
-->releasepage() - but that only gets called if PG_private or PG_private_2
-is set - and currently the former is at the discretion of the network
-filesystem and the latter is only set whilst a page is being written to the
-cache, so sometimes we miss clearing the optimisation.
-
-Fix this by following Willy's suggestion[1] and adding an address_space
-flag, AS_RELEASE_ALWAYS, that causes filemap_release_folio() to always call
-->release_folio() if it's set, even if PG_private or PG_private_2 aren't
-set.
-
-Note that this would require folio_test_private() and page_has_private() to
-become more complicated.  To avoid that, in the places[*] where these are
-used to conditionalise calls to filemap_release_folio() and
-try_to_release_page(), the tests are removed the those functions just
-jumped to unconditionally and the test is performed there.
-
-[*] There are some exceptions in vmscan.c where the check guards more than
-just a call to the releaser.  I've added a function, folio_needs_release()
-to wrap all the checks for that.
-
-AS_RELEASE_ALWAYS should be set if a non-NULL cookie is obtained from
-fscache and cleared in ->evict_inode() before truncate_inode_pages_final()
-is called.
-
-Additionally, the FSCACHE_COOKIE_NO_DATA_TO_READ flag needs to be cleared
-and the optimisation cancelled if a cachefiles object already contains data
-when we open it.
-
-Fixes: 1f67e6d0b188 ("fscache: Provide a function to note the release of a page")
-Fixes: 047487c947e8 ("cachefiles: Implement the I/O routines")
-Reported-by: Rohith Surabattula <rohiths.msft@gmail.com>
-Suggested-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Linus Torvalds <torvalds@linux-foundation.org>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Dave Wysochanski <dwysocha@redhat.com>
-cc: Dominique Martinet <asmadeus@codewreck.org>
-cc: Ilya Dryomov <idryomov@gmail.com>
-cc: linux-cachefs@redhat.com
-cc: linux-cifs@vger.kernel.org
-cc: linux-afs@lists.infradead.org
-cc: v9fs-developer@lists.sourceforge.net
-cc: ceph-devel@vger.kernel.org
-cc: linux-nfs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-mm@kvack.org
----
-
-Notes:
-    ver #7)
-     - Make NFS set AS_RELEASE_ALWAYS.
-    
-    ver #4)
-     - Split out merging of folio_has_private()/filemap_release_folio() call
-       pairs into a preceding patch.
-     - Don't need to clear AS_RELEASE_ALWAYS in ->evict_inode().
-    
-    ver #3)
-     - Fixed mapping_clear_release_always() to use clear_bit() not set_bit().
-     - Moved a '&&' to the correct line.
-    
-    ver #2)
-     - Rewrote entirely according to Willy's suggestion[1].
-
- fs/9p/cache.c           |  2 ++
- fs/afs/internal.h       |  2 ++
- fs/cachefiles/namei.c   |  2 ++
- fs/ceph/cache.c         |  2 ++
- fs/nfs/fscache.c        |  3 +++
- fs/smb/client/fscache.c |  2 ++
- include/linux/pagemap.h | 16 ++++++++++++++++
- mm/internal.h           |  5 ++++-
- 8 files changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/fs/9p/cache.c b/fs/9p/cache.c
-index cebba4eaa0b5..12c0ae29f185 100644
---- a/fs/9p/cache.c
-+++ b/fs/9p/cache.c
-@@ -68,6 +68,8 @@ void v9fs_cache_inode_get_cookie(struct inode *inode)
- 				       &path, sizeof(path),
- 				       &version, sizeof(version),
- 				       i_size_read(&v9inode->netfs.inode));
-+	if (v9inode->netfs.cache)
-+		mapping_set_release_always(inode->i_mapping);
- 
- 	p9_debug(P9_DEBUG_FSC, "inode %p get cookie %p\n",
- 		 inode, v9fs_inode_cookie(v9inode));
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index 9d3d64921106..da73b97e19a9 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -681,6 +681,8 @@ static inline void afs_vnode_set_cache(struct afs_vnode *vnode,
- {
- #ifdef CONFIG_AFS_FSCACHE
- 	vnode->netfs.cache = cookie;
-+	if (cookie)
-+		mapping_set_release_always(vnode->netfs.inode.i_mapping);
- #endif
- }
- 
-diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-index d9d22d0ec38a..7bf7a5fcc045 100644
---- a/fs/cachefiles/namei.c
-+++ b/fs/cachefiles/namei.c
-@@ -585,6 +585,8 @@ static bool cachefiles_open_file(struct cachefiles_object *object,
- 	if (ret < 0)
- 		goto check_failed;
- 
-+	clear_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &object->cookie->flags);
-+
- 	object->file = file;
- 
- 	/* Always update the atime on an object we've just looked up (this is
-diff --git a/fs/ceph/cache.c b/fs/ceph/cache.c
-index 177d8e8d73fe..de1dee46d3df 100644
---- a/fs/ceph/cache.c
-+++ b/fs/ceph/cache.c
-@@ -36,6 +36,8 @@ void ceph_fscache_register_inode_cookie(struct inode *inode)
- 				       &ci->i_vino, sizeof(ci->i_vino),
- 				       &ci->i_version, sizeof(ci->i_version),
- 				       i_size_read(inode));
-+	if (ci->netfs.cache)
-+		mapping_set_release_always(inode->i_mapping);
- }
- 
- void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info *ci)
-diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
-index 8c35d88a84b1..b05717fe0d4e 100644
---- a/fs/nfs/fscache.c
-+++ b/fs/nfs/fscache.c
-@@ -180,6 +180,9 @@ void nfs_fscache_init_inode(struct inode *inode)
- 					       &auxdata,      /* aux_data */
- 					       sizeof(auxdata),
- 					       i_size_read(inode));
-+
-+	if (netfs_inode(inode)->cache)
-+		mapping_set_release_always(inode->i_mapping);
- }
- 
- /*
-diff --git a/fs/smb/client/fscache.c b/fs/smb/client/fscache.c
-index 8f6909d633da..3677525ee993 100644
---- a/fs/smb/client/fscache.c
-+++ b/fs/smb/client/fscache.c
-@@ -108,6 +108,8 @@ void cifs_fscache_get_inode_cookie(struct inode *inode)
- 				       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
- 				       &cd, sizeof(cd),
- 				       i_size_read(&cifsi->netfs.inode));
-+	if (cifsi->netfs.cache)
-+		mapping_set_release_always(inode->i_mapping);
- }
- 
- void cifs_fscache_unuse_inode_cookie(struct inode *inode, bool update)
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index a56308a9d1a4..a1176ceb4a0c 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -199,6 +199,7 @@ enum mapping_flags {
- 	/* writeback related tags are not used */
- 	AS_NO_WRITEBACK_TAGS = 5,
- 	AS_LARGE_FOLIO_SUPPORT = 6,
-+	AS_RELEASE_ALWAYS,	/* Call ->release_folio(), even if no private data */
- };
- 
- /**
-@@ -269,6 +270,21 @@ static inline int mapping_use_writeback_tags(struct address_space *mapping)
- 	return !test_bit(AS_NO_WRITEBACK_TAGS, &mapping->flags);
- }
- 
-+static inline bool mapping_release_always(const struct address_space *mapping)
-+{
-+	return test_bit(AS_RELEASE_ALWAYS, &mapping->flags);
-+}
-+
-+static inline void mapping_set_release_always(struct address_space *mapping)
-+{
-+	set_bit(AS_RELEASE_ALWAYS, &mapping->flags);
-+}
-+
-+static inline void mapping_clear_release_always(struct address_space *mapping)
-+{
-+	clear_bit(AS_RELEASE_ALWAYS, &mapping->flags);
-+}
-+
- static inline gfp_t mapping_gfp_mask(struct address_space * mapping)
- {
- 	return mapping->gfp_mask;
-diff --git a/mm/internal.h b/mm/internal.h
-index a76314764d8c..86aef26df905 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -175,7 +175,10 @@ static inline void set_page_refcounted(struct page *page)
-  */
- static inline bool folio_needs_release(struct folio *folio)
- {
--	return folio_has_private(folio);
-+	struct address_space *mapping = folio->mapping;
-+
-+	return folio_has_private(folio) ||
-+		(mapping && mapping_release_always(mapping));
- }
- 
- extern unsigned long highest_memmap_pfn;
-
+>   fs/smb/server/unicode.c                       |   1 -
+>   fs/smb/server/unicode.h                       | 301 +----------------
+>   8 files changed, 298 insertions(+), 993 deletions(-)
+>   delete mode 100644 fs/smb/client/cifs_uniupr.h
+>   rename fs/smb/{server/uniupr.h => common/cifs_unicode_common.c} (50%)
+>   create mode 100644 fs/smb/common/cifs_unicode_common.h
+> 
