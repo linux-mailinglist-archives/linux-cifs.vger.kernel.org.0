@@ -2,397 +2,113 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2F77407D6
-	for <lists+linux-cifs@lfdr.de>; Wed, 28 Jun 2023 03:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F9F740909
+	for <lists+linux-cifs@lfdr.de>; Wed, 28 Jun 2023 05:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjF1BzD (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 27 Jun 2023 21:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S230405AbjF1DvW (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 27 Jun 2023 23:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjF1BzC (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 27 Jun 2023 21:55:02 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB712297B
-        for <linux-cifs@vger.kernel.org>; Tue, 27 Jun 2023 18:54:58 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1687917291t1p9wuj7
-Received: from winn-pc ( [113.57.152.160])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 28 Jun 2023 09:54:50 +0800 (CST)
-X-QQ-SSF: 01400000000000F0H000000A0000000
-X-QQ-FEAT: +FHoQ0ZR2/ZCBNmBj+HykU/iKmI2bhvXx/7CgxeQVnNbF+RCoUb2zjYSKM1NW
-        diAAs/dVqslIhyMbLQrT9th9tFBsOtLW+W1gNHW3j7wQ0D7cpDzNDjdTZrQcWIFoRxKdwDE
-        fCO5Nh5bwNB16e1N2Hr+zxHyTeyThBbMo5doiSrJmXr0iN35Tn/9YNNGMJ5ldY6LQZw5mS2
-        cl+8R8dWtyRHMxrWXe2XlvbPPs8puAC1WFcU9UQAmqLF5Qy2Buer2ADSUSMioO/qOHyZt79
-        a7xQBVG8ANm0aGYsZdcvvOAs3/0lKsAQzDvegGdTJjX3uFkV4A4w1HY00VaCo8hEbAmfeTQ
-        M0BXCv98uEIz6Xsd80bbKIy0MKsqpvFTrf/0AKy+L+PHhrRQRAZo9Nnup4J14qN1ckRRl2a
-        kWgIxfGQL4o=
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 665374868247882260
-Date:   Wed, 28 Jun 2023 09:54:49 +0800
-From:   Winston Wen <wentao@uniontech.com>
-To:     Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <smfrench@gmail.com>
-Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org, pc@manguebit.com,
-        sprasad@microsoft.com
-Subject: Re: [PATCH 1/3] cifs: fix session state transition to avoid
- use-after-free issue
-Message-ID: <4D492F4BF381CB0F+20230628095449.13f5ca57@winn-pc>
-In-Reply-To: <20230628084333.7c9b8469@winn-pc>
-References: <20230626034257.2078391-1-wentao@uniontech.com>
-        <20230626034257.2078391-2-wentao@uniontech.com>
-        <CANT5p=pD+s8h33rgyjLHkJhz-OkAt3PMP5Oz612Qm3GO-PE2EQ@mail.gmail.com>
-        <CAH2r5mtE8EmEPdxHc+AT256-ekzH1wjmTO+DbODHx+5PEYC9eA@mail.gmail.com>
-        <CANT5p=oETR0vg29rGohLXoeqw0Lrrt8GsLbhjV6snLth7od=Nw@mail.gmail.com>
-        <5C32A54005DEE4A2+20230626163909.1bd13a8a@winn-pc>
-        <CANT5p=otyXgTf+UO1e2TQFUFbrhEwoV=xe861tJUWNiErUBG_g@mail.gmail.com>
-        <6DE3D09EA3AEE6B1+20230627153429.7c34759f@winn-pc>
-        <CANT5p=pVwUUL2s_cOfxyw50bukT_iwpiCGvXHENqgYhkaD5oBg@mail.gmail.com>
-        <20230628084333.7c9b8469@winn-pc>
-Organization: Uniontech
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        with ESMTP id S229892AbjF1DvU (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 27 Jun 2023 23:51:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9068E2D75
+        for <linux-cifs@vger.kernel.org>; Tue, 27 Jun 2023 20:51:19 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so4822551e87.3
+        for <linux-cifs@vger.kernel.org>; Tue, 27 Jun 2023 20:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687924278; x=1690516278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eSKTTTgyXKeDCVzR/GXnDTyTU8ahYX/IPrhkvfaKMSk=;
+        b=IEMafbePa1CpIHuhbjAZ1LqO2Z/voep6zST9NJ5domNbnFrXHbprPJLHF5NOx252uX
+         +ZSe9a2tHdN3hd4NsKQi/Da1o8J5nu6cp6DUjYYtSjsWsJn0cyFVNiwUcyPlmBD7X3m4
+         zERSxzEuit7Ek715kCeEq4/LrM84O8x2OPr2cxEBuKnrirkk6bdwEJtB/hI9eWyhfqK2
+         A0+1/JnXpQjbmsRSzV96g6eESRzwYfKLNtnCOFmA4PQij/QCJZ+3DHktXyyjcHhZjDij
+         AWQ4Mj2kCnIoNtmKGYWLDXhOVkH+d4xVUivdnx+JcF0Vg4EwEFWSDCdkrIxMzFvgcDfm
+         OPag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687924278; x=1690516278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eSKTTTgyXKeDCVzR/GXnDTyTU8ahYX/IPrhkvfaKMSk=;
+        b=FJ+NH5jIXQiEItsy2a7PiIiBFCFC0pKTlRvDfjMnep5ZjpzojHAd9EkCbBOab+r8Sr
+         R6xIGfIGhwBFPiuDrKWqMPAIzxprlsJmzWM6gWVSiOKdOYgSYK8I66ZX/5SxkiR2210B
+         doD1OgcbU4P0DqOevvvYLH6Htwd7jULOd6EA2aAi6I5obGIRdr9DQ/JIxaLJfL9Uns2L
+         ssx1vu30JK81ns10SRG0x7kFtumkJG8og20BOnPUdPnlqIFyVDOxBimKWlrbaPl9q14T
+         U1uu9hpOhlzDMpEXrGIfBeNeUx+msRobta1rrqJr6B+Eu5f+IFEyC3GNwhoNZMhII103
+         9Y4Q==
+X-Gm-Message-State: AC+VfDyWJKoLeS1WYEn3hFZw+fqxJMU2+6JGjOwZjBO6vEwgygX5u9Um
+        vigrDyJDNbaEOPZKgWSRXOdf1YZ7p82V077gH2zgPPXt
+X-Google-Smtp-Source: ACHHUZ6iutdNdukIvf0MoMun4t0kjBIIuDf1FzQrpRIGxWQkzducKNlCBFi7T/cX8e/qlDfzPQQ+T/BiL+nv1XR77Rc=
+X-Received: by 2002:a05:6512:401e:b0:4f9:a232:f09c with SMTP id
+ br30-20020a056512401e00b004f9a232f09cmr7235685lfb.63.1687924277521; Tue, 27
+ Jun 2023 20:51:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/Tcuu9/BhKkjYZq9spOW06mm"
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230628002450.18781-1-pc@manguebit.com> <20230628002450.18781-4-pc@manguebit.com>
+In-Reply-To: <20230628002450.18781-4-pc@manguebit.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 27 Jun 2023 22:51:06 -0500
+Message-ID: <CAH2r5muvsac+DCRu3GPaqzBzA4earezeubGvwE5hZEDoKHDtBg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] smb: client: improve DFS mount check
+To:     Paulo Alcantara <pc@manguebit.com>
+Cc:     linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---MP_/Tcuu9/BhKkjYZq9spOW06mm
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+tentatively merged all 4 into cifs-2.6.git for-next pending additional
+review and testing
 
-On Wed, 28 Jun 2023 08:43:33 +0800
-Winston Wen <wentao@uniontech.com> wrote:
+On Tue, Jun 27, 2023 at 7:25=E2=80=AFPM Paulo Alcantara <pc@manguebit.com> =
+wrote:
+>
+> Some servers may return error codes from REQ_GET_DFS_REFERRAL requests
+> that are unexpected by the client, so to make it easier, assume
+> non-DFS mounts when the client can't get the initial DFS referral of
+> @ctx->UNC in dfs_mount_share().
+>
+> Signed-off-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
+> ---
+>  fs/smb/client/dfs.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
+> index afbaef05a1f1..a7f2e0608adf 100644
+> --- a/fs/smb/client/dfs.c
+> +++ b/fs/smb/client/dfs.c
+> @@ -264,8 +264,9 @@ int dfs_mount_share(struct cifs_mount_ctx *mnt_ctx, b=
+ool *isdfs)
+>         if (!nodfs) {
+>                 rc =3D dfs_get_referral(mnt_ctx, ctx->UNC + 1, NULL, NULL=
+);
+>                 if (rc) {
+> -                       if (rc !=3D -ENOENT && rc !=3D -EOPNOTSUPP && rc =
+!=3D -EIO)
+> -                               return rc;
+> +                       cifs_dbg(FYI, "%s: no dfs referral for %s: %d\n",
+> +                                __func__, ctx->UNC + 1, rc);
+> +                       cifs_dbg(FYI, "%s: assuming non-dfs mount...\n", =
+__func__);
+>                         nodfs =3D true;
+>                 }
+>         }
+> --
+> 2.41.0
+>
 
-> On Tue, 27 Jun 2023 17:43:25 +0530
-> Shyam Prasad N <nspmangalore@gmail.com> wrote:
->=20
-> > On Tue, Jun 27, 2023 at 1:04=E2=80=AFPM Winston Wen <wentao@uniontech.c=
-om>
-> > wrote:
-> > >
-> > > On Tue, 27 Jun 2023 12:24:04 +0530
-> > > Shyam Prasad N <nspmangalore@gmail.com> wrote:
-> > >
-> > > > On Mon, Jun 26, 2023 at 2:09=E2=80=AFPM Winston Wen
-> > > > <wentao@uniontech.com> wrote:
-> > > > >
-> > > > > On Mon, 26 Jun 2023 12:24:35 +0530
-> > > > > Shyam Prasad N <nspmangalore@gmail.com> wrote:
-> > > > >
-> > > > > > On Mon, Jun 26, 2023 at 10:54=E2=80=AFAM Steve French
-> > > > > > <smfrench@gmail.com> wrote:
-> > > > > > >
-> > > > > > > Added Cc: stable and Shyam's RB and merged into
-> > > > > > > cifs-2.6.git for-next
-> > > > > > >
-> > > > > > > On Mon, Jun 26, 2023 at 12:15=E2=80=AFAM Shyam Prasad N
-> > > > > > > <nspmangalore@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Jun 26, 2023 at 9:25=E2=80=AFAM Winston Wen
-> > > > > > > > <wentao@uniontech.com> wrote:
-> > > > > > > > >
-> > > > > > > > > We switch session state to SES_EXITING without
-> > > > > > > > > cifs_tcp_ses_lock now, it may lead to potential
-> > > > > > > > > use-after-free issue.
-> > > > > > > > >
-> > > > > > > > > Consider the following execution processes:
-> > > > > > > > >
-> > > > > > > > > Thread 1:
-> > > > > > > > > __cifs_put_smb_ses()
-> > > > > > > > >     spin_lock(&cifs_tcp_ses_lock)
-> > > > > > > > >     if (--ses->ses_count > 0)
-> > > > > > > > >         spin_unlock(&cifs_tcp_ses_lock)
-> > > > > > > > >         return
-> > > > > > > > >     spin_unlock(&cifs_tcp_ses_lock)
-> > > > > > > > >         ---> **GAP**
-> > > > > > > > >     spin_lock(&ses->ses_lock)
-> > > > > > > > >     if (ses->ses_status =3D=3D SES_GOOD)
-> > > > > > > > >         ses->ses_status =3D SES_EXITING
-> > > > > > > > >     spin_unlock(&ses->ses_lock)
-> > > > > > > > >
-> > > > > > > > > Thread 2:
-> > > > > > > > > cifs_find_smb_ses()
-> > > > > > > > >     spin_lock(&cifs_tcp_ses_lock)
-> > > > > > > > >     list_for_each_entry(ses, ...)
-> > > > > > > > >         spin_lock(&ses->ses_lock)
-> > > > > > > > >         if (ses->ses_status =3D=3D SES_EXITING)
-> > > > > > > > >             spin_unlock(&ses->ses_lock)
-> > > > > > > > >             continue
-> > > > > > > > >         ...
-> > > > > > > > >         spin_unlock(&ses->ses_lock)
-> > > > > > > > >     if (ret)
-> > > > > > > > >         cifs_smb_ses_inc_refcount(ret)
-> > > > > > > > >     spin_unlock(&cifs_tcp_ses_lock)
-> > > > > > > > >
-> > > > > > > > > If thread 1 is preempted in the gap and thread 2 start
-> > > > > > > > > executing, thread 2 will get the session, and soon
-> > > > > > > > > thread 1 will switch the session state to SES_EXITING
-> > > > > > > > > and start releasing it, even though thread 1 had
-> > > > > > > > > increased the session's refcount and still uses it.
-> > > > > > > > >
-> > > > > > > > > So switch session state under cifs_tcp_ses_lock to
-> > > > > > > > > eliminate this gap.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Winston Wen <wentao@uniontech.com>
-> > > > > > > > > ---
-> > > > > > > > >  fs/smb/client/connect.c | 7 ++++---
-> > > > > > > > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/fs/smb/client/connect.c
-> > > > > > > > > b/fs/smb/client/connect.c index
-> > > > > > > > > 9d16626e7a66..165ecb222c19 100644 ---
-> > > > > > > > > a/fs/smb/client/connect.c +++
-> > > > > > > > > b/fs/smb/client/connect.c @@ -1963,15 +1963,16 @@
-> > > > > > > > > void __cifs_put_smb_ses(struct cifs_ses *ses)
-> > > > > > > > > spin_unlock(&cifs_tcp_ses_lock); return;
-> > > > > > > > >         }
-> > > > > > > > > +       spin_lock(&ses->ses_lock);
-> > > > > > > > > +       if (ses->ses_status =3D=3D SES_GOOD)
-> > > > > > > > > +               ses->ses_status =3D SES_EXITING;
-> > > > > > > > > +       spin_unlock(&ses->ses_lock);
-> > > > > > > > >         spin_unlock(&cifs_tcp_ses_lock);
-> > > > > > > > >
-> > > > > > > > >         /* ses_count can never go negative */
-> > > > > > > > >         WARN_ON(ses->ses_count < 0);
-> > > > > > > > >
-> > > > > > > > >         spin_lock(&ses->ses_lock);
-> > > > > > > > > -       if (ses->ses_status =3D=3D SES_GOOD)
-> > > > > > > > > -               ses->ses_status =3D SES_EXITING;
-> > > > > > > > > -
-> > > > > > > > >         if (ses->ses_status =3D=3D SES_EXITING &&
-> > > > > > > > > server->ops->logoff) { spin_unlock(&ses->ses_lock);
-> > > > > > > > >                 cifs_free_ipc(ses);
-> > > > > > > > > --
-> > > > > > > > > 2.40.1
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > Good catch.
-> > > > > > > > Looks good to me.
-> > > > > > > > @Steve French Please CC stable for this one.
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > Regards,
-> > > > > > > > Shyam
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > --
-> > > > > > > Thanks,
-> > > > > > >
-> > > > > > > Steve
-> > > > > >
-> > > > > > @Winston Wen I think the following change should be
-> > > > > > sufficient to fix this issue:
-> > > > > > diff --git a/fs/smb/client/connect.c
-> > > > > > b/fs/smb/client/connect.c index 9d16626e7a66..78874eb2537d
-> > > > > > 100644 --- a/fs/smb/client/connect.c
-> > > > > > +++ b/fs/smb/client/connect.c
-> > > > > > @@ -1963,10 +1963,11 @@ void __cifs_put_smb_ses(struct
-> > > > > > cifs_ses *ses) spin_unlock(&cifs_tcp_ses_lock);
-> > > > > >                 return;
-> > > > > >         }
-> > > > > > -       spin_unlock(&cifs_tcp_ses_lock);
-> > > > > >
-> > > > > >         /* ses_count can never go negative */
-> > > > > >         WARN_ON(ses->ses_count < 0);
-> > > > > > +       list_del_init(&ses->smb_ses_list);
-> > > > > > +       spin_unlock(&cifs_tcp_ses_lock);
-> > > > > >
-> > > > > >         spin_lock(&ses->ses_lock);
-> > > > > >         if (ses->ses_status =3D=3D SES_GOOD)
-> > > > > > @@ -1986,9 +1987,6 @@ void __cifs_put_smb_ses(struct
-> > > > > > cifs_ses *ses) cifs_free_ipc(ses);
-> > > > > >         }
-> > > > > >
-> > > > > > -       spin_lock(&cifs_tcp_ses_lock);
-> > > > > > -       list_del_init(&ses->smb_ses_list);
-> > > > > > -       spin_unlock(&cifs_tcp_ses_lock);
-> > > > > >
-> > > > > >         chan_count =3D ses->chan_count;
-> > > > > >
-> > > > > > The bug was that the ses was kept in the smb ses list, even
-> > > > > > after the ref count had reached 0.
-> > > > > > With the above change, that should be fixed, and no one
-> > > > > > should be able to get to the ses from that point.
-> > > > > >
-> > > > > > Please let me know if you see a problem with this.
-> > > > > >
-> > > > >
-> > > > > Hi Shyam,
-> > > > >
-> > > > > Thanks for the comments! And sorry for my late reply...
-> > > > >
-> > > > > It make sense to me that maybe we should remove the session
-> > > > > from the list once its refcount is reduced to 0 to avoid any
-> > > > > futher access. In fact, I did try to do this from the
-> > > > > beginning. But I was not sure if we need to access the session
-> > > > > from the list in the free process, such as the following:
-> > > > >
-> > > > > smb2_check_receive()
-> > > > >   smb2_verify_signature()
-> > > > >     server->ops->calc_signature()
-> > > > >       smb2_calc_signature()
-> > > > >         smb2_find_smb_ses()
-> > > > >           /* scan the list and find the session */
-> > > > >
-> > > > > Perhaps we need some refactoring here.
-> > > >
-> > > > Yes. The above ses finding is expected to fail during a
-> > > > reconnect.
-> > >
-> > > Agreed.
-> > >
-> > > >
-> > > > >
-> > > > > So I gave up on this approach and did a small fix to make it
-> > > > > work, but maybe I missed something elsewhere...
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Thanks,
-> > > > > Winston
-> > > >
-> > > > Attaching the above change as a patch.
-> > > > It replaces this particular patch in the series.
-> > >
-> > > I think this is a better way to fix the problem, the session
-> > > really should not stay in the list and be found after it has been
-> > > marked EXITING.
-> > >
-> > > >
-> > > > The other two patches are not strictly necessary with this
-> > > > change, but don't hurt.
-> > > >
-> > >
-> > > Yes. Feel free to drop them if they are not necessary. And if
-> > > that's the case, perhaps we should do some cleaning work on other
-> > > paths to ensure consistency.
-> >=20
-> > I don't really have a strong opinion about this. Even if they stay,
-> > I'm okay. But curious to know what you mean by the cleaning work on
-> > other paths here. Do you still think there's more cleanup needed
-> > around this?
->=20
-> IIRC there are other paths that scan the list and do the
-> check, like cifs_find_smb_ses(). So I think if they become unnecessary
-> now after this fix patch, maybe we can also remove them at the same
-> time to avoid make others confused.
->=20
-> But I also don't have a strong opinion about this. I think we have the
-> following options and all are okay to me. Which one do you prefer?
->=20
-> - keep/add the check
-> - remove all checks
-> - remove all checks and add a WARNING
->=20
-> (I think we shouldn't find a exiting session in the list now.)
->=20
-> >=20
-> > >
-> > > Thanks for your review and comments!
-> > >
-> > > >
-> > > > --
-> > > > Regards,
-> > > > Shyam
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > > Winston
-> >=20
-> >=20
-> >=20
->=20
->=20
->=20
-
-Attaching the patch (remove all checks and add a warning)
 
 --=20
 Thanks,
-Winston
 
---MP_/Tcuu9/BhKkjYZq9spOW06mm
-Content-Type: text/x-patch
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename=0001-cifs-give-a-warning-if-existing-session-is-found-in-.patch
-
-From 047495d974dc896313a8c5a258ee654e0bdfefa2 Mon Sep 17 00:00:00 2001
-From: Winston Wen <wentao@uniontech.com>
-Date: Wed, 28 Jun 2023 09:03:39 +0800
-Subject: [PATCH] cifs: give a warning if existing session is found in server's
- list
-
-With Shyam's fix [1], we remove smb session from the list before setting
-its state to SES_EXITING, so we should never find a exiting session in
-the list now.
-
-Remove the check and add a warning.
-
-[1] https://lore.kernel.org/linux-cifs/CANT5p=oETR0vg29rGohLXoeqw0Lrrt8GsLbhjV6snLth7od=Nw@mail.gmail.com/
-
-Signed-off-by: Winston Wen <wentao@uniontech.com>
----
- fs/smb/client/connect.c       | 6 ++----
- fs/smb/client/smb2pdu.c       | 1 +
- fs/smb/client/smb2transport.c | 2 ++
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index 78874eb2537d..3d35dc742615 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -1920,11 +1920,9 @@ cifs_find_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- 
- 	spin_lock(&cifs_tcp_ses_lock);
- 	list_for_each_entry(ses, &server->smb_ses_list, smb_ses_list) {
-+		WARN_ON(ses->ses_status == SES_EXITING);
-+
- 		spin_lock(&ses->ses_lock);
--		if (ses->ses_status == SES_EXITING) {
--			spin_unlock(&ses->ses_lock);
--			continue;
--		}
- 		spin_lock(&ses->chan_lock);
- 		if (match_session(ses, ctx)) {
- 			spin_unlock(&ses->chan_lock);
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index 17fe212ab895..4d4504a8e63e 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -3797,6 +3797,7 @@ void smb2_reconnect_server(struct work_struct *work)
- 
- 	spin_lock(&cifs_tcp_ses_lock);
- 	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
-+		WARN_ON(ses->ses_status == SES_EXITING);
- 
- 		tcon_selected = false;
- 
-diff --git a/fs/smb/client/smb2transport.c b/fs/smb/client/smb2transport.c
-index 790acf65a092..d0f9373620c7 100644
---- a/fs/smb/client/smb2transport.c
-+++ b/fs/smb/client/smb2transport.c
-@@ -151,6 +151,8 @@ smb2_find_smb_ses_unlocked(struct TCP_Server_Info *server, __u64 ses_id)
- 	pserver = CIFS_SERVER_IS_CHAN(server) ? server->primary_server : server;
- 
- 	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
-+		WARN_ON(ses->ses_status == SES_EXITING);
-+
- 		if (ses->Suid != ses_id)
- 			continue;
- 		++ses->ses_count;
--- 
-2.40.1
-
-
---MP_/Tcuu9/BhKkjYZq9spOW06mm--
+Steve
