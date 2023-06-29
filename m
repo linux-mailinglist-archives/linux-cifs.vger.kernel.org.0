@@ -2,46 +2,48 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23047422CB
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jun 2023 10:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569447422D0
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jun 2023 11:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjF2I7m (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 29 Jun 2023 04:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S232097AbjF2JAN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 29 Jun 2023 05:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2I7k (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 29 Jun 2023 04:59:40 -0400
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BCCE4B
-        for <linux-cifs@vger.kernel.org>; Thu, 29 Jun 2023 01:59:38 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688029170t5li198q
+        with ESMTP id S232371AbjF2I76 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 29 Jun 2023 04:59:58 -0400
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3462E4B
+        for <linux-cifs@vger.kernel.org>; Thu, 29 Jun 2023 01:59:55 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1688029182te8nlnxs
 Received: from localhost.localdomain ( [113.57.152.160])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 16:59:29 +0800 (CST)
+        id ; Thu, 29 Jun 2023 16:59:34 +0800 (CST)
 X-QQ-SSF: 01400000000000F0H000000A0000000
-X-QQ-FEAT: zT6n3Y95oi1aCGkfXogeSa7YQtC2lUYv1KYRnqbdWTTG6yl+PB/9g2NexvJBB
-        A6dEwSWHOEZolVS+rqLhwCZeN+kaTInUnlCWTivYT5nlKIv7Pl/eyfo7goCPPC9lj6HBzxo
-        okBGgzrPkjivzfwJuJamFYCxuBQkDMtuNLMQwzZeyFQG7cnGYaA8xNhcFycekjzJbRLUow6
-        eKaId0oH/3WF3Pji+TjRhgG/yZqciknBc3G29Yy9NyRWy2t5k8Gyv3eWNFvlXRTFG0U7V+l
-        jLZI1C/5xEmbDKskOyoNQ1OZWZtOQW+5xW5DGZjqPtlLQmrVhhPbDMYA3Sn93JaM01VFAzM
-        VjC8dktLYhOn2/DEl0Dx210+soN6+I/b83tb9/sURvUMxfXxor+jCUxk4viNKcNX5TFdMvn
-        ClCOgLDhkNM=
+X-QQ-FEAT: WP/PdQRFMYs8L0/4aWn/8mGsurvVJEdL43dlS+uxRokZl8yhk+mPOSYWKwWiz
+        zjUTBQVHnv9by/aiMjahHNy8s2CWzQjraiEkNCVnodAeYTQLjr8xP1lRZPC1VVipyWYcPKC
+        LdrCkGxG3bsVFUtTX9GNu+FpKyXpFQF6AQpmzhQj3Jvka7WcNYxb+ckUgPyZ6QfMoOVAsaW
+        wHqFehqJWwZCMf9GONoPw/Qe15SEidmX1LPdxcnrkGSQei4ns/9OI6Pcox+mdyK7Id2yHpH
+        KLkg0cvmaBl5uDyo934qEwtvnv/te7TWHoDPcsd/kBNVUNsCcrU8fpW4BuC9JwcG2XQDxom
+        OpyWMdWRRq+1I7mIFHLQogB0snNtXwSDSR6CmpwAYl5Dbp/BuSrYPdfHEzf5jnLF11ICKgM
+        z/6HXtL5pwrBegj7dM61dC1OzhHY7maD
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8565504980206895837
+X-BIZMAIL-ID: 6905205907467928356
 From:   Winston Wen <wentao@uniontech.com>
 To:     smfrench@gmail.com, linux-cifs@vger.kernel.org, pc@manguebit.com,
         nspmangalore@gmail.com
 Cc:     Winston Wen <wentao@uniontech.com>
-Subject: [PATCH 1/3] cifs: fix credit leaks in async callback
-Date:   Thu, 29 Jun 2023 16:58:56 +0800
-Message-Id: <20230629085858.2834937-1-wentao@uniontech.com>
+Subject: [PATCH 2/3] cifs: stop waiting for credits if there are no more requests in flight
+Date:   Thu, 29 Jun 2023 16:58:57 +0800
+Message-Id: <20230629085858.2834937-2-wentao@uniontech.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230629085858.2834937-1-wentao@uniontech.com>
+References: <20230629085858.2834937-1-wentao@uniontech.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6a-1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,45 +51,85 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Initialize credits.value to 1, which will be passed to add_credits() if
-mid->mid_state is not MID_RESPONSE_RECEIVED or MID_RESPONSE_MALFORMED.
+A compound request will wait for credits if free credits are not enough
+now but there are in flight requests which might bring back some credits
+to meet our needs in the near future.
+
+But if the in-flight requests don't bring back enough credits, the
+compound request will continue to wait unnecessarily until it times out
+(60s now).
+
+So add a helper has_credits_or_insufficient() to check if we should stop
+waiting for credits in the loop to return faster.
 
 Signed-off-by: Winston Wen <wentao@uniontech.com>
 ---
- fs/smb/client/smb2pdu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/smb/client/cifsglob.h  | 13 +++++++++++++
+ fs/smb/client/transport.c | 16 +++++++++++++---
+ 2 files changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index e04766fe6f80..4c71979fca6d 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -3760,7 +3760,7 @@ smb2_echo_callback(struct mid_q_entry *mid)
- {
- 	struct TCP_Server_Info *server = mid->callback_data;
- 	struct smb2_echo_rsp *rsp = (struct smb2_echo_rsp *)mid->resp_buf;
--	struct cifs_credits credits = { .value = 0, .instance = 0 };
-+	struct cifs_credits credits = { .value = 1, .instance = 0 };
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index cb38c29b9a73..43d0a675b543 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -800,6 +800,19 @@ has_credits(struct TCP_Server_Info *server, int *credits, int num_credits)
+ 	return num >= num_credits;
+ }
  
- 	if (mid->mid_state == MID_RESPONSE_RECEIVED
- 	    || mid->mid_state == MID_RESPONSE_MALFORMED) {
-@@ -4150,7 +4150,7 @@ smb2_readv_callback(struct mid_q_entry *mid)
- 	struct TCP_Server_Info *server = rdata->server;
- 	struct smb2_hdr *shdr =
- 				(struct smb2_hdr *)rdata->iov[0].iov_base;
--	struct cifs_credits credits = { .value = 0, .instance = 0 };
-+	struct cifs_credits credits = { .value = 1, .instance = 0 };
- 	struct smb_rqst rqst = { .rq_iov = &rdata->iov[1], .rq_nvec = 1 };
++static inline bool
++has_credits_or_insufficient(struct TCP_Server_Info *server, int *credits, int num_credits)
++{
++	int scredits;
++	int in_flight;
++
++	spin_lock(&server->req_lock);
++	scredits = *credits;
++	in_flight = server->in_flight;
++	spin_unlock(&server->req_lock);
++	return scredits >= num_credits || in_flight == 0;
++}
++
+ static inline void
+ add_credits(struct TCP_Server_Info *server, const struct cifs_credits *credits,
+ 	    const int optype)
+diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+index f280502a2aee..82071142d72b 100644
+--- a/fs/smb/client/transport.c
++++ b/fs/smb/client/transport.c
+@@ -534,11 +534,21 @@ wait_for_free_credits(struct TCP_Server_Info *server, const int num_credits,
+ 		spin_lock(&server->req_lock);
+ 		if (*credits < num_credits) {
+ 			scredits = *credits;
++			in_flight = server->in_flight;
++			if (in_flight == 0) {
++				spin_unlock(&server->req_lock);
++				trace_smb3_insufficient_credits(server->CurrentMid,
++						server->conn_id, server->hostname, scredits,
++						num_credits, in_flight);
++				cifs_dbg(FYI, "%s: %d requests in flight, needed %d total=%d\n",
++						__func__, in_flight, num_credits, scredits);
++				return -EDEADLK;
++			}
+ 			spin_unlock(&server->req_lock);
  
- 	if (rdata->got_bytes) {
-@@ -4402,7 +4402,7 @@ smb2_writev_callback(struct mid_q_entry *mid)
- 	struct TCP_Server_Info *server = wdata->server;
- 	unsigned int written;
- 	struct smb2_write_rsp *rsp = (struct smb2_write_rsp *)mid->resp_buf;
--	struct cifs_credits credits = { .value = 0, .instance = 0 };
-+	struct cifs_credits credits = { .value = 1, .instance = 0 };
- 
- 	WARN_ONCE(wdata->server != mid->server,
- 		  "wdata server %p != mid server %p",
+ 			cifs_num_waiters_inc(server);
+ 			rc = wait_event_killable_timeout(server->request_q,
+-				has_credits(server, credits, num_credits), t);
++				has_credits_or_insufficient(server, credits, num_credits), t);
+ 			cifs_num_waiters_dec(server);
+ 			if (!rc) {
+ 				spin_lock(&server->req_lock);
+@@ -578,8 +588,8 @@ wait_for_free_credits(struct TCP_Server_Info *server, const int num_credits,
+ 				cifs_num_waiters_inc(server);
+ 				rc = wait_event_killable_timeout(
+ 					server->request_q,
+-					has_credits(server, credits,
+-						    MAX_COMPOUND + 1),
++					has_credits_or_insufficient(server, credits,
++								MAX_COMPOUND + 1),
+ 					t);
+ 				cifs_num_waiters_dec(server);
+ 				if (!rc) {
 -- 
 2.40.1
 
