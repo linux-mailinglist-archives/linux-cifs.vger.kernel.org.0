@@ -2,94 +2,134 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B19175D63D
-	for <lists+linux-cifs@lfdr.de>; Fri, 21 Jul 2023 23:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829FE75D800
+	for <lists+linux-cifs@lfdr.de>; Sat, 22 Jul 2023 02:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjGUVNU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 21 Jul 2023 17:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S229905AbjGVAAd (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 21 Jul 2023 20:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjGUVNU (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 21 Jul 2023 17:13:20 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319573A82;
-        Fri, 21 Jul 2023 14:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=lcJTNqRfG0mUbBpf0GldfJX03xDDVNXhUA/82mJ4Hcg=; b=d7E64/U87yqqjVZQBCQCP4nAVj
-        ErluQYoVQC0B/tpxx2WHgIozt2fE4m9D63syItC0OFFoiO1UvggtjLuM9obFGHU9WQQYrogvaj82/
-        CiiuPUTdlmyqEliHZoG7uKf+FcAiouez0a3vjPIuhUlb626mrSMFIH0+NxAc0JpyYWY9PoEnBGCoT
-        2N9Mo40i1aJzIN6F7qVMG4Cm/Iz7K8PIENPZSBzcM1N6OVI3hNwtPH8QG5ElQ5l79DpCAnjcctEBP
-        rF+ux/dp/YLUZUHJkEmG9NZw0Bdmr5rmG76p5DaZ72+ffJRZ4jW6GzXnPacMAM5MKva9I6TzwI3Nw
-        wcBr8Gjg==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1qMxQO-002dYJ-BL; Fri, 21 Jul 2023 21:12:32 +0000
-Date:   Fri, 21 Jul 2023 21:12:32 +0000
-From:   "Dr. David Alan Gilbert" <dave@treblig.org>
-To:     Paulo Alcantara <pc@manguebit.com>, smfrench@gmail.com
-Cc:     Tom Talpey <tom@talpey.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        linkinjeon@kernel.org, shaggy@kernel.org,
-        linux-cifs@vger.kernel.org, krisman@collabora.com,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] dedupe smb unicode files
-Message-ID: <ZLr0wFMKhEaannov@gallifrey>
-References: <ZK80mu/YbHLEABAB@gallifrey>
- <CAH2r5mvrhr52hXFv87O9O=Qw45AXRXr0NQAsTk4Wj-6s19-2bA@mail.gmail.com>
- <CAH2r5mss4RsEF1b6gJo8LFWsN9-YBSEP6GV7axsNhX7ihj5CqA@mail.gmail.com>
- <ZLhchajZaWEVM6D7@gallifrey>
- <79bbb44c-f3b1-5c5c-1ad4-bcaab0069666@oracle.com>
- <d1f7fbe9-8fe2-e3e3-d6ff-1544204202ff@talpey.com>
- <ZLnJzUynpTBvZGtA@gallifrey>
- <f8f4a2c5-05d3-0b2d-688f-b3274a98fc73@talpey.com>
- <ZLrxYzGXJzsLmGDs@gallifrey>
- <16f50dff126af9b20f9b99ca056ad5fa.pc@manguebit.com>
+        with ESMTP id S229533AbjGVAAc (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 21 Jul 2023 20:00:32 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA4130E3
+        for <linux-cifs@vger.kernel.org>; Fri, 21 Jul 2023 17:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=vp737VbsI9W+BcFCzc9mxmjcPCYbLamKCzu+Y239O28=; b=xdBXuW2/1nJ1PAEcws5jeVWmbp
+        uMcKSpa1UZJmxDfPVynSE0cgi2jc2xGncsk8d9cH99cLQxuPLMtdtEFlelAwaSgQAEQG9m44lIvAn
+        Ur8Am6mfC+6DZJEbo3lL87w5aHrAg52g7etxBiUKa3qHI6rMbYkNpEe/pJikUDXySiFCSy03P5b2y
+        C9wEsuD6Q0pnFZlzs81tHdJ4yTSKf+D/6knZw65IMVgiMOpRIC44DM8CESNgJZ28rCM6VvbvvvOg0
+        MpTOftAu9wcOV4q6Vc+Cq4sXCERdr5JnIc7pCtlW1lFdncuAbHTroCmm3Nmirbt1XlX5Bf+yMlMTf
+        fSJhfkFtgaBwJHEHPot6VPktA5MDZ7BkqR6PhD1cQQ4MoVa0gBxHqsXCCcJK8dlxEtjIPuEw63Uw+
+        OJ3Los58TI6hucHrl1Lqea5l/dX5ZBG2y7BmGHrUaUARp/qG6cUOxRNAD5N4+8u9bVMeM0hRSgEtK
+        qH44ELBVr9fZcbr93vqzhLUC;
+Received: from [2a01:4f8:192:486::6:0] (port=58338 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qN02i-003Q3H-0t
+        for cifs-qa@samba.org;
+        Sat, 22 Jul 2023 00:00:17 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qN02f-001ePH-Jk
+        for cifs-qa@samba.org;
+        Sat, 22 Jul 2023 00:00:14 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15428] New: Linux mount.smb3 Fails With Windows Host After
+ Update July 2023 Update kb5028166
+Date:   Sat, 22 Jul 2023 00:00:11 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 4.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: sbharvey@verizon.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ qa_contact target_milestone attachments.created
+Message-ID: <bug-15428-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <16f50dff126af9b20f9b99ca056ad5fa.pc@manguebit.com>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-23-amd64 (x86_64)
-X-Uptime: 21:11:06 up 15 days,  6:42,  1 user,  load average: 0.06, 0.01, 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-* Paulo Alcantara (pc@manguebit.com) wrote:
-> "Dr. David Alan Gilbert" <linux@treblig.org> writes:
-> 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/checkpatch.pl#n3737
-> > 	if ($realfile =~ /\.(h|s|S)$/) {
-> > 		$comment = '/*';
-> > 	} elsif ($realfile =~ /\.(c|rs|dts|dtsi)$/) {
-> > 		$comment = '//';
-> >
-> > I don't get where that idea came from.
-> 
-> Check Documentation/process/license-rules.rst.
+https://bugzilla.samba.org/show_bug.cgi?id=3D15428
 
-Oh, that's a painful history!
-Hmm that landed just after I posted a v3 (of just this patch)
+            Bug ID: 15428
+           Summary: Linux mount.smb3 Fails With Windows Host After Update
+                    July 2023 Update kb5028166
+           Product: CifsVFS
+           Version: 4.x
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: user space tools
+          Assignee: jlayton@samba.org
+          Reporter: sbharvey@verizon.net
+        QA Contact: cifs-qa@samba.org
+  Target Milestone: ---
 
-Steve: Your call, do you want me to post a v4 with that comment
-back and but with the copyright lineas as in v3?
+Created attachment 17993
+  --> https://bugzilla.samba.org/attachment.cgi?id=3D17993&action=3Dedit
+Successful mount.smb3 prior to windows update
 
-Dave
+Prior to July 2023 windows host "shares" could be mounted in Linux Servers =
+with
+the command mount.smb3.  After Windows security update kb5028166 the mount
+command no longer functions.=20
 
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+I believe this is related bug 15418 "Secure Channel Faulty ..."=20
+Attachments are added that show that a Windows 10 host "share" can be mount=
+ed
+successfully and when the share cannot be added after the Window 10/11 secu=
+rity
+update kb5028166 has been applied.
+
+Here is the dmesg message when the mount.smb3 command fails:
+cat dmesg_mnt_failure.txt
+[507009.217361] CIFS: Attempting to mount //win10-testhost.harvey.net/public
+[509040.494271] CIFS: Attempting to mount //win10-testhost.harvey.net/public
+[509040.665517] CIFS: Status code returned 0xc000018d
+STATUS_TRUSTED_RELATIONSHIP_FAILURE
+
+Linux Version and distribution:
+swupd info
+Distribution:      Clear Linux OS
+Installed version: 39630
+Version URL:       https://cdn.download.clearlinux.org/update
+Content URL:       https://cdn.download.clearlinux.org/update
+
+uname -a
+Linux netserver03 6.4.3-1333.native #1 SMP Mon Jul 10 21:56:56 PDT 2023 x86=
+_64
+GNU/Linux
+
+samba --version
+Version 4.18.1
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
