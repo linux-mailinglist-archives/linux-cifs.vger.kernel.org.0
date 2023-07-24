@@ -2,75 +2,97 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3522475EE21
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Jul 2023 10:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825AD75FB0E
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Jul 2023 17:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjGXIpT (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 24 Jul 2023 04:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S230078AbjGXPos (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 24 Jul 2023 11:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjGXIpG (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 24 Jul 2023 04:45:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4403E42;
-        Mon, 24 Jul 2023 01:45:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32AC760F13;
-        Mon, 24 Jul 2023 08:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E764BC433C8;
-        Mon, 24 Jul 2023 08:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690188303;
-        bh=hP4ovmU6B3WVf/5esttvkylIjaVnP6CtrBNzRRpBJBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fYl/LUcPg1lG8hkErJs5cFhFlKu4a1xAlRl7JP2D1bNw5Zlj2Nh+NYVwZbeBwe1Gn
-         Ixi56pOe+6gqTmm282kgsxmdh0pY2pH5huTomtimQvC+wzasWZSEDUxZum6KMw+yQ9
-         aa/AN+eNwxux8B+UVdOP8S6hQGH/Oba2cTxQKGYmkLrHx4R7dVvv6Z/1VuB3Q+Udzv
-         53TjIGVZBspMPgmIlGPzToP7jJdSwttqPlU7aaC1M+KWqmxd4PmM8tNJbjrsKc/0LZ
-         g83gr3xga/vwX4HGMI+GwvCHFrCW6Bs33yTGusWeN+B2p7OxvAoJvHOfKoq/wbt6sT
-         pslJp8jwU6v3A==
-Date:   Mon, 24 Jul 2023 10:44:58 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Winston Wen <wentao@uniontech.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paulo Alcantara <pc@manguebit.com>
-Subject: Re: [PATCH 1/2] fs/nls: make load_nls() take a const parameter
-Message-ID: <20230724-modifikation-geldinstitut-4122e1262c40@brauner>
-References: <20230724021057.2958991-1-wentao@uniontech.com>
- <20230724021057.2958991-2-wentao@uniontech.com>
+        with ESMTP id S229688AbjGXPos (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 24 Jul 2023 11:44:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52C311F
+        for <linux-cifs@vger.kernel.org>; Mon, 24 Jul 2023 08:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=+XSO9kpYWSMjrDyXW65U6xwM6RE9OhfIK16wl424J14=; b=mdnCx/gTgczcvDQIIDp4TCQ0RQ
+        qrjs4reZN2Z4G1Df8D7D/PL/35fbFctGFMvudZ1eU7LrJStfwlWPWQNvLB1mM4Zg4WwtBKYWr+Wb3
+        YDFmHnErmApzkEm8AzWoIwwoKiyljsFNQRLFPDEC1gQZCoaqlGErSCO3D/AEL+MSDJDM/Kuwl4h+E
+        bTt4MPRkTMoODL8AVsd0d0LGT/87flzuixAn4TNuksTdOvV1adz0yRX6JB160+SvajuF9b5Frh+E4
+        puGMrW+m85nsQJZlIP6Lb1TylLd84jti/R0bMCtmVXZWPH4EM0bAkbrEr+8ydcmLjYeKouOWvbjdC
+        FDu5+t8yfaOykuAxGA59IiD1JupUcP+iOuMjJoZ9UvDLoad5AgNqltikaPAah5Xx4nLPF1sIa1Rwk
+        sWF/4cXKiAT30i3QSW/kjLaDomV705dxbiMrT8IcnG5X0ZD8arpHoJVy0bHM7z83voh3Ju0KNZ/ym
+        F2oOBC9uPj2Pq4I3CD556oDL;
+Received: from [2a01:4f8:192:486::6:0] (port=34924 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qNxjo-003r55-1I
+        for cifs-qa@samba.org;
+        Mon, 24 Jul 2023 15:44:44 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qNxjl-0000hB-75
+        for cifs-qa@samba.org;
+        Mon, 24 Jul 2023 15:44:41 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15428] Linux mount.smb3 Fails With Windows Host After Update
+ July 2023 Update kb5028166
+Date:   Mon, 24 Jul 2023 15:44:41 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 4.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: sbharvey@verizon.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15428-10630-YzlIKZlQO3@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15428-10630@https.bugzilla.samba.org/>
+References: <bug-15428-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230724021057.2958991-2-wentao@uniontech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 10:10:56AM +0800, Winston Wen wrote:
-> load_nls() take a char * parameter, use it to find nls module in list or
-> construct the module name to load it.
-> 
-> This change make load_nls() take a const parameter, so we don't need do
-> some cast like this:
-> 
->         ses->local_nls = load_nls((char *)ctx->local_nls->charset);
-> 
-> Suggested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Winston Wen <wentao@uniontech.com>
-> Reviewed-by: Paulo Alcantara <pc@manguebit.com>
-> ---
+https://bugzilla.samba.org/show_bug.cgi?id=3D15428
 
-Looks good to me,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+--- Comment #3 from Scott Harvey <sbharvey@verizon.net> ---
+Current Status, Clear Linux has not updated samba beyond version 4.18.1, it=
+ is
+not certain when they will update Samba.  Meanwhile I am trying to stand up=
+ a
+working Clear Linux in VMware that emulates my working "production" server.=
+=20
+This is taking a little longer than expected.  Once that is setup I will ne=
+ed
+to download the code base for Samba make files etc.. I am thinking there ar=
+e=20
+robust make files, since Samba has been around for so many years.
+
+Is there a link for a how-to for how apply patches, compile, link and insta=
+ll
+for samba? I have never done this before.
+
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
