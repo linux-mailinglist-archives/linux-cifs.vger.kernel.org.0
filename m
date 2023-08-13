@@ -2,46 +2,46 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7C577A7B6
-	for <lists+linux-cifs@lfdr.de>; Sun, 13 Aug 2023 17:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8B077A803
+	for <lists+linux-cifs@lfdr.de>; Sun, 13 Aug 2023 17:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjHMPuN (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 13 Aug 2023 11:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
+        id S231892AbjHMPxU (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 13 Aug 2023 11:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbjHMPuE (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 13 Aug 2023 11:50:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E711993;
-        Sun, 13 Aug 2023 08:49:59 -0700 (PDT)
+        with ESMTP id S231792AbjHMPwo (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 13 Aug 2023 11:52:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D742D6D;
+        Sun, 13 Aug 2023 08:52:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 193D26308C;
-        Sun, 13 Aug 2023 15:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B847CC433C7;
-        Sun, 13 Aug 2023 15:49:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C1E463290;
+        Sun, 13 Aug 2023 15:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E51C433C7;
+        Sun, 13 Aug 2023 15:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691941798;
-        bh=vxIAMDw40Bn4sHBM6oyXy4ZNp6BQcKAIvulLQ3JuQJU=;
+        s=k20201202; t=1691941863;
+        bh=TsOBTcXGH1ZXSB1qcDVhgmW3xJXi2PIi00ebZWVIcco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AiQ/Kt8HVqAPeYeQJVKV2v6PXIvPtajDAJukCF+GkojGq9/xIUQ1S+qQXMSIkohnh
-         FfOZG7rJc4PJFfKWvrDPHJQXTBfpqKOOHMZzhXAsI2K3arXgTQAQNak4Lq9klxx5J2
-         VTnEHBHpK6zzduPtWg6rRLGKxm4IGgt8afFh0Bar0cQDLMtrYk6hQ3BDE7OPomajxk
-         I+8vkxyLfYA5E8uckuMqFMpFbZYOShc3GPpAHVQM+LHkydFkHaSBQfvGL4vyaEbQdV
-         vHWvnl70Jh8zjPNJBd21o/Scw53hPqiz00frwK1z/5o52QdWG7VviU+rUjFsByIUCS
-         lM00x9AwT/4WQ==
+        b=Yxg9rvG8blFJC5lf3XoyFUp6h6dVjTV+cC16RhE814nBSogdLrHcuZh9ItcBVTZrB
+         aalgqb6KbVRS4IWOdYjH8ZoN7yBSQmiFbFzxMrBlgieviQj8OAlG5lQixOtGyZYBoX
+         mwzBMhTrJwYgUsN7q6LpXfNrPQ7MaLpdHG93xeWjlKalDgraIFx8gEcwoQR1oFhpql
+         BJI40TYQeJKOgG8EwQRZJIVN1/G5tq57hbY6dznLYJoMiPLUeyvmyYDaxuu3sOMewq
+         xWjWK4J+MWgViB7MkSeT8ZT7LPgf211Hw+g3B4zxl3p2xyj3je4iO2DTYwqSOOnT+D
+         UT912Dluy5ynQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        zdi-disclosures@trendmicro.com,
+Cc:     Winston Wen <wentao@uniontech.com>,
+        Paulo Alcantara <pc@manguebit.com>,
         Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 14/54] ksmbd: fix out of bounds in init_smb2_rsp_hdr()
-Date:   Sun, 13 Aug 2023 11:48:53 -0400
-Message-Id: <20230813154934.1067569-14-sashal@kernel.org>
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 6.4 27/54] cifs: fix charset issue in reconnection
+Date:   Sun, 13 Aug 2023 11:49:06 -0400
+Message-Id: <20230813154934.1067569-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230813154934.1067569-1-sashal@kernel.org>
 References: <20230813154934.1067569-1-sashal@kernel.org>
@@ -50,8 +50,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.4.10
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,105 +59,118 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Winston Wen <wentao@uniontech.com>
 
-[ Upstream commit 536bb492d39bb6c080c92f31e8a55fe9934f452b ]
+[ Upstream commit a43f95fdd39490f7b156fd126f1e90ec2d5553f1 ]
 
-If client send smb2 negotiate request and then send smb1 negotiate
-request, init_smb2_rsp_hdr is called for smb1 negotiate request since
-need_neg is set to false. This patch ignore smb1 packets after ->need_neg
-is set to false.
+We need to specify charset, like "iocharset=utf-8", in mount options for
+Chinese path if the nls_default don't support it, such as iso8859-1, the
+default value for CONFIG_NLS_DEFAULT.
 
-Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-21541
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+But now in reconnection the nls_default is used, instead of the one we
+specified and used in mount, and this can lead to mount failure.
+
+Signed-off-by: Winston Wen <wentao@uniontech.com>
+Reviewed-by: Paulo Alcantara <pc@manguebit.com>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/server/server.c     |  7 ++++++-
- fs/smb/server/smb_common.c | 19 +++++++++++--------
- fs/smb/server/smb_common.h |  2 +-
- 3 files changed, 18 insertions(+), 10 deletions(-)
+ fs/smb/client/cifsglob.h | 1 +
+ fs/smb/client/cifssmb.c  | 3 +--
+ fs/smb/client/connect.c  | 5 +++++
+ fs/smb/client/misc.c     | 1 +
+ fs/smb/client/smb2pdu.c  | 3 +--
+ 5 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/fs/smb/server/server.c b/fs/smb/server/server.c
-index ced7a9e916f01..9df121bdf3492 100644
---- a/fs/smb/server/server.c
-+++ b/fs/smb/server/server.c
-@@ -286,6 +286,7 @@ static void handle_ksmbd_work(struct work_struct *wk)
- static int queue_ksmbd_work(struct ksmbd_conn *conn)
- {
- 	struct ksmbd_work *work;
-+	int err;
- 
- 	work = ksmbd_alloc_work_struct();
- 	if (!work) {
-@@ -297,7 +298,11 @@ static int queue_ksmbd_work(struct ksmbd_conn *conn)
- 	work->request_buf = conn->request_buf;
- 	conn->request_buf = NULL;
- 
--	ksmbd_init_smb_server(work);
-+	err = ksmbd_init_smb_server(work);
-+	if (err) {
-+		ksmbd_free_work_struct(work);
-+		return 0;
-+	}
- 
- 	ksmbd_conn_enqueue_request(work);
- 	atomic_inc(&conn->r_count);
-diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-index 3e391a7d5a3ab..27b8bd039791e 100644
---- a/fs/smb/server/smb_common.c
-+++ b/fs/smb/server/smb_common.c
-@@ -388,26 +388,29 @@ static struct smb_version_cmds smb1_server_cmds[1] = {
- 	[SMB_COM_NEGOTIATE_EX]	= { .proc = smb1_negotiate, },
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index ca2da713c5fe9..87c6ce54c72d0 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -1062,6 +1062,7 @@ struct cifs_ses {
+ 	unsigned long chans_need_reconnect;
+ 	/* ========= end: protected by chan_lock ======== */
+ 	struct cifs_ses *dfs_root_ses;
++	struct nls_table *local_nls;
  };
  
--static void init_smb1_server(struct ksmbd_conn *conn)
-+static int init_smb1_server(struct ksmbd_conn *conn)
- {
- 	conn->ops = &smb1_server_ops;
- 	conn->cmds = smb1_server_cmds;
- 	conn->max_cmds = ARRAY_SIZE(smb1_server_cmds);
-+	return 0;
+ static inline bool
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index a0c4e9874b010..a49f95ea7cf6f 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -129,7 +129,7 @@ cifs_reconnect_tcon(struct cifs_tcon *tcon, int smb_command)
+ 	}
+ 	spin_unlock(&server->srv_lock);
+ 
+-	nls_codepage = load_nls_default();
++	nls_codepage = ses->local_nls;
+ 
+ 	/*
+ 	 * need to prevent multiple threads trying to simultaneously
+@@ -200,7 +200,6 @@ cifs_reconnect_tcon(struct cifs_tcon *tcon, int smb_command)
+ 		rc = -EAGAIN;
+ 	}
+ 
+-	unload_nls(nls_codepage);
+ 	return rc;
  }
  
--void ksmbd_init_smb_server(struct ksmbd_work *work)
-+int ksmbd_init_smb_server(struct ksmbd_work *work)
- {
- 	struct ksmbd_conn *conn = work->conn;
- 	__le32 proto;
- 
--	if (conn->need_neg == false)
--		return;
--
- 	proto = *(__le32 *)((struct smb_hdr *)work->request_buf)->Protocol;
-+	if (conn->need_neg == false) {
-+		if (proto == SMB1_PROTO_NUMBER)
-+			return -EINVAL;
-+		return 0;
-+	}
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index 853209268f507..e965196e4f746 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -1837,6 +1837,10 @@ static int match_session(struct cifs_ses *ses, struct smb3_fs_context *ctx)
+ 			    CIFS_MAX_PASSWORD_LEN))
+ 			return 0;
+ 	}
 +
- 	if (proto == SMB1_PROTO_NUMBER)
--		init_smb1_server(conn);
--	else
--		init_smb3_11_server(conn);
-+		return init_smb1_server(conn);
-+	return init_smb3_11_server(conn);
++	if (strcmp(ctx->local_nls->charset, ses->local_nls->charset))
++		return 0;
++
+ 	return 1;
  }
  
- int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
-diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index 6b0d5f1fe85ca..f0134d16067fb 100644
---- a/fs/smb/server/smb_common.h
-+++ b/fs/smb/server/smb_common.h
-@@ -427,7 +427,7 @@ bool ksmbd_smb_request(struct ksmbd_conn *conn);
+@@ -2280,6 +2284,7 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
  
- int ksmbd_lookup_dialect_by_id(__le16 *cli_dialects, __le16 dialects_count);
+ 	ses->sectype = ctx->sectype;
+ 	ses->sign = ctx->sign;
++	ses->local_nls = load_nls(ctx->local_nls->charset);
  
--void ksmbd_init_smb_server(struct ksmbd_work *work);
-+int ksmbd_init_smb_server(struct ksmbd_work *work);
+ 	/* add server as first channel */
+ 	spin_lock(&ses->chan_lock);
+diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
+index 70dbfe6584f9e..d7e85d9a26553 100644
+--- a/fs/smb/client/misc.c
++++ b/fs/smb/client/misc.c
+@@ -95,6 +95,7 @@ sesInfoFree(struct cifs_ses *buf_to_free)
+ 		return;
+ 	}
  
- struct ksmbd_kstat;
- int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work,
++	unload_nls(buf_to_free->local_nls);
+ 	atomic_dec(&sesInfoAllocCount);
+ 	kfree(buf_to_free->serverOS);
+ 	kfree(buf_to_free->serverDomain);
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index 17fe212ab895d..5f20a754fb13b 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -242,7 +242,7 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
+ 	}
+ 	spin_unlock(&server->srv_lock);
+ 
+-	nls_codepage = load_nls_default();
++	nls_codepage = ses->local_nls;
+ 
+ 	/*
+ 	 * need to prevent multiple threads trying to simultaneously
+@@ -324,7 +324,6 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
+ 		rc = -EAGAIN;
+ 	}
+ failed:
+-	unload_nls(nls_codepage);
+ 	return rc;
+ }
+ 
 -- 
 2.40.1
 
