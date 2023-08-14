@@ -2,42 +2,64 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8739577B308
-	for <lists+linux-cifs@lfdr.de>; Mon, 14 Aug 2023 09:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F1C77BA91
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Aug 2023 15:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjHNHw6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 14 Aug 2023 03:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229631AbjHNNsH (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 14 Aug 2023 09:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbjHNHwe (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Aug 2023 03:52:34 -0400
-Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91413120
-        for <linux-cifs@vger.kernel.org>; Mon, 14 Aug 2023 00:52:33 -0700 (PDT)
-Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
-        id 4B2D522C2B; Mon, 14 Aug 2023 07:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
-        s=mail; t=1691999552;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=IXOyYGX10I38ipCbrHnTWaQL8EjSTColqVV/0t+P/x9F+HoIJcf5IDZCP8lCX/0bv
-         /TJzt9h+KwajSDIs6B1l7WBlAoYnlAbmBiE0XGHngjxl0hTcMeHsOKtUOnmzrfMzFh
-         Tbfyq7usQjFzgjGqnnPvE/2FYQfUlS1a/9i3EjKCP92cKlubzuCtTJmUa2TFNqYWIb
-         QUmYXLGOg6G4zBV0uJYoISflwFkuU63uNjpzNsIdVWlX/8m/nGPrB2oQdqBH3AVPoo
-         N3QwHs2rtOBkCHOdDn85Bc1UO+8va5vON7JZcFJwojokWaa4u50QVsD8hxwMwiS0du
-         ke6OJq+MYEVgQ==
-Received: by mail.commercesolutions.pl for <linux-cifs@vger.kernel.org>; Mon, 14 Aug 2023 07:51:16 GMT
-Message-ID: <20230814064500-0.1.80.1fld7.0.7s6q1xz6du@commercesolutions.pl>
-Date:   Mon, 14 Aug 2023 07:51:16 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
-To:     <linux-cifs@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.commercesolutions.pl
+        with ESMTP id S231251AbjHNNrj (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Aug 2023 09:47:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B0210C0;
+        Mon, 14 Aug 2023 06:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692020857; x=1723556857;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ePs0UmKu1hjztHu9C+rXU1GIS085e6zZzqafi/eRvjY=;
+  b=I3u3u8rF2XOgkDQG8Axf2J5d2IC3lHlexRkpxD5ffnXw6wYRY/ygU/Xw
+   VtqA/YiMvPROdgbTGWdWXkPxFcYtYDZYXruvfV3Md1TfjjFi3JWD1WNGh
+   vArX93SFOsfnAuct8M67NeW/E3FSHseL+FbpJS0exqLGybSzS8UuijtPo
+   1sA00OXmFH/80Z8IfamqnkuC3ZqhJnVN8EC7+1wKm+8PkNl59or2sHRD0
+   ww0c34tKD0tRtuMUxlXWDm9gSeXj/vcQJYS06aGvWHZJNoYHUEqpjn4dv
+   5TFOFRO9oB/NNvn9Jxh6dL+NBOVcuFqKp2Q+2Ir5ZxKg1ZUaU6qmm/xG+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="372035493"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="372035493"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 06:47:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="847663850"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="847663850"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Aug 2023 06:47:34 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qVXuv-0000AZ-1r;
+        Mon, 14 Aug 2023 13:47:33 +0000
+Date:   Mon, 14 Aug 2023 21:47:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     linux@treblig.org, smfrench@gmail.com, dave.kleikamp@oracle.com,
+        tom@talpey.com, pc@manguebit.com
+Cc:     oe-kbuild-all@lists.linux.dev, linkinjeon@kernel.org,
+        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, krisman@collabora.com,
+        "Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: Re: [PATCH v4 3/4] fs/smb/client: Use common code in client
+Message-ID: <202308142118.G4M0uxEm-lkp@intel.com>
+References: <20230813005344.112955-4-linux@treblig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230813005344.112955-4-linux@treblig.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,18 +67,93 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+kernel test robot noticed the following build warnings:
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+[auto build test WARNING on cifs/for-next]
+[also build test WARNING on kleikamp-shaggy/jfs-next linus/master v6.5-rc6 next-20230809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+url:    https://github.com/intel-lab-lkp/linux/commits/linux-treblig-org/fs-smb-Remove-unicode-lower-tables/20230813-085613
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+patch link:    https://lore.kernel.org/r/20230813005344.112955-4-linux%40treblig.org
+patch subject: [PATCH v4 3/4] fs/smb/client: Use common code in client
+config: i386-randconfig-i062-20230814 (https://download.01.org/0day-ci/archive/20230814/202308142118.G4M0uxEm-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230814/202308142118.G4M0uxEm-lkp@intel.com/reproduce)
 
-Pozdrawiam
-Kamil Tralewski
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308142118.G4M0uxEm-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> fs/smb/client/smb2pdu.c:2573:27: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] *ucs1 @@     got restricted __le16 [usertype] * @@
+   fs/smb/client/smb2pdu.c:2573:27: sparse:     expected unsigned short [usertype] *ucs1
+   fs/smb/client/smb2pdu.c:2573:27: sparse:     got restricted __le16 [usertype] *
+>> fs/smb/client/smb2pdu.c:2573:38: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short const [usertype] *ucs2 @@     got restricted __le16 const * @@
+   fs/smb/client/smb2pdu.c:2573:38: sparse:     expected unsigned short const [usertype] *ucs2
+   fs/smb/client/smb2pdu.c:2573:38: sparse:     got restricted __le16 const *
+   fs/smb/client/smb2pdu.c:2574:27: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] *ucs1 @@     got restricted __le16 [usertype] * @@
+   fs/smb/client/smb2pdu.c:2574:27: sparse:     expected unsigned short [usertype] *ucs1
+   fs/smb/client/smb2pdu.c:2574:27: sparse:     got restricted __le16 [usertype] *
+>> fs/smb/client/smb2pdu.c:2574:38: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short const [usertype] *ucs2 @@     got restricted __le16 const [usertype] *path @@
+   fs/smb/client/smb2pdu.c:2574:38: sparse:     expected unsigned short const [usertype] *ucs2
+   fs/smb/client/smb2pdu.c:2574:38: sparse:     got restricted __le16 const [usertype] *path
+
+vim +2573 fs/smb/client/smb2pdu.c
+
+ff2a09e9196e2f fs/cifs/smb2pdu.c Steve French      2019-07-06  2535  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2536  static int
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2537  alloc_path_with_tree_prefix(__le16 **out_path, int *out_size, int *out_len,
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2538  			    const char *treename, const __le16 *path)
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2539  {
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2540  	int treename_len, path_len;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2541  	struct nls_table *cp;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2542  	const __le16 sep[] = {cpu_to_le16('\\'), cpu_to_le16(0x0000)};
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2543  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2544  	/*
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2545  	 * skip leading "\\"
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2546  	 */
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2547  	treename_len = strlen(treename);
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2548  	if (treename_len < 2 || !(treename[0] == '\\' && treename[1] == '\\'))
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2549  		return -EINVAL;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2550  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2551  	treename += 2;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2552  	treename_len -= 2;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2553  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2554  	path_len = UniStrnlen((wchar_t *)path, PATH_MAX);
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2555  
+a1d2eb51f0a33c fs/cifs/smb2pdu.c Paulo Alcantara   2022-08-19  2556  	/* make room for one path separator only if @path isn't empty */
+a1d2eb51f0a33c fs/cifs/smb2pdu.c Paulo Alcantara   2022-08-19  2557  	*out_len = treename_len + (path[0] ? 1 : 0) + path_len;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2558  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2559  	/*
+a1d2eb51f0a33c fs/cifs/smb2pdu.c Paulo Alcantara   2022-08-19  2560  	 * final path needs to be 8-byte aligned as specified in
+a1d2eb51f0a33c fs/cifs/smb2pdu.c Paulo Alcantara   2022-08-19  2561  	 * MS-SMB2 2.2.13 SMB2 CREATE Request.
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2562  	 */
+d7173623bf0b15 fs/cifs/smb2pdu.c Enzo Matsumiya    2022-10-12  2563  	*out_size = round_up(*out_len * sizeof(__le16), 8);
+a1d2eb51f0a33c fs/cifs/smb2pdu.c Paulo Alcantara   2022-08-19  2564  	*out_path = kzalloc(*out_size + sizeof(__le16) /* null */, GFP_KERNEL);
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2565  	if (!*out_path)
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2566  		return -ENOMEM;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2567  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2568  	cp = load_nls_default();
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2569  	cifs_strtoUTF16(*out_path, treename, treename_len, cp);
+7eacba3b00a3c3 fs/cifs/smb2pdu.c Eugene Korenevsky 2022-01-14  2570  
+7eacba3b00a3c3 fs/cifs/smb2pdu.c Eugene Korenevsky 2022-01-14  2571  	/* Do not append the separator if the path is empty */
+7eacba3b00a3c3 fs/cifs/smb2pdu.c Eugene Korenevsky 2022-01-14  2572  	if (path[0] != cpu_to_le16(0x0000)) {
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22 @2573  		UniStrcat(*out_path, sep);
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22 @2574  		UniStrcat(*out_path, path);
+7eacba3b00a3c3 fs/cifs/smb2pdu.c Eugene Korenevsky 2022-01-14  2575  	}
+7eacba3b00a3c3 fs/cifs/smb2pdu.c Eugene Korenevsky 2022-01-14  2576  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2577  	unload_nls(cp);
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2578  
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2579  	return 0;
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2580  }
+f0712928be1a66 fs/cifs/smb2pdu.c Aurelien Aptel    2017-02-22  2581  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
