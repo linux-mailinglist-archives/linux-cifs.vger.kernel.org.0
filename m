@@ -2,162 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6B277A855
-	for <lists+linux-cifs@lfdr.de>; Sun, 13 Aug 2023 18:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8739577B308
+	for <lists+linux-cifs@lfdr.de>; Mon, 14 Aug 2023 09:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjHMQBX (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 13 Aug 2023 12:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S232931AbjHNHw6 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 14 Aug 2023 03:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbjHMQBT (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 13 Aug 2023 12:01:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A521BC0;
-        Sun, 13 Aug 2023 09:01:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7379634BE;
-        Sun, 13 Aug 2023 16:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE76CC433C7;
-        Sun, 13 Aug 2023 16:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691942460;
-        bh=KPozp3XFVsCBL4Zz6wEhzoLnmhS1oIbHpQEHhZ9vol4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H6tUu7tO4KdrcAmkgjK/MDhmxc5Igwx2s3nF4YPXgOq8SRqZUMWpGzaUlYvpcv5g1
-         RxuxL8O/p7HuuBouM4CS4SiBaVEJzC1Gunuzcm8mYuUtsuUMB6QBlmCZ5ibgtv8jlo
-         Xp1HeH/0EU/gQw3Mf3OSOMq5TRxsO4+kOMCgP8chuCu5ZdnYYX8QSR2baXRQfbcfwM
-         +z/Nxl2rJKYUOgDd5aQcAEB45CCl6aQ3Cuh29JFc/arNuIsbsBDxmAyd+RQCdL8hI5
-         dZ6zcPACL05bkoqFJL2OiAr2OeMpSc7NfkN61232L+FFENqRG4G3gUKPqsja6Yz3yS
-         FBNR5fmcXqUKQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        zdi-disclosures@trendmicro.com,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 12/47] ksmbd: fix out of bounds in init_smb2_rsp_hdr()
-Date:   Sun, 13 Aug 2023 11:59:07 -0400
-Message-Id: <20230813160006.1073695-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230813160006.1073695-1-sashal@kernel.org>
-References: <20230813160006.1073695-1-sashal@kernel.org>
+        with ESMTP id S234293AbjHNHwe (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 14 Aug 2023 03:52:34 -0400
+Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91413120
+        for <linux-cifs@vger.kernel.org>; Mon, 14 Aug 2023 00:52:33 -0700 (PDT)
+Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
+        id 4B2D522C2B; Mon, 14 Aug 2023 07:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
+        s=mail; t=1691999552;
+        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
+        h=Date:From:To:Subject:From;
+        b=IXOyYGX10I38ipCbrHnTWaQL8EjSTColqVV/0t+P/x9F+HoIJcf5IDZCP8lCX/0bv
+         /TJzt9h+KwajSDIs6B1l7WBlAoYnlAbmBiE0XGHngjxl0hTcMeHsOKtUOnmzrfMzFh
+         Tbfyq7usQjFzgjGqnnPvE/2FYQfUlS1a/9i3EjKCP92cKlubzuCtTJmUa2TFNqYWIb
+         QUmYXLGOg6G4zBV0uJYoISflwFkuU63uNjpzNsIdVWlX/8m/nGPrB2oQdqBH3AVPoo
+         N3QwHs2rtOBkCHOdDn85Bc1UO+8va5vON7JZcFJwojokWaa4u50QVsD8hxwMwiS0du
+         ke6OJq+MYEVgQ==
+Received: by mail.commercesolutions.pl for <linux-cifs@vger.kernel.org>; Mon, 14 Aug 2023 07:51:16 GMT
+Message-ID: <20230814064500-0.1.80.1fld7.0.7s6q1xz6du@commercesolutions.pl>
+Date:   Mon, 14 Aug 2023 07:51:16 GMT
+From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
+To:     <linux-cifs@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.commercesolutions.pl
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.45
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+Dzie=C5=84 dobry,
 
-[ Upstream commit 536bb492d39bb6c080c92f31e8a55fe9934f452b ]
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-If client send smb2 negotiate request and then send smb1 negotiate
-request, init_smb2_rsp_hdr is called for smb1 negotiate request since
-need_neg is set to false. This patch ignore smb1 packets after ->need_neg
-is set to false.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-21541
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/server/server.c     |  7 ++++++-
- fs/smb/server/smb_common.c | 19 +++++++++++--------
- fs/smb/server/smb_common.h |  2 +-
- 3 files changed, 18 insertions(+), 10 deletions(-)
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-diff --git a/fs/smb/server/server.c b/fs/smb/server/server.c
-index 847ee62afb8a1..9804cabe72a84 100644
---- a/fs/smb/server/server.c
-+++ b/fs/smb/server/server.c
-@@ -286,6 +286,7 @@ static void handle_ksmbd_work(struct work_struct *wk)
- static int queue_ksmbd_work(struct ksmbd_conn *conn)
- {
- 	struct ksmbd_work *work;
-+	int err;
- 
- 	work = ksmbd_alloc_work_struct();
- 	if (!work) {
-@@ -297,7 +298,11 @@ static int queue_ksmbd_work(struct ksmbd_conn *conn)
- 	work->request_buf = conn->request_buf;
- 	conn->request_buf = NULL;
- 
--	ksmbd_init_smb_server(work);
-+	err = ksmbd_init_smb_server(work);
-+	if (err) {
-+		ksmbd_free_work_struct(work);
-+		return 0;
-+	}
- 
- 	ksmbd_conn_enqueue_request(work);
- 	atomic_inc(&conn->r_count);
-diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-index d937e2f45c829..a4421d9458d90 100644
---- a/fs/smb/server/smb_common.c
-+++ b/fs/smb/server/smb_common.c
-@@ -388,26 +388,29 @@ static struct smb_version_cmds smb1_server_cmds[1] = {
- 	[SMB_COM_NEGOTIATE_EX]	= { .proc = smb1_negotiate, },
- };
- 
--static void init_smb1_server(struct ksmbd_conn *conn)
-+static int init_smb1_server(struct ksmbd_conn *conn)
- {
- 	conn->ops = &smb1_server_ops;
- 	conn->cmds = smb1_server_cmds;
- 	conn->max_cmds = ARRAY_SIZE(smb1_server_cmds);
-+	return 0;
- }
- 
--void ksmbd_init_smb_server(struct ksmbd_work *work)
-+int ksmbd_init_smb_server(struct ksmbd_work *work)
- {
- 	struct ksmbd_conn *conn = work->conn;
- 	__le32 proto;
- 
--	if (conn->need_neg == false)
--		return;
--
- 	proto = *(__le32 *)((struct smb_hdr *)work->request_buf)->Protocol;
-+	if (conn->need_neg == false) {
-+		if (proto == SMB1_PROTO_NUMBER)
-+			return -EINVAL;
-+		return 0;
-+	}
-+
- 	if (proto == SMB1_PROTO_NUMBER)
--		init_smb1_server(conn);
--	else
--		init_smb3_11_server(conn);
-+		return init_smb1_server(conn);
-+	return init_smb3_11_server(conn);
- }
- 
- int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
-diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index e63d2a4f466b5..1cbb492cdefec 100644
---- a/fs/smb/server/smb_common.h
-+++ b/fs/smb/server/smb_common.h
-@@ -427,7 +427,7 @@ bool ksmbd_smb_request(struct ksmbd_conn *conn);
- 
- int ksmbd_lookup_dialect_by_id(__le16 *cli_dialects, __le16 dialects_count);
- 
--void ksmbd_init_smb_server(struct ksmbd_work *work);
-+int ksmbd_init_smb_server(struct ksmbd_work *work);
- 
- struct ksmbd_kstat;
- int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work,
--- 
-2.40.1
-
+Pozdrawiam
+Kamil Tralewski
