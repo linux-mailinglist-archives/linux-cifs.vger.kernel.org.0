@@ -2,58 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABBD77FADB
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286F177FAD8
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352652AbjHQPfm (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Aug 2023 11:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S1352325AbjHQPfl (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Aug 2023 11:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353242AbjHQPfb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:31 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668332D6D
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:29 -0700 (PDT)
+        with ESMTP id S1352419AbjHQPfd (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:33 -0400
+Received: from mx.manguebit.com (mx.manguebit.com [IPv6:2a01:4f8:1c1e:a2ae::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FC730D1
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:31 -0700 (PDT)
 From:   Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286528;
+        s=dkim; t=1692286529;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BBUEbXV9bz9ZnmO9Vxf4Sz7qaDsxNZRQjhphLLsioVs=;
-        b=oKEHUoSPRsZtH8+KQFBNNo/FlUKA3dAvXZ0OZ+U4nDGzDm9ExjLpY2Uan13/yxJhsA6z1c
-        Mu7ONjz4RsVDhGWHb0uDNiUP/bb0Qp+Or5CWgRmP5rF9e/TolScFlwBOSfQBoINq+FvomX
-        2v1ehzxtcEmP9c8NsSR+kUr+/N94TjI2YVTJTAXRW72Lwmgr5DQDETzCD6z7dy8olYlsrm
-        TugH2E+xqyv5pvi7bUm0Hu3xqt6ChDsOQteRTi5Ql6PMphP4Ai3ytEPpxFnCio30o1Xy4X
-        gR0SVxk0K3eIrCSEkJra/XAO9Zmvw0RF7GkyH071Gavu+ePOTyb3CWSq4m82Hg==
+        bh=TA7u0WoopLEa7a4Pd8C8cxs5u/xTPlq/mWW6rsmRnok=;
+        b=rnXgELluKyHavPT0ZK1UeN8C6JaGkSBFhnLFcnIppVTD/5SGCjUEiSZJByuO0wKsvJGvZJ
+        FnDC8J2T2h3DbWqE2jKkFiwSjZaUrWjtgiFwF1Umv5q9K0R0uADDXGkYhV8dcDNYj0msjq
+        8X4tkaN0oKUsxqqyYg26BwPpWYCmXqSW2G4YyjWWwkhHKDWu6fzrpSIU6j92iEElJ8yP56
+        Sk+WIJW5zJh5k7t6+3tM/3/7i9uHu4bR6Thvzg2Vy7Lp7LoeArgKfTNsuIL/ft0galOG0X
+        uDsSAgZ1uQtTXC8LBYOvT0G1WTVV2xlQwb4VO6lPy9g2+0HEi1PZGnktV7jG4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286528;
+        s=dkim; t=1692286529;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BBUEbXV9bz9ZnmO9Vxf4Sz7qaDsxNZRQjhphLLsioVs=;
-        b=S8ptd85FRWAHDqkwU2j3Wu/f1jK+n0iw5MbnFnCSTfOCJgY8Lalurr4KC3cXc7kEzGS2xf
-        73zEiV0UTWZaUYv/5g5PC24lSsgAu91jYLoKz1BYTZXbTUYs7cKBw50qvnd2pQN/Ka4ly5
-        c2Uvn4YQpXFq18ICzRIWjB6n0AEWZK7pBvyWTW82rxehyeFDkODk5C9Z0yvBiLv66gU3Wq
-        hAXcFsEBQJZmLy922VzplFVTw7ZupiRaF9dnCOJc+fU4cCnzQgEjitH4f76gJV8Asx66OF
-        a4dD7rCEW7+so1GezzbqbHZLp9o2xJKZrF3YaLJrlcdyTPaJ0NrC25g32PkqgA==
+        bh=TA7u0WoopLEa7a4Pd8C8cxs5u/xTPlq/mWW6rsmRnok=;
+        b=nAlKaE9CKefUyx310haa/XVQRWOnPFDuQLUOPMZWV8FD8FKMoMfLrWzfFxLJ5seTfJ5vYJ
+        Y1ongdCM3Q0GveoKXrQp18JximTxYIpKoHvk8UgOotWW8Pe6L/YriVrv5szymj9+vbx9Xo
+        zar0aTw5ck1zJkUI8j5w6dtFBlxcD6MOtCswv6fIlqS8mOwodU4MMYJqqdeDtDjDbXHORY
+        W+JdvQABwxWBMPRyMtpS2TxbD53tU+MNyDgYsRB05alL1a6btI2K9leDgJfSf0plHG9u2l
+        d0AYga0tlzpErU6EnpmX6Z48yTmNGX8kLAGn71g0FVh41VuWWFRHa2dCpnAyXg==
 ARC-Authentication-Results: i=1;
         ORIGINATING;
         auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286528; a=rsa-sha256;
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286529; a=rsa-sha256;
         cv=none;
-        b=NhD7J672of9gJYGV/nxnQIT1xOvZhpk0lhg9jcMW6g4h7HHpB40SPpN8rTpJsNFRXxJsy9
-        SSzrRodFpwZ0DcHbCg3RPk5rfQXLqqkPD5gvOvmoDpGBTJ7bD7VxzVa9OuwaTNYNZzuo0+
-        Gf4NWjHoXO8XRv3Bd5LzZYB3nujbWyqYJHYLHJwAJ9bcRMdBNbIc5n/Yn4bKMwwebekaeg
-        JIl2xAOtzciHsjlTcStpobwEfx9G6mipcj4K0QhswrxMM9Z+nxY9kxaEzhod1EAgvbRzNd
-        wg7i3KNHwKqfnKbiKjaYJiSsP38C/ZET95IvN60cZwndFm1W6h59ZmjRa862Tw==
+        b=WLmMk6Fos0VQkxe6aNNb3YBNP3p/5r5H3626TgsC4Dpfq7bq2PfRqrAxQDohHsQ9/RHa9u
+        kPsQ8UnekhDONdAH9xT5xwA1Imj7hQurj0KGBhXr48IcoUShZM5FxK9YDuEd9Cr98+Q7/u
+        23PVtzmVDMIXW5cABVORtAhFoI5PrgI6dmRJvdxWY24Ky1iq7sNc8rNG5M+8XtDl7cJzKB
+        mpO4LDK+WvYt4W44qKScZ3q63dfH5//EvVk3bpfl+JM1nzKErdJfnPn3rWYliHcBuzPfLs
+        Z8+GEaI5+Vp3Zz42rhitC7HiKC4eTrT9YhQSEmSHlckI9du/PMheonP6ykUZhw==
 To:     smfrench@gmail.com
 Cc:     linux-cifs@vger.kernel.org, Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 02/17] smb: client: ensure to try all targets when finding nested links
-Date:   Thu, 17 Aug 2023 12:34:00 -0300
-Message-ID: <20230817153416.28083-3-pc@manguebit.com>
+Subject: [PATCH 03/17] smb: client: move some params to cifs_open_info_data
+Date:   Thu, 17 Aug 2023 12:34:01 -0300
+Message-ID: <20230817153416.28083-4-pc@manguebit.com>
 In-Reply-To: <20230817153416.28083-1-pc@manguebit.com>
 References: <20230817153416.28083-1-pc@manguebit.com>
 MIME-Version: 1.0
@@ -67,555 +67,404 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-With current implementation, when a nested DFS link is found during
-mount(2), the client follows the referral and then try to connect to
-all of its targets.  If all targets failed, the client bails out
-rather than retrying remaining targets from previous referral.
+Instead of passing @adjust_tz and some reparse point related fields as
+parameters in ->query_path_info() and
+{smb311_posix,cifs}_info_to_fattr() calls, move them to
+cifs_open_info_data structure as they can be easily accessed through
+@data.
 
-Fix this by stacking all referrals and targets so the client can retry
-remaining targets from previous referrals in case all targets of
-current referral have failed.
-
-Thanks to samba, this can be easily tested like below
-
-* Run the following under dfs folder in samba server
-
-  $ ln -s "msdfs:srv\\bad-share" link1
-  $ ln -s "msdfs:srv\\dfs\\link1,srv\\good-share" link0
-
-* Before patch
-
-  $ mount.cifs //srv/dfs/link0 /mnt -o ...
-  mount error(2): No such file or directory
-  Refer to the mount.cifs(8) manual page (e.g. man mount.cifs)...
-
-* After patch
-
-  $ mount.cifs //srv/dfs/link0 /mnt -o ...
-  # ls /mnt
-  bar  fileshare1  sub
+No functional changes.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
 ---
- fs/smb/client/cifsglob.h  |  16 ++-
- fs/smb/client/dfs.c       | 271 ++++++++++++++++++++------------------
- fs/smb/client/dfs.h       | 104 +++++++++++++++
- fs/smb/client/dfs_cache.c |   6 +-
- fs/smb/client/dfs_cache.h |   6 +-
- 5 files changed, 265 insertions(+), 138 deletions(-)
+ fs/smb/client/cifsglob.h  | 14 ++++++--
+ fs/smb/client/inode.c     | 68 ++++++++++++++++++---------------------
+ fs/smb/client/smb1ops.c   | 15 +++++----
+ fs/smb/client/smb2inode.c | 29 +++++++++--------
+ fs/smb/client/smb2proto.h | 17 ++++++----
+ 5 files changed, 77 insertions(+), 66 deletions(-)
 
 diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 657dee4b2c8c..712557c2d526 100644
+index 712557c2d526..4792de20a447 100644
 --- a/fs/smb/client/cifsglob.h
 +++ b/fs/smb/client/cifsglob.h
-@@ -1721,11 +1721,23 @@ struct cifs_mount_ctx {
- 	struct list_head dfs_ses_list;
+@@ -186,6 +186,12 @@ struct cifs_cred {
  };
  
-+static inline void __free_dfs_info_param(struct dfs_info3_param *param)
-+{
-+	kfree(param->path_name);
-+	kfree(param->node_name);
-+}
-+
- static inline void free_dfs_info_param(struct dfs_info3_param *param)
-+{
-+	if (param)
-+		__free_dfs_info_param(param);
-+}
-+
-+static inline void zfree_dfs_info_param(struct dfs_info3_param *param)
+ struct cifs_open_info_data {
++	bool adjust_tz;
++	union {
++		bool reparse_point;
++		bool symlink;
++	};
++	__u32 reparse_tag;
+ 	char *symlink_target;
+ 	union {
+ 		struct smb2_file_all_info fi;
+@@ -318,9 +324,11 @@ struct smb_version_operations {
+ 	int (*is_path_accessible)(const unsigned int, struct cifs_tcon *,
+ 				  struct cifs_sb_info *, const char *);
+ 	/* query path data from the server */
+-	int (*query_path_info)(const unsigned int xid, struct cifs_tcon *tcon,
+-			       struct cifs_sb_info *cifs_sb, const char *full_path,
+-			       struct cifs_open_info_data *data, bool *adjust_tz, bool *reparse);
++	int (*query_path_info)(const unsigned int xid,
++			       struct cifs_tcon *tcon,
++			       struct cifs_sb_info *cifs_sb,
++			       const char *full_path,
++			       struct cifs_open_info_data *data);
+ 	/* query file data from the server */
+ 	int (*query_file_info)(const unsigned int xid, struct cifs_tcon *tcon,
+ 			       struct cifsFileInfo *cfile, struct cifs_open_info_data *data);
+diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
+index c3eeae07e139..0d11e63042e2 100644
+--- a/fs/smb/client/inode.c
++++ b/fs/smb/client/inode.c
+@@ -632,10 +632,11 @@ static int cifs_sfu_mode(struct cifs_fattr *fattr, const unsigned char *path,
+ }
+ 
+ /* Fill a cifs_fattr struct with info from POSIX info struct */
+-static void smb311_posix_info_to_fattr(struct cifs_fattr *fattr, struct cifs_open_info_data *data,
++static void smb311_posix_info_to_fattr(struct cifs_fattr *fattr,
++				       struct cifs_open_info_data *data,
+ 				       struct cifs_sid *owner,
+ 				       struct cifs_sid *group,
+-				       struct super_block *sb, bool adjust_tz, bool symlink)
++				       struct super_block *sb)
  {
- 	if (param) {
--		kfree(param->path_name);
--		kfree(param->node_name);
-+		__free_dfs_info_param(param);
-+		memset(param, 0, sizeof(*param));
+ 	struct smb311_posix_qinfo *info = &data->posix_fi;
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+@@ -655,7 +656,7 @@ static void smb311_posix_info_to_fattr(struct cifs_fattr *fattr, struct cifs_ope
+ 	fattr->cf_ctime = cifs_NTtimeToUnix(info->ChangeTime);
+ 	fattr->cf_mtime = cifs_NTtimeToUnix(info->LastWriteTime);
+ 
+-	if (adjust_tz) {
++	if (data->adjust_tz) {
+ 		fattr->cf_ctime.tv_sec += tcon->ses->server->timeAdj;
+ 		fattr->cf_mtime.tv_sec += tcon->ses->server->timeAdj;
  	}
+@@ -669,7 +670,7 @@ static void smb311_posix_info_to_fattr(struct cifs_fattr *fattr, struct cifs_ope
+ 	/* The srv fs device id is overridden on network mount so setting rdev isn't needed here */
+ 	/* fattr->cf_rdev = le32_to_cpu(info->DeviceId); */
+ 
+-	if (symlink) {
++	if (data->symlink) {
+ 		fattr->cf_mode |= S_IFLNK;
+ 		fattr->cf_dtype = DT_LNK;
+ 		fattr->cf_symlink_target = data->symlink_target;
+@@ -690,13 +691,14 @@ static void smb311_posix_info_to_fattr(struct cifs_fattr *fattr, struct cifs_ope
+ 		fattr->cf_mode, fattr->cf_uniqueid, fattr->cf_nlink);
  }
  
-diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
-index c837800c49d4..71ee74041884 100644
---- a/fs/smb/client/dfs.c
-+++ b/fs/smb/client/dfs.c
-@@ -3,7 +3,6 @@
-  * Copyright (c) 2022 Paulo Alcantara <palcantara@suse.de>
-  */
- 
--#include <linux/namei.h>
- #include "cifsproto.h"
- #include "cifs_debug.h"
- #include "dns_resolve.h"
-@@ -96,51 +95,134 @@ static int add_root_smb_session(struct cifs_mount_ctx *mnt_ctx)
- 	return 0;
- }
- 
--static int get_dfs_conn(struct cifs_mount_ctx *mnt_ctx, const char *ref_path, const char *full_path,
--			const struct dfs_cache_tgt_iterator *tit)
-+static inline int parse_dfs_target(struct smb3_fs_context *ctx,
-+				   struct dfs_ref_walk *rw,
-+				   struct dfs_info3_param *tgt)
-+{
-+	int rc;
-+	const char *fpath = ref_walk_fpath(rw) + 1;
-+
-+	rc = ref_walk_get_tgt(rw, tgt);
-+	if (!rc)
-+		rc = dfs_parse_target_referral(fpath, tgt, ctx);
-+	return rc;
-+}
-+
-+static int set_ref_paths(struct cifs_mount_ctx *mnt_ctx,
-+			 struct dfs_info3_param *tgt,
-+			 struct dfs_ref_walk *rw)
-+{
-+	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
-+	struct cifs_sb_info *cifs_sb = mnt_ctx->cifs_sb;
-+	char *ref_path, *full_path;
-+	int rc;
-+
-+	full_path = smb3_fs_context_fullpath(ctx, CIFS_DIR_SEP(cifs_sb));
-+	if (IS_ERR(full_path))
-+		return PTR_ERR(full_path);
-+
-+	if (!tgt || (tgt->server_type == DFS_TYPE_LINK &&
-+		     DFS_INTERLINK(tgt->flags)))
-+		ref_path = dfs_get_path(cifs_sb, ctx->UNC);
-+	else
-+		ref_path = dfs_get_path(cifs_sb, full_path);
-+	if (IS_ERR(ref_path)) {
-+		rc = PTR_ERR(ref_path);
-+		kfree(full_path);
-+		return rc;
-+	}
-+	ref_walk_path(rw) = ref_path;
-+	ref_walk_fpath(rw) = full_path;
-+	return 0;
-+}
-+
-+static int __dfs_referral_walk(struct cifs_mount_ctx *mnt_ctx,
-+			       struct dfs_ref_walk *rw)
+-static void cifs_open_info_to_fattr(struct cifs_fattr *fattr, struct cifs_open_info_data *data,
+-				    struct super_block *sb, bool adjust_tz, bool symlink,
+-				    u32 reparse_tag)
++static void cifs_open_info_to_fattr(struct cifs_fattr *fattr,
++				    struct cifs_open_info_data *data,
++				    struct super_block *sb)
  {
- 	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
--	struct dfs_info3_param ref = {};
-+	struct dfs_info3_param tgt = {};
- 	bool is_refsrv;
--	int rc, rc2;
--
--	rc = dfs_cache_get_tgt_referral(ref_path + 1, tit, &ref);
--	if (rc)
--		return rc;
--
--	rc = dfs_parse_target_referral(full_path + 1, &ref, ctx);
--	if (rc)
--		goto out;
--
--	cifs_mount_put_conns(mnt_ctx);
--	rc = get_session(mnt_ctx, ref_path);
--	if (rc)
--		goto out;
--
--	is_refsrv = !!(ref.flags & DFSREF_REFERRAL_SERVER);
--
--	rc = -EREMOTE;
--	if (ref.flags & DFSREF_STORAGE_SERVER) {
--		rc = cifs_mount_get_tcon(mnt_ctx);
--		if (rc)
--			goto out;
--
--		/* some servers may not advertise referral capability under ref.flags */
--		is_refsrv |= is_tcon_dfs(mnt_ctx->tcon);
--
--		rc = cifs_is_path_remote(mnt_ctx);
--	}
--
--	dfs_cache_noreq_update_tgthint(ref_path + 1, tit);
--
--	if (rc == -EREMOTE && is_refsrv) {
--		rc2 = add_root_smb_session(mnt_ctx);
--		if (rc2)
--			rc = rc2;
--	}
-+	int rc = -ENOENT;
-+
-+again:
-+	do {
-+		if (ref_walk_empty(rw)) {
-+			rc = dfs_get_referral(mnt_ctx, ref_walk_path(rw) + 1,
-+					      NULL, ref_walk_tl(rw));
-+			if (rc) {
-+				rc = cifs_mount_get_tcon(mnt_ctx);
-+				if (!rc)
-+					rc = cifs_is_path_remote(mnt_ctx);
-+				continue;
-+			}
-+			if (!ref_walk_num_tgts(rw)) {
-+				rc = -ENOENT;
-+				continue;
-+			}
-+		}
-+
-+		while (ref_walk_next_tgt(rw)) {
-+			rc = parse_dfs_target(ctx, rw, &tgt);
-+			if (rc)
-+				continue;
-+
-+			cifs_mount_put_conns(mnt_ctx);
-+			rc = get_session(mnt_ctx, ref_walk_path(rw));
-+			if (rc)
-+				continue;
-+
-+			is_refsrv = tgt.server_type == DFS_TYPE_ROOT ||
-+				DFS_INTERLINK(tgt.flags);
-+			ref_walk_set_tgt_hint(rw);
-+
-+			if (tgt.flags & DFSREF_STORAGE_SERVER) {
-+				rc = cifs_mount_get_tcon(mnt_ctx);
-+				if (!rc)
-+					rc = cifs_is_path_remote(mnt_ctx);
-+				if (!rc)
-+					break;
-+				if (rc != -EREMOTE)
-+					continue;
-+			}
-+
-+			if (is_refsrv) {
-+				rc = add_root_smb_session(mnt_ctx);
-+				if (rc)
-+					goto out;
-+			}
-+
-+			rc = ref_walk_advance(rw);
-+			if (!rc) {
-+				rc = set_ref_paths(mnt_ctx, &tgt, rw);
-+				if (!rc) {
-+					rc = -EREMOTE;
-+					goto again;
-+				}
-+			}
-+			if (rc != -ELOOP)
-+				goto out;
-+		}
-+	} while (rc && ref_walk_descend(rw));
+ 	struct smb2_file_all_info *info = &data->fi;
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+ 	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
++	u32 reparse_tag = data->reparse_tag;
  
- out:
--	free_dfs_info_param(&ref);
-+	free_dfs_info_param(&tgt);
-+	return rc;
-+}
-+
-+static int dfs_referral_walk(struct cifs_mount_ctx *mnt_ctx)
-+{
-+	struct dfs_ref_walk *rw;
-+	int rc;
-+
-+	rw = ref_walk_alloc();
-+	if (IS_ERR(rw))
-+		return PTR_ERR(rw);
-+
-+	ref_walk_init(rw);
-+	rc = set_ref_paths(mnt_ctx, NULL, rw);
-+	if (!rc)
-+		rc = __dfs_referral_walk(mnt_ctx, rw);
-+	ref_walk_free(rw);
- 	return rc;
- }
+ 	memset(fattr, 0, sizeof(*fattr));
+ 	fattr->cf_cifsattrs = le32_to_cpu(info->Attributes);
+@@ -711,7 +713,7 @@ static void cifs_open_info_to_fattr(struct cifs_fattr *fattr, struct cifs_open_i
+ 	fattr->cf_ctime = cifs_NTtimeToUnix(info->ChangeTime);
+ 	fattr->cf_mtime = cifs_NTtimeToUnix(info->LastWriteTime);
  
-@@ -148,105 +230,36 @@ static int __dfs_mount_share(struct cifs_mount_ctx *mnt_ctx)
- {
- 	struct cifs_sb_info *cifs_sb = mnt_ctx->cifs_sb;
- 	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
--	char *ref_path = NULL, *full_path = NULL;
--	struct dfs_cache_tgt_iterator *tit;
+-	if (adjust_tz) {
++	if (data->adjust_tz) {
+ 		fattr->cf_ctime.tv_sec += tcon->ses->server->timeAdj;
+ 		fattr->cf_mtime.tv_sec += tcon->ses->server->timeAdj;
+ 	}
+@@ -736,7 +738,7 @@ static void cifs_open_info_to_fattr(struct cifs_fattr *fattr, struct cifs_open_i
+ 	} else if (reparse_tag == IO_REPARSE_TAG_LX_BLK) {
+ 		fattr->cf_mode |= S_IFBLK | cifs_sb->ctx->file_mode;
+ 		fattr->cf_dtype = DT_BLK;
+-	} else if (symlink || reparse_tag == IO_REPARSE_TAG_SYMLINK ||
++	} else if (data->symlink || reparse_tag == IO_REPARSE_TAG_SYMLINK ||
+ 		   reparse_tag == IO_REPARSE_TAG_NFS) {
+ 		fattr->cf_mode = S_IFLNK;
+ 		fattr->cf_dtype = DT_LNK;
+@@ -789,8 +791,6 @@ cifs_get_file_info(struct file *filp)
+ 	struct cifsFileInfo *cfile = filp->private_data;
+ 	struct cifs_tcon *tcon = tlink_tcon(cfile->tlink);
+ 	struct TCP_Server_Info *server = tcon->ses->server;
+-	bool symlink = false;
+-	u32 tag = 0;
+ 
+ 	if (!server->ops->query_file_info)
+ 		return -ENOSYS;
+@@ -800,11 +800,12 @@ cifs_get_file_info(struct file *filp)
+ 	switch (rc) {
+ 	case 0:
+ 		/* TODO: add support to query reparse tag */
++		data.adjust_tz = false;
+ 		if (data.symlink_target) {
+-			symlink = true;
+-			tag = IO_REPARSE_TAG_SYMLINK;
++			data.symlink = true;
++			data.reparse_tag = IO_REPARSE_TAG_SYMLINK;
+ 		}
+-		cifs_open_info_to_fattr(&fattr, &data, inode->i_sb, false, symlink, tag);
++		cifs_open_info_to_fattr(&fattr, &data, inode->i_sb);
+ 		break;
+ 	case -EREMOTE:
+ 		cifs_create_dfs_fattr(&fattr, inode->i_sb);
+@@ -968,14 +969,11 @@ int cifs_get_inode_info(struct inode **inode, const char *full_path,
+ 	struct TCP_Server_Info *server;
+ 	struct tcon_link *tlink;
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+-	bool adjust_tz = false;
+ 	struct cifs_fattr fattr = {0};
+-	bool is_reparse_point = false;
+ 	struct cifs_open_info_data tmp_data = {};
+ 	void *smb1_backup_rsp_buf = NULL;
+ 	int rc = 0;
+ 	int tmprc = 0;
+-	__u32 reparse_tag = 0;
+ 
+ 	tlink = cifs_sb_tlink(cifs_sb);
+ 	if (IS_ERR(tlink))
+@@ -992,8 +990,8 @@ int cifs_get_inode_info(struct inode **inode, const char *full_path,
+ 			cifs_dbg(FYI, "No need to revalidate cached inode sizes\n");
+ 			goto out;
+ 		}
+-		rc = server->ops->query_path_info(xid, tcon, cifs_sb, full_path, &tmp_data,
+-						  &adjust_tz, &is_reparse_point);
++		rc = server->ops->query_path_info(xid, tcon, cifs_sb,
++						  full_path, &tmp_data);
+ 		data = &tmp_data;
+ 	}
+ 
+@@ -1008,24 +1006,23 @@ int cifs_get_inode_info(struct inode **inode, const char *full_path,
+ 		 * since we have to check if its reparse tag matches a known
+ 		 * special file type e.g. symlink or fifo or char etc.
+ 		 */
+-		if (is_reparse_point && data->symlink_target) {
+-			reparse_tag = IO_REPARSE_TAG_SYMLINK;
++		if (data->reparse_point && data->symlink_target) {
++			data->reparse_tag = IO_REPARSE_TAG_SYMLINK;
+ 		} else if ((le32_to_cpu(data->fi.Attributes) & ATTR_REPARSE) &&
+ 			   server->ops->query_reparse_tag) {
+ 			tmprc = server->ops->query_reparse_tag(xid, tcon, cifs_sb, full_path,
+-							    &reparse_tag);
+-			if (tmprc)
+-				cifs_dbg(FYI, "%s: query_reparse_tag: rc = %d\n", __func__, tmprc);
++							       &data->reparse_tag);
++			cifs_dbg(FYI, "%s: query_reparse_tag: rc = %d\n", __func__, tmprc);
+ 			if (server->ops->query_symlink) {
+-				tmprc = server->ops->query_symlink(xid, tcon, cifs_sb, full_path,
++				tmprc = server->ops->query_symlink(xid, tcon, cifs_sb,
++								   full_path,
+ 								   &data->symlink_target,
+-								   is_reparse_point);
+-				if (tmprc)
+-					cifs_dbg(FYI, "%s: query_symlink: rc = %d\n", __func__,
+-						 tmprc);
++								   data->reparse_point);
++				cifs_dbg(FYI, "%s: query_symlink: rc = %d\n",
++					 __func__, tmprc);
+ 			}
+ 		}
+-		cifs_open_info_to_fattr(&fattr, data, sb, adjust_tz, is_reparse_point, reparse_tag);
++		cifs_open_info_to_fattr(&fattr, data, sb);
+ 		break;
+ 	case -EREMOTE:
+ 		/* DFS link, no metadata available on this server */
+@@ -1168,9 +1165,7 @@ smb311_posix_get_inode_info(struct inode **inode,
  	struct cifs_tcon *tcon;
--	char *origin_fullpath = NULL;
--	char sep = CIFS_DIR_SEP(cifs_sb);
--	int num_links = 0;
-+	char *origin_fullpath;
- 	int rc;
- 
--	ref_path = dfs_get_path(cifs_sb, ctx->UNC);
--	if (IS_ERR(ref_path))
--		return PTR_ERR(ref_path);
-+	origin_fullpath = dfs_get_path(cifs_sb, ctx->source);
-+	if (IS_ERR(origin_fullpath))
-+		return PTR_ERR(origin_fullpath);
- 
--	full_path = smb3_fs_context_fullpath(ctx, sep);
--	if (IS_ERR(full_path)) {
--		rc = PTR_ERR(full_path);
--		full_path = NULL;
-+	rc = dfs_referral_walk(mnt_ctx);
-+	if (rc)
+ 	struct tcon_link *tlink;
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+-	bool adjust_tz = false;
+ 	struct cifs_fattr fattr = {0};
+-	bool symlink = false;
+ 	struct cifs_open_info_data data = {};
+ 	struct cifs_sid owner, group;
+ 	int rc = 0;
+@@ -1190,9 +1185,9 @@ smb311_posix_get_inode_info(struct inode **inode,
  		goto out;
--	}
- 
--	origin_fullpath = kstrdup(full_path, GFP_KERNEL);
--	if (!origin_fullpath) {
--		rc = -ENOMEM;
--		goto out;
-+	tcon = mnt_ctx->tcon;
-+	spin_lock(&tcon->tc_lock);
-+	if (!tcon->origin_fullpath) {
-+		tcon->origin_fullpath = origin_fullpath;
-+		origin_fullpath = NULL;
- 	}
--
--	do {
--		DFS_CACHE_TGT_LIST(tl);
--
--		rc = dfs_get_referral(mnt_ctx, ref_path + 1, NULL, &tl);
--		if (rc) {
--			rc = cifs_mount_get_tcon(mnt_ctx);
--			if (!rc)
--				rc = cifs_is_path_remote(mnt_ctx);
--			break;
--		}
--
--		tit = dfs_cache_get_tgt_iterator(&tl);
--		if (!tit) {
--			cifs_dbg(VFS, "%s: dfs referral (%s) with no targets\n", __func__,
--				 ref_path + 1);
--			rc = -ENOENT;
--			dfs_cache_free_tgts(&tl);
--			break;
--		}
--
--		do {
--			rc = get_dfs_conn(mnt_ctx, ref_path, full_path, tit);
--			if (!rc)
--				break;
--			if (rc == -EREMOTE) {
--				if (++num_links > MAX_NESTED_LINKS) {
--					rc = -ELOOP;
--					break;
--				}
--				kfree(ref_path);
--				kfree(full_path);
--				ref_path = full_path = NULL;
--
--				full_path = smb3_fs_context_fullpath(ctx, sep);
--				if (IS_ERR(full_path)) {
--					rc = PTR_ERR(full_path);
--					full_path = NULL;
--				} else {
--					ref_path = dfs_get_path(cifs_sb, full_path);
--					if (IS_ERR(ref_path)) {
--						rc = PTR_ERR(ref_path);
--						ref_path = NULL;
--					}
--				}
--				break;
--			}
--		} while ((tit = dfs_cache_get_next_tgt(&tl, tit)));
--		dfs_cache_free_tgts(&tl);
--	} while (rc == -EREMOTE);
--
--	if (!rc) {
--		tcon = mnt_ctx->tcon;
--
--		spin_lock(&tcon->tc_lock);
--		if (!tcon->origin_fullpath) {
--			tcon->origin_fullpath = origin_fullpath;
--			origin_fullpath = NULL;
--		}
--		spin_unlock(&tcon->tc_lock);
--
--		if (list_empty(&tcon->dfs_ses_list)) {
--			list_replace_init(&mnt_ctx->dfs_ses_list,
--					  &tcon->dfs_ses_list);
--			queue_delayed_work(dfscache_wq, &tcon->dfs_cache_work,
--					   dfs_cache_get_ttl() * HZ);
--		} else {
--			dfs_put_root_smb_sessions(&mnt_ctx->dfs_ses_list);
--		}
-+	spin_unlock(&tcon->tc_lock);
-+
-+	if (list_empty(&tcon->dfs_ses_list)) {
-+		list_replace_init(&mnt_ctx->dfs_ses_list, &tcon->dfs_ses_list);
-+		queue_delayed_work(dfscache_wq, &tcon->dfs_cache_work,
-+				   dfs_cache_get_ttl() * HZ);
-+	} else {
-+		dfs_put_root_smb_sessions(&mnt_ctx->dfs_ses_list);
  	}
  
- out:
- 	kfree(origin_fullpath);
--	kfree(ref_path);
--	kfree(full_path);
+-	rc = smb311_posix_query_path_info(xid, tcon, cifs_sb, full_path, &data,
+-					  &owner, &group, &adjust_tz,
+-					  &symlink);
++	rc = smb311_posix_query_path_info(xid, tcon, cifs_sb,
++					  full_path, &data,
++					  &owner, &group);
+ 
+ 	/*
+ 	 * 2. Convert it to internal cifs metadata (fattr)
+@@ -1200,8 +1195,7 @@ smb311_posix_get_inode_info(struct inode **inode,
+ 
+ 	switch (rc) {
+ 	case 0:
+-		smb311_posix_info_to_fattr(&fattr, &data, &owner, &group,
+-					   sb, adjust_tz, symlink);
++		smb311_posix_info_to_fattr(&fattr, &data, &owner, &group, sb);
+ 		break;
+ 	case -EREMOTE:
+ 		/* DFS link, no metadata available on this server */
+diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
+index 7d1b3fc014d9..094ef4fe2219 100644
+--- a/fs/smb/client/smb1ops.c
++++ b/fs/smb/client/smb1ops.c
+@@ -542,14 +542,17 @@ cifs_is_path_accessible(const unsigned int xid, struct cifs_tcon *tcon,
  	return rc;
  }
  
-diff --git a/fs/smb/client/dfs.h b/fs/smb/client/dfs.h
-index 98e9d2aca6a7..c0a9eea6a2c5 100644
---- a/fs/smb/client/dfs.h
-+++ b/fs/smb/client/dfs.h
-@@ -9,6 +9,110 @@
- #include "cifsglob.h"
- #include "fs_context.h"
- #include "cifs_unicode.h"
-+#include <linux/namei.h>
-+
-+#define DFS_INTERLINK(v) \
-+	(((v) & DFSREF_REFERRAL_SERVER) && !((v) & DFSREF_STORAGE_SERVER))
-+
-+struct dfs_ref {
-+	char *path;
-+	char *full_path;
-+	struct dfs_cache_tgt_list tl;
-+	struct dfs_cache_tgt_iterator *tit;
-+};
-+
-+struct dfs_ref_walk {
-+	struct dfs_ref *ref;
-+	struct dfs_ref refs[MAX_NESTED_LINKS];
-+};
-+
-+#define ref_walk_start(w)	((w)->refs)
-+#define ref_walk_end(w)	(&(w)->refs[ARRAY_SIZE((w)->refs) - 1])
-+#define ref_walk_cur(w)	((w)->ref)
-+#define ref_walk_descend(w)	(--ref_walk_cur(w) >= ref_walk_start(w))
-+
-+#define ref_walk_tit(w)	(ref_walk_cur(w)->tit)
-+#define ref_walk_empty(w)	(!ref_walk_tit(w))
-+#define ref_walk_path(w)	(ref_walk_cur(w)->path)
-+#define ref_walk_fpath(w)	(ref_walk_cur(w)->full_path)
-+#define ref_walk_tl(w)		(&ref_walk_cur(w)->tl)
-+
-+static inline struct dfs_ref_walk *ref_walk_alloc(void)
-+{
-+	struct dfs_ref_walk *rw;
-+
-+	rw = kmalloc(sizeof(*rw), GFP_KERNEL);
-+	if (!rw)
-+		return ERR_PTR(-ENOMEM);
-+	return rw;
-+}
-+
-+static inline void ref_walk_init(struct dfs_ref_walk *rw)
-+{
-+	memset(rw, 0, sizeof(*rw));
-+	ref_walk_cur(rw) = ref_walk_start(rw);
-+}
-+
-+static inline void __ref_walk_free(struct dfs_ref *ref)
-+{
-+	kfree(ref->path);
-+	kfree(ref->full_path);
-+	dfs_cache_free_tgts(&ref->tl);
-+	memset(ref, 0, sizeof(*ref));
-+}
-+
-+static inline void ref_walk_free(struct dfs_ref_walk *rw)
-+{
-+	struct dfs_ref *ref = ref_walk_start(rw);
-+
-+	for (; ref <= ref_walk_end(rw); ref++)
-+		__ref_walk_free(ref);
-+	kfree(rw);
-+}
-+
-+static inline int ref_walk_advance(struct dfs_ref_walk *rw)
-+{
-+	struct dfs_ref *ref = ref_walk_cur(rw) + 1;
-+
-+	if (ref > ref_walk_end(rw))
-+		return -ELOOP;
-+	__ref_walk_free(ref);
-+	ref_walk_cur(rw) = ref;
-+	return 0;
-+}
-+
-+static inline struct dfs_cache_tgt_iterator *
-+ref_walk_next_tgt(struct dfs_ref_walk *rw)
-+{
-+	struct dfs_cache_tgt_iterator *tit;
-+	struct dfs_ref *ref = ref_walk_cur(rw);
-+
-+	if (!ref->tit)
-+		tit = dfs_cache_get_tgt_iterator(&ref->tl);
-+	else
-+		tit = dfs_cache_get_next_tgt(&ref->tl, ref->tit);
-+	ref->tit = tit;
-+	return tit;
-+}
-+
-+static inline int ref_walk_get_tgt(struct dfs_ref_walk *rw,
-+				   struct dfs_info3_param *tgt)
-+{
-+	zfree_dfs_info_param(tgt);
-+	return dfs_cache_get_tgt_referral(ref_walk_path(rw) + 1,
-+					  ref_walk_tit(rw), tgt);
-+}
-+
-+static inline int ref_walk_num_tgts(struct dfs_ref_walk *rw)
-+{
-+	return dfs_cache_get_nr_tgts(ref_walk_tl(rw));
-+}
-+
-+static inline void ref_walk_set_tgt_hint(struct dfs_ref_walk *rw)
-+{
-+	dfs_cache_noreq_update_tgthint(ref_walk_path(rw) + 1,
-+				       ref_walk_tit(rw));
-+}
- 
- struct dfs_root_ses {
- 	struct list_head list;
-diff --git a/fs/smb/client/dfs_cache.c b/fs/smb/client/dfs_cache.c
-index 89b8af831a43..508d831fabe3 100644
---- a/fs/smb/client/dfs_cache.c
-+++ b/fs/smb/client/dfs_cache.c
-@@ -29,8 +29,6 @@
- #define CACHE_MIN_TTL		120 /* 2 minutes */
- #define CACHE_DEFAULT_TTL	300 /* 5 minutes */
- 
--#define IS_DFS_INTERLINK(v) (((v) & DFSREF_REFERRAL_SERVER) && !((v) & DFSREF_STORAGE_SERVER))
--
- struct cache_dfs_tgt {
- 	char *name;
- 	int path_consumed;
-@@ -174,7 +172,7 @@ static int dfscache_proc_show(struct seq_file *m, void *v)
- 				   "cache entry: path=%s,type=%s,ttl=%d,etime=%ld,hdr_flags=0x%x,ref_flags=0x%x,interlink=%s,path_consumed=%d,expired=%s\n",
- 				   ce->path, ce->srvtype == DFS_TYPE_ROOT ? "root" : "link",
- 				   ce->ttl, ce->etime.tv_nsec, ce->hdr_flags, ce->ref_flags,
--				   IS_DFS_INTERLINK(ce->hdr_flags) ? "yes" : "no",
-+				   DFS_INTERLINK(ce->hdr_flags) ? "yes" : "no",
- 				   ce->path_consumed, cache_entry_expired(ce) ? "yes" : "no");
- 
- 			list_for_each_entry(t, &ce->tlist, list) {
-@@ -243,7 +241,7 @@ static inline void dump_ce(const struct cache_entry *ce)
- 		 ce->srvtype == DFS_TYPE_ROOT ? "root" : "link", ce->ttl,
- 		 ce->etime.tv_nsec,
- 		 ce->hdr_flags, ce->ref_flags,
--		 IS_DFS_INTERLINK(ce->hdr_flags) ? "yes" : "no",
-+		 DFS_INTERLINK(ce->hdr_flags) ? "yes" : "no",
- 		 ce->path_consumed,
- 		 cache_entry_expired(ce) ? "yes" : "no");
- 	dump_tgts(ce);
-diff --git a/fs/smb/client/dfs_cache.h b/fs/smb/client/dfs_cache.h
-index c6abc524855f..18a08a2ca93b 100644
---- a/fs/smb/client/dfs_cache.h
-+++ b/fs/smb/client/dfs_cache.h
-@@ -55,8 +55,8 @@ static inline struct dfs_cache_tgt_iterator *
- dfs_cache_get_next_tgt(struct dfs_cache_tgt_list *tl,
- 		       struct dfs_cache_tgt_iterator *it)
+-static int cifs_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+-				struct cifs_sb_info *cifs_sb, const char *full_path,
+-				struct cifs_open_info_data *data, bool *adjustTZ, bool *symlink)
++static int cifs_query_path_info(const unsigned int xid,
++				struct cifs_tcon *tcon,
++				struct cifs_sb_info *cifs_sb,
++				const char *full_path,
++				struct cifs_open_info_data *data)
  {
--	if (!tl || list_empty(&tl->tl_list) || !it ||
--	    list_is_last(&it->it_list, &tl->tl_list))
-+	if (!tl || !tl->tl_numtgts || list_empty(&tl->tl_list) ||
-+	    !it || list_is_last(&it->it_list, &tl->tl_list))
- 		return NULL;
- 	return list_next_entry(it, it_list);
+ 	int rc;
+ 	FILE_ALL_INFO fi = {};
+ 
+-	*symlink = false;
++	data->symlink = false;
++	data->adjust_tz = false;
+ 
+ 	/* could do find first instead but this returns more info */
+ 	rc = CIFSSMBQPathInfo(xid, tcon, full_path, &fi, 0 /* not legacy */, cifs_sb->local_nls,
+@@ -562,7 +565,7 @@ static int cifs_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	if ((rc == -EOPNOTSUPP) || (rc == -EINVAL)) {
+ 		rc = SMBQueryInformation(xid, tcon, full_path, &fi, cifs_sb->local_nls,
+ 					 cifs_remap(cifs_sb));
+-		*adjustTZ = true;
++		data->adjust_tz = true;
+ 	}
+ 
+ 	if (!rc) {
+@@ -589,7 +592,7 @@ static int cifs_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 		/* Need to check if this is a symbolic link or not */
+ 		tmprc = CIFS_open(xid, &oparms, &oplock, NULL);
+ 		if (tmprc == -EOPNOTSUPP)
+-			*symlink = true;
++			data->symlink = true;
+ 		else if (tmprc == 0)
+ 			CIFSSMBClose(xid, tcon, fid.netfid);
+ 	}
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 8e696fbd72fa..260b2ed23cbd 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -541,9 +541,11 @@ static int smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
+ 	return rc;
  }
-@@ -75,7 +75,7 @@ static inline void dfs_cache_free_tgts(struct dfs_cache_tgt_list *tl)
- {
- 	struct dfs_cache_tgt_iterator *it, *nit;
  
--	if (!tl || list_empty(&tl->tl_list))
-+	if (!tl || !tl->tl_numtgts || list_empty(&tl->tl_list))
- 		return;
- 	list_for_each_entry_safe(it, nit, &tl->tl_list, it_list) {
- 		list_del(&it->it_list);
+-int smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+-			 struct cifs_sb_info *cifs_sb, const char *full_path,
+-			 struct cifs_open_info_data *data, bool *adjust_tz, bool *reparse)
++int smb2_query_path_info(const unsigned int xid,
++			 struct cifs_tcon *tcon,
++			 struct cifs_sb_info *cifs_sb,
++			 const char *full_path,
++			 struct cifs_open_info_data *data)
+ {
+ 	__u32 create_options = 0;
+ 	struct cifsFileInfo *cfile;
+@@ -553,8 +555,8 @@ int smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	bool islink;
+ 	int rc, rc2;
+ 
+-	*adjust_tz = false;
+-	*reparse = false;
++	data->adjust_tz = false;
++	data->reparse_point = false;
+ 
+ 	if (strcmp(full_path, ""))
+ 		rc = -ENOENT;
+@@ -588,7 +590,7 @@ int smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 			if (rc)
+ 				goto out;
+ 
+-			*reparse = true;
++			data->reparse_point = true;
+ 			create_options |= OPEN_REPARSE_POINT;
+ 
+ 			/* Failed on a symbolic link - query a reparse point info */
+@@ -619,12 +621,13 @@ int smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ }
+ 
+ 
+-int smb311_posix_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+-				 struct cifs_sb_info *cifs_sb, const char *full_path,
++int smb311_posix_query_path_info(const unsigned int xid,
++				 struct cifs_tcon *tcon,
++				 struct cifs_sb_info *cifs_sb,
++				 const char *full_path,
+ 				 struct cifs_open_info_data *data,
+ 				 struct cifs_sid *owner,
+-				 struct cifs_sid *group,
+-				 bool *adjust_tz, bool *reparse)
++				 struct cifs_sid *group)
+ {
+ 	int rc;
+ 	__u32 create_options = 0;
+@@ -636,8 +639,8 @@ int smb311_posix_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	size_t sidsbuflen = 0;
+ 	size_t owner_len, group_len;
+ 
+-	*adjust_tz = false;
+-	*reparse = false;
++	data->adjust_tz = false;
++	data->reparse_point = false;
+ 
+ 	/*
+ 	 * BB TODO: Add support for using the cached root handle.
+@@ -659,7 +662,7 @@ int smb311_posix_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 			if (rc)
+ 				goto out;
+ 		}
+-		*reparse = true;
++		data->reparse_point = true;
+ 		create_options |= OPEN_REPARSE_POINT;
+ 
+ 		/* Failed on a symbolic link - query a reparse point info */
+diff --git a/fs/smb/client/smb2proto.h b/fs/smb/client/smb2proto.h
+index d5d7ffb7711c..46eff9ec302a 100644
+--- a/fs/smb/client/smb2proto.h
++++ b/fs/smb/client/smb2proto.h
+@@ -56,9 +56,11 @@ extern int smb3_handle_read_data(struct TCP_Server_Info *server,
+ extern int smb2_query_reparse_tag(const unsigned int xid, struct cifs_tcon *tcon,
+ 				struct cifs_sb_info *cifs_sb, const char *path,
+ 				__u32 *reparse_tag);
+-int smb2_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+-			 struct cifs_sb_info *cifs_sb, const char *full_path,
+-			 struct cifs_open_info_data *data, bool *adjust_tz, bool *reparse);
++int smb2_query_path_info(const unsigned int xid,
++			 struct cifs_tcon *tcon,
++			 struct cifs_sb_info *cifs_sb,
++			 const char *full_path,
++			 struct cifs_open_info_data *data);
+ extern int smb2_set_path_size(const unsigned int xid, struct cifs_tcon *tcon,
+ 			      const char *full_path, __u64 size,
+ 			      struct cifs_sb_info *cifs_sb, bool set_alloc);
+@@ -275,12 +277,13 @@ extern int smb2_query_info_compound(const unsigned int xid,
+ 				    struct kvec *rsp, int *buftype,
+ 				    struct cifs_sb_info *cifs_sb);
+ /* query path info from the server using SMB311 POSIX extensions*/
+-int smb311_posix_query_path_info(const unsigned int xid, struct cifs_tcon *tcon,
+-				 struct cifs_sb_info *cifs_sb, const char *full_path,
++int smb311_posix_query_path_info(const unsigned int xid,
++				 struct cifs_tcon *tcon,
++				 struct cifs_sb_info *cifs_sb,
++				 const char *full_path,
+ 				 struct cifs_open_info_data *data,
+ 				 struct cifs_sid *owner,
+-				 struct cifs_sid *group,
+-				 bool *adjust_tz, bool *reparse);
++				 struct cifs_sid *group);
+ int posix_info_parse(const void *beg, const void *end,
+ 		     struct smb2_posix_info_parsed *out);
+ int posix_info_sid_size(const void *beg, const void *end);
 -- 
 2.41.0
 
