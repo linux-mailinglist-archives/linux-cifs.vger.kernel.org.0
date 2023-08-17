@@ -2,58 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014F877FAE5
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEED77FAEA
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352322AbjHQPgP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        id S1352326AbjHQPgP (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
         Thu, 17 Aug 2023 11:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352649AbjHQPft (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:49 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [IPv6:2a01:4f8:1c1e:a2ae::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19A630C5
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:47 -0700 (PDT)
+        with ESMTP id S1353228AbjHQPfu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:50 -0400
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CC30D8
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:49 -0700 (PDT)
 From:   Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286546;
+        s=dkim; t=1692286548;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZFfThoOQW9o4qr0HUpa3Vb36F6/+z8NMM3fvFNNomg0=;
-        b=LuJLNvMxedYVMA9FMRzZtR2Er4kxg/b2yttmz1XSR4B9zM4RQTP1uwfplZwkeK0hN6ei2k
-        i5G4j88Sg1NguPqudOOy6czfO3JdAscpoGjKYi3dmc4Jit3YPnqurHDSRvUMbBsKogvD+Q
-        QkGb2Lhj/v1ymAz5wN3WYLFxuylBw5o24Osgh2kz+uFBKgWlw5jWaB2ZN7Fe+O1rd3dFuE
-        ESq6tVLkLeyzcld5S+xQQsF5swsAq8tR8xvHnLv9f/bwoebkY3oK6Nnjc8uW9gJJRNEifW
-        awsP1t9NTMcA1ftVOm10fZ+RDJC0H6lZOvqNnIEXBMVxmEJt7N+s0bsxvONzLg==
+        bh=lTjDRReiGjyTPvMeCsJB3obpBf0aVkmd6MiO7iIGZ0Q=;
+        b=RYaydkuGIhmRJ6ldNmGeKm3HqcyZ40IDuVS6V6vFh0NKmybIZi03I+yHs8HN/yM4HRuvtO
+        ZbyO6HC9NziRCCfOsgF/jpWt//YIm2gVZ5uFVNMQNdJCnVcTWPfoPU+rby+2oxV7G/2wSi
+        HURBDokKcAVKRvKTqP6N19m9B8vCGgpQpeIN0AmWSmAiTz06BF8qcEq6e+7+9v0fqtCBO9
+        Dh5TaDz/00NzrxAwMOyav3XPUtGfEwxM6yNJbCCypY6JyrN925KbwXaVmq2ubMMNphrF1U
+        KsVz2Cz+5l58nfRb27E0a+xxzX9NDMlCaMMSLD08mTmwjiE/EpaF+42MpvRXxw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286546;
+        s=dkim; t=1692286548;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZFfThoOQW9o4qr0HUpa3Vb36F6/+z8NMM3fvFNNomg0=;
-        b=ImXDQhPsaA/gKy6644vXCdH2+R55pzWPJqghBlXwld/cDcFRC8ENZORaPc2oPkOteqbE/F
-        8LehhXikktp6e7ESWoArU+KUqCtgLMoTgmNDIgUBIFO+KJxmYYB4BEjzlMvpLaPkxbBKS9
-        mlUNSNq6B1CoTAA0iZ+2Mu8NtHlcVV3SJTSPj5Ie+qYaCZ4TAf+svqFnhHNGS/8tATQjlV
-        OLv6pIYxDeOJkGXNZJ5jHjAx4GCO+UBJnMTeu6c3lfOvkDuxUpIEyJ3u7A7Qo9QG8wtV1a
-        FbqMgyX8dTzPTBDRRs6Ax3m7ZEaGq5X3GJXMm3fK77dSPDTO7Iik3lzjEML/bA==
+        bh=lTjDRReiGjyTPvMeCsJB3obpBf0aVkmd6MiO7iIGZ0Q=;
+        b=Im5JqXFihzjQehsQXvhWy6aVzapswBvthu8Mt/AMAAytmoDyMfhgcsGE2jTULbQHW0Sf40
+        156eVyZvjyQusN/8pdtHT6p01QWfgooh8RG06sJe0pCfiERAK8mfZM4IL81YaXyLDu6nxo
+        hKmKaYlP6kssPA0BxlgIcXptAn4smxr05IfXMtqR3n45no7Me0j4tssbURUjO5gBdx0ecj
+        9GM5kYo7m8fGduJ08RqcpHBosfZGnHkSAbWb/Nx4L6TswBJZa3iamCuosoZ4XlaL22LoyB
+        GUlA0/sVA6eW0cxv0mPOSUir813/J4DJvTf6YVNhkXLwjrx4PeulASvm9WG1Qw==
 ARC-Authentication-Results: i=1;
         ORIGINATING;
         auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286546; a=rsa-sha256;
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286548; a=rsa-sha256;
         cv=none;
-        b=JTy51eu5xE+uLL7Yd3g9tXuUirEnEl6g9X4qrr3nX2HUUhiRVURKD+r87FvlXLJYno+j2p
-        vDGDGcgN83PawIYPuWlO1WBIQgCB6x1oY1WXhAWl0rXWnrpHj2sRIb8VJLr+R8i2eBfBhd
-        sezOJ8lU7n7M7NjbyVMBK5kNhKGB9vo5lS5qDwEU2BVGUdh38dW7Aa08q7IOEHy6qkRZZx
-        Tl/YYGI8yJYZqKcckRA6vWvLlT857OWksfnQ9YBaTF6MBxJlT/0AXnFTp8/W8jF1Yyld8M
-        ykUrcvt/ICl7xWM8LfWnInWZ1IdebsLJqMEaIOz0zMDZaAb18fsfBV9uppJ2ZQ==
+        b=EhK/aZU8BEg5tKdlGSvBBCAF1TzsMnabvLwQB78lpgLtAe0BI1jJAieo9iwXERVaaVqsV2
+        3ckCAidqZBHTcLk4zK7IDXxpmaj1LI5zrLPbq6vKEo5KYtkVgbTw+AENSB6u/5PeYqr7B6
+        19+9F7muppi9GjpffROX31KTpp9fwwgSdEBlN7IPOVzCSEu1TszvUSEBzogJ74y4CZQVuR
+        hhGaHYznd3AyfpJmebafYUCfPQ4Rw0gbgsrrvw8T0N5RFTXpZnMZ+Md8s4ZCKCf7BJBD5j
+        Az8kG513ngJLMBG/D4+b4ByWph7Qr1RonzzH5O7oWoKwtM735N9DSUdc7i3qLA==
 To:     smfrench@gmail.com
 Cc:     linux-cifs@vger.kernel.org, Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 13/17] smb: client: reduce stack usage in cifs_demultiplex_thread()
-Date:   Thu, 17 Aug 2023 12:34:11 -0300
-Message-ID: <20230817153416.28083-14-pc@manguebit.com>
+Subject: [PATCH 14/17] smb: client: reduce stack usage in smb_send_rqst()
+Date:   Thu, 17 Aug 2023 12:34:12 -0300
+Message-ID: <20230817153416.28083-15-pc@manguebit.com>
 In-Reply-To: <20230817153416.28083-1-pc@manguebit.com>
 References: <20230817153416.28083-1-pc@manguebit.com>
 MIME-Version: 1.0
@@ -69,33 +69,76 @@ X-Mailing-List: linux-cifs@vger.kernel.org
 
 Clang warns about exceeded stack frame size
 
-  fs/smb/client/connect.c:1109:1: warning: stack frame size (1048)
-  exceeds limit (1024) in 'cifs_demultiplex_thread'
-  [-Wframe-larger-than]
+  fs/smb/client/transport.c:420:1: warning: stack frame size (1048)
+  exceeds limit (1024) in 'smb_send_rqst' [-Wframe-larger-than]
 
-It turns out that clean_demultiplex_info() got inlined into
-cifs_demultiplex_thread(), so mark it as noinline_for_stack to save
-some stack space.
+Fix this by allocating a structure that will hold transform header and
+compound requests.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
 ---
- fs/smb/client/connect.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/smb/client/transport.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index b3461d5d0f7d..e19a9c81a5fa 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -911,8 +911,8 @@ cifs_enable_signing(struct TCP_Server_Info *server, bool mnt_sign_required)
- 	return 0;
+diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+index f280502a2aee..1b5d9794ed5b 100644
+--- a/fs/smb/client/transport.c
++++ b/fs/smb/client/transport.c
+@@ -416,13 +416,19 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	return rc;
  }
  
--
--static void clean_demultiplex_info(struct TCP_Server_Info *server)
-+static noinline_for_stack void
-+clean_demultiplex_info(struct TCP_Server_Info *server)
++struct send_req_vars {
++	struct smb2_transform_hdr tr_hdr;
++	struct smb_rqst rqst[MAX_COMPOUND];
++	struct kvec iov;
++};
++
+ static int
+ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	      struct smb_rqst *rqst, int flags)
  {
- 	int length;
+-	struct kvec iov;
+-	struct smb2_transform_hdr *tr_hdr;
+-	struct smb_rqst cur_rqst[MAX_COMPOUND];
++	struct send_req_vars *vars;
++	struct smb_rqst *cur_rqst;
++	struct kvec *iov;
+ 	int rc;
+ 
+ 	if (!(flags & CIFS_TRANSFORM_REQ))
+@@ -436,16 +442,15 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 		return -EIO;
+ 	}
+ 
+-	tr_hdr = kzalloc(sizeof(*tr_hdr), GFP_NOFS);
+-	if (!tr_hdr)
++	vars = kzalloc(sizeof(*vars), GFP_NOFS);
++	if (!vars)
+ 		return -ENOMEM;
++	cur_rqst = vars->rqst;
++	iov = &vars->iov;
+ 
+-	memset(&cur_rqst[0], 0, sizeof(cur_rqst));
+-	memset(&iov, 0, sizeof(iov));
+-
+-	iov.iov_base = tr_hdr;
+-	iov.iov_len = sizeof(*tr_hdr);
+-	cur_rqst[0].rq_iov = &iov;
++	iov->iov_base = &vars->tr_hdr;
++	iov->iov_len = sizeof(vars->tr_hdr);
++	cur_rqst[0].rq_iov = iov;
+ 	cur_rqst[0].rq_nvec = 1;
+ 
+ 	rc = server->ops->init_transform_rq(server, num_rqst + 1,
+@@ -456,7 +461,7 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	rc = __smb_send_rqst(server, num_rqst + 1, &cur_rqst[0]);
+ 	smb3_free_compound_rqst(num_rqst, &cur_rqst[1]);
+ out:
+-	kfree(tr_hdr);
++	kfree(vars);
+ 	return rc;
+ }
  
 -- 
 2.41.0
