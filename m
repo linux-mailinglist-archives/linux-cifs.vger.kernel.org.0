@@ -2,110 +2,116 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2820877F3B4
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 11:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C00077FAE0
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjHQJnE (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Aug 2023 05:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S1352756AbjHQPfo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Aug 2023 11:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343762AbjHQJmc (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 05:42:32 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7012D66
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 02:42:30 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4ff93a7f230so863617e87.1
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 02:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692265349; x=1692870149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YHHlS+pk0mCHCjGphBweWiOV3/q0xsOg3g0ajcesSsw=;
-        b=b/J5njzUe4w69aFGtNoNOeA4gZpv+pax86mck9Z/TiQHoaCYKF8n7KpMMUhQ/Y9Ft1
-         B+/ixLXcPQsrNmhx/UwaGyxvPJuHAsk4H98SdrxBS7/snSK0C0BY9lzUSq49q+16Sb5b
-         ltwq/X/PnwhFdy8XQVJxaM8kfNf19aS1CxDGwUJ4xhAZnWq6wAd0VK52+GieH5pzCWmq
-         5PeczNcrnEYUn0fCZmWtkpUpBhKVDovkmgzFltFmfpK8yZN0OZTqBkkdwkp4rzSqdOpj
-         gnb7E5KLaHnsw2mF+ZpfF5Ry6JjdWjClgSxl1WRAMvorZdJJXF0RXqp7Du3y/JOCCFtr
-         onKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692265349; x=1692870149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YHHlS+pk0mCHCjGphBweWiOV3/q0xsOg3g0ajcesSsw=;
-        b=iFpCWy0m0qTbm9NMpHM+1kafjpggbk50hZcqqbl8PS5NToHfiupWOmPkIIu2JBNZIf
-         EATUdZl0yGyRbvBk+z9hYoEt7ZrkMEcjnqXqvFxP+H8OgM7Ih/KNjtZQTcT5BoUy9OTg
-         vpXTBJ+gmFyaldRYLGvQ3m8JYNEljEDz/l156ve0VGiyywVQihlMXJUsQmJh9ghjb7E5
-         iHcpYv49JfDxBaWUr0np3J1rGq/LwMa0UGuWIQNG6tycB6jmXUzjCUFpRJr/GEooa/NZ
-         /mxoYnDck5QgQ2ZoUkxawb/ATiDuoOQTCKSE3/3sHVLqYELwaEQRgkM7kntmtES8lujo
-         Wm5w==
-X-Gm-Message-State: AOJu0YxJavWfFGykq74+1YMGWBQeMqgiY8u+U+zcbmRMWw3mCvNMC3U8
-        39Cp95Ht7gpII7qCh/MblnVOzw3ZCyeYfwZW9Nk=
-X-Google-Smtp-Source: AGHT+IEhXGrf5vYlEQ/t+epEaWWnZscVL2FrQho8rsa6Xc1Qhp3nKhxTW5AtEa1J47aNrWh43+M+ylrloYO384kyFcc=
-X-Received: by 2002:a05:6512:3d01:b0:4fe:d15:e1d2 with SMTP id
- d1-20020a0565123d0100b004fe0d15e1d2mr755393lfv.12.1692265348698; Thu, 17 Aug
- 2023 02:42:28 -0700 (PDT)
+        with ESMTP id S1353238AbjHQPf2 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:28 -0400
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78AD30DE
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:26 -0700 (PDT)
+From:   Paulo Alcantara <pc@manguebit.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+        s=dkim; t=1692286525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L3TdGOB09yuHzHodf32k9qZeUpG9cgywUb5exfqeM7Y=;
+        b=TpKyvdLQCXY34Cc7zz0z792+B2EdwUIF9KU6/XncnG8JX6MhbUIveK6dLB1Ud8pBRis2aP
+        H3s6cLq5laTiea7Y8QfN7mlW7WmkWFbSCUp/MMutoChEXypj0VnXKsIItxGe2Ubp9IFWNS
+        4o+Zpr43kh9IFKaOyQ4VqhY/XHtJJ/LG/Oo5wU64MXgf/5SaZ5gfd8uVIKFjOaQhiHpy4b
+        LGmwGbBp8HyZsKhGmRReqdLP1qolbnVZhY+AL2R40JfWFvi6C3/r+bK2Qm9k/zcdzwcFTr
+        SIkhoqK6YbeUoseJMzYwQC5Tyx/yYPu+DIsPk5gU26nZPGaeNybSr1PPXSxl8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+        s=dkim; t=1692286524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L3TdGOB09yuHzHodf32k9qZeUpG9cgywUb5exfqeM7Y=;
+        b=Zho60JC4W+aAqiSupT4CFyHJd47Py+agi7jsdeX44y+pcbymXobptDcqXB6p0enNNXiRSg
+        2j/6QN6XWa7aI8PklRKwteJ3Vd42gFM5tRJqvucvWHfmigpi8ein5yRlQA9LmRo7NZqzfR
+        wvkHOfyWmsD2t0hiRZe2MC4Ztbgzm6Fk/uKo9CPZyuLNJ0p4KUdFkCEjUW1plom/uoBb6V
+        bGcG4nomCvInal4b3qFfs/oR7ovAlHq4Ya5wOT0gqlNS9adsKa8Ex1BfS86iEQ740Cjdm0
+        cENgZ7CtDKy1BHwZZUZ0kKdFaHUJN5d7jRk8EPlt0hX7sN78qI04dvrHqw0NsQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286525; a=rsa-sha256;
+        cv=none;
+        b=YTrYDWYeCpfCT1eEoptveKpenQBeUv7BzwTbPUry49A5SytO4GzWNwBOgIvRWsGqEkOksI
+        PixIXDwxuGS3OPZAWaS/6p+S0YmBCnhaFZpo4T9XgwJqc/m/+iEyrLj+KB9c5bjiakhLla
+        OXaCHKoeVbyZNPwsyEq1gl/8NLj3pSVgXvKvkXq+8ozi4fYfy4xXIkw26zLr2rHB+tweNe
+        D/Wno8Qu2FTTkgYJDFw6PWA8LJUD848lyrDgHuSPTvFLYmIhigHrN/S+I9nQnQY5Lof5pz
+        izaZQxOBblb2RtQ8L80HKz85lTre1WNgfgcv3FbcWHaScqYrS7buV+FkEp/Ehw==
+To:     smfrench@gmail.com
+Cc:     linux-cifs@vger.kernel.org, Paulo Alcantara <pc@manguebit.com>
+Subject: [PATCH 00/17] cifs.ko fixes
+Date:   Thu, 17 Aug 2023 12:33:58 -0300
+Message-ID: <20230817153416.28083-1-pc@manguebit.com>
 MIME-Version: 1.0
-References: <20230816202638.17616-1-bharathsm@microsoft.com>
-In-Reply-To: <20230816202638.17616-1-bharathsm@microsoft.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Thu, 17 Aug 2023 15:12:17 +0530
-Message-ID: <CANT5p=ocZ1V-0buA7i8fJXYCMdWi5MZjQbvRJugmKMp+SHBpRQ@mail.gmail.com>
-Subject: Re: [PATCH] cifs: update desired access while requesting for
- directory lease
-To:     Bharath SM <bharathsm.hsk@gmail.com>
-Cc:     pc@manguebit.com, sfrench@samba.org, sprasad@microsoft.com,
-        tom@talpey.com, linux-cifs@vger.kernel.org, bharathsm@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 1:58=E2=80=AFAM Bharath SM <bharathsm.hsk@gmail.com=
-> wrote:
->
-> We read and cache directory contents when we get directory
-> lease, so we should ask for read permission to read contents
-> of directory.
->
-> Signed-off-by: Bharath SM <bharathsm@microsoft.com>
-> ---
->  fs/smb/client/cached_dir.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
-> index fe483f163dbc..2d5e9a9d5b8b 100644
-> --- a/fs/smb/client/cached_dir.c
-> +++ b/fs/smb/client/cached_dir.c
-> @@ -218,7 +218,7 @@ int open_cached_dir(unsigned int xid, struct cifs_tco=
-n *tcon,
->                 .tcon =3D tcon,
->                 .path =3D path,
->                 .create_options =3D cifs_create_options(cifs_sb, CREATE_N=
-OT_FILE),
-> -               .desired_access =3D FILE_READ_ATTRIBUTES,
-> +               .desired_access =3D  FILE_READ_DATA | FILE_READ_ATTRIBUTE=
-S,
->                 .disposition =3D FILE_OPEN,
->                 .fid =3D pfid,
->         };
-> --
-> 2.39.2
->
+Hi Steve,
 
-Looks good to me.
-Should also CC stable.
+Follow patchset with DFS, reparse point and -Wframe-larger-than fixes
+for v6.6.
 
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Please review & test.
 
---=20
-Regards,
-Shyam
+Paulo Alcantara (17):
+  smb: client: introduce DFS_CACHE_TGT_LIST()
+  smb: client: ensure to try all targets when finding nested links
+  smb: client: move some params to cifs_open_info_data
+  smb: client: make smb2_compound_op() return resp buffer on success
+  smb: client: rename cifs_dfs_ref.c to namespace.c
+  smb: client: get rid of dfs naming in automount code
+  smb: client: get rid of dfs code dep in namespace.c
+  smb: client: parse reparse point flag in create response
+  smb: client: do not query reparse points twice on symlinks
+  smb: client: query reparse points in older dialects
+  smb: cilent: set reparse mount points as automounts
+  smb: client: reduce stack usage in cifs_try_adding_channels()
+  smb: client: reduce stack usage in cifs_demultiplex_thread()
+  smb: client: reduce stack usage in smb_send_rqst()
+  smb: client: reduce stack usage in smb2_set_ea()
+  smb: client: reduce stack usage in smb2_query_info_compound()
+  smb: client: reduce stack usage in smb2_query_reparse_point()
+
+ fs/smb/client/Makefile                        |   5 +-
+ fs/smb/client/cifsfs.c                        |   2 +-
+ fs/smb/client/cifsfs.h                        |  11 +-
+ fs/smb/client/cifsglob.h                      |  69 ++-
+ fs/smb/client/cifsproto.h                     |   9 +-
+ fs/smb/client/connect.c                       |   8 +-
+ fs/smb/client/dfs.c                           | 291 +++++-----
+ fs/smb/client/dfs.h                           | 141 +++--
+ fs/smb/client/dfs_cache.c                     |  10 +-
+ fs/smb/client/dfs_cache.h                     |  12 +-
+ fs/smb/client/dir.c                           |   4 +-
+ fs/smb/client/inode.c                         | 530 ++++++++++--------
+ fs/smb/client/{cifs_dfs_ref.c => namespace.c} | 113 ++--
+ fs/smb/client/readdir.c                       |  23 +-
+ fs/smb/client/sess.c                          |  68 ++-
+ fs/smb/client/smb1ops.c                       |  26 +-
+ fs/smb/client/smb2inode.c                     | 199 ++++---
+ fs/smb/client/smb2ops.c                       | 283 +++-------
+ fs/smb/client/smb2proto.h                     |  17 +-
+ fs/smb/client/transport.c                     |  29 +-
+ 20 files changed, 993 insertions(+), 857 deletions(-)
+ rename fs/smb/client/{cifs_dfs_ref.c => namespace.c} (62%)
+
+-- 
+2.41.0
+
