@@ -2,58 +2,58 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5356677FADF
-	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC19E77FADD
+	for <lists+linux-cifs@lfdr.de>; Thu, 17 Aug 2023 17:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352757AbjHQPfp (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 17 Aug 2023 11:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S1352676AbjHQPfo (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 17 Aug 2023 11:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353246AbjHQPfh (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:37 -0400
+        with ESMTP id S1353248AbjHQPfi (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 17 Aug 2023 11:35:38 -0400
 Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B457430C6
-        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCC130C5
+        for <linux-cifs@vger.kernel.org>; Thu, 17 Aug 2023 08:35:37 -0700 (PDT)
 From:   Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286534;
+        s=dkim; t=1692286536;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J+qC7fw5PBrM2g10SnT+3E6TH4omTAkAHDXNRo187g8=;
-        b=SLRoYipqRGV0JrcJQmBip9h6A6bdy/bX4YpiUIDStyFdwzwAqT+8pkN9o9hRMCK/Ji7nA3
-        qJ3uDgtbBvnjgKWmYGO5/jkEUH/FDjg6DjtSUj73+KdLNF0RXyOiUpsq/e+fOwu0xbwnxr
-        6Yh3Ss/VFssIntlP84+blNnLzdiZ42QN8KSlpGbH608fahceOySo95RAJi2/66nl+jcAzp
-        XtA6HqqQLti3wM2E1H0/U8hZDmnsCFZImKS4oBdcyA+oISsvS4Gf3FidXFicffot+MB76T
-        P5DpmEQQsd1Lly/Hvl61CFBgt+Ffpn+y4lJ37qoFHoZHymewhZImLiXczFwBIQ==
+        bh=tsioSQiZ417b8RqCL1VpmHMw8YPV2IvsZHhxTbozTFg=;
+        b=JR1Bvzn0PB3VoEAGXFaF7DS+aRxAcaV7FuwWxENixqNgRD5F7mnAkhn5YTxtgJfm4bOTid
+        uggFk9vo+g8cEW22A9Sl2hEJDfnfRBkCKl78CTxFJSsBw21N9t2SEzg/PGaRhej1wSFCeX
+        4L+Amy0Ww9e0pOcok8PDE+SxyKbBr7DS3fYR8azMpn3GLBf6k2LS+2coO4aO7tMDNP3mdR
+        P2ieVe5lgLiePf7wfEq/YoL4KdJDyNRHZVHJAmvOJBFnDzha+3HcftUIWccqUOiz16g92C
+        IMazTeOEMp7tzYZdMw+mKl1iMMUvCdvr1tFr7Rg2BOu6RApq9BMJj4eCaYmUsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1692286534;
+        s=dkim; t=1692286536;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J+qC7fw5PBrM2g10SnT+3E6TH4omTAkAHDXNRo187g8=;
-        b=WNI074jkOFzfuGRMsXaPygsMfXgGprIWSYOcO71WQIweKmRPK0rZ80CrEkszgs0V+LZNFJ
-        DSXg8E82tcvJ59FrOAit9FXva6D5qVwRP3hdJelEnmWjdGDuBiCgemFsOoftBfPrJqLjUc
-        +x52AIWQvlN8sX/FHRzonBxlISox/+BiB0baK6XFCYdkWttKqCnUDV1YPNtrG/yaaZSzzQ
-        a96jrfDWbJeue7oa83C/QWLxrVJ72GSaUnKPwcOpLLJpMmJMKCy0RwkPaO6jJ4HACsFG7D
-        YtNnR1hCuzDWMpVizotCHNS1jUQrJup7DPOYFr5BsBDnOCpmb7UgQDDC1LrmSg==
+        bh=tsioSQiZ417b8RqCL1VpmHMw8YPV2IvsZHhxTbozTFg=;
+        b=pEESAX/8xhGEnSRn1mTxfGLQ7MjOLeAPyAwf9YKjPgGct98sztegR62r8zFpX8H6PX/VB9
+        HfQkH/GlnOCXxubE3+QlUDx4zvB7rB9XSV/jM1Ak+18zKhF+z74pcGjg6KeyEo9lSslqFS
+        yCd3ehgmYxQjciocfTi/O10z8XB8vjw3TLDS58YqlHwK0j7OFC97yY5WJKM1KK/6ZYaqZ2
+        nxYCvDOChVPWUmpckFwIce63kOJMH++N6AVQOJcsuPeR4UZhOY+2vEF1i8glnO/B9VN0vT
+        KeGFLCpm+wiPGBwkwMr9U0vPEJ8sRBhwe4rp5lRtWwG26WSGYnXxLYiFiarrSQ==
 ARC-Authentication-Results: i=1;
         ORIGINATING;
         auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286534; a=rsa-sha256;
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1692286536; a=rsa-sha256;
         cv=none;
-        b=Dv5O6ZdWISIbfzXre71VcISd6TwQFG70aJlpmCKbHSkPwMqXHz0jWK8mXam6mvtvcvxoYG
-        HGrk3YYfbXhqgsrS0lPtdDOmIs46GnFaeQ6h3nivGEhV1ZM8uaVg7xCvIrTyP6Map8Gzfq
-        bjpjYdhNhHex75EjobjWfczqlu1ty3R2k/K15W1rto2+FoIy3DBnbmT5loq33CqXJVRAWg
-        vl8EzYek9yt7UiFuBDBWiSjxHrGnJaNeFr+84nCNNQq8mK8dbiq7o9Zr2THVDdeJhiqKGo
-        1zjW5/cD2ZcVgOzWHWM/SlbhXjKuUH/hGpYqA2+HPP+Rf3iKLxCorObJFgzq2Q==
+        b=rIH1EkQTYUVmWv3ARJcNE7sbcJ/FfmNeVqBWcmkNwskVDimTu0eEYzT2bW4SmXdlqmOSyO
+        LgqMT3O7/tRiFknmgWzcgr0gYOyOLBruuFc6YvF6jNff8S1ymuSND47oRrk2yBnxvj6lu0
+        Drud4Jzmdq7OLse6s2fV1zQV3QyHUDX8/l6kWhNNTxtAW2lt79QV3Lhv5LPWi3RzEWgiC+
+        bIgBNEVgEbM4VS+KUq8yqvn6ELosVufe9byMhGMKG4ZIPINzPreSAzg8Kf0x81swSYlPsk
+        5XAB+lGZczPNQtstflTUBKByZN0Ar3AflIMF91obz7rES/NAxe4k/b1vuCN/sw==
 To:     smfrench@gmail.com
 Cc:     linux-cifs@vger.kernel.org, Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 06/17] smb: client: get rid of dfs naming in automount code
-Date:   Thu, 17 Aug 2023 12:34:04 -0300
-Message-ID: <20230817153416.28083-7-pc@manguebit.com>
+Subject: [PATCH 07/17] smb: client: get rid of dfs code dep in namespace.c
+Date:   Thu, 17 Aug 2023 12:34:05 -0300
+Message-ID: <20230817153416.28083-8-pc@manguebit.com>
 In-Reply-To: <20230817153416.28083-1-pc@manguebit.com>
 References: <20230817153416.28083-1-pc@manguebit.com>
 MIME-Version: 1.0
@@ -67,203 +67,278 @@ Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Automount code will handle both DFS links and reparse mount points.
-
-Also, get rid of BUG_ON() in cifs_release_automount_timer() while
-we're at it.
+Make namespace.c being built without requiring
+CONFIG_CIFS_DFS_UPCALL=y by moving set_dest_addr() to dfs.c and call
+it at the beginning of dfs_mount_share() so it can chase the DFS link
+starting from the correct server in @ctx->dstaddr.
 
 Signed-off-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
 ---
- fs/smb/client/cifsfs.c    |  2 +-
- fs/smb/client/cifsfs.h    |  6 +++---
- fs/smb/client/cifsproto.h |  4 ++--
- fs/smb/client/dir.c       |  4 ++--
- fs/smb/client/inode.c     |  2 +-
- fs/smb/client/namespace.c | 42 +++++++++++++++++++--------------------
- 6 files changed, 30 insertions(+), 30 deletions(-)
+ fs/smb/client/Makefile    |  5 ++--
+ fs/smb/client/cifsfs.h    |  7 -----
+ fs/smb/client/cifsproto.h |  4 ---
+ fs/smb/client/dfs.c       | 16 +++++++++++
+ fs/smb/client/dfs.h       | 37 --------------------------
+ fs/smb/client/inode.c     |  4 ---
+ fs/smb/client/namespace.c | 56 ++++++++++++++++++++++++++-------------
+ 7 files changed, 57 insertions(+), 72 deletions(-)
 
-diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
-index a4d8b0ea1c8c..d49fd2bf71b0 100644
---- a/fs/smb/client/cifsfs.c
-+++ b/fs/smb/client/cifsfs.c
-@@ -1805,7 +1805,7 @@ exit_cifs(void)
- 	cifs_dbg(NOISY, "exit_smb3\n");
- 	unregister_filesystem(&cifs_fs_type);
- 	unregister_filesystem(&smb3_fs_type);
--	cifs_dfs_release_automount_timer();
-+	cifs_release_automount_timer();
- 	exit_cifs_idmap();
- #ifdef CONFIG_CIFS_SWN_UPCALL
- 	cifs_genl_exit();
+diff --git a/fs/smb/client/Makefile b/fs/smb/client/Makefile
+index 851e6ba65e9b..0b07eb94c93b 100644
+--- a/fs/smb/client/Makefile
++++ b/fs/smb/client/Makefile
+@@ -11,7 +11,8 @@ cifs-y := trace.o cifsfs.o cifs_debug.o connect.o dir.o file.o \
+ 	  readdir.o ioctl.o sess.o export.o unc.o winucase.o \
+ 	  smb2ops.o smb2maperror.o smb2transport.o \
+ 	  smb2misc.o smb2pdu.o smb2inode.o smb2file.o cifsacl.o fs_context.o \
+-	  dns_resolve.o cifs_spnego_negtokeninit.asn1.o asn1.o
++	  dns_resolve.o cifs_spnego_negtokeninit.asn1.o asn1.o \
++	  namespace.o
+ 
+ $(obj)/asn1.o: $(obj)/cifs_spnego_negtokeninit.asn1.h
+ 
+@@ -21,7 +22,7 @@ cifs-$(CONFIG_CIFS_XATTR) += xattr.o
+ 
+ cifs-$(CONFIG_CIFS_UPCALL) += cifs_spnego.o
+ 
+-cifs-$(CONFIG_CIFS_DFS_UPCALL) += namespace.o dfs_cache.o dfs.o
++cifs-$(CONFIG_CIFS_DFS_UPCALL) += dfs_cache.o dfs.o
+ 
+ cifs-$(CONFIG_CIFS_SWN_UPCALL) += netlink.o cifs_swn.o
+ 
 diff --git a/fs/smb/client/cifsfs.h b/fs/smb/client/cifsfs.h
-index 15c8cc4b6680..99075970716e 100644
+index 99075970716e..532c38fe07cd 100644
 --- a/fs/smb/client/cifsfs.h
 +++ b/fs/smb/client/cifsfs.h
-@@ -81,7 +81,7 @@ extern int cifs_fiemap(struct inode *, struct fiemap_extent_info *, u64 start,
- 
- extern const struct inode_operations cifs_file_inode_ops;
- extern const struct inode_operations cifs_symlink_inode_ops;
--extern const struct inode_operations cifs_dfs_referral_inode_operations;
-+extern const struct inode_operations cifs_namespace_inode_operations;
- 
- 
- /* Functions related to files and directories */
-@@ -119,9 +119,9 @@ extern const struct dentry_operations cifs_dentry_ops;
+@@ -118,14 +118,7 @@ extern void cifs_pages_write_redirty(struct inode *inode, loff_t start, unsigned
+ extern const struct dentry_operations cifs_dentry_ops;
  extern const struct dentry_operations cifs_ci_dentry_ops;
  
- #ifdef CONFIG_CIFS_DFS_UPCALL
--extern struct vfsmount *cifs_dfs_d_automount(struct path *path);
-+extern struct vfsmount *cifs_d_automount(struct path *path);
- #else
--static inline struct vfsmount *cifs_dfs_d_automount(struct path *path)
-+static inline struct vfsmount *cifs_d_automount(struct path *path)
- {
- 	return ERR_PTR(-EREMOTE);
- }
+-#ifdef CONFIG_CIFS_DFS_UPCALL
+ extern struct vfsmount *cifs_d_automount(struct path *path);
+-#else
+-static inline struct vfsmount *cifs_d_automount(struct path *path)
+-{
+-	return ERR_PTR(-EREMOTE);
+-}
+-#endif
+ 
+ /* Functions related to symlinks */
+ extern const char *cifs_get_link(struct dentry *, struct inode *,
 diff --git a/fs/smb/client/cifsproto.h b/fs/smb/client/cifsproto.h
-index 1d71d658e167..c7a7484efbd2 100644
+index c7a7484efbd2..694d16acdf61 100644
 --- a/fs/smb/client/cifsproto.h
 +++ b/fs/smb/client/cifsproto.h
-@@ -296,9 +296,9 @@ extern void cifs_put_tcp_session(struct TCP_Server_Info *server,
+@@ -295,11 +295,7 @@ extern void cifs_put_tcp_session(struct TCP_Server_Info *server,
+ 				 int from_reconnect);
  extern void cifs_put_tcon(struct cifs_tcon *tcon);
  
- #if IS_ENABLED(CONFIG_CIFS_DFS_UPCALL)
--extern void cifs_dfs_release_automount_timer(void);
-+extern void cifs_release_automount_timer(void);
- #else /* ! IS_ENABLED(CONFIG_CIFS_DFS_UPCALL) */
--#define cifs_dfs_release_automount_timer()	do { } while (0)
-+#define cifs_release_automount_timer()	do { } while (0)
- #endif /* ! IS_ENABLED(CONFIG_CIFS_DFS_UPCALL) */
+-#if IS_ENABLED(CONFIG_CIFS_DFS_UPCALL)
+ extern void cifs_release_automount_timer(void);
+-#else /* ! IS_ENABLED(CONFIG_CIFS_DFS_UPCALL) */
+-#define cifs_release_automount_timer()	do { } while (0)
+-#endif /* ! IS_ENABLED(CONFIG_CIFS_DFS_UPCALL) */
  
  void cifs_proc_init(void);
-diff --git a/fs/smb/client/dir.c b/fs/smb/client/dir.c
-index 30b1e1bfd204..580a27a3a7e6 100644
---- a/fs/smb/client/dir.c
-+++ b/fs/smb/client/dir.c
-@@ -797,7 +797,7 @@ cifs_d_revalidate(struct dentry *direntry, unsigned int flags)
+ void cifs_proc_clean(void);
+diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
+index 71ee74041884..81b84151450d 100644
+--- a/fs/smb/client/dfs.c
++++ b/fs/smb/client/dfs.c
+@@ -263,12 +263,28 @@ static int __dfs_mount_share(struct cifs_mount_ctx *mnt_ctx)
+ 	return rc;
+ }
  
- const struct dentry_operations cifs_dentry_ops = {
- 	.d_revalidate = cifs_d_revalidate,
--	.d_automount = cifs_dfs_d_automount,
-+	.d_automount = cifs_d_automount,
- /* d_delete:       cifs_d_delete,      */ /* not needed except for debugging */
- };
++/* Resolve UNC hostname in @ctx->source and set ip addr in @ctx->dstaddr */
++static int update_fs_context_dstaddr(struct smb3_fs_context *ctx)
++{
++	struct sockaddr *addr = (struct sockaddr *)&ctx->dstaddr;
++	int rc;
++
++	rc = dns_resolve_server_name_to_ip(ctx->source, addr, NULL);
++	if (!rc)
++		cifs_set_port(addr, ctx->port);
++	return rc;
++}
++
+ int dfs_mount_share(struct cifs_mount_ctx *mnt_ctx, bool *isdfs)
+ {
+ 	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
+ 	bool nodfs = ctx->nodfs;
+ 	int rc;
  
-@@ -872,5 +872,5 @@ const struct dentry_operations cifs_ci_dentry_ops = {
- 	.d_revalidate = cifs_d_revalidate,
- 	.d_hash = cifs_ci_hash,
- 	.d_compare = cifs_ci_compare,
--	.d_automount = cifs_dfs_d_automount,
-+	.d_automount = cifs_d_automount,
- };
++	rc = update_fs_context_dstaddr(ctx);
++	if (rc)
++		return rc;
++
+ 	*isdfs = false;
+ 	rc = get_session(mnt_ctx, NULL);
+ 	if (rc)
+diff --git a/fs/smb/client/dfs.h b/fs/smb/client/dfs.h
+index c0a9eea6a2c5..875ab7ae57fc 100644
+--- a/fs/smb/client/dfs.h
++++ b/fs/smb/client/dfs.h
+@@ -138,43 +138,6 @@ static inline int dfs_get_referral(struct cifs_mount_ctx *mnt_ctx, const char *p
+ 			      cifs_remap(cifs_sb), path, ref, tl);
+ }
+ 
+-/* Return DFS full path out of a dentry set for automount */
+-static inline char *dfs_get_automount_devname(struct dentry *dentry, void *page)
+-{
+-	struct cifs_sb_info *cifs_sb = CIFS_SB(dentry->d_sb);
+-	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+-	size_t len;
+-	char *s;
+-
+-	spin_lock(&tcon->tc_lock);
+-	if (unlikely(!tcon->origin_fullpath)) {
+-		spin_unlock(&tcon->tc_lock);
+-		return ERR_PTR(-EREMOTE);
+-	}
+-	spin_unlock(&tcon->tc_lock);
+-
+-	s = dentry_path_raw(dentry, page, PATH_MAX);
+-	if (IS_ERR(s))
+-		return s;
+-	/* for root, we want "" */
+-	if (!s[1])
+-		s++;
+-
+-	spin_lock(&tcon->tc_lock);
+-	len = strlen(tcon->origin_fullpath);
+-	if (s < (char *)page + len) {
+-		spin_unlock(&tcon->tc_lock);
+-		return ERR_PTR(-ENAMETOOLONG);
+-	}
+-
+-	s -= len;
+-	memcpy(s, tcon->origin_fullpath, len);
+-	spin_unlock(&tcon->tc_lock);
+-	convert_delimiter(s, '/');
+-
+-	return s;
+-}
+-
+ static inline void dfs_put_root_smb_sessions(struct list_head *head)
+ {
+ 	struct dfs_root_ses *root, *tmp;
 diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index 0d11e63042e2..0d4a78561acc 100644
+index 0d4a78561acc..da2ec48dc0f6 100644
 --- a/fs/smb/client/inode.c
 +++ b/fs/smb/client/inode.c
-@@ -60,7 +60,7 @@ static void cifs_set_ops(struct inode *inode)
+@@ -58,13 +58,9 @@ static void cifs_set_ops(struct inode *inode)
+ 			inode->i_data.a_ops = &cifs_addr_ops;
+ 		break;
  	case S_IFDIR:
- #ifdef CONFIG_CIFS_DFS_UPCALL
+-#ifdef CONFIG_CIFS_DFS_UPCALL
  		if (IS_AUTOMOUNT(inode)) {
--			inode->i_op = &cifs_dfs_referral_inode_operations;
-+			inode->i_op = &cifs_namespace_inode_operations;
+ 			inode->i_op = &cifs_namespace_inode_operations;
  		} else {
- #else /* NO DFS support, treat as a directory */
- 		{
+-#else /* NO DFS support, treat as a directory */
+-		{
+-#endif
+ 			inode->i_op = &cifs_dir_inode_ops;
+ 			inode->i_fop = &cifs_dir_ops;
+ 		}
 diff --git a/fs/smb/client/namespace.c b/fs/smb/client/namespace.c
-index b1c2499b1c3b..af64f2add873 100644
+index af64f2add873..3252fe33f7a3 100644
 --- a/fs/smb/client/namespace.c
 +++ b/fs/smb/client/namespace.c
-@@ -1,7 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- *   Contains the CIFS DFS referral mounting routines used for handling
-- *   traversal via DFS junction point
-+ *   Contains mounting routines used for handling traversal via SMB junctions.
-  *
-  *   Copyright (c) 2007 Igor Mammedov
+@@ -6,6 +6,7 @@
   *   Copyright (C) International Business Machines  Corp., 2008
-@@ -24,27 +23,28 @@
- #include "dfs.h"
+  *   Author(s): Igor Mammedov (niallain@gmail.com)
+  *		Steve French (sfrench@us.ibm.com)
++ *   Copyright (c) 2023 Paulo Alcantara <palcantara@suse.de>
+  */
+ 
+ #include <linux/dcache.h>
+@@ -18,9 +19,7 @@
+ #include "cifsglob.h"
+ #include "cifsproto.h"
+ #include "cifsfs.h"
+-#include "dns_resolve.h"
+ #include "cifs_debug.h"
+-#include "dfs.h"
  #include "fs_context.h"
  
--static LIST_HEAD(cifs_dfs_automount_list);
-+static LIST_HEAD(cifs_automount_list);
- 
--static void cifs_dfs_expire_automounts(struct work_struct *work);
--static DECLARE_DELAYED_WORK(cifs_dfs_automount_task,
--			    cifs_dfs_expire_automounts);
--static int cifs_dfs_mountpoint_expiry_timeout = 500 * HZ;
-+static void cifs_expire_automounts(struct work_struct *work);
-+static DECLARE_DELAYED_WORK(cifs_automount_task,
-+			    cifs_expire_automounts);
-+static int cifs_mountpoint_expiry_timeout = 500 * HZ;
- 
--static void cifs_dfs_expire_automounts(struct work_struct *work)
-+static void cifs_expire_automounts(struct work_struct *work)
- {
--	struct list_head *list = &cifs_dfs_automount_list;
-+	struct list_head *list = &cifs_automount_list;
- 
- 	mark_mounts_for_expiry(list);
- 	if (!list_empty(list))
--		schedule_delayed_work(&cifs_dfs_automount_task,
--				      cifs_dfs_mountpoint_expiry_timeout);
-+		schedule_delayed_work(&cifs_automount_task,
-+				      cifs_mountpoint_expiry_timeout);
+ static LIST_HEAD(cifs_automount_list);
+@@ -118,15 +117,41 @@ cifs_build_devname(char *nodename, const char *prepath)
+ 	return dev;
  }
  
--void cifs_dfs_release_automount_timer(void)
-+void cifs_release_automount_timer(void)
+-static int set_dest_addr(struct smb3_fs_context *ctx)
++/* Return full path out of a dentry set for automount */
++static char *automount_fullpath(struct dentry *dentry, void *page)
  {
--	BUG_ON(!list_empty(&cifs_dfs_automount_list));
--	cancel_delayed_work_sync(&cifs_dfs_automount_task);
-+	if (WARN_ON(!list_empty(&cifs_automount_list)))
-+		return;
-+	cancel_delayed_work_sync(&cifs_automount_task);
+-	struct sockaddr *addr = (struct sockaddr *)&ctx->dstaddr;
+-	int rc;
++	struct cifs_sb_info *cifs_sb = CIFS_SB(dentry->d_sb);
++	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
++	size_t len;
++	char *s;
+ 
+-	rc = dns_resolve_server_name_to_ip(ctx->source, addr, NULL);
+-	if (!rc)
+-		cifs_set_port(addr, ctx->port);
+-	return rc;
++	spin_lock(&tcon->tc_lock);
++	if (unlikely(!tcon->origin_fullpath)) {
++		spin_unlock(&tcon->tc_lock);
++		return ERR_PTR(-EREMOTE);
++	}
++	spin_unlock(&tcon->tc_lock);
++
++	s = dentry_path_raw(dentry, page, PATH_MAX);
++	if (IS_ERR(s))
++		return s;
++	/* for root, we want "" */
++	if (!s[1])
++		s++;
++
++	spin_lock(&tcon->tc_lock);
++	len = strlen(tcon->origin_fullpath);
++	if (s < (char *)page + len) {
++		spin_unlock(&tcon->tc_lock);
++		return ERR_PTR(-ENAMETOOLONG);
++	}
++
++	s -= len;
++	memcpy(s, tcon->origin_fullpath, len);
++	spin_unlock(&tcon->tc_lock);
++	convert_delimiter(s, '/');
++
++	return s;
  }
  
- /**
-@@ -132,7 +132,7 @@ static int set_dest_addr(struct smb3_fs_context *ctx)
  /*
-  * Create a vfsmount that we can automount
-  */
--static struct vfsmount *cifs_dfs_do_automount(struct path *path)
-+static struct vfsmount *cifs_do_automount(struct path *path)
- {
- 	int rc;
- 	struct dentry *mntpt = path->dentry;
-@@ -214,25 +214,25 @@ static struct vfsmount *cifs_dfs_do_automount(struct path *path)
- /*
-  * Attempt to automount the referral
-  */
--struct vfsmount *cifs_dfs_d_automount(struct path *path)
-+struct vfsmount *cifs_d_automount(struct path *path)
- {
- 	struct vfsmount *newmnt;
+@@ -166,7 +191,7 @@ static struct vfsmount *cifs_do_automount(struct path *path)
+ 	ctx = smb3_fc2context(fc);
  
- 	cifs_dbg(FYI, "%s: %pd\n", __func__, path->dentry);
- 
--	newmnt = cifs_dfs_do_automount(path);
-+	newmnt = cifs_do_automount(path);
- 	if (IS_ERR(newmnt)) {
- 		cifs_dbg(FYI, "leaving %s [automount failed]\n" , __func__);
- 		return newmnt;
+ 	page = alloc_dentry_path();
+-	full_path = dfs_get_automount_devname(mntpt, page);
++	full_path = automount_fullpath(mntpt, page);
+ 	if (IS_ERR(full_path)) {
+ 		mnt = ERR_CAST(full_path);
+ 		goto out;
+@@ -196,15 +221,10 @@ static struct vfsmount *cifs_do_automount(struct path *path)
+ 		ctx->source = NULL;
+ 		goto out;
  	}
+-	cifs_dbg(FYI, "%s: ctx: source=%s UNC=%s prepath=%s dstaddr=%pISpc\n",
+-		 __func__, ctx->source, ctx->UNC, ctx->prepath, &ctx->dstaddr);
+-
+-	rc = set_dest_addr(ctx);
+-	if (!rc)
+-		mnt = fc_mount(fc);
+-	else
+-		mnt = ERR_PTR(rc);
++	cifs_dbg(FYI, "%s: ctx: source=%s UNC=%s prepath=%s\n",
++		 __func__, ctx->source, ctx->UNC, ctx->prepath);
  
- 	mntget(newmnt); /* prevent immediate expiration */
--	mnt_set_expiry(newmnt, &cifs_dfs_automount_list);
--	schedule_delayed_work(&cifs_dfs_automount_task,
--			      cifs_dfs_mountpoint_expiry_timeout);
-+	mnt_set_expiry(newmnt, &cifs_automount_list);
-+	schedule_delayed_work(&cifs_automount_task,
-+			      cifs_mountpoint_expiry_timeout);
- 	cifs_dbg(FYI, "leaving %s [ok]\n" , __func__);
- 	return newmnt;
- }
- 
--const struct inode_operations cifs_dfs_referral_inode_operations = {
-+const struct inode_operations cifs_namespace_inode_operations = {
- };
++	mnt = fc_mount(fc);
+ out:
+ 	put_fs_context(fc);
+ 	free_dentry_path(page);
 -- 
 2.41.0
 
