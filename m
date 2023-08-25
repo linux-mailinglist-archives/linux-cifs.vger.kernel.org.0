@@ -2,76 +2,86 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2721788BD3
-	for <lists+linux-cifs@lfdr.de>; Fri, 25 Aug 2023 16:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2380788BF2
+	for <lists+linux-cifs@lfdr.de>; Fri, 25 Aug 2023 16:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244644AbjHYOgw (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Fri, 25 Aug 2023 10:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S1343860AbjHYOtu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Fri, 25 Aug 2023 10:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343802AbjHYOgX (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Fri, 25 Aug 2023 10:36:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B9210C;
-        Fri, 25 Aug 2023 07:36:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A7C63F04;
-        Fri, 25 Aug 2023 14:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83ED8C43391;
-        Fri, 25 Aug 2023 14:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692974180;
-        bh=knPl1hvtXXOjW5o0nQigNWOkQl6U4T8rtkIhWnxCkgU=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=Lky+ur3wsG3xveAIsYAcjn3zVNavCDNBMJuDiu0umIjTk9e+635csWC1j1G9IX1sY
-         FtPkF01nFjUEUUSLHwXowU2m0Aa/eAIZlK6krD+kcZTkujEjI3Hkg4frPoizCaJmfl
-         4rweiJJ0H/CZ5u7xzavhoK+Y+EK+7zRk5RsppnRnYfqxkHEgYCd4YOSP6S0pcdK02m
-         U73ZPzAbCLuflu0LkhIKnvhLulr8Z5uCuojZc/T31H4Hh0Zqc13p7pddjF4Dg0DXWC
-         BE1KENsWcNN4jpznUb5XM1QeTaCas1EiphiWHNRQMaSA9lFB+/vwbjSiobImxeU5kK
-         r816/KsuI3TBA==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1cca0a1b3c7so630548fac.2;
-        Fri, 25 Aug 2023 07:36:20 -0700 (PDT)
-X-Gm-Message-State: AOJu0YynPodAQ0mOitmDHRRXdNndNOXLbjtU6zX6a8gMGS4lAUDm6zvd
-        VqyKvfu28yREoHEpf73CH3mqXAP9Of3YEUOc3CQ=
-X-Google-Smtp-Source: AGHT+IHQkXmrF3v5TxVMnwg1gH+qWgOF00qaJOiId0hGcAQ+sDMQsibx/zmS4VIpoPHFKj1Q3kXtTDYZxQA5+iomQdY=
-X-Received: by 2002:a05:6871:828:b0:1c0:1424:5e79 with SMTP id
- q40-20020a056871082800b001c014245e79mr3517602oap.42.1692974179652; Fri, 25
- Aug 2023 07:36:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a8a:1186:0:b0:4e8:f6ff:2aab with HTTP; Fri, 25 Aug 2023
- 07:36:18 -0700 (PDT)
-In-Reply-To: <20230821082903.26423-1-yang.lee@linux.alibaba.com>
-References: <20230821082903.26423-1-yang.lee@linux.alibaba.com>
+        with ESMTP id S1343897AbjHYOtf (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Fri, 25 Aug 2023 10:49:35 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF1F2127
+        for <linux-cifs@vger.kernel.org>; Fri, 25 Aug 2023 07:49:33 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-68a3e271491so813838b3a.0
+        for <linux-cifs@vger.kernel.org>; Fri, 25 Aug 2023 07:49:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692974973; x=1693579773;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vDyNSywzmPX/ucLdVYc/IA9y3uXrOJxBBVODBmdFAZ4=;
+        b=Q/oFxNYtsE2jLepV1LoRqAVKiDcL6ca5jTPcD2wWaahPG6TglVdHkunHbvDDyCxAWW
+         0l3Uka607rnCIQFPK9GDR0B/qo1KT5t6mWvbDd7HTdOE3MCoGJ4ASwzE1AVrOGZHLhEh
+         Ht46oJEixM1jIktNfunUf3jx4pT9ClvqCVtizF1UY8h974Z8uZJHP9KNFmu9T6n8y+l9
+         6oCppLje38PW886D0lwgxEcb+wboIsJ6yTTQ0HiTrvrF5OB3gEMeU7RG9xWkvDX/sjkp
+         MjghrPEK+r0716EZA995h5D0KX0mFr+GswbFftVKnHGkypPNTQNKWHK82FfKnnfU+ad9
+         /Ozw==
+X-Gm-Message-State: AOJu0YwGBYGKz7kj5puX2Bz7bwvt6p/jed84tay3ousMp737fi1e2GNj
+        LafKQLEIrWIG47/mQE6BlNVRhvqP+xw=
+X-Google-Smtp-Source: AGHT+IGnAzk6NkhRDQtA6PjDY+O3eEykAsa/hQ3XWtu5+okPfmP45h/C/b5bgHvUyVSz8ye+HScoRQ==
+X-Received: by 2002:a05:6a20:13c7:b0:147:e55f:cced with SMTP id ho7-20020a056a2013c700b00147e55fccedmr16204429pzc.49.1692974972784;
+        Fri, 25 Aug 2023 07:49:32 -0700 (PDT)
+Received: from localhost.localdomain ([110.14.71.32])
+        by smtp.gmail.com with ESMTPSA id jh12-20020a170903328c00b001bee782a1desm1798020plb.181.2023.08.25.07.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 07:49:32 -0700 (PDT)
 From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 25 Aug 2023 23:36:18 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9ac_X+n=Sn8KSFna8LSZ2CAvOx-KHu+t-2xbwzOd-GTQ@mail.gmail.com>
-Message-ID: <CAKYAXd9ac_X+n=Sn8KSFna8LSZ2CAvOx-KHu+t-2xbwzOd-GTQ@mail.gmail.com>
-Subject: Re: [PATCH -next] ksmbd: Fix one kernel-doc comment
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
+        hyc.lee@gmail.com, atteh.mailbox@gmail.com,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        zdi-disclosures@trendmicro.com
+Subject: [PATCH 1/3] ksmbd: fix wrong DataOffset validation of create context
+Date:   Fri, 25 Aug 2023 23:48:46 +0900
+Message-Id: <20230825144848.9034-1-linkinjeon@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-2023-08-21 17:29 GMT+09:00, Yang Li <yang.lee@linux.alibaba.com>:
-> Fix one kernel-doc comment to silence the warning:
-> fs/smb/server/smb2pdu.c:4160: warning: Excess function parameter
-> 'infoclass_size' description in 'buffer_check_err'
->
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+If ->DataOffset of create context is 0, DataBuffer size is not correctly
+validated. This patch change wrong validation code and consider tag
+length in request.
 
-Applied it to #ksmbd-for-next-next.
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-21824
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+---
+ fs/smb/server/oplock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
+diff --git a/fs/smb/server/oplock.c b/fs/smb/server/oplock.c
+index 6bc8a1e48171..9bc0103720f5 100644
+--- a/fs/smb/server/oplock.c
++++ b/fs/smb/server/oplock.c
+@@ -1481,7 +1481,7 @@ struct create_context *smb2_find_context_vals(void *open_req, const char *tag, i
+ 		    name_len < 4 ||
+ 		    name_off + name_len > cc_len ||
+ 		    (value_off & 0x7) != 0 ||
+-		    (value_off && (value_off < name_off + name_len)) ||
++		    (value_len && value_off < name_off + (name_len < 8 ? 8 : name_len)) ||
+ 		    ((u64)value_off + value_len > cc_len))
+ 			return ERR_PTR(-EINVAL);
+ 
+-- 
+2.25.1
+
