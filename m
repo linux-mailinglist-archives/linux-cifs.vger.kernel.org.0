@@ -2,124 +2,170 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FD278C4D5
-	for <lists+linux-cifs@lfdr.de>; Tue, 29 Aug 2023 15:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6535D78C5A3
+	for <lists+linux-cifs@lfdr.de>; Tue, 29 Aug 2023 15:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbjH2NGF (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 29 Aug 2023 09:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S236190AbjH2Ndx (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 29 Aug 2023 09:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbjH2NFb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 29 Aug 2023 09:05:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFCA184;
-        Tue, 29 Aug 2023 06:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RchKoATVAdQvPJfSjQ7igQ4w+5FVPwMefhSLf5vYpSI=; b=Q3QmRgXTehCOZCVueX+FS2Az5N
-        PVqmWnEC5SOyltZJNMDkbuPj3BuxIKobdTkUGJdkwt9An23qab7RWIeUTJvkRcM5ZQw7A9VajHpfv
-        K7r2l3ZZ2pGC+tetoYQU12TmTvlZI3sm3ayVKtCD8x7/yd2j9SuUz7gnHbMb8LXGAJC6qfT96aNHD
-        /+KAN9szQKpq1/b+zh8evtWeBszURne3cpQtIIZ5DUWss+rP/RkNTx5Y/tCCASZPZaSLUEyAkYJWx
-        0SrCGJoWwn5s3UmnWTZbObVE6DrneAPDreiurlPZ6M22SpYEkwQtVmJFqXgm29PIZAfXouLOFvP7I
-        44OUuuBQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qayP8-006i8Z-JC; Tue, 29 Aug 2023 13:05:10 +0000
-Date:   Tue, 29 Aug 2023 14:05:10 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hao Xu <hao.xu@linux.dev>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
-        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: [PATCH 02/11] xfs: add NOWAIT semantics for readdir
-Message-ID: <ZO3tBqJLtRwSYrEr@casper.infradead.org>
-References: <20230827132835.1373581-1-hao.xu@linux.dev>
- <20230827132835.1373581-3-hao.xu@linux.dev>
- <ZOu1xYS6LRmPgEiV@casper.infradead.org>
- <ca10040f-b7fa-7c43-1c89-6706d13b2747@linux.dev>
+        with ESMTP id S236234AbjH2Ndh (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 29 Aug 2023 09:33:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D6F1B7;
+        Tue, 29 Aug 2023 06:33:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2C906577C;
+        Tue, 29 Aug 2023 13:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A01CC433CC;
+        Tue, 29 Aug 2023 13:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693315976;
+        bh=8A9HVwbG0lhe1zjrODO9hy3JO/qnRf1tmJiWu2sV0Ug=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UbEB3iZ4MBaQQ83hrsFbBMyEHR9bLwR3mv3ilsMWbo14/41TWFqUOs/Te4bgT3hXy
+         xZBonHcVdE1Orud8FmB22CtklxZYYGfwSfCi3yte2u4TOUBPP6nh08C/RssnhbG7qn
+         DN5zXiSJHZcc9As7hvtI/m22J3GnT/CU6aGnkTJhFoA/nfW3DgxIcQSE4J1xz9qyr6
+         avnxGgulZp+bZbt+ez84N/8/ksgtDXacFFIyo/Nfhwy3x3iHMNj3Rie9GycM/1FsKA
+         DWw0MScEA8oyweZenyPnKCluoOy3+n5AA5PLCneLVGlHxMj21sHI4zV1sf/NQyebCv
+         9/+16O+qmsT7w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>, sfrench@samba.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 6.1 05/15] smb/client: print "Unknown" instead of bogus link speed value
+Date:   Tue, 29 Aug 2023 09:32:35 -0400
+Message-Id: <20230829133245.520176-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230829133245.520176-1-sashal@kernel.org>
+References: <20230829133245.520176-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca10040f-b7fa-7c43-1c89-6706d13b2747@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.49
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 03:41:43PM +0800, Hao Xu wrote:
-> On 8/28/23 04:44, Matthew Wilcox wrote:
-> > > @@ -391,10 +401,17 @@ xfs_dir2_leaf_getdents(
-> > >   				bp = NULL;
-> > >   			}
-> > > -			if (*lock_mode == 0)
-> > > -				*lock_mode = xfs_ilock_data_map_shared(dp);
-> > > +			if (*lock_mode == 0) {
-> > > +				*lock_mode =
-> > > +					xfs_ilock_data_map_shared_generic(dp,
-> > > +					ctx->flags & DIR_CONTEXT_F_NOWAIT);
-> > > +				if (!*lock_mode) {
-> > > +					error = -EAGAIN;
-> > > +					break;
-> > > +				}
-> > > +			}
-> > 
-> > 'generic' doesn't seem like a great suffix to mean 'takes nowait flag'.
-> > And this is far too far indented.
-> > 
-> > 			xfs_dir2_lock(dp, ctx, lock_mode);
-> > 
-> > with:
-> > 
-> > STATIC void xfs_dir2_lock(struct xfs_inode *dp, struct dir_context *ctx,
-> > 		unsigned int lock_mode)
-> > {
-> > 	if (*lock_mode)
-> > 		return;
-> > 	if (ctx->flags & DIR_CONTEXT_F_NOWAIT)
-> > 		return xfs_ilock_data_map_shared_nowait(dp);
-> > 	return xfs_ilock_data_map_shared(dp);
-> > }
-> > 
-> > ... which I think you can use elsewhere in this patch (reformat it to
-> > XFS coding style, of course).  And then you don't need
-> > xfs_ilock_data_map_shared_generic().
-> 
-> How about rename xfs_ilock_data_map_shared() to xfs_ilock_data_map_block()
-> and rename xfs_ilock_data_map_shared_generic() to
-> xfs_ilock_data_map_shared()?
-> 
-> STATIC void xfs_ilock_data_map_shared(struct xfs_inode *dp, struct
-> dir_context *ctx, unsigned int lock_mode)
-> {
->  	if (*lock_mode)
->  		return;
->  	if (ctx->flags & DIR_CONTEXT_F_NOWAIT)
->  		return xfs_ilock_data_map_shared_nowait(dp);
->  	return xfs_ilock_data_map_shared_block(dp);
-> }
+From: Enzo Matsumiya <ematsumiya@suse.de>
 
-xfs_ilock_data_map_shared() is used for a lot of things which are not
-directories.  I think a new function name is appropriate, and that
-function name should include the word 'dir' in it somewhere.
+[ Upstream commit 50e63d6db6fd30a6dd9a33c49aa5b0bba36e1a92 ]
+
+The virtio driver for Linux guests will not set a link speed to its
+paravirtualized NICs.  This will be seen as -1 in the ethernet layer, and
+when some servers (e.g. samba) fetches it, it's converted to an unsigned
+value (and multiplied by 1000 * 1000), so in client side we end up with:
+
+1)      Speed: 4294967295000000 bps
+
+in DebugData.
+
+This patch introduces a helper that returns a speed string (in Mbps or
+Gbps) if interface speed is valid (>= SPEED_10 and <= SPEED_800000), or
+"Unknown" otherwise.
+
+The reason to not change the value in iface->speed is because we don't
+know the real speed of the HW backing the server NIC, so let's keep
+considering these as the fastest NICs available.
+
+Also print "Capabilities: None" when the interface doesn't support any.
+
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/client/cifs_debug.c | 47 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/fs/smb/client/cifs_debug.c b/fs/smb/client/cifs_debug.c
+index e41154ad96afc..492f9b11e9ad0 100644
+--- a/fs/smb/client/cifs_debug.c
++++ b/fs/smb/client/cifs_debug.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/proc_fs.h>
+ #include <linux/uaccess.h>
++#include <uapi/linux/ethtool.h>
+ #include "cifspdu.h"
+ #include "cifsglob.h"
+ #include "cifsproto.h"
+@@ -145,18 +146,62 @@ cifs_dump_channel(struct seq_file *m, int i, struct cifs_chan *chan)
+ 		   atomic_read(&server->num_waiters));
+ }
+ 
++static inline const char *smb_speed_to_str(size_t bps)
++{
++	size_t mbps = bps / 1000 / 1000;
++
++	switch (mbps) {
++	case SPEED_10:
++		return "10Mbps";
++	case SPEED_100:
++		return "100Mbps";
++	case SPEED_1000:
++		return "1Gbps";
++	case SPEED_2500:
++		return "2.5Gbps";
++	case SPEED_5000:
++		return "5Gbps";
++	case SPEED_10000:
++		return "10Gbps";
++	case SPEED_14000:
++		return "14Gbps";
++	case SPEED_20000:
++		return "20Gbps";
++	case SPEED_25000:
++		return "25Gbps";
++	case SPEED_40000:
++		return "40Gbps";
++	case SPEED_50000:
++		return "50Gbps";
++	case SPEED_56000:
++		return "56Gbps";
++	case SPEED_100000:
++		return "100Gbps";
++	case SPEED_200000:
++		return "200Gbps";
++	case SPEED_400000:
++		return "400Gbps";
++	case SPEED_800000:
++		return "800Gbps";
++	default:
++		return "Unknown";
++	}
++}
++
+ static void
+ cifs_dump_iface(struct seq_file *m, struct cifs_server_iface *iface)
+ {
+ 	struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
+ 	struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
+ 
+-	seq_printf(m, "\tSpeed: %zu bps\n", iface->speed);
++	seq_printf(m, "\tSpeed: %s\n", smb_speed_to_str(iface->speed));
+ 	seq_puts(m, "\t\tCapabilities: ");
+ 	if (iface->rdma_capable)
+ 		seq_puts(m, "rdma ");
+ 	if (iface->rss_capable)
+ 		seq_puts(m, "rss ");
++	if (!iface->rdma_capable && !iface->rss_capable)
++		seq_puts(m, "None");
+ 	seq_putc(m, '\n');
+ 	if (iface->sockaddr.ss_family == AF_INET)
+ 		seq_printf(m, "\t\tIPv4: %pI4\n", &ipv4->sin_addr);
+-- 
+2.40.1
+
