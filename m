@@ -2,114 +2,90 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1ED792990
-	for <lists+linux-cifs@lfdr.de>; Tue,  5 Sep 2023 18:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080FC792CEE
+	for <lists+linux-cifs@lfdr.de>; Tue,  5 Sep 2023 19:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345228AbjIEQ1N (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Tue, 5 Sep 2023 12:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S233418AbjIER7n (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Tue, 5 Sep 2023 13:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353805AbjIEITL (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Sep 2023 04:19:11 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1B1CD2
-        for <linux-cifs@vger.kernel.org>; Tue,  5 Sep 2023 01:19:04 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4135f97435eso13848471cf.2
-        for <linux-cifs@vger.kernel.org>; Tue, 05 Sep 2023 01:19:04 -0700 (PDT)
+        with ESMTP id S240609AbjIER70 (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Tue, 5 Sep 2023 13:59:26 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAE83A99
+        for <linux-cifs@vger.kernel.org>; Tue,  5 Sep 2023 10:55:55 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bd0d19a304so46237931fa.1
+        for <linux-cifs@vger.kernel.org>; Tue, 05 Sep 2023 10:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693901944; x=1694506744; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvUmRYKO5rN5JiKdYLn9/Xxm/soJiVGtQm650JnL3Yc=;
-        b=IDuf0baB1t1F8QSCLjWC8pmRvzAKQ/R4M4t5u3FLsOX2SqRgQXz/Z3MpAk8Vd5Kb6m
-         OBaz+r/ujIbUuNkrji3TkmDn2dTAwQpGpPSmDRQp7o69pvQ/Nlbne7CwWkb0CdLrrzzk
-         IN5sVqz4WX/cEw2uA94JE67yTGlOm8wzR3yOF0SXEPyJnQGBjepPHYJlqPiS3zq3DGfU
-         I2yXoCdrDFdm20VoyBK97sKFjeM/5AIhQp1In2otrpCJ9z7tTsw9ci7s0XR+LUbYUzXt
-         uod929b61k889o1RxRCphXZmWycOoUHC60HIKvs/decRlJjUBc58LQQ4Se5bQ0loDS6t
-         OnEQ==
+        d=gmail.com; s=20221208; t=1693936502; x=1694541302; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HaLBF9JULR3pvVhPzdqXHldlD3WLab71DqI9y0iBuWo=;
+        b=RNPvnvVPWbas6aTcfjSV8NFoEhhrBtx5fMTwDgCWhrHSr1JMfPC3xraXbZXtIfUk+z
+         THUP9OzvgW/mPaOENt5iqdjUxmaxEX5T0T8brDwl6gBDNd6pqn7Z/mBB11+eBbp+98V7
+         3l/gHLSAw8m4AP/EQWvPb6wMoiPnBj6y6qd3hKL/RQFvNAtnikDTyAjhn5Z1iy29Q8yT
+         Uumo/tPjZBke0pRiPq58tbDlIv834ylNAwP4eiBLLw+gfFLGQm+LOApu+BO4sNx1HKCf
+         TVL8ru80JfQWEP+hQjJ40CMJDkjmOTE5gCzZuUk/xZM07vgYtQKLU8cl6rP3VV8sFcId
+         YzsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693901944; x=1694506744;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CvUmRYKO5rN5JiKdYLn9/Xxm/soJiVGtQm650JnL3Yc=;
-        b=lCj5zQQJFMMP1fi9JzZ30KtSi5I8rq/QZkix2/W0KexgCKOydbwCQ5M5GK9zLEkWHL
-         nA/K9KD/5abUCiu2yvi8KCdeH0VGjNCKB52HqJp1x5FjyjcS7qG0zo1HVjkdQAJO7mi7
-         QerNuZoDC7RXPUZO914eB54Zm42n2rHuPGHblm9I2nd1sSBZlWU4LCer+4MsyaKPEHia
-         j2CiU5267G7aiiczRzi/nsA0SRuLqcX2sSPXGJQKMNAeoPdmKa4khrFucumFWo9sfAWw
-         S5jz4qUEJUxIrEnXnZz5MuPrcB3PlOFcVjwTvy5b0wk3AQSmuwfMXwQkHgoFkFLlU9Uu
-         fBXQ==
-X-Gm-Message-State: AOJu0Yw0xrWBm1jn7sTnUrlyiK6XnDNvWSmRmfJipX995NDwvjqkGjsL
-        5S2w7g0Pl8F0kfz8Fj6bm+FxriPC2FkqSjPLgpI=
-X-Google-Smtp-Source: AGHT+IERAX8PQb3+O/VRt2IpdT+B8+AIRhc7TR9qfBXEywqtD/tUeMqNmseulSPs3fS452xIhVN8tbhQYqX1LXl34po=
-X-Received: by 2002:a0c:aa1b:0:b0:653:5736:c0b4 with SMTP id
- d27-20020a0caa1b000000b006535736c0b4mr10412089qvb.54.1693901943569; Tue, 05
- Sep 2023 01:19:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693936502; x=1694541302;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HaLBF9JULR3pvVhPzdqXHldlD3WLab71DqI9y0iBuWo=;
+        b=LpLs54E3+R59+Ew0BL79rUiUspUGIMT602Spg4fj8oUaNv9YiwIF/n6jSXtSGSFhcP
+         6qFPl2CKUe1dShKoj9wFQcuvGCFTwHvGUAt25tNj8+AR8doHaYp6OJfBi+adSjTOPG+2
+         gm+YcheR5hXZORbd/eUuO7THa9Ke8+/WYHloVn/C4/Uuwc7snSz11ca6vCdRlHt3Nv49
+         Np76IjhkGZ6Cl8qbZTxqOUoKeqiYzVdxuhwx8jWThUQqeZdYGcfU+3VcMlXj075z3jYE
+         iers7/80pXfjgiag0UolaPQ4u1u2a+MtlFir0SKwHhs8gkVM83MLJ7fh7Sxvk+91mjKD
+         zDng==
+X-Gm-Message-State: AOJu0YyDaHbJUMSX1IQX1CRdmhjXDEEXxAP6WdAoezr7oOPNYhdXd6RG
+        N5iO5XHN9rxJn8vXcWmmVr1yEKOtoTpQjWrHsjkx6o84
+X-Google-Smtp-Source: AGHT+IGYm0t2z8e5SFDepkDO++qI0JUsgmPxQ/gvS2AIPOTXr5ljIusoaN03wM2/qGm+qAfvedFHv307ikU5SHLg414=
+X-Received: by 2002:a17:906:749b:b0:9a2:26d8:f181 with SMTP id
+ e27-20020a170906749b00b009a226d8f181mr383148ejl.61.1693933756199; Tue, 05 Sep
+ 2023 10:09:16 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a0c:de0e:0:b0:634:8588:8dcb with HTTP; Tue, 5 Sep 2023
- 01:19:02 -0700 (PDT)
-Reply-To: wuwumoneytransfer5000@hotmail.com
-From:   "(IMF) SCAM VICTIMS" <smmab4668@gmail.com>
-Date:   Tue, 5 Sep 2023 01:19:02 -0700
-Message-ID: <CAPvhgiGb_xchv+cBfjtNXZbs3T38s2BJRqmONSNBDUeOvUkr=Q@mail.gmail.com>
-Subject: Betrugsopfer
-To:     undisclosed-recipients:;
+From:   Brian Pardy <brian.pardy@gmail.com>
+Date:   Tue, 5 Sep 2023 13:09:05 -0400
+Message-ID: <CAO+kfxTwOvaxYV0ZRESxZB-4LHsF9b_VBjAKahhwUm5a1_c4ug@mail.gmail.com>
+Subject: Possible bug report: kernel 6.5.0/6.5.1 high load when CIFS share is
+ mounted (cifsd-cfid-laundromat in"D" state)
+To:     linux-cifs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Sehr geehrter E-Mail-Besitzer,
+My apologies if I do not have the bug report protocol correct in posting here.
 
+I've noticed an issue with the CIFS client in kernel 6.5.0/6.5.1 that
+does not exist in 6.4.12 or other previous kernels (I have not tested
+6.4.13). Almost immediately after mounting a CIFS share, the reported
+load average on my system goes up by 2. At the time this occurs I see
+two [cifsd-cfid-laundromat] kernel threads running the "D" state,
+where they remain for the entire time the CIFS share is mounted. The
+load will remain stable at 2 (otherwise idle) until the share is
+unmounted, at which point the [cifsd-cfid-laundromat] threads
+disappear and load drops back down to 0. This is easily reproducible
+on my system, but I am not sure what to do to retrieve more useful
+debugging information. If I mount two shares from this server, I get
+four laundromat threads in "D" state and a sustained load average of
+4.
 
+The client is running Gentoo Linux, the server is a Seagate Personal
+Cloud NAS running Samba 4.6.5. Mount options used are
+"noperm,guest,vers=3.02". The CPUs do not actually appear to be
+spinning, the reported load average appears incorrect as far as actual
+CPU use is concerned.
 
-Der Internationale W=C3=A4hrungsfonds (IWF) entsch=C3=A4digt alle Betrugsop=
-fer
-und Ihre E-Mail-Adresse wurde auf der Liste der Betrugsopfer gefunden.
+I am happy to follow any instructions provided to gather more details
+if I can help to track this down. Nothing that appears relevant
+appears in syslog or dmesg output.
 
-Dieses Western Union-B=C3=BCro wurde vom IWF beauftragt Ihnen Ihre
-Verg=C3=BCtung per Western Union Money Transfer zu =C3=BCberweisen.
-
-Wir haben uns jedoch entschieden Ihre eigene Zahlung =C3=BCber Geldtransfer
-der Westunion in H=C3=B6he von =E2=82=AC5,000, pro Tag vorzunehmen bis die
-Gesamtsumme von =E2=82=AC1,500.000.00, vollst=C3=A4ndig an Sie =C3=BCberwie=
-sen wurde.
-
-Wir k=C3=B6nnen die Zahlung m=C3=B6glicherweise nicht nur mit Ihrer
-E-Mail-Adresse senden daher ben=C3=B6tigen wir Ihre Informationen dar=C3=BC=
-ber
-wohin wir das Geld an Sie senden wie z. B.:
-
-
-Name des Adressaten ________________
-
-Adresse________________
-
-Land__________________
-
-Telefonnummer________________
-
-Angeh=C3=A4ngte Kopie Ihres Ausweises______________
-
-Das Alter ________________________
-
-
-Wir beginnen mit der =C3=9Cbertragung sobald wir Ihre Informationen
-erhalten haben: Kontakt E-Mail: ( wuwumoneytransfer5000@hotmail.com)
-
-
-Getreu,
-
-
-Herr Anthony Duru,
-
-Direktor von Geldtransfer der Westunion
+Thank you.
