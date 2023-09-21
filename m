@@ -2,126 +2,87 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4C27A904C
-	for <lists+linux-cifs@lfdr.de>; Thu, 21 Sep 2023 02:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58507A909B
+	for <lists+linux-cifs@lfdr.de>; Thu, 21 Sep 2023 03:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjIUA6K (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 20 Sep 2023 20:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S229579AbjIUBqu (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 20 Sep 2023 21:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjIUA6J (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 20 Sep 2023 20:58:09 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED23CC
-        for <linux-cifs@vger.kernel.org>; Wed, 20 Sep 2023 17:58:02 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50337b43ee6so777872e87.3
-        for <linux-cifs@vger.kernel.org>; Wed, 20 Sep 2023 17:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695257881; x=1695862681; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xQp6NPpMjIDcwcELwd21rx92WrdKUlmXQ9Ig4slWdfc=;
-        b=X7gNG7aveHbF8DQ+KooI1pAltg8e/Heivyy4laQHBw9XiJPM5zqEQDGuWU6u0QIYV3
-         kJp5PB60gRsYeJxwDGW+QAjg1igqFcN4zE3UGaKAe9/zogE5bfjAl1pDFc+tmT41qmUY
-         X6a9QLSWxn1Ji8KLGNEawjdvSsthgRRoKJhonhCaU0J9jFlwWPswJ9bTGTifHL62vbir
-         yRlAGkkSNVbXiiUA8E9liGeXw9ny0ZaOwGjBXkdAThImPksX7akH/MINhi4R+xNzv5bL
-         cF2F2hsTkGaZSHCTy+YBPHQeLkJ3bBhcno0ZvoaXvuLe0gSRl8C+sYLJ74LUBJt0TU6x
-         Lx7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695257881; x=1695862681;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xQp6NPpMjIDcwcELwd21rx92WrdKUlmXQ9Ig4slWdfc=;
-        b=kq9PBdksg5lFrLO7RKZfomyK9SzO4W6T3vgYgZDBAekUW1shoySsMlaszaLHL3h+Zf
-         jKUrK4uIAwbwHW3mc6Ai/NT4DZe6O+qCQAQc75eDdKvhdOp9SwIq1371wRXGhJmZZaVn
-         tlRbAcV0xx1HXN9RUQ9uw8K9HFhip5uPwMzX6kSWGiDBEq2mprlwVp8TxpF3w66ic10p
-         buLYleWYTy+dDFIFp2mFoOFXmmK3h9NDvAxpS59XT++F9YbHm30LRr6wy9Ou1iZh2iCY
-         VUgxqaksCoo72LYT66rl0uBOpJUVBbHOS9FmGBsMktobzjT/jtdyohVuiDU+SHBT5t06
-         QvtA==
-X-Gm-Message-State: AOJu0YzCz23LZ+DITNoRhdWVeI2OYj8qnYFu8hk40zSA7MBjQhOyfwmT
-        35A3Wf3CySBwURiYeGdbH32fltp8eyKk+6fpTFFYYenp76w=
-X-Google-Smtp-Source: AGHT+IHEWttHCT7JVMZUzgenouxbP3SdeCrC42tESfioDdiCV8IpREj9pon+VJkBMyEFRamknirBSLBP09/Ohoy9YMk=
-X-Received: by 2002:a05:6512:36d1:b0:503:3587:fd15 with SMTP id
- e17-20020a05651236d100b005033587fd15mr3069418lfs.61.1695257880471; Wed, 20
- Sep 2023 17:58:00 -0700 (PDT)
+        with ESMTP id S229560AbjIUBqu (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 20 Sep 2023 21:46:50 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522BFA9
+        for <linux-cifs@vger.kernel.org>; Wed, 20 Sep 2023 18:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=GblEck3VPkoui7EtaxhBZ5oi99akhOZH5WDogaGs1WM=; b=vazGjDNcQbqfNZ7p8excxHJy2A
+        lHGgcSHr8jgGxKKYK4HpuBmXy6aPd1CdvpF7fuEAP0kGKPmRpFXX1DzDbfG5Ge78KU4veYDkhR3Fq
+        LVAe3AVukKsY6cUUbon8VJmnd5tB+Ir5Ad34VwHyqm1HTyr2sx8WycKKJv1ojs657OVUegXxMH7wt
+        RGJOCFK6WCTBPgYAFJaU+J3gDLCErMbDKRfV2ihCnSrTQE+mENjWJHnNDQETXdZiF0q8k2OjUPYuh
+        KMSsk9+xKAGIaeYVvXgAulMFkL3yzAoasljoM8D6j67e2QQB+MzRtp8JrcwP7ql4a6b+InWIehTL+
+        LLiYckXV5c6u7HJ7PZ9fZ6b+YGYYW4Cq6+D2ER5sOdI9T9gcC/K+KK7hI3/sDcVwi1AJf9zIEarai
+        SZvET9dY3Eprn0eXKny/5pIFDIzgK6HIrK0xbTl1xrsfIupac6vX2O4Iqt6Yu9EtqU1u0cQ21KSvj
+        xcloIxZnT/txzwb/ZAUSZpng;
+Received: from [2a01:4f8:192:486::6:0] (port=51612 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qj8m9-00EaFO-34
+        for cifs-qa@samba.org;
+        Thu, 21 Sep 2023 01:46:42 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qj8m9-001Qpz-By
+        for cifs-qa@samba.org;
+        Thu, 21 Sep 2023 01:46:41 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15480] Mounting Azure Fles Share using cifs-utils fails
+Date:   Thu, 21 Sep 2023 01:46:41 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: palcantara@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15480-10630-Mc81EQDARn@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15480-10630@https.bugzilla.samba.org/>
+References: <bug-15480-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 20 Sep 2023 19:57:49 -0500
-Message-ID: <CAH2r5mvXAy=p8HiPQxr5QdhyvZOB1_YvEDudWrUTa9veSNTYuQ@mail.gmail.com>
-Subject: [PATCH][SMB3] Fix confusing warning message about mode not specified
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     Paulo Alcantara <pc@manguebit.com>
-Content-Type: multipart/mixed; boundary="000000000000c4e35b0605d3fb3b"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
---000000000000c4e35b0605d3fb3b
-Content-Type: text/plain; charset="UTF-8"
+https://bugzilla.samba.org/show_bug.cgi?id=3D15480
 
-smb3: fix confusing debug message
+--- Comment #1 from Paulo Alcantara <palcantara@samba.org> ---
+cifs-utils version should be irrelevant as it seems a kernel bug.
 
-The message said it was an invalid mode, when it was intentionally
-not set.  Fix confusing message logged to dmesg.
+What kernel version is it?
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
----
- fs/smb/client/smb2pdu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can you reproduce it with latest stable kernel version (v6.5.4) from
+kernel.org?
 
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index 405ea324f28d..c75a80bb6d9e 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -848,7 +848,7 @@ add_posix_context(struct kvec *iov, unsigned int
-*num_iovec, umode_t mode)
-
-  iov[num].iov_base = create_posix_buf(mode);
-  if (mode == ACL_NO_MODE)
-- cifs_dbg(FYI, "Invalid mode\n");
-+ cifs_dbg(FYI, "%s: no mode\n", __func__);
-  if (iov[num].iov_base == NULL)
-  return -ENOMEM;
-  iov[num].iov_len = sizeof(struct create_posix);
-
--- 
-Thanks,
-
-Steve
-
---000000000000c4e35b0605d3fb3b
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smb3-fix-confusing-debug-message.patch"
-Content-Disposition: attachment; 
-	filename="0001-smb3-fix-confusing-debug-message.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lmsgrh430>
-X-Attachment-Id: f_lmsgrh430
-
-RnJvbSBjOGViZjA3N2ZiZWJkYTNhMjQzMzU2NjBkZWQ3Y2ZmNGI5MDMzMWI4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IFdlZCwgMjAgU2VwIDIwMjMgMTk6NTA6MDUgLTA1MDAKU3ViamVjdDogW1BBVENIXSBz
-bWIzOiBmaXggY29uZnVzaW5nIGRlYnVnIG1lc3NhZ2UKClRoZSBtZXNzYWdlIHNhaWQgaXQgd2Fz
-IGFuIGludmFsaWQgbW9kZSwgd2hlbiBpdCB3YXMgaW50ZW50aW9uYWxseQpub3Qgc2V0LiAgRml4
-IGNvbmZ1c2luZyBtZXNzYWdlIGxvZ2dlZCB0byBkbWVzZy4KClJldmlld2VkLWJ5OiBQYXVsbyBB
-bGNhbnRhcmEgKFNVU0UpIDxwY0BtYW5ndWViaXQuY29tPgpTaWduZWQtb2ZmLWJ5OiBTdGV2ZSBG
-cmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvc21iL2NsaWVudC9zbWIycGR1
-LmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
-CmRpZmYgLS1naXQgYS9mcy9zbWIvY2xpZW50L3NtYjJwZHUuYyBiL2ZzL3NtYi9jbGllbnQvc21i
-MnBkdS5jCmluZGV4IDQwNWVhMzI0ZjI4ZC4uYzc1YTgwYmI2ZDllIDEwMDY0NAotLS0gYS9mcy9z
-bWIvY2xpZW50L3NtYjJwZHUuYworKysgYi9mcy9zbWIvY2xpZW50L3NtYjJwZHUuYwpAQCAtODQ4
-LDcgKzg0OCw3IEBAIGFkZF9wb3NpeF9jb250ZXh0KHN0cnVjdCBrdmVjICppb3YsIHVuc2lnbmVk
-IGludCAqbnVtX2lvdmVjLCB1bW9kZV90IG1vZGUpCiAKIAlpb3ZbbnVtXS5pb3ZfYmFzZSA9IGNy
-ZWF0ZV9wb3NpeF9idWYobW9kZSk7CiAJaWYgKG1vZGUgPT0gQUNMX05PX01PREUpCi0JCWNpZnNf
-ZGJnKEZZSSwgIkludmFsaWQgbW9kZVxuIik7CisJCWNpZnNfZGJnKEZZSSwgIiVzOiBubyBtb2Rl
-XG4iLCBfX2Z1bmNfXyk7CiAJaWYgKGlvdltudW1dLmlvdl9iYXNlID09IE5VTEwpCiAJCXJldHVy
-biAtRU5PTUVNOwogCWlvdltudW1dLmlvdl9sZW4gPSBzaXplb2Yoc3RydWN0IGNyZWF0ZV9wb3Np
-eCk7Ci0tIAoyLjM5LjIKCg==
---000000000000c4e35b0605d3fb3b--
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
