@@ -2,61 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C747AFD9C
-	for <lists+linux-cifs@lfdr.de>; Wed, 27 Sep 2023 10:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE077B0652
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 Sep 2023 16:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjI0IGv (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 27 Sep 2023 04:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S232001AbjI0ONb (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 27 Sep 2023 10:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjI0IGt (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 Sep 2023 04:06:49 -0400
-Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E72711D
-        for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 01:06:45 -0700 (PDT)
-Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
-        id 0952723D93; Wed, 27 Sep 2023 08:06:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
-        s=mail; t=1695802001;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=4+eu/k7hUxIoP9kJ+rhNVs7r+NSwQO4eusuXBUTuu9/EE9lhr56F16umyxnNEP5P9
-         khRTeqRbFNJdAjTLw7V7eMABze64v7oT6c7gYfrqpfQOxTyVTxGJz4UXpNi0MUzkRd
-         lt1sT7veLlrw21ULwjfQXPNMKJMeBcliWISRVueMkw4p6j56mfU+HbIJgsxFl9ZvJh
-         sncgohAgH33sGhI8JEh+y9pM8VksWGvcO6tlt84HQsK568wIQZjKQBt4FHW4W77p5f
-         Sjvn8hzUqd2cZg7tDGORriXW8lOIhBCjkAYKt0lCOUuR9o7GJc5JXeXt14p69EfwxA
-         21zdwWIEEnoQQ==
-Received: by mail.commercesolutions.pl for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 08:05:58 GMT
-Message-ID: <20230927064500-0.1.8x.1pwk7.0.qvsu1wjmh3@commercesolutions.pl>
-Date:   Wed, 27 Sep 2023 08:05:58 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
-To:     <linux-cifs@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.commercesolutions.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S232036AbjI0ONa (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 Sep 2023 10:13:30 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207F7F3
+        for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 07:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=swHfxzTzFmbV3yloZrk0i1wkF8Ev6UlfWTmVLhkjoU4=; b=3QYPbxA86fNmchwQM9Z/cGqbjR
+        eWwXogk/8ts+gUflFDNgEaNiYNpjjyiywq7eoZMGW8mBt4mTkZxIRgMvdeTf8xQ7OO5SyiSMreZgs
+        V980eiYuh458JqLYQD6ZWyotrOOTEC4Zv7X6FDs62mh3Cej1XedbF8gp0Z9iLnoLjbxLXP9iIEtex
+        jD4kCN0EC8jEx1WX6TO+w8pygScUAbd5lBAff5vjAdjluQeL9IPMx8cfJ5S2OCi9wkSPOGj1QT7Db
+        XYUIV28ldz1ZrfZ+YD6FIoFHRK1tYvUaDz6bEYotXdLaHVvji64eK6WBCF7f2uYipZnCGbnBavnw2
+        ek1XILpQWaeTf0d3L4ELP/x/FZaRIiJXdHSXAzpIAwjprHpZiX8X/DSXueCBjFwYJVVILQ0uPGPxY
+        cNbgDxYaWji1jJAgJjTKSLsBA2GnQcWjINUn7br+SzuHHpv5JVbYQWrNAWJIiK9M/3NZ1v953Acqh
+        opINWrnSN7UFrwbL2HlpJq3g;
+Received: from [2a01:4f8:192:486::6:0] (port=24324 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qlVI6-00Fe92-13
+        for cifs-qa@samba.org;
+        Wed, 27 Sep 2023 14:13:26 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qlVI5-0021Bd-RD
+        for cifs-qa@samba.org;
+        Wed, 27 Sep 2023 14:13:25 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15480] Mounting Azure Fles Share using cifs-utils fails
+Date:   Wed, 27 Sep 2023 14:13:25 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: sverrir.jonsson@thyssenkrupp-materials.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-15480-10630-ythzAJpJV4@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15480-10630@https.bugzilla.samba.org/>
+References: <bug-15480-10630@https.bugzilla.samba.org/>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Dzie=C5=84 dobry,
+https://bugzilla.samba.org/show_bug.cgi?id=3D15480
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+--- Comment #6 from Yonz <sverrir.jonsson@thyssenkrupp-materials.com> ---
+Created attachment 18127
+  --> https://bugzilla.samba.org/attachment.cgi?id=3D18127&action=3Dedit
+TCPDUMP
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
-
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-Pozdrawiam
-Kamil Tralewski
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
