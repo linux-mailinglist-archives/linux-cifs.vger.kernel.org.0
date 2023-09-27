@@ -2,102 +2,93 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFBE7B06D9
-	for <lists+linux-cifs@lfdr.de>; Wed, 27 Sep 2023 16:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FBB7B0762
+	for <lists+linux-cifs@lfdr.de>; Wed, 27 Sep 2023 16:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjI0Oa7 (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 27 Sep 2023 10:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
+        id S232238AbjI0Oyh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Wed, 27 Sep 2023 10:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjI0Oaz (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 Sep 2023 10:30:55 -0400
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324671704
-        for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 07:30:33 -0700 (PDT)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-692779f583fso8085747b3a.0
-        for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 07:30:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695825032; x=1696429832;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aue8jEnZY54xGvixCdj5yyUKVBLT1FEl6PdQhev0tck=;
-        b=AL4R+EduhcHcAyvJeTPtLe6FGxGZzAFXuI6ojGGGdD87nP02Vg0inKadW/qNnVXhZs
-         LNiEOQ6ZIvAKTFpA/Ods6WeEgbVUtm0Rq04cdn2OGoKF9Iut1egXdI5cQXihrhoQpvCK
-         /VDs22homw8veOgEZFF7GSwwcVAf/bN2LGM1auVxjTD3vvo+a+mrmX8hKEsA5KURU5fw
-         SO7N0mFSRXIHGHSy14n34K6Ud96YLuCCXOVFO5nEkfRKSxiMVpKb5/z8T177v9KJI1P9
-         WZKY/b6EC/5mz+esShQMDhCFv/24tdmLBxo0/F/5y5qbRKRzGIUOiXRUDWBPIHLyCLvi
-         pXJg==
-X-Gm-Message-State: AOJu0YwBHTbeY3iyx+TZ975kKsY8Ms4j74nigR3LiNiKZCRxPdtTE5E2
-        DCapofYNd+WGPEKNH8bwoOUHnMz/tm0=
-X-Google-Smtp-Source: AGHT+IFntT8uongBnCdEwz3VCM7q3gcCcIem4qbN0ql184hJJFcuYqt4oiwy4KGEZlPa4J8SsyOTcA==
-X-Received: by 2002:a05:6a00:468e:b0:693:3783:4a29 with SMTP id de14-20020a056a00468e00b0069337834a29mr1393398pfb.20.1695825031993;
-        Wed, 27 Sep 2023 07:30:31 -0700 (PDT)
-Received: from localhost.localdomain ([110.14.71.32])
-        by smtp.gmail.com with ESMTPSA id p14-20020aa7860e000000b00690c52267easm661279pfn.40.2023.09.27.07.30.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 07:30:31 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
-        hyc.lee@gmail.com, atteh.mailbox@gmail.com,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH] ksmbd: not allow to open file if delelete on close bit is set
-Date:   Wed, 27 Sep 2023 23:30:09 +0900
-Message-Id: <20230927143009.8882-1-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        with ESMTP id S232100AbjI0Oyg (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Wed, 27 Sep 2023 10:54:36 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8438F4
+        for <linux-cifs@vger.kernel.org>; Wed, 27 Sep 2023 07:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=eo19jLShvkWn43v0+6abJhrnyYTofDA3u7AycKqYYyg=; b=xvxFHxAP3s9APJeZn0toUR3FsD
+        b8xwsHNg1w52/ga0kolA/25TGNyP4Y+DwRTJZ5cAEWuXdZuvufegq2M6evhltNoEwXHT9ZuZpbFZ0
+        JtrUh99WHWNCacosrBDxow4wf6nGCWOcNUAL5XxyGToYwjDMDbPjo1DQ+MTn5xW0oH36nmLjdHoxl
+        RM2YhnLI2uEPa5pWph3e9lNbaoLl30jTfcZqFLFGNgWqt/v+IItVSVX0AvBN+9arDn1RP0H9BI0BC
+        KOVl7AQo+VPNDynzl2+UFbniJs7JsFobNtzbRLPLz8MmK24SEbdoobLFI1Cc+xK6lqGecemiljF2G
+        cDnEm5nCo/7sFygpBkKRPZonAN1Klo4GjnNP6654lUKPr7/9TsmpHrabNYobJ/fTqQkLSIU+0LzHo
+        5tmIAWZ680IG0oDxFPWj0fKpq+dKgrCuH8mM2VnocdMGLlBQbYur6VUgy5Ga3rpcdAJ02MNB+ufx2
+        qBODOaaKQvWM/P5VwtZm3mkY;
+Received: from [2a01:4f8:192:486::6:0] (port=54212 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qlVvt-00FeYM-1X
+        for cifs-qa@samba.org;
+        Wed, 27 Sep 2023 14:54:33 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qlVvt-0021FF-4J
+        for cifs-qa@samba.org;
+        Wed, 27 Sep 2023 14:54:33 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 15480] Mounting Azure Fles Share using cifs-utils fails
+Date:   Wed, 27 Sep 2023 14:54:32 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: user space tools
+X-Bugzilla-Version: 5.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: sfrench@samba.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: jlayton@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15480-10630-cvkg5rG2jm@https.bugzilla.samba.org/>
+In-Reply-To: <bug-15480-10630@https.bugzilla.samba.org/>
+References: <bug-15480-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Cthon test fail with the following error.
+https://bugzilla.samba.org/show_bug.cgi?id=3D15480
 
-check for proper open/unlink operation
-nfsjunk files before unlink:
-  -rwxr-xr-x 1 root root 0  9월 25 11:03 ./nfs2y8Jm9
-./nfs2y8Jm9 open; unlink ret = 0
-nfsjunk files after unlink:
-  -rwxr-xr-x 1 root root 0  9월 25 11:03 ./nfs2y8Jm9
-data compare ok
-nfsjunk files after close:
-  ls: cannot access './nfs2y8Jm9': No such file or directory
-special tests failed
+--- Comment #8 from Steve French <sfrench@samba.org> ---
+The trace you sent shows an access denied on SMB3.1.1 session setup
+(NTLMv2/NTLMSSP not Kerberos).   The username looks plausible (based on the
+netname context sent, it matches that), but the obvious question is the
+password (either the one stored in your credentials file or passed on mount
+depending on how you mount this).  You can also verify that the credentials=
+ are
+ok by using smbclient //server/share -U username%password
 
-Cthon expect to second unlink failure when file is already unlinked.
-ksmbd can not allow to open file if flags of ksmbd inode is set with
-S_DEL_ON_CLS flags.
+If that also fails then access to the network may be disabled from some sub=
+nets
+so best to contact Azure support since they can look at the storage account=
+ and
+networking configuration.
 
-Reported-by: Tom Talpey <tom@talpey.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- fs/smb/server/vfs_cache.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/fs/smb/server/vfs_cache.c b/fs/smb/server/vfs_cache.c
-index f41f8d6108ce..f2e2a7cc24a9 100644
---- a/fs/smb/server/vfs_cache.c
-+++ b/fs/smb/server/vfs_cache.c
-@@ -577,6 +577,11 @@ struct ksmbd_file *ksmbd_open_fd(struct ksmbd_work *work, struct file *filp)
- 		goto err_out;
- 	}
- 
-+	if (fp->f_ci->m_flags & S_DEL_ON_CLS) {
-+		ret = -ENOENT;
-+		goto err_out;
-+	}
-+
- 	ret = __open_id(&work->sess->file_table, fp, OPEN_ID_TYPE_VOLATILE_ID);
- 	if (ret) {
- 		ksmbd_inode_put(fp->f_ci);
--- 
-2.25.1
-
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
