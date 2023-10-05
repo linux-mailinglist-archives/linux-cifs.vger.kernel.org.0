@@ -2,157 +2,117 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE6B7B9E36
-	for <lists+linux-cifs@lfdr.de>; Thu,  5 Oct 2023 16:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2DA7BA495
+	for <lists+linux-cifs@lfdr.de>; Thu,  5 Oct 2023 18:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjJEN5c (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Thu, 5 Oct 2023 09:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
+        id S229811AbjJEQHh (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 5 Oct 2023 12:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243882AbjJENzb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Thu, 5 Oct 2023 09:55:31 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C804202
-        for <linux-cifs@vger.kernel.org>; Wed,  4 Oct 2023 21:36:25 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c022ce8114so6435281fa.1
-        for <linux-cifs@vger.kernel.org>; Wed, 04 Oct 2023 21:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696480583; x=1697085383; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rcY2yxK/c5+RfMTKsi0B1UxobYWufoyncDkUmsQoSyM=;
-        b=mJveoZS5z4VPHCRjVpLu2RdT20QHHA3hbxKiOV6UKywMe5dAr5p4ZMkGd3EYe540Kj
-         bHTuvGgN4BnxaOQXyMtZC2OduLiObPU0j8CIsznoJR+p+KPFJPAkIjVnYlascE1neEiA
-         lhO3hPkV++VAP3HSksVOqPKQOGSEEBgqVKu6KHWjz9NtiTi3mDhW9sjhGV0beEyTAH48
-         rPq89RfIkPwMCmPBQH6Qa2Tjm32p4AyywyvalpdaTpyyuQomMNvbuiYQuMSA4NCGZBmn
-         he3Q4NbNh+gJJsT059ucktMLq+Gbt7ZQjn+644KUIn8EpPyGvlu5nLtubXuJloMgSLAF
-         CziA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696480583; x=1697085383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rcY2yxK/c5+RfMTKsi0B1UxobYWufoyncDkUmsQoSyM=;
-        b=vUFk+xnvEolhX8LhFvztyAeQaBuwd9haLRDTW2v6QoaIp6zBJTYm+5duZrt4mlPUeE
-         b3Fsfg6UZKRMvBvFrciAeA5AmMexxQSWa9mV0i9OcpGErkpGKgrdqwClYzmUNm5VGMi3
-         +WHfXUr8uM5ZySxJA3rEHmPyfHAq6G4rgayzrwDYSNXuQaoHAeyaCBbiL4hZwyzI6Tof
-         Jo2WvX2zT21lEnvOYmvAwwN6cLamGQ6fDA0tfqN6vFlHnFm5aY0OSxgU5sOd6hLlBnmS
-         A6hyUQQACbMyeSKoFfC0ChgKsLsOQQvzmdAJj0iF4vvy/u1uXiZKgI4QQ5Hn2Vl3W5JG
-         IBXw==
-X-Gm-Message-State: AOJu0Yyh6CWCjrArvu6GtQdcYAyBKcqYqSQKOBrrZQnpiHPDdNY4+Mnj
-        ELwGmTMZ3mzDcz5jt6B+iiESmaJWmQx/RNRfJHTqxsHEsJ8=
-X-Google-Smtp-Source: AGHT+IH9lGsURAD+yTH61jtwgz2OKlaM/TXV6f24oF6ueiWVuSUB6adEFJKuMU00vzNl918ceQ/4fp9kQPnhZanNtzo=
-X-Received: by 2002:a05:6512:1307:b0:500:7f71:e46b with SMTP id
- x7-20020a056512130700b005007f71e46bmr3772142lfu.1.1696480582905; Wed, 04 Oct
- 2023 21:36:22 -0700 (PDT)
+        with ESMTP id S237979AbjJEQFg (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 5 Oct 2023 12:05:36 -0400
+X-Greylist: delayed 4165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Oct 2023 08:54:29 PDT
+Received: from a1712.mx.srv.dfn.de (a1712.mx.srv.dfn.de [194.95.232.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BECC194;
+        Thu,  5 Oct 2023 08:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        uniklinik-freiburg.de; h=mime-version:content-transfer-encoding
+        :content-id:content-type:content-type:content-language
+        :accept-language:in-reply-to:references:message-id:date:date
+        :subject:subject:from:from:received:received:received; s=s1; t=
+        1696499748; x=1698314149; bh=lKcngNkNaJ2ZDxjfFkR58Vb8y7czhkiNh4X
+        i9DQEKJ8=; b=RNwuOCJBvaCCe6DAQSnKXYMYYGYTK3A/UCkvo4ZdmXogen8DtQf
+        9/V57bB9rE/uT8kb+OloNheioZUQRTPUTlPM/ju/e9zFevYHfyscYNDBJuAjFYnr
+        O4lLh59Hfk330BG7hXKIUQK2/fl7eKuG2iQXHtczRqOZRoTetikbVOUk=
+Received: from ukl-fm1.ukl.uni-freiburg.de (ukl-fm-ha.ukl.uni-freiburg.de [193.196.199.18])
+        by a1712.mx.srv.dfn.de (Postfix) with ESMTPS id D112538010B;
+        Thu,  5 Oct 2023 11:55:48 +0200 (CEST)
+Received: from UKL-EX3.ad.uniklinik-freiburg.de (xxx53.ukl.uni-freiburg.de [193.196.253.53])
+        by ukl-fm1.ukl.uni-freiburg.de  with ESMTPS id 3959tfPs008803-3959tfPu008803
+        (version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=OK);
+        Thu, 5 Oct 2023 11:55:41 +0200
+Received: from UKL-EX4.ad.uniklinik-freiburg.de (193.196.253.54) by
+ UKL-EX3.ad.uniklinik-freiburg.de (193.196.253.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Thu, 5 Oct 2023 11:55:41 +0200
+Received: from UKL-EX4.ad.uniklinik-freiburg.de ([fe80::6c6e:c675:beef:7071])
+ by UKL-EX4.ad.uniklinik-freiburg.de ([fe80::6c6e:c675:beef:7071%5]) with mapi
+ id 15.01.2507.032; Thu, 5 Oct 2023 11:55:41 +0200
+From:   "Dr. Bernd Feige" <bernd.feige@uniklinik-freiburg.de>
+To:     "tom@talpey.com" <tom@talpey.com>,
+        "smfrench@gmail.com" <smfrench@gmail.com>,
+        "paul@darkrain42.org" <paul@darkrain42.org>
+CC:     "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "pc@manguebit.com" <pc@manguebit.com>,
+        "ronniesahlberg@gmail.com" <ronniesahlberg@gmail.com>,
+        "nspmangalore@gmail.com" <nspmangalore@gmail.com>,
+        "brian.pardy@gmail.com" <brian.pardy@gmail.com>,
+        "bharathsm@microsoft.com" <bharathsm@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Possible bug report: kernel 6.5.0/6.5.1 high load when CIFS share
+ is mounted (cifsd-cfid-laundromat in"D" state)
+Thread-Topic: Possible bug report: kernel 6.5.0/6.5.1 high load when CIFS
+ share is mounted (cifsd-cfid-laundromat in"D" state)
+Thread-Index: AQHZ92+sm0zmujZcU0uXcBrFhineoLA608yA
+Date:   Thu, 5 Oct 2023 09:55:41 +0000
+Message-ID: <85d538fec5a086acf62d5a803056586a6c00e4bd.camel@uniklinik-freiburg.de>
+References: <CAO+kfxTwOvaxYV0ZRESxZB-4LHsF9b_VBjAKahhwUm5a1_c4ug@mail.gmail.com>
+         <ZPfPfyIoVxw5L6El@debian.me>
+         <CAO+kfxQgXOsx6u+xLKGJe0KDiFsRAGstSpnrwxjQF6udgz5HFQ@mail.gmail.com>
+         <CAO+kfxTvA6N=i+jGf0XbSyqf85i=q+vR6R9d_42OWfM2sWWXaA@mail.gmail.com>
+         <CAH2r5mtUedfLSv81Z-Yb3_=AbD_QpT3tVbU1PRzMTituaw7bgA@mail.gmail.com>
+         <CAH2r5mt6YzapEKDo=hQ64yvBn7=jwMmY1c85NOABKcMPKPp3KA@mail.gmail.com>
+         <CAO+kfxQtOKoKdb+LtMeFxgu8VXa73nbmTPSfscbdwjUXM7ME_A@mail.gmail.com>
+         <CAH2r5msNf9WDHrBZSi5FhHDSewSNxMAuXTetMJDnoNh3CF_oMA@mail.gmail.com>
+         <a895f860-11fa-e6d9-d042-a32bd08f9e9d@talpey.com>
+         <CAH2r5mszCxPtdURenMVgeVDX5zc8knumH=ASXyUufPa7SxbJBw@mail.gmail.com>
+         <ZRN9MtBqYnT6oX60@vaarsuvius>
+In-Reply-To: <ZRN9MtBqYnT6oX60@vaarsuvius>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [193.196.253.71]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <68FBD33032B9744A8A19C5C1FDCA7193@ad.uniklinik-freiburg.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20231004111755.25338-1-meetakshisetiyaoss@gmail.com> <CAH2r5mtDp3=5pc_CyThX=jJcXd98btAXArdF1Ept3OCVqrebcw@mail.gmail.com>
-In-Reply-To: <CAH2r5mtDp3=5pc_CyThX=jJcXd98btAXArdF1Ept3OCVqrebcw@mail.gmail.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Thu, 5 Oct 2023 10:06:11 +0530
-Message-ID: <CANT5p=r8LC6MwZdZCt7JwrF04ve1hUUbvWL8EipP_0J4kL33fQ@mail.gmail.com>
-Subject: Re: [PATCH] cifs: Add client version details to NTLM authenticate message
-To:     Steve French <smfrench@gmail.com>
-Cc:     meetakshisetiyaoss@gmail.com, linux-cifs@vger.kernel.org,
-        bharathsm.hsk@gmail.com, pc@cjr.nz,
-        Meetakshi Setiya <msetiya@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-FEAS-Client-IP: 193.196.253.53
+X-FE-Last-Public-Client-IP: 193.196.253.53
+X-FE-Policy-ID: 1:4:1:SYSTEM
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-On Wed, Oct 4, 2023 at 10:44=E2=80=AFPM Steve French <smfrench@gmail.com> w=
-rote:
->
-> tentatively merged into cifs-2.6.git for-next pending review/testing
->
-> On Wed, Oct 4, 2023 at 6:18=E2=80=AFAM <meetakshisetiyaoss@gmail.com> wro=
-te:
-> >
-> > From: Meetakshi Setiya <msetiya@microsoft.com>
-> >
-> > The NTLM authenticate message currently sets the NTLMSSP_NEGOTIATE_VERS=
-ION
-> > flag but does not populate the VERSION structure. This commit fixes thi=
-s
-> > bug by ensuring that the flag is set and the version details are includ=
-ed
-> > in the message.
-> >
-> > Signed-off-by: Meetakshi Setiya <msetiya@microsoft.com>
-> > ---
-> >  fs/smb/client/ntlmssp.h |  4 ++--
-> >  fs/smb/client/sess.c    | 12 +++++++++---
-> >  2 files changed, 11 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/fs/smb/client/ntlmssp.h b/fs/smb/client/ntlmssp.h
-> > index 2c5dde2ece58..875de43b72de 100644
-> > --- a/fs/smb/client/ntlmssp.h
-> > +++ b/fs/smb/client/ntlmssp.h
-> > @@ -133,8 +133,8 @@ typedef struct _AUTHENTICATE_MESSAGE {
-> >         SECURITY_BUFFER WorkstationName;
-> >         SECURITY_BUFFER SessionKey;
-> >         __le32 NegotiateFlags;
-> > -       /* SECURITY_BUFFER for version info not present since we
-> > -          do not set the version is present flag */
-> > +       struct  ntlmssp_version Version;
-> > +       /* SECURITY_BUFFER */
-> >         char UserString[];
-> >  } __attribute__((packed)) AUTHENTICATE_MESSAGE, *PAUTHENTICATE_MESSAGE=
-;
-> >
-> > diff --git a/fs/smb/client/sess.c b/fs/smb/client/sess.c
-> > index 79f26c560edf..919ace2d13d4 100644
-> > --- a/fs/smb/client/sess.c
-> > +++ b/fs/smb/client/sess.c
-> > @@ -1060,10 +1060,16 @@ int build_ntlmssp_auth_blob(unsigned char **pbu=
-ffer,
-> >         memcpy(sec_blob->Signature, NTLMSSP_SIGNATURE, 8);
-> >         sec_blob->MessageType =3D NtLmAuthenticate;
-> >
-> > +       /* send version information in ntlmssp authenticate also */
-> >         flags =3D ses->ntlmssp->server_flags | NTLMSSP_REQUEST_TARGET |
-> > -               NTLMSSP_NEGOTIATE_TARGET_INFO | NTLMSSP_NEGOTIATE_WORKS=
-TATION_SUPPLIED;
-> > -       /* we only send version information in ntlmssp negotiate, so do=
- not set this flag */
-> > -       flags =3D flags & ~NTLMSSP_NEGOTIATE_VERSION;
-> > +               NTLMSSP_NEGOTIATE_TARGET_INFO | NTLMSSP_NEGOTIATE_VERSI=
-ON |
-> > +               NTLMSSP_NEGOTIATE_WORKSTATION_SUPPLIED;
-> > +
-> > +       sec_blob->Version.ProductMajorVersion =3D LINUX_VERSION_MAJOR;
-> > +       sec_blob->Version.ProductMinorVersion =3D LINUX_VERSION_PATCHLE=
-VEL;
-> > +       sec_blob->Version.ProductBuild =3D cpu_to_le16(SMB3_PRODUCT_BUI=
-LD);
-> > +       sec_blob->Version.NTLMRevisionCurrent =3D NTLMSSP_REVISION_W2K3=
-;
-> > +
-> >         tmp =3D *pbuffer + sizeof(AUTHENTICATE_MESSAGE);
-> >         sec_blob->NegotiateFlags =3D cpu_to_le32(flags);
-> >
-> > --
-> > 2.39.2
-> >
->
->
-> --
-> Thanks,
->
-> Steve
-
-Looks good to me.
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-
---=20
-Regards,
-Shyam
+QW0gRGllbnN0YWcsIGRlbSAyNi4wOS4yMDIzIHVtIDE3OjU0IC0wNzAwIHNjaHJpZWIgUGF1bCBB
+dXJpY2g6DQo+IFBlcmhhcHMgdGhlIGxhdW5kcm9tYXQgdGhyZWFkIHNob3VsZCBiZSB1c2luZyBt
+c2xlZXBfaW50ZXJydXB0aWJsZSgpPw0KPiANCj4gVXNpbmcgYW4gaW50ZXJydXB0aWJsZSBzbGVl
+cCBhcHBlYXJzIHRvIHByZXZlbnQgdGhlIHRocmVhZCBmcm9tDQo+IGNvbnRyaWJ1dGluZyANCj4g
+dG8gdGhlIGxvYWQgYXZlcmFnZSwgYW5kIGhhcyB0aGUgaGFwcHkgc2lkZS1lZmZlY3Qgb2YgcmVt
+b3ZpbmcgdGhlDQo+IHVwLXRvLTFzIGRlbGF5IA0KPiB3aGVuIHRlYXJpbmcgZG93biB0aGUgdGNv
+biAoc2luY2UgYTdjMDFmYTkzYWUsIGt0aHJlYWRfc3RvcCgpIHdpbGwNCj4gcmV0dXJuIA0KPiBl
+YXJseSB0cmlnZ2VyZWQgYnkga3RocmVhZF9zdG9wKS4NCg0KU29ycnkgZm9yIGNoaW1pbmcgaW4g
+c28gbGF0ZSAtIEknbSBhbHNvIG9uIGdlbnRvbyAoa2VybmVsIDYuNS41LQ0KZ2VudG9vKSwgYnV0
+IGFzIGEgY2xpZW50IG9mIFdpbmRvd3MgQUQuDQoNCkp1c3Qgd2FudCB0byBlbXBoYXNpemUgdGhh
+dCB1c2luZyB1bmludGVycnVwdGlibGUgc2xlZXAgaGFzIG5vdCBqdXN0DQp1bmhhcHB5IGJ1dCBk
+ZXZhc3RhdGluZyBzaWRlLWVmZmVjdHMuDQoNCkkgaGF2ZSA4IHByb2Nlc3NvcnMgYW5kIDE2IGNp
+ZnNkLWNmaWQtbGF1bmRyb21hdCBwcm9jZXNzZXMsIHNvDQovcHJvYy9sb2FkYXZnIHJlcG9ydHMg
+YSBsb2FkIGF2ZXJhZ2Ugb2YgMTYgb24gYSB0b3RhbGx5IGlkbGUgc3lzdGVtLg0KDQpUaGlzIG1l
+YW5zIHRoYXQgbG9hZC1iYWxhbmNpbmcgc29mdHdhcmUgd2lsbCBuZXZlciBzdGFydCBhZGRpdGlv
+bmFsDQp0YXNrcyBvbiB0aGlzIHN5c3RlbSAtICJtYWtlIC1sIiBidXQgYWxzbyBhbnkgb3RoZXIg
+bG9hZC1kZXBlbmRlbnQNCnN5c3RlbS4gSnVzdCByZWR1Y2luZyB0aGUgbnVtYmVyIG9mIGNpZnNk
+LWNmaWQtbGF1bmRyb21hdCBwcm9jZXNzZXMNCmRvZXMgbm90IGZpeCB0aGlzIC0gZXZlbiBhIHNp
+bmdsZSBvbmUgbWFrZXMgbG9hZGF2ZyByZXBvcnQgYSB3cm9uZw0KcmVzdWx0IGZvciBsb2FkIGJh
+bGFuY2luZy4NCg0KU28sIGlmIGNpZnNkLWNmaWQtbGF1bmRyb21hdCBtdXN0IHJlYWxseSBiZSB1
+bmludGVycnVwdGlibGUsIHRoZSBvbmx5DQpzb2x1dGlvbiB3b3VsZCBiZSB0byBjaGFuZ2UgdGhl
+IHdheSBsb2FkYXZnIGlzIGNvbXB1dGVkIGJ5IHRoZSBrZXJuZWwNCnRvIGV4Y2x1ZGUgdW5pbnRl
+cnJ1cHRpYmxlIGJ1dCBzbGVlcGluZyBwcm9jZXNzZXMuIEJ1dCBtdXN0IGl0IGJlDQp1bmludGVy
+cnVwdGlibGU/DQoNClRoYW5rcyBhbmQgYmVzdCByZWdhcmRzLA0KQmVybmQNCg==
