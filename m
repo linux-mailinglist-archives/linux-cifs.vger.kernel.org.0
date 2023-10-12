@@ -2,94 +2,83 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C6F7C574C
-	for <lists+linux-cifs@lfdr.de>; Wed, 11 Oct 2023 16:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE1D7C6E42
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Oct 2023 14:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbjJKOsk (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Wed, 11 Oct 2023 10:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S1343872AbjJLMhC (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Thu, 12 Oct 2023 08:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbjJKOsj (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Wed, 11 Oct 2023 10:48:39 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF688BA
-        for <linux-cifs@vger.kernel.org>; Wed, 11 Oct 2023 07:48:37 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-57b68556d6dso3835031eaf.1
-        for <linux-cifs@vger.kernel.org>; Wed, 11 Oct 2023 07:48:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697035717; x=1697640517;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KWq5BS6S9RabcE2DIs2WK/cbdGqkeRiKmjdiZPxBiYI=;
-        b=MxvJHrIrxuUYCq1ZDhHRpt+ABoWhOxwa4O03KoNLZpM4LxM+LKSj8QtUodp8fAhWLF
-         u7TwBS7/2XQtdS3mYlTeaYh/Hnb1+pVPL0DD5tCa8BtMoyuCrOG5zwSc3dqS4CH1w0V/
-         l5LV0XuLD7Kb32e3gkr5hUUqLQ/kYETjEJhs7nyHh+Wkzh5Zwacku9KjAkRVmkrltVXu
-         boy1fo9ZboduFrD4TDrtbL47JvqCI7IMKM90aYF+gVwjef95fhR00572k4mB+JhF+zX4
-         7ciSJdHMQHJWxRL1h7wMJ65ybLNC9xcpYjhvqgTXPokENu/DMgMmaKF1RRPtT4DejAh9
-         8Ueg==
-X-Gm-Message-State: AOJu0YzfSabfMagohLD8ImhKLNgiRu0oCZRJ+74vrGliA5/ynREgtXj6
-        0s1V9CDwltLpjeQslnBNIutj6y7vm/4=
-X-Google-Smtp-Source: AGHT+IH8i/z39sjATbkcmKdLik2AvpBxzigNcMMiQA5hKFJoWHrjRfEyc3ibC7QwfUA6ScjR8Tzy7A==
-X-Received: by 2002:a05:6358:3421:b0:14d:bad5:6adf with SMTP id h33-20020a056358342100b0014dbad56adfmr24126847rwd.21.1697035716659;
-        Wed, 11 Oct 2023 07:48:36 -0700 (PDT)
-Received: from localhost.localdomain ([110.14.71.32])
-        by smtp.gmail.com with ESMTPSA id ey5-20020a056a0038c500b0068ff6d21563sm10626059pfb.148.2023.10.11.07.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 07:48:36 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, senozhatsky@chromium.org, tom@talpey.com,
-        atteh.mailbox@gmail.com, Namjae Jeon <linkinjeon@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH 2/2] ksmbd: fix potential double free on smb2_read_pipe() error path
-Date:   Wed, 11 Oct 2023 23:38:47 +0900
-Message-Id: <20231011143847.9140-2-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231011143847.9140-1-linkinjeon@kernel.org>
-References: <20231011143847.9140-1-linkinjeon@kernel.org>
+        with ESMTP id S1343824AbjJLMhB (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Thu, 12 Oct 2023 08:37:01 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB9AC9
+        for <linux-cifs@vger.kernel.org>; Thu, 12 Oct 2023 05:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Message-ID:Date:To:From:CC;
+        bh=Q8a+Gvip7e0WZtd4C8doMruD3hVVgcAhOrYzuYFN5dI=; b=VfniPOJxy30sSJXvC+wIIcYn5o
+        2738bkSFeN6YOswV3lBtRtbw37kEGVMTWXH1xYP1RHqPt9sWmhuo9UHoiGWMCR5wPbSM9KKh1bhC/
+        vP59H6vzYv7Y2H0KZR9RHIBbzc4UsRmBEpwzmvcgmMAH1NuFxFsKxsec+I4PHTaU5NAjMR/uSPHai
+        cza8JUm70zGF43Hq+qS9eeoou7oCPf1YbprAr6R2Ria9q/YUKTqlS4ZCNZoEGfagMaebyD8StwFi5
+        Cc3MJBX7OqEdCm0bflTy8/XauTy9VZRhPg7qz2hSqUb0v8MlkK14Bbzdek00yjmTt4f7KzVN7Jr/l
+        7hmc1RWZXXdKZT82JjbAnncIrZTxpPif3M9ehDZm5eKBjvEk/PmPsBoK6PFZdE2GQY7oaFNehLlRt
+        CPNuuh+d4C6fcTNLFJ6a1rmyaOeVLAcl79NIZ6KHIfN50VNrncNFuwQp+sg9H+TGpSQjTIdPar5bC
+        X3u3QjFTLo1XXrNBv9q+J9b4;
+Received: from [2a01:4f8:192:486::6:0] (port=56018 helo=hr6.samba.org) 
+        by hr2.samba.org with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qquvs-000GRQ-2p
+        for cifs-qa@samba.org;
+        Thu, 12 Oct 2023 12:36:54 +0000
+Received: from www-data by hr6.samba.org with local (Exim 4.95)
+        (envelope-from <www-data@samba.org>)
+        id 1qquvs-0006BY-2u
+        for cifs-qa@samba.org;
+        Thu, 12 Oct 2023 12:36:52 +0000
+From:   samba-bugs@samba.org
+To:     cifs-qa@samba.org
+Subject: [Bug 14492] Minshall-French symlinks cannot be searched for with
+ "find . -type l"
+Date:   Thu, 12 Oct 2023 12:36:47 +0000
+X-Bugzilla-Reason: QAcontact
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: CifsVFS
+X-Bugzilla-Component: kernel fs
+X-Bugzilla-Version: 3.x
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjacke@samba.org
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: sfrench@samba.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14492-10630-IHPxUlmcjv@https.bugzilla.samba.org/>
+In-Reply-To: <bug-14492-10630@https.bugzilla.samba.org/>
+References: <bug-14492-10630@https.bugzilla.samba.org/>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Bugzilla-URL: https://bugzilla.samba.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Fix new smatch warnings:
-fs/smb/server/smb2pdu.c:6131 smb2_read_pipe() error: double free of 'rpc_resp'
+https://bugzilla.samba.org/show_bug.cgi?id=3D14492
 
-Fixes: e2b76ab8b5c9 ("ksmbd: add support for read compound")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- fs/smb/server/smb2pdu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #3 from Bj=C3=B6rn Jacke <bjacke@samba.org> ---
+Any update on this? Bumped into this again, I thought this would have been
+fixed since long.
 
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 87c6401a6007..93262ca3f58a 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -6152,12 +6152,12 @@ static noinline int smb2_read_pipe(struct ksmbd_work *work)
- 		memcpy(aux_payload_buf, rpc_resp->payload, rpc_resp->payload_sz);
- 
- 		nbytes = rpc_resp->payload_sz;
--		kvfree(rpc_resp);
- 		err = ksmbd_iov_pin_rsp_read(work, (void *)rsp,
- 					     offsetof(struct smb2_read_rsp, Buffer),
- 					     aux_payload_buf, nbytes);
- 		if (err)
- 			goto out;
-+		kvfree(rpc_resp);
- 	} else {
- 		err = ksmbd_iov_pin_rsp(work, (void *)rsp,
- 					offsetof(struct smb2_read_rsp, Buffer));
--- 
-2.25.1
-
+--=20
+You are receiving this mail because:
+You are the QA Contact for the bug.=
