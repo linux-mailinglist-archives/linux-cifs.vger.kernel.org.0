@@ -2,108 +2,61 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052607D294B
-	for <lists+linux-cifs@lfdr.de>; Mon, 23 Oct 2023 06:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E306B7D2B80
+	for <lists+linux-cifs@lfdr.de>; Mon, 23 Oct 2023 09:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjJWETc (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Mon, 23 Oct 2023 00:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S229789AbjJWHiq (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Mon, 23 Oct 2023 03:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjJWETb (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Mon, 23 Oct 2023 00:19:31 -0400
-X-Greylist: delayed 92 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Oct 2023 21:19:27 PDT
-Received: from omta037.useast.a.cloudfilter.net (omta037.useast.a.cloudfilter.net [44.202.169.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA537F5;
-        Sun, 22 Oct 2023 21:19:27 -0700 (PDT)
-Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
-        by cmsmtp with ESMTPS
-        id uleKqckAjWcCIumO3qb9Bo; Mon, 23 Oct 2023 04:17:55 +0000
-Received: from 162-240-83-27.unifiedlayer.com ([137.59.148.200])
-        by cmsmtp with ESMTPS
-        id umO1qoa5ZTbebumO2q7k56; Mon, 23 Oct 2023 04:17:54 +0000
-X-Authority-Analysis: v=2.4 cv=E8LeGIRl c=1 sm=1 tr=0 ts=6535f3f2
- a=MgGYFET5X96nYrQ76toljg==:117 a=32wkWZdPouleh9wPFPhphQ==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=kj9zAlcOel0A:10 a=bhdUkHdE2iEA:10 a=lUDAUsI-kUQA:10
- a=9m64_h_j2zU8ieQoq-sA:9 a=CjuIK1q_8ugA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=35686686.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Dm1nus89JLbD/65ItGQLhdR/UwQLhddPM+BxEJ7yOwM=; b=PUqKfgRig+pZKS3FGcmiR/SFev
-        Ir0wJh9Rn+3ERSG9EZWXUIwwkBhBvTv/K+zr7llwyUij7W7GrXeQNFseXy5ZGRehyQkV7Im/sBSnW
-        ZW1RFjZ+/Tmt25XwSXgiWJpXzn9YLh/NQXbe9Ptdr0cTtL6CdnKPOMgXgIuWtHCFsYSL83sNrr9fg
-        oCWirZBXSfna5czQWjJaNs3dSoQM4R9wDeQBrA9dVkXIm3Muig4FWV/lPBkQoPYlEStLLChltObtL
-        Sy2QtFxmR6xsbqZf2Wj8Nh1tmj6WCiUL+cPR6p4WRPDflwUWmUYHaLFemYk5AuO1grn5sP4MYGfeG
-        noqvYFUA==;
-Received: from md-hk-12.webhostbox.net ([137.59.148.200]:32260)
-        by md-hk-12.webhostbox.net with esmtpa (Exim 4.96.2)
-        (envelope-from <jc@35686686.com>)
-        id 1qukGq-002oZ1-1e;
-        Mon, 23 Oct 2023 07:32:20 +0530
-Received: from [181.214.94.88]
- by 35686686.com
- with HTTP (HTTP/1.1 POST); Mon, 23 Oct 2023 07:32:11 +0530
+        with ESMTP id S229450AbjJWHiq (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Mon, 23 Oct 2023 03:38:46 -0400
+X-Greylist: delayed 466 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Oct 2023 00:38:40 PDT
+Received: from mail.mistycode.pl (mail.mistycode.pl [141.95.53.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451E6D60
+        for <linux-cifs@vger.kernel.org>; Mon, 23 Oct 2023 00:38:40 -0700 (PDT)
+Received: by mail.mistycode.pl (Postfix, from userid 1002)
+        id 33B26A250D; Mon, 23 Oct 2023 07:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mistycode.pl; s=mail;
+        t=1698046251; bh=IDNbz582ww0zEznMdcpH2+ezZgtU6Z/MLE6ao9Ixw6s=;
+        h=Date:From:To:Subject:From;
+        b=GuKtdiR6Y777MneFcxrBmPipRtpe+/hJilk/ck57BTxgEqQKZDWFI0C5pWyvKq2C8
+         +dS76Fy8cA6ARdRutmJ9IDPrR5u82Q3OeWQnl0MHSKqJvBgwH1AAl079HFOqumLjsk
+         5O6PD7FZK0f5zk75YEqAHrSNeyRK5StN8r4Yn8biIJeMbWxITGnhB+KDf2P/obg9Hu
+         wM6CkQxpA+VYa98HqfzWrqby8u5ew3z7ASyiIfqW7D4r5/Y3vLnto+tSydz9iI6pIT
+         KvdTflTZOFWFgvfUH/6wxwlkywZJX1CEIQfW4L+LfpDz7mVWJtws10A2YUnvWfzv+u
+         Z8v/Mq1aOE9cQ==
+Received: by mail.mistycode.pl for <linux-cifs@vger.kernel.org>; Mon, 23 Oct 2023 07:30:38 GMT
+Message-ID: <20231023064500-0.1.b6.ckdi.0.ia1k2vaf0r@mistycode.pl>
+Date:   Mon, 23 Oct 2023 07:30:38 GMT
+From:   =?UTF-8?Q? "=C5=81ukasz_Kurzaj" ?= <lukasz.kurzaj@mistycode.pl>
+To:     <linux-cifs@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.mistycode.pl
 MIME-Version: 1.0
-Date:   Mon, 23 Oct 2023 10:02:11 +0800
-From:   jc@35686686.com
-To:     undisclosed-recipients:;
-Subject: LOAN SCHEME
-Reply-To: info@kafurinvestment.com
-Mail-Reply-To: info@kafurinvestment.com
-User-Agent: Roundcube Webmail/1.6.0
-Message-ID: <444dc5ecb83daa7b98458b69e615a708@35686686.com>
-X-Sender: jc@35686686.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-hk-12.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 35686686.com
-X-BWhitelist: no
-X-Source-IP: 137.59.148.200
-X-Source-L: No
-X-Exim-ID: 1qukGq-002oZ1-1e
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: md-hk-12.webhostbox.net [137.59.148.200]:32260
-X-Source-Auth: jc@35686686.com
-X-Email-Count: 0
-X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: ZmJkZXN4amc7Ymx1ZWhvc3Q7bWQtaGstMTIud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfODYBkE0Ew/e76bFA5sYZIlzm61ztzqO4VdblE3rGKcPU99NL3B9NrOQxHnqENTmSMi32Ar5x+auiKKu2DYgyWGs5pp5akxInMwWM9CJGva8KRwo8tYv
- o2ss0WwK1mkntpNfBoSmANvtgNrRJXXIZUVGK4F1vu5PzrEktoX4dc59/WjrO34w7adxgTHBB0F5s/BAkdDgri4Pmy9aw0xliQoV6ve6xeb46FxSPrCx1vLE
- hMX3TWwvfNGU5+6UVt4T9X10pCiCWv66gK6Np7bi3fX7jteayBzVpUSuhDpKt8KBVzU7BNaBN6Pqr/HXniZE6y9m57//5cG9cR0xzfSAIzsKKsEUnUsqo4t8
- GedMoFmfj10f0GdwrDTxAjMqXY0Wi+32g7pazSCByimXAxKZjf/z0OVINkQwWD5D39E8CDBqkHKstJ5oTPracMH1631k0Ht5eTksnj53uyTWhpEd/9lzO3a+
- C5s3FpXY7cGcvGUw
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Greetings:
+Dzie=C5=84 dobry,
 
-I am Mr. Faheem Badawi, working as a project facilitator for (Kafur 
-Project Management Services) also, with numerous investors worldwide. As 
-a means of widening our global portfolio we would like to know if you 
-have any project(s) requiring funding. We also offer business, personal 
-and home loans to finance new projects as well as expansion capital.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-For more updates on the mode of operation send a reply.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Waiting for your prompt response.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Kind regards,
-Faheem Badawi.
-(Financial Advisory - KPMS)
+Pozdrawiam
+=C5=81ukasz Kurzaj
