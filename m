@@ -2,81 +2,66 @@ Return-Path: <linux-cifs-owner@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2AD7E1733
-	for <lists+linux-cifs@lfdr.de>; Sun,  5 Nov 2023 23:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765FB7E1619
+	for <lists+linux-cifs@lfdr.de>; Sun,  5 Nov 2023 20:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjKEWAn (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
-        Sun, 5 Nov 2023 17:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S229489AbjKETdK (ORCPT <rfc822;lists+linux-cifs@lfdr.de>);
+        Sun, 5 Nov 2023 14:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjKEWAj (ORCPT
-        <rfc822;linux-cifs@vger.kernel.org>); Sun, 5 Nov 2023 17:00:39 -0500
-X-Greylist: delayed 5232 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:37 PST
-Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEECC;
-        Sun,  5 Nov 2023 14:00:37 -0800 (PST)
-Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id F04D219226;
-        Mon,  6 Nov 2023 01:57:45 +0700 (+07)
-Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id E9CB819316;
-        Mon,  6 Nov 2023 01:57:45 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 868E61B82538;
-        Mon,  6 Nov 2023 01:57:47 +0700 (+07)
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id jh3SlK7N48tj; Mon,  6 Nov 2023 01:57:47 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 529421B8253C;
-        Mon,  6 Nov 2023 01:57:47 +0700 (+07)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 529421B8253C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
-        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210667;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=QQbTxUU1FooLeiJNE8AKnr3lh25G4fEh0ac5dKwzCVJOq1E8I/DOhqtaBNnjr6tb1
-         3qtPslyoi1ist/uLxk4cfUBMULNtnGH2CwubdDsGPNORQJiREmFCynU4ht0utVVLUq
-         5aPHTLYNJJo0Af/jWd1TNbwYSSipEUQSdDZ4WA2wxON24beYLkxJmZE6+uCrGwYCy8
-         kLyEMDPis8D+9HOQgE47Z6+QIQyLGFm+AugKXq2TVfbBL24Jj8MJ+aKWy+GGfxWGmG
-         4/EnCd6xQ7KztZQEEEKeAwgcngkCkuWnqoaOJZAAs2WxrZR0+0bwp48KkKseQC703a
-         xDFxG7+hhWCcA==
-X-Virus-Scanned: amavisd-new at hcrc.vn
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vuyzMQlpkpXD; Mon,  6 Nov 2023 01:57:47 +0700 (+07)
-Received: from [192.168.1.152] (unknown [51.179.100.52])
-        by zimbra.hcrc.vn (Postfix) with ESMTPSA id EFC621B8250B;
-        Mon,  6 Nov 2023 01:57:40 +0700 (+07)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229647AbjKETdI (ORCPT
+        <rfc822;linux-cifs@vger.kernel.org>); Sun, 5 Nov 2023 14:33:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916EAE1;
+        Sun,  5 Nov 2023 11:33:05 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C46F5C433C8;
+        Sun,  5 Nov 2023 19:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699212785;
+        bh=1ZSn8fX1O+pE4SPZosecaz3eXsXrtCg5RT9YyalLzBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MDJkErVAgzE5crGSHh9WVGqTANQW6FYwKB+ggVryU3HKPwW3R6wjoQR5CbA4YD9w2
+         LcJ0Wtwe6qzm6WV2AL8nlOSTNJxfH4Mh3tSVYkhFvn5BM9fvxILPt930TbZS664iwl
+         go2apfOhcyRzx13OulPkXhb4XADFnWT0i48k33wUnfy4a6MMQrc/iTdRTU5rwzbf+M
+         lQId99jXFLhOeJrsgM0D2LoVIJnbHXuppXlxEq3+j17Nzxmiu904HLzLHrLlyjYoOj
+         Y+21BauTD0lf+QjXFD2mIqLdEKNlHOccETUWyRCDMB20gdEZz+/ON/i4SZy9udTirw
+         bfVm9Hmqz8oFA==
+Date:   Sun, 5 Nov 2023 11:33:03 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     ronnie sahlberg <ronniesahlberg@gmail.com>
+Cc:     Steve French <smfrench@gmail.com>, John Sanpe <sanpeqf@gmail.com>,
+        stfrench@microsoft.com, linkinjeon@kernel.org, pc@manguebit.com,
+        sprasad@microsoft.com, linux-cifs@vger.kernel.org,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        samba-technical <samba-technical@lists.samba.org>,
+        Jeremy Allison <jra@samba.org>
+Subject: Re: [PATCH] fs/smb: using crypto lib instead cifs_arc4
+Message-ID: <20231105193303.GA91123@sol.localdomain>
+References: <20231022183917.1013135-1-sanpeqf@gmail.com>
+ <CAH2r5mvAvXaXTWr8CWnVZcXa3tiU+ZfpBoo0tiY-RH194f2xow@mail.gmail.com>
+ <CAH2r5mvAOYqjP7JvGxF5Jt58386Sjwke7516XUet-6L6XW3_NQ@mail.gmail.com>
+ <CAN05THRzP6uFyza90kBy5Ku8yGKMi2K5VYX1TJsjbvQrLfAEiw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <ch.31hamnghi@hcrc.vn>
-From:   ch.31hamnghi@hcrc.vn
-Date:   Sun, 05 Nov 2023 19:57:30 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231105185740.EFC621B8250B@zimbra.hcrc.vn>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAN05THRzP6uFyza90kBy5Ku8yGKMi2K5VYX1TJsjbvQrLfAEiw@mail.gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-cifs.vger.kernel.org>
 X-Mailing-List: linux-cifs@vger.kernel.org
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+On Mon, Oct 23, 2023 at 05:42:11AM +1000, ronnie sahlberg wrote:
+> You are right. The reason that arc4 and friend were moved into cifs
+> was because the crypto guys told us "we will delete these algorithms
+> from the crypto library"
 
+This was suggested for md4 but not for arc4.  arc4 still has multiple users in
+the kernel, so having it as a library makes sense.
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
-
+- Eric
