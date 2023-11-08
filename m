@@ -1,201 +1,106 @@
-Return-Path: <linux-cifs+bounces-21-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-25-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1324D7E5F5F
-	for <lists+linux-cifs@lfdr.de>; Wed,  8 Nov 2023 21:46:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 132E17E5FE9
+	for <lists+linux-cifs@lfdr.de>; Wed,  8 Nov 2023 22:23:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51E31B20ED4
-	for <lists+linux-cifs@lfdr.de>; Wed,  8 Nov 2023 20:46:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E0AB28131D
+	for <lists+linux-cifs@lfdr.de>; Wed,  8 Nov 2023 21:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1AF632C80;
-	Wed,  8 Nov 2023 20:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B0D30326;
+	Wed,  8 Nov 2023 21:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LA9dtmsi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y06LxX7y"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F0519460;
-	Wed,  8 Nov 2023 20:46:19 +0000 (UTC)
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEF12132;
-	Wed,  8 Nov 2023 12:46:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=IYjCp8rTcxEG3M279vzbbI0tfP2VMAdLWvZwpGFWngE=; b=LA9dtmsibsRBbAWigyG6Ny2I5Z
-	kSVBhUGbs97uvhj7+Mn2rGkp+uAsSWEP2Wduc0+uzyWxfGaLvOLV7/6xPy7AQD+Kp4LXWjX7kQxoS
-	johirG8nYCyJ5z8YzRRJiRQuufogk1Gwmu2LiitFrN83RH8Icq/kwrNnabv0SlHmkC+YGAuND2nDi
-	Hw/Sw/1P/gl5OyrI0guLvLwD6Ius4vybwK3R0wAiX4DCsKHdadbbN5GHUY6MPLutdtrwkprjGQ+1y
-	LXNOqQ6Zjmv/pTr8ELCD9a7caQzqcmQuMjUiR6M/Tt9KADBlNOCe1IdD/rRmXO9z1v18I9zeWLQL2
-	a7Pfju9A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1r0pRC-0037qA-2E; Wed, 08 Nov 2023 20:46:10 +0000
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	David Howells <dhowells@redhat.com>,
-	Steve French <sfrench@samba.org>,
-	linux-afs@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH 4/4] mm: Return void from folio_start_writeback() and related functions
-Date: Wed,  8 Nov 2023 20:46:05 +0000
-Message-Id: <20231108204605.745109-5-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20231108204605.745109-1-willy@infradead.org>
-References: <20231108204605.745109-1-willy@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C4A374CA
+	for <linux-cifs@vger.kernel.org>; Wed,  8 Nov 2023 21:23:38 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48185211D
+	for <linux-cifs@vger.kernel.org>; Wed,  8 Nov 2023 13:23:37 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9c603e235d1so29474866b.3
+        for <linux-cifs@vger.kernel.org>; Wed, 08 Nov 2023 13:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699478615; x=1700083415; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oLMUcI4/jw5EUukdjTXuzYA+uUI8JWgQmXJBcIzK6xs=;
+        b=Y06LxX7yW3qWrbHqrk6e18gkWvXnukRuIVSJVqzTW21Hbf70LuNcd2LFrm+rS5wzKk
+         ThyIqXWwsBlMJEKOOfNU4j9+fXcxViCkhWFnda8M/3XPBXpkTw0N3Cp0g6HraMYaHuFi
+         K0VfPdTqizUtEFKIg0tUH0XjgwtPJtHqWRi6B2kfhGCsu9EYlF30atsE5eAl2C43P3nD
+         BJR4trdBPwqGiSqbef2nhsMMGmfUyEw5acbFPj1UIGCtiE4tUcuc5DRPkUbpRq5K/Wn5
+         6zXdXTM7hl12dpyLx/fhvAm2p3831jk+4ZBRgad9j8opJZK6CiqBGiR76W5IqYSELc7K
+         uVlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699478615; x=1700083415;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oLMUcI4/jw5EUukdjTXuzYA+uUI8JWgQmXJBcIzK6xs=;
+        b=o6QSQGjHd3iUNYjJt9mpI6bz5L4fCAXrn4j29MaMEThDKPMMwjt2XEbL/uyaX1C2s6
+         LkSzI5W7T2TV9KAJmIV2ItSuxcEMeMtVFmqMjNQTcnzGPjJbRbHwPxbpVx+kbzvHDN7l
+         j+vPmh/aKks/TppCseNBAUYx2x1mpXH8tCGOGyOPgB+giCGwixHMZra8OF/loPX2lyj6
+         vr8rBCxouKpGPUkN9GkG/+PANrWLt8QGPuvZ0cODj44jgrq2UL7pib2kt3kW95jDzgrz
+         kZYZp+rhUNIlO0lyGXhATNIayI5ktMd+iOGCOLQx3CcfCkn6baRXMpVfaxHJJ3SAl5PN
+         7M/w==
+X-Gm-Message-State: AOJu0Yxof+q0QaP0ci8am40mNVKnxWUb2zBb2RbrE+L3/yqMWDpejyCf
+	N0lE/T+kNhB+M3CChX5Xn9So6q/dRvyX3lr6wwYWyiAtGdI=
+X-Google-Smtp-Source: AGHT+IEBbfV/Va7cznWuAvtaymCrGdDShHsAYeqMTm35tys3/xRyu0IuRAdepwXFdROtX3aT0uApYJ1QDdvedAK3VDg=
+X-Received: by 2002:a17:906:c104:b0:9d4:84b6:8715 with SMTP id
+ do4-20020a170906c10400b009d484b68715mr2689220ejc.52.1699478615161; Wed, 08
+ Nov 2023 13:23:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Eduard Bachmakov <e.bachmakov@gmail.com>
+Date: Wed, 8 Nov 2023 22:23:07 +0100
+Message-ID: <CADCRUiNvZuiUZ0VGZZO9HRyPyw6x92kiA7o7Q4tsX5FkZqUkKg@mail.gmail.com>
+Subject: Unexpected additional umh-based DNS lookup in 6.6.0
+To: linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Nobody now checks the return value from any of these functions, so
-add an assertion at the beginning of the function and return void.
+When attempting to mount (mount.cifs version 7.0) a share using
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- include/linux/page-flags.h |  4 +--
- mm/folio-compat.c          |  4 +--
- mm/page-writeback.c        | 54 ++++++++++++++++++--------------------
- 3 files changed, 29 insertions(+), 33 deletions(-)
+    $ mount -t cifs -o
+vers=3.1.1,cred=/home/u/.secret.txt,uid=1000,gid=100
+//smb.server.example.com/scans /home/u/mnt
 
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index a440062e9386..735cddc13d20 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -772,8 +772,8 @@ static __always_inline void SetPageUptodate(struct page *page)
- 
- CLEARPAGEFLAG(Uptodate, uptodate, PF_NO_TAIL)
- 
--bool __folio_start_writeback(struct folio *folio, bool keep_write);
--bool set_page_writeback(struct page *page);
-+void __folio_start_writeback(struct folio *folio, bool keep_write);
-+void set_page_writeback(struct page *page);
- 
- #define folio_start_writeback(folio)			\
- 	__folio_start_writeback(folio, false)
-diff --git a/mm/folio-compat.c b/mm/folio-compat.c
-index 10c3247542cb..aee3b9a16828 100644
---- a/mm/folio-compat.c
-+++ b/mm/folio-compat.c
-@@ -46,9 +46,9 @@ void mark_page_accessed(struct page *page)
- }
- EXPORT_SYMBOL(mark_page_accessed);
- 
--bool set_page_writeback(struct page *page)
-+void set_page_writeback(struct page *page)
- {
--	return folio_start_writeback(page_folio(page));
-+	folio_start_writeback(page_folio(page));
- }
- EXPORT_SYMBOL(set_page_writeback);
- 
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 46f2f5d3d183..118f02b51c8d 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2982,67 +2982,63 @@ bool __folio_end_writeback(struct folio *folio)
- 	return ret;
- }
- 
--bool __folio_start_writeback(struct folio *folio, bool keep_write)
-+void __folio_start_writeback(struct folio *folio, bool keep_write)
- {
- 	long nr = folio_nr_pages(folio);
- 	struct address_space *mapping = folio_mapping(folio);
--	bool ret;
- 	int access_ret;
- 
-+	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
-+
- 	folio_memcg_lock(folio);
- 	if (mapping && mapping_use_writeback_tags(mapping)) {
- 		XA_STATE(xas, &mapping->i_pages, folio_index(folio));
- 		struct inode *inode = mapping->host;
- 		struct backing_dev_info *bdi = inode_to_bdi(inode);
- 		unsigned long flags;
-+		bool on_wblist;
- 
- 		xas_lock_irqsave(&xas, flags);
- 		xas_load(&xas);
--		ret = folio_test_set_writeback(folio);
--		if (!ret) {
--			bool on_wblist;
-+		folio_test_set_writeback(folio);
- 
--			on_wblist = mapping_tagged(mapping,
--						   PAGECACHE_TAG_WRITEBACK);
-+		on_wblist = mapping_tagged(mapping, PAGECACHE_TAG_WRITEBACK);
- 
--			xas_set_mark(&xas, PAGECACHE_TAG_WRITEBACK);
--			if (bdi->capabilities & BDI_CAP_WRITEBACK_ACCT) {
--				struct bdi_writeback *wb = inode_to_wb(inode);
--
--				wb_stat_mod(wb, WB_WRITEBACK, nr);
--				if (!on_wblist)
--					wb_inode_writeback_start(wb);
--			}
-+		xas_set_mark(&xas, PAGECACHE_TAG_WRITEBACK);
-+		if (bdi->capabilities & BDI_CAP_WRITEBACK_ACCT) {
-+			struct bdi_writeback *wb = inode_to_wb(inode);
- 
--			/*
--			 * We can come through here when swapping
--			 * anonymous folios, so we don't necessarily
--			 * have an inode to track for sync.
--			 */
--			if (mapping->host && !on_wblist)
--				sb_mark_inode_writeback(mapping->host);
-+			wb_stat_mod(wb, WB_WRITEBACK, nr);
-+			if (!on_wblist)
-+				wb_inode_writeback_start(wb);
- 		}
-+
-+		/*
-+		 * We can come through here when swapping anonymous
-+		 * folios, so we don't necessarily have an inode to
-+		 * track for sync.
-+		 */
-+		if (mapping->host && !on_wblist)
-+			sb_mark_inode_writeback(mapping->host);
- 		if (!folio_test_dirty(folio))
- 			xas_clear_mark(&xas, PAGECACHE_TAG_DIRTY);
- 		if (!keep_write)
- 			xas_clear_mark(&xas, PAGECACHE_TAG_TOWRITE);
- 		xas_unlock_irqrestore(&xas, flags);
- 	} else {
--		ret = folio_test_set_writeback(folio);
--	}
--	if (!ret) {
--		lruvec_stat_mod_folio(folio, NR_WRITEBACK, nr);
--		zone_stat_mod_folio(folio, NR_ZONE_WRITE_PENDING, nr);
-+		folio_test_set_writeback(folio);
- 	}
-+
-+	lruvec_stat_mod_folio(folio, NR_WRITEBACK, nr);
-+	zone_stat_mod_folio(folio, NR_ZONE_WRITE_PENDING, nr);
- 	folio_memcg_unlock(folio);
-+
- 	access_ret = arch_make_folio_accessible(folio);
- 	/*
- 	 * If writeback has been triggered on a page that cannot be made
- 	 * accessible, it is too late to recover here.
- 	 */
- 	VM_BUG_ON_FOLIO(access_ret != 0, folio);
--
--	return ret;
- }
- EXPORT_SYMBOL(__folio_start_writeback);
- 
--- 
-2.42.0
+it succeeds on 6.5.9:
 
+    mount("//smb.server.example.com/scans", ".", "cifs", 0,
+"ip=192.168.5.43,unc=\\\\smb.server.example.com\\scans,vers=3.1.1,uid=1000,gid=100,user=u,pass=mypassword")
+= 0
+
+but fails on 6.0.0:
+
+    mount("//smb.server.example.com/scans", ".", "cifs", 0,
+"ip=192.168.5.43,unc=\\\\smb.server.example.com\\scans,vers=3.1.1,uid=1000,gid=100,user=u,pass=mypassword")
+= -1 ENOKEY (Required key not available)
+
+(or ENOENT) though it still works with using the IP instead of the domain:
+
+    mount("//192.168.5.43/scans", ".", "cifs", 0,
+"ip=192.168.5.43,unc=\\\\192.168.5.43\\scans,vers=3.1.1,uid=1000,gid=100,user=u,pass=mypassword")
+= 0
+
+Based on my reading ever since 348a04a ("smb: client: get rid of dfs
+code dep in namespace.c") dfs_mount_share() is now calling
+dns_resolve_server_name_to_ip() early and unconditionally. This can be
+verified on a running system by enabling dns_resolver logging (echo 1
+| sudo tee /sys/module/dns_resolver/parameters/debug + watch dmesg).
+An additional DNS lookup is attempted in 6.0.0 that previously wasn't.
+My best guess is that ENOENT is "didn't work" and ENOKEY means "didn't
+work but cached".
+
+On my system the request-key mechanism is not set up so this fails.
+I'm no expert on SMB so I don't know if things just happened to work
+previously by me relying on a bug but this change broke my setup. Is
+this expected?
 
