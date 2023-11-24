@@ -1,34 +1,34 @@
-Return-Path: <linux-cifs+bounces-158-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-159-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52FC77F7D15
-	for <lists+linux-cifs@lfdr.de>; Fri, 24 Nov 2023 19:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 296F07F7F76
+	for <lists+linux-cifs@lfdr.de>; Fri, 24 Nov 2023 19:41:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83DE41C2102E
-	for <lists+linux-cifs@lfdr.de>; Fri, 24 Nov 2023 18:21:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A1631C21447
+	for <lists+linux-cifs@lfdr.de>; Fri, 24 Nov 2023 18:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8C73A8C3;
-	Fri, 24 Nov 2023 18:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A377433CC2;
+	Fri, 24 Nov 2023 18:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gwFNlk1E"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gQoq5aZg"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55D039FFD;
-	Fri, 24 Nov 2023 18:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AE9C433C7;
-	Fri, 24 Nov 2023 18:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6F033CCC;
+	Fri, 24 Nov 2023 18:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC51C433C8;
+	Fri, 24 Nov 2023 18:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700850078;
-	bh=QZjHIs+EqSuj71ccHBGqKf4hy0LZdJnSHf4jHPi4zt0=;
+	s=korg; t=1700851306;
+	bh=rSKjR4kPDiHrtOEUb2nxNXOqHhNE005/NufjuESuqNQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gwFNlk1EShI6ZgvS7JpKdgTHEz3uNXHP6jpnNlmknnzN/6ZXUjAfg5jLCpTijK04P
-	 SOKZUvUgGnVcJKh5XUlPyyqBRoMiOjQVuN8dRBTG95XcNs0PrvWpPRVEJSg7c2+zGo
-	 q582Zj9G5EXPYxvM8rj8BlM36M2n78XSASnlpcqI=
+	b=gQoq5aZg9LmZmvmulfNk5InSDNXh4ZZXF3xBPymaE933L/bc8me8vGf3RNx0SqYRn
+	 nHdn/r56TReCvwbgDm2iAPf1wj08aUwsAI5IhAMs0GE2vmvMSKeLZYNBnnx8j0BrQt
+	 lTzjMSBAb5W564NEPF0QImaJqEgDDNxbuXw2izWE=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +40,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
 	David Howells <dhowells@redhat.com>,
 	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.6 429/530] cifs: Fix encryption of cleared, but unset rq_iter data buffers
-Date: Fri, 24 Nov 2023 17:49:55 +0000
-Message-ID: <20231124172041.137400231@linuxfoundation.org>
+Subject: [PATCH 6.5 396/491] cifs: Fix encryption of cleared, but unset rq_iter data buffers
+Date: Fri, 24 Nov 2023 17:50:32 +0000
+Message-ID: <20231124172036.511408593@linuxfoundation.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231124172028.107505484@linuxfoundation.org>
-References: <20231124172028.107505484@linuxfoundation.org>
+In-Reply-To: <20231124172024.664207345@linuxfoundation.org>
+References: <20231124172024.664207345@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.5-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -129,7 +129,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/smb/client/cifsglob.h
 +++ b/fs/smb/client/cifsglob.h
-@@ -2143,6 +2143,7 @@ static inline int cifs_get_num_sgs(const
+@@ -2113,6 +2113,7 @@ static inline int cifs_get_num_sgs(const
  	unsigned int len, skip;
  	unsigned int nents = 0;
  	unsigned long addr;
@@ -137,7 +137,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	int i, j;
  
  	/*
-@@ -2158,17 +2159,21 @@ static inline int cifs_get_num_sgs(const
+@@ -2128,17 +2129,21 @@ static inline int cifs_get_num_sgs(const
  	 * rqst[1+].rq_iov[0+] data to be encrypted/decrypted
  	 */
  	for (i = 0; i < num_rqst; i++) {
@@ -161,7 +161,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  			return -EIO;
  
  		for (j = 0; j < rqst[i].rq_nvec; j++) {
-@@ -2184,7 +2189,8 @@ static inline int cifs_get_num_sgs(const
+@@ -2154,7 +2159,8 @@ static inline int cifs_get_num_sgs(const
  			}
  			skip = 0;
  		}
