@@ -1,76 +1,105 @@
-Return-Path: <linux-cifs+bounces-502-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-503-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C6E8816BD9
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Dec 2023 12:06:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C728816E65
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Dec 2023 13:48:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 325B4B22CF0
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Dec 2023 11:06:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CCD81C2449C
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Dec 2023 12:48:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CAE318EA2;
-	Mon, 18 Dec 2023 11:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA7937891;
+	Mon, 18 Dec 2023 12:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkL3jKDV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myJh/V5s"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88595199A5;
-	Mon, 18 Dec 2023 11:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46498C433C7;
-	Mon, 18 Dec 2023 11:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7A837883;
+	Mon, 18 Dec 2023 12:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03EFBC433CA;
+	Mon, 18 Dec 2023 12:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702897558;
-	bh=WTNLubnfyisNRdtZDWlLkSm9Rz36/vqI/xP24+xTDcM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KkL3jKDVwOB5N0/qhs/9JjBN+vonQpMsSa26ZBjSeCRCaulbO8roJteQgbMujfTXZ
-	 3Pk24oNiYkl7kaOJH4+l0B3vvYwfgHe+iQlHgl15JWbDlqDuqUGQCkNX74IYjTVe8/
-	 WAi00oyNO8Glx7CMmqcF7w8ioqLSdeBZVo+RVjflOBISKeZQ9jhqo6YoYcd635YauS
-	 Nsvk9hyOKA3yRH7fpSLt2AJb6VqO2taL90lrMsyF44GZGUESZwPaw3Y5N/W7g2DNrx
-	 nBHyVnuPNVNNsyf1euBS6V7GssBV7vDeg58lO1OxEBSBMWuW+9Gg4JBPJiuck8Y32G
-	 /lwgRnx87ZYWw==
-Date: Mon, 18 Dec 2023 12:05:50 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Dominique Martinet <asmadeus@codewreck.org>
-Cc: Jeff Layton <jlayton@kernel.org>, Steve French <smfrench@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Ilya Dryomov <idryomov@gmail.com>, linux-cachefs@redhat.com,
-	linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-	linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-	v9fs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/39] netfs, afs, 9p: Delegate high-level I/O to
- netfslib
-Message-ID: <20231218-gegen-unumstritten-fb0aeb7519af@brauner>
-References: <20231213152350.431591-1-dhowells@redhat.com>
- <20231215-einziehen-landen-94a63dd17637@brauner>
- <ZXxUx_nh4HNTaDJx@codewreck.org>
+	s=k20201202; t=1702903477;
+	bh=fshcEVw9K2IIEPBWEG2Uqu+aE3s8suJzHOqMwGZRdno=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=myJh/V5sIw3CaUvW6kPfxXwIirwhtHb+k7cKARGd3O1hdj4Kyq8ulNCopzoicT9Je
+	 P9WuBUBIBYO/SD/YzjTNwhz8PMO0A8A9nCcn4ZaXRbr2BWZNW5iMr2bh2ARt24Pa4w
+	 eKBYejiy0rv1v9XrqOjlcCsjxrSIV/pQtq+PEZ51R87kl6sA5ek4+7WN0TYezdRSSD
+	 2OeLIUNZTiIKaZWN8TlBmfqRuAu4LCSX+Fqj/+dvkp+F59ZpGXNBzbfy+cvWSc45u4
+	 49QR5G2YMMcjj2o9DBJD3WSCknaeEQwLoIIVErcubl6ignEUg87mz4u+4Biwj4Zw00
+	 BuzYb7MlfrOyw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>,
+	sfrench@samba.org,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 10/18] ksmbd: avoid duplicate opinfo_put() call on error of smb21_lease_break_ack()
+Date: Mon, 18 Dec 2023 07:43:44 -0500
+Message-ID: <20231218124415.1379060-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231218124415.1379060-1-sashal@kernel.org>
+References: <20231218124415.1379060-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZXxUx_nh4HNTaDJx@codewreck.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.7
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 15, 2023 at 10:29:43PM +0900, Dominique Martinet wrote:
-> Christian Brauner wrote on Fri, Dec 15, 2023 at 01:03:14PM +0100:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> > branch: vfs.netfs
-> 
-> This doesn't seem to build:
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-Yeah, I'm aware. That's why I didn't push it out. I couldn't finish the
-rebase completely on Friday.
+[ Upstream commit 658609d9a618d8881bf549b5893c0ba8fcff4526 ]
+
+opinfo_put() could be called twice on error of smb21_lease_break_ack().
+It will cause UAF issue if opinfo is referenced on other places.
+
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/server/smb2pdu.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index 269fbfb3cd678..c0c92898c86a1 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -8205,6 +8205,11 @@ static void smb21_lease_break_ack(struct ksmbd_work *work)
+ 			    le32_to_cpu(req->LeaseState));
+ 	}
+ 
++	if (ret < 0) {
++		rsp->hdr.Status = err;
++		goto err_out;
++	}
++
+ 	lease_state = lease->state;
+ 	opinfo->op_state = OPLOCK_STATE_NONE;
+ 	wake_up_interruptible_all(&opinfo->oplock_q);
+@@ -8212,11 +8217,6 @@ static void smb21_lease_break_ack(struct ksmbd_work *work)
+ 	wake_up_interruptible_all(&opinfo->oplock_brk);
+ 	opinfo_put(opinfo);
+ 
+-	if (ret < 0) {
+-		rsp->hdr.Status = err;
+-		goto err_out;
+-	}
+-
+ 	rsp->StructureSize = cpu_to_le16(36);
+ 	rsp->Reserved = 0;
+ 	rsp->Flags = 0;
+-- 
+2.43.0
+
 
