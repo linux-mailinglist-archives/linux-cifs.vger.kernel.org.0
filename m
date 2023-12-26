@@ -1,37 +1,37 @@
-Return-Path: <linux-cifs+bounces-584-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-585-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07BAE81E35D
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Dec 2023 01:28:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66A0C81E3AA
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Dec 2023 01:35:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B583A285C4F
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Dec 2023 00:28:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07E201F21184
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Dec 2023 00:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4764CB51;
-	Tue, 26 Dec 2023 00:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2D958AAD;
+	Tue, 26 Dec 2023 00:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0BjI/BK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5OtWNz4"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE1A54729;
-	Tue, 26 Dec 2023 00:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA5DC433C8;
-	Tue, 26 Dec 2023 00:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D718558132;
+	Tue, 26 Dec 2023 00:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD47EC433CA;
+	Tue, 26 Dec 2023 00:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703550096;
-	bh=JyJL7+g1ECe4rRP3IBy9n2McuHzuQlk2PdDG+2qS3XQ=;
+	s=k20201202; t=1703550225;
+	bh=nkxnA4C83oN9prUJryj5u6mE48qIMDs9ePu4jYxMODk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O0BjI/BKtqeQeltQeeWX/4UMhSt2pagybXIFf9QHg92tVpCLGmZ9Bf0ajyHgNeZst
-	 g1tM9iNz4jZmhAyYRwVv1A2xFvXhLcOuhMJVBCM61yjXaM7dwM7bw5LlmhDK/q6eyw
-	 XxHLxiseyJAUt27mYMME9ixCSc2CPfhE4uaLatejwmDFq7jlcrurbM6AZRhWtASo/f
-	 XKzzManOVwXdrn/3rAf+MjRegZD5mHQOA0zBwIB6Y8pU+R9V/EsbSqTm8tKf5xClMr
-	 DHMpsliYHVlu1TOIEI0ZTuUZTVTUgOjYMXuhNnjgql8RypIe8BJIh1eoYJG4lT4e/z
-	 eCMekPcA47qZA==
+	b=h5OtWNz4R/Z9XaUJ5qUk9hO4zH9O4E7/MUW7O52dp3PlHdq2hB8pZqSH0hE0SlxeJ
+	 apCeS/c4y+iwuH7Gdsw12C9wl+vLWE+Dh+YLnK+7o1PmnDvHzXbFsO+O0eLi7QRxQf
+	 ZAWmUK+4K70BeHsfyIsByLsmjbQjuHj7hCqOyw/QNsMdQUQmgf1s2W8nPP+aqsuufD
+	 jFuC1leE3WVQIZfBz9ryw7gpZuwmUrnQDSNHbYMU78FURrV2YwtwPDtPCInHfWWOmF
+	 gvIxI44Vgh31NmcMP197fN3Q2nfqUBGH3HeVP1Oh4hUwlXjAYFETdGZfte2uViCF34
+	 W3zfYuBKZEczQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -42,12 +42,12 @@ Cc: Paulo Alcantara <pc@manguebit.com>,
 	sfrench@samba.org,
 	linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.6 29/39] smb: client: fix potential OOB in smb2_dump_detail()
-Date: Mon, 25 Dec 2023 19:19:19 -0500
-Message-ID: <20231226002021.4776-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 18/24] smb: client: fix potential OOB in smb2_dump_detail()
+Date: Mon, 25 Dec 2023 19:22:11 -0500
+Message-ID: <20231226002255.5730-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231226002021.4776-1-sashal@kernel.org>
-References: <20231226002021.4776-1-sashal@kernel.org>
+In-Reply-To: <20231226002255.5730-1-sashal@kernel.org>
+References: <20231226002255.5730-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.8
+X-stable-base: Linux 6.1.69
 Content-Transfer-Encoding: 8bit
 
 From: Paulo Alcantara <pc@manguebit.com>
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/fs/smb/client/smb2misc.c b/fs/smb/client/smb2misc.c
-index e20b4354e703b..82b84a4941dd2 100644
+index 88942b1fb4318..08ad74f51964f 100644
 --- a/fs/smb/client/smb2misc.c
 +++ b/fs/smb/client/smb2misc.c
 @@ -173,6 +173,21 @@ smb2_check_message(char *buf, unsigned int len, struct TCP_Server_Info *server)
@@ -128,10 +128,10 @@ index e20b4354e703b..82b84a4941dd2 100644
  		if (command != SMB2_OPLOCK_BREAK_HE && (shdr->Status == 0 ||
  		    pdu->StructureSize2 != SMB2_ERROR_STRUCTURE_SIZE2_LE)) {
 diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index dbcfdf7bc2704..610783bf52422 100644
+index 1b3489a2f0db7..a9f84664a7a83 100644
 --- a/fs/smb/client/smb2ops.c
 +++ b/fs/smb/client/smb2ops.c
-@@ -403,8 +403,10 @@ smb2_dump_detail(void *buf, struct TCP_Server_Info *server)
+@@ -398,8 +398,10 @@ smb2_dump_detail(void *buf, struct TCP_Server_Info *server)
  	cifs_server_dbg(VFS, "Cmd: %d Err: 0x%x Flags: 0x%x Mid: %llu Pid: %d\n",
  		 shdr->Command, shdr->Status, shdr->Flags, shdr->MessageId,
  		 shdr->Id.SyncId.ProcessId);
