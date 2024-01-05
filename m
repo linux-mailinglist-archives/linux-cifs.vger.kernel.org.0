@@ -1,140 +1,114 @@
-Return-Path: <linux-cifs+bounces-662-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-659-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81DB48251D2
-	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jan 2024 11:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FB02825176
+	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jan 2024 11:07:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ECC0283B81
-	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jan 2024 10:25:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2F8E282EEE
+	for <lists+linux-cifs@lfdr.de>; Fri,  5 Jan 2024 10:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227AA225DD;
-	Fri,  5 Jan 2024 10:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAAC24B36;
+	Fri,  5 Jan 2024 10:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="dZ0xZuk9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sCPY23v5"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75C4250E7
-	for <linux-cifs@vger.kernel.org>; Fri,  5 Jan 2024 10:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=RjGmijxcsbrG9Vb7GmVvaQYXaZLzedozYzWz5ySxSb4=; b=dZ0xZuk9BaG0KfylYGsWyjBIDk
-	Rf7HjAnY4Hj0zqI80hKSmHaSFbZjCZl0VyYH9kLk7CcX1PdvbKOxtRllsSl+oiBWpyW2zTKu096Mx
-	E4fdrP3kbuwQCNo9LJK8ABmlXNOlWWwKABuzZ02RF3VhIbx0LO5DSgf6F/MpBAC1bHLe0oAO8jaVL
-	qODu8AR1h+wa+Fa6mKYBr71FczAncK4VXQEpT7yhbVuUBoVN+yaFMPttBzZJFZweB0ilNPieOo+Ww
-	MRH/KbWq7YddxXSWT0gi6zR58zDOoX7lHcptNBvdXjLaGLLwAcKjLSjPKf6dt9uqRj/FLQQESQtAu
-	PuJfw3k84FNpuFLpqnKqAcVAW9r4mX4P3GK+rJQOm+uO09U0VdIJ02iGJPnUHN5h1mk175AeK9SSN
-	uYNcZy5ACWOWJtmw5JmizWn8wE7UIKyt7Z5zOSn2hjpvjIRN/Ib25eNOMKfHJRNxvE0t4LbWcmnzq
-	2U8TaRW4TQknHMCTQY5CVGI5;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1rLgzu-006aas-0d;
-	Fri, 05 Jan 2024 10:00:14 +0000
-Message-ID: <242e196c-dc38-49d2-a213-e703c3b4e647@samba.org>
-Date: Fri, 5 Jan 2024 11:00:13 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167B424B2F;
+	Fri,  5 Jan 2024 10:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CFEC433C8;
+	Fri,  5 Jan 2024 10:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704449219;
+	bh=Exy/fCfgWx2532qZ1vXYkjfLM2k7/JjLhx9Pk8pooss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sCPY23v50V2ll1z90icCOZpj4qdgoNJ3e9JEJNMtB2grMqRnAVcKBIcRZC7C0/hFt
+	 rOGRJWf+vMQbIij+5Syis7i+svqiVMboeSNjz0eRDvEZfgbAM3792ROS3uIaj0YeND
+	 sit07u3Dx2XIo4EzK+VdNzjZGNAArCVciPyjOiEs=
+Date: Fri, 5 Jan 2024 11:06:57 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jeffrey E Altman <jaltman@auristor.com>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Markus Suvanto <markus.suvanto@gmail.com>,
+	Wang Lei <wang840925@gmail.com>, Jeff Layton <jlayton@redhat.com>,
+	Steve French <smfrench@gmail.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+	linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+	keyrings@vger.kernel.org, netdev@vger.kernel.org,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 6.6 067/156] keys, dns: Allow key types (eg. DNS) to be
+ reclaimed immediately on expiry
+Message-ID: <2024010556-tradition-reappoint-95a4@gregkh>
+References: <20231230115812.333117904@linuxfoundation.org>
+ <20231230115814.539935693@linuxfoundation.org>
+ <cd1d6f0d-a05b-412c-882a-e62ee9e67b85@auristor.com>
+ <2024010526-catalyst-flame-2e33@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] smb: client: retry compound request without reusing
- lease
-Content-Language: en-US, de-DE
-To: Shyam Prasad N <nspmangalore@gmail.com>, Tom Talpey <tom@talpey.com>
-Cc: Paulo Alcantara <pc@manguebit.com>,
- Meetakshi Setiya <meetakshisetiyaoss@gmail.com>, sprasad@microsoft.com,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- sfrench@samba.org, Meetakshi Setiya <msetiya@microsoft.com>,
- bharathsm.hsk@gmail.com
-References: <20231229143521.44880-1-meetakshisetiyaoss@gmail.com>
- <20231229143521.44880-2-meetakshisetiyaoss@gmail.com>
- <7e61ce96ef41bdaf26ac765eda224381@manguebit.com>
- <CAFTVevWC-6S-fbDupfUugEOh_gP-1xrNuZpD15Of9zW5G9BuDQ@mail.gmail.com>
- <c618ab330758fcba46f4a0a6e4158414@manguebit.com>
- <62eb08fb-b27f-4c95-ab29-ac838f24d70f@talpey.com>
- <CANT5p=qqUbqbedW+ccdSQz2q1N-NNA-kqw4y8xSrfdOdbjAyjg@mail.gmail.com>
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <CANT5p=qqUbqbedW+ccdSQz2q1N-NNA-kqw4y8xSrfdOdbjAyjg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <2024010526-catalyst-flame-2e33@gregkh>
 
-Am 05.01.24 um 10:39 schrieb Shyam Prasad N via samba-technical:
-> On Fri, Jan 5, 2024 at 2:39â€¯AM Tom Talpey <tom@talpey.com> wrote:
->>
->> On 1/3/2024 9:37 AM, Paulo Alcantara wrote:
->>> Meetakshi Setiya <meetakshisetiyaoss@gmail.com> writes:
->>>
->>>> As per the discussion with Tom on the previous version of the changes, I
->>>> conferred with Shyam and Steve about possible workarounds and this seemed like a
->>>> choice which did the job without much perf drawbacks and code changes. One
->>>> highlighted difference between the two could be that in the previous
->>>> version, lease
->>>> would not be reused for any file with hardlinks at all, even though the inode
->>>> may hold the correct lease for that particular file. The current changes
->>>> would take care of this by sending the lease at least once, irrespective of the
->>>> number of hardlinks.
->>>
->>> Thanks for the explanation.  However, the code change size is no excuse
->>> for providing workarounds rather than the actual fix.
->>
->> I have to agree. And it really isn't much of a workaround either.
->>
+On Fri, Jan 05, 2024 at 10:51:50AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 04, 2024 at 09:13:34PM -0500, Jeffrey E Altman wrote:
+> > On 12/30/2023 6:58 AM, Greg Kroah-Hartman wrote:
+> > > 6.6-stable review patch.  If anyone has any objections, please let me know.
+> > > 
+> > > ------------------
+> > > 
+> > > From: David Howells <dhowells@redhat.com>
+> > > 
+> > > [ Upstream commit 39299bdd2546688d92ed9db4948f6219ca1b9542 ]
+> > Greg,
+> > 
+> > Upstream commit 39299bdd2546688d92ed9db4948f6219ca1b9542 ("keys, dns: Allow
+> > key types (eg. DNS) to be reclaimed immediately on expiry") was subsequently
+> > fixed by
+> > 
+> >   commit 1997b3cb4217b09e49659b634c94da47f0340409
+> >   Author: Edward Adam Davis <eadavis@qq.com>
+> >   Date:   Sun Dec 24 00:02:49 2023 +0000
+> > 
+> >     keys, dns: Fix missing size check of V1 server-list header
+> > 
+> >   Fixes: b946001d3bb1 ("keys, dns: Allow key types (eg. DNS) to be reclaimed
+> > immediately on expiry")
+> > 
+> > If it is not too late, would it be possible to apply 1997b3cb421 to the
+> > branches b946001d3bb1 was cherry-picked to before release?
+> > I believe the complete set of branches are
+> > 
+> >   linux-6.6.y, linux-6.1.y, linux-5.15.y, linux-5.10.y, linux-5.0.y
 > 
-> The original problem, i.e. compound operations like
-> unlink/rename/setsize not sending a lease key is very prevalent on the
-> field.
-> Unfortunately, fixing that exposed this problem with hard links.
-> So Steve suggested getting this fix to a shape where it's fixing the
-> original problem, even if it means that it does not fix it for the
-> case of where there are open handles to multiple hard links to the
-> same file.
-> Only thing we need to be careful of is that it does not make things
-> worse for other workloads.
-> 
->>> A possible way to handle such case would be keeping a list of
->>> pathname:lease_key pairs inside the inode, so in smb2_compound_op() you
->>> could look up the lease key by using @dentry.  I'm not sure if there's a
->>> better way to handle it as I haven't looked into it further.
->>
-> 
-> This seems like a reasonable change to make. That will make sure that
-> we stick to what the protocol recommends.
-> I'm not sure that this change will be a simple one. There could be
-> several places where we make an assumption that the lease is
-> associated with an inode, and not a link.
-> 
-> And I'm not yet fully convinced that the spec itself is doing the
-> right thing by tying the lease with the link, rather than the file.
-> Shouldn't the lease protect the data of the file, and not the link
-> itself? If opening two links to the same file with two different lease
-> keys end up breaking each other's leases, what's the point?
+> The stable trees were already released with this change in it, so I'll
+> queue this up for the next round, thanks.
 
-I guess the reason for making the lease key per path on
-the client is that the client can't know about possible hardlinks
-before opening the file, but that open wants to use a leasekey...
-Or a "stat" open that won't any lease needs to be done first,
-which doubles the roundtrip for every open.
+Ah, I see what happened, that line:
+	Fixes: b946001d3bb1 ("keys, dns: Allow key types (eg. DNS) to be reclaimed immediately on expiry")
+refers to a commit that is not in Linus's tree, and isn't the sha1 that
+you are pointing at here either.
 
-And hard links are not that common...
+So I'll go add this manually, but this is why our checking scripts
+missed this, please be more careful about using the proper SHA1 values
+in commits.  Using invalid ones is almost worse than not using them at
+allm as it gives you the false sense that the markings are correct.
 
-Maybe choosing und using a new leasekey would be the
-way to start with and when a hardlink is detected
-the open on the hardlink is closed again and retried
-with the former lease key, which would also upgrade it again.
+thanks,
 
-But sharing the handle lease for two pathnames seems wrong,
-as the idea of the handle lease is to cache the patchname on the client.
-
-While sharing the RW lease between two hardlinks would be desired.
-
-metze
+greg k-h
 
