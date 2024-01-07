@@ -1,69 +1,59 @@
-Return-Path: <linux-cifs+bounces-681-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-683-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26241826259
-	for <lists+linux-cifs@lfdr.de>; Sun,  7 Jan 2024 00:05:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D916F826423
+	for <lists+linux-cifs@lfdr.de>; Sun,  7 Jan 2024 14:08:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54D81B21CA9
-	for <lists+linux-cifs@lfdr.de>; Sat,  6 Jan 2024 23:05:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02CC61C20D24
+	for <lists+linux-cifs@lfdr.de>; Sun,  7 Jan 2024 13:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B852C63AE;
-	Sat,  6 Jan 2024 23:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="p25RYI1u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A41212E75;
+	Sun,  7 Jan 2024 13:08:28 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEDA101E3
-	for <linux-cifs@vger.kernel.org>; Sat,  6 Jan 2024 23:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
-From: Paulo Alcantara <pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1704582331;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JRhjFw8YBYVIRlMqPflU8xZzCZ1+enrUh24U1eFTbeg=;
-	b=p25RYI1u+SYK710O1W43qHvGiSCqxOsaPqj6+a+k/j4EPtB1puChUaRz0sYXPqTnQvY53o
-	y98Dy7MPjgi6Ok3anvzlnL3juXthaKIsn8ICBupPYOy5FSwrWgqA2Ggd1yOo7LYsrq1X/y
-	A49ezY6gowg8zbFlv3Xf/EGx3n8TbpJjkwGb5U2BGpQbmRYvsf5g3vmdlhcGyA7CVTbws/
-	i7VZtn1xj6r46Dd+Z9kCbs1/dPTe5BVBzmeY7mdhA5uUM2De6QE1VSYR7nF0YmLShAhmnv
-	C139Zz4u61DErwsQZsiIRS/gmHzOyOy5YupWYE3ZzmxYmCq8Hg2PSl7sf6mKGw==
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1704582331; a=rsa-sha256;
-	cv=none;
-	b=c0ieiMsmBi7DIE2sj0rR/2ACTh0/4X3NBRqdResEnJccyvhn+soH2Q6MrXmSntyacm80E3
-	2I52yEeKgsgp+P16KJk7SENBvZR4IX51bo+qMvjNrv2Y01qu8DOa5801GMgIotqcM9rVzJ
-	enXue9oGbWIHxUCENAajMlUC2E5TjjE9q9XoEQUO16G4NXJsKZChge9tugi9pzz4qf4Dl9
-	KzEsc7JgRLDnHmbanKRN3m9VVEZlTjRzy3Wn8w/00TRZ+8wBlrVe0EzdypcmexBG7iXGI/
-	Nu9UmWhz/EE2TLkKQU8P5kQSDJhrHqPMu/5PRIf8VP1OPttchpotC/OJ6rTdBw==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1704582331; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JRhjFw8YBYVIRlMqPflU8xZzCZ1+enrUh24U1eFTbeg=;
-	b=HbSuMu4QvYukwIot5o0rPcnoR+peRJObNcDebHn+s9XGvcmL0LKWLjF9+IAIUCt00/F8z5
-	Pb3ZftlD91ntC2EV++CWTVTRNqgCplZ8B/UP6wAk7vQgK1urYjb6FnGCGXHBsaal2eEAFM
-	GhYPym5pTttZvPF9y2mlcdVu/4n4kQjkxtTKapmeF8T4rdoZ4MaPiFTtzJyAvw1zvge1WY
-	lSy5ZaRO0vS1DhYuUFgIE1L6XRW/sNPJycfXZer4iRTZbZKBPY21WYvc8N96FdSpUlHdYh
-	t2afARnZ3lJ5oPj4URgYm7SzZUIixWGVbRYqDoh8r1XhDYYy5VGu/bwNIfadEQ==
-To: smfrench@gmail.com
-Cc: linux-cifs@vger.kernel.org,
-	Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 2/2] cifs: get rid of dup length check in parse_reparse_point()
-Date: Sat,  6 Jan 2024 20:05:18 -0300
-Message-ID: <20240106230518.29920-2-pc@manguebit.com>
-In-Reply-To: <20240106230518.29920-1-pc@manguebit.com>
-References: <20240106230518.29920-1-pc@manguebit.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C0F134A0
+	for <linux-cifs@vger.kernel.org>; Sun,  7 Jan 2024 13:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1d420aaa2abso2874545ad.3
+        for <linux-cifs@vger.kernel.org>; Sun, 07 Jan 2024 05:08:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704632906; x=1705237706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZdCpcASKwIkHmmagRL+LPawJrdPIJ2zk7U+4kAwM7mY=;
+        b=tM4+UW9QkEFu22qHohP3JjF3pdm/Or/ntS0rt8UNVoA26JPzx2PAyI0j5AI+huPhQm
+         4clRzRW9mgs6ebGDoQh7GVSeiWhflJpBhP+/jgWPwkMm9xw/oAc3kKMa2+QoOzGsFvn9
+         zDV7PZweuNmvlbCGt6v03AwTPOJT8+Z4+/+w2rwGtx+TnDWWOXMPXogcQ79AFR60tFcB
+         fRNydw2T8sXAexZbUykjQKqHZThVIg/ovw1nfhPmC009dhaBxtbZjAI2+FjqbVWNwbVh
+         4HQTXq/XWIJZmZoKZlKCdumJMeq6LKAaexkT07+t8HBwrlul/8xrbN/OOawirFKiPXja
+         jYoQ==
+X-Gm-Message-State: AOJu0YwDbTqe4UUmP0cg2j+oyX34pybLPU6pAeXeZ7LDwXVFRCRuJBFX
+	OSQ2jQoMAZsFl/6dBoou2HyNhlNvMZM=
+X-Google-Smtp-Source: AGHT+IH6m82p+yQPneb6YRcatlEHXBLII1wzfonUyIZaytW257mr0o4DUVbYk+iesbAqh6sLuL1m5A==
+X-Received: by 2002:a17:902:9a4c:b0:1d4:c4e6:9267 with SMTP id x12-20020a1709029a4c00b001d4c4e69267mr621997plv.67.1704632905896;
+        Sun, 07 Jan 2024 05:08:25 -0800 (PST)
+Received: from localhost.localdomain ([110.14.71.32])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170902e88e00b001d04c097d32sm4394086plg.270.2024.01.07.05.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jan 2024 05:08:25 -0800 (PST)
+From: Namjae Jeon <linkinjeon@kernel.org>
+To: linux-cifs@vger.kernel.org
+Cc: smfrench@gmail.com,
+	senozhatsky@chromium.org,
+	tom@talpey.com,
+	atteh.mailbox@gmail.com,
+	Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 1/2] ksmbd: don't allow O_TRUNC open on read-only share
+Date: Sun,  7 Jan 2024 22:08:13 +0900
+Message-Id: <20240107130814.7247-1-linkinjeon@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -72,79 +62,80 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-smb2_compound_op(SMB2_OP_GET_REPARSE) already checks if ioctl response
-has a valid reparse data buffer's length, so there's no need to check
-it again in parse_reparse_point().
+When file is changed using notepad on read-only share(read_only = yes in
+ksmbd.conf), There is a problem where existing data is truncated.
+notepad in windows try to O_TRUNC open(FILE_OVERWRITE_IF) and all data
+in file is truncated. This patch don't allow  O_TRUNC open on read-only
+share and add KSMBD_TREE_CONN_FLAG_WRITABLE check in smb2_set_info().
 
-In order to get rid of duplicate check, validate reparse data buffer's
-length also in cifs_query_reparse_point().
-
-Signed-off-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/smb/client/cifssmb.c | 14 ++++++++++++--
- fs/smb/client/smb2ops.c | 12 ------------
- 2 files changed, 12 insertions(+), 14 deletions(-)
+ fs/smb/server/smb2pdu.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index e9e33b0b3ac4..01e89070df5a 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -2700,11 +2700,12 @@ int cifs_query_reparse_point(const unsigned int xid,
- 			     u32 *tag, struct kvec *rsp,
- 			     int *rsp_buftype)
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index a2f729675183..2a335bfe25a4 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -2972,7 +2972,7 @@ int smb2_open(struct ksmbd_work *work)
+ 					    &may_flags);
+ 
+ 	if (!test_tree_conn_flag(tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
+-		if (open_flags & O_CREAT) {
++		if (open_flags & (O_CREAT | O_TRUNC)) {
+ 			ksmbd_debug(SMB,
+ 				    "User does not have write permission\n");
+ 			rc = -EACCES;
+@@ -5944,12 +5944,6 @@ static int smb2_set_info_file(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 	}
+ 	case FILE_RENAME_INFORMATION:
+ 	{
+-		if (!test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
+-			ksmbd_debug(SMB,
+-				    "User does not have write permission\n");
+-			return -EACCES;
+-		}
+-
+ 		if (buf_len < sizeof(struct smb2_file_rename_info))
+ 			return -EINVAL;
+ 
+@@ -5969,12 +5963,6 @@ static int smb2_set_info_file(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 	}
+ 	case FILE_DISPOSITION_INFORMATION:
+ 	{
+-		if (!test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
+-			ksmbd_debug(SMB,
+-				    "User does not have write permission\n");
+-			return -EACCES;
+-		}
+-
+ 		if (buf_len < sizeof(struct smb2_file_disposition_info))
+ 			return -EINVAL;
+ 
+@@ -6036,7 +6024,7 @@ int smb2_set_info(struct ksmbd_work *work)
  {
-+	struct reparse_data_buffer *buf;
- 	struct cifs_open_parms oparms;
- 	TRANSACT_IOCTL_REQ *io_req = NULL;
- 	TRANSACT_IOCTL_RSP *io_rsp = NULL;
- 	struct cifs_fid fid;
--	__u32 data_offset, data_count;
-+	__u32 data_offset, data_count, len;
- 	__u8 *start, *end;
- 	int io_rsp_len;
- 	int oplock = 0;
-@@ -2774,7 +2775,16 @@ int cifs_query_reparse_point(const unsigned int xid,
- 		goto error;
+ 	struct smb2_set_info_req *req;
+ 	struct smb2_set_info_rsp *rsp;
+-	struct ksmbd_file *fp;
++	struct ksmbd_file *fp = NULL;
+ 	int rc = 0;
+ 	unsigned int id = KSMBD_NO_FID, pid = KSMBD_NO_FID;
+ 
+@@ -6056,6 +6044,13 @@ int smb2_set_info(struct ksmbd_work *work)
+ 		rsp = smb2_get_msg(work->response_buf);
  	}
  
--	*tag = le32_to_cpu(((struct reparse_data_buffer *)start)->ReparseTag);
-+	data_count = le16_to_cpu(io_rsp->ByteCount);
-+	buf = (struct reparse_data_buffer *)start;
-+	len = sizeof(*buf);
-+	if (data_count < len ||
-+	    data_count < le16_to_cpu(buf->ReparseDataLength) + len) {
-+		rc = -EIO;
-+		goto error;
++	if (!test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE)) {
++		ksmbd_debug(SMB, "User does not have write permission\n");
++		pr_err("User does not have write permission\n");
++		rc = -EACCES;
++		goto err_out;
 +	}
 +
-+	*tag = le32_to_cpu(buf->ReparseTag);
- 	rsp->iov_base = io_rsp;
- 	rsp->iov_len = io_rsp_len;
- 	*rsp_buftype = CIFS_LARGE_BUFFER;
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 938d51a88dd6..01a5bd7e6a30 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -2947,18 +2947,6 @@ int parse_reparse_point(struct reparse_data_buffer *buf,
- 			u32 plen, struct cifs_sb_info *cifs_sb,
- 			bool unicode, struct cifs_open_info_data *data)
- {
--	if (plen < sizeof(*buf)) {
--		cifs_dbg(VFS, "%s: reparse buffer is too small. Must be at least 8 bytes but was %d\n",
--			 __func__, plen);
--		return -EIO;
--	}
--
--	if (plen < le16_to_cpu(buf->ReparseDataLength) + sizeof(*buf)) {
--		cifs_dbg(VFS, "%s: invalid reparse buf length: %d\n",
--			 __func__, plen);
--		return -EIO;
--	}
--
- 	data->reparse.buf = buf;
- 
- 	/* See MS-FSCC 2.1.2 */
+ 	if (!has_file_id(id)) {
+ 		id = req->VolatileFileId;
+ 		pid = req->PersistentFileId;
 -- 
-2.43.0
+2.25.1
 
 
