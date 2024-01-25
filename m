@@ -1,50 +1,50 @@
-Return-Path: <linux-cifs+bounces-943-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-945-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C6183BFCB
-	for <lists+linux-cifs@lfdr.de>; Thu, 25 Jan 2024 11:58:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 312F383BF7E
+	for <lists+linux-cifs@lfdr.de>; Thu, 25 Jan 2024 11:51:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B8BAB30927
-	for <lists+linux-cifs@lfdr.de>; Thu, 25 Jan 2024 10:50:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C03AF1F24291
+	for <lists+linux-cifs@lfdr.de>; Thu, 25 Jan 2024 10:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8481459179;
-	Thu, 25 Jan 2024 10:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867D65B5AD;
+	Thu, 25 Jan 2024 10:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YaRSxvPe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMxlmMVl"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8875914C;
-	Thu, 25 Jan 2024 10:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503455A7B9;
+	Thu, 25 Jan 2024 10:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706179437; cv=none; b=GQ2whXM3xG4v0PVohPGnsrLIF33xs/pCfciorq8m5SbBWBseABzCQ4UtEMtzk+8Qa+iNELXmDY4q0vCcsOzOdYmSIzddXm0f0ivaQePUabXhRhcj6ckGgxg0+P/h9BFjXEXEstQZLpNPGCKwwbRWvgYfOI4wd4DM1ujn+NEBh98=
+	t=1706179445; cv=none; b=Y3U2DrBq0nTeQM7+2xupGRq6gEJ7J1+bb5FGdVn0T/aaHk2wWrUzUMKCsU4cOb+NMO0q310sdJ0hKSDEVylcW3k7BNjlD5nlJLnAp5WjBnuqZoregtfQ9LO0RPVWArnN+mAMnjg+9Xr1EFuKmJiu4Yji40U/bPfWNwVDyahI2VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706179437; c=relaxed/simple;
-	bh=xAzKg8wMEncnI9mj1UI0sicUhafz7IJtoAlW8dv/xHI=;
+	s=arc-20240116; t=1706179445; c=relaxed/simple;
+	bh=d1wKW+uOYNY5LucFFfJnlWA/GEA3kZuTsZ+64BbFtXA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Cn1/jBTHRunnVkzCz/zhrFGpDCjFOqzdLgxifBJWeh5PDq6zkiXI5Mg+8Bd/wvVVXz3iABBG2zb9P41p2f4Igz27FhskmloN/6qpashJTHT8khBwjHzgbbarH4fAXryjMYcnGsDH0Yg61tp4o7ifo4e0vKZHqVlGQ1jYWjn+CsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YaRSxvPe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D9AC43330;
-	Thu, 25 Jan 2024 10:43:53 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ouap9TiCXJ5O14aoHIn0A8YXhiMwzGWysUHOiua9Wtaj974G7QHImtAnvfiGqyOHglzYvJptTMWItkMJRO6Yvv1yOC8o10oYMxD6rs5dwoyHvkVs7E7exGh6lZWKx6hdiQqKY68mPovFAZqGTFioyYizNFYAvz//Beib199Nurg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qMxlmMVl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC45C43601;
+	Thu, 25 Jan 2024 10:44:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706179437;
-	bh=xAzKg8wMEncnI9mj1UI0sicUhafz7IJtoAlW8dv/xHI=;
+	s=k20201202; t=1706179444;
+	bh=d1wKW+uOYNY5LucFFfJnlWA/GEA3kZuTsZ+64BbFtXA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YaRSxvPetFu2rYSeRYRYzlVgyUpsH11siosRosn+7obSwAtpn3ZfuubXEmPCBu4Jb
-	 DwVAgxHI2DOLLYFELVNYP7WJzZPnCqdEBoEDIi1wjVoEkDXcccxn7jD8dK+Nu8FEb/
-	 4lNfCwEaBgEm82h0pZCdIgw7XuFm/YZHBdRh4f1urEZwvboHdnA9yMc/Vzi94rnQIz
-	 OFcT0Jr1VKnTqXwqUKxD6FnmdBUN2PYx3AB2Dgj7he85joQ2TSV4KvNvnL/WPmhJUp
-	 1LGE6lcmbkrLkcfu6QC/lDBeSx+AHf+rA27oXN7hQlMx9Ae7e+g8Z/i+GpwQtoFxvH
-	 p5/943N2cUOrQ==
+	b=qMxlmMVlr+sx0G+5jYEGTmCMCmLXbpAmumPdwe1FuJxm/RZQvGSUyEHnA7z88O4Xp
+	 5z4+lHtZlnhWAEGCMdGko2TBEYQM9rEZymHTyrMEDHAcq1tSiAXaY4EaoBCXB2/x16
+	 iDWqU2v7/ZpZKT/AyPbzDgS9OPLmYfkd9eByTHHCjFd8CYhGZbCaYGuxP1Kb6FmUz8
+	 gMpsGCBBuijPmxxYKGk7y6olSSkU2lPDffilNVS7kexKoleGoX/g8S+uXy98Cl+R01
+	 qjUdwjaFKhKkUc3CQqK15x+/C3KSAWezBEjGVeFyOG0s+aSIUw53NUdhHFfAsevka7
+	 SWXxFvTAmx6MQ==
 From: Jeff Layton <jlayton@kernel.org>
-Date: Thu, 25 Jan 2024 05:42:52 -0500
-Subject: [PATCH v2 11/41] filelock: add coccinelle scripts to move fields
- to struct file_lock_core
+Date: Thu, 25 Jan 2024 05:42:54 -0500
+Subject: [PATCH v2 13/41] filelock: convert some internal functions to use
+ file_lock_core instead
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240125-flsplit-v2-11-7485322b62c7@kernel.org>
+Message-Id: <20240125-flsplit-v2-13-7485322b62c7@kernel.org>
 References: <20240125-flsplit-v2-0-7485322b62c7@kernel.org>
 In-Reply-To: <20240125-flsplit-v2-0-7485322b62c7@kernel.org>
 To: Christian Brauner <brauner@kernel.org>, 
@@ -87,215 +87,77 @@ Cc: linux-kernel@vger.kernel.org, v9fs@lists.linux.dev,
  linux-cifs@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
  Jeff Layton <jlayton@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3898; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=xAzKg8wMEncnI9mj1UI0sicUhafz7IJtoAlW8dv/xHI=;
- b=owEBbQKS/ZANAwAIAQAOaEEZVoIVAcsmYgBlsjs7+blHS3ofsEO8V8j6Vd8CAOi2fCz9K2JFF
- je2pWMQYFuJAjMEAAEIAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCZbI7OwAKCRAADmhBGVaC
- FS2mEADEf2Lhz6L0IfktlPToXicgql/FijkRc8+kJn4YA3lT5fFCZecU49h//en/EKSAmJF3mkw
- spCK6gXIvbMMzoA358oIMA1jlwgKTTW40Ad2Ks2RyYfyn+ihEQ5804ufESzJ+Uta2HeStESCDfS
- XAk+n/9Fcx6hm7HwaBjNWkIW8Oqsy28v8AU917hEl9kFdQDfBZ2KJXBR2VAowvnrXPLUOi4Go5r
- FyGJ1R5XeDKy4j4LircdY8Buz4MJMMKO6lZyphsnOmmoF53GQjbLAhvBJkHZMrvPKGlOrwe27Kg
- iL/jF7BXCnHi70hWTG/M5hzLVMnhVWhhVGtnl4ZGtu+Z7IkSFw7LICwdjimt9HNyMV415Os+bTG
- xyB0f0QNMsttM3zkHy31XMA2O/RUmOPVSNU0eE3Si/LdF/ECWnfbAm13sd/4RyNNcnnfypSp+jn
- UXCUaQddUn8qPb6sLeHgTpIVW3+EZnXdxE/6FSaha45i2/K8dURXFxXwQ4D5JvBUslT8ilI1X0b
- nUZ2i1T4laGdCAWkjEPnNv7DFGpRq1MXVLja+tMqoMgDr7Eo0h1b2L8B8Tgx/CnIk/9wQ8wt9CF
- BS9PocgED017gcDCSJkJseF8JRz5osAX8KBRLoXObhow11SwA9Iv/loe3g0mXkGi0G/s1Erc9H3
- r4W3ofJmIcpSJdg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1665; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=d1wKW+uOYNY5LucFFfJnlWA/GEA3kZuTsZ+64BbFtXA=;
+ b=owEBbQKS/ZANAwAIAQAOaEEZVoIVAcsmYgBlsjs7ijG032NvpXqx5U1Ss+bt2Ge4+GPeuITEP
+ GeF6qbAiWuJAjMEAAEIAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCZbI7OwAKCRAADmhBGVaC
+ FSNOD/9qXTZbLpJya3G4IjPbYhlbEysVgVafUDB2353dfD1z/X2Am6wgPdxzKN6vPuQjOuhEO7e
+ 9zBKt2po3GMQp8xGjYAZuAE7JeE+3LRVdrQ8IBaLRYNsgKLTh3O6RmYUzp8At22UiX4jCYrofh7
+ 32mknwkIE2i2wZTP5hOqCtvReTxTJkzgIHtNrJO0lk3YOhDHSw0Gasf6P5EJ+eAbc0mDUWFHd48
+ pyA/ISCTjDN//TfFU8IAvqFBbKWfXGlNiofzwkTcGrQ0Y6Vnf1qonC67f55p4dyXX7M12FPoHMF
+ V4rKAMARCiADhnaWch3EjsWDRAe8/bWGBWnjMFJYxX1qdJD3o3Ep01sUkgReT0MD6pJ4IJGUSj+
+ 2xpwZ6NTeT1PYiTH+mXFBfoYm1XesOLG09Bq1mUCQkE2rMr2+1OZMpYKGSK7j2nemyzX6yZCAXR
+ 9c+pZlXL3bOsWvY/vb3N2Vcxorq3M5yl2Mc+458mEeHINSbuBgMz8UwMjRoaQMG29VTp2LJo5va
+ 98ygDCtu9lZkVkNdvukbq4NeUAt1miFsHLqULiIojpWi1ww4b7ApwNV3I18CR0ZrDDMUQCtcLjt
+ Lyal54J+bY0tfXb14q16bqkPcw++chZUiz966wHAKhD2+UiwnPCDc7up9Q7lYCCEJscvJd2OmhO
+ d9pzWkXc2eE4f+Q==
 X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
  fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-This patch creates two ".cocci" semantic patches in a top level cocci/
-directory. These patches were used to help generate several of the
-following patches. We can drop this patch or move the files to a more
-appropriate location before merging.
+Convert some internal fs/locks.c function to take and deal with struct
+file_lock_core instead of struct file_lock:
+
+- locks_init_lock_heads
+- locks_alloc_lock
+- locks_init_lock
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- cocci/filelock.cocci | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- cocci/nlm.cocci      | 81 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 169 insertions(+)
+ fs/locks.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/cocci/filelock.cocci b/cocci/filelock.cocci
-new file mode 100644
-index 000000000000..93fb4ed8341a
---- /dev/null
-+++ b/cocci/filelock.cocci
-@@ -0,0 +1,88 @@
-+@@
-+struct file_lock *fl;
-+@@
-+(
-+- fl->fl_blocker
-++ fl->fl_core.flc_blocker
-+|
-+- fl->fl_list
-++ fl->fl_core.flc_list
-+|
-+- fl->fl_link
-++ fl->fl_core.flc_link
-+|
-+- fl->fl_blocked_requests
-++ fl->fl_core.flc_blocked_requests
-+|
-+- fl->fl_blocked_member
-++ fl->fl_core.flc_blocked_member
-+|
-+- fl->fl_owner
-++ fl->fl_core.flc_owner
-+|
-+- fl->fl_flags
-++ fl->fl_core.flc_flags
-+|
-+- fl->fl_type
-++ fl->fl_core.flc_type
-+|
-+- fl->fl_pid
-++ fl->fl_core.flc_pid
-+|
-+- fl->fl_link_cpu
-++ fl->fl_core.flc_link_cpu
-+|
-+- fl->fl_wait
-++ fl->fl_core.flc_wait
-+|
-+- fl->fl_file
-++ fl->fl_core.flc_file
-+)
-+
-+@@
-+struct file_lock fl;
-+@@
-+(
-+- fl.fl_blocker
-++ fl.fl_core.flc_blocker
-+|
-+- fl.fl_list
-++ fl.fl_core.flc_list
-+|
-+- fl.fl_link
-++ fl.fl_core.flc_link
-+|
-+- fl.fl_blocked_requests
-++ fl.fl_core.flc_blocked_requests
-+|
-+- fl.fl_blocked_member
-++ fl.fl_core.flc_blocked_member
-+|
-+- fl.fl_owner
-++ fl.fl_core.flc_owner
-+|
-+- fl.fl_flags
-++ fl.fl_core.flc_flags
-+|
-+- fl.fl_type
-++ fl.fl_core.flc_type
-+|
-+- fl.fl_pid
-++ fl.fl_core.flc_pid
-+|
-+- fl.fl_link_cpu
-++ fl.fl_core.flc_link_cpu
-+|
-+- fl.fl_wait
-++ fl.fl_core.flc_wait
-+|
-+- fl.fl_file
-++ fl.fl_core.flc_file
-+)
-+
-+@@
-+struct file_lock *fl;
-+struct list_head *li;
-+@@
-+- list_for_each_entry(fl, li, fl_list)
-++ list_for_each_entry(fl, li, fl_core.flc_list)
-diff --git a/cocci/nlm.cocci b/cocci/nlm.cocci
-new file mode 100644
-index 000000000000..bf22f0a75812
---- /dev/null
-+++ b/cocci/nlm.cocci
-@@ -0,0 +1,81 @@
-+@@
-+struct nlm_lock *nlck;
-+@@
-+(
-+- nlck->fl.fl_blocker
-++ nlck->fl.fl_core.flc_blocker
-+|
-+- nlck->fl.fl_list
-++ nlck->fl.fl_core.flc_list
-+|
-+- nlck->fl.fl_link
-++ nlck->fl.fl_core.flc_link
-+|
-+- nlck->fl.fl_blocked_requests
-++ nlck->fl.fl_core.flc_blocked_requests
-+|
-+- nlck->fl.fl_blocked_member
-++ nlck->fl.fl_core.flc_blocked_member
-+|
-+- nlck->fl.fl_owner
-++ nlck->fl.fl_core.flc_owner
-+|
-+- nlck->fl.fl_flags
-++ nlck->fl.fl_core.flc_flags
-+|
-+- nlck->fl.fl_type
-++ nlck->fl.fl_core.flc_type
-+|
-+- nlck->fl.fl_pid
-++ nlck->fl.fl_core.flc_pid
-+|
-+- nlck->fl.fl_link_cpu
-++ nlck->fl.fl_core.flc_link_cpu
-+|
-+- nlck->fl.fl_wait
-++ nlck->fl.fl_core.flc_wait
-+|
-+- nlck->fl.fl_file
-++ nlck->fl.fl_core.flc_file
-+)
-+
-+@@
-+struct nlm_args *argp;
-+@@
-+(
-+- argp->lock.fl.fl_blocker
-++ argp->lock.fl.fl_core.flc_blocker
-+|
-+- argp->lock.fl.fl_list
-++ argp->lock.fl.fl_core.flc_list
-+|
-+- argp->lock.fl.fl_link
-++ argp->lock.fl.fl_core.flc_link
-+|
-+- argp->lock.fl.fl_blocked_requests
-++ argp->lock.fl.fl_core.flc_blocked_requests
-+|
-+- argp->lock.fl.fl_blocked_member
-++ argp->lock.fl.fl_core.flc_blocked_member
-+|
-+- argp->lock.fl.fl_owner
-++ argp->lock.fl.fl_core.flc_owner
-+|
-+- argp->lock.fl.fl_flags
-++ argp->lock.fl.fl_core.flc_flags
-+|
-+- argp->lock.fl.fl_type
-++ argp->lock.fl.fl_core.flc_type
-+|
-+- argp->lock.fl.fl_pid
-++ argp->lock.fl.fl_core.flc_pid
-+|
-+- argp->lock.fl.fl_link_cpu
-++ argp->lock.fl.fl_core.flc_link_cpu
-+|
-+- argp->lock.fl.fl_wait
-++ argp->lock.fl.fl_core.flc_wait
-+|
-+- argp->lock.fl.fl_file
-++ argp->lock.fl.fl_core.flc_file
-+)
+diff --git a/fs/locks.c b/fs/locks.c
+index b06fa4dea298..3a91515dbccd 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -251,13 +251,13 @@ locks_free_lock_context(struct inode *inode)
+ 	}
+ }
+ 
+-static void locks_init_lock_heads(struct file_lock *fl)
++static void locks_init_lock_heads(struct file_lock_core *flc)
+ {
+-	INIT_HLIST_NODE(&fl->fl_core.flc_link);
+-	INIT_LIST_HEAD(&fl->fl_core.flc_list);
+-	INIT_LIST_HEAD(&fl->fl_core.flc_blocked_requests);
+-	INIT_LIST_HEAD(&fl->fl_core.flc_blocked_member);
+-	init_waitqueue_head(&fl->fl_core.flc_wait);
++	INIT_HLIST_NODE(&flc->flc_link);
++	INIT_LIST_HEAD(&flc->flc_list);
++	INIT_LIST_HEAD(&flc->flc_blocked_requests);
++	INIT_LIST_HEAD(&flc->flc_blocked_member);
++	init_waitqueue_head(&flc->flc_wait);
+ }
+ 
+ /* Allocate an empty lock structure. */
+@@ -266,7 +266,7 @@ struct file_lock *locks_alloc_lock(void)
+ 	struct file_lock *fl = kmem_cache_zalloc(filelock_cache, GFP_KERNEL);
+ 
+ 	if (fl)
+-		locks_init_lock_heads(fl);
++		locks_init_lock_heads(&fl->fl_core);
+ 
+ 	return fl;
+ }
+@@ -347,7 +347,7 @@ locks_dispose_list(struct list_head *dispose)
+ void locks_init_lock(struct file_lock *fl)
+ {
+ 	memset(fl, 0, sizeof(struct file_lock));
+-	locks_init_lock_heads(fl);
++	locks_init_lock_heads(&fl->fl_core);
+ }
+ EXPORT_SYMBOL(locks_init_lock);
+ 
 
 -- 
 2.43.0
