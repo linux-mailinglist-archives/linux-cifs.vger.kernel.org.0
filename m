@@ -1,113 +1,124 @@
-Return-Path: <linux-cifs+bounces-1025-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1027-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7657F84376E
-	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jan 2024 08:14:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8451844624
+	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jan 2024 18:29:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 312C3281540
-	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jan 2024 07:14:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8DD51C21D0B
+	for <lists+linux-cifs@lfdr.de>; Wed, 31 Jan 2024 17:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDE455C04;
-	Wed, 31 Jan 2024 07:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377D8D282;
+	Wed, 31 Jan 2024 17:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JPs80czN"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="R9XLS+nF"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FBA78683
-	for <linux-cifs@vger.kernel.org>; Wed, 31 Jan 2024 07:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706685024; cv=none; b=m63B7TQfIEJXmKHktn2S/UTAdcMNu6dJcuK+iPKZmTB6trwkXFlGZSPO9YKdXof/UjoG/jLiFLDcQA11yJMKSsunagBGggnUOKs6Js4jr3Z+8n8hRtE7BrF8CY+7e7CrsH9P1IVjzC99Wb2vcr+22iHFu5C8U0KCQI8DDUKFSf8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706685024; c=relaxed/simple;
-	bh=64+50SEu7bMaznhj+tfj6rGm3p7Mn6Ou6pGwTLtkJU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hBVbOSKhfDzNA5ctm6NGMXWjnYUSyPHy8j2LSmsFjvjTX/leUkz0RzsWsqoNJduubT8uObBoidjnr8KrWE97YJl0xTHwtoo+kIN+Js6cM2JxDwcjnhDqHMtkTNgJQDjAhcPIQmMdQtNlpEgle4DC4KGD9YVBE8H2L5abgLZwsn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JPs80czN; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40f02b8d150so12379745e9.2
-        for <linux-cifs@vger.kernel.org>; Tue, 30 Jan 2024 23:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706685021; x=1707289821; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vc7Ay37ay3645f2H/l3hoUbCFFGpLA9KuX/mQOmWXIA=;
-        b=JPs80czNPh/LAg6Y6gi4RQkBT1BcxdCf5ZzhL92x/FA+1RjPC6qFmVrHLe3O9sK5wU
-         oAlfIJHBMzHP5apviTANB2P3t/3ctHOlKernQZiZY45ItPHqLYXhPYgdzsXkYtQ+dSPO
-         naU5rccvkGCjrXlWi52NrwlzrwjkrE+/CixDEpBC8II1l5NcjSBoYUw2P/0uXmaMDmsg
-         D4rWoyoAFuhJmqytAgmYxTmLMN1KNER3pKjjhAqG/yciLSI24Fl8Br2ZFghcf0yHoVIM
-         b5HzawekLeohOLaahuLy25SuJTqbtcpt/VUczpWBpmc0mqGyK/xpvmODRH2z90TE3S+4
-         SCeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706685021; x=1707289821;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vc7Ay37ay3645f2H/l3hoUbCFFGpLA9KuX/mQOmWXIA=;
-        b=k8Vf5Gy7uuKyp14u/XL0KF2JcAaICK+O9/vKMUdoVkPrtkMODKQZKxBucV1266DjqV
-         WlYZvDmPShAbLRLS7TLlut6GRqUnOWQVPGzcUnisqFpGAm2FjfgsI/lLHcXNV0X+eS80
-         +VvZNhnuP7RqEdkNxMjapXXA7E/Wwy/c1ocP1WD31uFhSkdVEu6TaHRC0WWMjPSQwJ0d
-         mNZkT46smcL8+7ec+dY5y6G0LbsVzt6vxOpoxY1rnSoVz6B2UgP/r/H9ntOUT0YN0efV
-         6T4Kt4E1qUzNZ8dgF0AlBnrxt0Nr2dyALVpxKwdVQXlzlXPTcmDLvK0tpK7/DbPj7b5C
-         QHgw==
-X-Gm-Message-State: AOJu0Yw8fPCNfYZTevp3UabeghqiIHCfcExH69MmqWhvaAh8tF3V+THq
-	LACXSyz/mrC99R9GoK3wFaVpKdPQzbst3WAztpG6ncB3IEFG2FMamiA8MGoZoZaP0OIblUJABmu
-	I
-X-Google-Smtp-Source: AGHT+IFXo2HcWmvuyG4b6xsYseqZ6xdR/0xrJoLYo/RaHcbhl9ESjeisij6PH95V7cr1Hrpo3n4U7Q==
-X-Received: by 2002:a05:600c:4749:b0:40e:545b:80bc with SMTP id w9-20020a05600c474900b0040e545b80bcmr619945wmo.29.1706685021366;
-        Tue, 30 Jan 2024 23:10:21 -0800 (PST)
-Received: from localhost ([102.140.226.10])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05600c471000b0040fb30f17e8sm650884wmo.38.2024.01.30.23.10.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 23:10:21 -0800 (PST)
-Date: Wed, 31 Jan 2024 10:10:18 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Paulo Alcantara <pc@manguebit.com>
-Cc: Steve French <sfrench@samba.org>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] smb: client: Fix a NULL vs IS_ERR() check in wsl_set_xattrs()
-Message-ID: <571c33b3-8378-49fd-84e1-57f622ef6db5@moroto.mountain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158FC12BF33;
+	Wed, 31 Jan 2024 17:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=167.235.159.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706722153; cv=pass; b=GRHG+G++WByCtEf2f/r5cBFqg15GRogNgGswCpJ66YRVXNtWnz727vhdi1uNRLnt50rk4GGUqRtTs7aeoppRNFRZaqPXRSo6FEKURl5vATuo+6iL/s0FR8hqKFLx3uHzhDGLGnndNaZ2q8Y6xcO+01jQf4nhawVR8FF1oj+wAO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706722153; c=relaxed/simple;
+	bh=IaFEG33hBcEgNUsHITOicSErxjWnrxGesGXGIozJavk=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=VgpL5TOYuYae6uaRWAku3/x9MN2EtIhA5L4W7WeWTcGoHNND69K+qt+2Xg7ftKTzZGsuuU/eqkpZZofmy3CWYrAAdQIlSK1Eevuh+uDN/Whi7KqekNQDeqLqdBpiNXK/PAcv6/kj7sqXxDldCtV5yicmEOpg5vbueLgp9Q6o4FM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=R9XLS+nF; arc=pass smtp.client-ip=167.235.159.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
+Message-ID: <848c0723a10638fcf293514fab8cfa2e@manguebit.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+	s=dkim; t=1706721552;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g9nP9Ud88BouQsVgMsrOba+H6PVYBrp7eIRfMuU8hBI=;
+	b=R9XLS+nF1XxALuaU8TKoUrd6J06WkI6q6nnzDeoVhKQ7qtsvWA6DpXQExNpn5D9A2c6vCI
+	itg/ReNgJd3dB/aQs85OcwOE76zrIRDaE9a0Rku3m1/iKM5VI+VCM0Ovti3BHWWxh//rn+
+	4He5UVbzTccG9ekMabFQsuTDC5QxY7QC+KQuAniNyrMghY0/NDy7NnjtM3T+9jZukAzfyg
+	M8SzGfIZVVe60AzTteVVnhsa9BwofYnJNDLDqXWWu16ny9Qu5GMxkVgqevRjvZ1bJSkgRf
+	++/4+stihEsmd0Bv53XrCbILWjGRNKp3vYm5o1UqQxI/xmIIfd+823NNfltpcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+	s=dkim; t=1706721552; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g9nP9Ud88BouQsVgMsrOba+H6PVYBrp7eIRfMuU8hBI=;
+	b=hFEpyKaWGj7ekhhr/6Wowfhs3EgLW+r3QPAoExl8vF6CCCJj/H6uEkyWSV+lrRfwx0xsKd
+	Cd86+TY5Nj/rLEI18lSUQvqyO6dvCSiv9XaVZTTeCLWnWABOi0gxX4SkkksGlpIjS5Eynz
+	YHZKIWpqNbcBvQKF3/W7my+VEIsVKzxCBn1yIPCMHsa0xOt7JKHW9Os9cNY9lcvUJ1peS4
+	X2U33mBcroufdnQIMIskLhRdAvWlLVkj2afUJt1Gbjk5hTjI4NKuNe5Q+DFI0m4LKl2gCk
+	y86MnnFFUO2tUtLZ+usId7qy5xbhCvYLhwyNsQZEl3ZRVgnxDGVCJJ27OZHtcw==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.mailfrom=pc@manguebit.com
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1706721552; a=rsa-sha256;
+	cv=none;
+	b=qOtMiiPb3OA1I58drlFXTWIt82eDyDA0U9NT7o1nVTgEs/9YZC9Wdc5yhQ8hxmnBH65pAp
+	jon6apKP3IOIY4OnMR+PkYgoKkJcmgB/6O7WoQtt5xSVY4GKrFUWdroWHveQ0w6OEzabGU
+	bwXb7xSlu9WiHdg7z7egxfYfc+1TFz9sBLwOVTqOqonN8Z4Tb+S5Gq6oxFsLT9hNueXSBJ
+	7wd66dkjS9hWOoIec5jSMLJCrHuv3SGBF9qNH462dbyi1fbvHdfzY1U1awgLXet9GHnTWk
+	uUuv5eb9yZGY9mkuFu36okQYS4CQRQgrY4EY7H574flS7DsHMvsB26pAjkpoXQ==
+From: Paulo Alcantara <pc@manguebit.com>
+To: Salvatore Bonaccorso <carnil@debian.org>, "Mohamed Abuelfotoh, Hazem"
+ <abuehaze@amazon.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "leonardo@schenkel.net" <leonardo@schenkel.net>,
+ "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+ "m.weissbach@info-gate.de" <m.weissbach@info-gate.de>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+ "sairon@sairon.cz" <sairon@sairon.cz>, "stable@vger.kernel.org"
+ <stable@vger.kernel.org>
+Subject: Re: [REGRESSION 6.1.70] system calls with CIFS mounts failing with
+ "Resource temporarily unavailable"
+In-Reply-To: <ZbnpDbgV7ZCRy3TT@eldamar.lan>
+References: <53F11617-D406-47C6-8CA7-5BE26EB042BE@amazon.com>
+ <9B20AAD6-2C27-4791-8CA9-D7DB912EDC86@amazon.com>
+ <2024011521-feed-vanish-5626@gregkh>
+ <716A5E86-9D25-4729-BF65-90AC2A335301@amazon.com>
+ <ZbnpDbgV7ZCRy3TT@eldamar.lan>
+Date: Wed, 31 Jan 2024 14:19:08 -0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+Content-Type: text/plain
 
-This was intended to be an IS_ERR() check.  The ea_create_context()
-function doesn't return NULL.
+Salvatore Bonaccorso <carnil@debian.org> writes:
 
-Fixes: 1eab17fe485c ("smb: client: add support for WSL reparse points")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- fs/smb/client/reparse.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi,
+>
+> On Mon, Jan 15, 2024 at 03:30:46PM +0000, Mohamed Abuelfotoh, Hazem wrote:
+>> Thanks Greg, I will submit separate patch inclusion requests for 
+>> fixing this on 5.15 and 5.10.
+>
+> Note, my reply in the secondary thread:
+> https://lore.kernel.org/stable/Zbl881W5S-nL7iof@eldamar.lan/T/#mb9a9a012adde1c5c6e9d3daa1d8dce2c9b5cc78f
+>
+> Now
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit?id=a280ecca48beb40ca6c0fc20dd5a7fdd9b3ee0b7
+> was applied, but equally the backport
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=06aa6eff7b243891c631b40852a0c453e274955d
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=ef8316e0e29e98d9cf7e0689ddffa37e79d33736
+>
+> So I guess
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit?id=a280ecca48beb40ca6c0fc20dd5a7fdd9b3ee0b7
+> should be dropped again.
 
-diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-index ce69d67feefa..d4d2555ebd38 100644
---- a/fs/smb/client/reparse.c
-+++ b/fs/smb/client/reparse.c
-@@ -225,7 +225,7 @@ static int wsl_set_xattrs(struct inode *inode, umode_t mode,
- 	}
- 
- 	cc = ea_create_context(dlen, &cc_len);
--	if (!cc)
-+	if (IS_ERR(cc))
- 		return PTR_ERR(cc);
- 
- 	ea = &cc->ea;
--- 
-2.43.0
+Agreed.
 
+Greg, could you please drop
+
+        b3632baa5045 ("cifs: fix off-by-one in SMB2_query_info_init()")
+
+from v5.10.y as suggested by Salvatore?
+
+Thanks.
 
