@@ -1,131 +1,148 @@
-Return-Path: <linux-cifs+bounces-1263-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1265-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E39A850C57
-	for <lists+linux-cifs@lfdr.de>; Mon, 12 Feb 2024 00:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3276C850D02
+	for <lists+linux-cifs@lfdr.de>; Mon, 12 Feb 2024 04:07:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D81E282684
-	for <lists+linux-cifs@lfdr.de>; Sun, 11 Feb 2024 23:30:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C1932881CE
+	for <lists+linux-cifs@lfdr.de>; Mon, 12 Feb 2024 03:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E74154B1;
-	Sun, 11 Feb 2024 23:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5505F17C2;
+	Mon, 12 Feb 2024 03:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="A5F5DuMX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/iox0gW"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01D712E52
-	for <linux-cifs@vger.kernel.org>; Sun, 11 Feb 2024 23:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=167.235.159.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707694215; cv=pass; b=E1vaiE7rqJ+U4GJ0nPsQwvfHBf28rJgUnwN8WmvqT2t8nsmFivGU6MeOu2ujln71W8WOdOPV7uSmsIYSnxk9PeswRhtKzHsWa3kiIfmRLLru9qLBQQ5THgxXsboViL6E0AjyKTnpR+P5fXeMkOdHNtEQYXtqV4F3D0CqX8Al0S8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707694215; c=relaxed/simple;
-	bh=k3K6did4C2wW4aUWpXJhkdUZ/iT2GFKmHTfeHOxA62A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nxWNTsoXglm/hGqj0TiLzN4h16TJ/7iIRMFULVKQDNrd5z+wlM6k/vYippifaT+6MVBIXdxGdBtY0Ic9kfkzCIGYqyTzxnOwsRA2oELAZqiKxIhj9jadt+ibdUQTvvMoJQ3FbTo9xNvnsaUEEHXQrK5KUGyb+sdMrqb3Q1iLI9M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=A5F5DuMX; arc=pass smtp.client-ip=167.235.159.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
-From: Paulo Alcantara <pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1707693647;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iZ0Bf7d9JLDl+KIPMEGMvlf2V54ODdk/m17lSJiWIDI=;
-	b=A5F5DuMXKESBaDyp0XwCdi63Ixj56LOsG3VirXzGHq0GBiDtm+VsM0tDs8PPQVs67KDz4D
-	hrGpHiHAJ7kCpC8nbQiwBggbTHVOQ2CVCqyQBpe43VLmx7ND3CgYvQrSDAJ2ZFlSyyADD8
-	mmmWeLyp8RN9sq2y5w2TzJAXA0ztoFooLB/rDpB+NUmjzLuDIvgl/pn2tMi+jfnOz3WH9e
-	SmZQF1d02+6E9AvS/uPZEpXqM7UNnH3LqPiQFsRf+xtke7JIrEKWO0/kMm/ek5v8TSowbP
-	nZ2InA9z71mD0fRzu6ZTn0m55+a93xY8lDw2drfsTCxiVd++C/q4rFIH8SiguA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1707693647; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iZ0Bf7d9JLDl+KIPMEGMvlf2V54ODdk/m17lSJiWIDI=;
-	b=hgcSzTmy5vemmrIPaAH62W5VTU/kZBG3TIVQjqJPGyzXL/JUFt3FYPWLLIlDNFT1xGnnan
-	WSboBq52yolPpvknlBFK6XMhdfeWHYA2Uv9aa0A5v76i4Ed082gWnK/k7EKfIyBq8ST0Ph
-	GlIMW7zCe6C3mD10YKhahuUUZVFqkhqEo//bAi7TxOL+bVzSTBYdDOfUKf6dBtyJmnifjf
-	fYzU8CSzLhe2Py1+bJZuuiLvPWBTeh/A6rhviEyIodtvSKes5iIlA0Rpzq4cAePKBNu5t1
-	d/X1/c8sxUeQs00eEQGR3K3gRtGt1wQX+90ERrL6tTckXDGynaxqlXBaACt4zQ==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1707693647; a=rsa-sha256;
-	cv=none;
-	b=d92t79y6f18zWVQ/2L6/xLQiCNqYbU43oOKeHzSQUhoPwFP5wdejDhZzqI+0DeHi7HeyPX
-	z+/aEHZ9Pq+G2RsW8ZWRLygFZRhGYB+r3QKk8QODj2oxW7aGKqsFhoSBeOOMsVmjTAja97
-	6j6VRghi74z9VWW2S/JDT9UloNNSbYDmO35Zb9Hn3liJ8LeGJJoAJ4GlaXlDUCw0RWaK5Q
-	Gpja+52lizR1uKzV3yiZMru3hLAwe31Xfhd98DkYTcSrTKskWWR3SaVKo+ylCDNQGgYWIg
-	5QUZG7anejFFfFuY4WLpK/RF8joHz/66HfDCPt2e/nF2Uxe+xMENCpHbXLnxjA==
-To: smfrench@gmail.com
-Cc: linux-cifs@vger.kernel.org,
-	Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 2/2] smb: client: handle path separator of created SMB symlinks
-Date: Sun, 11 Feb 2024 20:19:31 -0300
-Message-ID: <20240211231931.185193-2-pc@manguebit.com>
-In-Reply-To: <20240211231931.185193-1-pc@manguebit.com>
-References: <20240211231931.185193-1-pc@manguebit.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3DB1841
+	for <linux-cifs@vger.kernel.org>; Mon, 12 Feb 2024 03:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707707234; cv=none; b=Oyn0nGAK4jhqxlbFEs+pvXoQdYfCf1TdS9InDBPGu+OcWsF7pbviyUWUD4P1aBAymDCsokHpWAP9klhKdYHiCdh1QynzSFV8U5HIgkg68g7ly9oXTk9TETYsr6wncAyxUlePqfwXinmB10x/5ZDVaG5GWKfqREiFxTO6UtzIdJ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707707234; c=relaxed/simple;
+	bh=gqBEZUvye648SOMHJ/DyIotegnMDR9aLr0aDcOt/Rk8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E7v+SwTdphtM85DjFdAlX4RyRdnWJzPSLuEtEiYZb0DXffsx9Fny82h1pLH26/tKs3tpC/kUmHOIikRpFwRphM9cgMyi0O7ZusHzUFKQ5h8QPl/b5+FtXxPzZ9tYfvlsO4OSAUrl6qOUFBgXzz0ewTjDUzPvo2oEOw5ueScEWl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/iox0gW; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d0e520362cso14461331fa.2
+        for <linux-cifs@vger.kernel.org>; Sun, 11 Feb 2024 19:07:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707707230; x=1708312030; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w/9+iSYF0GX6IS/JCqwZKPxY8c3onvnKHWNo9EbhBgo=;
+        b=O/iox0gWPeRLM2Rw5gdCtVG09SKdcto/Ur5sbSpCgGkQFVM+slXFXlSFBOwLzoVdQh
+         r143F6R9Qngu76h4Cg29Pw/7m80jcczuiG8IySdxexFuTQYcU7zH5ePRLDD3lpU6c4yV
+         GTzVMmTaISOi5356HU35NUpWGA6zFT6rut3LTsz1BwmpE4UqosGAr2c6UdXWZIjxVqpb
+         dKpQSQjiVCYTdw1XJjD1ah6/cujWMYrM6Mpz6/cgRouy4J0Q7FmsllOQVfuAInqufYLy
+         S2dwRgAK+qeh3MTt3CbW22dVPZSoWYbOZlH1tVTy8b9BmI8FWOl3vOgqKdE8R/kkFoGg
+         Ziig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707707230; x=1708312030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w/9+iSYF0GX6IS/JCqwZKPxY8c3onvnKHWNo9EbhBgo=;
+        b=v3Loko+2dfWRzTjk3v1iOigx+vYWcREGhfq6t3yOlJayucNmpS/mejvhLaXG/uyRO7
+         sUnhDuX/2S+aj6pF6RhIJL9lamxeAdPKPHvZ4nyA6giD96W/Lwzktq2x5BrXcRmGdVo3
+         gLr1f27GeBaSPU1SdnWacC0cbF/fhzNI2/qCtNNbtlamgkj8wuYDUIWaQO2IMu6q0Cuv
+         rNrmWdICS0g54wkRO9HRTsxcV1DisI8tWUCH75NHO7vi78NVNQBkQM9xMhNtohDdhmyk
+         avq2dPObLygsZxwKDuQ2pUUQbOOX2ER6zMn5+A4IvbS75+033FZ3JXeyllnBCEAO3q8j
+         KWQA==
+X-Gm-Message-State: AOJu0YxJCa5KHuQbPD8Jr9cu2IwHOzpFxoHCu5e5ba0TzE/vP2byVBaJ
+	ZQc+F4zaYLmnKfaow+ZE8zIOCglwT1x+1xdIn+3A4cXrdh1zEdn61j1Q9ZqDWaLt2hEc6ByMmef
+	pfifU6DG019AzM54wCPKljk60iai5eTD1QpE=
+X-Google-Smtp-Source: AGHT+IEWHmDRaToQC1tubmZMK1FERPSnILZjw6OgZokVXpz9f1yDqusELwd2yteOYeexI5TBAiscdRJrQ72i7Q7SIPA=
+X-Received: by 2002:a2e:8216:0:b0:2d0:cce1:f0a8 with SMTP id
+ w22-20020a2e8216000000b002d0cce1f0a8mr3330020ljg.1.1707707230075; Sun, 11 Feb
+ 2024 19:07:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240211231931.185193-1-pc@manguebit.com>
+In-Reply-To: <20240211231931.185193-1-pc@manguebit.com>
+From: Steve French <smfrench@gmail.com>
+Date: Sun, 11 Feb 2024 21:06:57 -0600
+Message-ID: <CAH2r5mvUeeNcd_eBQfCvKLdp3x0GycO17s2WSaGrWpa6dmBXHg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] smb: client: set correct id, uid and cruid for
+ multiuser automounts
+To: Paulo Alcantara <pc@manguebit.com>
+Cc: linux-cifs@vger.kernel.org, Shane Nehring <snehring@iastate.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert path separator to CIFS_DIR_SEP(cifs_sb) from symlink target
-before sending it over the wire otherwise the created SMB symlink may
-become innaccesible from server side.
+tentatively merged these two into cifs-2.6.git for-next pending review
+and testing
 
-Fixes: 514d793e27a3 ("smb: client: allow creating symlinks via reparse points")
-Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
----
- fs/smb/client/smb2ops.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+On Sun, Feb 11, 2024 at 5:20=E2=80=AFPM Paulo Alcantara <pc@manguebit.com> =
+wrote:
+>
+> When uid, gid and cruid are not specified, we need to set dynamically
+> set them into the filesystem context used for automounting otherwise
+> they'll end up reusing the values from the parent mount.
+>
+> Fixes: 9fd29a5bae6e ("cifs: use fs_context for automounts")
+> Reported-by: Shane Nehring <snehring@iastate.edu>
+> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259257
+> Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
+> ---
+>  fs/smb/client/namespace.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/fs/smb/client/namespace.c b/fs/smb/client/namespace.c
+> index a6968573b775..4a517b280f2b 100644
+> --- a/fs/smb/client/namespace.c
+> +++ b/fs/smb/client/namespace.c
+> @@ -168,6 +168,21 @@ static char *automount_fullpath(struct dentry *dentr=
+y, void *page)
+>         return s;
+>  }
+>
+> +static void fs_context_set_ids(struct smb3_fs_context *ctx)
+> +{
+> +       kuid_t uid =3D current_fsuid();
+> +       kgid_t gid =3D current_fsgid();
+> +
+> +       if (ctx->multiuser) {
+> +               if (!ctx->uid_specified)
+> +                       ctx->linux_uid =3D uid;
+> +               if (!ctx->gid_specified)
+> +                       ctx->linux_gid =3D gid;
+> +       }
+> +       if (!ctx->cruid_specified)
+> +               ctx->cred_uid =3D uid;
+> +}
+> +
+>  /*
+>   * Create a vfsmount that we can automount
+>   */
+> @@ -205,6 +220,7 @@ static struct vfsmount *cifs_do_automount(struct path=
+ *path)
+>         tmp.leaf_fullpath =3D NULL;
+>         tmp.UNC =3D tmp.prepath =3D NULL;
+>         tmp.dfs_root_ses =3D NULL;
+> +       fs_context_set_ids(&tmp);
+>
+>         rc =3D smb3_fs_context_dup(ctx, &tmp);
+>         if (rc) {
+> --
+> 2.43.0
+>
 
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 6b3c384ead0d..4695433fcf39 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -5217,7 +5217,7 @@ static int smb2_create_reparse_symlink(const unsigned int xid,
- 	struct inode *new;
- 	struct kvec iov;
- 	__le16 *path;
--	char *sym;
-+	char *sym, sep = CIFS_DIR_SEP(cifs_sb);
- 	u16 len, plen;
- 	int rc = 0;
- 
-@@ -5231,7 +5231,8 @@ static int smb2_create_reparse_symlink(const unsigned int xid,
- 		.symlink_target = sym,
- 	};
- 
--	path = cifs_convert_path_to_utf16(symname, cifs_sb);
-+	convert_delimiter(sym, sep);
-+	path = cifs_convert_path_to_utf16(sym, cifs_sb);
- 	if (!path) {
- 		rc = -ENOMEM;
- 		goto out;
-@@ -5254,7 +5255,10 @@ static int smb2_create_reparse_symlink(const unsigned int xid,
- 	buf->PrintNameLength = cpu_to_le16(plen);
- 	memcpy(buf->PathBuffer, path, plen);
- 	buf->Flags = cpu_to_le32(*symname != '/' ? SYMLINK_FLAG_RELATIVE : 0);
-+	if (*sym != sep)
-+		buf->Flags = cpu_to_le32(SYMLINK_FLAG_RELATIVE);
- 
-+	convert_delimiter(sym, '/');
- 	iov.iov_base = buf;
- 	iov.iov_len = len;
- 	new = smb2_get_reparse_inode(&data, inode->i_sb, xid,
--- 
-2.43.0
 
+--=20
+Thanks,
+
+Steve
 
