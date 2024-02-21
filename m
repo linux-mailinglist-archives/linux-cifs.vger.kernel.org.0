@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-1317-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1316-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EEBB85DC9C
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Feb 2024 14:55:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9FB985DC60
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Feb 2024 14:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDAB91C22E28
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Feb 2024 13:55:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4EA28515D
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Feb 2024 13:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 173657A715;
-	Wed, 21 Feb 2024 13:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB2478B50;
+	Wed, 21 Feb 2024 13:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fwtq0KFH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="k4iop9QK"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E0D79DA2;
-	Wed, 21 Feb 2024 13:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE969942;
+	Wed, 21 Feb 2024 13:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708523721; cv=none; b=jHj0xc7XPqxiH3dUGBcb19gR2ZkBIqp12nmvxgnXx02L/AeK+WD0Th+nEfo8Hi9TDDKqethVn2f9p2HZJpejQRmuap9k34CHExyS8nKieEwBV0A1GUQvUwug88Y6b7ffskE2FbIsSpSpmGYbe6KGgsq3J4uTNskJqUK7jmjijYI=
+	t=1708523555; cv=none; b=QidgoLDdHGgyPdxo6qsGUT74ex9OjGzFQcQZx4F0kyJ85IrqBW3TjMBRBXxqp2IUow6bxOSKH3hVLTnlFUIvvog9A9Y9GA2K7CKZ+8bum1qCXl3x/SthAnIKULnyu9uorUtnTXOJzBSzU2/ebPBowDXT4RlsjIlB/EHcanyPItg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708523721; c=relaxed/simple;
-	bh=ld6dz30CAkVtdBfUVTa86NKEdFPYD2Tj5pqHPyaQeCQ=;
+	s=arc-20240116; t=1708523555; c=relaxed/simple;
+	bh=EGdph8+f5vEVqs4PMtDUdBW2LPCS93R903fDRBaDigo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ueFR1/KZIXM2MMn8rfwC2byyyxUQXYiDOZnKza4/0i2Pqr30NnrleCbQDyRn2Pg2d1t4Jt7ymDhl+q+YdsEpyTaWRwB81p1h42gSM7DGy6d78vgHro28hHuinajdUc3UYZcvv2UYZlv+WR3IhS1uXzlNkhPSL21wlgVNFuWs6uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Fwtq0KFH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D712C433C7;
-	Wed, 21 Feb 2024 13:55:20 +0000 (UTC)
+	 MIME-Version; b=D3qqvbZcHvha6GHYequSAEk9L0ZEoj7BCZ6UvT0gSXxwcTx7rHr8B4cL6IDTWiAwNS/DZz0xQagb9CZKQ0zNOHg7rtpuUKaKpuZq9HgJhH3kpHZWjJCJAuw6x85hsBYMX+GQZHMNztQYA0buSf66jYsxqvBXfcLoqH62kaXbU1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=k4iop9QK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5795C43390;
+	Wed, 21 Feb 2024 13:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708523720;
-	bh=ld6dz30CAkVtdBfUVTa86NKEdFPYD2Tj5pqHPyaQeCQ=;
+	s=korg; t=1708523555;
+	bh=EGdph8+f5vEVqs4PMtDUdBW2LPCS93R903fDRBaDigo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fwtq0KFHe/Wi7QMvJ1sMSkWECTbS6t5Sgq2/GbIluhSJ7VpvxQ+ipb9DoAcTMfveb
-	 p7B4MuXi3h5HyBNS/VLoOYZFRy8ZXfpG4kq1pVAgdgNTUCPw/9m0WYXilH0xLGKaoR
-	 TMf/hZ8w1YxDnby3UiZxEoCKxJWT62bl9y63dnhk=
+	b=k4iop9QKIMbtPzlrAiICttOs0DBh+BUcy312sSaTEkSMC70BzR+b4DN9vrgWMW6GB
+	 FHcQ4CV4gGDH+uuUWLlqOcoMRZFu8RCGy09b5wRYzXkZrCYceX7bT8BVgfFQXBNwn/
+	 DMIcb1YfSkI+HUyQAR0sYSUjVbLsCIRjpl5+BPDo=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,12 +54,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Kees Cook <keescook@chromium.org>,
 	Steve French <stfrench@microsoft.com>,
 	Vasiliy Kovalev <kovalev@altlinux.org>
-Subject: [PATCH 5.10 039/379] smb3: Replace smb2pdu 1-element arrays with flex-arrays
-Date: Wed, 21 Feb 2024 14:03:38 +0100
-Message-ID: <20240221125956.073220757@linuxfoundation.org>
+Subject: [PATCH 5.15 471/476] smb3: Replace smb2pdu 1-element arrays with flex-arrays
+Date: Wed, 21 Feb 2024 14:08:42 +0100
+Message-ID: <20240221130025.417505095@linuxfoundation.org>
 X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240221125954.917878865@linuxfoundation.org>
-References: <20240221125954.917878865@linuxfoundation.org>
+In-Reply-To: <20240221130007.738356493@linuxfoundation.org>
+References: <20240221130007.738356493@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-5.10-stable review patch.  If anyone has any objections, please let me know.
+5.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -86,28 +86,28 @@ and run-time array bounds checking[1].
 Replace the trailing 1-element array with a flexible array in the
 following structures:
 
-        struct smb2_err_rsp
-        struct smb2_tree_connect_req
-        struct smb2_negotiate_rsp
-        struct smb2_sess_setup_req
-        struct smb2_sess_setup_rsp
-        struct smb2_read_req
-        struct smb2_read_rsp
-        struct smb2_write_req
-        struct smb2_write_rsp
-        struct smb2_query_directory_req
-        struct smb2_query_directory_rsp
-        struct smb2_set_info_req
-        struct smb2_change_notify_rsp
-        struct smb2_create_rsp
-        struct smb2_query_info_req
-        struct smb2_query_info_rsp
+	struct smb2_err_rsp
+	struct smb2_tree_connect_req
+	struct smb2_negotiate_rsp
+	struct smb2_sess_setup_req
+	struct smb2_sess_setup_rsp
+	struct smb2_read_req
+	struct smb2_read_rsp
+	struct smb2_write_req
+	struct smb2_write_rsp
+	struct smb2_query_directory_req
+	struct smb2_query_directory_rsp
+	struct smb2_set_info_req
+	struct smb2_change_notify_rsp
+	struct smb2_create_rsp
+	struct smb2_query_info_req
+	struct smb2_query_info_rsp
 
 Replace the trailing 1-element array with a flexible array, but leave
 the existing structure padding:
 
-        struct smb2_file_all_info
-        struct smb2_lock_req
+	struct smb2_file_all_info
+	struct smb2_lock_req
 
 Adjust all related size calculations to match the changes to sizeof().
 
@@ -141,7 +141,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/cifs/smb2misc.c
 +++ b/fs/cifs/smb2misc.c
-@@ -117,7 +117,7 @@ static __u32 get_neg_ctxt_len(struct smb
+@@ -113,7 +113,7 @@ static __u32 get_neg_ctxt_len(struct smb
  	} else if (nc_offset + 1 == non_ctxlen) {
  		cifs_dbg(FYI, "no SPNEGO security blob in negprot rsp\n");
  		size_of_pad_before_neg_ctxts = 0;
@@ -152,7 +152,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	else
 --- a/fs/cifs/smb2ops.c
 +++ b/fs/cifs/smb2ops.c
-@@ -5561,7 +5561,7 @@ struct smb_version_values smb20_values =
+@@ -5826,7 +5826,7 @@ struct smb_version_values smb20_values =
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -161,7 +161,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5583,7 +5583,7 @@ struct smb_version_values smb21_values =
+@@ -5848,7 +5848,7 @@ struct smb_version_values smb21_values =
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -170,7 +170,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5604,7 +5604,7 @@ struct smb_version_values smb3any_values
+@@ -5869,7 +5869,7 @@ struct smb_version_values smb3any_values
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -179,7 +179,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5625,7 +5625,7 @@ struct smb_version_values smbdefault_val
+@@ -5890,7 +5890,7 @@ struct smb_version_values smbdefault_val
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -188,7 +188,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5646,7 +5646,7 @@ struct smb_version_values smb30_values =
+@@ -5911,7 +5911,7 @@ struct smb_version_values smb30_values =
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -197,7 +197,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5667,7 +5667,7 @@ struct smb_version_values smb302_values
+@@ -5932,7 +5932,7 @@ struct smb_version_values smb302_values
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -206,7 +206,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.lock_cmd = SMB2_LOCK,
  	.cap_unix = 0,
  	.cap_nt_find = SMB2_NT_FIND,
-@@ -5688,7 +5688,7 @@ struct smb_version_values smb311_values
+@@ -5953,7 +5953,7 @@ struct smb_version_values smb311_values
  	.header_size = sizeof(struct smb2_sync_hdr),
  	.header_preamble_size = 0,
  	.max_header_size = MAX_SMB2_HDR_SIZE,
@@ -217,7 +217,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.cap_nt_find = SMB2_NT_FIND,
 --- a/fs/cifs/smb2pdu.c
 +++ b/fs/cifs/smb2pdu.c
-@@ -1261,7 +1261,7 @@ SMB2_sess_sendreceive(struct SMB2_sess_d
+@@ -1327,7 +1327,7 @@ SMB2_sess_sendreceive(struct SMB2_sess_d
  
  	/* Testing shows that buffer offset must be at location of Buffer[0] */
  	req->SecurityBufferOffset =
@@ -226,7 +226,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	req->SecurityBufferLength = cpu_to_le16(sess_data->iov[1].iov_len);
  
  	memset(&rqst, 0, sizeof(struct smb_rqst));
-@@ -1760,8 +1760,7 @@ SMB2_tcon(const unsigned int xid, struct
+@@ -1826,8 +1826,7 @@ SMB2_tcon(const unsigned int xid, struct
  	iov[0].iov_len = total_len - 1;
  
  	/* Testing shows that buffer offset must be at location of Buffer[0] */
@@ -236,7 +236,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	req->PathLength = cpu_to_le16(unc_path_len - 2);
  	iov[1].iov_base = unc_path;
  	iov[1].iov_len = unc_path_len;
-@@ -4676,7 +4675,7 @@ int SMB2_query_directory_init(const unsi
+@@ -4748,7 +4747,7 @@ int SMB2_query_directory_init(const unsi
  	memcpy(bufptr, &asteriks, len);
  
  	req->FileNameOffset =
@@ -245,7 +245,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	req->FileNameLength = cpu_to_le16(len);
  	/*
  	 * BB could be 30 bytes or so longer if we used SMB2 specific
-@@ -4873,7 +4872,7 @@ SMB2_set_info_init(struct cifs_tcon *tco
+@@ -4945,7 +4944,7 @@ SMB2_set_info_init(struct cifs_tcon *tco
  	req->AdditionalInformation = cpu_to_le32(additional_info);
  
  	req->BufferOffset =
@@ -254,7 +254,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	req->BufferLength = cpu_to_le32(*size);
  
  	memcpy(req->Buffer, *data, *size);
-@@ -5105,9 +5104,9 @@ build_qfs_info_req(struct kvec *iov, str
+@@ -5177,9 +5176,9 @@ build_qfs_info_req(struct kvec *iov, str
  	req->VolatileFileId = volatile_fid;
  	/* 1 for pad */
  	req->InputBufferOffset =
@@ -268,7 +268,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	iov->iov_len = total_len;
 --- a/fs/cifs/smb2pdu.h
 +++ b/fs/cifs/smb2pdu.h
-@@ -220,7 +220,7 @@ struct smb2_err_rsp {
+@@ -218,7 +218,7 @@ struct smb2_err_rsp {
  	__le16 StructureSize;
  	__le16 Reserved; /* MBZ */
  	__le32 ByteCount;  /* even if zero, at least one byte follows */
@@ -277,7 +277,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  #define SYMLINK_ERROR_TAG 0x4c4d5953
-@@ -464,7 +464,7 @@ struct smb2_negotiate_rsp {
+@@ -487,7 +487,7 @@ struct smb2_negotiate_rsp {
  	__le16 SecurityBufferOffset;
  	__le16 SecurityBufferLength;
  	__le32 NegotiateContextOffset;	/* Pre:SMB3.1.1 was reserved/ignored */
@@ -286,7 +286,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* Flags */
-@@ -481,7 +481,7 @@ struct smb2_sess_setup_req {
+@@ -504,7 +504,7 @@ struct smb2_sess_setup_req {
  	__le16 SecurityBufferOffset;
  	__le16 SecurityBufferLength;
  	__u64 PreviousSessionId;
@@ -295,7 +295,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* Currently defined SessionFlags */
-@@ -494,7 +494,7 @@ struct smb2_sess_setup_rsp {
+@@ -517,7 +517,7 @@ struct smb2_sess_setup_rsp {
  	__le16 SessionFlags;
  	__le16 SecurityBufferOffset;
  	__le16 SecurityBufferLength;
@@ -304,7 +304,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_logoff_req {
-@@ -520,7 +520,7 @@ struct smb2_tree_connect_req {
+@@ -543,7 +543,7 @@ struct smb2_tree_connect_req {
  	__le16 Flags; /* Reserved MBZ for dialects prior to SMB3.1.1 */
  	__le16 PathOffset;
  	__le16 PathLength;
@@ -313,7 +313,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* See MS-SMB2 section 2.2.9.2 */
-@@ -828,7 +828,7 @@ struct smb2_create_rsp {
+@@ -852,7 +852,7 @@ struct smb2_create_rsp {
  	__u64  VolatileFileId; /* opaque endianness */
  	__le32 CreateContextsOffset;
  	__le32 CreateContextsLength;
@@ -322,7 +322,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct create_context {
-@@ -1289,7 +1289,7 @@ struct smb2_read_plain_req {
+@@ -1313,7 +1313,7 @@ struct smb2_read_plain_req {
  	__le32 RemainingBytes;
  	__le16 ReadChannelInfoOffset;
  	__le16 ReadChannelInfoLength;
@@ -331,7 +331,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* Read flags */
-@@ -1304,7 +1304,7 @@ struct smb2_read_rsp {
+@@ -1328,7 +1328,7 @@ struct smb2_read_rsp {
  	__le32 DataLength;
  	__le32 DataRemaining;
  	__u32  Flags;
@@ -340,7 +340,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* For write request Flags field below the following flags are defined: */
-@@ -1324,7 +1324,7 @@ struct smb2_write_req {
+@@ -1348,7 +1348,7 @@ struct smb2_write_req {
  	__le16 WriteChannelInfoOffset;
  	__le16 WriteChannelInfoLength;
  	__le32 Flags;
@@ -349,7 +349,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_write_rsp {
-@@ -1335,7 +1335,7 @@ struct smb2_write_rsp {
+@@ -1359,7 +1359,7 @@ struct smb2_write_rsp {
  	__le32 DataLength;
  	__le32 DataRemaining;
  	__u32  Reserved2;
@@ -358,7 +358,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* notify flags */
-@@ -1371,7 +1371,7 @@ struct smb2_change_notify_rsp {
+@@ -1395,7 +1395,7 @@ struct smb2_change_notify_rsp {
  	__le16	StructureSize;  /* Must be 9 */
  	__le16	OutputBufferOffset;
  	__le32	OutputBufferLength;
@@ -367,7 +367,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  #define SMB2_LOCKFLAG_SHARED_LOCK	0x0001
-@@ -1394,7 +1394,10 @@ struct smb2_lock_req {
+@@ -1422,7 +1422,10 @@ struct smb2_lock_req {
  	__u64  PersistentFileId; /* opaque endianness */
  	__u64  VolatileFileId; /* opaque endianness */
  	/* Followed by at least one */
@@ -379,7 +379,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_lock_rsp {
-@@ -1434,7 +1437,7 @@ struct smb2_query_directory_req {
+@@ -1478,7 +1481,7 @@ struct smb2_query_directory_req {
  	__le16 FileNameOffset;
  	__le16 FileNameLength;
  	__le32 OutputBufferLength;
@@ -388,7 +388,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_query_directory_rsp {
-@@ -1442,7 +1445,7 @@ struct smb2_query_directory_rsp {
+@@ -1486,7 +1489,7 @@ struct smb2_query_directory_rsp {
  	__le16 StructureSize; /* Must be 9 */
  	__le16 OutputBufferOffset;
  	__le32 OutputBufferLength;
@@ -397,7 +397,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /* Possible InfoType values */
-@@ -1483,7 +1486,7 @@ struct smb2_query_info_req {
+@@ -1527,7 +1530,7 @@ struct smb2_query_info_req {
  	__le32 Flags;
  	__u64  PersistentFileId; /* opaque endianness */
  	__u64  VolatileFileId; /* opaque endianness */
@@ -406,7 +406,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_query_info_rsp {
-@@ -1491,7 +1494,7 @@ struct smb2_query_info_rsp {
+@@ -1535,7 +1538,7 @@ struct smb2_query_info_rsp {
  	__le16 StructureSize; /* Must be 9 */
  	__le16 OutputBufferOffset;
  	__le32 OutputBufferLength;
@@ -415,7 +415,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  /*
-@@ -1514,7 +1517,7 @@ struct smb2_set_info_req {
+@@ -1558,7 +1561,7 @@ struct smb2_set_info_req {
  	__le32 AdditionalInformation;
  	__u64  PersistentFileId; /* opaque endianness */
  	__u64  VolatileFileId; /* opaque endianness */
@@ -424,7 +424,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  } __packed;
  
  struct smb2_set_info_rsp {
-@@ -1716,7 +1719,10 @@ struct smb2_file_all_info { /* data bloc
+@@ -1761,7 +1764,10 @@ struct smb2_file_all_info { /* data bloc
  	__le32 Mode;
  	__le32 AlignmentRequirement;
  	__le32 FileNameLength;
