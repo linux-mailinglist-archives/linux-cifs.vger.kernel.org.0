@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-1362-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1363-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068B78693E1
-	for <lists+linux-cifs@lfdr.de>; Tue, 27 Feb 2024 14:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8A686969B
+	for <lists+linux-cifs@lfdr.de>; Tue, 27 Feb 2024 15:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A5C51C21D4B
-	for <lists+linux-cifs@lfdr.de>; Tue, 27 Feb 2024 13:49:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EC721C2340A
+	for <lists+linux-cifs@lfdr.de>; Tue, 27 Feb 2024 14:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FD81474C6;
-	Tue, 27 Feb 2024 13:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533EA145B29;
+	Tue, 27 Feb 2024 14:13:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Aq/TIvUp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eVcofVQ9"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B0A1420C8;
-	Tue, 27 Feb 2024 13:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2806A145B24;
+	Tue, 27 Feb 2024 14:13:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709041649; cv=none; b=BddCiiAF7g1TmfUsnPRtDX/aNMX9HYwTIXm9axf2Pdp0xJ3UwPojYjnyT7cljvRLjEcX911UphtmxctxQ90ZhUBAUXILnnMcPRDKxOUkDQTPiMz9rpWrpQLeJ0zKfcy/xnEPUndPh5veBKMGMXZ/GW56IrTqfe1E3yvdTZcrg9k=
+	t=1709043186; cv=none; b=HpmoIESDFmGlXzRHKN95BzYav3YG2jj/eCF00tCtqLP1K7t7c+BgqJYJGt2TS6fqvBzlarN7NZ4W5k5E4EmaNWLMv7i6Cv7iZTPFfm69ZjSs3WkpJ94Gi+lsGEs9Dc/X4lDTiAuvB/qL2xEG1n/f4KVjJzDhDk40lTAeWMrU2s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709041649; c=relaxed/simple;
-	bh=nw0/20MxZXuTSTm5jYy9oiQ732AcTs2QwpEpjgykd9o=;
+	s=arc-20240116; t=1709043186; c=relaxed/simple;
+	bh=M1pPVoQu+WOkGDCVbwzGC9xcKcRyQbtg3jDnYy72dhA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I2XDa4vVxC7L8yv6cEgwunAB9UHZqeIkvWyGWdIBMFvjGM7AGvK5weEiwGG/lrG8qzx4Axm5J8MWFbxLOCA7LnGkHnQuPwcblbUl2JUZfcB+5axWorJlz1Aqtxqx8ZdakYIOCkXSsIL0dpX3Po5Q7Y5WWU3JjG2aO44Z+OlE12w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Aq/TIvUp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEFFC433C7;
-	Tue, 27 Feb 2024 13:47:28 +0000 (UTC)
+	 MIME-Version; b=NFO9ysRnELR9sXEIv1uEVA5/bKhh+HZ+eEibApHpNZONaZx1S1PAzr4wEcR4Vq/xIywZXrbwNclmcHpBHtYWEgm8eQ1m0bkjsGiL/0Nhd7OvyMLX0zj+7Y8HFAWhCx8MIZV3iVDvi3f5cYOKF71XV4Dj37hSwh/Dt4XKVZQt4s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eVcofVQ9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B96C43390;
+	Tue, 27 Feb 2024 14:13:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709041649;
-	bh=nw0/20MxZXuTSTm5jYy9oiQ732AcTs2QwpEpjgykd9o=;
+	s=korg; t=1709043185;
+	bh=M1pPVoQu+WOkGDCVbwzGC9xcKcRyQbtg3jDnYy72dhA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Aq/TIvUp6vi/jKYt/AaODbQj5iASsJ/LtUprpRHoeP5s9Fxy2tDE10mKaM4d3gWFN
-	 lwqoYAq2IHu0ts/sxOJ388oF2EW6u0FxWF3wv49WNifM5sm32co5GSY0zs/zHEcRuc
-	 fYbQAgQBXHIyL//uPjejpTEGFTAGV7Cv2Mnr+/FU=
+	b=eVcofVQ990Fd/HzxiE8ShFHvuUxg1t5A/Zsp7cAV8QqCw4EWVRlKuECqiQsxt90Pl
+	 X8w7Ok5c11s+UWBp7xX5S6Po22lXtKVHcC/VeQCVwBRez0LuMmK42Vqr/PUYKMlo+n
+	 3dpyjUake1QYfe1kurDTCA/oAVXE/ambOavhJT3w=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,12 +53,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Kees Cook <keescook@chromium.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 022/299] smb: Work around Clang __bdos() type confusion
-Date: Tue, 27 Feb 2024 14:22:13 +0100
-Message-ID: <20240227131626.544984138@linuxfoundation.org>
+Subject: [PATCH 6.1 019/195] smb: Work around Clang __bdos() type confusion
+Date: Tue, 27 Feb 2024 14:24:40 +0100
+Message-ID: <20240227131611.030143428@linuxfoundation.org>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240227131625.847743063@linuxfoundation.org>
-References: <20240227131625.847743063@linuxfoundation.org>
+In-Reply-To: <20240227131610.391465389@linuxfoundation.org>
+References: <20240227131610.391465389@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -123,10 +123,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
-index ef4c2e3c9fa61..6322f0f68a176 100644
+index d0ac2648c0d61..d3d4cf6321fd5 100644
 --- a/fs/smb/client/cifsencrypt.c
 +++ b/fs/smb/client/cifsencrypt.c
-@@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
+@@ -444,7 +444,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
  		len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
  		UniStrupr(user);
  	} else {
