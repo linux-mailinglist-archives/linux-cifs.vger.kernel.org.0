@@ -1,76 +1,76 @@
-Return-Path: <linux-cifs+bounces-1723-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1726-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B15D5895CAA
-	for <lists+linux-cifs@lfdr.de>; Tue,  2 Apr 2024 21:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C848895CAD
+	for <lists+linux-cifs@lfdr.de>; Tue,  2 Apr 2024 21:34:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DB1D1F20E7A
-	for <lists+linux-cifs@lfdr.de>; Tue,  2 Apr 2024 19:34:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0B371F21BEE
+	for <lists+linux-cifs@lfdr.de>; Tue,  2 Apr 2024 19:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A1915B962;
-	Tue,  2 Apr 2024 19:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF81956458;
+	Tue,  2 Apr 2024 19:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="onKvuxxb"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="THHMKVTz"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4306D15A4BF
-	for <linux-cifs@vger.kernel.org>; Tue,  2 Apr 2024 19:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E78715A4BF
+	for <linux-cifs@vger.kernel.org>; Tue,  2 Apr 2024 19:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=167.235.159.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086488; cv=pass; b=Qg53xfYOHAn8fdL3iVeGLa1DKwnKI820dGvB7iwdRQo0naLJeQer8K0zKIGWATurLY+94iO3oHu7eh3MASaWG14IM+0H9UF4B4Z0kauS53HMi2tEFvy2Ox+KZgM58keBipnq4D0COVXe/FHByioxesBu0RdltS+3cjQoM30ZMvg=
+	t=1712086490; cv=pass; b=SWvaiFJPUjZaUr/c6BSzsBNxH5SXiEnMd8Uzb1r6gQplInl5GBopriSe7YHLAkO4c/oFsVt7mjVuoYNP+tbTg3H+pNNbiZPXzNg3+Q+ND3qxUgLcJv6YovUiSYioa9Shf6Uj9xRVeuJERdEgo+i36YUgsRJIsc+zpr/OGW9BZKk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086488; c=relaxed/simple;
-	bh=9qJo1LLk4mGoQrQ3TOyFfTBbhVaiIbb6fOpvWiLxjBE=;
+	s=arc-20240116; t=1712086490; c=relaxed/simple;
+	bh=OUoPlpwojIn1vNQdVRW1revNkh+kceML9MeP7IpgZQI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GaVynDXWVMdUYlpNe8Y7A+6OclZZSLQ0xUzvKUEqjeurRUAXXCxCmNH5lgonP4h0k74QgdP7rGCR2kvDQnBH3OPzX2XrpsaJOAb9ecnDsTm2/YChWzCOnqllSslayQYNMllb20Y42k200G+asROuNcCrctgpzzBLFBIEt7tTqoU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=onKvuxxb; arc=pass smtp.client-ip=167.235.159.17
+	 MIME-Version; b=EdWtfRFNZ3f8Z7gXfRYxXNRC1apexTIjyljobCT34SbYTyV+d2QJcryOr47dU2a/tp6zIhxmYpcBVwLm/1JTtwjLXRkWGrSdYhkVODzsYuti9oB61yATrR/y7UudJA9gcPrBTVf1B4u5OLSJYR5A0ovScLBdcE515uTpOyWoXtw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=THHMKVTz; arc=pass smtp.client-ip=167.235.159.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
 From: Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1712086485;
+	s=dkim; t=1712086487;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TDIF5pz8B3+b93ew4STkJnG2r5i2svhd2mrslzBBC7g=;
-	b=onKvuxxbG/ZQim2ScGm3DELnL/sdd7XYe7U5Rt9CIG3/K2qyG4y5w81msJ3Y5vPv+zY0eb
-	9MOXu9Qox948tZjp8+3QotAN7pV1dVGXo55euBr7BkEEbkMR8hUrldjuRMQxo8/73hb5GV
-	g7EzhpQgINYrjP+0cN9OCPejIypUE1m1IYnLOcx2L0HcBNHRcVTC/7V2NsIkY9he61+tVJ
-	1eUM6+W2gFjAeLOscF5saQnnKtFve/VFUOA69BCrb0nn31KMmTmLfNmxodpWyzIlO4nTC2
-	M79ipletkLqfEKj+r0oBLhYeIrPYxpC6oYzCOVXGUPh2/hETTTzzgt/TCp1yGw==
+	bh=G8LhCD9Y6XSW1yomWSIcKAk3XFngRWAzYK41UbGFhT0=;
+	b=THHMKVTzFHUf4MTaoqMm02ocKakwq9geIf89siGXupBJHRI7KwIyYavdmovYfnzP0LkeYz
+	Cz2tCv1CaxXU4dH7QgvSxW479ydY7hIBPEjzMPIu0SolXVpLok5tcABNe1BzL35QWM7aAj
+	pscasjJ/Ax8UcnN9woXWO7kbPQ3vCZNgF93V0G/foTAStmXlNJsg08JL4Fcd4ogb7pq1Fj
+	nw3f36klDVqKFZ2RRbdu4+iB9PnJEyDpdSTl0fYqXxvG7PThqy36FmyrT38/IUG7zp5Ili
+	TxubnujtBzlq6l1DstcMjsQhw0gT9VUAy7bGUoQInvkz8oN5HQtXBjGxTDbgwg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1712086485; h=from:from:sender:reply-to:subject:subject:date:date:
+	s=dkim; t=1712086487; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TDIF5pz8B3+b93ew4STkJnG2r5i2svhd2mrslzBBC7g=;
-	b=rIS0BlnwHAp83v7tTyaPgOGPhf4BGmzqCvqDEKHCT0hv6OsMb19LbqfdSF/q9JjsQx6Q63
-	mXA4M//dcdlltKp2Arwi/GNvGvvrmY3uXxgIWeJPiSvfUg6PrV2njI+x/zah0bh/OslvjE
-	ybkr2jfR+XmzKqUmX346RgTWtP5yb2bIR1J1chRA4KM5MB6IMAy5WleJzpkreDawxNfZrJ
-	xsvhFPapZwbh0njZP4i0kT+mboexnNJCQFGbmpA6Xfpn2cnL881H3c/lE0O9Dvg7WqDC2+
-	FpLRfgN4lM5W4zFP/b0oHhviDq+jl1ASYmHk31ah8nIMIwrIymV9juK4f7i18w==
+	bh=G8LhCD9Y6XSW1yomWSIcKAk3XFngRWAzYK41UbGFhT0=;
+	b=WaUinTACKt0fdQfrmEQeYPzdyl5WUsLeWG8xH8s3mcJ/+ERDmn+3ClF1Psqrk5ezq5HJwJ
+	fjwHvRtmvSvNAJRxn/Y+z4BbukmyUYayIOy3Kkz+FMDwpDkWGsS3WFzK/qBlP6fpYbhcF/
+	X95+PvK565THmaEDvD4OOdh/WUwSrjV6HhUGBjT73Pb43DdxkqmScVdK4mGx5YItGViBM9
+	f9JtL6jnRXVwR21w9/SHSRS7kEMFrAutsVBp0n1UmpqihaHYfA6ISaRHu6/Bz1puhkajef
+	c/5JBcX6BEZg/XViUnlJtbZ2zyrk6MjSYWYWIns5DBJcAG1AXXOfwHvTv7ZBUg==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1712086485; a=rsa-sha256;
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1712086487; a=rsa-sha256;
 	cv=none;
-	b=hJ43ClbbrOJYhmHp17QJkQmHfx6BVn19yE8qeVVZsRRIPlI5qQicHpp5x9VOqSlUAWyVp+
-	cfaSmJOYgNuiztFXj4RWe7R8AtWBQmKfXN+Jr+9xOq59lXa/aBpg1UoQc2NpIV8JDdNA1n
-	3RRFyVJYgAmKlV+bnml+ilNCAddD1SHVnOViTggi/56NKklKrWtGHJkqy7Q8EQHX3H3MbE
-	egmQfB00Ju3QF1sGK/el3qzUjjFaDUozu4v1Ktf3c/dJv4ZUaW/X2MPVIMBm5rw8T34ZV9
-	HbVoZqnOtvmyMmaHHo9S0HUIQdgaSnAjOgOo/0R5pHo2zgtYHSzsNGbSzCVplQ==
+	b=HuJZ8zgrT+/AIQM59ISxG/QPFPWCag/q3eRNUSvcrnJUZlmpRVpT2hpVYrPKerfHrbUbj7
+	LUJv94CSANpNl4SoWpkrdMtmg2jtUIeEhfC9ZhqaazAgB8OH2y+4p2x6GxgZ2358co2VpY
+	FCj1H37kbmtMyrPTfvIrZ3jsaG4jaaJ8eHpHMx0+W5sNIXtAbYPYkiyYKJfcIsMhiAFmlX
+	8KtBZnH9vNDIMzykMkI7dsMl0pyZf0nDKVJnhyG3lKekYABDzD/V9jWZdlWDKBNSQxLXDQ
+	MmNPVSlN/AxbEmFuwF/HZsuvf+zYY+g+l3WspkYnOajXjHHQ/svesfZm7bhC7A==
 To: smfrench@gmail.com
 Cc: linux-cifs@vger.kernel.org,
 	Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 04/12] smb: client: fix potential UAF in cifs_stats_proc_show()
-Date: Tue,  2 Apr 2024 16:33:56 -0300
-Message-ID: <20240402193404.236159-4-pc@manguebit.com>
+Subject: [PATCH 05/12] smb: client: fix potential UAF in smb2_check_message()
+Date: Tue,  2 Apr 2024 16:33:57 -0300
+Message-ID: <20240402193404.236159-5-pc@manguebit.com>
 In-Reply-To: <20240402193404.236159-1-pc@manguebit.com>
 References: <20240402193404.236159-1-pc@manguebit.com>
 Precedence: bulk
@@ -86,22 +86,23 @@ avoid UAF.
 
 Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
 ---
- fs/smb/client/cifs_debug.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/smb/client/smb2misc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/smb/client/cifs_debug.c b/fs/smb/client/cifs_debug.c
-index 8535c9907462..c71ae5c04306 100644
---- a/fs/smb/client/cifs_debug.c
-+++ b/fs/smb/client/cifs_debug.c
-@@ -759,6 +759,8 @@ static int cifs_stats_proc_show(struct seq_file *m, void *v)
+diff --git a/fs/smb/client/smb2misc.c b/fs/smb/client/smb2misc.c
+index 82b84a4941dd..14d74ef70cc8 100644
+--- a/fs/smb/client/smb2misc.c
++++ b/fs/smb/client/smb2misc.c
+@@ -160,7 +160,8 @@ smb2_check_message(char *buf, unsigned int len, struct TCP_Server_Info *server)
+ 		/* decrypt frame now that it is completely read in */
+ 		spin_lock(&cifs_tcp_ses_lock);
+ 		list_for_each_entry(iter, &pserver->smb_ses_list, smb_ses_list) {
+-			if (iter->Suid == le64_to_cpu(thdr->SessionId)) {
++			if (!cifs_ses_exiting(iter) &&
++			    iter->Suid == le64_to_cpu(thdr->SessionId)) {
+ 				ses = iter;
+ 				break;
  			}
- #endif /* STATS2 */
- 		list_for_each_entry(ses, &server->smb_ses_list, smb_ses_list) {
-+			if (cifs_ses_exiting(ses))
-+				continue;
- 			list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
- 				i++;
- 				seq_printf(m, "\n%d) %s", i, tcon->tree_name);
 -- 
 2.44.0
 
