@@ -1,276 +1,121 @@
-Return-Path: <linux-cifs+bounces-1893-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1891-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC37E8ADA00
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Apr 2024 02:03:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526DC8AD8F8
+	for <lists+linux-cifs@lfdr.de>; Tue, 23 Apr 2024 01:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30268B2711D
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Apr 2024 00:03:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8189D1C21178
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Apr 2024 23:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2527115E5D1;
-	Mon, 22 Apr 2024 23:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7253244361;
+	Mon, 22 Apr 2024 23:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+0okJs5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RejDHZEP"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE1315E5BB;
-	Mon, 22 Apr 2024 23:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBF93D556;
+	Mon, 22 Apr 2024 23:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830148; cv=none; b=CxNarOXzbpHOrpD58iuXu8oOqtnn85DIGRWqF2AdGi4wRvW1ygBpWLGm5ocEXS3KW9eIt7CAAsngWxMF+CKeCbA773Rx1Za8zvnaP5etArjX3FFn1Kmn16QLTzxwNeh5Y3iFQcPO5Vll0zKsmEQEwh1ozlZEtWBBcGmYQSlJfyA=
+	t=1713828046; cv=none; b=nK+2re1JKjBzKXcSK7HYb/iSnOpUdUdZf9F/HgU9UbNQbPaad4sy2vkYZB55kHix0bLtNDrinqeCi7BBq3VN6ytg3m8j94dUm7YJtN0Qjhd5ga7yruVrJK6ie0/enu4INIeNSMMOtKw1rjjB4RxIUDEhpfcpAvJIA64yZUiJ38E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830148; c=relaxed/simple;
-	bh=XdlwIfcEJwKSQO1K2Wl06iC59TTHQt/kAhbz8Yi1iAc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ArRghdzXjx5ox5f5vp1S7kITelGIOlTVauMLwUo7q+BtXF2DsXv/5ksEh1rE141ISEeIcugSrVX0SKS3qa5VSix6KN6+5/mhT9jgyYPu2wzck2b9V616ZKYuHWvbe6MbYJFOyjIASpEcNc9yAEuGy8/Wmj4P+WOdcFhVFqszhe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+0okJs5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8A5C3277B;
-	Mon, 22 Apr 2024 23:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830147;
-	bh=XdlwIfcEJwKSQO1K2Wl06iC59TTHQt/kAhbz8Yi1iAc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l+0okJs5xo0Ih/j9N7KNH9IRcKxwZbbHxWa12jZY1lvAAD/fiRDzQvxQQdfZAl0eY
-	 oo+cnYn3CicjuPGaImfAb3YCa8CRLjGE6OfVtTOICGqZ9+1ZYY17c36ms4lhUhViIw
-	 7BBXA7S9hXNUHuGY80WgR1t7c6Ps7tkSlkh6c1yOGpBkTLlQnW2HZbvJpSE2qIf+ep
-	 OuEawtfAhYogoafrVyGZD8SIT0QztdtK94tKpKok3H7pu4yGrSyKlq5J2nLtkVQ/jL
-	 Fi1dmkaeXR3JmhmHWN//SqCLFcqOUWYXxecQCgWJBNCDY6hDqvRmVmeXaJ/lSn217u
-	 Ji4396KokWTBw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Steve French <stfrench@microsoft.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>,
-	sfrench@samba.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.8 42/43] smb3: fix broken reconnect when password changing on the server by allowing password rotation
-Date: Mon, 22 Apr 2024 19:14:28 -0400
-Message-ID: <20240422231521.1592991-42-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422231521.1592991-1-sashal@kernel.org>
-References: <20240422231521.1592991-1-sashal@kernel.org>
+	s=arc-20240116; t=1713828046; c=relaxed/simple;
+	bh=oj/jDjK3V5yRVW0Ym1lVsrvMUhzgj+h+qucbTcRuJMU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=t+tV202BQWgHjTbUPcGtSh357mvLFL9RX4fEE2J1FMYqx/VysfGfgpAXeJ5gzYbiw9J7Z1sbzd53T/PEjLIZfFmQnB4KSiP9r/p1/WxDeJ3fo2Gv/rLKv0gNUwRkswrloSr0Uo9upI3aU+DaTVi+nZSglX0TLCXMlq7dp0N4ycA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RejDHZEP; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2dd6a7ae2dcso29338141fa.1;
+        Mon, 22 Apr 2024 16:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713828043; x=1714432843; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/C4ZKdvHLh97H7STf6xCInhQe9bGeawo6BaxTH4MasM=;
+        b=RejDHZEPhM+fEan6LyKWXAv5GavI5NR8O4Wu2eBUvjG78jSj1kWF3JhSocVKrgXt/i
+         DZAF1rDdkvMPVoID5O84B7NLc8PAn6Av9lf/ERVaAzmkh7ckG9ICBUDZzzY3jP0jsBqC
+         eCDzeQD0Y74Sgc9ybJCpBn4gw2T0nzPTerwQAnBhX612YxCRQtqjOV7V4uxejZZf/8+p
+         eCXtg8qarcbStiG3PCGGGMvXe1Mhs/HEl8Z4SYNvJkxJ7/lOaciCCnEMUjFUfEKClUnY
+         k3S77AzpF/iERlWiGVPS/b3mR9j5fcvuOBVTjZ5WelRIbPZG5D5uzeJHSqDTIJyRRZOn
+         vj7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713828043; x=1714432843;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/C4ZKdvHLh97H7STf6xCInhQe9bGeawo6BaxTH4MasM=;
+        b=ZKC8zcvWSj7RSYV2P60xYIy48yRiL4+6fIp6P5mnMAljF3RXe5k9XqP2lJmba46T2j
+         jOFPohHLbp7184EW71Iu9UDcDfPfRRPvKa0c21DPFr6R0aeIeDU2ZdbMwmgTNLId5iKZ
+         N7nkpD5zfi4HoE7QIxj9tGnjs1VkMdHWs4OxHb0nA6dPC9aDqiLpISA1Finb/sRuOI88
+         kGf1RQ+YZrTv+ZfjiIVhiHPlUl8SiHYkZbZ7sc6HicVDQAQWOLguzqeCNs3k9YLljHO4
+         +HyfK4csu7D2uMfTx0woVCYh5uuhn34YaYekoLyGaXKCiInazAZn1cVnQ7Ob31mDL9Ht
+         iIuA==
+X-Forwarded-Encrypted: i=1; AJvYcCXK5HA2pkjPuVsPfW/4Ve7KpeLuJ0vlik8KD/wVrFPRnNZjKTDyKWxzORJskMu1tWr2HhoLE+J3Cr7/UzsEY7vJ+2zYimZ/FPNGxg==
+X-Gm-Message-State: AOJu0YzP5Rd73xV2xJ5b8v/taUgVlmYWvayU3iChoEA6YFNFoSlwLy9k
+	Z+Ov1ZLV/kfhh31S+9EVGpK1Ze4/os/0oOfNQ+slpnQem710s+nJ/J7sfs+JX/ahOgZtGU8d3Ng
+	a3hpbJXoX3ECQ2X97+ZegPbG2fGGjfGYl
+X-Google-Smtp-Source: AGHT+IGaATWXxm54U52r2l7bs7whal15Jl96TdQJ+uO4Ct9/JAw5VwRxdhOHm+JbWX96oWX+haITAEbREAZIwagvcHs=
+X-Received: by 2002:a2e:a988:0:b0:2d6:c749:17bc with SMTP id
+ x8-20020a2ea988000000b002d6c74917bcmr10136033ljq.31.1713828042866; Mon, 22
+ Apr 2024 16:20:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.7
-Content-Transfer-Encoding: 8bit
+From: Steve French <smfrench@gmail.com>
+Date: Mon, 22 Apr 2024 18:20:31 -0500
+Message-ID: <CAH2r5mt+jm0-X-zx18QgJ+Q2DX9pCkf+TQH=Cb809xTjVJVGQQ@mail.gmail.com>
+Subject: [GIT PULL] ksmbd server fixes
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Namjae Jeon <linkinjeon@kernel.org>, 
+	CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Steve French <stfrench@microsoft.com>
+Please pull the following changes since commit
+0bbac3facb5d6cc0171c45c9873a2dc96bea9680:
 
-[ Upstream commit 35f834265e0dc78b003aa0d1af65cafb89666b76 ]
+  Linux 6.9-rc4 (2024-04-14 13:38:39 -0700)
 
-There are various use cases that are becoming more common in which password
-changes are scheduled on a server(s) periodically but the clients connected
-to this server need to stay connected (even in the face of brief network
-reconnects) due to mounts which can not be easily unmounted and mounted at
-will, and servers that do password rotation do not always have the ability
-to tell the clients exactly when to the new password will be effective,
-so add support for an alt password ("password2=") on mount (and also
-remount) so that we can anticipate the upcoming change to the server
-without risking breaking existing mounts.
+are available in the Git repository at:
 
-An alternative would have been to use the kernel keyring for this but the
-processes doing the reconnect do not have access to the keyring but do
-have access to the ses structure.
+  git://git.samba.org/ksmbd.git tags/6.9-rc5-ksmbd-fixes
 
-Reviewed-by: Bharath SM <bharathsm@microsoft.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/client/cifsglob.h   |  1 +
- fs/smb/client/connect.c    |  8 ++++++++
- fs/smb/client/fs_context.c | 21 +++++++++++++++++++++
- fs/smb/client/fs_context.h |  2 ++
- fs/smb/client/misc.c       |  1 +
- fs/smb/client/smb2pdu.c    | 11 +++++++++++
- 6 files changed, 44 insertions(+)
+for you to fetch changes up to e9d8c2f95ab8acaf3f4d4a53682a4afa3c263692:
 
-diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 844afda090d05..8a4ea961b28ee 100644
---- a/fs/smb/client/cifsglob.h
-+++ b/fs/smb/client/cifsglob.h
-@@ -1063,6 +1063,7 @@ struct cifs_ses {
- 				   and after mount option parsing we fill it */
- 	char *domainName;
- 	char *password;
-+	char *password2; /* When key rotation used, new password may be set before it expires */
- 	char workstation_name[CIFS_MAX_WORKSTATION_LEN];
- 	struct session_key auth_key;
- 	struct ntlmssp_auth *ntlmssp; /* ciphertext, flags, server challenge */
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index 7516c7d4558d8..e28f011f11d6c 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -2186,6 +2186,7 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx, struct cifs_ses *ses)
- 	}
- 
- 	++delim;
-+	/* BB consider adding support for password2 (Key Rotation) for multiuser in future */
- 	ctx->password = kstrndup(delim, len, GFP_KERNEL);
- 	if (!ctx->password) {
- 		cifs_dbg(FYI, "Unable to allocate %zd bytes for password\n",
-@@ -2209,6 +2210,7 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx, struct cifs_ses *ses)
- 			kfree(ctx->username);
- 			ctx->username = NULL;
- 			kfree_sensitive(ctx->password);
-+			/* no need to free ctx->password2 since not allocated in this path */
- 			ctx->password = NULL;
- 			goto out_key_put;
- 		}
-@@ -2320,6 +2322,12 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- 		if (!ses->password)
- 			goto get_ses_fail;
- 	}
-+	/* ctx->password freed at unmount */
-+	if (ctx->password2) {
-+		ses->password2 = kstrdup(ctx->password2, GFP_KERNEL);
-+		if (!ses->password2)
-+			goto get_ses_fail;
-+	}
- 	if (ctx->domainname) {
- 		ses->domainName = kstrdup(ctx->domainname, GFP_KERNEL);
- 		if (!ses->domainName)
-diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
-index d9fe17b2ba375..ce04108162357 100644
---- a/fs/smb/client/fs_context.c
-+++ b/fs/smb/client/fs_context.c
-@@ -162,6 +162,7 @@ const struct fs_parameter_spec smb3_fs_parameters[] = {
- 	fsparam_string("username", Opt_user),
- 	fsparam_string("pass", Opt_pass),
- 	fsparam_string("password", Opt_pass),
-+	fsparam_string("password2", Opt_pass2),
- 	fsparam_string("ip", Opt_ip),
- 	fsparam_string("addr", Opt_ip),
- 	fsparam_string("domain", Opt_domain),
-@@ -315,6 +316,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
- 	new_ctx->nodename = NULL;
- 	new_ctx->username = NULL;
- 	new_ctx->password = NULL;
-+	new_ctx->password2 = NULL;
- 	new_ctx->server_hostname = NULL;
- 	new_ctx->domainname = NULL;
- 	new_ctx->UNC = NULL;
-@@ -327,6 +329,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
- 	DUP_CTX_STR(prepath);
- 	DUP_CTX_STR(username);
- 	DUP_CTX_STR(password);
-+	DUP_CTX_STR(password2);
- 	DUP_CTX_STR(server_hostname);
- 	DUP_CTX_STR(UNC);
- 	DUP_CTX_STR(source);
-@@ -875,6 +878,8 @@ static int smb3_reconfigure(struct fs_context *fc)
- 	else  {
- 		kfree_sensitive(ses->password);
- 		ses->password = kstrdup(ctx->password, GFP_KERNEL);
-+		kfree_sensitive(ses->password2);
-+		ses->password2 = kstrdup(ctx->password2, GFP_KERNEL);
- 	}
- 	STEAL_STRING(cifs_sb, ctx, domainname);
- 	STEAL_STRING(cifs_sb, ctx, nodename);
-@@ -1275,6 +1280,18 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
- 			goto cifs_parse_mount_err;
- 		}
- 		break;
-+	case Opt_pass2:
-+		kfree_sensitive(ctx->password2);
-+		ctx->password2 = NULL;
-+		if (strlen(param->string) == 0)
-+			break;
-+
-+		ctx->password2 = kstrdup(param->string, GFP_KERNEL);
-+		if (ctx->password2 == NULL) {
-+			cifs_errorf(fc, "OOM when copying password2 string\n");
-+			goto cifs_parse_mount_err;
-+		}
-+		break;
- 	case Opt_ip:
- 		if (strlen(param->string) == 0) {
- 			ctx->got_ip = false;
-@@ -1574,6 +1591,8 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
-  cifs_parse_mount_err:
- 	kfree_sensitive(ctx->password);
- 	ctx->password = NULL;
-+	kfree_sensitive(ctx->password2);
-+	ctx->password2 = NULL;
- 	return -EINVAL;
- }
- 
-@@ -1678,6 +1697,8 @@ smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx)
- 	ctx->username = NULL;
- 	kfree_sensitive(ctx->password);
- 	ctx->password = NULL;
-+	kfree_sensitive(ctx->password2);
-+	ctx->password2 = NULL;
- 	kfree(ctx->server_hostname);
- 	ctx->server_hostname = NULL;
- 	kfree(ctx->UNC);
-diff --git a/fs/smb/client/fs_context.h b/fs/smb/client/fs_context.h
-index b3d51b345eaef..3744071d5b8df 100644
---- a/fs/smb/client/fs_context.h
-+++ b/fs/smb/client/fs_context.h
-@@ -138,6 +138,7 @@ enum cifs_param {
- 	Opt_source,
- 	Opt_user,
- 	Opt_pass,
-+	Opt_pass2,
- 	Opt_ip,
- 	Opt_domain,
- 	Opt_srcaddr,
-@@ -169,6 +170,7 @@ struct smb3_fs_context {
- 
- 	char *username;
- 	char *password;
-+	char *password2;
- 	char *domainname;
- 	char *source;
- 	char *server_hostname;
-diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
-index 74627d647818a..3edf270ceef3e 100644
---- a/fs/smb/client/misc.c
-+++ b/fs/smb/client/misc.c
-@@ -101,6 +101,7 @@ sesInfoFree(struct cifs_ses *buf_to_free)
- 	kfree(buf_to_free->serverDomain);
- 	kfree(buf_to_free->serverNOS);
- 	kfree_sensitive(buf_to_free->password);
-+	kfree_sensitive(buf_to_free->password2);
- 	kfree(buf_to_free->user_name);
- 	kfree(buf_to_free->domainName);
- 	kfree_sensitive(buf_to_free->auth_key.response);
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index b71e32d66eba7..60793143e24c6 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -367,6 +367,17 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
- 		}
- 
- 		rc = cifs_setup_session(0, ses, server, nls_codepage);
-+		if ((rc == -EACCES) || (rc == -EKEYEXPIRED) || (rc == -EKEYREVOKED)) {
-+			/*
-+			 * Try alternate password for next reconnect (key rotation
-+			 * could be enabled on the server e.g.) if an alternate
-+			 * password is available and the current password is expired,
-+			 * but do not swap on non pwd related errors like host down
-+			 */
-+			if (ses->password2)
-+				swap(ses->password2, ses->password);
-+		}
-+
- 		if ((rc == -EACCES) && !tcon->retry) {
- 			mutex_unlock(&ses->session_mutex);
- 			rc = -EHOSTDOWN;
+  ksmbd: add continuous availability share parameter (2024-04-19 20:48:47 -0500)
+
+----------------------------------------------------------------
+Five ksmbd server fixes, most also for stable
+- rename fix
+- fix for two potential out of bounds
+- fix for connections from MacOS (padding in close response)
+- fix for when to enable persistent handles
+----------------------------------------------------------------
+Marios Makassikis (1):
+      ksmbd: clear RENAME_NOREPLACE before calling vfs_rename
+
+Namjae Jeon (4):
+      ksmbd: fix slab-out-of-bounds in smb2_allocate_rsp_buf
+      ksmbd: validate request buffer size in smb2_allocate_rsp_buf()
+      ksmbd: common: use struct_group_attr instead of struct_group for
+network_open_info
+      ksmbd: add continuous availability share parameter
+
+ fs/smb/common/smb2pdu.h       |  2 +-
+ fs/smb/server/ksmbd_netlink.h | 35 ++++++++++++++++++-----------------
+ fs/smb/server/server.c        | 13 +++++--------
+ fs/smb/server/smb2pdu.c       | 15 +++++++++++++--
+ fs/smb/server/vfs.c           |  5 +++++
+ 5 files changed, 42 insertions(+), 28 deletions(-)
+
 -- 
-2.43.0
+Thanks,
 
+Steve
 
