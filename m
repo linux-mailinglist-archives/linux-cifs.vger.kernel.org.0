@@ -1,232 +1,276 @@
-Return-Path: <linux-cifs+bounces-1890-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1893-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42D888AD63C
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Apr 2024 22:58:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC37E8ADA00
+	for <lists+linux-cifs@lfdr.de>; Tue, 23 Apr 2024 02:03:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACF33B22B84
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Apr 2024 20:58:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30268B2711D
+	for <lists+linux-cifs@lfdr.de>; Tue, 23 Apr 2024 00:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28A6E1C69A;
-	Mon, 22 Apr 2024 20:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2527115E5D1;
+	Mon, 22 Apr 2024 23:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFiV1A11"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+0okJs5"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8AA1D545;
-	Mon, 22 Apr 2024 20:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE1315E5BB;
+	Mon, 22 Apr 2024 23:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713819507; cv=none; b=le1sjgeqeCx0caWA3xhhoX3HtmFVpEOwmbdHVNmabhORd5ZNbO+yNX8tyAj3f0w4KFlmr7N4TTSOsHq8bgCFmfa92maJGyAfexvVbqqeF2DkJt3dCZAqRY3+9TtuZLHLrCaNJ7/sFr1qW8nQnTNmG+2DHj6gGoit5RfshS4kd1o=
+	t=1713830148; cv=none; b=CxNarOXzbpHOrpD58iuXu8oOqtnn85DIGRWqF2AdGi4wRvW1ygBpWLGm5ocEXS3KW9eIt7CAAsngWxMF+CKeCbA773Rx1Za8zvnaP5etArjX3FFn1Kmn16QLTzxwNeh5Y3iFQcPO5Vll0zKsmEQEwh1ozlZEtWBBcGmYQSlJfyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713819507; c=relaxed/simple;
-	bh=BwnqGMnVETwc0KXdR3xkHpOq8Kccp1bF5FE6wwjmlG4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bdIf2K/50XEf7vpQN+V1qfEY/7cBMGXOLkTKFx0yUC+IEn9pj1CtnJBHlh+tiT9o95gK2JtnJeV6RXrefP/2NzQDAkfx+5e77R1dachS+DD/NAQwP1L65y/KI5tC8b9g6vfz/BUU4jW72yKYq26QrYyxEXPdRwh+3sD/MKfF658=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFiV1A11; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36a06a409caso25654225ab.3;
-        Mon, 22 Apr 2024 13:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713819504; x=1714424304; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BwnqGMnVETwc0KXdR3xkHpOq8Kccp1bF5FE6wwjmlG4=;
-        b=EFiV1A11vdztVbSQyXjQCb2v1ERGmn2IGvQFBBswiQjfDvBQYkZj/pz5gxchtJOmk/
-         T8suoRZDL+IJR/jADTIrm4dKprPSclYg3L3X4K6eH4GCn86ZvR1kyIfxMOmftYUKF3z+
-         N6thhJGMG5cyJjkzzOPcuhMjrA1P0Srg4cW6lUmhB+NJ3qfKfg+Qbb7bnQgthg1Uz7KR
-         m+5ZdcUmsig016d74Ty2F/7HkYQoP261UUA9ZnptDi3USJw0pL9/XO74eFHxY9WnuaWf
-         F3y4o2qn08Bbc81j1v7iALFMkb4A54EYRQU2kZgnXSjzVy92t6xfHA7U1jvRD9vkGU99
-         JvGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713819504; x=1714424304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BwnqGMnVETwc0KXdR3xkHpOq8Kccp1bF5FE6wwjmlG4=;
-        b=uU1pWQp0OpyUsA4m61RDK7bLKJMtUV9Uhaa3G3iL1RfXW3divoUrLA9ogG1dW/Skgf
-         kPXzkXTqBg8wOspzgLnn2AII8pfYwDJp7fGMQVIXkHZ/DhmKr6aYL20ETXd01eXLaDM+
-         SGUrWNy9H5c+PF6N+/+7R+cnz4IKyjsWkqetByV5gHL4ifbvgGbmId3C8DAv6N70seSy
-         jM2QmKkX3mtu5rPH/k+fD/0DTuJ7fkzWe48J0zwoPuSg014mNoKTDqqVk6LHJNwPAy7s
-         VzZrpGc1wMfWspNIEFWETXIf2lbJ4r/b5XqLkFpkvWv8s1ojMME60WMmA4h4dDiBTL+7
-         9hhA==
-X-Forwarded-Encrypted: i=1; AJvYcCX54nd5wtl/A4rgCmCH8yMpyDNmto5D3TA/Z6Hca3VPvbl+wLer/sAoFQVUY9IwoQ7Y5nWmO57dZscssXdVswhnUlACHM8B+hNuoQ==
-X-Gm-Message-State: AOJu0YwjKktXnFT357TT58HFksC9bLAxnCbWIWECkoubQXiP6cs0d+jE
-	Hh5mhmdqErKngYgXCR3B25czE4pi0F70k0+AaEcCA4TnNErrfHgaUyZEMGppqEZ7WMa1j0WEhEj
-	eLfWD1UR2NJ6iShEOW/5dp2e9na4=
-X-Google-Smtp-Source: AGHT+IGRzFPzanVbdKTkjs+7WbgWV7Jna9PHJzH4lPSB8bJtMM4YppisUzmtRljQeTDF2p1jdE9qhiCDzku+geR5RtQ=
-X-Received: by 2002:a05:6e02:1a6d:b0:36c:cda:e2fc with SMTP id
- w13-20020a056e021a6d00b0036c0cdae2fcmr6998387ilv.16.1713819504551; Mon, 22
- Apr 2024 13:58:24 -0700 (PDT)
+	s=arc-20240116; t=1713830148; c=relaxed/simple;
+	bh=XdlwIfcEJwKSQO1K2Wl06iC59TTHQt/kAhbz8Yi1iAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ArRghdzXjx5ox5f5vp1S7kITelGIOlTVauMLwUo7q+BtXF2DsXv/5ksEh1rE141ISEeIcugSrVX0SKS3qa5VSix6KN6+5/mhT9jgyYPu2wzck2b9V616ZKYuHWvbe6MbYJFOyjIASpEcNc9yAEuGy8/Wmj4P+WOdcFhVFqszhe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+0okJs5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8A5C3277B;
+	Mon, 22 Apr 2024 23:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713830147;
+	bh=XdlwIfcEJwKSQO1K2Wl06iC59TTHQt/kAhbz8Yi1iAc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=l+0okJs5xo0Ih/j9N7KNH9IRcKxwZbbHxWa12jZY1lvAAD/fiRDzQvxQQdfZAl0eY
+	 oo+cnYn3CicjuPGaImfAb3YCa8CRLjGE6OfVtTOICGqZ9+1ZYY17c36ms4lhUhViIw
+	 7BBXA7S9hXNUHuGY80WgR1t7c6Ps7tkSlkh6c1yOGpBkTLlQnW2HZbvJpSE2qIf+ep
+	 OuEawtfAhYogoafrVyGZD8SIT0QztdtK94tKpKok3H7pu4yGrSyKlq5J2nLtkVQ/jL
+	 Fi1dmkaeXR3JmhmHWN//SqCLFcqOUWYXxecQCgWJBNCDY6hDqvRmVmeXaJ/lSn217u
+	 Ji4396KokWTBw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Steve French <stfrench@microsoft.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>,
+	sfrench@samba.org,
+	linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 6.8 42/43] smb3: fix broken reconnect when password changing on the server by allowing password rotation
+Date: Mon, 22 Apr 2024 19:14:28 -0400
+Message-ID: <20240422231521.1592991-42-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240422231521.1592991-1-sashal@kernel.org>
+References: <20240422231521.1592991-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1710173427.git.lucien.xin@gmail.com> <74d5db09-6b5c-4054-b9d3-542f34769083@samba.org>
- <CADvbK_dzVcDKsJ9RN9oc0K1Jwd+kYjxgE6q=ioRbVGhJx7Qznw@mail.gmail.com>
- <f427b422-6cfc-45ac-88eb-3e7694168b63@samba.org> <CADvbK_cA-RCLiUUWkyNsS=4OhkWrUWb68QLg28yO2=8PqNuGBQ@mail.gmail.com>
- <438496a6-7f90-403d-9558-4a813e842540@samba.org> <CADvbK_fkbOnhKL+Rb+pp+NF+VzppOQ68c=nk_6MSNjM_dxpCoQ@mail.gmail.com>
- <1456b69c-4ffd-4a08-b120-6a00abf1eb05@samba.org> <CADvbK_cQRpyzHG4UUOzfgmqLndvpx5Cd+d59rrqGRp0ic3PyxA@mail.gmail.com>
- <95922a2f-07a1-4555-acd2-c745e59bcb8e@samba.org> <CADvbK_eR4++HbR_RncjV9N__M-uTHtmqcC+_Of1RKVw7Uqf9Cw@mail.gmail.com>
- <CADvbK_dEWNNA_i1maRk4cmAB_uk4G4x0eZfZbrVX=zJ+2H9o_A@mail.gmail.com> <dc3815af-5b46-452b-8bcc-30a0934740a2@samba.org>
-In-Reply-To: <dc3815af-5b46-452b-8bcc-30a0934740a2@samba.org>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 22 Apr 2024 16:58:13 -0400
-Message-ID: <CADvbK_e7i08GAiOenJNTP_m+-MeYjSf7J-vkF+hgRfYGNCjkwQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 0/5] net: In-kernel QUIC implementation with
- Userspace handshake
-To: Stefan Metzmacher <metze@samba.org>, Martin KaFai Lau <kafai@fb.com>
-Cc: network dev <netdev@vger.kernel.org>, davem@davemloft.net, kuba@kernel.org, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Steve French <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>, 
-	Chuck Lever III <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Tyler Fanelli <tfanelli@redhat.com>, 
-	Pengtao He <hepengtao@xiaomi.com>, 
-	"linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>, 
-	Samba Technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.7
+Content-Transfer-Encoding: 8bit
 
-On Sun, Apr 21, 2024 at 3:27=E2=80=AFPM Stefan Metzmacher <metze@samba.org>=
- wrote:
->
-> Am 20.04.24 um 21:32 schrieb Xin Long:
-> > On Fri, Apr 19, 2024 at 3:19=E2=80=AFPM Xin Long <lucien.xin@gmail.com>=
- wrote:
-> >>
-> >> On Fri, Apr 19, 2024 at 2:51=E2=80=AFPM Stefan Metzmacher <metze@samba=
-.org> wrote:
-> >>>
-> >>> Hi Xin Long,
-> >>>
-> >>>>> But I think its unavoidable for the ALPN and SNI fields on
-> >>>>> the server side. As every service tries to use udp port 443
-> >>>>> and somehow that needs to be shared if multiple services want to
-> >>>>> use it.
-> >>>>>
-> >>>>> I guess on the acceptor side we would need to somehow detach low le=
-vel
-> >>>>> udp struct sock from the logical listen struct sock.
-> >>>>>
-> >>>>> And quic_do_listen_rcv() would need to find the correct logical lis=
-tening
-> >>>>> socket and call quic_request_sock_enqueue() on the logical socket
-> >>>>> not the lowlevel udo socket. The same for all stuff happening after
-> >>>>> quic_request_sock_enqueue() at the end of quic_do_listen_rcv.
-> >>>>>
-> >>>> The implementation allows one low level UDP sock to serve for multip=
-le
-> >>>> QUIC socks.
-> >>>>
-> >>>> Currently, if your 3 quic applications listen to the same address:po=
-rt
-> >>>> with SO_REUSEPORT socket option set, the incoming connection will ch=
-oose
-> >>>> one of your applications randomly with hash(client_addr+port) vi
-> >>>> reuseport_select_sock() in quic_sock_lookup().
-> >>>>
-> >>>> It should be easy to do a further match with ALPN between these 3 qu=
-ic
-> >>>> socks that listens to the same address:port to get the right quic so=
-ck,
-> >>>> instead of that randomly choosing.
-> >>>
-> >>> Ah, that sounds good.
-> >>>
-> >>>> The problem is to parse the TLS Client_Hello message to get the ALPN=
- in
-> >>>> quic_sock_lookup(), which is not a proper thing to do in kernel, and
-> >>>> might be rejected by networking maintainers, I need to check with th=
-em.
-> >>>
-> >>> Is the reassembling of CRYPTO frames done in the kernel or
-> >>> userspace? Can you point me to the place in the code?
-> >> In quic_inq_handshake_tail() in kernel, for Client Initial packet
-> >> is processed when calling accept(), this is the path:
-> >>
-> >> quic_accept()-> quic_accept_sock_init() -> quic_packet_process() ->
-> >> quic_packet_handshake_process() -> quic_frame_process() ->
-> >> quic_frame_crypto_process() -> quic_inq_handshake_tail().
-> >>
-> >> Note that it's with the accept sock, not the listen sock.
-> >>
-> >>>
-> >>> If it's really impossible to do in C code maybe
-> >>> registering a bpf function in order to allow a listener
-> >>> to check the intial quic packet and decide if it wants to serve
-> >>> that connection would be possible as last resort?
-> >> That's a smart idea! man.
-> >> I think the bpf hook in reuseport_select_sock() is meant to do such
-> >> selection.
-> >>
-> >> For the Client initial packet (the only packet you need to handle),
-> >> I double you will need to do the reassembling, as Client Hello TLS mes=
-sage
-> >> is always less than 400 byte in my env.
-> >>
-> >> But I think you need to do the decryption for the Client initial packe=
-t
-> >> before decoding it then parsing the TLS message from its crypto frame.
-> > I created this patch:
-> >
-> > https://github.com/lxin/quic/commit/aee0b7c77df3f39941f98bb901c73fdc560=
-befb8
-> >
-> > to do this decryption in quic_sock_look() before calling
-> > reuseport_select_sock(), so that it provides the bpf selector with
-> > a plain-text QUIC initial packet:
-> >
-> > https://datatracker.ietf.org/doc/html/rfc9000#section-17.2.2
-> >
-> > If it's complex for you to do the decryption for the initial packet in
-> > the bpf selector, I will apply this patch. Please let me know.
->
-> I guess in addition to quic_server_handshake(), which is called
-> after accept(), there should be quic_server_prepare_listen()
-> (and something similar for in kernel servers) that setup the reuseport
-> magic for the socket, so that it's not needed in every application.
-It's done when calling listen(), see quic_inet_listen()->quic_hash()
-where only listening sockets with its sk_reuseport set will be
-added into the reuseport group.
+From: Steve French <stfrench@microsoft.com>
 
-It means SO_REUSEPORT sockopt must be set for every socket
-before calling listen().
+[ Upstream commit 35f834265e0dc78b003aa0d1af65cafb89666b76 ]
 
->
-> It seems there is only a single ebpf program possible per
-> reuseport group, so there has to be just a single one.
-Yes, a single ebpf program per reuseport group should work.
-see prepare_sk_fds() in kernel selftests for select_reuseport bfp.
+There are various use cases that are becoming more common in which password
+changes are scheduled on a server(s) periodically but the clients connected
+to this server need to stay connected (even in the face of brief network
+reconnects) due to mounts which can not be easily unmounted and mounted at
+will, and servers that do password rotation do not always have the ability
+to tell the clients exactly when to the new password will be effective,
+so add support for an alt password ("password2=") on mount (and also
+remount) so that we can anticipate the upcoming change to the server
+without risking breaking existing mounts.
 
->
-> But is it possible for in kernel servers to also register an epbf program=
-?
-Good question. TBH, I don't really know much about epbf programming.
-I guess the real problem is how you pass the .o file to kernel space?
+An alternative would have been to use the kernel keyring for this but the
+processes doing the reconnect do not have access to the keyring but do
+have access to the ses structure.
 
-Another question is, in the selftests:
-tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
+Reviewed-by: Bharath SM <bharathsm@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/client/cifsglob.h   |  1 +
+ fs/smb/client/connect.c    |  8 ++++++++
+ fs/smb/client/fs_context.c | 21 +++++++++++++++++++++
+ fs/smb/client/fs_context.h |  2 ++
+ fs/smb/client/misc.c       |  1 +
+ fs/smb/client/smb2pdu.c    | 11 +++++++++++
+ 6 files changed, 44 insertions(+)
 
-it created a global reuseport_array, and then added these sockets
-into this array for the later lookup, but these sockets are all created
-in the same process.
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 844afda090d05..8a4ea961b28ee 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -1063,6 +1063,7 @@ struct cifs_ses {
+ 				   and after mount option parsing we fill it */
+ 	char *domainName;
+ 	char *password;
++	char *password2; /* When key rotation used, new password may be set before it expires */
+ 	char workstation_name[CIFS_MAX_WORKSTATION_LEN];
+ 	struct session_key auth_key;
+ 	struct ntlmssp_auth *ntlmssp; /* ciphertext, flags, server challenge */
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index 7516c7d4558d8..e28f011f11d6c 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -2186,6 +2186,7 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx, struct cifs_ses *ses)
+ 	}
+ 
+ 	++delim;
++	/* BB consider adding support for password2 (Key Rotation) for multiuser in future */
+ 	ctx->password = kstrndup(delim, len, GFP_KERNEL);
+ 	if (!ctx->password) {
+ 		cifs_dbg(FYI, "Unable to allocate %zd bytes for password\n",
+@@ -2209,6 +2210,7 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx, struct cifs_ses *ses)
+ 			kfree(ctx->username);
+ 			ctx->username = NULL;
+ 			kfree_sensitive(ctx->password);
++			/* no need to free ctx->password2 since not allocated in this path */
+ 			ctx->password = NULL;
+ 			goto out_key_put;
+ 		}
+@@ -2320,6 +2322,12 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
+ 		if (!ses->password)
+ 			goto get_ses_fail;
+ 	}
++	/* ctx->password freed at unmount */
++	if (ctx->password2) {
++		ses->password2 = kstrdup(ctx->password2, GFP_KERNEL);
++		if (!ses->password2)
++			goto get_ses_fail;
++	}
+ 	if (ctx->domainname) {
+ 		ses->domainName = kstrdup(ctx->domainname, GFP_KERNEL);
+ 		if (!ses->domainName)
+diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
+index d9fe17b2ba375..ce04108162357 100644
+--- a/fs/smb/client/fs_context.c
++++ b/fs/smb/client/fs_context.c
+@@ -162,6 +162,7 @@ const struct fs_parameter_spec smb3_fs_parameters[] = {
+ 	fsparam_string("username", Opt_user),
+ 	fsparam_string("pass", Opt_pass),
+ 	fsparam_string("password", Opt_pass),
++	fsparam_string("password2", Opt_pass2),
+ 	fsparam_string("ip", Opt_ip),
+ 	fsparam_string("addr", Opt_ip),
+ 	fsparam_string("domain", Opt_domain),
+@@ -315,6 +316,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
+ 	new_ctx->nodename = NULL;
+ 	new_ctx->username = NULL;
+ 	new_ctx->password = NULL;
++	new_ctx->password2 = NULL;
+ 	new_ctx->server_hostname = NULL;
+ 	new_ctx->domainname = NULL;
+ 	new_ctx->UNC = NULL;
+@@ -327,6 +329,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
+ 	DUP_CTX_STR(prepath);
+ 	DUP_CTX_STR(username);
+ 	DUP_CTX_STR(password);
++	DUP_CTX_STR(password2);
+ 	DUP_CTX_STR(server_hostname);
+ 	DUP_CTX_STR(UNC);
+ 	DUP_CTX_STR(source);
+@@ -875,6 +878,8 @@ static int smb3_reconfigure(struct fs_context *fc)
+ 	else  {
+ 		kfree_sensitive(ses->password);
+ 		ses->password = kstrdup(ctx->password, GFP_KERNEL);
++		kfree_sensitive(ses->password2);
++		ses->password2 = kstrdup(ctx->password2, GFP_KERNEL);
+ 	}
+ 	STEAL_STRING(cifs_sb, ctx, domainname);
+ 	STEAL_STRING(cifs_sb, ctx, nodename);
+@@ -1275,6 +1280,18 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+ 			goto cifs_parse_mount_err;
+ 		}
+ 		break;
++	case Opt_pass2:
++		kfree_sensitive(ctx->password2);
++		ctx->password2 = NULL;
++		if (strlen(param->string) == 0)
++			break;
++
++		ctx->password2 = kstrdup(param->string, GFP_KERNEL);
++		if (ctx->password2 == NULL) {
++			cifs_errorf(fc, "OOM when copying password2 string\n");
++			goto cifs_parse_mount_err;
++		}
++		break;
+ 	case Opt_ip:
+ 		if (strlen(param->string) == 0) {
+ 			ctx->got_ip = false;
+@@ -1574,6 +1591,8 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+  cifs_parse_mount_err:
+ 	kfree_sensitive(ctx->password);
+ 	ctx->password = NULL;
++	kfree_sensitive(ctx->password2);
++	ctx->password2 = NULL;
+ 	return -EINVAL;
+ }
+ 
+@@ -1678,6 +1697,8 @@ smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx)
+ 	ctx->username = NULL;
+ 	kfree_sensitive(ctx->password);
+ 	ctx->password = NULL;
++	kfree_sensitive(ctx->password2);
++	ctx->password2 = NULL;
+ 	kfree(ctx->server_hostname);
+ 	ctx->server_hostname = NULL;
+ 	kfree(ctx->UNC);
+diff --git a/fs/smb/client/fs_context.h b/fs/smb/client/fs_context.h
+index b3d51b345eaef..3744071d5b8df 100644
+--- a/fs/smb/client/fs_context.h
++++ b/fs/smb/client/fs_context.h
+@@ -138,6 +138,7 @@ enum cifs_param {
+ 	Opt_source,
+ 	Opt_user,
+ 	Opt_pass,
++	Opt_pass2,
+ 	Opt_ip,
+ 	Opt_domain,
+ 	Opt_srcaddr,
+@@ -169,6 +170,7 @@ struct smb3_fs_context {
+ 
+ 	char *username;
+ 	char *password;
++	char *password2;
+ 	char *domainname;
+ 	char *source;
+ 	char *server_hostname;
+diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
+index 74627d647818a..3edf270ceef3e 100644
+--- a/fs/smb/client/misc.c
++++ b/fs/smb/client/misc.c
+@@ -101,6 +101,7 @@ sesInfoFree(struct cifs_ses *buf_to_free)
+ 	kfree(buf_to_free->serverDomain);
+ 	kfree(buf_to_free->serverNOS);
+ 	kfree_sensitive(buf_to_free->password);
++	kfree_sensitive(buf_to_free->password2);
+ 	kfree(buf_to_free->user_name);
+ 	kfree(buf_to_free->domainName);
+ 	kfree_sensitive(buf_to_free->auth_key.response);
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index b71e32d66eba7..60793143e24c6 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -367,6 +367,17 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
+ 		}
+ 
+ 		rc = cifs_setup_session(0, ses, server, nls_codepage);
++		if ((rc == -EACCES) || (rc == -EKEYEXPIRED) || (rc == -EKEYREVOKED)) {
++			/*
++			 * Try alternate password for next reconnect (key rotation
++			 * could be enabled on the server e.g.) if an alternate
++			 * password is available and the current password is expired,
++			 * but do not swap on non pwd related errors like host down
++			 */
++			if (ses->password2)
++				swap(ses->password2, ses->password);
++		}
++
+ 		if ((rc == -EACCES) && !tcon->retry) {
+ 			mutex_unlock(&ses->session_mutex);
+ 			rc = -EHOSTDOWN;
+-- 
+2.43.0
 
-But your case is that the sockets are created in different processes.
-I'm not sure if it's possible to add sockets from different processes
-into the same reuseport_array?
-
-Added Martin who introduced BPF_PROG_TYPE_SK_REUSEPORT,
-I guess he may know the answers.
-
-Thanks.
 
