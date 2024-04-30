@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-1960-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-1962-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BB08B7067
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Apr 2024 12:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B45008B7238
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Apr 2024 13:05:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 567D71C22150
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Apr 2024 10:45:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D859F1C22772
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Apr 2024 11:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CCD12C48A;
-	Tue, 30 Apr 2024 10:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2FF12CD9C;
+	Tue, 30 Apr 2024 11:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oU9XsoDl"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xwvc6zh6"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB29712C46D;
-	Tue, 30 Apr 2024 10:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D81612C54B;
+	Tue, 30 Apr 2024 11:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714473931; cv=none; b=kpwMvCat6eLC1gxsKpw78gMuqe9tkKIlU3zHMLdBcjvRRDnv11IsVbCmviNgTqUetUXEWo2K0apCCi2fsgfIrBacId6u+ByIqS/eOO4scxN1iABkS+bK1URxx2oLm83HPqu0VRWgn7KpQfSv8ZMPJu/EZMEk1Lg+I7y54cZ3grg=
+	t=1714475149; cv=none; b=jmG9/gA00QBO6fDCF67jKmhB7tDu/kq1voQKPB+A/EpAHoaEeM9qTogJg2FkQCJgB5+QyJOGF1pzXQRnSC7xphBUAxtjwrYjHAbMlQMneR8Gw8y+Wj2NsW7JeViun+fDGKpN50aPVtl3zTRPM+UuUeslFGBUxOTUQZy5wUUcd64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714473931; c=relaxed/simple;
-	bh=hC03OIiMJ2E4WTpiCERA8rGnU2TYGA64/c3TJ4UGlt4=;
+	s=arc-20240116; t=1714475149; c=relaxed/simple;
+	bh=ysq95aXlSazU5zyelbUcdOD9YyGhOfOxAxnmZDbKpDo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FN6GjTiW3BadvO6RXxMsJ6E7NvfiJjd5Wl03d1IS5RpeNlyS10SdkU/u5xugvKXs1RssH1cvNWeKjcqpDYJrO3E2aHWKK4nP7ymTiXi+YwBmN7VDQ+92YF4ZlP0ygTX+QpkpY63ssE3mL1rtdjeomDTbKIQx4O6JrD+tSWsp8VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oU9XsoDl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6246AC2BBFC;
-	Tue, 30 Apr 2024 10:45:30 +0000 (UTC)
+	 MIME-Version; b=b2LEwe5w8r8bgy9GPyEcJC1wVU3CnKvwnTXqZEbOun59r8qgr+yQ1zRPvEfy20POvAQVckFzvCtBibeHwLtrXcY6yVd5cOMnpk8kjNBrXNWnOrG3IfpeEyXWh3lTxXpUgqsFZjr3CjRNza0NqQZ3B0z3uBqFMuX5fdZ67ol6Bqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xwvc6zh6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB970C2BBFC;
+	Tue, 30 Apr 2024 11:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714473930;
-	bh=hC03OIiMJ2E4WTpiCERA8rGnU2TYGA64/c3TJ4UGlt4=;
+	s=korg; t=1714475149;
+	bh=ysq95aXlSazU5zyelbUcdOD9YyGhOfOxAxnmZDbKpDo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oU9XsoDlh1RblRLeqiReO+FmlMLHrzABWziPnjGRYojNMD80fTZdRIs028EVzhHeF
-	 gqCHR/3Pt7AXKBP+PlWY50IBKMRPfG9U7nZr2SMX9dUft74ZdYIkcLanJYuYNig1Jr
-	 8C2nqj8Hamt/zRmzV91UIiDdnQie1uPbsTiIrb88=
+	b=xwvc6zh6hSEn+X+YrZSlbzvFu6BbCl6ACX9C61A63TttAI0Ue/9tyxsZqfgp+K2kJ
+	 g1nfv59QiqwriwyFUQPwAQEC7r4WmI/aCq+PHgB+5KOWMMO2s4ONzN5YEHOU9MAszP
+	 tDc53qJFWd3cAT6YSdTnx1CaEp38Iryu3fJE+VGU=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -49,12 +49,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-fsdevel@vger.kernel.org,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.8 001/228] cifs: Fix reacquisition of volume cookie on still-live connection
-Date: Tue, 30 Apr 2024 12:36:19 +0200
-Message-ID: <20240430103103.852592498@linuxfoundation.org>
+Subject: [PATCH 6.6 001/186] cifs: Fix reacquisition of volume cookie on still-live connection
+Date: Tue, 30 Apr 2024 12:37:33 +0200
+Message-ID: <20240430103058.058048644@linuxfoundation.org>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240430103103.806426847@linuxfoundation.org>
-References: <20240430103103.806426847@linuxfoundation.org>
+In-Reply-To: <20240430103058.010791820@linuxfoundation.org>
+References: <20240430103058.010791820@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.8-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -110,10 +110,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 18 insertions(+)
 
 diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 844afda090d05..0c3311de5dc0a 100644
+index 68fd61a564089..12a48e1d80c3f 100644
 --- a/fs/smb/client/cifsglob.h
 +++ b/fs/smb/client/cifsglob.h
-@@ -1261,7 +1261,9 @@ struct cifs_tcon {
+@@ -1247,7 +1247,9 @@ struct cifs_tcon {
  	__u32 max_cached_dirs;
  #ifdef CONFIG_CIFS_FSCACHE
  	u64 resource_id;		/* server resource id */
@@ -124,7 +124,7 @@ index 844afda090d05..0c3311de5dc0a 100644
  	struct list_head pending_opens;	/* list of incomplete opens */
  	struct cached_fids *cfids;
 diff --git a/fs/smb/client/fscache.c b/fs/smb/client/fscache.c
-index 340efce8f0529..113bde8f1e613 100644
+index a4ee801b29394..ecabc4b400535 100644
 --- a/fs/smb/client/fscache.c
 +++ b/fs/smb/client/fscache.c
 @@ -43,12 +43,23 @@ int cifs_fscache_get_super_cookie(struct cifs_tcon *tcon)
