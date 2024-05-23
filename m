@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-2091-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2089-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1907E8CD47D
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 May 2024 15:25:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 055858CD44E
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 May 2024 15:24:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93E1AB23493
-	for <lists+linux-cifs@lfdr.de>; Thu, 23 May 2024 13:25:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 823441F21D0E
+	for <lists+linux-cifs@lfdr.de>; Thu, 23 May 2024 13:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D6214B95B;
-	Thu, 23 May 2024 13:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38ED114BF89;
+	Thu, 23 May 2024 13:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mKDkYEME"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="laG+V2bY"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7904414B941;
-	Thu, 23 May 2024 13:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C0114AD3A;
+	Thu, 23 May 2024 13:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716470694; cv=none; b=HF957S2PUhrNT1uw2YHQchoue6aIKqLOQmqbQ2oL7/f8PavxTH4cd9wN5b4cWfzayu3paF6uOxZhRipvI1spcXO24r/jMr9U+U553qQ/AzVdYZr2bt3OsN90eHxKQVRM84mtRcl1xYuBzG8NINSjMCcbDB6oiiyXcV+0jVCA+5E=
+	t=1716470605; cv=none; b=u6frf2w0+hdtnrny/OaCadtyj7XTactNgxPW5bVxgYaatHUYco2gIuhb9asc/5VaO1T6x+Oe5xu9AifC5mf1E4XFl647NVkknm0bCw0kdjk5tHHkuE60oHU0h/C0b/7fYqXu37rhiZjWZrVl0CmNPbrhxxKeTBVfjDJ5hIORAJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716470694; c=relaxed/simple;
-	bh=9hIp0+VlXg/wlkW6hJzxAsexjBfYzP96CZ3pGYQIeGE=;
+	s=arc-20240116; t=1716470605; c=relaxed/simple;
+	bh=ADaCEAKHRdQ5zahjQduwuXUvIU4tJBquPeor8htHjYs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TBMhjGkPBQxhQICEF5n7PPwMn0plYGfUvUV2oDmSYFSUp0PfoPX0T59G+sqIYjgIIAm3ukk+ZBp5V0we7cTIZnr5oFVk7OevpN4m61WkhrolAGfx73ja+cznqkaKc95ewA+76abVDym1Hl4ixJSioKqRANxjXacTmpf5/TMx758=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mKDkYEME; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0126EC32782;
-	Thu, 23 May 2024 13:24:53 +0000 (UTC)
+	 MIME-Version; b=phTfFvblzK4U4axJ1ihcK9+KkytaRRDgfMc/PAfRDBdf9Bq1I9b2yPQzPYIXtZZ5Rfz1Tw76hkyvfJg0AxUIND5VHhOS/09ZV64d8+yCphMdLxi04BSC/6zOFjxaraBOGrq8Jm+NU27zuojpeyRwaUh+i/GjJwpmkHIkgVQUSOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=laG+V2bY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D2FC32781;
+	Thu, 23 May 2024 13:23:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716470694;
-	bh=9hIp0+VlXg/wlkW6hJzxAsexjBfYzP96CZ3pGYQIeGE=;
+	s=korg; t=1716470604;
+	bh=ADaCEAKHRdQ5zahjQduwuXUvIU4tJBquPeor8htHjYs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mKDkYEMErzbtnlpU29ZSmf130nWdgYCJMHfnMIO2lkV4PFQz05BF0Pf+J+ycvQlzR
-	 LImyGYMPmi5z7+uQeLnA3lsrnDWhP0TJ0M2P7q0V0VvcvkVfEcJhSWnqkN/8Cjy1cl
-	 XQhrorjAw0LESX2mhzLTqBrw+JpKXk3YkHZ5gnGQ=
+	b=laG+V2bYjpbXtNRGLDguTdGR5w7704/c4FDB0awaSGYkbYTUSbCI3/CXaG9VLKl/C
+	 HVXFZPKwxPSGNjtQh8g9fQflGb9qG6XJvVk30DHjHL48A9dTmx8vs4pGcmbxUkYLz7
+	 L4TdbjcbEhesefOq5+E3DYkXfDG9RhWr9Liz/5/I=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,9 +50,9 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-cifs@vger.kernel.org,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 024/102] ksmbd: auth: fix most kernel-doc warnings
-Date: Thu, 23 May 2024 15:12:49 +0200
-Message-ID: <20240523130343.375559595@linuxfoundation.org>
+Subject: [PATCH 6.6 025/102] ksmbd: vfs: fix all kernel-doc warnings
+Date: Thu, 23 May 2024 15:12:50 +0200
+Message-ID: <20240523130343.412475327@linuxfoundation.org>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240523130342.462912131@linuxfoundation.org>
 References: <20240523130342.462912131@linuxfoundation.org>
@@ -73,31 +73,35 @@ Content-Transfer-Encoding: 8bit
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit b4068f1ef36d634ef44ece894738284d756d6627 ]
+[ Upstream commit 8d99c1131d9d03053b7b1e1245b8f6e6846d9c69 ]
 
-Fix 12 of 17 kernel-doc warnings in auth.c:
+Fix all kernel-doc warnings in vfs.c:
 
-auth.c:221: warning: Function parameter or member 'conn' not described in 'ksmbd_auth_ntlmv2'
-auth.c:221: warning: Function parameter or member 'cryptkey' not described in 'ksmbd_auth_ntlmv2'
-auth.c:305: warning: Function parameter or member 'blob_len' not described in 'ksmbd_decode_ntlmssp_auth_blob'
-auth.c:305: warning: Function parameter or member 'conn' not described in 'ksmbd_decode_ntlmssp_auth_blob'
-auth.c:305: warning: Excess function parameter 'usr' description in 'ksmbd_decode_ntlmssp_auth_blob'
-auth.c:385: warning: Function parameter or member 'blob_len' not described in 'ksmbd_decode_ntlmssp_neg_blob'
-auth.c:385: warning: Function parameter or member 'conn' not described in 'ksmbd_decode_ntlmssp_neg_blob'
-auth.c:385: warning: Excess function parameter 'rsp' description in 'ksmbd_decode_ntlmssp_neg_blob'
-auth.c:385: warning: Excess function parameter 'sess' description in 'ksmbd_decode_ntlmssp_neg_blob'
-auth.c:413: warning: Function parameter or member 'conn' not described in 'ksmbd_build_ntlmssp_challenge_blob'
-auth.c:413: warning: Excess function parameter 'rsp' description in 'ksmbd_build_ntlmssp_challenge_blob'
-auth.c:413: warning: Excess function parameter 'sess' description in 'ksmbd_build_ntlmssp_challenge_blob'
-
-The other 5 are only present when a W=1 kernel build is done or
-when scripts/kernel-doc is run with -Wall. They are:
-
-auth.c:81: warning: No description found for return value of 'ksmbd_gen_sess_key'
-auth.c:385: warning: No description found for return value of 'ksmbd_decode_ntlmssp_neg_blob'
-auth.c:413: warning: No description found for return value of 'ksmbd_build_ntlmssp_challenge_blob'
-auth.c:577: warning: No description found for return value of 'ksmbd_sign_smb2_pdu'
-auth.c:628: warning: No description found for return value of 'ksmbd_sign_smb3_pdu'
+vfs.c:54: warning: Function parameter or member 'parent' not described in 'ksmbd_vfs_lock_parent'
+vfs.c:54: warning: Function parameter or member 'child' not described in 'ksmbd_vfs_lock_parent'
+vfs.c:54: warning: No description found for return value of 'ksmbd_vfs_lock_parent'
+vfs.c:372: warning: Function parameter or member 'fp' not described in 'ksmbd_vfs_read'
+vfs.c:372: warning: Excess function parameter 'fid' description in 'ksmbd_vfs_read'
+vfs.c:489: warning: Function parameter or member 'fp' not described in 'ksmbd_vfs_write'
+vfs.c:489: warning: Excess function parameter 'fid' description in 'ksmbd_vfs_write'
+vfs.c:555: warning: Function parameter or member 'path' not described in 'ksmbd_vfs_getattr'
+vfs.c:555: warning: Function parameter or member 'stat' not described in 'ksmbd_vfs_getattr'
+vfs.c:555: warning: Excess function parameter 'work' description in 'ksmbd_vfs_getattr'
+vfs.c:555: warning: Excess function parameter 'fid' description in 'ksmbd_vfs_getattr'
+vfs.c:555: warning: Excess function parameter 'attrs' description in 'ksmbd_vfs_getattr'
+vfs.c:572: warning: Function parameter or member 'p_id' not described in 'ksmbd_vfs_fsync'
+vfs.c:595: warning: Function parameter or member 'work' not described in 'ksmbd_vfs_remove_file'
+vfs.c:595: warning: Function parameter or member 'path' not described in 'ksmbd_vfs_remove_file'
+vfs.c:595: warning: Excess function parameter 'name' description in 'ksmbd_vfs_remove_file'
+vfs.c:633: warning: Function parameter or member 'work' not described in 'ksmbd_vfs_link'
+vfs.c:805: warning: Function parameter or member 'fp' not described in 'ksmbd_vfs_truncate'
+vfs.c:805: warning: Excess function parameter 'fid' description in 'ksmbd_vfs_truncate'
+vfs.c:846: warning: Excess function parameter 'size' description in 'ksmbd_vfs_listxattr'
+vfs.c:953: warning: Function parameter or member 'option' not described in 'ksmbd_vfs_set_fadvise'
+vfs.c:953: warning: Excess function parameter 'options' description in 'ksmbd_vfs_set_fadvise'
+vfs.c:1167: warning: Function parameter or member 'um' not described in 'ksmbd_vfs_lookup_in_dir'
+vfs.c:1203: warning: Function parameter or member 'work' not described in 'ksmbd_vfs_kern_path_locked'
+vfs.c:1641: warning: No description found for return value of 'ksmbd_vfs_init_kstat'
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Namjae Jeon <linkinjeon@kernel.org>
@@ -109,58 +113,132 @@ Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/server/auth.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ fs/smb/server/vfs.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/fs/smb/server/auth.c b/fs/smb/server/auth.c
-index 229a6527870d0..09b20039636e7 100644
---- a/fs/smb/server/auth.c
-+++ b/fs/smb/server/auth.c
-@@ -208,10 +208,12 @@ static int calc_ntlmv2_hash(struct ksmbd_conn *conn, struct ksmbd_session *sess,
+diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
+index 626406b0cf4ac..2558119969359 100644
+--- a/fs/smb/server/vfs.c
++++ b/fs/smb/server/vfs.c
+@@ -49,6 +49,10 @@ static void ksmbd_vfs_inherit_owner(struct ksmbd_work *work,
  
  /**
-  * ksmbd_auth_ntlmv2() - NTLMv2 authentication handler
-- * @sess:	session of connection
-+ * @conn:		connection
-+ * @sess:		session of connection
-  * @ntlmv2:		NTLMv2 challenge response
-  * @blen:		NTLMv2 blob length
-  * @domain_name:	domain name
-+ * @cryptkey:		session crypto key
-  *
-  * Return:	0 on success, error number on error
+  * ksmbd_vfs_lock_parent() - lock parent dentry if it is stable
++ * @parent: parent dentry
++ * @child: child dentry
++ *
++ * Returns: %0 on success, %-ENOENT if the parent dentry is not stable
   */
-@@ -294,7 +296,8 @@ int ksmbd_auth_ntlmv2(struct ksmbd_conn *conn, struct ksmbd_session *sess,
-  * ksmbd_decode_ntlmssp_auth_blob() - helper function to construct
-  * authenticate blob
-  * @authblob:	authenticate blob source pointer
-- * @usr:	user details
-+ * @blob_len:	length of the @authblob message
-+ * @conn:	connection
-  * @sess:	session of connection
-  *
-  * Return:	0 on success, error number on error
-@@ -376,8 +379,8 @@ int ksmbd_decode_ntlmssp_auth_blob(struct authenticate_message *authblob,
-  * ksmbd_decode_ntlmssp_neg_blob() - helper function to construct
-  * negotiate blob
-  * @negblob: negotiate blob source pointer
-- * @rsp:     response header pointer to be updated
-- * @sess:    session of connection
-+ * @blob_len:	length of the @authblob message
-+ * @conn:	connection
-  *
+ int ksmbd_vfs_lock_parent(struct dentry *parent, struct dentry *child)
+ {
+@@ -360,7 +364,7 @@ static int check_lock_range(struct file *filp, loff_t start, loff_t end,
+ /**
+  * ksmbd_vfs_read() - vfs helper for smb file read
+  * @work:	smb work
+- * @fid:	file id of open file
++ * @fp:		ksmbd file pointer
+  * @count:	read byte count
+  * @pos:	file pos
+  * @rbuf:	read data buffer
+@@ -474,7 +478,7 @@ static int ksmbd_vfs_stream_write(struct ksmbd_file *fp, char *buf, loff_t *pos,
+ /**
+  * ksmbd_vfs_write() - vfs helper for smb file write
+  * @work:	work
+- * @fid:	file id of open file
++ * @fp:		ksmbd file pointer
+  * @buf:	buf containing data for writing
+  * @count:	read byte count
+  * @pos:	file pos
+@@ -545,10 +549,8 @@ int ksmbd_vfs_write(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 
+ /**
+  * ksmbd_vfs_getattr() - vfs helper for smb getattr
+- * @work:	work
+- * @fid:	file id of open file
+- * @attrs:	inode attributes
+- *
++ * @path:	path of dentry
++ * @stat:	pointer to returned kernel stat structure
+  * Return:	0 on success, otherwise error
   */
- int ksmbd_decode_ntlmssp_neg_blob(struct negotiate_message *negblob,
-@@ -403,8 +406,7 @@ int ksmbd_decode_ntlmssp_neg_blob(struct negotiate_message *negblob,
-  * ksmbd_build_ntlmssp_challenge_blob() - helper function to construct
-  * challenge blob
-  * @chgblob: challenge blob source pointer to initialize
-- * @rsp:     response header pointer to be updated
-- * @sess:    session of connection
-+ * @conn:	connection
+ int ksmbd_vfs_getattr(const struct path *path, struct kstat *stat)
+@@ -565,6 +567,7 @@ int ksmbd_vfs_getattr(const struct path *path, struct kstat *stat)
+  * ksmbd_vfs_fsync() - vfs helper for smb fsync
+  * @work:	work
+  * @fid:	file id of open file
++ * @p_id:	persistent file id
   *
+  * Return:	0 on success, otherwise error
   */
- unsigned int
+@@ -587,7 +590,8 @@ int ksmbd_vfs_fsync(struct ksmbd_work *work, u64 fid, u64 p_id)
+ 
+ /**
+  * ksmbd_vfs_remove_file() - vfs helper for smb rmdir or unlink
+- * @name:	directory or file name that is relative to share
++ * @work:	work
++ * @path:	path of dentry
+  *
+  * Return:	0 on success, otherwise error
+  */
+@@ -623,6 +627,7 @@ int ksmbd_vfs_remove_file(struct ksmbd_work *work, const struct path *path)
+ 
+ /**
+  * ksmbd_vfs_link() - vfs helper for creating smb hardlink
++ * @work:	work
+  * @oldname:	source file name
+  * @newname:	hardlink name that is relative to share
+  *
+@@ -800,7 +805,7 @@ int ksmbd_vfs_rename(struct ksmbd_work *work, const struct path *old_path,
+ /**
+  * ksmbd_vfs_truncate() - vfs helper for smb file truncate
+  * @work:	work
+- * @fid:	file id of old file
++ * @fp:		ksmbd file pointer
+  * @size:	truncate to given size
+  *
+  * Return:	0 on success, otherwise error
+@@ -843,7 +848,6 @@ int ksmbd_vfs_truncate(struct ksmbd_work *work,
+  * ksmbd_vfs_listxattr() - vfs helper for smb list extended attributes
+  * @dentry:	dentry of file for listing xattrs
+  * @list:	destination buffer
+- * @size:	destination buffer length
+  *
+  * Return:	xattr list length on success, otherwise error
+  */
+@@ -952,7 +956,7 @@ int ksmbd_vfs_setxattr(struct mnt_idmap *idmap,
+ /**
+  * ksmbd_vfs_set_fadvise() - convert smb IO caching options to linux options
+  * @filp:	file pointer for IO
+- * @options:	smb IO options
++ * @option:	smb IO options
+  */
+ void ksmbd_vfs_set_fadvise(struct file *filp, __le32 option)
+ {
+@@ -1164,6 +1168,7 @@ static bool __caseless_lookup(struct dir_context *ctx, const char *name,
+  * @dir:	path info
+  * @name:	filename to lookup
+  * @namelen:	filename length
++ * @um:		&struct unicode_map to use
+  *
+  * Return:	0 on success, otherwise error
+  */
+@@ -1194,6 +1199,7 @@ static int ksmbd_vfs_lookup_in_dir(const struct path *dir, char *name,
+ 
+ /**
+  * ksmbd_vfs_kern_path_locked() - lookup a file and get path info
++ * @work:	work
+  * @name:		file path that is relative to share
+  * @flags:		lookup flags
+  * @parent_path:	if lookup succeed, return parent_path info
+@@ -1641,6 +1647,8 @@ int ksmbd_vfs_get_dos_attrib_xattr(struct mnt_idmap *idmap,
+  * ksmbd_vfs_init_kstat() - convert unix stat information to smb stat format
+  * @p:          destination buffer
+  * @ksmbd_kstat:      ksmbd kstat wrapper
++ *
++ * Returns: pointer to the converted &struct file_directory_info
+  */
+ void *ksmbd_vfs_init_kstat(char **p, struct ksmbd_kstat *ksmbd_kstat)
+ {
 -- 
 2.43.0
 
