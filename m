@@ -1,66 +1,96 @@
-Return-Path: <linux-cifs+bounces-2142-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2145-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 487328FE994
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jun 2024 16:15:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32B418FF23B
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jun 2024 18:19:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F06AB1F23D4A
-	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jun 2024 14:15:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5391F26967
+	for <lists+linux-cifs@lfdr.de>; Thu,  6 Jun 2024 16:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F148219AD4E;
-	Thu,  6 Jun 2024 14:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99007328A0;
+	Thu,  6 Jun 2024 16:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iXabhfJV"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nkWpYPQC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y8Ox3RZo";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nkWpYPQC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y8Ox3RZo"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD119885F;
-	Thu,  6 Jun 2024 14:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D790919A2A7
+	for <linux-cifs@vger.kernel.org>; Thu,  6 Jun 2024 16:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717683042; cv=none; b=OAn0ojc7h2jTRUH7L+9+ZpYyuKRoWq+u+uyXf6A05m9w9cYHVPLBzB/+UHDrA9PaW6ZT6bVxDNOt5KvWg1sm+MWyBr84ddxtdsCI5Ytxh9s0rF67B28Md0qy9kGKEDaoMsdAQ7va05ZNPmQKwYXCNKlncHlpX/1OQwwANglvvd8=
+	t=1717690449; cv=none; b=msGKw7Iq+uL49BI2k96Lq0WpGTxHhgYdoAJFVR4X+aJlYQHBMWayX/0+NbceLtX4t16AETVWfaWIiQBBRVk1w6Fb+JTpyRe/9gld5Ob81E8jTnjNK9bXaUG7Qc9rFLROsDdgsLXEr1rcA4RriqV5WwMElvV01zEplaONMAnlgqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717683042; c=relaxed/simple;
-	bh=1bl/YBnM4NrsMyWpLOZWjdYDE2E+LJUEceW+1HjrIXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LLbO75GnzZXFxshSrDPCk0qqs2a5TvjgmBmA0IwmeBzC6C1+Nj0ePDd7mXLEnmMfcG3a7N/sVIQzcBFDTfrDYxk6jhFKXmlfoLcflBP9kefg5OHOlGshWRCVpLHpUu9pWw64eobM8nPKJiH0PZ4o6sh/RJaKYiDnpm2GRWB9LqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iXabhfJV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5243C32781;
-	Thu,  6 Jun 2024 14:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1717683042;
-	bh=1bl/YBnM4NrsMyWpLOZWjdYDE2E+LJUEceW+1HjrIXw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iXabhfJVZBuP7C7MKhPVfXkTD2DVjipNrqMMPnpWvI6SiVJEFl5hDer6GofSJAgDM
-	 PMjPTcm+NkpSG7GAuACAoe+g+vzMFW7sAWigOGglHpXE5818O4Re9CZL0jrNn+ku73
-	 5m569DVchCKHII2vhIw6X7mQerKVzC5Al0xb+DvI=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Shyam Prasad N <nspmangalore@gmail.com>,
-	Rohith Surabattula <rohiths.msft@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	linux-cifs@vger.kernel.org,
-	netfs@lists.linux.dev,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.9 279/374] cifs: Fix missing set of remote_i_size
-Date: Thu,  6 Jun 2024 16:04:18 +0200
-Message-ID: <20240606131701.244247051@linuxfoundation.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240606131651.683718371@linuxfoundation.org>
-References: <20240606131651.683718371@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1717690449; c=relaxed/simple;
+	bh=0RulEnq9guJU7+LtzS2kXmHpsCN6HC+dXbm2Sy8oZIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JocPSl4/CXsYmEC7QOJU1Kmk0GuQtw7wMhzUBWzHJ2l7lFVwGKtYCfQNMhsM5StT64h/pRhkPeqjaluFRk6Rg0l5WYGjJzNpG/rIT92Am1v0cw93zdfSwNjtmkDN7ivtGexPz2L/1NRZScPxZOZaP+gHsa1xU0z+uvHL4m8v8ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nkWpYPQC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Y8Ox3RZo; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nkWpYPQC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Y8Ox3RZo; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 0E3181FB3C;
+	Thu,  6 Jun 2024 16:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717690446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=2EzfZ+/QKwMjiDV96fyfQhG5Lx7Dly0FsbaPIe81zdY=;
+	b=nkWpYPQCBYfI2lH407CRH22lVK1gSmU3p3ELyxPZu3irBq6nrCCDthPBsUc8xtFUJquQYB
+	djJtjt3Zq/k98oWmvwKi/pVhIyelhyoRA1icNuzNzYwzpTjEhCfbkqoxTC89vGZj8ncYkc
+	jmfL2alVEQrKn0HXPDQR6/lIx3wg9PY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717690446;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=2EzfZ+/QKwMjiDV96fyfQhG5Lx7Dly0FsbaPIe81zdY=;
+	b=Y8Ox3RZo22vnr0GoinoO2yR/pUl3LIHQ8AxKWUdUM4luwpp0Bdg9YXmaVHB8VIk6vpLpUf
+	TSUvKooY7bPmGECg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717690446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=2EzfZ+/QKwMjiDV96fyfQhG5Lx7Dly0FsbaPIe81zdY=;
+	b=nkWpYPQCBYfI2lH407CRH22lVK1gSmU3p3ELyxPZu3irBq6nrCCDthPBsUc8xtFUJquQYB
+	djJtjt3Zq/k98oWmvwKi/pVhIyelhyoRA1icNuzNzYwzpTjEhCfbkqoxTC89vGZj8ncYkc
+	jmfL2alVEQrKn0HXPDQR6/lIx3wg9PY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717690446;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=2EzfZ+/QKwMjiDV96fyfQhG5Lx7Dly0FsbaPIe81zdY=;
+	b=Y8Ox3RZo22vnr0GoinoO2yR/pUl3LIHQ8AxKWUdUM4luwpp0Bdg9YXmaVHB8VIk6vpLpUf
+	TSUvKooY7bPmGECg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9116E13A1E;
+	Thu,  6 Jun 2024 16:14:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id IRN4Fk3gYWYdfwAAD6G6ig
+	(envelope-from <ematsumiya@suse.de>); Thu, 06 Jun 2024 16:14:05 +0000
+From: Enzo Matsumiya <ematsumiya@suse.de>
+To: linux-cifs@vger.kernel.org
+Cc: smfrench@gmail.com,
+	pc@manguebit.com,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com
+Subject: [PATCH] smb: client: fix deadlock in smb2_find_smb_tcon()
+Date: Thu,  6 Jun 2024 13:13:13 -0300
+Message-ID: <20240606161313.25521-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -68,98 +98,55 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -2.09
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.09 / 50.00];
+	BAYES_HAM(-2.29)[96.68%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_DN_NONE(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,manguebit.com,microsoft.com,talpey.com];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
 
-6.9-stable review patch.  If anyone has any objections, please let me know.
+Unlock cifs_tcp_ses_lock before calling cifs_put_smb_ses() to avoid such
+deadlock.
 
-------------------
-
-From: David Howells <dhowells@redhat.com>
-
-[ Upstream commit 93a43155127fec0f8cc942d63b76668c2f8f69fa ]
-
-Occasionally, the generic/001 xfstest will fail indicating corruption in
-one of the copy chains when run on cifs against a server that supports
-FSCTL_DUPLICATE_EXTENTS_TO_FILE (eg. Samba with a share on btrfs).  The
-problem is that the remote_i_size value isn't updated by cifs_setsize()
-when called by smb2_duplicate_extents(), but i_size *is*.
-
-This may cause cifs_remap_file_range() to then skip the bit after calling
-->duplicate_extents() that sets sizes.
-
-Fix this by calling netfs_resize_file() in smb2_duplicate_extents() before
-calling cifs_setsize() to set i_size.
-
-This means we don't then need to call netfs_resize_file() upon return from
-->duplicate_extents(), but we also fix the test to compare against the pre-dup
-inode size.
-
-[Note that this goes back before the addition of remote_i_size with the
-netfs_inode struct.  It should probably have been setting cifsi->server_eof
-previously.]
-
-Fixes: cfc63fc8126a ("smb3: fix cached file size problems in duplicate extents (reflink)")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Paulo Alcantara <pc@manguebit.com>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cifs@vger.kernel.org
-cc: netfs@lists.linux.dev
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
 ---
- fs/smb/client/cifsfs.c  | 6 +++---
- fs/smb/client/smb2ops.c | 1 +
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ fs/smb/client/smb2transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
-index c8449f43856c5..4fb21affe4e11 100644
---- a/fs/smb/client/cifsfs.c
-+++ b/fs/smb/client/cifsfs.c
-@@ -1277,7 +1277,7 @@ static loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
- 	struct cifsFileInfo *smb_file_src = src_file->private_data;
- 	struct cifsFileInfo *smb_file_target = dst_file->private_data;
- 	struct cifs_tcon *target_tcon, *src_tcon;
--	unsigned long long destend, fstart, fend, new_size;
-+	unsigned long long destend, fstart, fend, old_size, new_size;
- 	unsigned int xid;
- 	int rc;
- 
-@@ -1344,6 +1344,7 @@ static loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
- 		goto unlock;
- 	if (fend > target_cifsi->netfs.zero_point)
- 		target_cifsi->netfs.zero_point = fend + 1;
-+	old_size = target_cifsi->netfs.remote_i_size;
- 
- 	/* Discard all the folios that overlap the destination region. */
- 	cifs_dbg(FYI, "about to discard pages %llx-%llx\n", fstart, fend);
-@@ -1356,9 +1357,8 @@ static loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
- 	if (target_tcon->ses->server->ops->duplicate_extents) {
- 		rc = target_tcon->ses->server->ops->duplicate_extents(xid,
- 			smb_file_src, smb_file_target, off, len, destoff);
--		if (rc == 0 && new_size > i_size_read(target_inode)) {
-+		if (rc == 0 && new_size > old_size) {
- 			truncate_setsize(target_inode, new_size);
--			netfs_resize_file(&target_cifsi->netfs, new_size, true);
- 			fscache_resize_cookie(cifs_inode_cookie(target_inode),
- 					      new_size);
- 		}
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 28f0b7d19d534..6fea0aed43461 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -2028,6 +2028,7 @@ smb2_duplicate_extents(const unsigned int xid,
- 		 * size will be queried on next revalidate, but it is important
- 		 * to make sure that file's cached size is updated immediately
- 		 */
-+		netfs_resize_file(netfs_inode(inode), dest_off + len, true);
- 		cifs_setsize(inode, dest_off + len);
+diff --git a/fs/smb/client/smb2transport.c b/fs/smb/client/smb2transport.c
+index 02135a605305..1476c445cadc 100644
+--- a/fs/smb/client/smb2transport.c
++++ b/fs/smb/client/smb2transport.c
+@@ -216,8 +216,8 @@ smb2_find_smb_tcon(struct TCP_Server_Info *server, __u64 ses_id, __u32  tid)
  	}
- 	rc = SMB2_ioctl(xid, tcon, trgtfile->fid.persistent_fid,
+ 	tcon = smb2_find_smb_sess_tcon_unlocked(ses, tid);
+ 	if (!tcon) {
+-		cifs_put_smb_ses(ses);
+ 		spin_unlock(&cifs_tcp_ses_lock);
++		cifs_put_smb_ses(ses);
+ 		return NULL;
+ 	}
+ 	spin_unlock(&cifs_tcp_ses_lock);
 -- 
-2.43.0
-
-
+2.45.1
 
 
