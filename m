@@ -1,46 +1,46 @@
-Return-Path: <linux-cifs+bounces-2314-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2315-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71669933005
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2024 20:33:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75F7493301D
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2024 20:35:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26AB01F22F2C
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2024 18:33:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D84E1C22295
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Jul 2024 18:35:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF0E1A0AE5;
-	Tue, 16 Jul 2024 18:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D811A0AE3;
+	Tue, 16 Jul 2024 18:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfXxSW6P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RrSees5s"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BC51A0AE0;
-	Tue, 16 Jul 2024 18:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941A11A08DB;
+	Tue, 16 Jul 2024 18:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721154753; cv=none; b=tQVUeclg9K6b6agjrSlCtceHtzzK4WZCWjbIabcUxVmmivzW8o4GzIrzGGSefVnRBpIGzHVhVU6N8NuouemyVwgm2om8vdXl7vM5GN6uNHtixaHNRVjs2XKrr65op59Aw4B9/57bVxsR6yxSfWCekbAUYX/AfAY8LNZz+TuyrAE=
+	t=1721154809; cv=none; b=qx2PvoY41wXT2pllrNkd+KtnXX1g1ahUr/53fM+N44jFjpOcYJLLeJ9SFjGNvGPtjuGucJO7pKIudyt42qap0Dj7OFq6qNih6Qw56omA6FKKA7ph9gbj33pG0nQcbuPrtHJYhHimgmXplwpt3akvO/9tl43kk3VBRh44PMG/tPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721154753; c=relaxed/simple;
-	bh=9DhenWku/QTRBJJBDZqUshT/VSPT0hls4j86hWsr/tI=;
+	s=arc-20240116; t=1721154809; c=relaxed/simple;
+	bh=apg+f4AOfs9ttQraXX0QIty1m/VFNd/tNLm+Eu3cbd0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gNzuJwPHWmEDsXtfyxyVEzFkFBt/6DEHYqVVUH9m94y/YUn64T4MdtS+Yh7Fo+Hea88OXvj59qzt8B5dsQNWToW107z6qGBBuqdXAoV0DIu8swITtrP4+ii3lEuU6Q8Shys+N4qcrlKGR5c1eBnmVop19Ns+Cu5Wc6rNHYnznCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfXxSW6P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAFBC4AF0E;
-	Tue, 16 Jul 2024 18:32:31 +0000 (UTC)
+	 MIME-Version; b=r8uiW10Qo07utYCmsl8E3Tf23AbLhM7foaOoPUF2/FQzBm0rMXFCr0KiIcjkfMowbSjcQ8y2MQJm58oKvUJYxx4c2nKoyaDtkVcjLAfCGtnXM860cYotfz2UQXaBRYKNDEQwDgw51dNXmEP4Oz216RibMq11zj2BpXN1lIyqNlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RrSees5s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260F8C4AF13;
+	Tue, 16 Jul 2024 18:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721154752;
-	bh=9DhenWku/QTRBJJBDZqUshT/VSPT0hls4j86hWsr/tI=;
+	s=k20201202; t=1721154809;
+	bh=apg+f4AOfs9ttQraXX0QIty1m/VFNd/tNLm+Eu3cbd0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MfXxSW6PMHUi1tDUYz/X9o9dKE+RoBu9yLxqqPtVwtxzc3FfPP9YABAIjD/6VFfjd
-	 wJACGCdXHJj/IBt4i4bsrYnnhPUUWg+xtybTv4APBJDA52QdxsY5ylro8Ed1fuGu+d
-	 q0bFeOdSO/8uGnpPHOGtadFA3+vrnimTfKBXu1n3USaAgZowJDVru5NMU04AnTDA1S
-	 Ymda5cpblSB6tOCQky1DALelrihdI9NrGeDVhWRvigLTXkCwop+WCr3A50jG/H5YR/
-	 LXrS8a7bdbpZzOFPcWBVKEOa2UDmGZMNcK2LC/8V5riujKLBwjIy2C1kOhYrICpkqN
-	 z39zTS0H7gETA==
+	b=RrSees5sGZjWC81Bxk9piEjN4b20Vuz4/jFlnRzHfCyIwN0ab1ynUxcB7uRmUbjfi
+	 ODqaKKTvmoFdNUi8VfDEepGDVkFNFkQOZXMv3JV+ThmB8eozYZUJ8roMq8+4+HzUFM
+	 G9CnXiFDdR4U0l50wm13QJC0PZPe8F3dM9daFCya6dezEqhZyRZISe+IkeHMQ9N5I8
+	 AeoXUdWeZo8mYOyMwZkufFRRv7S5MxeyXSZTcMe9TmEUJgjANwFemKfHO9ENSI4KxS
+	 fQsnZgtKEKCVzvXa/eX54ZcYuS/NS+DlLFd4fR/fMeHhRYuFbOZcVLMbT00HWB10zL
+	 l+WpMCdIZ5Wrg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Namjae Jeon <linkinjeon@kernel.org>,
 	sfrench@samba.org,
 	linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.9 05/11] ksmbd: return FILE_DEVICE_DISK instead of super magic
-Date: Tue, 16 Jul 2024 14:31:49 -0400
-Message-ID: <20240716183222.2813968-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 2/8] ksmbd: return FILE_DEVICE_DISK instead of super magic
+Date: Tue, 16 Jul 2024 14:32:59 -0400
+Message-ID: <20240716183324.2814275-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240716183222.2813968-1-sashal@kernel.org>
-References: <20240716183222.2813968-1-sashal@kernel.org>
+In-Reply-To: <20240716183324.2814275-1-sashal@kernel.org>
+References: <20240716183324.2814275-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.9
+X-stable-base: Linux 6.6.40
 Content-Transfer-Encoding: 8bit
 
 From: Namjae Jeon <linkinjeon@kernel.org>
@@ -84,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 41 insertions(+), 2 deletions(-)
 
 diff --git a/fs/smb/common/smb2pdu.h b/fs/smb/common/smb2pdu.h
-index 202ff91281560..694d2b4a4ad99 100644
+index 8d10be1fe18a8..c3ee42188d252 100644
 --- a/fs/smb/common/smb2pdu.h
 +++ b/fs/smb/common/smb2pdu.h
 @@ -917,6 +917,40 @@ struct smb2_query_directory_rsp {
@@ -129,7 +129,7 @@ index 202ff91281560..694d2b4a4ad99 100644
   * Maximum number of iovs we need for a set-info request.
   * The largest one is rename/hardlink
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index e7e07891781b3..786cd45fe18f1 100644
+index 6397f77b6750c..ac03ae34be015 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
 @@ -5314,8 +5314,13 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
