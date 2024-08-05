@@ -1,46 +1,46 @@
-Return-Path: <linux-cifs+bounces-2418-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2419-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D2D9480F4
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Aug 2024 20:00:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 394EA94811C
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 Aug 2024 20:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AF261F20D3C
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Aug 2024 18:00:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0C7CB24A13
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 Aug 2024 18:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889BC170A38;
-	Mon,  5 Aug 2024 17:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB3E179965;
+	Mon,  5 Aug 2024 17:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XodVjAn0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTA1DBtM"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC65170A32;
-	Mon,  5 Aug 2024 17:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137DA179958;
+	Mon,  5 Aug 2024 17:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722880631; cv=none; b=V9PtBCqWNCXYXFD4TVikuKGB3Jtt8sw69Sq+36rJygbZdSx/1VErviywuywcdmcjCBjj/Gk62g5kB2SiA5DNLFqp0Ygn9sMZhA7VG1Vbx7ue0m+8bi5yr8m0J2U3vX6IQ60L4tnkPeGHDGVuEdj9XSuWKt79X2G2wE3MBWZp/9A=
+	t=1722880708; cv=none; b=WtNaKmjuMOcsqL+CkhP+dUIGOKpJzzAied8IWG8bTuDskKcXw2lMnxKoem680vC8CJP/+g5qH5cZ1OUYDCxeFoseJU3Jpjobci2Nga5W4B/Pz8u5nH+jTo3b4uS13SvRW7L5rIZfBI3xdtD/6ZaXPNSmKOoW5zDaWmcN9Wt8ZlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722880631; c=relaxed/simple;
-	bh=w/jx80tZ1sEHuS88DDR4MnzexGPt8gX+7VH6MO2y/Tw=;
+	s=arc-20240116; t=1722880708; c=relaxed/simple;
+	bh=mvjVhW69jJxI6YiksH+FTLTcA9Vyz0bmDcBXEarPZ+U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZyT7cSWIsbDoyi5c5VGwvRDMjSgV4ai6fsxjJLo1qT7xJq5C7na32xKMPBF7xB7I9qIeNqvpbRsJIuc09l8iMbxmWGE5gmoszsJetO/omlobm0yOl9FORCqZp4BJs4rfboZava37McNijPmdPnPeUp4kq0jHYLvLFT+Y2VUNBcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XodVjAn0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4C7C32782;
-	Mon,  5 Aug 2024 17:57:09 +0000 (UTC)
+	 MIME-Version; b=ZjFK/HABDd3cgAmrBJBGl0GRcpTRxidSs/3Ti81Tllq0fxDtzzAWL9skiecelXhuO2NwRBlX+ELNBjtd64FGjW87WEdApJ/GQTgRLLybyVlK00yg1RT3BND5Z+R90bKv1JPyqgz/r1vF2slmj0RrFEVui0510ruVKLFduhY0qM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTA1DBtM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6C1C32782;
+	Mon,  5 Aug 2024 17:58:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722880631;
-	bh=w/jx80tZ1sEHuS88DDR4MnzexGPt8gX+7VH6MO2y/Tw=;
+	s=k20201202; t=1722880707;
+	bh=mvjVhW69jJxI6YiksH+FTLTcA9Vyz0bmDcBXEarPZ+U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XodVjAn014gStI2wM3b5DUohHwNQrpyStjvMePwQO+6c+6y7q6Qf3IJKAINvC0FjL
-	 y0gVr1NfQE14apKhpdyC6BkWlrGA8Ix+H1bCXC+pzn6mzAh3zCa5FH2JjAJxiodfUe
-	 Ikkxcs2QAoSwO87Y6O5U9Z2q3uuBUFPjafQsX6PkvJcrSqqazre2drBnnaKQYftQ/O
-	 tSfj2F4WlHXG8yzc1O4qPp39g02z15sRJAGlEi62BXY7Ehw4QseHzz4WGZJ8ggCeej
-	 1rVnUHLPV5nBuIBleFHJA26Y58cMaTeZJxzA2kouL4o9BGrwST9qlUdNdtzFVltxj2
-	 lF8EXVIhIQOSg==
+	b=lTA1DBtM1vDO1buwL53wVcsfO8kt6pVMkW4PflV3gbhjX82R6jf6P+FNSPHKTawhi
+	 peoF288vrO+72yW3DuTOZhcgx3zgsXzfJLX+oKA1MCVGQEXp9pmnLpYOzyDim57S3X
+	 PvWvhNsbcA7JMhcvUKPqLpl/HRFbH7N8d9sMawDRkiLuKY8Pz4jsoIdtTWTpVr77rt
+	 xtT8Od18/efeByPK3q+Q8Tz9QKmylAlEOPf7uxq0H2Dwn9q9XBWchWdoZuEJFK7tQq
+	 QGjO5G8MbkSs22ClDHOfxuIikhObUkOEIPVbDLMUXa8KZS/01sl9qjdABZCa6g3pKT
+	 NWVHUUyzObY/Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Paulo Alcantara <pc@manguebit.com>,
 	sfrench@samba.org,
 	linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.10 16/16] smb: client: fix FSCTL_GET_REPARSE_POINT against NetApp
-Date: Mon,  5 Aug 2024 13:55:48 -0400
-Message-ID: <20240805175618.3249561-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 15/15] smb: client: fix FSCTL_GET_REPARSE_POINT against NetApp
+Date: Mon,  5 Aug 2024 13:57:12 -0400
+Message-ID: <20240805175736.3252615-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240805175618.3249561-1-sashal@kernel.org>
-References: <20240805175618.3249561-1-sashal@kernel.org>
+In-Reply-To: <20240805175736.3252615-1-sashal@kernel.org>
+References: <20240805175736.3252615-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.3
+X-stable-base: Linux 6.6.44
 Content-Transfer-Encoding: 8bit
 
 From: Paulo Alcantara <pc@manguebit.com>
@@ -93,7 +93,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
-index 5c02a12251c84..f80bffafb878f 100644
+index 86f8c81791374..cd7b8ab84e5ca 100644
 --- a/fs/smb/client/smb2inode.c
 +++ b/fs/smb/client/smb2inode.c
 @@ -948,7 +948,8 @@ int smb2_query_path_info(const unsigned int xid,
