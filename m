@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-2511-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2514-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD2F89589DB
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 16:42:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B6D29589E3
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 16:43:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BBA6B21031
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 14:42:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC45D2854E8
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 14:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0A31BE23D;
-	Tue, 20 Aug 2024 14:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D1D1C579A;
+	Tue, 20 Aug 2024 14:36:59 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.67.179])
+Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.58.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA961BD03B;
-	Tue, 20 Aug 2024 14:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.67.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85B21C4631;
+	Tue, 20 Aug 2024 14:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.58.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724164611; cv=none; b=tnPgYZCxG2vw0XsP8Ud+aFJV+ygYpuDXN/bE/6b31KTGBoc3r0zuwO02a+2EmS0ZsXANeD9xxxgOGjh73RxAzg27p61A2W7J+8QMFWRlHAVscy4KmHMM3vnxH5J1SNJq3lowFsWIGUMDRqbx7c++wx8rwBvuETU8PFpCl1YjorU=
+	t=1724164619; cv=none; b=pPGi/VJhPfEUhiP6jeyw55h21ef7i5rTccrXLqmbXRfA43sj1Pz7x0NPhlNO0U86Y14TdsJiPoHnoT6ArVZGLwZV7Xp56SbknTOlYxQH1B8gHVZTI+/bYR38aSTz2Vl48iNaaIz6Kv0D6k1UPoATLLRFlxYbUsXDWRzrqpczksU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724164611; c=relaxed/simple;
-	bh=AHsj+lkL4gAcct16Db/0Gq9g/QXByj6CbgSwmJOoKCI=;
+	s=arc-20240116; t=1724164619; c=relaxed/simple;
+	bh=5WKFmMiK1A6Ge674LNnmmM/4JViFss5NZpUQwWYGunY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JiE0wgjwzSkk46FVbQbVvLobzPWO10hR2KWXKOpz/3DRzzHVXdUp4t3u7BOUjiLkyfrbpdCEPYhjUqKjluxnXGM1aXpj0tP7U3JXrQPvYSmJMQ9UCBKWBcBQM/QxgTkTHbwqI7Vvz3cVDb+b/yM16qdH9ZzOZqJDVvKiPIQf8/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=none smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=114.132.67.179
+	 MIME-Version; b=RKB0DTjguy0fqg0C8qY7YpVn9Vm+co7TivF/TWBSlPwWBVqTj/HRgJaNIZzAKQ2RyONqUqU3bXeTSAU5rDMuU/P014Hg+UYEiaInFi6ZfqYysYnfCfATutoWa33cez+4TnupxoSuALLZy9aV28WJdX5ET84nvLbFjdKjxUo2HlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=114.132.58.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: bizesmtpsz13t1724164447tcvmcj
-X-QQ-Originating-IP: Nx1+9CYaiCdQOfphM7sLh8mPjcMR+erolHuc9VjpznE=
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
+X-QQ-mid: bizesmtpsz13t1724164452t8aoj9
+X-QQ-Originating-IP: 6un5EVb3PB0T8n+h40gufD33xqtcdx4VDbWGYLwtZfk=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 20 Aug 2024 22:34:04 +0800 (CST)
+	id ; Tue, 20 Aug 2024 22:34:09 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3618686590817847333
+X-BIZMAIL-ID: 4418011969623935280
 From: chenxiaosong@chenxiaosong.com
 To: linkinjeon@kernel.org,
 	sfrench@samba.org,
@@ -53,9 +53,9 @@ Cc: chenxiaosong@kylinos.cn,
 	huhai@kylinos.cn,
 	liuyun01@kylinos.cn,
 	ChenXiaoSong <chenxiaosong@chenxiaosong.com>
-Subject: [PATCH 3/8] smb/server: remove useless variable assignment in smb2_open()
-Date: Tue, 20 Aug 2024 14:33:14 +0000
-Message-Id: <20240820143319.274033-4-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH 4/8] smb/client: fix typo: GlobalMid_Sem -> GlobalMid_Lock
+Date: Tue, 20 Aug 2024 14:33:15 +0000
+Message-Id: <20240820143319.274033-5-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
 References: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
@@ -71,25 +71,48 @@ Feedback-ID: bizesmtpsz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-The variable is already true here.
+The comments have typos, fix that to not confuse readers.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
 ---
- fs/smb/server/smb2pdu.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/smb/client/cifsfs.c   | 6 +++---
+ fs/smb/client/cifsglob.h | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 119c1ba5f255..4e87bbac2662 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -3100,7 +3100,6 @@ int smb2_open(struct ksmbd_work *work)
- 			goto err_out;
- 		}
+diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
+index 2c4b357d85e2..d89485235425 100644
+--- a/fs/smb/client/cifsfs.c
++++ b/fs/smb/client/cifsfs.c
+@@ -75,9 +75,9 @@ unsigned int sign_CIFS_PDUs = 1;
+ /*
+  * Global transaction id (XID) information
+  */
+-unsigned int GlobalCurrentXid;	/* protected by GlobalMid_Sem */
+-unsigned int GlobalTotalActiveXid; /* prot by GlobalMid_Sem */
+-unsigned int GlobalMaxActiveXid;	/* prot by GlobalMid_Sem */
++unsigned int GlobalCurrentXid;	/* protected by GlobalMid_Lock */
++unsigned int GlobalTotalActiveXid; /* prot by GlobalMid_Lock */
++unsigned int GlobalMaxActiveXid;	/* prot by GlobalMid_Lock */
+ spinlock_t GlobalMid_Lock; /* protects above & list operations on midQ entries */
  
--		file_present = true;
- 		idmap = mnt_idmap(path.mnt);
- 	} else {
- 		if (rc != -ENOENT)
+ /*
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 5c9b3e6cd95f..7ebe80a25d04 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -2017,9 +2017,9 @@ extern spinlock_t		cifs_tcp_ses_lock;
+ /*
+  * Global transaction id (XID) information
+  */
+-extern unsigned int GlobalCurrentXid;	/* protected by GlobalMid_Sem */
+-extern unsigned int GlobalTotalActiveXid; /* prot by GlobalMid_Sem */
+-extern unsigned int GlobalMaxActiveXid;	/* prot by GlobalMid_Sem */
++extern unsigned int GlobalCurrentXid;	/* protected by GlobalMid_Lock */
++extern unsigned int GlobalTotalActiveXid; /* prot by GlobalMid_Lock */
++extern unsigned int GlobalMaxActiveXid;	/* prot by GlobalMid_Lock */
+ extern spinlock_t GlobalMid_Lock; /* protects above & list operations on midQ entries */
+ 
+ /*
 -- 
 2.34.1
 
