@@ -1,41 +1,42 @@
-Return-Path: <linux-cifs+bounces-2508-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2512-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66B979589C8
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 16:39:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12C99589DD
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 16:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A0F91C20FA1
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 14:39:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AE3BB21431
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Aug 2024 14:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BD5198A30;
-	Tue, 20 Aug 2024 14:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852421C230E;
+	Tue, 20 Aug 2024 14:36:52 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FD7194AD5;
-	Tue, 20 Aug 2024 14:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466DA1922EF;
+	Tue, 20 Aug 2024 14:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724164591; cv=none; b=SJfjlwt2eFcrxTOJeTDHitF5KSgOmfF0Yjh+WRg/oC33X+VqfiZGWifr0QcXGca+vIEzSd/NR7TP8wZQPXB33gBPAQh/ZWbI3sGfg/B5eDTkcvA/uRg+CO/5zzKNesnzI7IshOgZKDmc4rdKMvW86vFYN9ntb+ULVIlaq2kDpVs=
+	t=1724164612; cv=none; b=ngp23P6pIl6gzU/WPbnqFO2i1bOxTTcm6gpaivDItYsovza8ubIv5NLIpfrpscnOPNdn7q55RYv6AWLgV4bdG4ZA1KlfPsMpMfx1Y3qgHrnE8hzbZuTcHOtfwcP0grN+lTrJkNx0OX8OXzsGO5pTyeKDg0wIOKdDxF8/p9G3q1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724164591; c=relaxed/simple;
-	bh=0GHqippeiQamqms57FKfMw79Fiop1ckSR5PqkLi4Obk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MODTIy8qifJ7RBZ0pgAesd/LTFtm+kw9CtBVPapXtewXdzCRJpU24UkaUsm1GkGBAoA7Ob5NkYlhzBRdvfGX7mpIzfo6E3ZxsWCStfkBzcGDje5rIoNmAfnTThvGaCdM5IfTXjQSQB8uPwtbBChttf86QN4SLkIa6VmZuCs6cc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=18.169.211.239
+	s=arc-20240116; t=1724164612; c=relaxed/simple;
+	bh=bBvDy7/6KrDhN+z7mAyor5oq4SSHkGap5G5Iw6V1tJ0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PImUmXcatBoPgAGeWoQLyuzUQbIs4qM+C8xPl1b9g1yjLHGdl1xo0JquZ3MWYsROIlj+c3eT6Iu+T41ZxTnc529k+dbr9gRAabr80RIj0e6PNFE6pzSwt0B6PGCW8+UvX81LpZZidWZ8xQM507e8nExEJsvhTKMs8F7zapkLUh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=18.194.254.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: bizesmtpsz13t1724164420todr5a
-X-QQ-Originating-IP: 7Zwh8UpWNzORHh/2En8EIPPPOEnang4BltazsvZWHoc=
+X-QQ-mid: bizesmtpsz13t1724164437tyf93n
+X-QQ-Originating-IP: yqk3UkeqByQJsO86tVOnVl2RVOLhncNNAmyhXCjlCJc=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 20 Aug 2024 22:33:38 +0800 (CST)
+	id ; Tue, 20 Aug 2024 22:33:42 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18163658882374804807
+X-BIZMAIL-ID: 4272407034101322349
 From: chenxiaosong@chenxiaosong.com
 To: linkinjeon@kernel.org,
 	sfrench@samba.org,
@@ -50,11 +51,14 @@ To: linkinjeon@kernel.org,
 Cc: chenxiaosong@kylinos.cn,
 	liuzhengyuan@kylinos.cn,
 	huhai@kylinos.cn,
-	liuyun01@kylinos.cn
-Subject: [PATCH 0/8] smb: fix some bugs, move duplicate definitions to common header file, and some small cleanups
-Date: Tue, 20 Aug 2024 14:33:11 +0000
-Message-Id: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
+	liuyun01@kylinos.cn,
+	ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+Subject: [PATCH 1/8] smb/server: fix return value of smb2_open()
+Date: Tue, 20 Aug 2024 14:33:12 +0000
+Message-Id: <20240820143319.274033-2-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
+References: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -67,49 +71,29 @@ Feedback-ID: bizesmtpsz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Fix some bugs in smb2_open() of smb server.
+In most error cases, error code is not returned in smb2_open(),
+__process_request() will not print error message.
 
-In order to maintain the code more easily, move some duplicate
-definitions to common header file.
+Fix this by returning the correct value at the end of smb2_open().
 
-By the way, add some small cleanups to the patchset.
+Signed-off-by: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+---
+ fs/smb/server/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-ChenXiaoSong (8):
-  smb/server: fix return value of smb2_open()
-  smb/server: fix potential null-ptr-deref of lease_ctx_info in
-    smb2_open()
-  smb/server: remove useless variable assignment in smb2_open()
-  smb/client: fix typo: GlobalMid_Sem -> GlobalMid_Lock
-  smb/server: update misguided comment of smb2_allocate_rsp_buf()
-  smb: move some duplicate definitions to common/smbacl.h
-  smb/client: fix typo: STATUS_MCA_OCCURED -> STATUS_MCA_OCCURRED
-  smb: move SMB2 Status code to common header file
-
- fs/smb/client/cifsacl.h                |   58 +-
- fs/smb/client/cifsfs.c                 |    6 +-
- fs/smb/client/cifsglob.h               |    6 +-
- fs/smb/client/smb2file.c               |    2 +-
- fs/smb/client/smb2inode.c              |    2 +-
- fs/smb/client/smb2maperror.c           |    4 +-
- fs/smb/client/smb2misc.c               |    2 +-
- fs/smb/client/smb2ops.c                |    2 +-
- fs/smb/client/smb2pdu.c                |    2 +-
- fs/smb/client/smb2transport.c          |    2 +-
- fs/smb/{client => common}/smb2status.h |    4 +-
- fs/smb/common/smbacl.h                 |   88 ++
- fs/smb/server/oplock.c                 |   13 +-
- fs/smb/server/server.c                 |    2 +-
- fs/smb/server/smb2misc.c               |    2 +-
- fs/smb/server/smb2pdu.c                |   24 +-
- fs/smb/server/smb_common.c             |    2 +-
- fs/smb/server/smbacl.h                 |   80 +-
- fs/smb/server/smbstatus.h              | 1822 ------------------------
- fs/smb/server/transport_rdma.c         |    2 +-
- 20 files changed, 135 insertions(+), 1990 deletions(-)
- rename fs/smb/{client => common}/smb2status.h (99%)
- create mode 100644 fs/smb/common/smbacl.h
- delete mode 100644 fs/smb/server/smbstatus.h
-
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index 2df1354288e6..d8a827e0dced 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -3710,7 +3710,7 @@ int smb2_open(struct ksmbd_work *work)
+ 	kfree(name);
+ 	kfree(lc);
+ 
+-	return 0;
++	return rc;
+ }
+ 
+ static int readdir_info_level_struct_sz(int info_level)
 -- 
 2.34.1
 
