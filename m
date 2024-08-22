@@ -1,125 +1,87 @@
-Return-Path: <linux-cifs+bounces-2546-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2548-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7B7895A895
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 02:12:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CF0A95A8AC
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 02:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8512832FA
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 00:12:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D14FDB21FD3
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 00:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27F2A38;
-	Thu, 22 Aug 2024 00:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8bUqlAW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842391D12FA;
+	Thu, 22 Aug 2024 00:18:35 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A2A368;
-	Thu, 22 Aug 2024 00:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF56A3FC2;
+	Thu, 22 Aug 2024 00:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724285522; cv=none; b=PvA/GDql4UbO/urWv7TTwSio23Jlw7o9YGKfrKVShxiSFv0cyR6fDkbqjRWw27s7V8+LmiXPV/ycSeG0uHhlA49/+4dj+KOWonR2DnlGaLfOeom1UvSA/HMy2uut+I7haAIhq9nxoQV+5xrX0MYmW74fi2U6VMw1gF9DVLtPLdc=
+	t=1724285915; cv=none; b=e35xM28dDYHPZdjB/CsZMObduX5ImnqIL1fKt04+jh4rvFlunBQcJyeHuK4gPmvUtG5Scu4QKfD3G7L9fI+S+BXW1zz0ObEBpVSTwqt6huQrhkcaHqjn/H/CO3xGTTvMNwenLqLCyEHeOueFyRX9SxTuBXcZOFSpSDAIkOMY80M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724285522; c=relaxed/simple;
-	bh=cOB+YiLmNayeW6bviExoaKiZs04FFiGdmrtliqQuWXc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EVrgty0TD3JbsRs7FcISIfVbsM1FhhfrVk67qW3ZS5KAwQ0j6rCwuO2YZgJ3qT+hsg9vDshbctWBkbDtcI+JhEMv7Qc2TBvV7LyZup7auaFJHiiSsb3wImeLgnrZUWalLGewMRPdlGx3zprJeHKH70T+0nlEGnANSAsPzxytVy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8bUqlAW; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-530e062217eso286424e87.1;
-        Wed, 21 Aug 2024 17:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724285519; x=1724890319; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ixcwWDPwJmqg6oOHPuUmOi09F3Uk9NfClTZxuEFkMi4=;
-        b=M8bUqlAWj2Z2EEj2G9snVCQnaJNuldiySIOaDfkU3Qv7lBCBJs/NXt5gqLbMsV0CJT
-         v1FPfF6YvdHv5Pa0h/UDvD4E4dDGCX7z0wGceUzyN4zGicpZkr4VUgUzQrwqGb9dzW7M
-         U9BKPpzdNG64iD8sZfZMhQlcSs3UK38r/XPigH2BFPc91LqmyljWRTc4Ej6ad375+avf
-         wKuLfs5lQzMkkWBk67ANeIWOFICh/Plor72Ifio+cU1nBSlpbXwK1wsa5yWN5hIoLwpz
-         1Q5tCuNPzd3gAr+cTbE1zAVKPMRg8/t4YEhC/isqbRrfQyyMOM/XigXxKZGMDKnmKUgh
-         3Gzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724285519; x=1724890319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ixcwWDPwJmqg6oOHPuUmOi09F3Uk9NfClTZxuEFkMi4=;
-        b=KiPk7KOIE373att1iIDsbKlGmzfavGJQt5n8HOi+YRzMjkaCmd3xBjKo8w5mnLV3Os
-         ozvqQOeY3NLTReFS3FbSowIVi7qKL2/f7FqcSx5CRXko8NuBTe+2cIl/2k3Akb0gN+9Q
-         HslbUbKmcR30R7CI/22T1pA4/9qpTr3F7t6NOkIO8aj9oGJ6kqvq3HsxNaF71UZO7fdI
-         f2JTP5lV/4c+vIwyTDaU845q1WjQb51LojZBfaH2hrmGhlV/DDmSaBBfk8PZYjKY+75h
-         bUjR96ttaKL2+VO3vs/Yu421KTcJf/QUr8BwhuAJUYDEOvO3svL+wN9G/etuq4iGp7Vc
-         hDNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUC4jOAvULYNo7DHh7hQj3Y3CjTCPNwRGnus2WXDdONDctu6avDoI83b/mhIZp2YYAIlYfcbSJnV0/m@vger.kernel.org, AJvYcCVyCPzev1MB/A9C7cED9U60f3xfjKM/80cNApM6q5ln06MY2wNm/gxQOEfL93cvlwHEL7CJzaqsSkJYhWvb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcDjwOT/bCEpSwLuymEDDPzUKPOOgvdy7plWiT5Btdi58JXng8
-	/wVbuAZkVCqtXPoTPPOA0XGe4K2jYglOeRRKhAgw7shVb4VUbJ2zzR2vAAbl5kbOYJnGA6vubQp
-	83K6hDHZxBCJzG3UQacPiTrtIYBU=
-X-Google-Smtp-Source: AGHT+IFOy8SQawRILFRXkqtw7mPwJHZkOXKB1VElMoyfPyqP4qEUIRGBU6t8gISxXvQF7NkibaPkNsSZV8lUD5nbRNE=
-X-Received: by 2002:a05:6512:15a9:b0:530:ad8b:de11 with SMTP id
- 2adb3069b0e04-533485650bbmr2147090e87.9.1724285518810; Wed, 21 Aug 2024
- 17:11:58 -0700 (PDT)
+	s=arc-20240116; t=1724285915; c=relaxed/simple;
+	bh=YCfGQLY4ta0TdR4ANpzxrEdExx8N15CmIRJOa2f/wCQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ARbYfaZKa1QvMudlLrLomwTqBSSTWvHJomfqmD2oqwdhVdJtZqDINv3C1kWaeP8eJL2PkZnl2p2g0nsvE9Y4rCkMHOtpmMzclTdo5vi29yjlu7ZpKucYSPwTZWQL7Y9B9k23UxgbE4ITXMxqqpVZn5vNiwOUY6ggl0cAa4oIZyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
+X-QQ-mid: bizesmtp87t1724285812tq2bijg4
+X-QQ-Originating-IP: dixtll8uRqqTyNQAVc5mWvuoSSnfSCJoXmnJJVvx9YM=
+Received: from [192.168.3.223] ( [116.128.244.171])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 22 Aug 2024 08:16:50 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15102028674120964960
+Message-ID: <74BD461E3A54DB61+0e15d4dc-350e-4ece-b6a9-6abd51b0def9@chenxiaosong.com>
+Date: Thu, 22 Aug 2024 08:16:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
- <20240820143319.274033-8-chenxiaosong@chenxiaosong.com> <CAKYAXd_XWf33rCHMh8AjhXKZEdvcRS-xXew9FDeitExNaezW2g@mail.gmail.com>
-In-Reply-To: <CAKYAXd_XWf33rCHMh8AjhXKZEdvcRS-xXew9FDeitExNaezW2g@mail.gmail.com>
-From: Steve French <smfrench@gmail.com>
-Date: Wed, 21 Aug 2024 19:11:47 -0500
-Message-ID: <CAH2r5mvqi0miAzd6FtJiK9Wfo6oBDVV8_vwV8Fi0bUnT+i1oyg@mail.gmail.com>
-Subject: Re: [PATCH 7/8] smb/client: fix typo: STATUS_MCA_OCCURED -> STATUS_MCA_OCCURRED
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/8] smb: move some duplicate definitions to
+ common/smbacl.h
 To: Namjae Jeon <linkinjeon@kernel.org>
-Cc: chenxiaosong@chenxiaosong.com, sfrench@samba.org, senozhatsky@chromium.org, 
-	tom@talpey.com, linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	pc@manguebit.com, ronniesahlberg@gmail.com, sprasad@microsoft.com, 
-	bharathsm@microsoft.com, chenxiaosong@kylinos.cn, liuzhengyuan@kylinos.cn, 
-	huhai@kylinos.cn, liuyun01@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+ linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org, pc@manguebit.com,
+ ronniesahlberg@gmail.com, sprasad@microsoft.com, bharathsm@microsoft.com,
+ chenxiaosong@kylinos.cn, liuzhengyuan@kylinos.cn, huhai@kylinos.cn,
+ liuyun01@kylinos.cn
+References: <20240820143319.274033-1-chenxiaosong@chenxiaosong.com>
+ <20240820143319.274033-7-chenxiaosong@chenxiaosong.com>
+ <CAKYAXd8mX+2gRuPyEuamg-nCTdyLb7G6bYKw0YiUrGb2GGTaaQ@mail.gmail.com>
+Content-Language: en-US
+From: chenxiaosong <chenxiaosong@chenxiaosong.com>
+In-Reply-To: <CAKYAXd8mX+2gRuPyEuamg-nCTdyLb7G6bYKw0YiUrGb2GGTaaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
-aah - good catch.  See MS-ERREF section 2.3.1
+Thanks for your reply. I will try to rename the prefix of cifs_ntsd, 
+cifs_sid, cifs_acl struct, send v2 patchset soon.
 
-Will back this patch out of for-next (and backout patch 0008 from
-for-next-next).
+On 2024/8/22 07:48, Namjae Jeon wrote:
+> On Tue, Aug 20, 2024 at 11:35 PM <chenxiaosong@chenxiaosong.com> wrote:
+>>
+>> From: ChenXiaoSong <chenxiaosong@kylinos.cn>
+>>
+>> In order to maintain the code more easily, move duplicate acl
+>> definitions to new common header file.
+>>
+>> Signed-off-by: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+> If you rename the prefix of cifs_ntsd, cifs_sid, cifs_acl struct, we
+> can move more ones to /common/smbacl.h.
+> Looking forward to the next patch.
+> Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+> Thanks!
+> 
 
-Chen,
-Can you update those two (and fix the Signed-off vs. Author line) and resen=
-d?
-
-
-On Wed, Aug 21, 2024 at 6:57=E2=80=AFPM Namjae Jeon <linkinjeon@kernel.org>=
- wrote:
->
-> On Tue, Aug 20, 2024 at 11:35=E2=80=AFPM <chenxiaosong@chenxiaosong.com> =
-wrote:
-> >
-> > From: ChenXiaoSong <chenxiaosong@kylinos.cn>
-> >
-> > Preparation for moving the SMB2 Status code definitions to a common
-> > header file.
-> >
-> > Signed-off-by: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
-> STATUS_MCA_OCCURED is not a typo.
-> Please check microsoft's header definition :
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/59=
-6a1078-e883-4972-9bbc-49e60bebca55
->
-> Thanks.
->
-
-
---=20
-Thanks,
-
-Steve
 
