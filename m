@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-2556-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2558-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BDE395B019
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 10:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C84D595B01F
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 10:24:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE09E1C22BEA
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 08:23:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073E11C22BB6
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 08:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAE06170A24;
-	Thu, 22 Aug 2024 08:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EE117C7BF;
+	Thu, 22 Aug 2024 08:23:47 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778F516A955;
-	Thu, 22 Aug 2024 08:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C059175D5F;
+	Thu, 22 Aug 2024 08:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724315023; cv=none; b=Q8qUVb9hzzN48zWv2zN3590aksyDexQfbExex7e6EJJOvZ9UMnZsJBMSejbHn7rLpj7CujaEhDwUUhIVGV93lT/rnsqnGFvOSxcfPfjNeorAoJV9cLEWoFjPyBnQ5gDKDhoeSQFTGpsUPbgA1QccN+BCqXp5w78AdNTujHuZ/jw=
+	t=1724315027; cv=none; b=n+pjtSZYisCQ7+a3CSF2VzKsQqh1MY1nK/ck3ubrZkANKHrP/Bj+FxKYD6vCmbVjSl84X8l3729iGAFoIMQ1pfWmL2Rt+OFOzjb8+QzqpFhC0oJPuvALL/8iIuOtUABU5NixgZx5jVqfi3T0ZcdD8rNED6mU8Dbhm6QcNU6FxKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724315023; c=relaxed/simple;
-	bh=v9gf538vK/s804RJKpMzo7z/rr7qSvrhASA5NJkmMfg=;
+	s=arc-20240116; t=1724315027; c=relaxed/simple;
+	bh=B4r809MJzzxLix81dlTD30go0lSL6FGSPAn6aiK3vyQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cQ3zCtOl9jDnUNWezg4AfpYKHxw57fob61R/TiKKRpAC+APJXI33bhFD/eTBrOhSVDp79UGk199R66IMMZGbzAr+DFBBS2z8Wd1qMnBN8CGuiMoqxvNpdg3J8ynBHBBAL7XRmCwwoXw7QmDB8doX9MDlzV1klTclg7gBaIR5p4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.254.200.128
+	 MIME-Version; b=VICH0xgE9dN8BdJGY/77kb4oX14CHKWMLBI+wtjdI5+QMmhZRj34JYNGaB6iVK79p3vKRw8lgrCRAz4SzAgKKMO+ukWpCRHoa0sQwKRHcjVVZHqcjPog7L0PuGq85GNtNNkOGb6cT7jY0UBnXqkta29AAE8hn1+aPLr0jpdUivo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: bizesmtp78t1724314909tqlrjlok
-X-QQ-Originating-IP: vrFwbI2ZYqPKUh1jNEVLgw8H0HQpRqOdyqXVZhNbrmY=
+X-QQ-mid: bizesmtp78t1724314919tzv7pevg
+X-QQ-Originating-IP: A8jhjxsq+9D9VKPcj91wRGhzXlP6aHQ2LLmIAB19yw4=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 22 Aug 2024 16:21:44 +0800 (CST)
+	id ; Thu, 22 Aug 2024 16:21:51 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11016837021676028273
+X-BIZMAIL-ID: 13919036902503210924
 From: chenxiaosong@chenxiaosong.com
 To: linkinjeon@kernel.org,
 	sfrench@samba.org,
@@ -53,9 +53,9 @@ Cc: chenxiaosong@kylinos.cn,
 	huhai@kylinos.cn,
 	liuyun01@kylinos.cn,
 	chenxiaosong@chenxiaosong.com
-Subject: [PATCH v2 01/12] smb/server: fix return value of smb2_open()
-Date: Thu, 22 Aug 2024 08:20:50 +0000
-Message-Id: <20240822082101.391272-2-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH v2 02/12] smb/server: fix potential null-ptr-deref of lease_ctx_info in smb2_open()
+Date: Thu, 22 Aug 2024 08:20:51 +0000
+Message-Id: <20240822082101.391272-3-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
 References: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
@@ -71,30 +71,68 @@ Feedback-ID: bizesmtp:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-In most error cases, error code is not returned in smb2_open(),
-__process_request() will not print error message.
+null-ptr-deref will occur when (req_op_level == SMB2_OPLOCK_LEVEL_LEASE)
+and parse_lease_state() return NULL.
 
-Fix this by returning the correct value at the end of smb2_open().
+Fix this by check if 'lease_ctx_info' is NULL.
+
+Additionally, remove the redundant parentheses in
+parse_durable_handle_context().
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/smb/server/smb2pdu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/smb/server/oplock.c  |  2 +-
+ fs/smb/server/smb2pdu.c | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/fs/smb/server/oplock.c b/fs/smb/server/oplock.c
+index a8f52c4ebbda..e546ffa57b55 100644
+--- a/fs/smb/server/oplock.c
++++ b/fs/smb/server/oplock.c
+@@ -1510,7 +1510,7 @@ void create_lease_buf(u8 *rbuf, struct lease *lease)
+  * parse_lease_state() - parse lease context containted in file open request
+  * @open_req:	buffer containing smb2 file open(create) request
+  *
+- * Return:  oplock state, -ENOENT if create lease context not found
++ * Return: allocated lease context object on success, otherwise NULL
+  */
+ struct lease_ctx_info *parse_lease_state(void *open_req)
+ {
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 2df1354288e6..d8a827e0dced 100644
+index d8a827e0dced..154bc27d1db8 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -3710,7 +3710,7 @@ int smb2_open(struct ksmbd_work *work)
- 	kfree(name);
- 	kfree(lc);
+@@ -2767,8 +2767,8 @@ static int parse_durable_handle_context(struct ksmbd_work *work,
+ 				}
+ 			}
  
--	return 0;
-+	return rc;
- }
+-			if (((lc && (lc->req_state & SMB2_LEASE_HANDLE_CACHING_LE)) ||
+-			     req_op_level == SMB2_OPLOCK_LEVEL_BATCH)) {
++			if ((lc && (lc->req_state & SMB2_LEASE_HANDLE_CACHING_LE)) ||
++			    req_op_level == SMB2_OPLOCK_LEVEL_BATCH) {
+ 				dh_info->CreateGuid =
+ 					durable_v2_blob->CreateGuid;
+ 				dh_info->persistent =
+@@ -2788,8 +2788,8 @@ static int parse_durable_handle_context(struct ksmbd_work *work,
+ 				goto out;
+ 			}
  
- static int readdir_info_level_struct_sz(int info_level)
+-			if (((lc && (lc->req_state & SMB2_LEASE_HANDLE_CACHING_LE)) ||
+-			     req_op_level == SMB2_OPLOCK_LEVEL_BATCH)) {
++			if ((lc && (lc->req_state & SMB2_LEASE_HANDLE_CACHING_LE)) ||
++			    req_op_level == SMB2_OPLOCK_LEVEL_BATCH) {
+ 				ksmbd_debug(SMB, "Request for durable open\n");
+ 				dh_info->type = dh_idx;
+ 			}
+@@ -3411,7 +3411,7 @@ int smb2_open(struct ksmbd_work *work)
+ 			goto err_out1;
+ 		}
+ 	} else {
+-		if (req_op_level == SMB2_OPLOCK_LEVEL_LEASE) {
++		if (req_op_level == SMB2_OPLOCK_LEVEL_LEASE && lc) {
+ 			if (S_ISDIR(file_inode(filp)->i_mode)) {
+ 				lc->req_state &= ~SMB2_LEASE_WRITE_CACHING_LE;
+ 				lc->is_dir = true;
 -- 
 2.34.1
 
