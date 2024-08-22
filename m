@@ -1,99 +1,94 @@
-Return-Path: <linux-cifs+bounces-2565-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2568-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFC4795B036
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 10:27:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D4795B42C
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 13:49:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 643FBB24C66
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 08:27:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C51F1F23B76
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 11:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97DC170A24;
-	Thu, 22 Aug 2024 08:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D6A1C93C2;
+	Thu, 22 Aug 2024 11:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJxhandw"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F6A16F271;
-	Thu, 22 Aug 2024 08:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8E417A584;
+	Thu, 22 Aug 2024 11:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724315121; cv=none; b=hV92Wa5eYlwEj8emUCYdmLL+mrhjYIuqzjGw7tK1ydQqYBuF4o5NI3l6+N7FpD5YkKxI6Yvo91tQqOk521h+5s+2EOIZBs19M8iteXl+0yrPSTi0Ivc1gOV28jpT4+QJNj+opvsmmIzeXFqomQ6xi3k9mMrvVLsIa/BYjNeLeww=
+	t=1724327344; cv=none; b=jSodZPYGUlXmtMzh5iSKIY6Y8KjndYNa5ImGn4P2tKf+fTOM57vJDNO6G9TbbzRkqXvq8zGEVisEqZEENClZQ6UW7NAIslzAtkuXorpDAw7zbaW0rH1c1PxzbSMM3coQp3ecKoSOiHmJYvQDlaFY+dPxBy/uv1lNAxSsmMzCdEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724315121; c=relaxed/simple;
-	bh=UqMz90SMB+B/iWHCTMwCu01DOmAehuGURx5l95yYUo4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rVMa8San8YFX7N3XJ1rS3tFrw4fgbbJw3RB5/H73utKjbvGN8yx3Pn8lkqGhivKpbWrN3Gxj0BO8sOkyrv9IntHP6ZUUt1kyBLOFfpwyc5vGmz9ApkrRd9UZSEUj+3HkSw8OYIBAe4pj/hVm0lkGnXgqzcylITpljY0TATMHQhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=none smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.254.200.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: bizesmtp78t1724314980tzmk46zg
-X-QQ-Originating-IP: uO/tLQ9Ai+GDR5RkfhLgv7YYOlIYwHwfnj6CfOu8s1U=
-Received: from localhost.localdomain ( [116.128.244.171])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 22 Aug 2024 16:22:57 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9458377168774231472
-From: chenxiaosong@chenxiaosong.com
-To: linkinjeon@kernel.org,
-	sfrench@samba.org,
-	senozhatsky@chromium.org,
-	tom@talpey.com,
-	linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pc@manguebit.com,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	bharathsm@microsoft.com
-Cc: chenxiaosong@kylinos.cn,
-	liuzhengyuan@kylinos.cn,
-	huhai@kylinos.cn,
-	liuyun01@kylinos.cn,
-	chenxiaosong@chenxiaosong.com
-Subject: [PATCH v2 12/12] smb: add comment to STATUS_MCA_OCCURED
-Date: Thu, 22 Aug 2024 08:21:01 +0000
-Message-Id: <20240822082101.391272-13-chenxiaosong@chenxiaosong.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
-References: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
+	s=arc-20240116; t=1724327344; c=relaxed/simple;
+	bh=TjVpZFtF4o9A6699x4gEKx/H+ag92cqsOEMzu99Q/R8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JgsQK1A4nvoyJE4w+NHr6AYDZLNMbulNk+UtH/q1HhGjbzj63R1MHdzEJU6Xb0ue+h1DmNIyLWeV14IEycM2Abvceq+MTzGExwDEO0uyTiGiQcrfKUuwydvo3QCdTybKdW/mjqj89AXnE0+lst1WZSg3ZqaWBxwPhPdsZmJrBLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJxhandw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF19C4AF14;
+	Thu, 22 Aug 2024 11:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724327343;
+	bh=TjVpZFtF4o9A6699x4gEKx/H+ag92cqsOEMzu99Q/R8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KJxhandw23zfHwQh2a+6N7i/5WlBdGi/kpj49vrBnXbjsi6jxVdvKeBKTRfpdLbUp
+	 JpmYdMCgD21277bnEWZG0/+lF00bGw0Puz7dWeOnDmjuEPuF7TwceunPVtwg+M0eyD
+	 khrDsJGlRCoDCcALmFRNiEAnLXkFkaNsKST0Wi6l6PWe1NiBhFn5QiNnjP44G23CM6
+	 qmuCqT/LA5VzlgaPe+0TnSqEX45QqQ9TdCoyeqaF7bZJGhqDQQNOfe3ngWePgnKovb
+	 OUvyu2YojVEmTur7DBEs1Y7in9ap1SBaQKZ2CxAj8lQZyRGZPu2DbgNHfyYnAYjPNa
+	 vQTg5/u746lYQ==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f3ffc7841dso6414711fa.0;
+        Thu, 22 Aug 2024 04:49:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVbVBlhYem8ePb19TMsWtJgXR9c11IMpi1cYGLhbt307YHb+idRmTreiD8MrMUlL7NUELL1/C6Tytozs4CB@vger.kernel.org, AJvYcCWBKpPEEYponbzBZkyCdmMazBlpvf5FXc71NpgrO7flb5Cc6SHDBxwdtosdw6l+2Yqin7IuoO3V8HOc@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUJ/qrIhGbrHOFgtJsUJhPyc2nR9OuiaJFm4aoC4lZCe2lfkey
+	yHkP8eQxQc0Wm4C66jQ/eFc6hazyNSrlgp3iBtAHV3Iv8IiFVEST735dQGit33WAROG3AZBu6Mv
+	NoR2294jXoogg76i4EGvf18DgOfw=
+X-Google-Smtp-Source: AGHT+IHZTQrh2EhVHGqy2EsoHabkA9xWKcFI6tHOJgEwo6Bim8ClWMUDrfLKNI9hcs0RwklJAj02ktrvRwtePRCP5pc=
+X-Received: by 2002:a2e:be9e:0:b0:2ef:2016:262e with SMTP id
+ 38308e7fff4ca-2f3f8721e0fmr47100151fa.0.1724327341684; Thu, 22 Aug 2024
+ 04:49:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+References: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com> <20240822082101.391272-3-chenxiaosong@chenxiaosong.com>
+In-Reply-To: <20240822082101.391272-3-chenxiaosong@chenxiaosong.com>
+From: Namjae Jeon <linkinjeon@kernel.org>
+Date: Thu, 22 Aug 2024 20:48:48 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_e3kpanj2-B-KneDbk_qPcy6Pte_kKHVeMx2-h-k+XhA@mail.gmail.com>
+Message-ID: <CAKYAXd_e3kpanj2-B-KneDbk_qPcy6Pte_kKHVeMx2-h-k+XhA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/12] smb/server: fix potential null-ptr-deref of
+ lease_ctx_info in smb2_open()
+To: chenxiaosong@chenxiaosong.com
+Cc: sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com, 
+	linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org, pc@manguebit.com, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, bharathsm@microsoft.com, 
+	chenxiaosong@kylinos.cn, liuzhengyuan@kylinos.cn, huhai@kylinos.cn, 
+	liuyun01@kylinos.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: ChenXiaoSong <chenxiaosong@kylinos.cn>
-
-Explained why the typo was not corrected.
-
-Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
----
- fs/smb/common/smb2status.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/fs/smb/common/smb2status.h b/fs/smb/common/smb2status.h
-index 841d4c688411..14b4a5f04564 100644
---- a/fs/smb/common/smb2status.h
-+++ b/fs/smb/common/smb2status.h
-@@ -901,6 +901,10 @@ struct ntstatus {
- #define STATUS_DEVICE_ENUMERATION_ERROR cpu_to_le32(0xC0000366)
- #define STATUS_MOUNT_POINT_NOT_RESOLVED cpu_to_le32(0xC0000368)
- #define STATUS_INVALID_DEVICE_OBJECT_PARAMETER cpu_to_le32(0xC0000369)
-+/*
-+ * 'OCCURED' is typo in MS-ERREF, it should be 'OCCURRED',
-+ * but we'll keep it consistent with MS-ERREF.
-+ */
- #define STATUS_MCA_OCCURED cpu_to_le32(0xC000036A)
- #define STATUS_DRIVER_BLOCKED_CRITICAL cpu_to_le32(0xC000036B)
- #define STATUS_DRIVER_BLOCKED cpu_to_le32(0xC000036C)
--- 
-2.34.1
-
+On Thu, Aug 22, 2024 at 5:22=E2=80=AFPM <chenxiaosong@chenxiaosong.com> wro=
+te:
+>
+> From: ChenXiaoSong <chenxiaosong@kylinos.cn>
+>
+> null-ptr-deref will occur when (req_op_level =3D=3D SMB2_OPLOCK_LEVEL_LEA=
+SE)
+> and parse_lease_state() return NULL.
+>
+> Fix this by check if 'lease_ctx_info' is NULL.
+>
+> Additionally, remove the redundant parentheses in
+> parse_durable_handle_context().
+>
+> Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Applied it to #ksmbd-for-next-next.
+Thanks.
 
