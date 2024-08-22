@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-2561-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2567-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0501995B026
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 10:25:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D27095B049
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 10:28:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0A60285245
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 08:25:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA1E2282821
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Aug 2024 08:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0824171092;
-	Thu, 22 Aug 2024 08:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7A017F4F2;
+	Thu, 22 Aug 2024 08:26:07 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D531547EA;
-	Thu, 22 Aug 2024 08:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F8F502BE;
+	Thu, 22 Aug 2024 08:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724315056; cv=none; b=EG3wf8cQMWXYrczQh/IHr8de+KzmEByvm5xOn0b19pkF19fVZPOhMOiIlj6/DUkycw6ZzPR4TZpVlBVntd/Qsarh9vm28pz6bkn5ghwa0fgsR4ZxqCl5EOdTvxpWo0M4zTcfUXM8EEU03d+DJwDz9OBfT98VjDBzFgowmqcWoX0=
+	t=1724315167; cv=none; b=mepBL5R45ysQA4cHMpaoZ4Lx6JweQImfSBCzbwlzOjxc3nrmb0Zuu5RBmshODUSky3OqFgbqUaFpzBK4ljW+GGZ3H1ndv3QBlkPxWhd93KDiJ9EWUVgj06SXoBJGGesUyH0pyvxeOIUmQe0ZKzaSdHfn4VG2YDMZunGPAg0ZMuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724315056; c=relaxed/simple;
-	bh=sKdzp468gGsw26jKXvu72l3pMuzkEOM9VnEXnAXc8N4=;
+	s=arc-20240116; t=1724315167; c=relaxed/simple;
+	bh=lWxahNHz+tm3vRNIk6OkjfhoO66D9lzFakL31LQCnk0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qPFQhwjAYI4arAxx2jbfLIuSHux936yC6IjnEVaFbbn7bDAoiK0Th6/z3Y4VhE02vXma2H/vP4BAZNLTGvyV3CygXysg9pOcEu4V7iNdlqvh/rk/S/wbgwSTTWkYTllQrTNDt6MovEfGnH4E/UUQo+Kiaq1URGJ7XukoCFVHVKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=none smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=18.132.163.193
+	 MIME-Version; b=PIgen1SmYrccc6juQIG9sGTr/Nf2iF9lKI2nH0iOvQSuS64gGa6UVF+b19Mrq4RGuTHzcEU/ksjCZcgEjc8vt2zKCzQ3+E9pyxFgKbGhleFKMG5gTurQoxSNO+8XfzSA06bWC/9DqDwq+VpUlzJQxG3h99ZCDbFOGZDel1mO/fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.243.244.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: bizesmtp78t1724314966tu1jqbsz
-X-QQ-Originating-IP: aukmJBXD7LggjOiYSWRKAlyMFzQRK3CBqfB/N7XP7lo=
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
+X-QQ-mid: bizesmtp78t1724314970tq4r97eh
+X-QQ-Originating-IP: AG8pGLr3xPPyQafA2Y6C5dxZ0CxT4Y+9KJaIwh6BVrI=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 22 Aug 2024 16:22:41 +0800 (CST)
+	id ; Thu, 22 Aug 2024 16:22:47 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8855987532588777255
+X-BIZMAIL-ID: 2076485905222529775
 From: chenxiaosong@chenxiaosong.com
 To: linkinjeon@kernel.org,
 	sfrench@samba.org,
@@ -53,9 +53,9 @@ Cc: chenxiaosong@kylinos.cn,
 	huhai@kylinos.cn,
 	liuyun01@kylinos.cn,
 	chenxiaosong@chenxiaosong.com
-Subject: [PATCH v2 09/12] smb/client: rename cifs_ace to smb_ace
-Date: Thu, 22 Aug 2024 08:20:58 +0000
-Message-Id: <20240822082101.391272-10-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH v2 10/12] smb: move some duplicate definitions to common/smbacl.h
+Date: Thu, 22 Aug 2024 08:20:59 +0000
+Message-Id: <20240822082101.391272-11-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
 References: <20240822082101.391272-1-chenxiaosong@chenxiaosong.com>
@@ -71,352 +71,399 @@ Feedback-ID: bizesmtp:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Preparation for moving acl definitions to new common header file.
-
-Use the following shell command to rename:
-
-  find fs/smb/client -type f -exec sed -i \
-    's/struct cifs_ace/struct smb_ace/g' {} +
+In order to maintain the code more easily, move duplicate definitions
+to new common header file.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 ---
- fs/smb/client/cifsacl.c   | 62 +++++++++++++++++++--------------------
- fs/smb/client/cifsacl.h   |  4 +--
- fs/smb/client/cifsglob.h  |  2 +-
- fs/smb/client/cifsproto.h |  6 ++--
- fs/smb/client/smb2pdu.c   |  8 ++---
- 5 files changed, 41 insertions(+), 41 deletions(-)
+ fs/smb/client/cifsacl.h |  91 +-----------------------------
+ fs/smb/common/smbacl.h  | 121 ++++++++++++++++++++++++++++++++++++++++
+ fs/smb/server/smbacl.h  | 111 +-----------------------------------
+ 3 files changed, 123 insertions(+), 200 deletions(-)
+ create mode 100644 fs/smb/common/smbacl.h
 
-diff --git a/fs/smb/client/cifsacl.c b/fs/smb/client/cifsacl.c
-index 2e1c9b528dde..e2ec1d934335 100644
---- a/fs/smb/client/cifsacl.c
-+++ b/fs/smb/client/cifsacl.c
-@@ -666,7 +666,7 @@ static void mode_to_access_flags(umode_t mode, umode_t bits_to_use,
- 	return;
- }
- 
--static __u16 cifs_copy_ace(struct cifs_ace *dst, struct cifs_ace *src, struct smb_sid *psid)
-+static __u16 cifs_copy_ace(struct smb_ace *dst, struct smb_ace *src, struct smb_sid *psid)
- {
- 	__u16 size = 1 + 1 + 2 + 4;
- 
-@@ -685,7 +685,7 @@ static __u16 cifs_copy_ace(struct cifs_ace *dst, struct cifs_ace *src, struct sm
- 	return size;
- }
- 
--static __u16 fill_ace_for_sid(struct cifs_ace *pntace,
-+static __u16 fill_ace_for_sid(struct smb_ace *pntace,
- 			const struct smb_sid *psid, __u64 nmode,
- 			umode_t bits, __u8 access_type,
- 			bool allow_delete_child)
-@@ -723,7 +723,7 @@ static __u16 fill_ace_for_sid(struct cifs_ace *pntace,
- 
- 
- #ifdef CONFIG_CIFS_DEBUG2
--static void dump_ace(struct cifs_ace *pace, char *end_of_acl)
-+static void dump_ace(struct smb_ace *pace, char *end_of_acl)
- {
- 	int num_subauth;
- 
-@@ -766,7 +766,7 @@ static void parse_dacl(struct smb_acl *pdacl, char *end_of_acl,
- 	int num_aces = 0;
- 	int acl_size;
- 	char *acl_base;
--	struct cifs_ace **ppace;
-+	struct smb_ace **ppace;
- 
- 	/* BB need to add parm so we can store the SID BB */
- 
-@@ -799,15 +799,15 @@ static void parse_dacl(struct smb_acl *pdacl, char *end_of_acl,
- 	if (num_aces > 0) {
- 		umode_t denied_mode = 0;
- 
--		if (num_aces > ULONG_MAX / sizeof(struct cifs_ace *))
-+		if (num_aces > ULONG_MAX / sizeof(struct smb_ace *))
- 			return;
--		ppace = kmalloc_array(num_aces, sizeof(struct cifs_ace *),
-+		ppace = kmalloc_array(num_aces, sizeof(struct smb_ace *),
- 				      GFP_KERNEL);
- 		if (!ppace)
- 			return;
- 
- 		for (i = 0; i < num_aces; ++i) {
--			ppace[i] = (struct cifs_ace *) (acl_base + acl_size);
-+			ppace[i] = (struct smb_ace *) (acl_base + acl_size);
- #ifdef CONFIG_CIFS_DEBUG2
- 			dump_ace(ppace[i], end_of_acl);
- #endif
-@@ -849,7 +849,7 @@ static void parse_dacl(struct smb_acl *pdacl, char *end_of_acl,
- 
- /*			memcpy((void *)(&(cifscred->aces[i])),
- 				(void *)ppace[i],
--				sizeof(struct cifs_ace)); */
-+				sizeof(struct smb_ace)); */
- 
- 			acl_base = (char *)ppace[i];
- 			acl_size = le16_to_cpu(ppace[i]->size);
-@@ -861,7 +861,7 @@ static void parse_dacl(struct smb_acl *pdacl, char *end_of_acl,
- 	return;
- }
- 
--unsigned int setup_authusers_ACE(struct cifs_ace *pntace)
-+unsigned int setup_authusers_ACE(struct smb_ace *pntace)
- {
- 	int i;
- 	unsigned int ace_size = 20;
-@@ -885,7 +885,7 @@ unsigned int setup_authusers_ACE(struct cifs_ace *pntace)
-  * Fill in the special SID based on the mode. See
-  * https://technet.microsoft.com/en-us/library/hh509017(v=ws.10).aspx
-  */
--unsigned int setup_special_mode_ACE(struct cifs_ace *pntace, __u64 nmode)
-+unsigned int setup_special_mode_ACE(struct smb_ace *pntace, __u64 nmode)
- {
- 	int i;
- 	unsigned int ace_size = 28;
-@@ -907,7 +907,7 @@ unsigned int setup_special_mode_ACE(struct cifs_ace *pntace, __u64 nmode)
- 	return ace_size;
- }
- 
--unsigned int setup_special_user_owner_ACE(struct cifs_ace *pntace)
-+unsigned int setup_special_user_owner_ACE(struct smb_ace *pntace)
- {
- 	int i;
- 	unsigned int ace_size = 28;
-@@ -944,17 +944,17 @@ static void populate_new_aces(char *nacl_base,
- 	__u64 deny_user_mode = 0;
- 	__u64 deny_group_mode = 0;
- 	bool sticky_set = false;
--	struct cifs_ace *pnntace = NULL;
-+	struct smb_ace *pnntace = NULL;
- 
- 	nmode = *pnmode;
- 	num_aces = *pnum_aces;
- 	nsize = *pnsize;
- 
- 	if (modefromsid) {
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 		nsize += setup_special_mode_ACE(pnntace, nmode);
- 		num_aces++;
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 		nsize += setup_authusers_ACE(pnntace);
- 		num_aces++;
- 		goto set_size;
-@@ -992,7 +992,7 @@ static void populate_new_aces(char *nacl_base,
- 		sticky_set = true;
- 
- 	if (deny_user_mode) {
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 		nsize += fill_ace_for_sid(pnntace, pownersid, deny_user_mode,
- 				0700, ACCESS_DENIED, false);
- 		num_aces++;
-@@ -1000,31 +1000,31 @@ static void populate_new_aces(char *nacl_base,
- 
- 	/* Group DENY ACE does not conflict with owner ALLOW ACE. Keep in preferred order*/
- 	if (deny_group_mode && !(deny_group_mode & (user_mode >> 3))) {
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 		nsize += fill_ace_for_sid(pnntace, pgrpsid, deny_group_mode,
- 				0070, ACCESS_DENIED, false);
- 		num_aces++;
- 	}
- 
--	pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+	pnntace = (struct smb_ace *) (nacl_base + nsize);
- 	nsize += fill_ace_for_sid(pnntace, pownersid, user_mode,
- 			0700, ACCESS_ALLOWED, true);
- 	num_aces++;
- 
- 	/* Group DENY ACE conflicts with owner ALLOW ACE. So keep it after. */
- 	if (deny_group_mode && (deny_group_mode & (user_mode >> 3))) {
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 		nsize += fill_ace_for_sid(pnntace, pgrpsid, deny_group_mode,
- 				0070, ACCESS_DENIED, false);
- 		num_aces++;
- 	}
- 
--	pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+	pnntace = (struct smb_ace *) (nacl_base + nsize);
- 	nsize += fill_ace_for_sid(pnntace, pgrpsid, group_mode,
- 			0070, ACCESS_ALLOWED, !sticky_set);
- 	num_aces++;
- 
--	pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+	pnntace = (struct smb_ace *) (nacl_base + nsize);
- 	nsize += fill_ace_for_sid(pnntace, &sid_everyone, other_mode,
- 			0007, ACCESS_ALLOWED, !sticky_set);
- 	num_aces++;
-@@ -1040,11 +1040,11 @@ static __u16 replace_sids_and_copy_aces(struct smb_acl *pdacl, struct smb_acl *p
- {
- 	int i;
- 	u16 size = 0;
--	struct cifs_ace *pntace = NULL;
-+	struct smb_ace *pntace = NULL;
- 	char *acl_base = NULL;
- 	u32 src_num_aces = 0;
- 	u16 nsize = 0;
--	struct cifs_ace *pnntace = NULL;
-+	struct smb_ace *pnntace = NULL;
- 	char *nacl_base = NULL;
- 	u16 ace_size = 0;
- 
-@@ -1057,8 +1057,8 @@ static __u16 replace_sids_and_copy_aces(struct smb_acl *pdacl, struct smb_acl *p
- 
- 	/* Go through all the ACEs */
- 	for (i = 0; i < src_num_aces; ++i) {
--		pntace = (struct cifs_ace *) (acl_base + size);
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pntace = (struct smb_ace *) (acl_base + size);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 
- 		if (pnownersid && compare_sids(&pntace->sid, pownersid) == 0)
- 			ace_size = cifs_copy_ace(pnntace, pntace, pnownersid);
-@@ -1080,11 +1080,11 @@ static int set_chmod_dacl(struct smb_acl *pdacl, struct smb_acl *pndacl,
- {
- 	int i;
- 	u16 size = 0;
--	struct cifs_ace *pntace = NULL;
-+	struct smb_ace *pntace = NULL;
- 	char *acl_base = NULL;
- 	u32 src_num_aces = 0;
- 	u16 nsize = 0;
--	struct cifs_ace *pnntace = NULL;
-+	struct smb_ace *pnntace = NULL;
- 	char *nacl_base = NULL;
- 	u32 num_aces = 0;
- 	bool new_aces_set = false;
-@@ -1108,7 +1108,7 @@ static int set_chmod_dacl(struct smb_acl *pdacl, struct smb_acl *pndacl,
- 
- 	/* Retain old ACEs which we can retain */
- 	for (i = 0; i < src_num_aces; ++i) {
--		pntace = (struct cifs_ace *) (acl_base + size);
-+		pntace = (struct smb_ace *) (acl_base + size);
- 
- 		if (!new_aces_set && (pntace->flags & INHERITED_ACE)) {
- 			/* Place the new ACEs in between existing explicit and inherited */
-@@ -1130,7 +1130,7 @@ static int set_chmod_dacl(struct smb_acl *pdacl, struct smb_acl *pndacl,
- 		}
- 
- 		/* update the pointer to the next ACE to populate*/
--		pnntace = (struct cifs_ace *) (nacl_base + nsize);
-+		pnntace = (struct smb_ace *) (nacl_base + nsize);
- 
- 		nsize += cifs_copy_ace(pnntace, pntace, NULL);
- 		num_aces++;
-@@ -1625,9 +1625,9 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 *pnmode,
- 	nsecdesclen = secdesclen;
- 	if (pnmode && *pnmode != NO_CHANGE_64) { /* chmod */
- 		if (mode_from_sid)
--			nsecdesclen += 2 * sizeof(struct cifs_ace);
-+			nsecdesclen += 2 * sizeof(struct smb_ace);
- 		else /* cifsacl */
--			nsecdesclen += 5 * sizeof(struct cifs_ace);
-+			nsecdesclen += 5 * sizeof(struct smb_ace);
- 	} else { /* chown */
- 		/* When ownership changes, changes new owner sid length could be different */
- 		nsecdesclen = sizeof(struct smb_ntsd) + (sizeof(struct smb_sid) * 2);
-@@ -1636,7 +1636,7 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 *pnmode,
- 			dacl_ptr = (struct smb_acl *)((char *)pntsd + dacloffset);
- 			if (mode_from_sid)
- 				nsecdesclen +=
--					le32_to_cpu(dacl_ptr->num_aces) * sizeof(struct cifs_ace);
-+					le32_to_cpu(dacl_ptr->num_aces) * sizeof(struct smb_ace);
- 			else /* cifsacl */
- 				nsecdesclen += le16_to_cpu(dacl_ptr->size);
- 		}
 diff --git a/fs/smb/client/cifsacl.h b/fs/smb/client/cifsacl.h
-index a23d59987828..cbaed8038e36 100644
+index cbaed8038e36..6529478b7f48 100644
 --- a/fs/smb/client/cifsacl.h
 +++ b/fs/smb/client/cifsacl.h
-@@ -35,7 +35,7 @@
-  */
- #define DEFAULT_SEC_DESC_LEN (sizeof(struct smb_ntsd) + \
- 			      sizeof(struct smb_acl) + \
--			      (sizeof(struct cifs_ace) * 4))
-+			      (sizeof(struct smb_ace) * 4))
+@@ -9,8 +9,7 @@
+ #ifndef _CIFSACL_H
+ #define _CIFSACL_H
  
+-#define NUM_AUTHS (6)	/* number of authority fields */
+-#define SID_MAX_SUB_AUTHORITIES (15) /* max number of sub authority fields */
++#include "../common/smbacl.h"
+ 
+ #define READ_BIT        0x4
+ #define WRITE_BIT       0x2
+@@ -23,12 +22,6 @@
+ #define UBITSHIFT	6
+ #define GBITSHIFT	3
+ 
+-#define ACCESS_ALLOWED	0
+-#define ACCESS_DENIED	1
+-
+-#define SIDOWNER 1
+-#define SIDGROUP 2
+-
  /*
-  * Maximum size of a string representation of a SID:
-@@ -111,7 +111,7 @@ struct smb_acl {
- #define SUCCESSFUL_ACCESS_ACE_FLAG 0x40
- #define FAILED_ACCESS_ACE_FLAG	0x80
+  * Security Descriptor length containing DACL with 3 ACEs (one each for
+  * owner, group and world).
+@@ -37,88 +30,6 @@
+ 			      sizeof(struct smb_acl) + \
+ 			      (sizeof(struct smb_ace) * 4))
  
--struct cifs_ace {
+-/*
+- * Maximum size of a string representation of a SID:
+- *
+- * The fields are unsigned values in decimal. So:
+- *
+- * u8:  max 3 bytes in decimal
+- * u32: max 10 bytes in decimal
+- *
+- * "S-" + 3 bytes for version field + 15 for authority field + NULL terminator
+- *
+- * For authority field, max is when all 6 values are non-zero and it must be
+- * represented in hex. So "-0x" + 12 hex digits.
+- *
+- * Add 11 bytes for each subauthority field (10 bytes each + 1 for '-')
+- */
+-#define SID_STRING_BASE_SIZE (2 + 3 + 15 + 1)
+-#define SID_STRING_SUBAUTH_SIZE (11) /* size of a single subauth string */
+-
+-struct smb_ntsd {
+-	__le16 revision; /* revision level */
+-	__le16 type;
+-	__le32 osidoffset;
+-	__le32 gsidoffset;
+-	__le32 sacloffset;
+-	__le32 dacloffset;
+-} __attribute__((packed));
+-
+-struct smb_sid {
+-	__u8 revision; /* revision level */
+-	__u8 num_subauth;
+-	__u8 authority[NUM_AUTHS];
+-	__le32 sub_auth[SID_MAX_SUB_AUTHORITIES]; /* sub_auth[num_subauth] */
+-} __attribute__((packed));
+-
+-/* size of a struct smb_sid, sans sub_auth array */
+-#define CIFS_SID_BASE_SIZE (1 + 1 + NUM_AUTHS)
+-
+-struct smb_acl {
+-	__le16 revision; /* revision level */
+-	__le16 size;
+-	__le32 num_aces;
+-} __attribute__((packed));
+-
+-/* ACE types - see MS-DTYP 2.4.4.1 */
+-#define ACCESS_ALLOWED_ACE_TYPE	0x00
+-#define ACCESS_DENIED_ACE_TYPE	0x01
+-#define SYSTEM_AUDIT_ACE_TYPE	0x02
+-#define SYSTEM_ALARM_ACE_TYPE	0x03
+-#define ACCESS_ALLOWED_COMPOUND_ACE_TYPE 0x04
+-#define ACCESS_ALLOWED_OBJECT_ACE_TYPE	0x05
+-#define ACCESS_DENIED_OBJECT_ACE_TYPE	0x06
+-#define SYSTEM_AUDIT_OBJECT_ACE_TYPE	0x07
+-#define SYSTEM_ALARM_OBJECT_ACE_TYPE	0x08
+-#define ACCESS_ALLOWED_CALLBACK_ACE_TYPE 0x09
+-#define ACCESS_DENIED_CALLBACK_ACE_TYPE	0x0A
+-#define ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE 0x0B
+-#define ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE  0x0C
+-#define SYSTEM_AUDIT_CALLBACK_ACE_TYPE	0x0D
+-#define SYSTEM_ALARM_CALLBACK_ACE_TYPE	0x0E /* Reserved */
+-#define SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE 0x0F
+-#define SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE 0x10 /* reserved */
+-#define SYSTEM_MANDATORY_LABEL_ACE_TYPE	0x11
+-#define SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE 0x12
+-#define SYSTEM_SCOPED_POLICY_ID_ACE_TYPE 0x13
+-
+-/* ACE flags */
+-#define OBJECT_INHERIT_ACE	0x01
+-#define CONTAINER_INHERIT_ACE	0x02
+-#define NO_PROPAGATE_INHERIT_ACE 0x04
+-#define INHERIT_ONLY_ACE	0x08
+-#define INHERITED_ACE		0x10
+-#define SUCCESSFUL_ACCESS_ACE_FLAG 0x40
+-#define FAILED_ACCESS_ACE_FLAG	0x80
+-
+-struct smb_ace {
+-	__u8 type; /* see above and MS-DTYP 2.4.4.1 */
+-	__u8 flags;
+-	__le16 size;
+-	__le32 access_req;
+-	struct smb_sid sid; /* ie UUID of user or group who gets these perms */
+-} __attribute__((packed));
+-
+ /*
+  * The current SMB3 form of security descriptor is similar to what was used for
+  * cifs (see above) but some fields are split, and fields in the struct below
+diff --git a/fs/smb/common/smbacl.h b/fs/smb/common/smbacl.h
+new file mode 100644
+index 000000000000..6a60698fc6f0
+--- /dev/null
++++ b/fs/smb/common/smbacl.h
+@@ -0,0 +1,121 @@
++/* SPDX-License-Identifier: LGPL-2.1+ */
++/*
++ *   Copyright (c) International Business Machines  Corp., 2007
++ *   Author(s): Steve French (sfrench@us.ibm.com)
++ *   Modified by Namjae Jeon (linkinjeon@kernel.org)
++ */
++
++#ifndef _COMMON_SMBACL_H
++#define _COMMON_SMBACL_H
++
++#define NUM_AUTHS (6)	/* number of authority fields */
++#define SID_MAX_SUB_AUTHORITIES (15) /* max number of sub authority fields */
++
++/* ACE types - see MS-DTYP 2.4.4.1 */
++#define ACCESS_ALLOWED_ACE_TYPE 0x00
++#define ACCESS_DENIED_ACE_TYPE  0x01
++#define SYSTEM_AUDIT_ACE_TYPE   0x02
++#define SYSTEM_ALARM_ACE_TYPE   0x03
++#define ACCESS_ALLOWED_COMPOUND_ACE_TYPE 0x04
++#define ACCESS_ALLOWED_OBJECT_ACE_TYPE  0x05
++#define ACCESS_DENIED_OBJECT_ACE_TYPE   0x06
++#define SYSTEM_AUDIT_OBJECT_ACE_TYPE    0x07
++#define SYSTEM_ALARM_OBJECT_ACE_TYPE    0x08
++#define ACCESS_ALLOWED_CALLBACK_ACE_TYPE 0x09
++#define ACCESS_DENIED_CALLBACK_ACE_TYPE 0x0A
++#define ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE 0x0B
++#define ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE  0x0C
++#define SYSTEM_AUDIT_CALLBACK_ACE_TYPE  0x0D
++#define SYSTEM_ALARM_CALLBACK_ACE_TYPE  0x0E /* Reserved */
++#define SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE 0x0F
++#define SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE 0x10 /* reserved */
++#define SYSTEM_MANDATORY_LABEL_ACE_TYPE 0x11
++#define SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE 0x12
++#define SYSTEM_SCOPED_POLICY_ID_ACE_TYPE 0x13
++
++/* ACE flags */
++#define OBJECT_INHERIT_ACE		0x01
++#define CONTAINER_INHERIT_ACE		0x02
++#define NO_PROPAGATE_INHERIT_ACE	0x04
++#define INHERIT_ONLY_ACE		0x08
++#define INHERITED_ACE			0x10
++#define SUCCESSFUL_ACCESS_ACE_FLAG	0x40
++#define FAILED_ACCESS_ACE_FLAG		0x80
++
++/*
++ * Maximum size of a string representation of a SID:
++ *
++ * The fields are unsigned values in decimal. So:
++ *
++ * u8:  max 3 bytes in decimal
++ * u32: max 10 bytes in decimal
++ *
++ * "S-" + 3 bytes for version field + 15 for authority field + NULL terminator
++ *
++ * For authority field, max is when all 6 values are non-zero and it must be
++ * represented in hex. So "-0x" + 12 hex digits.
++ *
++ * Add 11 bytes for each subauthority field (10 bytes each + 1 for '-')
++ */
++#define SID_STRING_BASE_SIZE (2 + 3 + 15 + 1)
++#define SID_STRING_SUBAUTH_SIZE (11) /* size of a single subauth string */
++
++#define DOMAIN_USER_RID_LE	cpu_to_le32(513)
++
++/*
++ * ACE types - see MS-DTYP 2.4.4.1
++ */
++enum {
++	ACCESS_ALLOWED,
++	ACCESS_DENIED,
++};
++
++/*
++ * Security ID types
++ */
++enum {
++	SIDOWNER = 1,
++	SIDGROUP,
++	SIDCREATOR_OWNER,
++	SIDCREATOR_GROUP,
++	SIDUNIX_USER,
++	SIDUNIX_GROUP,
++	SIDNFS_USER,
++	SIDNFS_GROUP,
++	SIDNFS_MODE,
++};
++
++struct smb_ntsd {
++	__le16 revision; /* revision level */
++	__le16 type;
++	__le32 osidoffset;
++	__le32 gsidoffset;
++	__le32 sacloffset;
++	__le32 dacloffset;
++} __attribute__((packed));
++
++struct smb_sid {
++	__u8 revision; /* revision level */
++	__u8 num_subauth;
++	__u8 authority[NUM_AUTHS];
++	__le32 sub_auth[SID_MAX_SUB_AUTHORITIES]; /* sub_auth[num_subauth] */
++} __attribute__((packed));
++
++/* size of a struct smb_sid, sans sub_auth array */
++#define CIFS_SID_BASE_SIZE (1 + 1 + NUM_AUTHS)
++
++struct smb_acl {
++	__le16 revision; /* revision level */
++	__le16 size;
++	__le32 num_aces;
++} __attribute__((packed));
++
 +struct smb_ace {
- 	__u8 type; /* see above and MS-DTYP 2.4.4.1 */
- 	__u8 flags;
- 	__le16 size;
-diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index dd944f160973..a27daf5b4ddb 100644
---- a/fs/smb/client/cifsglob.h
-+++ b/fs/smb/client/cifsglob.h
-@@ -205,7 +205,7 @@ struct cifs_cred {
- 	struct smb_sid osid;
- 	struct smb_sid gsid;
- 	struct cifs_ntace *ntaces;
--	struct cifs_ace *aces;
-+	struct smb_ace *aces;
- };
++	__u8 type; /* see above and MS-DTYP 2.4.4.1 */
++	__u8 flags;
++	__le16 size;
++	__le32 access_req;
++	struct smb_sid sid; /* ie UUID of user or group who gets these perms */
++} __attribute__((packed));
++
++#endif /* _COMMON_SMBACL_H */
+diff --git a/fs/smb/server/smbacl.h b/fs/smb/server/smbacl.h
+index 2b52861707d8..24ce576fc292 100644
+--- a/fs/smb/server/smbacl.h
++++ b/fs/smb/server/smbacl.h
+@@ -8,6 +8,7 @@
+ #ifndef _SMBACL_H
+ #define _SMBACL_H
  
- struct cifs_open_info_data {
-diff --git a/fs/smb/client/cifsproto.h b/fs/smb/client/cifsproto.h
-index 33ca3c98900d..1fd82ce970f9 100644
---- a/fs/smb/client/cifsproto.h
-+++ b/fs/smb/client/cifsproto.h
-@@ -243,9 +243,9 @@ extern int cifs_set_acl(struct mnt_idmap *idmap,
- 			struct dentry *dentry, struct posix_acl *acl, int type);
- extern int set_cifs_acl(struct smb_ntsd *, __u32, struct inode *,
- 				const char *, int);
--extern unsigned int setup_authusers_ACE(struct cifs_ace *pace);
--extern unsigned int setup_special_mode_ACE(struct cifs_ace *pace, __u64 nmode);
--extern unsigned int setup_special_user_owner_ACE(struct cifs_ace *pace);
-+extern unsigned int setup_authusers_ACE(struct smb_ace *pace);
-+extern unsigned int setup_special_mode_ACE(struct smb_ace *pace, __u64 nmode);
-+extern unsigned int setup_special_user_owner_ACE(struct smb_ace *pace);
++#include "../common/smbacl.h"
+ #include <linux/fs.h>
+ #include <linux/namei.h>
+ #include <linux/posix_acl.h>
+@@ -15,32 +16,6 @@
  
- extern void dequeue_mid(struct mid_q_entry *mid, bool malformed);
- extern int cifs_read_from_socket(struct TCP_Server_Info *server, char *buf,
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index bb56543e0a2a..1df4174e06ca 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -2623,7 +2623,7 @@ create_sd_buf(umode_t mode, bool set_owner, unsigned int *len)
- 	unsigned int group_offset = 0;
- 	struct smb3_acl acl = {};
+ #include "mgmt/tree_connect.h"
  
--	*len = round_up(sizeof(struct crt_sd_ctxt) + (sizeof(struct cifs_ace) * 4), 8);
-+	*len = round_up(sizeof(struct crt_sd_ctxt) + (sizeof(struct smb_ace) * 4), 8);
+-#define NUM_AUTHS (6)	/* number of authority fields */
+-#define SID_MAX_SUB_AUTHORITIES (15) /* max number of sub authority fields */
+-
+-/*
+- * ACE types - see MS-DTYP 2.4.4.1
+- */
+-enum {
+-	ACCESS_ALLOWED,
+-	ACCESS_DENIED,
+-};
+-
+-/*
+- * Security ID types
+- */
+-enum {
+-	SIDOWNER = 1,
+-	SIDGROUP,
+-	SIDCREATOR_OWNER,
+-	SIDCREATOR_GROUP,
+-	SIDUNIX_USER,
+-	SIDUNIX_GROUP,
+-	SIDNFS_USER,
+-	SIDNFS_GROUP,
+-	SIDNFS_MODE,
+-};
+-
+ /* Revision for ACLs */
+ #define SD_REVISION	1
  
- 	if (set_owner) {
- 		/* sizeof(struct owner_group_sids) is already multiple of 8 so no need to round */
-@@ -2672,21 +2672,21 @@ create_sd_buf(umode_t mode, bool set_owner, unsigned int *len)
- 	ptr += sizeof(struct smb3_acl);
+@@ -62,92 +37,8 @@ enum {
+ #define RM_CONTROL_VALID	0x4000
+ #define SELF_RELATIVE		0x8000
  
- 	/* create one ACE to hold the mode embedded in reserved special SID */
--	acelen = setup_special_mode_ACE((struct cifs_ace *)ptr, (__u64)mode);
-+	acelen = setup_special_mode_ACE((struct smb_ace *)ptr, (__u64)mode);
- 	ptr += acelen;
- 	acl_size = acelen + sizeof(struct smb3_acl);
- 	ace_count = 1;
+-/* ACE types - see MS-DTYP 2.4.4.1 */
+-#define ACCESS_ALLOWED_ACE_TYPE 0x00
+-#define ACCESS_DENIED_ACE_TYPE  0x01
+-#define SYSTEM_AUDIT_ACE_TYPE   0x02
+-#define SYSTEM_ALARM_ACE_TYPE   0x03
+-#define ACCESS_ALLOWED_COMPOUND_ACE_TYPE 0x04
+-#define ACCESS_ALLOWED_OBJECT_ACE_TYPE  0x05
+-#define ACCESS_DENIED_OBJECT_ACE_TYPE   0x06
+-#define SYSTEM_AUDIT_OBJECT_ACE_TYPE    0x07
+-#define SYSTEM_ALARM_OBJECT_ACE_TYPE    0x08
+-#define ACCESS_ALLOWED_CALLBACK_ACE_TYPE 0x09
+-#define ACCESS_DENIED_CALLBACK_ACE_TYPE 0x0A
+-#define ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE 0x0B
+-#define ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE  0x0C
+-#define SYSTEM_AUDIT_CALLBACK_ACE_TYPE  0x0D
+-#define SYSTEM_ALARM_CALLBACK_ACE_TYPE  0x0E /* Reserved */
+-#define SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE 0x0F
+-#define SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE 0x10 /* reserved */
+-#define SYSTEM_MANDATORY_LABEL_ACE_TYPE 0x11
+-#define SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE 0x12
+-#define SYSTEM_SCOPED_POLICY_ID_ACE_TYPE 0x13
+-
+-/* ACE flags */
+-#define OBJECT_INHERIT_ACE		0x01
+-#define CONTAINER_INHERIT_ACE		0x02
+-#define NO_PROPAGATE_INHERIT_ACE	0x04
+-#define INHERIT_ONLY_ACE		0x08
+-#define INHERITED_ACE			0x10
+-#define SUCCESSFUL_ACCESS_ACE_FLAG	0x40
+-#define FAILED_ACCESS_ACE_FLAG		0x80
+-
+-/*
+- * Maximum size of a string representation of a SID:
+- *
+- * The fields are unsigned values in decimal. So:
+- *
+- * u8:  max 3 bytes in decimal
+- * u32: max 10 bytes in decimal
+- *
+- * "S-" + 3 bytes for version field + 15 for authority field + NULL terminator
+- *
+- * For authority field, max is when all 6 values are non-zero and it must be
+- * represented in hex. So "-0x" + 12 hex digits.
+- *
+- * Add 11 bytes for each subauthority field (10 bytes each + 1 for '-')
+- */
+-#define SID_STRING_BASE_SIZE (2 + 3 + 15 + 1)
+-#define SID_STRING_SUBAUTH_SIZE (11) /* size of a single subauth string */
+-
+-#define DOMAIN_USER_RID_LE	cpu_to_le32(513)
+-
+ struct ksmbd_conn;
  
- 	if (set_owner) {
- 		/* we do not need to reallocate buffer to add the two more ACEs. plenty of space */
--		acelen = setup_special_user_owner_ACE((struct cifs_ace *)ptr);
-+		acelen = setup_special_user_owner_ACE((struct smb_ace *)ptr);
- 		ptr += acelen;
- 		acl_size += acelen;
- 		ace_count += 1;
- 	}
- 
- 	/* and one more ACE to allow access for authenticated users */
--	acelen = setup_authusers_ACE((struct cifs_ace *)ptr);
-+	acelen = setup_authusers_ACE((struct smb_ace *)ptr);
- 	ptr += acelen;
- 	acl_size += acelen;
- 	ace_count += 1;
+-struct smb_ntsd {
+-	__le16 revision; /* revision level */
+-	__le16 type;
+-	__le32 osidoffset;
+-	__le32 gsidoffset;
+-	__le32 sacloffset;
+-	__le32 dacloffset;
+-} __packed;
+-
+-struct smb_sid {
+-	__u8 revision; /* revision level */
+-	__u8 num_subauth;
+-	__u8 authority[NUM_AUTHS];
+-	__le32 sub_auth[SID_MAX_SUB_AUTHORITIES]; /* sub_auth[num_subauth] */
+-} __packed;
+-
+-/* size of a struct cifs_sid, sans sub_auth array */
+-#define CIFS_SID_BASE_SIZE (1 + 1 + NUM_AUTHS)
+-
+-struct smb_acl {
+-	__le16 revision; /* revision level */
+-	__le16 size;
+-	__le32 num_aces;
+-} __packed;
+-
+-struct smb_ace {
+-	__u8 type;
+-	__u8 flags;
+-	__le16 size;
+-	__le32 access_req;
+-	struct smb_sid sid; /* ie UUID of user or group who gets these perms */
+-} __packed;
+-
+ struct smb_fattr {
+ 	kuid_t	cf_uid;
+ 	kgid_t	cf_gid;
 -- 
 2.34.1
 
