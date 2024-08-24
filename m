@@ -1,119 +1,118 @@
-Return-Path: <linux-cifs+bounces-2622-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2624-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E5DA95DE1D
-	for <lists+linux-cifs@lfdr.de>; Sat, 24 Aug 2024 15:35:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D9095DE4A
+	for <lists+linux-cifs@lfdr.de>; Sat, 24 Aug 2024 16:13:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 953821F21E28
-	for <lists+linux-cifs@lfdr.de>; Sat, 24 Aug 2024 13:35:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B641C2110F
+	for <lists+linux-cifs@lfdr.de>; Sat, 24 Aug 2024 14:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31CD6155CAC;
-	Sat, 24 Aug 2024 13:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47591509B6;
+	Sat, 24 Aug 2024 14:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TepTd2Io"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSGnLKAX"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746541BDDB;
-	Sat, 24 Aug 2024 13:35:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772FA186A;
+	Sat, 24 Aug 2024 14:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724506540; cv=none; b=fzqnsD2/kc9GuEu46R/jbX9aSOfqU7sHPnkEACoP+7LwT0+za9/g9AAeCN0GrykIOvvu97m91QM8YsKu9IRR1kS2V138cBdWQlogBJ3uXdlnyu3PJ4dN56wowhgddK6khg4QAsDIPG9MfY2UaIdayyCzdYFi+0YktQpX67X7xUs=
+	t=1724508792; cv=none; b=RNiPCYaDCJYzmma3ylxOyymnW5vUOgcoF1yRwdweq6voOJxp8jVHAV1qb3Rwy9RmqwfBEYkYSR0A85E4q8dzxOYqRBPtosr+zNzhAS8gemagAMiieKQkOlGLjQuBPbJiWxR2nmfHv8z4GWkFYb9hy+tGXypmxkVGzaDh1S0zWtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724506540; c=relaxed/simple;
-	bh=K/ysHGSh2tpJMGU0zcN1LbvUjYwlWxuw99THfl478WQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=msGBSUjcWEz+VDFTMdZbv1LBiaux4oDlBf1FKnl64E2GJkeMdOqmQiRRJEuvMWh8eNZWGzPYkPeFOSsZLEHCEnbuHPnVL9Sz9TXvRgxidgIHsyaVs1jGJ9pclNfml+8wSzf12MQy+hNi5PgeZVnIEj5krtWwHxvLXsRR4dGN1b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TepTd2Io; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-534366c1aa2so2009423e87.1;
-        Sat, 24 Aug 2024 06:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724506536; x=1725111336; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=loqmru87kWNBUwgs1DTG9KZigit4FCc1OkbpRIzXkKo=;
-        b=TepTd2Ioun/GRCaA2HP5BCYojx/gbqwkKzRMomoaeyVCBm4DS5NXv55ZiwKcJgQCIA
-         0XUK+SbQ15f/PgT8B3YJHDX5c5zK2enX55rxmp7H9rReN5rQ6Xfdyfh73d4/mtrL8L8V
-         rHMoJTwcTBttCB74X/8+nI+J+bfjjbqHXOON6abdZopEgvOB8VX5gq3wtCKlmrrBe4dN
-         J6+cJm+9JH2RtMq7JPHUsDMWQG+uaLIGB8g18P/bZtdPLbryAlSe1TCbtc1CZLD7vbPh
-         z8dL1AZnvrML1urmJiFYPNM7vylnawF01MA2H5RVof/aehpQUopwJOExBPKzs8gGI1Vf
-         OQXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724506536; x=1725111336;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loqmru87kWNBUwgs1DTG9KZigit4FCc1OkbpRIzXkKo=;
-        b=XFcfHDU6KTALpCJZIwHOuc9tklUjIvHmiXOyiZyl14BFAKmeIoag61Be5fMhZbbbD4
-         wI2CUxYueM2BpJQqHzaQuvfdCuNDe0Xueqh5Z6Ca15t3Saoar9pX81ZchCyKnqV4+B8B
-         5W8anzT16Z9zplK8omM7kl4zA1DrD1D+MztzMKDfHWux9LjYwCxvARlewCpvmmo84krr
-         dn7w0iFtbDb4mg5IeqN9wdDyeach3wrinM0XPzHjeNC1wsZuyu+nd1/Q2gTcB2qxR+hX
-         ci/WaqIf7NOyl/kkqeTAHoG7kwElqWuhmN2H+VyGQp93IixX8MIanSiTWzFoL9Hi6rXt
-         7b7w==
-X-Forwarded-Encrypted: i=1; AJvYcCVDeRORNw5G9aciF2rPhQ2kZ/4WdjSw4QCg2fVKdJpMpSSTjw+b9VbZygziYA3WrukH5KMnEd/aho8f@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlOCCuTDJOIkcCr2e/XDm+U1cmqlX0GPuMu9dB44ZmHIYkRKsK
-	gVrW/nXg8metqRmRYa0adPF7qxuB9Ka2z7/8jRucjeAuqklY35JVTNsQ2AjQp/9xbqBLyPkG0mx
-	GQcbI3/o2z/yM9elHKTgT0YcgPFsbrw==
-X-Google-Smtp-Source: AGHT+IFsJFvJKiSYg5+HQTRFRMt8EpNAVNRT1cXUCMCnQ6ElfGri7YUdpNRCdpj9IH7SB08a7En0SqqJVfkzshY1eOA=
-X-Received: by 2002:a05:6512:3d24:b0:52c:e3ad:3fbf with SMTP id
- 2adb3069b0e04-5343885f866mr3083774e87.42.1724506536013; Sat, 24 Aug 2024
- 06:35:36 -0700 (PDT)
+	s=arc-20240116; t=1724508792; c=relaxed/simple;
+	bh=1RROgoMoiIURZrgBI0u+sQOi22mVdm5uhe2i5PEaJ7Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cpUhtYmy0EtfIXIVOOPpeNQpvpLG9ECsf0a8eI25Ckxg2XhYseB7e1Om0fs2TISNGbmh5A7e5JNZB79Mdne7XoTKuXvdfLRrOYaAC3sq8Y0ryiL4g5Bl6oZlJJ1SHKCX702vIol854Y5lqXg9TCi3oB86RxHChrDUk+EtBKVG6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSGnLKAX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A59C32781;
+	Sat, 24 Aug 2024 14:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724508792;
+	bh=1RROgoMoiIURZrgBI0u+sQOi22mVdm5uhe2i5PEaJ7Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TSGnLKAXbEucvWAQfLpYFzmykp5QeFdt9IGLO+QBd3M9TQsdDcpmVFe8sIb1ZSi0l
+	 +xUKZvMbaYbGjtogaGv09XTXzAuo3HtUW2ICNSKj9fMMR27DBbK2E1mYlZ8J2gyerm
+	 /1PL8xB02z5ButNd1qgVUbpCElWMbZ1P1wArc2W84/S5cKlHRjHUEhfBiwOjHiEORA
+	 DrUX7VJMPECqiLrCo6LNitskmpC6nLf+zytSgeFiVmlaE/DoS2qzaGEi+wgkLOLxVK
+	 IaO8KNkckCOjIhYKAqG+j4ZySWSAQ7nLPL5KSegXJ7SMcBj+z2/inWTDbW9aFUtA0+
+	 eYCtNddeZ/ciw==
+From: Christian Brauner <brauner@kernel.org>
+To: David Howells <dhowells@redhat.com>,
+	Steve French <sfrench@samba.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Pankaj Raghav <p.raghav@samsung.com>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	netfs@lists.linux.dev,
+	linux-afs@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	v9fs@lists.linux.dev,
+	linux-erofs@lists.ozlabs.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/9] netfs, cifs: Combined repost of fixes for truncation, DIO read and read-retry
+Date: Sat, 24 Aug 2024 16:09:51 +0200
+Message-ID: <20240824-ohrwurm-kernaufgabe-6253ce9cb620@brauner>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240823200819.532106-1-dhowells@redhat.com>
+References: <20240823200819.532106-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Steve French <smfrench@gmail.com>
-Date: Sat, 24 Aug 2024 08:35:23 -0500
-Message-ID: <CAH2r5mt24xmXoKUiqHhGzEqXxwusQQQ9iQk0up6xzMbP9xfrKQ@mail.gmail.com>
-Subject: [GIT PULL] ksmbd server fixes
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>, 
-	Namjae Jeon <linkinjeon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1823; i=brauner@kernel.org; h=from:subject:message-id; bh=1RROgoMoiIURZrgBI0u+sQOi22mVdm5uhe2i5PEaJ7Q=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSdfJVffXKaT/8Pjqu3GVvfLH2vu2VCaW5K1dO7uq5zj 7TqHFq0s6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiD5IZGRo7T3+Ld/D4IPp9 k8KLx7tbnO8x+ez5wfR20v6496lRfS4M/11XbSi+/6B3pnG0bXW1kq909nHuDUFrV6Rdv7zltM8 eB24A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Please pull the following changes since commit
-b311c1b497e51a628aa89e7cb954481e5f9dced2:
+On Fri, 23 Aug 2024 21:08:08 +0100, David Howells wrote:
+> Firstly, there are some fixes for truncation, netfslib and afs that I
+> discovered whilst trying Pankaj Raghav's minimum folio order patchset:
+> 
+>  (1) Fix truncate to make it honour AS_RELEASE_ALWAYS in a couple of places
+>      that got missed.
+> 
+>  (2) Fix duplicated editing of a partially invalidated folio in afs's
+>      post-setattr edit phase.
+> 
+> [...]
 
-  Merge tag '6.11-rc4-server-fixes' of git://git.samba.org/ksmbd
-(2024-08-20 19:03:07 -0700)
+Applied to the vfs.fixes branch of the vfs/vfs.git tree.
+Patches in the vfs.fixes branch should appear in linux-next soon.
 
-are available in the Git repository at:
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-  git://git.samba.org/ksmbd.git tags/6.11-rc5-server-fixes
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-for you to fetch changes up to 2b7e0573a49064d9c94c114b4471327cd96ae39c:
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-  smb/server: update misguided comment of smb2_allocate_rsp_buf()
-(2024-08-22 09:52:00 -0500)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.fixes
 
-----------------------------------------------------------------
-Five ksmbd server fixes
-- query directory flex array fix
-- fix potential null ptr reference in open
-- fix error message in some open cases
-- two minor cleanup
-----------------------------------------------------------------
-ChenXiaoSong (4):
-      smb/server: fix return value of smb2_open()
-      smb/server: fix potential null-ptr-deref of lease_ctx_info in smb2_open()
-      smb/server: remove useless assignment of 'file_present' in smb2_open()
-      smb/server: update misguided comment of smb2_allocate_rsp_buf()
-
-Namjae Jeon (1):
-      ksmbd: the buffer of smb2 query dir response has at least 1 byte
-
- fs/smb/server/oplock.c  |  2 +-
- fs/smb/server/smb2pdu.c | 18 +++++++++---------
- 2 files changed, 10 insertions(+), 10 deletions(-)
-
---
-Thanks,
-
-Steve
+[1/9] mm: Fix missing folio invalidation calls during truncation
+      https://git.kernel.org/vfs/vfs/c/0aa2e1b2fb7a
+[2/9] afs: Fix post-setattr file edit to do truncation correctly
+      https://git.kernel.org/vfs/vfs/c/a74ee0e878e2
+[3/9] netfs: Fix netfs_release_folio() to say no if folio dirty
+      https://git.kernel.org/vfs/vfs/c/7dfc8f0c6144
+[4/9] netfs: Fix trimming of streaming-write folios in netfs_inval_folio()
+      https://git.kernel.org/vfs/vfs/c/cce6bfa6ca0e
+[5/9] netfs: Fix missing iterator reset on retry of short read
+      https://git.kernel.org/vfs/vfs/c/950b03d0f664
+[10/10] netfs: Fix interaction of streaming writes with zero-point tracker
+        https://git.kernel.org/vfs/vfs/c/e00e99ba6c6b
 
