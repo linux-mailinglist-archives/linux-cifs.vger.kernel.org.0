@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-2679-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2676-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BDA0967899
-	for <lists+linux-cifs@lfdr.de>; Sun,  1 Sep 2024 18:33:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E2A09677FE
+	for <lists+linux-cifs@lfdr.de>; Sun,  1 Sep 2024 18:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51B021F21339
-	for <lists+linux-cifs@lfdr.de>; Sun,  1 Sep 2024 16:33:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8AA9B21E3F
+	for <lists+linux-cifs@lfdr.de>; Sun,  1 Sep 2024 16:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E7517E8EA;
-	Sun,  1 Sep 2024 16:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A479181B88;
+	Sun,  1 Sep 2024 16:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yU97MFQ+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qp5D+XHt"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7677F2B9C7;
-	Sun,  1 Sep 2024 16:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F091E18132F;
+	Sun,  1 Sep 2024 16:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725208402; cv=none; b=oHIHIawkXJncxbwoEwve8LGgxKqmCuWoofmVRMw4lUMkWusbF08V3c6Iy5b3OZTBzAoV5nWCCvHeD9Z+1lCvbntc6iFeLjLnSjKngNVIK2DSAIXuhLsvkYsB9NWGIRkORTk2cCtzwY4YX8oS1tIWFZGFwQM+FEv4mLkWPkNhyVg=
+	t=1725207989; cv=none; b=gttj8wOM/x+zJ6fJA2Um6Wwz8S+0ktEr0DWlXsXF4O1mNhW+40rTlCmg31HpyqjQY5vUMhvL7GFRWYLME4SAaMkGLN11sx7ISPJaWHDjdB0GRc2IeDdb+jLJzKgNbEqT7RmrEZ061kfh5LqQd1U2nSYHeZGuyqjjdVXZQK5rc5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725208402; c=relaxed/simple;
-	bh=9o/vd6q79XBRfsxHjr7dha6xQzqmuHh+CV0HjLxjBjU=;
+	s=arc-20240116; t=1725207989; c=relaxed/simple;
+	bh=N/959gfYX00ziHtqMXnG549dcbHHpLZdLmkODtpAD8o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=leShJS/v5cYxW50Fpby2KDR7zVEVL0MSr8UiWz+KqlpLr8/NBRLWvwEZX7+mpqH2t5dHlmnqVbG03lVVj3kpld1qaBDTdFF4O9fjOI54bygnl391zwLL4ivzyLpgf856y0kJ0y0q8AP9G44+tZGooSFRIGiBKtbRl+BjL99T+aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yU97MFQ+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF94C4CEC3;
-	Sun,  1 Sep 2024 16:33:21 +0000 (UTC)
+	 MIME-Version; b=hlkmMArZawysg5C2e6LdOD2mYei/r78MjEP0Mi4tz7qHLFKvbHKIHEPagY6/eJwm1kgfdxH/XNBSVLokBvRVa+tqg/YrZ16HWyx687sGEn/K0b2WrtwhqAmKgg9Ii1/8d54KtCmlQs8Q5BlovCy63QNqJel3lJy/P5KLct4Mgt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qp5D+XHt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7988EC4CEC3;
+	Sun,  1 Sep 2024 16:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725208402;
-	bh=9o/vd6q79XBRfsxHjr7dha6xQzqmuHh+CV0HjLxjBjU=;
+	s=korg; t=1725207988;
+	bh=N/959gfYX00ziHtqMXnG549dcbHHpLZdLmkODtpAD8o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=yU97MFQ+iXqpcF1J8d+WW8ZZzAQ2pCW4gQAJ8tbbov+pRnuT8XY+gcQ4eHoFaNbeV
-	 LafRnfPBwqqYQXcB9YwGJkCDO4pRmUpys5RJFkOUko95Vw0gi9agJ8Z5z0WIAARhYc
-	 XBBpGLPgfxBEcpJOTMSBYQH7soLHNFzXE7afl600=
+	b=qp5D+XHtHnF3J9X6XnVIxGXlWjIvjWsJA98Od70cJUgs3JllvjttWqxtTKexuhonq
+	 cbMRebALByB+JCfRM4XZimOwbjU1OL3gRv6DcxZEKD4ZYvNgfw30KVmiowd8/k5dzx
+	 hxbPhyDmhnzrAc7aar8ZCinGFlP3h5ulr4KECRBE=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -51,12 +51,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	netfs@lists.linux.dev,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.10 072/149] cifs: Fix FALLOC_FL_PUNCH_HOLE support
-Date: Sun,  1 Sep 2024 18:16:23 +0200
-Message-ID: <20240901160820.173540829@linuxfoundation.org>
+Subject: [PATCH 6.6 40/93] cifs: Fix FALLOC_FL_PUNCH_HOLE support
+Date: Sun,  1 Sep 2024 18:16:27 +0200
+Message-ID: <20240901160808.870426806@linuxfoundation.org>
 X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240901160817.461957599@linuxfoundation.org>
-References: <20240901160817.461957599@linuxfoundation.org>
+In-Reply-To: <20240901160807.346406833@linuxfoundation.org>
+References: <20240901160807.346406833@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.10-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -130,10 +130,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 22 insertions(+)
 
 diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index cfbca3489ece1..f44f5f2494006 100644
+index 66cfce456263b..012d6ec12a691 100644
 --- a/fs/smb/client/smb2ops.c
 +++ b/fs/smb/client/smb2ops.c
-@@ -3287,6 +3287,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
+@@ -3251,6 +3251,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
  	struct inode *inode = file_inode(file);
  	struct cifsFileInfo *cfile = file->private_data;
  	struct file_zero_data_information fsctl_buf;
@@ -141,7 +141,7 @@ index cfbca3489ece1..f44f5f2494006 100644
  	long rc;
  	unsigned int xid;
  	__u8 set_sparse = 1;
-@@ -3318,6 +3319,27 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
+@@ -3282,6 +3283,27 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
  			(char *)&fsctl_buf,
  			sizeof(struct file_zero_data_information),
  			CIFSMaxBufSize, NULL, NULL);
