@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-2754-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2750-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44AB79768A5
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 14:06:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17B659768A0
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 14:06:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEAAF1F25946
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 12:06:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1165E1C234C9
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 12:06:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B9D1A3052;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191261A262F;
 	Thu, 12 Sep 2024 12:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZ6fDvyI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tJ9tnwPp"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA221A0BFF;
-	Thu, 12 Sep 2024 12:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59C91A2622;
+	Thu, 12 Sep 2024 12:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726142761; cv=none; b=tFeDrWpdCdw2GrypYG6q5xFoqyfW1XuS9S5gO7N9/VaSn7EqCTXiLAAEDfGED7ybLM1gBVCXtgw0tYt234WY/YkzojuvWF5Uop9XxFeoLZznF+K4lUMS0dkoCsDu02XOiNnL7LzBqtGafrOP3kfNZbu4z7Dow+EaZXEhWcNOGX0=
+	t=1726142761; cv=none; b=LOPF50jZzONAwQsuYBVebv3FMTy6r0cbDJrOycQ5PYHUkA8gtor+ldkfi7lJGx5xC28ZxKBJAEDjZ2xS2/vh4yec7bHq3Gl7SAVEbRsiC6sRyJK4/u2PSgH6BjgZjZ4xowbQPGHUhAsNS0DzuCyj/sy+sd1zDS1N1uW5v3yIyMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1726142761; c=relaxed/simple;
-	bh=cQz+jNq/ftZXX/k+WOGLdN1FFcKYmae9h3VM8SsnEvA=;
+	bh=Tvx8ty3Re4/zz/tINhZ29nrFM+JFehh/c4aSeICembc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lH9veEuwL9FnnTWGshqYqVxkwNiN7iY7bu5pIbKqjtXJabjsB5Krwb4lF1KoPotfD2CIiS9BxjcV4somSC0Y1BWWuuwi5/pY4smsb9aaR3chdLFarHbxJzOZOhn4TsQmf5R7jtOOJosRClrI9OLowQBDgSsPoxLdnhaSkoNx+Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZ6fDvyI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06EB6C4CED0;
-	Thu, 12 Sep 2024 12:06:01 +0000 (UTC)
+	 MIME-Version:Content-Type; b=q1ctZG1ExliZYEl1j9UgbL5fWkBhYzqHPGSa5Fulyvqo5R4YZ3AhKSu51miqxaGMdsLg+9qVtaj4u8vH7dkv2uR6YcFWiRCAIQZMm96FcHStG0pmPerKqeOFvML3buYdO6ODlALCsIDknDcedbM/TV9X+RS9QWLZ09rATSdjcoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tJ9tnwPp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D45C4CEC5;
+	Thu, 12 Sep 2024 12:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726142761;
-	bh=cQz+jNq/ftZXX/k+WOGLdN1FFcKYmae9h3VM8SsnEvA=;
+	s=k20201202; t=1726142760;
+	bh=Tvx8ty3Re4/zz/tINhZ29nrFM+JFehh/c4aSeICembc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hZ6fDvyI6Mu7SwMjIFKh0gosTj02P4h5vvQClFPvFuBVNTxIxWiStVKGIxP0T52gU
-	 TjtW4sltZcmAsBMmZ8s2UVt/D7lbj+HkQMO3rssHLV273G7P/KYb8W9Tln1q/5iq42
-	 v02t+ex1mYHENrqaaRdoAufnGH3jZLKlrTy0yvW1KcFK19wUpdK3Rf4h82WrBse+nq
-	 70kHOk59iXaEzSauFVLHt8gZ6xN1o5z6a0fD7ywkcfmUBR6eO6ByzxSAPIZCMrxYEo
-	 Fygh5AkWmFxgd+9ScLm8NmghrsVFeZujBug3y6bAWojiD5I1q8+e68IElmUpLsQ/RA
-	 XoGzUugXfNzMg==
+	b=tJ9tnwPpM2G25d3OmnOAmTtGzM5P3l3CSxCTDInOpkBInXcFQUKlmaOv2kBKhBOfF
+	 Zi8APJLcxptc702OSQ9NrnmCGcDuWfyKlAR2YGfWot4QvXPiacXQVkdMqwTeBUJtAg
+	 m0oeE8tEoZjdb9rTng2fWxtBqVcQr918w0nybgi5VmZSEcLD3jH/fPbBvzhloAXEpV
+	 Ca6PQTJJAH2S40ual5jkHraw0ucZwABlmW2s4Ctp3IWQXKDWLx7dRZwEZYRusMCKQm
+	 UKisrwFZltPioNgpc7mNzSPUiDX6CzSq/yq98FTUmProhEIqZ7FMl7cHaSEYtELwtH
+	 DsQOXrasPGfkQ==
 Received: by pali.im (Postfix)
-	id 5C15EB9A; Thu, 12 Sep 2024 14:05:55 +0200 (CEST)
+	id 7FE5CC01; Thu, 12 Sep 2024 14:05:55 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] cifs: Put explicit zero byte into SFU block/char types
-Date: Thu, 12 Sep 2024 14:05:44 +0200
-Message-Id: <20240912120548.15877-4-pali@kernel.org>
+Subject: [PATCH 4/7] cifs: Show debug message when SFU Fifo type was detected
+Date: Thu, 12 Sep 2024 14:05:45 +0200
+Message-Id: <20240912120548.15877-5-pali@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240912120548.15877-1-pali@kernel.org>
 References: <20240912120548.15877-1-pali@kernel.org>
@@ -64,63 +64,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-SFU types IntxCHR and IntxBLK are 8 bytes with zero as last byte. Make it
-explicit in memcpy and memset calls, so the zero byte is visible in the
-code (and not hidden as string trailing nul byte).
-
-It is important for reader to show the last byte for block and char types
-because it differs from the last byte of symlink type (which has it 0x01).
-
-Also it is important to show that the type is not nul-term string, but
-rather 8 bytes (with some printable bytes).
+For debugging purposes it is a good idea to show detected SFU type also for
+Fifo. Debug message is already print for all other special types.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/inode.c   | 4 ++--
- fs/smb/client/smb2ops.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ fs/smb/client/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index e8567ed63f22..d8c39989840e 100644
+index d8c39989840e..70c32b40ede0 100644
 --- a/fs/smb/client/inode.c
 +++ b/fs/smb/client/inode.c
-@@ -586,7 +586,7 @@ cifs_sfu_type(struct cifs_fattr *fattr, const char *path,
- 	rc = tcon->ses->server->ops->sync_read(xid, &fid, &io_parms,
- 					&bytes_read, &pbuf, &buf_type);
- 	if ((rc == 0) && (bytes_read >= 8)) {
--		if (memcmp("IntxBLK", pbuf, 8) == 0) {
-+		if (memcmp("IntxBLK\0", pbuf, 8) == 0) {
- 			cifs_dbg(FYI, "Block device\n");
- 			fattr->cf_mode |= S_IFBLK;
- 			fattr->cf_dtype = DT_BLK;
-@@ -598,7 +598,7 @@ cifs_sfu_type(struct cifs_fattr *fattr, const char *path,
- 				mnr = le64_to_cpu(*(__le64 *)(pbuf+16));
- 				fattr->cf_rdev = MKDEV(mjr, mnr);
- 			}
--		} else if (memcmp("IntxCHR", pbuf, 8) == 0) {
-+		} else if (memcmp("IntxCHR\0", pbuf, 8) == 0) {
- 			cifs_dbg(FYI, "Char device\n");
- 			fattr->cf_mode |= S_IFCHR;
- 			fattr->cf_dtype = DT_CHR;
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index e6540072ffb0..9c2d065d3cc4 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -5072,12 +5072,12 @@ static int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+@@ -541,6 +541,7 @@ cifs_sfu_type(struct cifs_fattr *fattr, const char *path,
+ 	fattr->cf_mode &= ~S_IFMT;
  
- 	switch (mode & S_IFMT) {
- 	case S_IFCHR:
--		strscpy(pdev.type, "IntxCHR");
-+		memcpy(pdev.type, "IntxCHR\0", 8);
- 		pdev.major = cpu_to_le64(MAJOR(dev));
- 		pdev.minor = cpu_to_le64(MINOR(dev));
- 		break;
- 	case S_IFBLK:
--		strscpy(pdev.type, "IntxBLK");
-+		memcpy(pdev.type, "IntxBLK\0", 8);
- 		pdev.major = cpu_to_le64(MAJOR(dev));
- 		pdev.minor = cpu_to_le64(MINOR(dev));
- 		break;
+ 	if (fattr->cf_eof == 0) {
++		cifs_dbg(FYI, "Fifo\n");
+ 		fattr->cf_mode |= S_IFIFO;
+ 		fattr->cf_dtype = DT_FIFO;
+ 		return 0;
 -- 
 2.20.1
 
