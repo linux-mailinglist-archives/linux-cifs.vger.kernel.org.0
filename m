@@ -1,170 +1,170 @@
-Return-Path: <linux-cifs+bounces-2749-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2752-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 870BD97684B
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 13:52:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD4A9768A1
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 14:06:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C0DC1F233C0
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 11:52:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06D0B1F255FA
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Sep 2024 12:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DE01A706B;
-	Thu, 12 Sep 2024 11:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EC71A2635;
+	Thu, 12 Sep 2024 12:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c60cbSQ6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIFhHWmA"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4D81A42B3
-	for <linux-cifs@vger.kernel.org>; Thu, 12 Sep 2024 11:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBACB1A2625;
+	Thu, 12 Sep 2024 12:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726141818; cv=none; b=dhvgHTg4eyOaTRlVZZlvitnSPGW75VMBuYg3gkGj8aKO9b7TkmkrvzIAIg67UgjMAfJYPfD3S9kxnoAaTa6F5dfJSt3Wic+G//bgf0b3NM3Fx4zzYyjGa22NX2G9vdiLp8ZgSVA4OhOVWATwfeoPqDv9dctyOpfuYzpWmUwmu9Q=
+	t=1726142761; cv=none; b=UJTGAR7BZj9NhTfP2d/Kbkyui1ZjduDSPfkEWG3yAivYyI/+hyS2CbJ45tZXgZp3NYNfFV5BJ6xknDF1D4ADjToJzZepycfhWPZfe+3DI74zCH5DGiI66+8VA1VJ5oC/hj+HvtncmzhXtUMdAmaF76duVJIb9cs1E4yLxOeReB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726141818; c=relaxed/simple;
-	bh=Xl6nNLBK8GTBKxLIKD61vE0uvYByirFE263h76WjaRM=;
-	h=From:To:cc:Subject:MIME-Version:Content-Type:Date:Message-ID; b=mOwxGBBj2zbMb2nE7dzol62XzCjFhh2MbzXA77OI4UtYJ8Wuc2LDcMILG9j+OU541yBAfDYpFPiUu9Wi+XuznCP48YGFzRY+I9dg7Pg8K9vmmDwWYN7ZpqeOQ74l58vDFPnA1NpeQJXtftVP1lILZ496kw79tBYli3Ou6oYIyNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c60cbSQ6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726141816;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jLN3U1yZ7TMderZrIcQLdov+Z22mdFuW5sMvjEe338o=;
-	b=c60cbSQ6ECuz5CYf30bQT21XKzAF2vUr3AaRfycsazw8kc1hhv3LjCx63uQua0fynN39ni
-	IKxLHo1+o5sfXjqIl2HP2UQXzkaAurVjauw18Tn2FSNWeUFSAetouxrr0vfACo3Sd1/CMr
-	pOZetFAZcrH3qVJxk5u3rd/F5U8NzFs=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-FdrR9fltPha0VMOFb_6fTA-1; Thu,
- 12 Sep 2024 07:50:13 -0400
-X-MC-Unique: FdrR9fltPha0VMOFb_6fTA-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F3217197702F;
-	Thu, 12 Sep 2024 11:50:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1FA4519560AA;
-	Thu, 12 Sep 2024 11:50:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-To: Christian Brauner <brauner@kernel.org>,
-    Steve French <stfrench@microsoft.com>
-cc: dhowells@redhat.com, Paulo Alcantara <pc@manguebit.com>,
-    Jeff Layton <jlayton@kernel.org>,
-    Stephen Rothwell <sfr@canb.auug.org.au>, linux-cifs@vger.kernel.org,
-    netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: Fix up netfs-writeback vs cifs fixes merge conflicts
+	s=arc-20240116; t=1726142761; c=relaxed/simple;
+	bh=9A1yrLsGcrTDe13xvxQFibx6YzFnxkW2P1PU9DwTHUs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=UlSt9lzkloy+nYlERSeAuif9c9s0jweG8aFxPjT4fNyLvfLiR/rc/qmHgtPQpmToszpaMpJxk9jC8e/p0ygCFeqxy2pYiVsY5FUEPUH5c3fGsS5qFc7dcRPqezmPqUjuWd4SmT55YONLcViCy1+a0DtTHrCMURhAj5cVBtTFDwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIFhHWmA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3109AC4CEC3;
+	Thu, 12 Sep 2024 12:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726142760;
+	bh=9A1yrLsGcrTDe13xvxQFibx6YzFnxkW2P1PU9DwTHUs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uIFhHWmA/VCUTakByO0JX1EA9zn+f52piF2OtLn0ZoJwx8FMDV5q8jLpY5IEUe6Yo
+	 Kn4J82+o11lLN653peuAmrUfLf8RZxLN3xhbXK1QmN7oTaFwpzoYYUMf340VsahCsC
+	 AkXYH8jxfoAK9C0EP6X743mj1fnqFkBzkjPMYv4WOLYtElweXtLlbGc8AbdC1RbrX1
+	 9T1+wkyXjnpCUX4kmukC1tCQBd89kF4ofP0WXV+YHJMnfvvymivdwsyxtBkOUOj/mT
+	 +EaHbbvfmy/esZnhXvXP7mLmTEis7/jNkbVUreE9VzymgtaF91jO67hKa5xoTjQBBZ
+	 5S88j0AuJ3Ydg==
+Received: by pali.im (Postfix)
+	id D3EBC5E9; Thu, 12 Sep 2024 14:05:54 +0200 (CEST)
+From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To: Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] cifs: Improve client SFU support for special files
+Date: Thu, 12 Sep 2024 14:05:41 +0200
+Message-Id: <20240912120548.15877-1-pali@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1131387.1726141806.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 12 Sep 2024 12:50:06 +0100
-Message-ID: <1131388.1726141806@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-    =
+This patch series implement full support for SFU-style of special files
+(fifo, socket, block, char, symlink) and makes client cifs's -o sfu
+mount option to be fully compatible with SFU.
 
-Fix up the conflicts between the netfslib development patches and cifs fix
-commits due to:
+Before this patch series, kernel cifs client was able to:
+* create new char and block devices in SFU-style, and detect them
+* detect existing SFU fifo, but no create/mkfifo SFU functionality
+* detect symlink SFU symlink, but no readlink() functionality and
+  neither no create SFU symlink functionality
 
-        a68c74865f517e26728735aba0ae05055eaff76c
-        cifs: Fix SMB1 readv/writev callback in the same way as SMB2/3
+And it was able to create some SFU-incompatible sockets and fifos (when
+-o sfu was specified) which were not recognized by neither original MS
+SFU implementation and neither by others.
 
-conflicting with:
+This patch series implements missing functionality, which is:
+* detect existing SFU sockets
+* create new SFU sockets
+* create new SFU fifos
+* create new SFU symlink
+* readlink() support for existing SFU symlinks
 
-        ee4cdf7ba857
-        netfs: Speed up buffered reading"
+In following pragraphs are some details about these SFU special files
+which usage on Linux has to be activated by -o sfu mount option.
 
-This will need to be applied if/when Christian's vfs.netfs branch is merge=
-d.
+SFU-style fifo is empty file with system attribute set. This format is
+used by old Microsoft POSIX subsystem and later also by OpenNT/Interix
+subsystem (which replaced Microsoft POSIX subsystem and is part of
+Microsoft SFU). OpenNT is previous name of Interix versions 1.x/2.x.
+Microsoft POSIX subsystem is available since the first Windows NT
+version 3.1, and it was replaced by Interix since Windows XP. Interix
+continue to use this format up to the its last released version for
+Windows 8 / Server 2012 (part of Subsystem for UNIX-based Applications).
+Hence these SFU-style fifos are for very long time unified and widely
+supported.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <stfrench@microsoft.com>
-cc: Paulo Alcantara <pc@manguebit.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cifs@vger.kernel.org
-cc: netfs@lists.linux.dev
-cc: linux-fsdevel@vger.kernel.org
----
- fs/smb/client/cifssmb.c |   14 +++++++-------
- fs/smb/client/smb2pdu.c |    2 --
- 2 files changed, 7 insertions(+), 9 deletions(-)
+SFU-style socket is file which has system attribute set and file content
+is one zero byte.
 
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 6ad22732c25c..d0df0c17b18f 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -1266,9 +1266,7 @@ static void cifs_readv_worker(struct work_struct *wo=
-rk)
- 	struct cifs_io_subrequest *rdata =3D
- 		container_of(work, struct cifs_io_subrequest, subreq.work);
- =
+SFU-style symlink is file which has system attribute set and file content
+is buffer "IntxLNK\1" (8th byte is 0x01) followed by the target location
+encoded in little endian UCS-2/UTF-16. There is no trailing nul.
 
--	netfs_subreq_terminated(&rdata->subreq,
--				(rdata->result =3D=3D 0 || rdata->result =3D=3D -EAGAIN) ?
--				rdata->got_bytes : rdata->result, true);
-+	netfs_read_subreq_terminated(&rdata->subreq, rdata->result, false);
- }
- =
+SFU-style char or block device is file which has system attribute set
+and file content is buffer "IntxBLK\0" or "IntxCHR\0" (8th byte is 0x00)
+followed by major and minor numbers encoded in twos 64-bit little endian.
 
- static void
-@@ -1327,9 +1325,9 @@ cifs_readv_callback(struct mid_q_entry *mid)
- 		__set_bit(NETFS_SREQ_HIT_EOF, &rdata->subreq.flags);
- 		rdata->result =3D 0;
- 	} else {
--		if (rdata->got_bytes < rdata->actual_len &&
--		    rdata->subreq.start + rdata->subreq.transferred + rdata->got_bytes =
-=3D=3D
--		    ictx->remote_i_size) {
-+		size_t trans =3D rdata->subreq.transferred + rdata->got_bytes;
-+		if (trans < rdata->subreq.len &&
-+		    rdata->subreq.start + trans =3D=3D ictx->remote_i_size) {
- 			__set_bit(NETFS_SREQ_HIT_EOF, &rdata->subreq.flags);
- 			rdata->result =3D 0;
- 		}
-@@ -1337,7 +1335,9 @@ cifs_readv_callback(struct mid_q_entry *mid)
- =
+Format of SFU-style sockets, symlinks, char and block devices was
+introduced in Interix 3.0 subsystem, as part of the Microsoft SFU 3.0
+and is used also by all later versions, up to the Windows 8 / Server 2012
+(part of Subsystem for UNIX-based Applications) where it was deprecated.
+Previous OpenNT/Interix versions had no support for UNIX domain sockets
+(and socket files), symlinks or possibility to create character or block
+devices (but they had block/char devices in-memory, returned by stat()).
 
- 	rdata->credits.value =3D 0;
- 	rdata->subreq.transferred +=3D rdata->got_bytes;
--	netfs_read_subreq_terminated(&rdata->subreq, rdata->result, false);
-+	trace_netfs_sreq(&rdata->subreq, netfs_sreq_trace_io_progress);
-+	INIT_WORK(&rdata->subreq.work, cifs_readv_worker);
-+	queue_work(cifsiod_wq, &rdata->subreq.work);
- 	release_mid(mid);
- 	add_credits(server, &credits, 0);
- }
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index 95377bb91950..bb8ecbbe78af 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -4614,8 +4614,6 @@ smb2_readv_callback(struct mid_q_entry *mid)
- 			      0, cifs_trace_rw_credits_read_response_clear);
- 	rdata->credits.value =3D 0;
- 	rdata->subreq.transferred +=3D rdata->got_bytes;
--	if (rdata->subreq.start + rdata->subreq.transferred >=3D rdata->subreq.r=
-req->i_size)
--		__set_bit(NETFS_SREQ_HIT_EOF, &rdata->subreq.flags);
- 	trace_netfs_sreq(&rdata->subreq, netfs_sreq_trace_io_progress);
- 	INIT_WORK(&rdata->subreq.work, smb2_readv_worker);
- 	queue_work(cifsiod_wq, &rdata->subreq.work);
+Microsoft NFS server up to the version included in Windows Server 2008 R2
+also uses this SFU-style format of special files when storing them on
+local filesystem. Later Microsoft NFS server versions (starting in
+Windows Server 2012) use new NFS reparse format, which Interix subsystem
+(included in SFU or SUA) does not understand.
+
+Even SFU-style of special files is old format, it has one big advantage,
+this format does not require any support on SMB/CIFS server of special
+files, as everything is stored only in the file content. The only
+requirement from server is support for system attribute. So this allows
+to store special files also on FAT filesystem.
+
+This patch series makes cifs -o sfu mount option compatible with
+SFU-style of special files, and so compatible with the latest SFU/SUA.
+
+Note that -o sfu is by default turned off, so these changes should have
+no effect on default cifs mounts.
+
+Manually tested with MS SFU 3.5 (for Windows XP) and MS SUA 6.2 (latest
+released version of Interix) that interop works correctly, special files
+created by POSIX/Interix application can be recognized by Linux cifs
+client (exported over MS SMB) with these patches (and vice-versa setup,
+created by Linux cifs client and recognized in POSIX/Interix subsystem).
+
+Manually tested that old Linux 4.19 cifs client version can recognize
+SFU-style of special files created by Linux cifs client this patch
+series (except socket, which is unsupported in this Linux cifs version).
+
+Patch series is based on the latest upstream tag v6.11-rc7.
+
+Pali Rohár (7):
+  cifs: Fix recognizing SFU symlinks
+  cifs: Add support for reading SFU symlink location
+  cifs: Put explicit zero byte into SFU block/char types
+  cifs: Show debug message when SFU Fifo type was detected
+  cifs: Recognize SFU socket type
+  cifs: Fix creating of SFU fifo and socket special files
+  cifs: Add support for creating SFU symlinks
+
+ fs/smb/client/cifspdu.h    |  6 ---
+ fs/smb/client/cifsproto.h  |  4 ++
+ fs/smb/client/cifssmb.c    |  8 ++--
+ fs/smb/client/fs_context.c | 13 ++++---
+ fs/smb/client/inode.c      | 42 ++++++++++++++++++--
+ fs/smb/client/link.c       |  3 ++
+ fs/smb/client/smb1ops.c    |  2 +-
+ fs/smb/client/smb2ops.c    | 78 ++++++++++++++++++++++++++++----------
+ 8 files changed, 117 insertions(+), 39 deletions(-)
+
+-- 
+2.20.1
 
 
