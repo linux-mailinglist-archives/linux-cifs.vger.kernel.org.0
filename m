@@ -1,60 +1,61 @@
-Return-Path: <linux-cifs+bounces-2795-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2797-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21DAF979880
-	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 21:46:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35640979882
+	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 21:46:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F10B1C21A79
-	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 19:45:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBF83282ABD
+	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 19:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478F81C9DE5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750281CA68D;
 	Sun, 15 Sep 2024 19:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKo+X6r6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nc+N9+mR"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D55B1C8FA6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCC91C9ED7;
 	Sun, 15 Sep 2024 19:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726429556; cv=none; b=ojxZ2LAuQgBzVenEdeJYppaL67AGUMzSLfLPfT4vjldwFQOLqK4780wNqNrYj6NCZhXEZZgbREdM6800DZgp9toIMJfbmKWwFAdVfxY2/CcuNgkI07TJvNw+63tkzdb/jLxi6+AlS2WPvDWnHPdSYoQebBOWP2s5KcI0jsgs0rA=
+	t=1726429556; cv=none; b=krz3t04OiN8WX/4tuKHhcm6+IONSq9dNaTda68n2juIoyG4sx+vyeQcArU0Ac3rDwG5YyF75VikAh4mLZp4R4fBm53azbhxY/gtBYTi0of3yufBlUuPIwqq2C2oTKiMBmjIyxqydBQ4I6tOtVkQnNMn8Xy3xSxMQnUMV5Oz8Jl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1726429556; c=relaxed/simple;
-	bh=HclElrmg3hy8k67tn/YH6FGa6YDj21hBYAJBNd6TKPY=;
+	bh=0jXRDe3Au5vgW5gbMHbJSVYKmeRM43vkNYMJ7QYDdW8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kib2DrxxohYU59HAYiHUbMKZD4bcAqOiaDBbLLY7WO7XxcuTSMTTB5EbEbN9TSv2J/D1Ye3kbQMZRaAzggv9IimGzOYpAtQ/7apfc2lr7QmiURdAJbXoKU92FpYszdztxcb39BXRLw5BI3xkalWtn0fL9Oe1Lf5K4Vll95JDWqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKo+X6r6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD6CC4CEC3;
+	 MIME-Version:Content-Type; b=LTG6WT7xqTZc3xKeem6rZ10m48O7WVamcUQH01V3JrYCUxJ5jMPLkzd/W2Hh2dpKavV9fuKkZTAP17sNdF0wnk2W/D7qZKVU2eflmX+so/HxKO2kY0Da/lGpr2zkK1/VHYpfQGZExEOLKddahOx/tL3QaOn+oyC6xzOwLUzZPVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nc+N9+mR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708FDC4CECD;
 	Sun, 15 Sep 2024 19:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726429555;
-	bh=HclElrmg3hy8k67tn/YH6FGa6YDj21hBYAJBNd6TKPY=;
+	bh=0jXRDe3Au5vgW5gbMHbJSVYKmeRM43vkNYMJ7QYDdW8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MKo+X6r6vd11nrL+jV6DpVe7XuvSwsqan6Es7E9TyQq6lihH2YsHH6MCNJ8BUtFmp
-	 rD6AMlULQaq8DienUVQNSfJMP2NxMH2ykGrP5tiMkJFrjBO6QPLuDk5F4Tjy/TVa4V
-	 12VzAKW6BIJd0HfFzpwL6wZF+P9qIUmh9t209XKVKTrzdx1vs+LzSyUAeFW5gFqJBC
-	 S1LkuJ0ZJTabEesb5fyBHdYIYNmGGuiv/6LISGja1ZxEsoXdPnfjqfEcqe5wTmEi6x
-	 d7JF6rp+N+/kq25LrG0c3041EEGTEBvY4MSx+NpDBVgATMcavnAgyW6R14bEwWNfcI
-	 HaNbMFgcghk1Q==
+	b=nc+N9+mRNT+YnIuYBU6n+ZhuV5RMmL2YkflcN83FpFXjESO5+LStli6RNyWUBu2Lc
+	 hsQEOJzeFsM+ARMnGPEAd1rWhbvcxbeetXfZtmhIHT4fPPyFtLVTHTm0h2oTE6e8Qb
+	 6Gi4FCzDO6ZUZg0Dpx6W+ydEkVa/Rk/UbkCxFRnYzMzN/fxDzDWXsbj/kn/MKMCOlw
+	 wzwvlScZ1QCH4To79uJNEJNJsALgI+XnS6bJsDTRUCscUT4mHPh9gCv3qmFVdEc6Fs
+	 DA0SlnbByBON9wCH6I7HhH7yLaELGd3z5R7V+v5t6KBGmJD2Mv+hE4dztKnOy92lEH
+	 Er608WYL024Ag==
 Received: by pali.im (Postfix)
-	id 2832A7BC; Sun, 15 Sep 2024 21:45:50 +0200 (CEST)
+	id 4B7E6A7F; Sun, 15 Sep 2024 21:45:50 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] cifs: Improve client SFU support for special files (2)
-Date: Sun, 15 Sep 2024 21:45:41 +0200
-Message-Id: <20240915194545.14779-1-pali@kernel.org>
+Subject: [PATCH 1/4] cifs: Add support for creating SFU symlinks
+Date: Sun, 15 Sep 2024 21:45:42 +0200
+Message-Id: <20240915194545.14779-2-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20240912120548.15877-7-pali@kernel.org>
+In-Reply-To: <20240915194545.14779-1-pali@kernel.org>
 References: <20240912120548.15877-7-pali@kernel.org>
+ <20240915194545.14779-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -64,33 +65,236 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Per Steve's request I'm re-sending changes from PATCH 6/7 and
-PATCH 7/7 from patch series "cifs: Improve client SFU support for
-special files" (Sep 12, 2024). There is no functional change, just split
-and reorder.
+Linux cifs client can already detect SFU symlinks and reads it content
+(target location). But currently is not able to create new symlink. So
+implement this missing support.
 
-All changes are:
-* Use ARRAY_SIZE() instead of magic value 2
-* Patch for SFU symlinks (original 6/7) is the first one
-* Patch for SFU fifo/sockets is after symlinks and is split into other
-  tree independent patches (socket, fifo and comments), so every one can
-  be applied separatetely or dropped if would not be acceptable.
+When 'sfu' mount option is specified and 'mfsymlinks' is not specified then
+create new symlinks in SFU-style. This will provide full SFU compatibility
+of symlinks when mounting cifs share with 'sfu' option. 'mfsymlinks' option
+override SFU for better Apple compatibility as explained in fs_context.c
+file in smb3_update_mnt_flags() function.
 
-Pali Rohár (4):
-  cifs: Add support for creating SFU symlinks
-  cifs: Fix creating of SFU socket special files
-  cifs: Fix creating of SFU fifo special files
-  cifs: Update SFU comments about fifos and sockets
+Extend __cifs_sfu_make_node() function, which now can handle also S_IFLNK
+type and refactor structures passed to sync_write() in this function, by
+splitting SFU type and SFU data from original combined struct win_dev as
+combined fixed-length struct cannot be used for variable-length symlinks.
 
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
  fs/smb/client/cifspdu.h    |  6 ---
  fs/smb/client/cifsproto.h  |  4 ++
- fs/smb/client/cifssmb.c    |  8 ++--
  fs/smb/client/fs_context.c | 13 ++++---
  fs/smb/client/link.c       |  3 ++
- fs/smb/client/smb1ops.c    |  2 +-
- fs/smb/client/smb2ops.c    | 79 +++++++++++++++++++++++++++++---------
- 7 files changed, 80 insertions(+), 35 deletions(-)
+ fs/smb/client/smb2ops.c    | 80 +++++++++++++++++++++++++++++---------
+ 5 files changed, 77 insertions(+), 29 deletions(-)
 
+diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
+index a2072ab9e586..c3b6263060b0 100644
+--- a/fs/smb/client/cifspdu.h
++++ b/fs/smb/client/cifspdu.h
+@@ -2573,12 +2573,6 @@ typedef struct {
+ } __attribute__((packed)) FIND_FILE_STANDARD_INFO; /* level 0x1 FF resp data */
+ 
+ 
+-struct win_dev {
+-	unsigned char type[8]; /* IntxCHR or IntxBLK or LnxFIFO or LnxSOCK */
+-	__le64 major;
+-	__le64 minor;
+-} __attribute__((packed));
+-
+ struct fea {
+ 	unsigned char EA_flags;
+ 	__u8 name_len;
+diff --git a/fs/smb/client/cifsproto.h b/fs/smb/client/cifsproto.h
+index 497bf3c447bc..791bddac0396 100644
+--- a/fs/smb/client/cifsproto.h
++++ b/fs/smb/client/cifsproto.h
+@@ -676,6 +676,10 @@ char *extract_sharename(const char *unc);
+ int parse_reparse_point(struct reparse_data_buffer *buf,
+ 			u32 plen, struct cifs_sb_info *cifs_sb,
+ 			bool unicode, struct cifs_open_info_data *data);
++int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
++			 struct dentry *dentry, struct cifs_tcon *tcon,
++			 const char *full_path, umode_t mode, dev_t dev,
++			 const char *symname);
+ int cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+ 		       struct dentry *dentry, struct cifs_tcon *tcon,
+ 		       const char *full_path, umode_t mode, dev_t dev);
+diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
+index bc926ab2555b..2f0c3894b0f7 100644
+--- a/fs/smb/client/fs_context.c
++++ b/fs/smb/client/fs_context.c
+@@ -1896,14 +1896,17 @@ void smb3_update_mnt_flags(struct cifs_sb_info *cifs_sb)
+ 	if (ctx->mfsymlinks) {
+ 		if (ctx->sfu_emul) {
+ 			/*
+-			 * Our SFU ("Services for Unix" emulation does not allow
+-			 * creating symlinks but does allow reading existing SFU
+-			 * symlinks (it does allow both creating and reading SFU
+-			 * style mknod and FIFOs though). When "mfsymlinks" and
++			 * Our SFU ("Services for Unix") emulation allows now
++			 * creating new and reading existing SFU symlinks.
++			 * Older Linux kernel versions were not able to neither
++			 * read existing nor create new SFU symlinks. But
++			 * creating and reading SFU style mknod and FIFOs was
++			 * supported for long time. When "mfsymlinks" and
+ 			 * "sfu" are both enabled at the same time, it allows
+ 			 * reading both types of symlinks, but will only create
+ 			 * them with mfsymlinks format. This allows better
+-			 * Apple compatibility (probably better for Samba too)
++			 * Apple compatibility, compatibility with older Linux
++			 * kernel clients (probably better for Samba too)
+ 			 * while still recognizing old Windows style symlinks.
+ 			 */
+ 			cifs_dbg(VFS, "mount options mfsymlinks and sfu both enabled\n");
+diff --git a/fs/smb/client/link.c b/fs/smb/client/link.c
+index 80099bbb333b..47ddeb7fa111 100644
+--- a/fs/smb/client/link.c
++++ b/fs/smb/client/link.c
+@@ -606,6 +606,9 @@ cifs_symlink(struct mnt_idmap *idmap, struct inode *inode,
+ 	/* BB what if DFS and this volume is on different share? BB */
+ 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_MF_SYMLINKS) {
+ 		rc = create_mf_symlink(xid, pTcon, cifs_sb, full_path, symname);
++	} else if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_UNX_EMUL) {
++		rc = __cifs_sfu_make_node(xid, inode, direntry, pTcon,
++					  full_path, S_IFLNK, 0, symname);
+ #ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
+ 	} else if (pTcon->unix_ext) {
+ 		rc = CIFSUnixCreateSymLink(xid, pTcon, full_path, symname,
+diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+index 9c2d065d3cc4..2c251e9a3a30 100644
+--- a/fs/smb/client/smb2ops.c
++++ b/fs/smb/client/smb2ops.c
+@@ -5055,9 +5055,10 @@ static int smb2_next_header(struct TCP_Server_Info *server, char *buf,
+ 	return 0;
+ }
+ 
+-static int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
++int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+ 				struct dentry *dentry, struct cifs_tcon *tcon,
+-				const char *full_path, umode_t mode, dev_t dev)
++				const char *full_path, umode_t mode, dev_t dev,
++				const char *symname)
+ {
+ 	struct TCP_Server_Info *server = tcon->ses->server;
+ 	struct cifs_open_parms oparms;
+@@ -5065,30 +5066,64 @@ static int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+ 	struct cifs_fid fid;
+ 	unsigned int bytes_written;
+-	struct win_dev pdev = {};
+-	struct kvec iov[2];
++	u8 type[8];
++	int type_len = 0;
++	struct {
++		__le64 major;
++		__le64 minor;
++	} __packed pdev = {};
++	__le16 *symname_utf16 = NULL;
++	u8 *data = NULL;
++	int data_len = 0;
++	struct kvec iov[3];
+ 	__u32 oplock = server->oplocks ? REQ_OPLOCK : 0;
+ 	int rc;
+ 
+ 	switch (mode & S_IFMT) {
+ 	case S_IFCHR:
+-		memcpy(pdev.type, "IntxCHR\0", 8);
++		type_len = 8;
++		memcpy(type, "IntxCHR\0", type_len);
+ 		pdev.major = cpu_to_le64(MAJOR(dev));
+ 		pdev.minor = cpu_to_le64(MINOR(dev));
++		data = (u8 *)&pdev;
++		data_len = sizeof(pdev);
+ 		break;
+ 	case S_IFBLK:
+-		memcpy(pdev.type, "IntxBLK\0", 8);
++		type_len = 8;
++		memcpy(type, "IntxBLK\0", type_len);
+ 		pdev.major = cpu_to_le64(MAJOR(dev));
+ 		pdev.minor = cpu_to_le64(MINOR(dev));
++		data = (u8 *)&pdev;
++		data_len = sizeof(pdev);
++		break;
++	case S_IFLNK:
++		type_len = 8;
++		memcpy(type, "IntxLNK\1", type_len);
++		symname_utf16 = cifs_strndup_to_utf16(symname, strlen(symname),
++						      &data_len, cifs_sb->local_nls,
++						      NO_MAP_UNI_RSVD);
++		if (!symname_utf16) {
++			rc = -ENOMEM;
++			goto out;
++		}
++		data_len -= 2; /* symlink is without trailing wide-nul */
++		data = (u8 *)symname_utf16;
+ 		break;
+ 	case S_IFSOCK:
+-		strscpy(pdev.type, "LnxSOCK");
++		type_len = 8;
++		strscpy(type, "LnxSOCK");
++		data = (u8 *)&pdev;
++		data_len = sizeof(pdev);
+ 		break;
+ 	case S_IFIFO:
+-		strscpy(pdev.type, "LnxFIFO");
++		type_len = 8;
++		strscpy(type, "LnxFIFO");
++		data = (u8 *)&pdev;
++		data_len = sizeof(pdev);
+ 		break;
+ 	default:
+-		return -EPERM;
++		rc = -EPERM;
++		goto out;
+ 	}
+ 
+ 	oparms = CIFS_OPARMS(cifs_sb, tcon, full_path, GENERIC_WRITE,
+@@ -5098,17 +5133,26 @@ static int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+ 
+ 	rc = server->ops->open(xid, &oparms, &oplock, NULL);
+ 	if (rc)
+-		return rc;
++		goto out;
+ 
+-	io_parms.pid = current->tgid;
+-	io_parms.tcon = tcon;
+-	io_parms.length = sizeof(pdev);
+-	iov[1].iov_base = &pdev;
+-	iov[1].iov_len = sizeof(pdev);
++	if (type_len + data_len > 0) {
++		io_parms.pid = current->tgid;
++		io_parms.tcon = tcon;
++		io_parms.length = type_len + data_len;
++		iov[1].iov_base = type;
++		iov[1].iov_len = type_len;
++		iov[2].iov_base = data;
++		iov[2].iov_len = data_len;
++
++		rc = server->ops->sync_write(xid, &fid, &io_parms,
++					     &bytes_written,
++					     iov, ARRAY_SIZE(iov)-1);
++	}
+ 
+-	rc = server->ops->sync_write(xid, &fid, &io_parms,
+-				     &bytes_written, iov, 1);
+ 	server->ops->close(xid, tcon, &fid);
++
++out:
++	kfree(symname_utf16);
+ 	return rc;
+ }
+ 
+@@ -5120,7 +5164,7 @@ int cifs_sfu_make_node(unsigned int xid, struct inode *inode,
+ 	int rc;
+ 
+ 	rc = __cifs_sfu_make_node(xid, inode, dentry, tcon,
+-				  full_path, mode, dev);
++				  full_path, mode, dev, NULL);
+ 	if (rc)
+ 		return rc;
+ 
 -- 
 2.20.1
 
