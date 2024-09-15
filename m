@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-2799-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2796-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B89D9979888
-	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 21:46:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97BAA979881
+	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 21:46:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C798282A4E
-	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 19:46:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C97B31C21AAC
+	for <lists+linux-cifs@lfdr.de>; Sun, 15 Sep 2024 19:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDDD1CB505;
-	Sun, 15 Sep 2024 19:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E4B1CA68B;
+	Sun, 15 Sep 2024 19:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NncchzfX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1RFBc2M"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E981CB33F;
-	Sun, 15 Sep 2024 19:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC761C9ED4;
+	Sun, 15 Sep 2024 19:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726429557; cv=none; b=ZLld/FBNZ1dRa7khDpL7T8nAT7UkxVyCRRUVRus5LkVqlp+gk4ZvzFgUB0qyL85Zj6GiOGgHXOaaWeV2v9lIW5NkCvxAVXkaZePwQ+Znib69um+mXY5eIBwLVvvKUdFZXGpi3AqfuyIhuIF2TN9YmLuXmlU4GKWb7GT0N0ZTKTQ=
+	t=1726429556; cv=none; b=R3KJtWn8mt6oNwQBSjceF99os19FGUgi7tWYSSw1PH8TzyehuvbM24/oGGyqNo5m1wTBA7659vdu2thH5wPpd5OZtJ1SClVA5JcBy5jAR5quKQ5vCNyal81+khA3DuThLUhskxBzLOcMhwCYmmmmG7SAZ/DD/rB/aOnne11kMHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726429557; c=relaxed/simple;
-	bh=vp0tJ6174kqd3NVUVhvDpzmPnqU1dZ9ivhzYz0EgvRg=;
+	s=arc-20240116; t=1726429556; c=relaxed/simple;
+	bh=kBgkdFHz49MetJQnsWgzyt5qwDabg4EPCDFgVX9Fd7Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J0z19SG6VgTZM4X2s+Qxt7MvQqWi0VcZl+pAYN0dmFTYCtsVk8fwA2KLg8nRBeXdGqgXoz+Coxtw0vvYOacQPqawzW9Poqv3tWvUqyUK/H+aKG7WCo2NEvqVfk4fUDgCOH88j63Gaz0cp8wSM7NyJJQ49ZHFkqP8WNCS7yWyEPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NncchzfX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48262C4CED5;
-	Sun, 15 Sep 2024 19:45:57 +0000 (UTC)
+	 MIME-Version:Content-Type; b=MP85BLlAx8dmKt0pQIOGVW27536ygn3931oyaB1i9uqNPZv3W6Z/Ij08kpF4LhPAWyNsEetYoDOJCjVfr/xg2M63LivwtjwRIVFt4jKtLybFbClU+Ne4KAiy86T0qOBVn9xzRqliPA2KjUm4wOM7g8zHfrOoiqDypyDmIn4aR4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1RFBc2M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4450C4CEC4;
+	Sun, 15 Sep 2024 19:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726429557;
-	bh=vp0tJ6174kqd3NVUVhvDpzmPnqU1dZ9ivhzYz0EgvRg=;
+	s=k20201202; t=1726429555;
+	bh=kBgkdFHz49MetJQnsWgzyt5qwDabg4EPCDFgVX9Fd7Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NncchzfXBhzIL1H6QsMnTVqt20Tf+Mvl2i/x8S+kZrP4igs/uZkRxEJAlAwOSJ7UF
-	 jn26aUwkdkJ32boLMFLIUIiXm56cgsxHumfCHQH12bmUvGH1i6vE9oHzlAVHItCsi4
-	 bHWZdAdvW37GvGhBdixW7CK8uMzXu3YuOSkuW+MdizPzBqSbXz+pb9ExZXz6Fj4Mvm
-	 bHn7XmLaVDEFmmujM1U3GDf74CLOeqP2j4wwde34ZBOJBhf/tlz6PXuWSwf/GNmtnQ
-	 NDndFTmHVBtp7mS9fy8pWmpUit85sAlnslfAEDu9CDqbeuIFGVw+mIE27KQ8GpGzvF
-	 xmsv3jGC/7i7g==
+	b=m1RFBc2MUpHdJC1UPwLj4Q6AX5/Uob9B6IXOkWM/kTUE/W+JS3ZeHm/AxNonH/1WM
+	 vxdm1bI3oGJtHW7sxfk6XBhBN9+HrEs+BrNyW3yIBSHOozJ8eDPAeCM+gTTAy46Bns
+	 dauosbwjKnsvuffml8t/Ff1BvRsOdRKQO0g6W6Pwx4rRbRXfruoJVKEc0VU7MIjkGc
+	 GjdcVyBnHVqgPPDDvmIqFf0A6CKs0ukO/4DPzDSu3+kOck2l0wJ5DTJVU4fqSicSXE
+	 TL2GsJkzFXfWmdMJUnhPARaReGepihqjmnM/JFfspAb1r8L92J/5SzG1n95UpBhDhi
+	 fOFE5atVgWO/w==
 Received: by pali.im (Postfix)
-	id A470CCB5; Sun, 15 Sep 2024 21:45:50 +0200 (CEST)
+	id CF0F9CF3; Sun, 15 Sep 2024 21:45:50 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] cifs: Fix creating of SFU fifo special files
-Date: Sun, 15 Sep 2024 21:45:44 +0200
-Message-Id: <20240915194545.14779-4-pali@kernel.org>
+Subject: [PATCH 4/4] cifs: Update SFU comments about fifos and sockets
+Date: Sun, 15 Sep 2024 21:45:45 +0200
+Message-Id: <20240915194545.14779-5-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20240915194545.14779-1-pali@kernel.org>
 References: <20240912120548.15877-7-pali@kernel.org>
@@ -65,49 +65,68 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-SFU-style fifo is empty file with system attribute set. This format is used
-by old Microsoft POSIX subsystem and later also by OpenNT/Interix subsystem
-(which replaced Microsoft POSIX subsystem and is part of Microsoft SFU).
+In SFU mode, activated by -o sfu mount option is now also support for
+creating new fifos and sockets.
 
-This format of SFU-style fifos is recognized also by Windows NFS server
-included in the latest version on Windows Server 2022.
-
-Currently when sfu mount option is specified then CIFS creates new fifo
-files with content LnxFIFO. This was introduced in commit 72bc63f5e23a
-("smb3: fix creating FIFOs when mounting with "sfu" mount option").
-
-It is important to note that LnxFIFO is not SFU-compatible and neither
-Interix, SFU, SUA or Windows NFS server recognize file with content of
-LnxFIFO as special fifo file.
-
-So when sfu mount option is specified, fix this problem and create all fifo
-special files compatible with SFU format, as it is expected by sfu mount
-option. This allows interoperability with other SFU implementations and
-also with Windows NFS server.
-
-Fixes: 72bc63f5e23a ("smb3: fix creating FIFOs when mounting with "sfu" mount option")
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb2ops.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/smb/client/cifssmb.c | 8 ++++----
+ fs/smb/client/smb1ops.c | 2 +-
+ fs/smb/client/smb2ops.c | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index cfae2e918209..0ffc45aa5e2c 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -1076,8 +1076,8 @@ SMBLegacyOpen(const unsigned int xid, struct cifs_tcon *tcon,
+ 	pSMB->OpenFlags |= cpu_to_le16(REQ_MORE_INFO);
+ 	pSMB->Mode = cpu_to_le16(access_flags_to_smbopen_mode(access_flags));
+ 	pSMB->Mode |= cpu_to_le16(0x40); /* deny none */
+-	/* set file as system file if special file such
+-	   as fifo and server expecting SFU style and
++	/* set file as system file if special file such as fifo,
++	 * socket, char or block and server expecting SFU style and
+ 	   no Unix extensions */
+ 
+ 	if (create_options & CREATE_OPTION_SPECIAL)
+@@ -1193,8 +1193,8 @@ CIFS_open(const unsigned int xid, struct cifs_open_parms *oparms, int *oplock,
+ 	req->AllocationSize = 0;
+ 
+ 	/*
+-	 * Set file as system file if special file such as fifo and server
+-	 * expecting SFU style and no Unix extensions.
++	 * Set file as system file if special file such as fifo, socket, char
++	 * or block and server expecting SFU style and no Unix extensions.
+ 	 */
+ 	if (create_options & CREATE_OPTION_SPECIAL)
+ 		req->FileAttributes = cpu_to_le32(ATTR_SYSTEM);
+diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
+index e1f2feb56f45..e03c91a49650 100644
+--- a/fs/smb/client/smb1ops.c
++++ b/fs/smb/client/smb1ops.c
+@@ -1078,7 +1078,7 @@ cifs_make_node(unsigned int xid, struct inode *inode,
+ 	/*
+ 	 * Check if mounted with mount parm 'sfu' mount parm.
+ 	 * SFU emulation should work with all servers, but only
+-	 * supports block and char device (no socket & fifo),
++	 * supports block and char device, socket & fifo,
+ 	 * and was used by default in earlier versions of Windows
+ 	 */
+ 	if (!(cifs_sb->mnt_cifs_flags & CIFS_MOUNT_UNX_EMUL))
 diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index dc56f7ba1a06..406f2399f0c5 100644
+index 406f2399f0c5..d30f7cab197e 100644
 --- a/fs/smb/client/smb2ops.c
 +++ b/fs/smb/client/smb2ops.c
-@@ -5115,10 +5115,8 @@ int __cifs_sfu_make_node(unsigned int xid, struct inode *inode,
- 		type[0] = '\0';
- 		break;
- 	case S_IFIFO:
--		type_len = 8;
--		strscpy(type, "LnxFIFO");
--		data = (u8 *)&pdev;
--		data_len = sizeof(pdev);
-+		/* SFU fifo is system file which is empty */
-+		type_len = 0;
- 		break;
- 	default:
- 		rc = -EPERM;
+@@ -5190,7 +5190,7 @@ static int smb2_make_node(unsigned int xid, struct inode *inode,
+ 	/*
+ 	 * Check if mounted with mount parm 'sfu' mount parm.
+ 	 * SFU emulation should work with all servers, but only
+-	 * supports block and char device (no socket & fifo),
++	 * supports block and char device, socket & fifo,
+ 	 * and was used by default in earlier versions of Windows
+ 	 */
+ 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_UNX_EMUL) {
 -- 
 2.20.1
 
