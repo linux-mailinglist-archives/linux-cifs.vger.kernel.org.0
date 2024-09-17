@@ -1,80 +1,84 @@
-Return-Path: <linux-cifs+bounces-2828-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2822-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9EDC97B4EE
-	for <lists+linux-cifs@lfdr.de>; Tue, 17 Sep 2024 22:55:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F30797B4AB
+	for <lists+linux-cifs@lfdr.de>; Tue, 17 Sep 2024 22:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 926441F234C5
-	for <lists+linux-cifs@lfdr.de>; Tue, 17 Sep 2024 20:55:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E6E1B20E6C
+	for <lists+linux-cifs@lfdr.de>; Tue, 17 Sep 2024 20:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24311898EB;
-	Tue, 17 Sep 2024 20:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E811B187FF5;
+	Tue, 17 Sep 2024 20:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="fAyCLEqR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cV5LWwiM"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080EF27470;
-	Tue, 17 Sep 2024 20:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD897BA3D;
+	Tue, 17 Sep 2024 20:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726606513; cv=none; b=Rz03gYfld6tv0D0hn1vmfluWSijH116h61gbqDSShIotbXmEG32U26K1ZjNHXiT9R2WwBipiGAAHjTpZCg1Vilzo16Bd9YWdvbvJwVuphMgVmOuLj3R86KxsSY9gOCNUpiJhER2a6Ms9ykD84Hep+ueNy67pQRZhXkFxa5wzoIs=
+	t=1726604966; cv=none; b=nUdQLFjv9TiXRpmbW7ulpMP0ZpmVV4vbaB44V5egposZI2Ir8lYr/isU3H9jPAbE4lFMpZ/W/EZEj8rGP+E8SsosyweHpVxRxJ1xtxiMyOLugp24ABLMvODVJurchi57AyJRuGEYqwT/kbaRNeWVbOptOWVdInP69bPpbP+fjIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726606513; c=relaxed/simple;
-	bh=mjTGlZ163pOCGFSGDD/ozGhwT5Jtnls34lFZ8aDDWrE=;
+	s=arc-20240116; t=1726604966; c=relaxed/simple;
+	bh=1u5qfbV/wXkrEI1rMOo37jka3EKwNBRi2E/srOJMWo0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iid4g7UHCkZ9ld+dtmsyof3P2otKr0JUBJblYTNMLzL3OwbPMVqaQIz+insA7ZLv6k5qi3bhl5ZXomJy0GqsayUJ2R815ZSzZonpyxBdY/A5JF7zxMbE4XiddxAspRzSqqRjg6Q+PO2LFqQraY4qGRBP2kGrO9F9i7ZPhQYKp5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=fAyCLEqR; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=Message-ID:Cc:To:From:Date;
-	bh=mjTGlZ163pOCGFSGDD/ozGhwT5Jtnls34lFZ8aDDWrE=; b=fAyCLEqRx553cMRQM3t0HVQW2O
-	nLvoSV9L2m6lpt5fNKuZBwnnWK16tFWDcS04wNomNJweu2dLDR0Pu/xX5bScJMQAz85Wk3qK/8Pf3
-	yb80+FrZqwWnUNBO6BxsvFxWEMfwdLI15IJrsEmnkWk385k4bL2Au81RyYX8yiJk9AuXWmHrY67iZ
-	dgCkbDj6zKy1MGF0Vg0Zo0XEPAzi0gMuzmtUc7JF3EQPMfJqxDiMDG5uIDa4XvpI2+mSEbGApNnL5
-	nqVrL86zxSCoZAWqH/rO9Q6kWHqZpQ4ZcCdDTm5d826nPgnYxEXaO5v4RD9iiwy/SCnfgj4bhZyiJ
-	nQ4Q3wugN1NFysGR3eirWvyBArbZwMFadNEBVQFZOYswQp2vic4zahCVX3kT+HF0xLgc0QCwZv4jO
-	9tObU+ZvqEBYDxbVLDu49DqvSg5BP7VDziSVctNTbr/G6zHnscaWt0H1jc4Ga7A4fWKDPGy2sUCXG
-	MBzsuim/3LfMiTB2AqWx+YD8;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1sqejf-000baw-0k;
-	Tue, 17 Sep 2024 20:23:43 +0000
-Date: Tue, 17 Sep 2024 13:23:40 -0700
-From: Jeremy Allison <jra@samba.org>
-To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=L4Q6gJcDWg98i5LMW2B9ZcQyR9T+xyxbeycixTkyCYkEUBE/Gm9BA0ej6WLbkWuE9BqP8IpzCwEkkdqr9ZzU6VAlpQwHsgRnJTqBi/Rgmu4FUuxxksPYHF+maz6nLbxEKLBbMI/r4nad8/t6dL+H0E6jMF0rS4iP8EgqNG1vlgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cV5LWwiM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EFBC4CEC5;
+	Tue, 17 Sep 2024 20:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726604966;
+	bh=1u5qfbV/wXkrEI1rMOo37jka3EKwNBRi2E/srOJMWo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cV5LWwiMqV9Hd4NgJk2qDLcrZbaJ214LCPgacUASDXZq2snJ86k3e7x8eZXR8vtBh
+	 uFh9mPp/Yv3WNxo8gVbCVdo4N+VLo8TDOUg9XbsnyjOz2cH1QVMRFtoufWqGU21FwB
+	 SGsAPuH7E1Nw/2+6QZoUJ/XsGwZ0yv4hWDPNBN+/bpvqX4szge4idP+aG33kNYyXKH
+	 /EDPCfaNLM7Ig7LNrgKl0MBCN+fHC3/RA8WJ/DfrKwQ9w5JzuRTBOu2xszefUDc7JL
+	 +IsfT5/IBHi8MY/veXmf4GD9tgnziTkLzhqYQpTHuwcOSmUu9RlNY+eM9snnhzkMx4
+	 kNdHg9QZSBD1w==
+Received: by pali.im (Postfix)
+	id 3BD577BA; Tue, 17 Sep 2024 22:29:21 +0200 (CEST)
+Date: Tue, 17 Sep 2024 22:29:21 +0200
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Jeremy Allison <jra@samba.org>
 Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>,
 	linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] cifs: Fix getting reparse points from server without WSL
  support
-Message-ID: <ZunlTDxPLn4yryW3@jeremy-rocky-laptop.localdomain>
-Reply-To: Jeremy Allison <jra@samba.org>
+Message-ID: <20240917202921.ty32zzmhrg33knpy@pali>
 References: <20240913200204.10660-1-pali@kernel.org>
  <20240913201041.cwueaflcxhewnvwj@pali>
  <20240917200600.6smfxhrppkyjuyku@pali>
+ <ZunlTDxPLn4yryW3@jeremy-rocky-laptop.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240917200600.6smfxhrppkyjuyku@pali>
+In-Reply-To: <ZunlTDxPLn4yryW3@jeremy-rocky-laptop.localdomain>
+User-Agent: NeoMutt/20180716
 
-On Tue, Sep 17, 2024 at 10:06:00PM +0200, Pali Rohár wrote:
->And seems that SMB2_OP_QUERY_WSL_EA is useful not only for reparse
->points, but also for any regular file or directory as it can contain
->UNIX mode and UID/GID ownership.
+On Tuesday 17 September 2024 13:23:40 Jeremy Allison wrote:
+> On Tue, Sep 17, 2024 at 10:06:00PM +0200, Pali RohÃ¡r wrote:
+> > And seems that SMB2_OP_QUERY_WSL_EA is useful not only for reparse
+> > points, but also for any regular file or directory as it can contain
+> > UNIX mode and UID/GID ownership.
+> 
+> uid/gid should *never* be exposed over the wire for SMB.
+> 
+> That way lies madness.
 
-uid/gid should *never* be exposed over the wire for SMB.
-
-That way lies madness.
+Hello Jeremy, if I understood wsl_to_fattr() function correctly then it
+is already doing it, it fills uid/gid for stat() from data which were
+exposed over the wire for SMB. Could you check that function if it is
+truth?
 
