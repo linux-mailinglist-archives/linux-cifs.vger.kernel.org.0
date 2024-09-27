@@ -1,132 +1,95 @@
-Return-Path: <linux-cifs+bounces-2932-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2933-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B04988B55
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Sep 2024 22:40:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78718988B7E
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Sep 2024 22:50:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEC201F20F71
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Sep 2024 20:40:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FB781C21438
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Sep 2024 20:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37B51C2435;
-	Fri, 27 Sep 2024 20:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127AE1C2DA0;
+	Fri, 27 Sep 2024 20:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+QGF/DH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CeIVyJ0P"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0311E4AE;
-	Fri, 27 Sep 2024 20:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BDC15B57C
+	for <linux-cifs@vger.kernel.org>; Fri, 27 Sep 2024 20:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727469614; cv=none; b=Qrl6dlERJLSSGIHZaXcqhpy8nJk5NhkYBCruw7WWvNlF8k6cQr6mXDBs9TQDPcdlUrRM8ZthYzEriuUZByor743ySeKn9CaPmpiISOP0vRl/8i9hbAl9QMLeK66Z2alM/4RhsXiNn1APhRfH3+1Id2t2cWERXZdIUhyFvo3A6ss=
+	t=1727470234; cv=none; b=BiAC060TarkoPnwHh029wX1mPr6xTTO+KR1cF4Ng0ph8ZqIUgfFWIbSau8yJzPes1692EfbVMZky/og4iZiMFtCZ9qpBBSrP86oxvFi5ECzYt9ne5CugP/l5lKOrfoeoBmOT/bvjPBGR9yxc3/fwcyJGI7DRbJUHl4MbZSF2cD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727469614; c=relaxed/simple;
-	bh=3DGUJ3TLsK0lVuJXsACcJZxaucifcbxqwagxApclWEc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=hyREbdLmTe9LlhrNBNb9ATRRRMLGwyCNP+EYk9UbJCCO5QfXGUS/1A93lUPnUcSE8faOC+eIRVcC5pb3Xhnx2w6kRJDQCK4qXy8NWjAsWuTAIViwyDSOocHKNHj8t+2cgGG15SxxYIukfVNnNSHgbH3CtaKKvFGeMykuQDEWN8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+QGF/DH; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53659867cbdso4142372e87.3;
-        Fri, 27 Sep 2024 13:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727469611; x=1728074411; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hthAcDKPQMJW1A+hjzFdpyeRVVHnV5fmXsD68YpD0u4=;
-        b=l+QGF/DHrqPMuittVYX+QMZgqPMu2qPOs0VDr24Hsnx5LtD063zWlvHuPZHEKV1MIe
-         YZdlvfMFJ95fX1GSQCR5yYTC5uOSaMth/XeCrHo3tSge3uLl412UeSxp1VwXLFZqkX01
-         xlINslsaWGsS8mTeWVGIzhs2ypOgTmT6RZovHr8+mWJTjYsxQgpJfC5YOOPxmnmHx45u
-         p509qPDiabOSFrqU5sssUMRuh55EgayeL5EEaPWDprDI/Yst7OV0t7Hio0ui6NIA84P0
-         7C4kRVwk6Nnz0041rYWih6BcOzQ7IAL8QmwCq2DZ0cvKpfC4riSpTRkcuqoq2iz3Fa4m
-         giow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727469611; x=1728074411;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hthAcDKPQMJW1A+hjzFdpyeRVVHnV5fmXsD68YpD0u4=;
-        b=Wq/za5FAoeMtvkOD8edqe0Egtk3O6sGaEe+OTAD57iAA42AvsezhWFcFoRlqTf0Ntf
-         sT2SNjRuu+/Z6AyZJHh1+VWEWeyc7YcflVWmluwHAtwB7+wHjtUn424sUr7TRhaZrSyR
-         oWZkcGDHAkwvNQOBTwYrJSA3Prvu6HryaxbUDoGDg0ukkfa+uG/CHPa02wAvhA/t43VL
-         IdqYGjuw6Cmi3X3Q0SYThxHPo+O13yz5eTqNeSHvQfpil6AikbAZbsVVCG8lmJ6LFsgE
-         qkhmMUF//lSnZ+hAgCzVxzPkQKmFQd5oYSYN0DxD/7Zsc5hA7R8ZqFCg4Motfsp1NeOM
-         fVew==
-X-Forwarded-Encrypted: i=1; AJvYcCXbrCcYxWnwbgITNF9fJUrCorv99XQsIR98sEHjj1Z+9HSvH+gh38FfwVu88UTZYth9tVauBedA2RPH@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfUi7m2J/+fQVal9yFBT0jDPVtECzcE4AFjTpPxKj7c+hvWhmS
-	1n3DbVKJMyHbn+bvQBgs4rLztM/36DedTPzKP4CU5mN8gCRezcX9JW1h+i8wL0WgzSjDcDyiGD7
-	z3Y7kJsOBI9TUJr1MAubqT6afGg3C7fLi
-X-Google-Smtp-Source: AGHT+IH3DmL/UKZB5yPvchHnEQUAmyPoNU5cm+KbxtkilRuEU3FV3gdezLxwkO+1P5WGGJLCRrn36GESu/C1mwnXGxc=
-X-Received: by 2002:ac2:4c56:0:b0:533:4505:5b2a with SMTP id
- 2adb3069b0e04-5389fc478b7mr4561184e87.28.1727469611014; Fri, 27 Sep 2024
- 13:40:11 -0700 (PDT)
+	s=arc-20240116; t=1727470234; c=relaxed/simple;
+	bh=Ehr+2NKsngL7ZGsFX4D84MvJxLhbtVlSuY/MGkYSJZ0=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=kdc9iq1TH2/EbVQfpN7FspvNVZdKK9vSQDZru7/nur4lBCHE4MDYUsLad5CjbYNJssDAh+9YcC/7mE74vUpxd8I5UVveB3vPLi2jaJTl8IFfNJOD232dxjLGhbJYIFst+HwRePScg5dNpqfHk4YLQWWxXQej3R5APLFvYGQ4wyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CeIVyJ0P; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727470230;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ehr+2NKsngL7ZGsFX4D84MvJxLhbtVlSuY/MGkYSJZ0=;
+	b=CeIVyJ0Pe5GYx2z4IfYzsemYHvETZ0H08XiJWI/nsNHOrRexFB1bzjZDWQt0zgIBufLEYb
+	bWQO7L81XFhoNavX850v87TfCd1Z0N3oWWM2VUBUz/D3C+aiNssYiFoBs38qYrZZJWI3kr
+	iut+tWqmmWt8ai/KC7lRKO0UcuWr/OI=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-319-peQ0JcNLMAKLyO6YtwYCog-1; Fri,
+ 27 Sep 2024 16:50:27 -0400
+X-MC-Unique: peQ0JcNLMAKLyO6YtwYCog-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8C38818DEF1D;
+	Fri, 27 Sep 2024 20:50:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.145])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2A0421956086;
+	Fri, 27 Sep 2024 20:50:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20240923183432.1876750-1-chantr4@gmail.com>
+References: <20240923183432.1876750-1-chantr4@gmail.com> <20240814203850.2240469-20-dhowells@redhat.com>
+To: Manu Bretelle <chantr4@gmail.com>,
+    Eduard Zingerman <eddyz87@gmail.com>
+Cc: dhowells@redhat.com, asmadeus@codewreck.org,
+    ceph-devel@vger.kernel.org, christian@brauner.io, ericvh@kernel.org,
+    hsiangkao@linux.alibaba.com, idryomov@gmail.com, jlayton@kernel.org,
+    linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+    linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+    linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+    linux-nfs@vger.kernel.org, marc.dionne@auristor.com,
+    netdev@vger.kernel.org, netfs@lists.linux.dev, pc@manguebit.com,
+    smfrench@gmail.com, sprasad@microsoft.com, tom@talpey.com,
+    v9fs@lists.linux.dev, willy@infradead.org
+Subject: Re: [PATCH v2 19/25] netfs: Speed up buffered reading
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Steve French <smfrench@gmail.com>
-Date: Fri, 27 Sep 2024 15:39:59 -0500
-Message-ID: <CAH2r5mv17isy4Or5+Gffn82y=HWWdgdsUOayJbbJ7dd4r3Teqw@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2663728.1727470216.1@warthog.procyon.org.uk>
+Date: Fri, 27 Sep 2024 21:50:16 +0100
+Message-ID: <2663729.1727470216@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-Please pull the following changes since commit
-ac34bb40f748593e585f4c414a59cf4404249a15:
+Is it possible for you to turn on some tracepoints and access the traces?
+Granted, you probably need to do the enablement during boot.
 
-  Merge tag 'v6.12-rc-smb3-client-fixes-part2' of
-git://git.samba.org/sfrench/cifs-2.6 (2024-09-26 09:20:19 -0700)
+David
 
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.12rc-more-smb3-client-fixes
-
-for you to fetch changes up to 220d83b52c7d16ec3c168b82f4e6ce59c645f7ab:
-
-  smb: client: make SHA-512 TFM ephemeral (2024-09-26 18:15:19 -0500)
-
-----------------------------------------------------------------
-Five smb3 client fixes, and an immportant netfs fix for cifs write regression
-- noisy log message cleanup
-- important netfs fix for cifs crash in generic/074
-- Three minor improvements to use of hashing (multichannel and mount
-improvements)
-- Fix decryption crash for large read with small esize
-----------------------------------------------------------------
-David Howells (1):
-      netfs: Fix write oops in generic/346 (9p) and generic/074 (cifs)
-
-Enzo Matsumiya (4):
-      smb: client: fix UAF in async decryption
-      smb: client: allocate crypto only for primary server
-      smb: client: make HMAC-MD5 TFM ephemeral
-      smb: client: make SHA-512 TFM ephemeral
-
-Paulo Alcantara (1):
-      smb: client: stop flooding dmesg in smb2_calc_signature()
-
- fs/netfs/internal.h           |   1 +
- fs/netfs/misc.c               |  74 +++++++++++++++++-------
- fs/netfs/write_issue.c        |  12 +++-
- fs/smb/client/cifsencrypt.c   | 151
-+++++++++++++++++++-----------------------------
- fs/smb/client/cifsglob.h      |   2 -
- fs/smb/client/sess.c          |   2 +-
- fs/smb/client/smb2misc.c      |  28 ++++-----
- fs/smb/client/smb2ops.c       |  47 +++++++++------
- fs/smb/client/smb2pdu.c       |  10 ++++
- fs/smb/client/smb2proto.h     |   2 +-
- fs/smb/client/smb2transport.c |  32 +---------
- 11 files changed, 182 insertions(+), 179 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
 
