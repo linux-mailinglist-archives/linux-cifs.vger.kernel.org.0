@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-2952-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-2949-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 688869891C4
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765C19891C6
 	for <lists+linux-cifs@lfdr.de>; Sun, 29 Sep 2024 00:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63EFF1F23C35
-	for <lists+linux-cifs@lfdr.de>; Sat, 28 Sep 2024 22:01:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8361F23B63
+	for <lists+linux-cifs@lfdr.de>; Sat, 28 Sep 2024 22:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E5B187862;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D71187855;
 	Sat, 28 Sep 2024 22:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bqGklTFY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cksvZ6JC"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9CE18754D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1D1187347;
 	Sat, 28 Sep 2024 22:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727560848; cv=none; b=JDmQBEiBteIfcFXmZbnJnShRR3Q1KWndXrNhH3fEsZymLLal4RB8+/j/MgLI3KtdTFytqsnmJfrPCiQUWqrfr2fRqhSmJ37XnQe8EKBAeWXYX/l3uLBFCt4OQAdFV1QCDd/324wh/IYug6o8evLh6qS5CfhF+NvNE37o+M+4fMc=
+	t=1727560848; cv=none; b=BQ5v49ceOM8iTwRmwCvnG4pF7TO8d0Y0bQ0Jvkqyb0TWtAjwZvJzO16yKzDRPkMfyV/xOkSceEK4eTEu7S+7gsd5QeweLsROF2vX46W1UV4/5vT3TQ6QGVt1P1H1YQHgTtIyskirwrZ22upnoc55h2ui2VaGWOqSJIP7gf4sFO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727560848; c=relaxed/simple;
-	bh=yafdB9R1iS/MIPawy5b6gSA2MMikl+1Y9iR4oZxhH0c=;
+	bh=Nqkkzjy+oFOwXzYUoBJUIL1MmPuVBHIvi/pv18rAyK0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uNZS8jJ911ztJvSH/Qdhh7WDwX66nvd6aBHkyLh6RVVH9O2rXs68ChUAk0CLL6ciR+rI/gZ5YjHvI34e6zo+AFylMqfoNSVQqv+XRtMfSmTj3vs3HYdn32XvTstKe8lSgZo7dNGCXYloXR8DosMTFi7BH+awefP3azjFphqKhVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bqGklTFY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D97C4CECE;
+	 MIME-Version:Content-Type; b=oMJc0mf9UsPY6vbT5EbqKW7PF+/zXUGfFeYoDXe90hjkVRss7t7ZOD1tohqYp5y8JSdwc/L02JcVMgadU6BnGcdGyPGsB+4rQ3muQHSvHzIwysvVLvcmPXl+T9geL41SdK3s5cBHdohTf0Pbf3+bHZhIyss3c7dEJg1Sh4vspH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cksvZ6JC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32E8C4CED0;
 	Sat, 28 Sep 2024 22:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1727560847;
-	bh=yafdB9R1iS/MIPawy5b6gSA2MMikl+1Y9iR4oZxhH0c=;
+	bh=Nqkkzjy+oFOwXzYUoBJUIL1MmPuVBHIvi/pv18rAyK0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bqGklTFYYorgtFAQtQrttOJoheU+LqSrmOlXvf5Pi5h+GZZ7fZGErPRnHPybPJwNx
-	 EMB9//b/EjTw0OxmlH/+vu1g59QUt+GXo0TX/u8s/aVSQa7UPqTw+oigemBLI3IVVu
-	 7a6rfdAr8f1zDzpPv8Gvef1h9dCAxB3/VVfDE+T9jxKEo9ivIHDmsHl/uaq5qGy694
-	 nCPtQTfRm4l+7bg9UF0gEuC7JYgBb6st1V9XchclCPqluVklrGOnKQwVS3aSVmTC1L
-	 cIBnsQLRm/FuRRPIrATy4xVbuCHWBxcIV3fx/5EFmjw+GafSq8Q0tutW/JoNRSQfto
-	 R5zok+GBwXYDA==
+	b=cksvZ6JCi5VSD4a7dMInohSiPPyy0WI4KbyeJWJ0sheXwEQCyuKjuV6WT2+4RwOy8
+	 S4MoyMnT5rZ+0K7rt8y/nOvzAOXyPaYXHl3F2WUTVhhj+809lSNF9bI5WQ2fn+vCW6
+	 z8p9cb5URZdiFSCclJBWL2qKO/em1Q8fk9xYYxz565pq/lB1RYHX88287tSUaE7SBu
+	 5AZkYLtmDxCWmhMkNUol1kEINleTnObQpBlibQMij+knFlbPHALcPBDhPxIg2zHUnr
+	 KayKqvgXUUSxc6bHLvI3RXx/Px5FDZtg6cEITuUzBNcJQjwNilApDTYAA6X4+Oxolc
+	 2n8TrShDFvn5w==
 Received: by pali.im (Postfix)
-	id 6A215C46; Sun, 29 Sep 2024 00:00:41 +0200 (CEST)
+	id 9A42AC7D; Sun, 29 Sep 2024 00:00:41 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/8] cifs: Do not convert delimiter when parsing NFS-style symlinks
-Date: Sat, 28 Sep 2024 23:59:46 +0200
-Message-Id: <20240928215948.4494-7-pali@kernel.org>
+Subject: [PATCH 7/8] cifs: Validate content of NFS reparse point buffer
+Date: Sat, 28 Sep 2024 23:59:47 +0200
+Message-Id: <20240928215948.4494-8-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20240928215948.4494-1-pali@kernel.org>
 References: <20240928215948.4494-1-pali@kernel.org>
@@ -64,36 +64,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-NFS-style symlinks have target location always stored in NFS/UNIX form
-where backslash means the real UNIX backslash and not the SMB path
-separator.
+Symlink target location stored in DataBuffer is encoded in UTF-16. So check
+that symlink DataBuffer length is non-zero and even number. And check that
+DataBuffer does not contain UTF-16 null codepoint because Linux cannot
+process symlink with null byte.
 
-So do not mangle slash and backslash content of NFS-style symlink during
-readlink() syscall as it is already in the correct Linux form.
+DataBuffer for char and block devices is 8 bytes long as it contains two
+32-bit numbers (major and minor). Add check for this.
 
-This fixes interoperability of NFS-style symlinks with backslashes created
-by Linux NFS3 client throw Windows NFS server and retrieved by Linux SMB
-client throw Windows SMB server, where both Windows servers exports the
-same directory.
+DataBuffer buffer for sockets and fifos zero-length. Add checks for this.
 
-Fixes: d5ecebc4900d ("smb3: Allow query of symlinks stored as reparse points")
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/reparse.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/smb/client/reparse.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-index af32a7dbca4b..e3cf7ae516cb 100644
+index e3cf7ae516cb..35e8f2e18530 100644
 --- a/fs/smb/client/reparse.c
 +++ b/fs/smb/client/reparse.c
-@@ -335,7 +335,6 @@ static int parse_reparse_posix(struct reparse_posix_data *buf,
+@@ -330,6 +330,18 @@ static int parse_reparse_posix(struct reparse_posix_data *buf,
+ 
+ 	switch ((type = le64_to_cpu(buf->InodeType))) {
+ 	case NFS_SPECFILE_LNK:
++		if (len == 0 || (len % 2)) {
++			cifs_dbg(VFS, "srv returned malformed nfs symlink buffer\n");
++			return -EIO;
++		}
++		/*
++		 * Check that buffer does not contain UTF-16 null codepoint
++		 * because Linux cannot process symlink with null byte.
++		 */
++		if (UniStrnlen((wchar_t *)buf->DataBuffer, len/2) != len/2) {
++			cifs_dbg(VFS, "srv returned null byte in nfs symlink target location\n");
++			return -EIO;
++		}
+ 		data->symlink_target = cifs_strndup_from_utf16(buf->DataBuffer,
+ 							       len, true,
  							       cifs_sb->local_nls);
- 		if (!data->symlink_target)
- 			return -ENOMEM;
--		convert_delimiter(data->symlink_target, '/');
- 		cifs_dbg(FYI, "%s: target path: %s\n",
- 			 __func__, data->symlink_target);
+@@ -340,8 +352,19 @@ static int parse_reparse_posix(struct reparse_posix_data *buf,
  		break;
+ 	case NFS_SPECFILE_CHR:
+ 	case NFS_SPECFILE_BLK:
++		/* DataBuffer for block and char devices contains two 32-bit numbers */
++		if (len != 8) {
++			cifs_dbg(VFS, "srv returned malformed nfs buffer for type: 0x%llx\n", type);
++			return -EIO;
++		}
++		break;
+ 	case NFS_SPECFILE_FIFO:
+ 	case NFS_SPECFILE_SOCK:
++		/* DataBuffer for fifos and sockets is empty */
++		if (len != 0) {
++			cifs_dbg(VFS, "srv returned malformed nfs buffer for type: 0x%llx\n", type);
++			return -EIO;
++		}
+ 		break;
+ 	default:
+ 		cifs_dbg(VFS, "%s: unhandled inode type: 0x%llx\n",
 -- 
 2.20.1
 
