@@ -1,56 +1,56 @@
-Return-Path: <linux-cifs+bounces-3047-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3053-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A84D991D6B
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 11:07:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D601991D9C
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 12:01:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6AF2B212AE
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 09:07:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B77DB1F21D8E
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 10:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0C016EC19;
-	Sun,  6 Oct 2024 09:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6865176230;
+	Sun,  6 Oct 2024 10:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyFHfzLF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PaBIQk+m"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5D028EC;
-	Sun,  6 Oct 2024 09:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2D1175D5C;
+	Sun,  6 Oct 2024 10:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728205621; cv=none; b=qqj2UI64cB9BCfcI6HK6P/1BTobPaY6T50XHP02QlrJo4pOxhiGHSvNCiAajR+c0ikAoXX5rKt6hraUsykBT3mjPDurr9BpH+oD35JdKVcLNazhO+xg9Z5eot7y8i3ty4uuiN1F/KkI4rMQeWvoCYC+gISf8gXuz4EfqT4u1ld8=
+	t=1728208871; cv=none; b=r2psmbgKjxS+FfF/WkGviwTeKH6lIeR+afrRWE0QBn/tC8OXRaDkK+xIYTKkzRvAzlOOHj3Tz5QN1DMGBoHSf0lGL+2uIivgdSAotF9lVwSCWYBsMVCzWM2vO9izBM91JLVnCizWsIJy/gOI8oZVD5zdzoqVekKiv1au/zmisw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728205621; c=relaxed/simple;
-	bh=JDcqnQNF8JJFhiKpQYt3uez/euJmc6ELDxIoi1C3h3E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=k97f8Jft/0fGrCwyu0hyguyEFQRXD2TVvVbDY7KQ0Q746YdCV14Eoke8uKK9UDcqbQyrmZvQ0RK3nYIyZPyWizlVFtXLy9cMQjkiOFp6JcuHo2EAfd2YBiHxmE+r3XHgaV5NHAwiIwIAJr0xub23001ETyf0jXR/uLjvtKKpNPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyFHfzLF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5EDC4CEC5;
-	Sun,  6 Oct 2024 09:07:00 +0000 (UTC)
+	s=arc-20240116; t=1728208871; c=relaxed/simple;
+	bh=nDcqMOmHhs7STNbH0Ot5sUT4vs+zoNhL3T3tE+/I+JA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aXwPYZWgJjjulIP3DZpCCZ4NhFbCR4enibOlX01n1qI09DzscOVjlOINJhCMyAYBC01eJ2+l4/KESZb4jr777xleiKA8vfI7QJFJxPxQP6sj1/71wqd6mNX4LXJjSEnhUqcqmFqlbSpckuEwfnY/yagtFV9FXNP/mlk0pmZLXqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PaBIQk+m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E282AC4CECF;
+	Sun,  6 Oct 2024 10:01:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728205620;
-	bh=JDcqnQNF8JJFhiKpQYt3uez/euJmc6ELDxIoi1C3h3E=;
+	s=k20201202; t=1728208871;
+	bh=nDcqMOmHhs7STNbH0Ot5sUT4vs+zoNhL3T3tE+/I+JA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=XyFHfzLFLpq4bSmUt+b7c8yelZfw63WP++muuxzTCWall+wqU9VqjK4ilzH+/s+i+
-	 wEKB6Lb2m6bp522z9LayGMBtIjAwo+EF8WVsLLZGZuf3ZL1/y/QKnX3EeXvs+tNCyy
-	 ZFZco2qoBRfrACfLO1kz4NSL7MVTdnsh1vOiSbfG3McuCs+obDqVhKjMdPfY0Ylvhq
-	 IlwVDKtG5rNUYuu83o1wRdNMhWg7+4X95Lc6fMnmJZCgk6JGX+5aGbjo88WddKFnWf
-	 eN+XDlc8IQ+3bdiRJgRHzgNvteQ8ghPN+iX3dPTuRK2utN6ue4AEkt2YSLiLIgjh4N
-	 BUQFGCwaYy1jg==
+	b=PaBIQk+m9qCRhv6wm/h55UfuuZKI3SIkZ43/NFKcwWt3Y5+YEOmLEk+cwqd4gsZmN
+	 Hm8GJMc5GzXSC7C+vGpSF4l3ZhBttHYI9kg+sgdCW55ipraX1H13BkpzV32uH1SIAA
+	 ITjVTVyLOx4b2TlhDH6vn67Iqei5O44QKziWIpHIS+yNlbWn2Z42TInoGK27op1Wwj
+	 24zCP4TkoG6xtRPvszPfLIYPUYSmhePUC2gtmplsnZgKZSBkEi8WJX7EvelPXv90B2
+	 Ixx4kGHdKSG9IPJPT6KUzVL9+PrkLS0KV+bQOPLSAbdv6Nc1JKv5wzGGpkjyJhlLWZ
+	 sMxRaJh4LAAuw==
 Received: by pali.im (Postfix)
-	id 03D7581A; Sun,  6 Oct 2024 11:06:53 +0200 (CEST)
+	id F119C81A; Sun,  6 Oct 2024 12:01:01 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: Add support for parsing WSL-style symlinks
-Date: Sun,  6 Oct 2024 11:05:48 +0200
-Message-Id: <20241006090548.30053-1-pali@kernel.org>
+Subject: [PATCH 0/7] cifs: Improve mount option -o reparse and support for native Windows sockets
+Date: Sun,  6 Oct 2024 12:00:39 +0200
+Message-Id: <20241006100046.30772-1-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
@@ -61,112 +61,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Linux CIFS client currently does not implement readlink() for WSL-style
-symlinks. It is only able to detect that file is of WSL-style symlink, but
-is not able to read target symlink location.
+This patch series improves choosing reparse format when creating new
+special files.
 
-Add this missing functionality and implement support for parsing content of
-WSL-style symlink.
+In following table is behavior of creating new special files before
+this patch series. In columns are mount options, in rows are file types
+and in each cell is reparse format which is created.
 
-The important note is that symlink target location stored for WSL symlink
-reparse point (IO_REPARSE_TAG_LX_SYMLINK) is in UTF-8 encoding instead of
-UTF-16 (which is used in whole SMB protocol and also in all other symlink
-styles). So for proper locale/cp support it is needed to do conversion from
-UTF-8 to local_nls.
+          -o reparse=default  -o reparse=nfs  -o reparse=wsl
+symlink      native              native          native
+socket       nfs                 nfs             wsl
+fifo         nfs                 nfs             wsl
+block        nfs                 nfs             wsl
+char         nfs                 nfs             wsl
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- fs/smb/client/reparse.c | 49 +++++++++++++++++++++++++++++++++++++++++
- fs/smb/common/smb2pdu.h |  9 ++++++++
- 2 files changed, 58 insertions(+)
 
-diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-index a577b2d2a4fc..6e9d914bac41 100644
---- a/fs/smb/client/reparse.c
-+++ b/fs/smb/client/reparse.c
-@@ -875,6 +875,52 @@ static int parse_reparse_symlink(struct reparse_symlink_data_buffer *sym,
- 					 cifs_sb);
- }
- 
-+static int parse_reparse_wsl_symlink(struct reparse_wsl_symlink_data_buffer *buf,
-+				     struct cifs_sb_info *cifs_sb,
-+				     struct cifs_open_info_data *data)
-+{
-+	int len = le16_to_cpu(buf->ReparseDataLength);
-+	int symname_utf8_len;
-+	__le16 *symname_utf16;
-+	int symname_utf16_len;
-+
-+	if (len <= sizeof(buf->Flags)) {
-+		cifs_dbg(VFS, "srv returned malformed wsl symlink buffer\n");
-+		return -EIO;
-+	}
-+
-+	/* PathBuffer is in UTF-8 but without trailing null-term byte */
-+	symname_utf8_len = len - sizeof(buf->Flags);
-+	/*
-+	 * Check that buffer does not contain null byte
-+	 * because Linux cannot process symlink with null byte.
-+	 */
-+	if (strnlen(buf->PathBuffer, symname_utf8_len) != symname_utf8_len) {
-+		cifs_dbg(VFS, "srv returned null byte in wsl symlink target location\n");
-+		return -EIO;
-+	}
-+	symname_utf16 = kzalloc(symname_utf8_len * 2, GFP_KERNEL);
-+	if (!symname_utf16)
-+		return -ENOMEM;
-+	symname_utf16_len = utf8s_to_utf16s(buf->PathBuffer, symname_utf8_len,
-+					    UTF16_LITTLE_ENDIAN,
-+					    symname_utf16, symname_utf8_len * 2);
-+	if (symname_utf16_len < 0) {
-+		kfree(symname_utf16);
-+		return symname_utf16_len;
-+	}
-+	symname_utf16_len *= 2; /* utf8s_to_utf16s() returns number of u16 items, not byte length */
-+
-+	data->symlink_target = cifs_strndup_from_utf16((u8 *)symname_utf16,
-+						       symname_utf16_len, true,
-+						       cifs_sb->local_nls);
-+	kfree(symname_utf16);
-+	if (!data->symlink_target)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
- int parse_reparse_point(struct reparse_data_buffer *buf,
- 			u32 plen, struct cifs_sb_info *cifs_sb,
- 			const char *full_path,
-@@ -894,6 +940,9 @@ int parse_reparse_point(struct reparse_data_buffer *buf,
- 			(struct reparse_symlink_data_buffer *)buf,
- 			plen, unicode, cifs_sb, full_path, data);
- 	case IO_REPARSE_TAG_LX_SYMLINK:
-+		return parse_reparse_wsl_symlink(
-+			(struct reparse_wsl_symlink_data_buffer *)buf,
-+			cifs_sb, data);
- 	case IO_REPARSE_TAG_AF_UNIX:
- 	case IO_REPARSE_TAG_LX_FIFO:
- 	case IO_REPARSE_TAG_LX_CHR:
-diff --git a/fs/smb/common/smb2pdu.h b/fs/smb/common/smb2pdu.h
-index c769f9dbc0b4..275184c31a89 100644
---- a/fs/smb/common/smb2pdu.h
-+++ b/fs/smb/common/smb2pdu.h
-@@ -1552,6 +1552,15 @@ struct reparse_symlink_data_buffer {
- 
- /* See MS-FSCC 2.1.2.6 and cifspdu.h for struct reparse_posix_data */
- 
-+/* For IO_REPARSE_TAG_LX_SYMLINK */
-+struct reparse_wsl_symlink_data_buffer {
-+	__le32	ReparseTag;
-+	__le16	ReparseDataLength;
-+	__u16	Reserved;
-+	__le32	Flags;
-+	__u8	PathBuffer[]; /* Variable Length UTF-8 string without nul-term */
-+} __packed;
-+
- struct validate_negotiate_info_req {
- 	__le32 Capabilities;
- 	__u8   Guid[SMB2_CLIENT_GUID_SIZE];
+After this patch series the table looks like:
+
+          -o reparse=default  -o reparse=nfs  -o reparse=wsl  -o reparse=native+nfs  -o reparse=native+wsl  -o reparse=native  -o reparse=none
+symlink      native              nfs             wsl             native                 native                 native             -disallowed-
+socket       native              nfs             wsl             native                 native                 native             -disallowed-
+fifo         nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
+block        nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
+char         nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
+
+
+The default behavior when no option is specified (which is same as
+-o reparse=default) changes only for creating new sockets which are
+now created in its native NTFS form with IO_REPARSE_TAG_AF_UNIX reparse
+tag.
+
+The nfs and wsl behavior is changed to always create new special files
+in its own formats.
+
+There are new options native+nfs and native+wsl which creates by default
+in native form (symlinks + sockets) and fallbacks to nfs/wsl for other
+types (fifo, char, block). This is probably the most useful for
+interoperability. Mount option -o reparse=default is now same as
+-o reparse=native+nfs
+
+For completeness there are also new options -o reparse=native which
+allows to creating only native types used by Windows applications
+(symlinks and sockets) and option -o reparse=none to completely disable
+creating new reparse points.
+
+
+Pali Rohár (7):
+  cifs: Add mount option -o reparse=native
+  cifs: Add mount option -o reparse=none
+  cifs: Add support for creating native Windows sockets
+  cifs: Add support for creating NFS-style symlinks
+  cifs: Improve guard for excluding $LXDEV xattr
+  cifs: Add support for creating WSL-style symlinks
+  cifs: Validate content of WSL reparse point buffers
+
+ fs/smb/client/cifsglob.h   |  18 +++-
+ fs/smb/client/fs_context.c |  16 +++
+ fs/smb/client/fs_context.h |   4 +
+ fs/smb/client/reparse.c    | 211 +++++++++++++++++++++++++++++++------
+ fs/smb/client/reparse.h    |   2 +
+ 5 files changed, 218 insertions(+), 33 deletions(-)
+
 -- 
 2.20.1
 
