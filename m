@@ -1,57 +1,60 @@
-Return-Path: <linux-cifs+bounces-3053-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3049-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D601991D9C
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 12:01:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EC9991D92
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 12:01:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B77DB1F21D8E
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 10:01:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9EB8283358
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 10:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6865176230;
-	Sun,  6 Oct 2024 10:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98F71714B0;
+	Sun,  6 Oct 2024 10:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PaBIQk+m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hfzw/tcK"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2D1175D5C;
-	Sun,  6 Oct 2024 10:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF111EB36;
+	Sun,  6 Oct 2024 10:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728208871; cv=none; b=r2psmbgKjxS+FfF/WkGviwTeKH6lIeR+afrRWE0QBn/tC8OXRaDkK+xIYTKkzRvAzlOOHj3Tz5QN1DMGBoHSf0lGL+2uIivgdSAotF9lVwSCWYBsMVCzWM2vO9izBM91JLVnCizWsIJy/gOI8oZVD5zdzoqVekKiv1au/zmisw0=
+	t=1728208869; cv=none; b=H2+fr4RBksew+lyxnSpffl0xL+agVMVFCFfn71ASWDB3BaN1wj05/EwCRBub2NrH1qahcAK+SnIfDdUx9MUvGrC2S192nUGe5EWrU0ieAsnl7nrSDGQ4cVtXU1MVl7EO6DsP2ZtGX5MUIfRxStINVSHiQkmD1F9tCP+8ceVqVeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728208871; c=relaxed/simple;
-	bh=nDcqMOmHhs7STNbH0Ot5sUT4vs+zoNhL3T3tE+/I+JA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aXwPYZWgJjjulIP3DZpCCZ4NhFbCR4enibOlX01n1qI09DzscOVjlOINJhCMyAYBC01eJ2+l4/KESZb4jr777xleiKA8vfI7QJFJxPxQP6sj1/71wqd6mNX4LXJjSEnhUqcqmFqlbSpckuEwfnY/yagtFV9FXNP/mlk0pmZLXqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PaBIQk+m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E282AC4CECF;
-	Sun,  6 Oct 2024 10:01:10 +0000 (UTC)
+	s=arc-20240116; t=1728208869; c=relaxed/simple;
+	bh=wQDjDxaOIJ2QMPx/RGAlRjXH23pYiR7J647kSjFOiiE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H083Yd8gmfIFSUt2kErQrRczECD6VID3Np1TpMms5uomz4zg9xPTRGSAk/UkTIeCmihdo1Ja0gsbiJfUpyGwvQ59UWIpU49vptrKV3sVJ35GO9e9FG22d1t46bujY/k6yMa0hu3l2j5CBsA+F+YxaxeBn7mm2VNvgZqvwK8kix4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hfzw/tcK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BC7C4CEC5;
+	Sun,  6 Oct 2024 10:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728208871;
-	bh=nDcqMOmHhs7STNbH0Ot5sUT4vs+zoNhL3T3tE+/I+JA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PaBIQk+m9qCRhv6wm/h55UfuuZKI3SIkZ43/NFKcwWt3Y5+YEOmLEk+cwqd4gsZmN
-	 Hm8GJMc5GzXSC7C+vGpSF4l3ZhBttHYI9kg+sgdCW55ipraX1H13BkpzV32uH1SIAA
-	 ITjVTVyLOx4b2TlhDH6vn67Iqei5O44QKziWIpHIS+yNlbWn2Z42TInoGK27op1Wwj
-	 24zCP4TkoG6xtRPvszPfLIYPUYSmhePUC2gtmplsnZgKZSBkEi8WJX7EvelPXv90B2
-	 Ixx4kGHdKSG9IPJPT6KUzVL9+PrkLS0KV+bQOPLSAbdv6Nc1JKv5wzGGpkjyJhlLWZ
-	 sMxRaJh4LAAuw==
+	s=k20201202; t=1728208869;
+	bh=wQDjDxaOIJ2QMPx/RGAlRjXH23pYiR7J647kSjFOiiE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hfzw/tcK3yAJsl/IeGZnvchmujoxE4xQ3BXUiPW8JcEOpJ+SpDJA8h6NoYcr4Fbbd
+	 N2FY88m4QbpON2LAQMhfXu8Q+dH2igl3TZB59PjwejiBXhjp8BNYAW/v9S1+Pg2EP3
+	 OMxM1MufwWag/Y6mek27z9XL3clJrsgjWRMGpH2qRb/Ev/0rm++6LQX0Qdng4iVRIn
+	 PFwDyveytjyfmB4mePk80INfW6ygDlWY11gb6m3iZFqdnvXDI6m/0JXM7QcWfzJVvI
+	 XiAR47AsnPnWwOMnu+TExpr0aJ0vscA3w+oUoNgPHN3m/jhfBcKICoIXtkRwegiBPA
+	 z82zZMAolNAAg==
 Received: by pali.im (Postfix)
-	id F119C81A; Sun,  6 Oct 2024 12:01:01 +0200 (CEST)
+	id 2D481B49; Sun,  6 Oct 2024 12:01:02 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] cifs: Improve mount option -o reparse and support for native Windows sockets
-Date: Sun,  6 Oct 2024 12:00:39 +0200
-Message-Id: <20241006100046.30772-1-pali@kernel.org>
+Subject: [PATCH 1/7] cifs: Add mount option -o reparse=native
+Date: Sun,  6 Oct 2024 12:00:40 +0200
+Message-Id: <20241006100046.30772-2-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241006100046.30772-1-pali@kernel.org>
+References: <20241006100046.30772-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -61,67 +64,263 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch series improves choosing reparse format when creating new
-special files.
+Currently the default option is -o reparse=default which is same as
+-o reparse=nfs. Currently mount option -o reparse=nfs does not create
+symlink in NFS reparse point style, which is misleading.
 
-In following table is behavior of creating new special files before
-this patch series. In columns are mount options, in rows are file types
-and in each cell is reparse format which is created.
+Add new -o reparse= options "native", "native+nfs" and "native+wsl" to make
+it more clear and allow to choose the expected reparse point types.
 
-          -o reparse=default  -o reparse=nfs  -o reparse=wsl
-symlink      native              native          native
-socket       nfs                 nfs             wsl
-fifo         nfs                 nfs             wsl
-block        nfs                 nfs             wsl
-char         nfs                 nfs             wsl
+"native" would mean to create new special files only with reparse point
+tags which are natively supported by SMB or Windows. Types which are not
+natively supported cannot be created.
 
+"native+nfs" would mean same as native, but fallback to "nfs" for
+unsupported types.
 
-After this patch series the table looks like:
+"native+wsl" would mean to fallback to "wsl".
 
-          -o reparse=default  -o reparse=nfs  -o reparse=wsl  -o reparse=native+nfs  -o reparse=native+wsl  -o reparse=native  -o reparse=none
-symlink      native              nfs             wsl             native                 native                 native             -disallowed-
-socket       native              nfs             wsl             native                 native                 native             -disallowed-
-fifo         nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
-block        nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
-char         nfs                 nfs             wsl             nfs                    wsl                    -disallowed-       -disallowed-
+Change also meaning of "nfs" and "wsl" to always create special types with
+nfs / wsl style.
 
+And change also the default option to "native+nfs", so the default behavior
+stay same as without this change. Without this change were all symlinks
+created in native Windows/SMB form and this stay same with this change too.
 
-The default behavior when no option is specified (which is same as
--o reparse=default) changes only for creating new sockets which are
-now created in its native NTFS form with IO_REPARSE_TAG_AF_UNIX reparse
-tag.
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ fs/smb/client/cifsglob.h   | 15 ++++++++--
+ fs/smb/client/fs_context.c | 12 ++++++++
+ fs/smb/client/fs_context.h |  3 ++
+ fs/smb/client/reparse.c    | 58 +++++++++++++++++++++++++++++++-------
+ fs/smb/client/reparse.h    |  2 ++
+ 5 files changed, 77 insertions(+), 13 deletions(-)
 
-The nfs and wsl behavior is changed to always create new special files
-in its own formats.
-
-There are new options native+nfs and native+wsl which creates by default
-in native form (symlinks + sockets) and fallbacks to nfs/wsl for other
-types (fifo, char, block). This is probably the most useful for
-interoperability. Mount option -o reparse=default is now same as
--o reparse=native+nfs
-
-For completeness there are also new options -o reparse=native which
-allows to creating only native types used by Windows applications
-(symlinks and sockets) and option -o reparse=none to completely disable
-creating new reparse points.
-
-
-Pali Rohár (7):
-  cifs: Add mount option -o reparse=native
-  cifs: Add mount option -o reparse=none
-  cifs: Add support for creating native Windows sockets
-  cifs: Add support for creating NFS-style symlinks
-  cifs: Improve guard for excluding $LXDEV xattr
-  cifs: Add support for creating WSL-style symlinks
-  cifs: Validate content of WSL reparse point buffers
-
- fs/smb/client/cifsglob.h   |  18 +++-
- fs/smb/client/fs_context.c |  16 +++
- fs/smb/client/fs_context.h |   4 +
- fs/smb/client/reparse.c    | 211 +++++++++++++++++++++++++++++++------
- fs/smb/client/reparse.h    |   2 +
- 5 files changed, 218 insertions(+), 33 deletions(-)
-
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 260b553283ef..367f0ac6400d 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -154,14 +154,23 @@ enum securityEnum {
+ };
+ 
+ enum cifs_reparse_type {
+-	CIFS_REPARSE_TYPE_NFS,
+-	CIFS_REPARSE_TYPE_WSL,
+-	CIFS_REPARSE_TYPE_DEFAULT = CIFS_REPARSE_TYPE_NFS,
++	CIFS_REPARSE_TYPE_NATIVE, /* native symlinks only */
++	CIFS_REPARSE_TYPE_NATIVE_NFS, /* native for symlinks, nfs for others */
++	CIFS_REPARSE_TYPE_NATIVE_WSL, /* native for symlinks, wsl for others */
++	CIFS_REPARSE_TYPE_NFS, /* nfs for everything */
++	CIFS_REPARSE_TYPE_WSL, /* wsl for everything */
++	CIFS_REPARSE_TYPE_DEFAULT = CIFS_REPARSE_TYPE_NATIVE_NFS,
+ };
+ 
+ static inline const char *cifs_reparse_type_str(enum cifs_reparse_type type)
+ {
+ 	switch (type) {
++	case CIFS_REPARSE_TYPE_NATIVE:
++		return "native";
++	case CIFS_REPARSE_TYPE_NATIVE_NFS:
++		return "native+nfs";
++	case CIFS_REPARSE_TYPE_NATIVE_WSL:
++		return "native+wsl";
+ 	case CIFS_REPARSE_TYPE_NFS:
+ 		return "nfs";
+ 	case CIFS_REPARSE_TYPE_WSL:
+diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
+index 22b550860cc8..e5de84912e3d 100644
+--- a/fs/smb/client/fs_context.c
++++ b/fs/smb/client/fs_context.c
+@@ -303,6 +303,9 @@ cifs_parse_cache_flavor(struct fs_context *fc, char *value, struct smb3_fs_conte
+ 
+ static const match_table_t reparse_flavor_tokens = {
+ 	{ Opt_reparse_default,	"default" },
++	{ Opt_reparse_native,	"native" },
++	{ Opt_reparse_native_nfs, "native+nfs" },
++	{ Opt_reparse_native_wsl, "native+wsl" },
+ 	{ Opt_reparse_nfs,	"nfs" },
+ 	{ Opt_reparse_wsl,	"wsl" },
+ 	{ Opt_reparse_err,	NULL },
+@@ -317,6 +320,15 @@ static int parse_reparse_flavor(struct fs_context *fc, char *value,
+ 	case Opt_reparse_default:
+ 		ctx->reparse_type = CIFS_REPARSE_TYPE_DEFAULT;
+ 		break;
++	case Opt_reparse_native:
++		ctx->reparse_type = CIFS_REPARSE_TYPE_NATIVE;
++		break;
++	case Opt_reparse_native_nfs:
++		ctx->reparse_type = CIFS_REPARSE_TYPE_NATIVE_NFS;
++		break;
++	case Opt_reparse_native_wsl:
++		ctx->reparse_type = CIFS_REPARSE_TYPE_NATIVE_WSL;
++		break;
+ 	case Opt_reparse_nfs:
+ 		ctx->reparse_type = CIFS_REPARSE_TYPE_NFS;
+ 		break;
+diff --git a/fs/smb/client/fs_context.h b/fs/smb/client/fs_context.h
+index 8dd12498ffd8..1011176ba3b7 100644
+--- a/fs/smb/client/fs_context.h
++++ b/fs/smb/client/fs_context.h
+@@ -43,6 +43,9 @@ enum {
+ 
+ enum cifs_reparse_parm {
+ 	Opt_reparse_default,
++	Opt_reparse_native,
++	Opt_reparse_native_nfs,
++	Opt_reparse_native_wsl,
+ 	Opt_reparse_nfs,
+ 	Opt_reparse_wsl,
+ 	Opt_reparse_err
+diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
+index 6e9d914bac41..38fe0a710c65 100644
+--- a/fs/smb/client/reparse.c
++++ b/fs/smb/client/reparse.c
+@@ -14,6 +14,20 @@
+ #include "fs_context.h"
+ #include "reparse.h"
+ 
++static int mknod_nfs(unsigned int xid, struct inode *inode,
++		     struct dentry *dentry, struct cifs_tcon *tcon,
++		     const char *full_path, umode_t mode, dev_t dev,
++		     const char *symname);
++
++static int mknod_wsl(unsigned int xid, struct inode *inode,
++		     struct dentry *dentry, struct cifs_tcon *tcon,
++		     const char *full_path, umode_t mode, dev_t dev,
++		     const char *symname);
++
++static int create_native_symlink(const unsigned int xid, struct inode *inode,
++				 struct dentry *dentry, struct cifs_tcon *tcon,
++				 const char *full_path, const char *symname);
++
+ static int detect_directory_symlink_target(struct cifs_sb_info *cifs_sb,
+ 					   const unsigned int xid,
+ 					   const char *full_path,
+@@ -23,6 +37,26 @@ static int detect_directory_symlink_target(struct cifs_sb_info *cifs_sb,
+ int smb2_create_reparse_symlink(const unsigned int xid, struct inode *inode,
+ 				struct dentry *dentry, struct cifs_tcon *tcon,
+ 				const char *full_path, const char *symname)
++{
++	struct smb3_fs_context *ctx = CIFS_SB(inode->i_sb)->ctx;
++
++	switch (ctx->reparse_type) {
++	case CIFS_REPARSE_TYPE_NATIVE:
++	case CIFS_REPARSE_TYPE_NATIVE_NFS:
++	case CIFS_REPARSE_TYPE_NATIVE_WSL:
++		return create_native_symlink(xid, inode, dentry, tcon, full_path, symname);
++	case CIFS_REPARSE_TYPE_NFS:
++		return mknod_nfs(xid, inode, dentry, tcon, full_path, S_IFLNK, 0, symname);
++	case CIFS_REPARSE_TYPE_WSL:
++		return mknod_wsl(xid, inode, dentry, tcon, full_path, S_IFLNK, 0, symname);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int create_native_symlink(const unsigned int xid, struct inode *inode,
++				 struct dentry *dentry, struct cifs_tcon *tcon,
++				 const char *full_path, const char *symname)
+ {
+ 	struct reparse_symlink_data_buffer *buf = NULL;
+ 	struct cifs_open_info_data data = {};
+@@ -363,6 +397,7 @@ static int nfs_set_reparse_buf(struct reparse_posix_data *buf,
+ 	case NFS_SPECFILE_SOCK:
+ 		dlen = 0;
+ 		break;
++	case NFS_SPECFILE_LNK: /* TODO: add support for NFS symlinks */
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -381,7 +416,8 @@ static int nfs_set_reparse_buf(struct reparse_posix_data *buf,
+ 
+ static int mknod_nfs(unsigned int xid, struct inode *inode,
+ 		     struct dentry *dentry, struct cifs_tcon *tcon,
+-		     const char *full_path, umode_t mode, dev_t dev)
++		     const char *full_path, umode_t mode, dev_t dev,
++		     const char *symname)
+ {
+ 	struct cifs_open_info_data data;
+ 	struct reparse_posix_data *p;
+@@ -421,6 +457,7 @@ static int wsl_set_reparse_buf(struct reparse_data_buffer *buf,
+ 	case IO_REPARSE_TAG_LX_FIFO:
+ 	case IO_REPARSE_TAG_AF_UNIX:
+ 		break;
++	case IO_REPARSE_TAG_LX_SYMLINK: /* TODO: add support for WSL symlinks */
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -518,7 +555,8 @@ static int wsl_set_xattrs(struct inode *inode, umode_t _mode,
+ 
+ static int mknod_wsl(unsigned int xid, struct inode *inode,
+ 		     struct dentry *dentry, struct cifs_tcon *tcon,
+-		     const char *full_path, umode_t mode, dev_t dev)
++		     const char *full_path, umode_t mode, dev_t dev,
++		     const char *symname)
+ {
+ 	struct cifs_open_info_data data;
+ 	struct reparse_data_buffer buf;
+@@ -563,17 +601,17 @@ int smb2_mknod_reparse(unsigned int xid, struct inode *inode,
+ 		       const char *full_path, umode_t mode, dev_t dev)
+ {
+ 	struct smb3_fs_context *ctx = CIFS_SB(inode->i_sb)->ctx;
+-	int rc = -EOPNOTSUPP;
+ 
+ 	switch (ctx->reparse_type) {
++	case CIFS_REPARSE_TYPE_NATIVE_NFS:
+ 	case CIFS_REPARSE_TYPE_NFS:
+-		rc = mknod_nfs(xid, inode, dentry, tcon, full_path, mode, dev);
+-		break;
++		return mknod_nfs(xid, inode, dentry, tcon, full_path, mode, dev, NULL);
++	case CIFS_REPARSE_TYPE_NATIVE_WSL:
+ 	case CIFS_REPARSE_TYPE_WSL:
+-		rc = mknod_wsl(xid, inode, dentry, tcon, full_path, mode, dev);
+-		break;
++		return mknod_wsl(xid, inode, dentry, tcon, full_path, mode, dev, NULL);
++	default:
++		return -EOPNOTSUPP;
+ 	}
+-	return rc;
+ }
+ 
+ /* See MS-FSCC 2.1.2.6 for the 'NFS' style reparse tags */
+@@ -848,7 +886,7 @@ int smb2_parse_native_symlink(char **target, const char *buf, unsigned int len,
+ 	return rc;
+ }
+ 
+-static int parse_reparse_symlink(struct reparse_symlink_data_buffer *sym,
++static int parse_reparse_native_symlink(struct reparse_symlink_data_buffer *sym,
+ 				 u32 plen, bool unicode,
+ 				 struct cifs_sb_info *cifs_sb,
+ 				 const char *full_path,
+@@ -936,7 +974,7 @@ int parse_reparse_point(struct reparse_data_buffer *buf,
+ 		return parse_reparse_posix((struct reparse_posix_data *)buf,
+ 					   cifs_sb, data);
+ 	case IO_REPARSE_TAG_SYMLINK:
+-		return parse_reparse_symlink(
++		return parse_reparse_native_symlink(
+ 			(struct reparse_symlink_data_buffer *)buf,
+ 			plen, unicode, cifs_sb, full_path, data);
+ 	case IO_REPARSE_TAG_LX_SYMLINK:
+diff --git a/fs/smb/client/reparse.h b/fs/smb/client/reparse.h
+index eb6854e65e08..a6bdf20ce1b0 100644
+--- a/fs/smb/client/reparse.h
++++ b/fs/smb/client/reparse.h
+@@ -61,6 +61,7 @@ static inline kgid_t wsl_make_kgid(struct cifs_sb_info *cifs_sb,
+ static inline u64 reparse_mode_nfs_type(mode_t mode)
+ {
+ 	switch (mode & S_IFMT) {
++	case S_IFLNK: return NFS_SPECFILE_LNK;
+ 	case S_IFBLK: return NFS_SPECFILE_BLK;
+ 	case S_IFCHR: return NFS_SPECFILE_CHR;
+ 	case S_IFIFO: return NFS_SPECFILE_FIFO;
+@@ -72,6 +73,7 @@ static inline u64 reparse_mode_nfs_type(mode_t mode)
+ static inline u32 reparse_mode_wsl_tag(mode_t mode)
+ {
+ 	switch (mode & S_IFMT) {
++	case S_IFLNK: return IO_REPARSE_TAG_LX_SYMLINK;
+ 	case S_IFBLK: return IO_REPARSE_TAG_LX_BLK;
+ 	case S_IFCHR: return IO_REPARSE_TAG_LX_CHR;
+ 	case S_IFIFO: return IO_REPARSE_TAG_LX_FIFO;
 -- 
 2.20.1
 
