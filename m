@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-3052-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3054-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59C29991D98
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 12:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 044CA991D9D
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 12:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ED7E1F21DAB
-	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 10:01:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8091F21E7B
+	for <lists+linux-cifs@lfdr.de>; Sun,  6 Oct 2024 10:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D2117335C;
-	Sun,  6 Oct 2024 10:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC3C176AA1;
+	Sun,  6 Oct 2024 10:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNNOTwKT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RI0WFRem"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68411173331;
-	Sun,  6 Oct 2024 10:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0798B176252;
+	Sun,  6 Oct 2024 10:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728208870; cv=none; b=hGEidSNNzhvK52obAt9Ve8LcktORTatN1GIcTP57fl40wpkk2dRc4XSi8C8F8qjsuG9Mr7vjnxN2l+YnhL34DeoJ18qECxOCg+3ZefhtEwz7TrYZy0jlerFm3SPdQRR2BmIljwp/2dZc0CTsLvI+Q7+odQUcVrDc1Dl/u+aAHvg=
+	t=1728208872; cv=none; b=LMrOBPR8muCTmqWx/wRyckIzSAOtOMJ6uIk0jgsQxTW6h6PSv6wofA1gIv+ECwTP+2xs0C6X4Y9M+LJvd70GzQbGNzOomWlgEj3hPSxWsmvb98/1gdY/hf3WowfUNTmRLYZQhCClyjXQSvR2JNGi32h92Hhj3DN2Nh10ahGVBxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728208870; c=relaxed/simple;
-	bh=W6n5Jr77kjwOeKY8KnGZDlpMZFxE5WYz+WvM1VpLAzY=;
+	s=arc-20240116; t=1728208872; c=relaxed/simple;
+	bh=PIF7Qur/PKKm4DYKUr+wEds9pKd7tP/IVUfLASXkER8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lcKbGf6bNW18VaQXmaiY1nWCQQlvZTTCqBs18Zqox9jfEIO8N6KGFNYAbu4FTT5Z4Zt3YxtluLPAmyKnJwja5HpCypSRPYwL5/Nj11ZhU7NRCsQQ44Uq0ctidxk+vNJjP44qBDFVKdEqHTPZ40l9yqzleHH++0qdK/3Y+/kpmRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNNOTwKT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2990C4CED2;
-	Sun,  6 Oct 2024 10:01:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=LPWw8g/N4VH9M+wH5XKdzTwfZChpXPqEhByeyaQU34LSIoGLgJ2vNpDd1WJx0NyeD/M9jxWmo+FYXoT2zT5el8bHRFCBr/jtaO07+swZ02kNuQHCamKMDQYujVRZJ/WySYWahPRfF1AP6Cqrm9PVtOxRZ62ikqzE6iJLPtpzHT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RI0WFRem; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E04C4CEC5;
+	Sun,  6 Oct 2024 10:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728208870;
-	bh=W6n5Jr77kjwOeKY8KnGZDlpMZFxE5WYz+WvM1VpLAzY=;
+	s=k20201202; t=1728208871;
+	bh=PIF7Qur/PKKm4DYKUr+wEds9pKd7tP/IVUfLASXkER8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lNNOTwKT0bAcL2JTYDL9wCV2e4ZD9kDuEisPj6bmYxyv5hl/HzZni89atOmRPBWxx
-	 7cCmME901Fdw8dBYjFPqVkHmHOp8k7abXD+XJg1zjJxPTLldTe6u0P6dOHisUkm45v
-	 WT3GBQoOhKBNyJMgxC5iM+eFnzhrkT00+l67zKxfqp7ANhjDJpTzR82X2jIUkwa4yF
-	 bd70lXIuHpvyR+FJkABipFQI/k50q8iXxAvOVW/qOdOnkBwT+Lx/mHkFIo2xlcpNPA
-	 PWeC5B2DoI7I7mY55JtVD1PC+cWpQC2u3PkMHRuLRnePI4HLdh6PJHeYuFg7GCfeJR
-	 Ic4ebWfvDPTGw==
+	b=RI0WFRem1EE08HV/1Ez5hRPtdS6SoTzM3ACcespjztSYwh+BJop/JgwZ4ntF7RJ5u
+	 hA5qV7i2dP4vysQ3JMOojrB35G6JDTJWSF5EqdAVh6g3Y9KtrqY3nvfAwRz/YXCUp2
+	 ML5TatWk2pJQi5V6ZZKG1+ZscXhkdwjYlqYRt1duXz3gS9ll0WW9yhGYvmcKerqsnf
+	 o8BThlokuw5OG3aaStENxHL1VhWavwItFd9t3n2RXRanx5ABoWX0FWxUxG7CEVUDVP
+	 C3aLgUAYT0O9wCpRSqqTXkpFgGzAUKbyj/INMNPsaNjiJa6m/BaPxXCYCLJeGp/ZHA
+	 T57MntVfRVJiQ==
 Received: by pali.im (Postfix)
-	id 735E4D0E; Sun,  6 Oct 2024 12:01:03 +0200 (CEST)
+	id 9FBA5DE8; Sun,  6 Oct 2024 12:01:03 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/7] cifs: Add support for creating WSL-style symlinks
-Date: Sun,  6 Oct 2024 12:00:45 +0200
-Message-Id: <20241006100046.30772-7-pali@kernel.org>
+Subject: [PATCH 7/7] cifs: Validate content of WSL reparse point buffers
+Date: Sun,  6 Oct 2024 12:00:46 +0200
+Message-Id: <20241006100046.30772-8-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241006100046.30772-1-pali@kernel.org>
 References: <20241006100046.30772-1-pali@kernel.org>
@@ -64,140 +64,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This change implements support for creating new symlink in WSL-style by
-Linux cifs client when -o reparse=wsl mount option is specified. WSL-style
-symlink uses reparse point with tag IO_REPARSE_TAG_LX_SYMLINK and symlink
-target location is stored in reparse buffer in UTF-8 encoding prefixed by
-32-bit flags. Flags bits are unknown, but it was observed that WSL always
-sets flags to value 0x02000000. Do same in Linux cifs client.
-
-New symlinks would be created in WSL-style only in case the mount option
--o reparse=wsl is specified, which is not by default. So default CIFS
-mounts are not affected by this change.
+WSL socket, fifo, char and block devices have empty reparse buffer.
+Validate the length of the reparse buffer.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/reparse.c | 65 +++++++++++++++++++++++++++++++++--------
- 1 file changed, 53 insertions(+), 12 deletions(-)
+ fs/smb/client/reparse.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-index 402eb568f466..6606c40487ae 100644
+index 6606c40487ae..c0d9ba14a60d 100644
 --- a/fs/smb/client/reparse.c
 +++ b/fs/smb/client/reparse.c
-@@ -506,9 +506,17 @@ static int mknod_nfs(unsigned int xid, struct inode *inode,
- 	return rc;
- }
- 
--static int wsl_set_reparse_buf(struct reparse_data_buffer *buf,
--			       mode_t mode, struct kvec *iov)
-+static int wsl_set_reparse_buf(struct reparse_data_buffer **buf,
-+			       mode_t mode, const char *symname,
-+			       struct cifs_sb_info *cifs_sb,
-+			       struct kvec *iov)
- {
-+	struct reparse_wsl_symlink_data_buffer *symlink_buf;
-+	__le16 *symname_utf16;
-+	int symname_utf16_len;
-+	int symname_utf8_maxlen;
-+	int symname_utf8_len;
-+	size_t buf_len;
- 	u32 tag;
- 
- 	switch ((tag = reparse_mode_wsl_tag(mode))) {
-@@ -516,17 +524,45 @@ static int wsl_set_reparse_buf(struct reparse_data_buffer *buf,
- 	case IO_REPARSE_TAG_LX_CHR:
+@@ -1093,6 +1093,11 @@ int parse_reparse_point(struct reparse_data_buffer *buf,
  	case IO_REPARSE_TAG_LX_FIFO:
- 	case IO_REPARSE_TAG_AF_UNIX:
-+		buf_len = sizeof(struct reparse_data_buffer);
-+		*buf = kzalloc(buf_len, GFP_KERNEL);
-+		if (!*buf)
-+			return -ENOMEM;
-+		break;
-+	case IO_REPARSE_TAG_LX_SYMLINK:
-+		symname_utf16 = cifs_strndup_to_utf16(symname, strlen(symname),
-+						      &symname_utf16_len,
-+						      cifs_sb->local_nls,
-+						      NO_MAP_UNI_RSVD);
-+		if (!symname_utf16)
-+			return -ENOMEM;
-+		symname_utf8_maxlen = symname_utf16_len/2*3;
-+		symlink_buf = kzalloc(sizeof(struct reparse_wsl_symlink_data_buffer) +
-+				      symname_utf8_maxlen, GFP_KERNEL);
-+		if (!symlink_buf) {
-+			kfree(symname_utf16);
-+			return -ENOMEM;
+ 	case IO_REPARSE_TAG_LX_CHR:
+ 	case IO_REPARSE_TAG_LX_BLK:
++		if (le16_to_cpu(buf->ReparseDataLength) != 0) {
++			cifs_dbg(VFS, "srv returned malformed buffer for reparse point: 0x%08x\n",
++				 le32_to_cpu(buf->ReparseTag));
++			return -EIO;
 +		}
-+		/* Flag 0x02000000 is unknown, but all wsl symlinks have this value */
-+		symlink_buf->Flags = cpu_to_le32(0x02000000);
-+		/* PathBuffer is in UTF-8 but without trailing null-term byte */
-+		symname_utf8_len = utf16s_to_utf8s(symname_utf16, symname_utf16_len/2,
-+						   UTF16_LITTLE_ENDIAN,
-+						   symlink_buf->PathBuffer,
-+						   symname_utf8_maxlen);
-+		*buf = (struct reparse_data_buffer *)symlink_buf;
-+		buf_len = sizeof(struct reparse_wsl_symlink_data_buffer) + symname_utf8_len;
-+		kfree(symname_utf16);
  		break;
--	case IO_REPARSE_TAG_LX_SYMLINK: /* TODO: add support for WSL symlinks */
  	default:
- 		return -EOPNOTSUPP;
- 	}
- 
--	buf->ReparseTag = cpu_to_le32(tag);
--	buf->Reserved = 0;
--	buf->ReparseDataLength = 0;
--	iov->iov_base = buf;
--	iov->iov_len = sizeof(*buf);
-+	(*buf)->ReparseTag = cpu_to_le32(tag);
-+	(*buf)->Reserved = 0;
-+	(*buf)->ReparseDataLength = buf_len - sizeof(struct reparse_data_buffer);
-+	iov->iov_base = *buf;
-+	iov->iov_len = buf_len;
- 	return 0;
- }
- 
-@@ -618,25 +654,29 @@ static int mknod_wsl(unsigned int xid, struct inode *inode,
- 		     const char *full_path, umode_t mode, dev_t dev,
- 		     const char *symname)
- {
-+	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
- 	struct cifs_open_info_data data;
--	struct reparse_data_buffer buf;
-+	struct reparse_data_buffer *buf;
- 	struct smb2_create_ea_ctx *cc;
- 	struct inode *new;
- 	unsigned int len;
- 	struct kvec reparse_iov, xattr_iov;
- 	int rc;
- 
--	rc = wsl_set_reparse_buf(&buf, mode, &reparse_iov);
-+	rc = wsl_set_reparse_buf(&buf, mode, symname, cifs_sb, &reparse_iov);
- 	if (rc)
- 		return rc;
- 
- 	rc = wsl_set_xattrs(inode, mode, dev, &xattr_iov);
--	if (rc)
-+	if (rc) {
-+		kfree(buf);
- 		return rc;
-+	}
- 
- 	data = (struct cifs_open_info_data) {
- 		.reparse_point = true,
--		.reparse = { .tag = le32_to_cpu(buf.ReparseTag), .buf = &buf, },
-+		.reparse = { .tag = le32_to_cpu(buf->ReparseTag), .buf = buf, },
-+		.symlink_target = kstrdup(symname, GFP_KERNEL),
- 	};
- 
- 	cc = xattr_iov.iov_base;
-@@ -653,6 +693,7 @@ static int mknod_wsl(unsigned int xid, struct inode *inode,
- 		rc = PTR_ERR(new);
- 	cifs_free_open_info(&data);
- 	kfree(xattr_iov.iov_base);
-+	kfree(buf);
- 	return rc;
- }
- 
+ 		cifs_tcon_dbg(VFS | ONCE, "unhandled reparse tag: 0x%08x\n",
 -- 
 2.20.1
 
