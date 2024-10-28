@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-3231-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3232-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469519B2E53
-	for <lists+linux-cifs@lfdr.de>; Mon, 28 Oct 2024 12:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D079B2E56
+	for <lists+linux-cifs@lfdr.de>; Mon, 28 Oct 2024 12:14:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E44741F22939
-	for <lists+linux-cifs@lfdr.de>; Mon, 28 Oct 2024 11:14:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D8A31F227B4
+	for <lists+linux-cifs@lfdr.de>; Mon, 28 Oct 2024 11:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0351DE2D2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864EB1DE3A3;
 	Mon, 28 Oct 2024 11:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1g8JaSc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEol7T5U"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0361DA309;
-	Mon, 28 Oct 2024 11:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE2D1DE2DA;
+	Mon, 28 Oct 2024 11:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730113466; cv=none; b=fX1Zy3/AOx99QiAbSnp9jmhJhKG97iXDBbL8G1xiCXWbcIZKCmZ075eex17bRap4W2fa1pB41lac4wZfME3CcyM4+FCn21n7KzRrgic5zqkXj7F+5cJA8HTRSKk1+6cRx/4Fl/SYOWlcljvK4Lc7uX5ffNJiUh2OgzfFU78s5L4=
+	t=1730113466; cv=none; b=Bx/lN9pjrFhBUBoH/2prM00Jbj1EHR4TtoSxJktH1xKYw2svK+RwhAuoCeN9n5EAczduwj7eY1rJmq3Zm7yhQJlBPKL6Y61N2XScrYtcLtCMpbjhltiQvpWwSEgyPK8mx+MT9FavAFCv/vKrjSnz9z1EDMUlh098Tssjw9HZ6Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730113466; c=relaxed/simple;
-	bh=bm+RRqbe/JhESROs99jQSB63rwUhxOeEc+sxxBHydlM=;
+	bh=WHtLiJHjirtfbEslTsmtV/oBQXUhlLaEDksL+A80+5Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iaIBWPlrxTP8Sx5c5lQkVzVCsaNfAqq8Vj8hQqpdnx7NLa4Ks/bFwdfTVit5XV7qo7vEeMdrsWX/7aC0eaZKfoi1PydXRbpkfaPZHae2iStqYM+xisUH4VKzQzRLuDGR8ITvHsRGxMQbJwOS8PovSns8v1yI0qf5LOTM0aW301I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1g8JaSc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67DBDC4CEE4;
+	 MIME-Version:Content-Type; b=amL0U7G3NK4f3zSP8p8bMtpHBj/Czim6SuVDiqwhNF913ZqLX+gub6nZqb72lZ9zM07DVYG+WNNxzkbJx775yiUB5YbwSH0GJ/espTy4xTe7YNRv1JTUXdP99HglURNADISq2iR36CqVjxmnxpYDyjTTXHDJGV7O+HqCG3Scdas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEol7T5U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8653C4CEE3;
 	Mon, 28 Oct 2024 11:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730113465;
-	bh=bm+RRqbe/JhESROs99jQSB63rwUhxOeEc+sxxBHydlM=;
+	s=k20201202; t=1730113466;
+	bh=WHtLiJHjirtfbEslTsmtV/oBQXUhlLaEDksL+A80+5Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A1g8JaScxncUmzZwTQU01Kd4wydn2gIFmD+oL0YhyjU3/6Kt4nNLtfk543EKDv2zC
-	 6dmIYWraE0Cn0ZjL1igACgXhZMwnxgBgNWetNdxk7JImZfnlnsjAmVGdVCoDCGjmZM
-	 7vQaJca5mmX7doJZmI4dYqD9Fpr5zWOXhFNK6Ul1HMy+CXO/CBV7xpF5WgS+HQ9xmY
-	 b+xe2W0jOvJ/W6dXB0R1P90gIicVXCP4447ZHu3LQFurnEbl/yAJQ1IiNuzSoFbmM7
-	 8ZHcDpyPQ+pAqiLKN1ej3gKZbPRgk8F3uGWUqrx6Dui44Xx8xbnc9uqK5PWc2uGyr6
-	 nraCks0nvIfuA==
+	b=gEol7T5U/A6egd5SelcyuFSXmvhJWM0P42bTsgE7L7QbJ6YQ6kv09Pto0PIpsHdiR
+	 OEihNsgmdvN42ZoZE6BMlK8za7M/S6W8w1jerCk0lUOxYn1v9G+1fctRJvwQ8dBnsb
+	 EBc6AGYms2cKhz4ru/DcvdP29kHJVWKeyuimOhv+k4f8iAEj/Z6plm+11OPXx2jkrz
+	 sfAu1ouaOi+x4Qebr+U4c7OoQ0WUYWCNHC/3OXhXJ6heyQxLplJ62WLjaAk/Vq6ifa
+	 QelNEGpaCqY4iyEFqmUUlEO0/R/O7Q9xzsKmG0xgw+ElPOUyyJG2gfSSmbHmllaMr+
+	 T4UW2MKE/Q4IQ==
 Received: by pali.im (Postfix)
-	id 66E51AB4; Mon, 28 Oct 2024 12:04:18 +0100 (CET)
+	id 91BC0BB0; Mon, 28 Oct 2024 12:04:18 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] cifs: Fix encoding of SMB1 Session Setup Kerberos Request in non-UNICODE mode
-Date: Mon, 28 Oct 2024 12:03:37 +0100
-Message-Id: <20241028110340.29911-3-pali@kernel.org>
+Subject: [PATCH 3/5] cifs: Add support for SMB1 Session Setup NTLMSSP Request in non-UNICODE mode
+Date: Mon, 28 Oct 2024 12:03:38 +0100
+Message-Id: <20241028110340.29911-4-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241028110340.29911-1-pali@kernel.org>
 References: <20241028110340.29911-1-pali@kernel.org>
@@ -64,123 +64,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Like in UNICODE mode, SMB1 Session Setup Kerberos Request contains oslm and
-domain strings.
+SMB1 Session Setup NTLMSSP Request in non-UNICODE mode is similar to
+UNICODE mode, just strings are encoded in ASCII and not in UTF-16.
 
-Extract common code into ascii_oslm_strings() and ascii_domain_string()
-functions (similar to unicode variants) and use these functions in
-non-UNICODE code path in sess_auth_kerberos().
-
-Decision if non-UNICODE or UNICODE mode is used is based on the
-SMBFLG2_UNICODE flag in Flags2 packed field, and not based on the
-capabilities of server. Fix this check too.
+With this change it is possible to setup SMB1 session with NTLM
+authentication in non-UNICODE mode with Windows SMB server.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/sess.c | 60 +++++++++++++++++++++++++++++---------------
- 1 file changed, 40 insertions(+), 20 deletions(-)
+ fs/smb/client/sess.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/fs/smb/client/sess.c b/fs/smb/client/sess.c
-index 6a92db287843..7226f2563b99 100644
+index 7226f2563b99..29a1756ba0f7 100644
 --- a/fs/smb/client/sess.c
 +++ b/fs/smb/client/sess.c
-@@ -701,6 +701,22 @@ unicode_oslm_strings(char **pbcc_area, const struct nls_table *nls_cp)
- 	*pbcc_area = bcc_ptr;
- }
+@@ -1704,22 +1704,22 @@ _sess_auth_rawntlmssp_assemble_req(struct sess_data *sess_data)
+ 	pSMB = (SESSION_SETUP_ANDX *)sess_data->iov[0].iov_base;
  
-+static void
-+ascii_oslm_strings(char **pbcc_area, const struct nls_table *nls_cp)
-+{
-+	char *bcc_ptr = *pbcc_area;
-+
-+	strcpy(bcc_ptr, "Linux version ");
-+	bcc_ptr += strlen("Linux version ");
-+	strcpy(bcc_ptr, init_utsname()->release);
-+	bcc_ptr += strlen(init_utsname()->release) + 1;
-+
-+	strcpy(bcc_ptr, CIFS_NETWORK_OPSYS);
-+	bcc_ptr += strlen(CIFS_NETWORK_OPSYS) + 1;
-+
-+	*pbcc_area = bcc_ptr;
-+}
-+
- static void unicode_domain_string(char **pbcc_area, struct cifs_ses *ses,
- 				   const struct nls_table *nls_cp)
- {
-@@ -725,6 +741,25 @@ static void unicode_domain_string(char **pbcc_area, struct cifs_ses *ses,
- 	*pbcc_area = bcc_ptr;
- }
- 
-+static void ascii_domain_string(char **pbcc_area, struct cifs_ses *ses,
-+				const struct nls_table *nls_cp)
-+{
-+	char *bcc_ptr = *pbcc_area;
-+	int len;
-+
-+	/* copy domain */
-+	if (ses->domainName != NULL) {
-+		len = strscpy(bcc_ptr, ses->domainName, CIFS_MAX_DOMAINNAME_LEN);
-+		if (WARN_ON_ONCE(len < 0))
-+			len = CIFS_MAX_DOMAINNAME_LEN - 1;
-+		bcc_ptr += len;
-+	} /* else we send a null domain name so server will default to its own domain */
-+	*bcc_ptr = 0;
-+	bcc_ptr++;
-+
-+	*pbcc_area = bcc_ptr;
-+}
-+
- static void unicode_ssetup_strings(char **pbcc_area, struct cifs_ses *ses,
- 				   const struct nls_table *nls_cp)
- {
-@@ -770,25 +805,10 @@ static void ascii_ssetup_strings(char **pbcc_area, struct cifs_ses *ses,
- 	*bcc_ptr = 0;
- 	bcc_ptr++; /* account for null termination */
- 
--	/* copy domain */
--	if (ses->domainName != NULL) {
--		len = strscpy(bcc_ptr, ses->domainName, CIFS_MAX_DOMAINNAME_LEN);
--		if (WARN_ON_ONCE(len < 0))
--			len = CIFS_MAX_DOMAINNAME_LEN - 1;
--		bcc_ptr += len;
--	} /* else we send a null domain name so server will default to its own domain */
--	*bcc_ptr = 0;
--	bcc_ptr++;
+ 	capabilities = cifs_ssetup_hdr(ses, server, pSMB);
+-	if ((pSMB->req.hdr.Flags2 & SMBFLG2_UNICODE) == 0) {
+-		cifs_dbg(VFS, "NTLMSSP requires Unicode support\n");
+-		return -ENOSYS;
+-	}
 -
- 	/* BB check for overflow here */
+ 	pSMB->req.hdr.Flags2 |= SMBFLG2_EXT_SEC;
+ 	capabilities |= CAP_EXTENDED_SECURITY;
+ 	pSMB->req.Capabilities |= cpu_to_le32(capabilities);
  
--	strcpy(bcc_ptr, "Linux version ");
--	bcc_ptr += strlen("Linux version ");
--	strcpy(bcc_ptr, init_utsname()->release);
--	bcc_ptr += strlen(init_utsname()->release) + 1;
--
--	strcpy(bcc_ptr, CIFS_NETWORK_OPSYS);
--	bcc_ptr += strlen(CIFS_NETWORK_OPSYS) + 1;
-+	ascii_domain_string(&bcc_ptr, ses, nls_cp);
-+	ascii_oslm_strings(&bcc_ptr, nls_cp);
- 
- 	*pbcc_area = bcc_ptr;
- }
-@@ -1590,7 +1610,7 @@ sess_auth_kerberos(struct sess_data *sess_data)
- 	sess_data->iov[1].iov_len = msg->secblob_len;
- 	pSMB->req.SecurityBlobLength = cpu_to_le16(sess_data->iov[1].iov_len);
- 
--	if (ses->capabilities & CAP_UNICODE) {
+ 	bcc_ptr = sess_data->iov[2].iov_base;
+-	/* unicode strings must be word aligned */
+-	if (!IS_ALIGNED(sess_data->iov[0].iov_len + sess_data->iov[1].iov_len, 2)) {
+-		*bcc_ptr = 0;
+-		bcc_ptr++;
++
 +	if (pSMB->req.hdr.Flags2 & SMBFLG2_UNICODE) {
- 		/* unicode strings must be word aligned */
- 		if (!IS_ALIGNED(sess_data->iov[0].iov_len + sess_data->iov[1].iov_len, 2)) {
- 			*bcc_ptr = 0;
-@@ -1599,8 +1619,8 @@ sess_auth_kerberos(struct sess_data *sess_data)
- 		unicode_oslm_strings(&bcc_ptr, sess_data->nls_cp);
- 		unicode_domain_string(&bcc_ptr, ses, sess_data->nls_cp);
- 	} else {
--		/* BB: is this right? */
--		ascii_ssetup_strings(&bcc_ptr, ses, sess_data->nls_cp);
++		/* unicode strings must be word aligned */
++		if (!IS_ALIGNED(sess_data->iov[0].iov_len + sess_data->iov[1].iov_len, 2)) {
++			*bcc_ptr = 0;
++			bcc_ptr++;
++		}
++		unicode_oslm_strings(&bcc_ptr, sess_data->nls_cp);
++	} else {
 +		ascii_oslm_strings(&bcc_ptr, sess_data->nls_cp);
-+		ascii_domain_string(&bcc_ptr, ses, sess_data->nls_cp);
  	}
+-	unicode_oslm_strings(&bcc_ptr, sess_data->nls_cp);
  
  	sess_data->iov[2].iov_len = (long) bcc_ptr -
+ 					(long) sess_data->iov[2].iov_base;
 -- 
 2.20.1
 
