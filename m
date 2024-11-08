@@ -1,59 +1,59 @@
-Return-Path: <linux-cifs+bounces-3339-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3332-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF0E9C27A3
-	for <lists+linux-cifs@lfdr.de>; Fri,  8 Nov 2024 23:35:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0869C2795
+	for <lists+linux-cifs@lfdr.de>; Fri,  8 Nov 2024 23:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A9712809D6
-	for <lists+linux-cifs@lfdr.de>; Fri,  8 Nov 2024 22:35:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B59AB21959
+	for <lists+linux-cifs@lfdr.de>; Fri,  8 Nov 2024 22:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE56E1E0B67;
-	Fri,  8 Nov 2024 22:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D6D1DE896;
+	Fri,  8 Nov 2024 22:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="lU/vcCb4";
-	dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="l9mXkH+r"
+	dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="/wDSLqYz";
+	dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="dW2Ypar0"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from o-chul.darkrain42.org (o-chul.darkrain42.org [74.207.241.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620471A9B5C
-	for <linux-cifs@vger.kernel.org>; Fri,  8 Nov 2024 22:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221931E2308
+	for <linux-cifs@vger.kernel.org>; Fri,  8 Nov 2024 22:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.207.241.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731105298; cv=none; b=Fl6NFQp/AiBaydbKW73D0zKX6OAYdYSm4Spg5SFkuzn2XS5HGv85GLKs4HbqvmuEIgMJ1rgk3lXzGNB2WCZ+gVZIgLuMjgTjofu/QzEJtPijzWWjgOgZDeLlwIC3g0DA0Tt+oluUEstqCvGy5bAxPrFDEUs79BqTUnC5tOHlCWQ=
+	t=1731104993; cv=none; b=rK3WuAKrwc4oxhayXDU7a0VOXXGmoqrsC24MyTt8NFg6Y/Eaa94vcpQZ519jHszdiO8C4L77JwCsKP2W/yRIOFASnOccGhcCZcoIG8kG2GqHOVmzt6MUDxOtwWnR0CS6xk6MdVSv1U2x+DUrNOMhEF2kbmkQ7lhTYk6gbTv14Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731105298; c=relaxed/simple;
-	bh=Ijl5o91jm/90iRlY2OLGTMCo/Ssq17wd1yrvoKEiW+U=;
+	s=arc-20240116; t=1731104993; c=relaxed/simple;
+	bh=3JV4XBhVZZ5+lWIhTKvzXA3OSgZKpB0+es83cgTgyNI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qhySwYOC6U/YjVVmsQbHgB3Nt3yMoZuzGwD7/Rs8UPvJrVT2D82AMqr5JRRpI9l2PhTTQkOxAV5A6bRfB+gxvh0AN3NOt/Xa9KWGGqMdBUTMajS+HGJFn/H9oU1wqFQAtbGVqVZXCLpGOSVXNAoTqBCOe4UEf2r3Z42F/x1ySug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org; spf=pass smtp.mailfrom=darkrain42.org; dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=lU/vcCb4; dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=l9mXkH+r; arc=none smtp.client-ip=74.207.241.14
+	 MIME-Version; b=Cyl7MMQ3HafANkRhF51jz3PHBzAVCxAb8Ikg79tCL6HKdlqplEl97dX4U9g21wPkPIlcfaEOVWB35HE+cNVgPysC3KTi3iDf8iFi7EJSef3Ppdr3SKOnmcSDYy4u5nixbgWUXU689VRzm+On8WlvDYwpXd7oGPAeoTpGGfr4PqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org; spf=pass smtp.mailfrom=darkrain42.org; dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=/wDSLqYz; dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=dW2Ypar0; arc=none smtp.client-ip=74.207.241.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=darkrain42.org
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
  d=darkrain42.org; i=@darkrain42.org; q=dns/txt; s=ed25519-2022-03;
- t=1731104986; h=from : to : cc : subject : date : message-id :
+ t=1731104987; h=from : to : cc : subject : date : message-id :
  in-reply-to : references : mime-version : content-transfer-encoding :
- from; bh=CtwbfSNsg+RRz0+u2V3E2W4jVDzVn1IzjVjE74UL+sg=;
- b=lU/vcCb4SH/Itm/7byD7JNyU1WbOcxe2rdVLVt24Pjyp0YPMiVnjD76PRBkRGnoz1EYmd
- DB/HxEmT9vT8o6fBw==
+ from; bh=ggHGn8vOR722aSNA2nPvVAMdptwhOaRM26WFsctR9Jo=;
+ b=/wDSLqYzxLWOBsiCyEZiDK9QcG7J3gw1s9BFeeMYyDsxd1KaD5picIYvIdOBKYvqBoIqI
+ BOlSX8d9CiTXiGDAg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=darkrain42.org;
- i=@darkrain42.org; q=dns/txt; s=rsa-2022-03; t=1731104986; h=from : to
+ i=@darkrain42.org; q=dns/txt; s=rsa-2022-03; t=1731104987; h=from : to
  : cc : subject : date : message-id : in-reply-to : references :
  mime-version : content-transfer-encoding : from;
- bh=CtwbfSNsg+RRz0+u2V3E2W4jVDzVn1IzjVjE74UL+sg=;
- b=l9mXkH+r9yU53KJ0uTsGlrfOARsuOYZLbJW9rfoiBaf9wvsk0+WeUbQcttbpF4sEV5LlT
- PYZFg+gS/bpMUJ2WU4YRVwWZ2KEGrHcXU8hYXeINtrxainJpnfJAL5uVXPLCeweYi/PkAZL
- avIYDPcvxwXO/8TB5wJP1BQ3oiF/2piFFcksjfkcwTSl/wo/Wwkck2zBLJIKYP5ydITErh9
- FEG+zzuCmvkfPJPVO2BoX/44KgtDWssGV3BAIOBmFuLwhZP5TNovkFt4G6vyR5vHP0l7Iis
- YqK4UGzXQhJJ92bAFVV9EPxh3/IGXZa5hzbu5NnWyW/dHEFrla9Ll5MO2sLg==
+ bh=ggHGn8vOR722aSNA2nPvVAMdptwhOaRM26WFsctR9Jo=;
+ b=dW2Ypar0gTDpYFrtLPCmTRK9Nuqqdq67sYcwRLh9y7WclGGneoDjzmGXs5XtEn+B+utrs
+ UNRD5KViAlS4vEH7blJ90mo0K1FahCt7jl2U37BqYiLxg9g1FURQWUCDzRKzDNmyLXZxo9N
+ nEpMCM0NXsezhzaOE1TspYPDFGcwcm4v/GF6/G/maDB8vKp/VI/kVw8hPVPCr/yT6tVH4mL
+ mg+BuVZvv0TJmQcDZxdcyJ2w+2S8dQM5KjaCJyUpC7Mklxg+v1oE6Nfvpe5fywUFMJVmh/K
+ OoYXwt8Ed5hHaY9ejY0N6tCPksT32Rvw30Ld0ry+ZUu2VKc9CjIKs3uklLdA==
 Received: from [127.0.0.1] (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by o-chul.darkrain42.org (Postfix) with ESMTPSA id 76B5581F3;
+	by o-chul.darkrain42.org (Postfix) with ESMTPSA id D1494826F;
 	Fri,  8 Nov 2024 14:29:46 -0800 (PST)
 From: Paul Aurich <paul@darkrain42.org>
 To: linux-cifs@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: paul@darkrain42.org,
 	Shyam Prasad N <sprasad@microsoft.com>,
 	Tom Talpey <tom@talpey.com>,
 	Bharath SM <bharathsm@microsoft.com>
-Subject: [PATCH 4/5] smb: No need to wait for work when cleaning up cached directories
-Date: Fri,  8 Nov 2024 14:29:05 -0800
-Message-ID: <20241108222906.3257172-5-paul@darkrain42.org>
+Subject: [PATCH 5/5] smb: During umount, flush any pending lease breaks for cached dirs
+Date: Fri,  8 Nov 2024 14:29:06 -0800
+Message-ID: <20241108222906.3257172-6-paul@darkrain42.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241108222906.3257172-1-paul@darkrain42.org>
 References: <20241108222906.3257172-1-paul@darkrain42.org>
@@ -78,63 +78,46 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It isn't possible for cfids_laundromat_worker(),
-invalidate_all_cached_dirs(), and cached_dir_lease_break() to race with
-each other. Each holds the spinlock while walking the list of cfids, and
-removes entries from the list. cfids_laundromat_worker() and
-invalidate_all_cached_dirs() will never see a cfid that has pending
-work.
+*** WORK IN PROGRESS ***
 
+If a lease break is received right as a filesystem is being unmounted,
+it's possible for cifs_kill_sb() to race with a queued
+smb2_cached_lease_break(). Since the cfid is no longer on the
+cfids->entries list, close_all_cached_dirs() cannot drop the dentry,
+leading to the unmount to report these BUGs:
+
+BUG: Dentry ffff88814f37e358{i=1000000000080,n=/}  still in use (2) [unmount of cifs cifs]
+VFS: Busy inodes after unmount of cifs (cifs)
+------------[ cut here ]------------
+kernel BUG at fs/super.c:661!
+
+Flush anything in the cifsiod_wq workqueue in close_all_cached_dirs.
+
+Fixes: ebe98f1447bb ("cifs: enable caching of directories for which a lease is held")
+Cc: stable@vger.kernel.org
 Signed-off-by: Paul Aurich <paul@darkrain42.org>
 ---
- fs/smb/client/cached_dir.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ fs/smb/client/cached_dir.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
-index 06eb19dabb0e..de1e41abdaf2 100644
+index de1e41abdaf2..931108b3bb4a 100644
 --- a/fs/smb/client/cached_dir.c
 +++ b/fs/smb/client/cached_dir.c
-@@ -516,11 +516,10 @@ void invalidate_all_cached_dirs(struct cifs_tcon *tcon)
+@@ -482,10 +482,13 @@ void close_all_cached_dirs(struct cifs_sb_info *cifs_sb)
+ 		list_for_each_entry(cfid, &cfids->entries, entry) {
+ 			dput(cfid->dentry);
+ 			cfid->dentry = NULL;
+ 		}
  	}
- 	spin_unlock(&cfids->cfid_list_lock);
- 
- 	list_for_each_entry_safe(cfid, q, &entry, entry) {
- 		list_del(&cfid->entry);
--		cancel_work_sync(&cfid->lease_break);
- 		/*
- 		 * Drop the ref-count from above, either the lease-ref (if there
- 		 * was one) or the extra one acquired.
- 		 */
- 		kref_put(&cfid->refcount, smb2_close_cached_fid);
-@@ -594,10 +593,12 @@ static struct cached_fid *init_cached_dir(const char *path)
- 
- static void free_cached_dir(struct cached_fid *cfid)
- {
- 	struct cached_dirent *dirent, *q;
- 
-+	WARN_ON(work_pending(&cfid->lease_break));
 +
- 	dput(cfid->dentry);
- 	cfid->dentry = NULL;
++	/* Flush any pending lease breaks */
++	flush_workqueue(cifsiod_wq);
+ }
  
- 	/*
- 	 * Delete all cached dirent names
-@@ -640,15 +641,10 @@ static void cfids_laundromat_worker(struct work_struct *work)
- 	}
- 	spin_unlock(&cfids->cfid_list_lock);
- 
- 	list_for_each_entry_safe(cfid, q, &entry, entry) {
- 		list_del(&cfid->entry);
--		/*
--		 * Cancel and wait for the work to finish in case we are racing
--		 * with it.
--		 */
--		cancel_work_sync(&cfid->lease_break);
- 		/*
- 		 * Drop the ref-count from above, either the lease-ref (if there
- 		 * was one) or the extra one acquired.
- 		 */
- 		kref_put(&cfid->refcount, smb2_close_cached_fid);
+ /*
+  * Invalidate all cached dirs when a TCON has been reset
+  * due to a session loss.
 -- 
 2.45.2
 
