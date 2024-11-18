@@ -1,97 +1,131 @@
-Return-Path: <linux-cifs+bounces-3412-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3414-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 479799D189D
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 19:59:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25739D1ACF
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 22:50:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023FB1F25A29
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 18:59:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AFA1B21B15
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 21:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF463BBF2;
-	Mon, 18 Nov 2024 18:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBDE1E765B;
+	Mon, 18 Nov 2024 21:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="DEA729iI"
+	dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="TEHHLPFg";
+	dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="qFh+Lvo1"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+Received: from o-chul.darkrain42.org (o-chul.darkrain42.org [74.207.241.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6281F1E130F
-	for <linux-cifs@vger.kernel.org>; Mon, 18 Nov 2024 18:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=167.235.159.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731956368; cv=fail; b=ek5K9JyoJeYrBQMujYSMqMPcHHFsVoYJ3UB13hKMx9UH/Ib5J9MWXH9wfiJxzqAUIiagCWIc94I1HAaZ6TGlw/gliVilWxnCfBt+/Orea0gCb9uruibnLje1ZTEPUbfnFjVE3n6Exed805Mhsu9Kz99Tfved29pPEYb41iF4V+U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731956368; c=relaxed/simple;
-	bh=e/D4dGGzmmnbaSkf/OE3ObWSW7ztdaJ4tQtln53Xhhg=;
-	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
-	 MIME-Version:Content-Type; b=Qn9W5G5jQLJlVwLjRgVo1P3417cle8kK3qCDla0e37Xz7qH2u/ddwWjLajzqbTaQGuPBcrkBHA+Fx//q6Fc31A7dv1Uz0Y0koLYQGJMluH6gsvdFy0xWvBOAcljJIWxBNZUuaVOH56ciY+wMBDkYBwRZN1kSaOyOpufmjZYG5L4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=DEA729iI; arc=fail smtp.client-ip=167.235.159.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
-Message-ID: <3d10dd5c3a7f190533474e4ec48f07e4@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1731956364;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kWvezka22UZIjUIHSe1lhBbCoQ0GczC6qfffqKBxOVY=;
-	b=DEA729iIShZmbTc57x3QodgrUmj/k/+p6YNIm8gyphHJ3MtuvlOrSDMTxieEqC4KfrsMsu
-	9CHFOklU9dHn/1eCgSQcogIcvfZDsqNhkYyrq1VqIijUo6Xn5KESAC3BdTLQOoqVZy497Y
-	ascuxe+G2tXbqynf5sYx2H6CLnQdr+w04PQaMuFpQwUGO8knPpthN2a7QzYRIoPCysNhuL
-	QFO7d7/Rfzj8nad0N0dEQp/qAZcYViNaXK63xOlbkGBoUl/JphuMyFxEnITLCtt17F6cDJ
-	WymnYhhFgEvgcd8mUFRDl+lruJMlOItJCH92ETQ08/DzTTKegg4cswBWFiz8kg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1731956364; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kWvezka22UZIjUIHSe1lhBbCoQ0GczC6qfffqKBxOVY=;
-	b=aHIv/HNlOW+5N7Qmr0PSQHmzcWJhtFobO5Q+0Vcm1o3tUCgGKWre55nkkr29GIEv9s3UMD
-	p3SR0U/N8lZzJVjNMLDZ8A1JG0WPITC2az4oeV+HmrO63AqtvGimEcDlas8iiREQmjkwhD
-	hMBsfUKMXPn266JrO1bRxg9295SI1vfgGmwV/DqkpVANbvMUkasTRt52B9XZmSel+Kz6eT
-	lS/jkM9HAPhk41Yvt8FWSBFmqTpIRSnqw3UhmYavNm5BeJzluFil/iXiG3KClMhByvrpE9
-	SlywyNvWpBulG/9lJAW8YHc8tw5gRPWaysvKmsDiQGNdwbzya/UO7RXcI1AoSw==
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1731956364; a=rsa-sha256;
-	cv=none;
-	b=gFuVnNlyidkYtU4iKnC44w/nfbl/yfhhjD1ofATfezbKqXHbDjtZ5ELHJLrnTCWKywW5Kx
-	1atg3mXqTtpN/JREQiI8rmypR3KReVd5XS+yFdxGDveEmNH01WTy2lym2KMBzzLEQ4jpL+
-	bN/0NWChZQz8r6pBiBDIoD8e6Mp83tJPBqcFi3LaAmvjukVm66KJnhoYY1VCSN8QDSXnuD
-	74uuHWiFloAqTuRFQmP3mfJsWSMMHfHTKJR6iLwQb8Awby6GwmbFZiEue3NBxYvIQPlymd
-	LthwEvKl6I/IuTm4MnWc61fw3PBhDv49x9I1/GvCwA/LbVwPDPNxeJ/nYfb9fQ==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.mailfrom=pc@manguebit.com
-From: Paulo Alcantara <pc@manguebit.com>
-To: Steve French <smfrench@gmail.com>
-Cc: linux-cifs@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH 3/3] smb: client: handle max length for SMB symlinks
-In-Reply-To: <CAH2r5mueythTtWNcgaduN1=CW3gt+xQc2mY=naYEn_mmKY2vMg@mail.gmail.com>
-References: <20241118153516.48676-1-pc@manguebit.com>
- <20241118153516.48676-3-pc@manguebit.com>
- <CAH2r5mueythTtWNcgaduN1=CW3gt+xQc2mY=naYEn_mmKY2vMg@mail.gmail.com>
-Date: Mon, 18 Nov 2024 15:59:20 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BDC199252
+	for <linux-cifs@vger.kernel.org>; Mon, 18 Nov 2024 21:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.207.241.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731966641; cv=none; b=bVuOqatm5KjMG+/n6+9e+8vl0aPH1tH/N6Z7M1kZqHb59n25ZOm4Uh54L4kdOUhFOOr5bLZ52kCQgbpnOo3jNVb49SkjaIEYxf2yoQztFHN0nET84OR/4CkuIoljyVznRztLoNg77sWZ1a2w1OrGQzbkcRYHe2ecN0ZNWyElkhQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731966641; c=relaxed/simple;
+	bh=r3gIwCFgARespgglR9gPEzORqU0u9lVcSr2aZqf99uw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fg2zzFFbZJrI7vbRWd5I50utco6Y7snn46n6y2woi2G8qrsIN0aesa7ZIcwXGYkscVYmbCXIoc6EVAdCFFB1BDhaFx9V1V8UJl4UkeJFwvK3Ix6md/T4+Nn/DQAYrLXlu8zRJ/vwYNuj61J0P1F41YiuHMPMo1cY2AtRd/l1rnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org; spf=pass smtp.mailfrom=darkrain42.org; dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=TEHHLPFg; dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=qFh+Lvo1; arc=none smtp.client-ip=74.207.241.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=darkrain42.org
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=darkrain42.org; i=@darkrain42.org; q=dns/txt; s=ed25519-2022-03;
+ t=1731966633; h=from : to : cc : subject : date : message-id :
+ mime-version : content-transfer-encoding : from;
+ bh=CypxzNUY+Fri2KnhnBaoxs+/5wkzepMR1gFO1Z0TrO0=;
+ b=TEHHLPFgOAYDzZvkuN1e/cmCPsvaLkFQb5fAqOBck317vyseTYTWmidR7gw8E12y6ZKBF
+ 0m6Zg+mErk/a3EhAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=darkrain42.org;
+ i=@darkrain42.org; q=dns/txt; s=rsa-2022-03; t=1731966633; h=from : to
+ : cc : subject : date : message-id : mime-version :
+ content-transfer-encoding : from;
+ bh=CypxzNUY+Fri2KnhnBaoxs+/5wkzepMR1gFO1Z0TrO0=;
+ b=qFh+Lvo13DZX5hM57Kr6S3EYL8usZ6GFXEBad0xsJmngpp/XV6iBu1nzsOWAE39KyHgfN
+ fczKv+sCfI5v0yKNwuExxKKXhIAbo1yg39pQr+ZW4jtFC9bhi8rbmbQdL4VVLKWvm08GSdP
+ BiDg2t5031/HaYvHKcQuhpvIZz2is/S6kcIq5S+UiHksALR7SSIeVu5CtAnYiJJfZWGD7WE
+ piDnUeU91jKCPxGTLgVmzIyEuOrflucKVzk3kRAxW92BwbgB+YWzvFg4KK2Ykb4b/K02aZD
+ EIOna7jj8wKvEBPC2XyUS713v5kTXwPBTViPn3pNOISEzS3KUWZyE9sr74Xg==
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by o-chul.darkrain42.org (Postfix) with ESMTPSA id D38D48379;
+	Mon, 18 Nov 2024 13:50:32 -0800 (PST)
+From: Paul Aurich <paul@darkrain42.org>
+To: linux-cifs@vger.kernel.org,
+	Steve French <sfrench@samba.org>
+Cc: paul@darkrain42.org,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Tom Talpey <tom@talpey.com>,
+	Bharath SM <bharathsm@microsoft.com>
+Subject: [PATCH v2 0/4] SMB cached directory fixes around reconnection/unmounting
+Date: Mon, 18 Nov 2024 13:50:24 -0800
+Message-ID: <20241118215028.1066662-1-paul@darkrain42.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Steve French <smfrench@gmail.com> writes:
+v2:
+- Added locking in closed_all_cached_dirs()
+- Replaced use of the cifsiod_wq with a new workqueue used for dropping cached
+  dir dentries, and split out the "drop dentry" work from "potential
+  SMB2_close + cleanup" work so that close_all_cached_dirs() doesn't block on
+  server traffic, but can ensure all "drop dentry" work has run.
+- Repurposed the (essentially unused) cfid->fid_lock to protect cfid->dentry
 
-> Presumably a symlink could be up to PATH_MAX (4096), is there any
-> reason not to fix the client side to be able to handle at least 4096?
 
-Even if we fix client to handle larger responses, Windows Server will
-not allow more than 4091 characters due to MS-FSA 2.1.5.10.37.  It's
-even worst with encryption that we only support parsing large responses
-with SMB2_READ.
+The SMB client cached directory functionality can either leak a cfid if
+open_cached_dir() races with a reconnect, or can have races between the
+unmount process and cached dir cleanup/lease breaks that all lead to
+a cached_dir instance not dropping its dentry ref in close_all_cached_dirs().
+These all manifest as a pair of BUGs when unmounting:
 
-Yes, we could fix the client to support up to 4091 chars, but that is
-out of scope for this series.  This patch is for allowing users to
-create SMB symlinks and read them back with and without encryption.
+    [18645.013550] BUG: Dentry ffff888140590ba0{i=1000000000080,n=/}  still in use (2) [unmount of cifs cifs]
+    [18645.789274] VFS: Busy inodes after unmount of cifs (cifs)
+
+These issues started with the lease directory cache handling introduced in
+commit ebe98f1447bb ("cifs: enable caching of directories for which a lease is
+held"), and go away if I mount with 'nohandlecache'.
+
+I'm able to reproduce the "Dentry still in use" errors by connecting to an
+actively-used SMB share (the server organically generates lease breaks) and
+leaving these running for 'a while':
+
+- while true; do cd ~; sleep 1; for i in {1..3}; do cd /mnt/test/subdir; echo $PWD; sleep 1; cd ..; echo $PWD; sleep 1; done; echo ...; done
+- while true; do iptables -F OUTPUT; mount -t cifs -a; for _ in {0..2}; do ls /mnt/test/subdir/ | wc -l; done; iptables -I OUTPUT -p tcp --dport 445 -j DROP; sleep 10; echo "unmounting"; umount -l -t cifs -a; echo "done unmounting"; sleep 20; echo "recovering"; iptables -F OUTPUT; sleep 10; done
+
+('a while' is anywhere from 10 minutes to overnight. Also, it's not the
+cleanest reproducer, but I stopped iterating once I had something that was
+even remotely reliable for me...)
+
+This series attempts to fix these, as well as a use-after-free that could
+occur because open_cached_dir() explicitly frees the cached_fid, rather than
+relying on reference counting.
+Paul Aurich (4):
+  smb: cached directories can be more than root file handle
+  smb: Don't leak cfid when reconnect races with open_cached_dir
+  smb: prevent use-after-free due to open_cached_dir error paths
+  smb: During unmount, ensure all cached dir instances drop their dentry
+
+ fs/smb/client/cached_dir.c | 228 +++++++++++++++++++++++++------------
+ fs/smb/client/cached_dir.h |   6 +-
+ fs/smb/client/cifsfs.c     |  14 ++-
+ fs/smb/client/cifsglob.h   |   3 +-
+ fs/smb/client/inode.c      |   3 -
+ fs/smb/client/trace.h      |   3 +
+ 6 files changed, 179 insertions(+), 78 deletions(-)
+
+--
+2.45.2
+
 
