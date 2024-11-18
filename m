@@ -1,67 +1,67 @@
-Return-Path: <linux-cifs+bounces-3404-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3406-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AD1C9D14CC
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 16:54:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AABB9D148B
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 16:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68EFDB2F671
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 15:36:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35CBB282E27
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Nov 2024 15:36:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E83579DC7;
-	Mon, 18 Nov 2024 15:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89621991C8;
+	Mon, 18 Nov 2024 15:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="c2AQmKtQ"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="V5iHtbFX"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89AEA1A9B3D
-	for <linux-cifs@vger.kernel.org>; Mon, 18 Nov 2024 15:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E751AA1E7
+	for <linux-cifs@vger.kernel.org>; Mon, 18 Nov 2024 15:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=167.235.159.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731944137; cv=fail; b=leOw/w9l4bnBHiFyhZxFdPit/WGgI24YRrHho37SvzLl1dvUKAKqosR5i0Gpn/CIrFLBvoPg/XnWb4U0LSYEywxyD6bcuUbjk9VPjt/ET5DHfizuN3N5C6dE90DQqmTv32h4p8FXI6XeCT6cNEcdVuVdUyiz6UWpid2GfyI7acE=
+	t=1731944141; cv=fail; b=MrrDOQ0V6mQVcKs6GVmz0SG4vnyWam/K73CV5bQPb4A9RHARlyeZsET7pmR7hp1CzfX7yNOETErx51ZS9XpmP/6bv8FovX+OZSdrVeYa25l7UQT0ZZIc0Nb1bNWFH2R5xKCgZXFKD6PG1n2jxLiB/c8Qqo5dCtArwt5MItRrtts=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731944137; c=relaxed/simple;
-	bh=kGcFdY3Qu4Hcsn9vtxOKyGMkC/GDtzYB1kMLNM3u/1I=;
+	s=arc-20240116; t=1731944141; c=relaxed/simple;
+	bh=KioX2BUz5l1UgYKt068YvXnO6NEjPm5yK/pokJh/Bfk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tMCrLfMs+DWsdH+d7VJTyUEmZC6H45UqZP5waAysvOTqkhBQPkVdWUa1C3R+jTREF5PrMBrg9i311b5l3H3D+bStQGMojQu7Da1nFB72PV6t+FbCglPNGimGl+pDUnLVyjkw7eDQF7neXMh/NacsA6qTC1JN19V0nwafI/6iYJY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=c2AQmKtQ; arc=fail smtp.client-ip=167.235.159.17
+	 MIME-Version; b=ocpYWPMNkJEJgajl+eT3lGJ+9T+Yl1MDIjQHWgBIM4ldty8Lw4MOc0Q19IKCa5toi13YGOOSROY2WtivXwdOB5nK1HyP2mJEURGnxS2+IOmXlEZcZ5UQySB1Jey1Cq63CpyYJeSoA6VvXWp/tzj9tlvSmNy6DOANessMypEAn5E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=V5iHtbFX; arc=fail smtp.client-ip=167.235.159.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
 From: Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1731944128;
+	s=dkim; t=1731944129;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z6bYezLH9HEYp9M1Lfk9fsTUlHhVC0887Oi8oZJdkyM=;
-	b=c2AQmKtQqPHOZ27noNCbkPYxdvR//i0tUSus3My8hOK106LUgbRGXcQL2+D3+lmOa8md3q
-	eLvJNNaduSUHiWaZ1czqdYHlc2pUqzwyXxsVLMMxkbuN3ZqT+LWJqq/OGcJnlzr66AW8po
-	o03XlOCJqfflo74QFZ72NgrOYkRsgorWquLQuPhPgj2EORR4fNocy5ONhSgCFUT0jEQUFa
-	UH8IBSBLYtrrl6FTzKiPsdsgnoLSOCoq8LnSK/ZwdIgynw4abInfe1ggPyEaLxNIoXeI1q
-	eilFhbPrciyxwbSN8lqXutA6D/cGS0AbXzeR+F0UKo9nszh0s8GWQ5MdMETqXQ==
+	bh=pmAI3VN/eB0b4w2t7LMBHbJ0j2zGdpXDdSoTNmjs8CU=;
+	b=V5iHtbFXLLxsjr+EqYBLseBCns2NLkbEqRdz2IlmtdUvI12/P7veYF9+iafQCp3pyEEbKA
+	Mv5iIF0K0RwrpnFZSqN7FURs9TuAAzVffN7gFADFXP3GpwQ5+hjmQVQXj5gNyX0Vqj/ysj
+	s2p26oiEtn2wiTBUeFy9cTGsITK00XooYYKor29wARYgodtPR2d0OdvstUlEM6XIIkfxDr
+	NQUSXnmbOhlW0EqmwsJzppvR0u6rdX9TVNDMu/7n0af4zwB9P0+Qel46GwmeJXRTG8glEB
+	VoMbOlUy3hGFXCbVMgFGiOmyTdjGgCxTYy+67/RiRZH4LY7lrtX+kSB0zZ0qZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1731944128; h=from:from:sender:reply-to:subject:subject:date:date:
+	s=dkim; t=1731944129; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z6bYezLH9HEYp9M1Lfk9fsTUlHhVC0887Oi8oZJdkyM=;
-	b=GkdF6fwuFse7Zyo8+IHb6mw1eKvp452mNZkyaCsIZzSIMBCGBTcoXRvq+eBxVSsTD/MC7S
-	PZvOw5ahekYBo7UCwlogcdLUjzh4JwrCPC0r4ars68f3nomCAqke6D2RUVfuz/0H+9+JTK
-	JoIZzE3K8Fnd9zRpKlPPaFHztt12wHkSfBcdvPbhH6wmvZ3F4JipQ5kh3RX2TMVRLSQfDk
-	/Lk6LikALzpFIHRcUDkEWY4+her7dwtSJOmTM1G1YtZtg8u2J/affbPbuULkHQN9pCJtpL
-	0nOxPHz3zuvKG+o6kUm0aZ3sYYKJmwUOANg2aNDLLFe5rwIh6wQHBs5oYm0r1g==
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1731944128; a=rsa-sha256;
+	bh=pmAI3VN/eB0b4w2t7LMBHbJ0j2zGdpXDdSoTNmjs8CU=;
+	b=Ctn8ncO+KatMQzwrAEVZkTOiwHpbY35EtTA8lVCbxCacuwVb46X+lc78UzNYFl7jKu65br
+	js+P6VO/QFE+897ESvTzlCgfJhu+1U4eFQYe1Sm/v+DQeejX+Ytcm8YlDR5Vb4LsS68kiu
+	+fiXiqlUApOcygvdA+PeFTf057KLXmhZpmQiXb8SWmt5C00c3uol9JZujq54FzP27ai52I
+	AJQb0h9/ukj9d+D8fFEzTDYDyHAWhgCFvDO9KN9WV1OIu/mD2peEbXV4SUwpYm/eem1nkU
+	dTd7A/0GiUS4Huoe+6HCoLaJ0Dfuv27EgQLhtD43w35teKpgJpKazK+JhcqAQA==
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1731944129; a=rsa-sha256;
 	cv=none;
-	b=of47eJELfPuezg8taXt9UcXhJJ10Bld+FXFnMvALimbdGMh4eS3hzhAxtFeLUPaUl43rFX
-	Y8Fzt05wdmKmXqzpYF74dGXLauXR3SS3LSx268QmcoMThCYnyoXfhHzU+r/N5nFiducchw
-	PpQrdrXmgmvG3JlorlJAerr3yMuskpWTfoDBch258UmyVCoQLJob8MeF9ZZlyhFBm+iAE0
-	4DGAIX4FNmp+TPYXFciVHD83wTAeaBlcg6FwRocL2bmz3CX5cHv5jQnNSNoL3u5AJGtkq9
-	f8vYVIjZ+LL8X+mDcxRBSlvyjCDnSXxUMqFdLpA16dhlg+9OrMnlMrxxsl0iWA==
+	b=K0HSsNArQHE3jMMBD4u5TRhRqG7dZF9o7LGF0WKIM0Fp9xj1+1MTFT4b8bvHQUjrsdKG7t
+	YULfL1HY5T97ALBLXN0u7A8/A91tIb3KT/TDC8ocnIu/UNMvtuwCse84ZpqpH9iBEPdm7L
+	5p05sDeybBjVZFEIJdNnZcKlhSQ9Ic8VlbejJL6XR6K2ZCDuSgT+4I/cunv0VJCZ52/Li1
+	DEtpFOx+W0YLXrGJ3UvNDZt9WSU/c1ZQkorjoZxDZyBaYnwkCgQnQO1BulDQYQfDkN3LH9
+	JAcIpYDBZ8TiKUlS0caq98qcngO9RDmV79BXfYDN/dQ5FhWUapgQzWuR82gnPQ==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.mailfrom=pc@manguebit.com
@@ -69,9 +69,9 @@ To: smfrench@gmail.com
 Cc: linux-cifs@vger.kernel.org,
 	Paulo Alcantara <pc@manguebit.com>,
 	David Howells <dhowells@redhat.com>
-Subject: [PATCH 2/3] smb: client: get rid of bounds check in SMB2_ioctl_init()
-Date: Mon, 18 Nov 2024 12:35:15 -0300
-Message-ID: <20241118153516.48676-2-pc@manguebit.com>
+Subject: [PATCH 3/3] smb: client: handle max length for SMB symlinks
+Date: Mon, 18 Nov 2024 12:35:16 -0300
+Message-ID: <20241118153516.48676-3-pc@manguebit.com>
 In-Reply-To: <20241118153516.48676-1-pc@manguebit.com>
 References: <20241118153516.48676-1-pc@manguebit.com>
 Precedence: bulk
@@ -82,35 +82,62 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-smb2_set_next_command() no longer squashes request iovs into a single
-iov, so the bounds check can be dropped.
+We can't use PATH_MAX for SMB symlinks because
+
+  (1) Windows Server will fail FSCTL_SET_REPARSE_POINT with
+      STATUS_IO_REPARSE_DATA_INVALID when input buffer is larger than
+      16K, as specified in MS-FSA 2.1.5.10.37.
+
+  (2) The client won't be able to parse large SMB responses that
+      includes SMB symlink path within SMB2_CREATE or SMB2_IOCTL
+      responses.
+
+Fix this by defining a maximum length value (4060) for SMB symlinks
+that both client and server can handle.
 
 Cc: David Howells <dhowells@redhat.com>
 Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
 ---
- fs/smb/client/smb2pdu.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ fs/smb/client/reparse.c | 5 ++++-
+ fs/smb/client/reparse.h | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index ab3a2ca66be3..055236835537 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -3313,15 +3313,6 @@ SMB2_ioctl_init(struct cifs_tcon *tcon, struct TCP_Server_Info *server,
- 		return rc;
+diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
+index 74abbdf5026c..90da1e2b6217 100644
+--- a/fs/smb/client/reparse.c
++++ b/fs/smb/client/reparse.c
+@@ -35,6 +35,9 @@ int smb2_create_reparse_symlink(const unsigned int xid, struct inode *inode,
+ 	u16 len, plen;
+ 	int rc = 0;
  
- 	if (indatalen) {
--		unsigned int len;
--
--		if (WARN_ON_ONCE(smb3_encryption_required(tcon) &&
--				 (check_add_overflow(total_len - 1,
--						     ALIGN(indatalen, 8), &len) ||
--				  len > MAX_CIFS_SMALL_BUFFER_SIZE))) {
--			cifs_small_buf_release(req);
--			return -EIO;
--		}
- 		/*
- 		 * indatalen is usually small at a couple of bytes max, so
- 		 * just allocate through generic pool
++	if (strlen(symname) > REPARSE_SYM_PATH_MAX)
++		return -ENAMETOOLONG;
++
+ 	sym = kstrdup(symname, GFP_KERNEL);
+ 	if (!sym)
+ 		return -ENOMEM;
+@@ -64,7 +67,7 @@ int smb2_create_reparse_symlink(const unsigned int xid, struct inode *inode,
+ 	if (rc < 0)
+ 		goto out;
+ 
+-	plen = 2 * UniStrnlen((wchar_t *)path, PATH_MAX);
++	plen = 2 * UniStrnlen((wchar_t *)path, REPARSE_SYM_PATH_MAX);
+ 	len = sizeof(*buf) + plen * 2;
+ 	buf = kzalloc(len, GFP_KERNEL);
+ 	if (!buf) {
+diff --git a/fs/smb/client/reparse.h b/fs/smb/client/reparse.h
+index 158e7b7aae64..2a9f4f9f79de 100644
+--- a/fs/smb/client/reparse.h
++++ b/fs/smb/client/reparse.h
+@@ -12,6 +12,8 @@
+ #include "fs_context.h"
+ #include "cifsglob.h"
+ 
++#define REPARSE_SYM_PATH_MAX 4060
++
+ /*
+  * Used only by cifs.ko to ignore reparse points from files when client or
+  * server doesn't support FSCTL_GET_REPARSE_POINT.
 -- 
 2.47.0
 
