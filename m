@@ -1,293 +1,195 @@
-Return-Path: <linux-cifs+bounces-3504-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3506-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E4D89DFB96
-	for <lists+linux-cifs@lfdr.de>; Mon,  2 Dec 2024 09:03:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CE7A9E09C3
+	for <lists+linux-cifs@lfdr.de>; Mon,  2 Dec 2024 18:23:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4403C16215F
-	for <lists+linux-cifs@lfdr.de>; Mon,  2 Dec 2024 08:03:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C6C828287E
+	for <lists+linux-cifs@lfdr.de>; Mon,  2 Dec 2024 17:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3489D1F9406;
-	Mon,  2 Dec 2024 08:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuKIJMOZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88BE1DB54B;
+	Mon,  2 Dec 2024 17:23:25 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A265F9E6
-	for <linux-cifs@vger.kernel.org>; Mon,  2 Dec 2024 08:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAE41D9A41
+	for <linux-cifs@vger.kernel.org>; Mon,  2 Dec 2024 17:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733126610; cv=none; b=P5DueSEW5lKDkuzJPudjUkDvcBWOJfDvdAC6mcLgivl+wHIi6Q3GjExlwNoL+QCsAAJHJD5PWPSq8SMlQl4jB3hSj4gwtsLTUqeza/+5prB6DLH4w76lDIYOLCw4ZuMSbRcKpY57RKC86XBOaWzGaLhKtmzi7DZEpCqgnNEp9hs=
+	t=1733160205; cv=none; b=AVT+o6aNo0+0A9XEZBeSNF9t7Hxtr0gP3Azc8S/dPIqqyosPSb6FpUwfku/FklzAFOouPxNDGhzR313N66VmUqvfAVGeTt53gG9e8gkn3sDCQlu4cyFzfJTsUyz6o3+CbDEyPo9XOXqsR07o+8PRwW/dQTQ4/v/Eyxi7lnd8IIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733126610; c=relaxed/simple;
-	bh=KvdgboTLUf3AIsHKnp8Kidq/Vdgy1Oby0HqtzajMzdQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=cOB0xXAdoOquL/R697aBqBDVXBxOiY35mch62Vx5skIIFHTYOgZVGlqdvvCOhs0GXDEqrtgWTBF8QAUQFmHGu09lgV2OrBqmZ5KDEBsb6N9oj1nHCISFm6+/Aj0asXBBNJRi0lvgv+406Z/raMFfJkus9b6oUdZExK1051xopYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuKIJMOZ; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9f1c590ecdso664107266b.1
-        for <linux-cifs@vger.kernel.org>; Mon, 02 Dec 2024 00:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733126606; x=1733731406; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EcNvz+WaNq+ZAvmtIkrk7IlvcV0TllS/5Cxe+2Yh34M=;
-        b=kuKIJMOZjq6JE++cYmg7Be879aQ7hON2pJLUgcSv8yErF042uSpO4S/JLMRajQDKIX
-         5tU+nVLHwaMuHU/ATccsNzW8et54c0DJFnRpn0ayja1wrT5qLXsZMi6Myw+0ANchCNG7
-         bOEFRlQCsde4bQpw5WO4zAWlnyDZcK23b3abqTQmy/q7yVM3I2KDg30pfFLpJU8pkzKc
-         hqxQ2OqS6U9aZMiyOW7H3qI46hy+31A7NIHczQpxpvgy4sUPmKHggZQUeon5GddhuAaW
-         1/FXdXC8sAbX4550mvW1Y78jee3B89aSfIxVAQ0Mc/QK758FoI3jIRHjFuHT4kpH1b0z
-         fY/w==
+	s=arc-20240116; t=1733160205; c=relaxed/simple;
+	bh=niYey3A2BI1zHc9oE/V9wTEb2AngGjaDi9xTB6eXJp0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=MFzVJKTGACbm/Hfs+2525nqLfotcZXVzMoRWd7Yj01Dx9O7rdNpSDJTeeZTrD/Hxq4omjxVy/FCWDFkGhReUkYqN4C8sUJGSQNMf4ZkswsDy8sgC8kwoN6PnTonb6Uzdo69/PGJ0dArNZ0g38L98np4Z5FbE+/BQ2ySVGrCV5FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3a78e952858so41560475ab.3
+        for <linux-cifs@vger.kernel.org>; Mon, 02 Dec 2024 09:23:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733126606; x=1733731406;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EcNvz+WaNq+ZAvmtIkrk7IlvcV0TllS/5Cxe+2Yh34M=;
-        b=XWs1MfJxV0pxnaY22JBnknCy2wtLXaI6C12W2gkEK0wOj65NItBSHLf6njFJDz2R/v
-         ugPcC8N2fYimjrVZHh3kZbONCel5briBxVyV5gQBDQsoLBrdWpbKJmo1aoEat3HUormE
-         M8nNn0nC0c6AA7mOk9zf+UKLuiWofrQja75gXAEHeoPIakF4rXyQIW67AbuseGQdnYrJ
-         KqNJC78J3QTIALcXpTNH67vWTaaXvu/3aiVfVuWgzWauC/raF/xAy4pPHN4Z4vqhqp8/
-         3sfNY114Bd6Xx6hSZ1vqIycw/6by/8I3huRqdO7Jpfb+iOks80cr+Ts5nqVe62CCCZbw
-         FI3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVG40GexlR9NMMld86A8JgjkAANkhrFJXoxFh110cziVCaxOVRSx8CUx5rtdSSdvtauvdyRNOtp8AoF@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxLKkGtVyX8gmzE7/3ooU9Nn1XqJaSknHOvMfuD/UJUJmWFiP3
-	oH8GcWPCgqKgHGhBaCl0eBNzcreGlcFjv9pb8FFBvvdUsW00ExpCtFwAwP0yvSsMHpHo0eTBuf+
-	yxHdJ9l3v50PH8VHgWVEIWOfifOxBmQ==
-X-Gm-Gg: ASbGncuJfugEykaffz35DfAkk3YxnhveMUqcw50p22JrA6syGZt7VNe837bJ6dlfuw8
-	X73IAs+iteKQD/L3+bmgaB6iZQkker+QVc7VKBkY66yBftrKRbvVaHyEGLQ55wQ==
-X-Google-Smtp-Source: AGHT+IHu1z7Sd+Sq4COosYUHni7IZkgCw0+rfj/66MG1AS4ejUD7iLSiG+6H2hlB7FBMhx6RghUdj2bfoJKfSgOfq+k=
-X-Received: by 2002:a17:906:3145:b0:aa5:1d68:1ec8 with SMTP id
- a640c23a62f3a-aa580eddd16mr1891347766b.7.1733126606153; Mon, 02 Dec 2024
- 00:03:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733160203; x=1733765003;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cWtCFCl9BH6B1/hrLDgMJbyasTsGi0yL5kBQrDwE6xQ=;
+        b=wSpfuw9zzMlAd8Ndn9AzmSizyXGdfFzAjpITdCLN9+hQKe/J2ExBWJr9fRzVI5DmhM
+         P3Wu6O/U8fevKi03tKD5JMOyCaL5HTGpvmbo+ylyBT2Tke+PIX0E4Pee+WPJ8SpgrGeb
+         aT3YYdC8/0gMBLt6QGwTsBm8D/lidU/ahA9CIYEeXwIXBuzAay7H1TL6oUsV439LzEQK
+         a4j1f3uz13NhqMF+pAYUYTPLY1ry2LjNvp1XKz0sla6hS4rpxzy7fSnsKGHQkqVg8xyN
+         cIqwpbtGx5KxGm0u5B5tzRZZ912cvmCc7iTpNFDYfOSN4fyw7fyJrO6neG1w4oKfNdVt
+         Bb/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUoOQcj3M8eelWggii0ZFKVrH+cmLUEqYuChPDiKVSbKoqtZhC4BEEwXGddIrRB9xdnL8OmusgcuHMK@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlS1zIVIdnpG08VW4iRVbcb6rRiSCVrx5YwwrqLL2LY6thapqK
+	IePkh60ISzWfAKRe11rxJflfmhPVPpaMh4t3S1HITTAelr5Y9next17FDExLy36s1vrQiFLkyz2
+	Fk0tUFwv9Ve6/EU4gNsFUtqZOAgyu8funwSEJFiEFXVOvnl+5qzNXjLU=
+X-Google-Smtp-Source: AGHT+IFGrYLgVMCkuWthz1BRGHleiw9U22O8SugwE5SIOQ51OAgdGsPOdMZVjiB1rIUZC23Pv25Kpzsr+8zM3B/WjzigFSvEFPLm
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANT5p=qBwjBm-D8soFVVtswGEfmMtQXVW83=TNfUtvyHeFQZBA@mail.gmail.com>
-In-Reply-To: <CANT5p=qBwjBm-D8soFVVtswGEfmMtQXVW83=TNfUtvyHeFQZBA@mail.gmail.com>
-From: Shyam Prasad N <nspmangalore@gmail.com>
-Date: Mon, 2 Dec 2024 13:33:14 +0530
-Message-ID: <CANT5p=pUGYwswgXM-pniMjEWwbLK0cKXPBOJB9cG_cOrkBwQhg@mail.gmail.com>
-Subject: Re: null-ptr deref found in netfs code
-To: Steve French <smfrench@gmail.com>, David Howells <dhowells@redhat.com>, 
-	CIFS <linux-cifs@vger.kernel.org>
+X-Received: by 2002:a05:6e02:1a02:b0:3a7:9347:5465 with SMTP id
+ e9e14a558f8ab-3a7c5523826mr268135525ab.3.1733160203172; Mon, 02 Dec 2024
+ 09:23:23 -0800 (PST)
+Date: Mon, 02 Dec 2024 09:23:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <674ded0b.050a0220.48a03.0027.GAE@google.com>
+Subject: [syzbot] [netfs?] WARNING in netfs_retry_reads (2)
+From: syzbot <syzbot+5621e2baf492be382fa9@syzkaller.appspotmail.com>
+To: asmadeus@codewreck.org, bharathsm@microsoft.com, brauner@kernel.org, 
+	dhowells@redhat.com, ericvh@kernel.org, jlayton@kernel.org, 
+	linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux_oss@crudebyte.com, lucho@ionkov.net, 
+	marc.dionne@auristor.com, mathieu.desnoyers@efficios.com, mhiramat@kernel.org, 
+	netfs@lists.linux.dev, pc@manguebit.com, ronniesahlberg@gmail.com, 
+	rostedt@goodmis.org, samba-technical@lists.samba.org, sfrench@samba.org, 
+	sprasad@microsoft.com, syzkaller-bugs@googlegroups.com, tom@talpey.com, 
+	v9fs@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 2, 2024 at 7:46=E2=80=AFAM Shyam Prasad N <nspmangalore@gmail.c=
-om> wrote:
->
-> Found this null-ptr dereference in netfs code with 6.13-rc1.
->
-> Is it a known issue?
->
-> [Mon Dec  2 01:57:27 2024] ------------[ cut here ]------------
-> [Mon Dec  2 01:57:27 2024] WARNING: CPU: 1 PID: 152 at
-> fs/netfs/read_collect.c:110 netfs_consume_read_data.isra.0+0x715/0xbb0
-> [netfs]
-> [Mon Dec  2 01:57:27 2024] Modules linked in: cmac nls_utf8 cifs
-> cifs_arc4 nls_ucs2_utils cifs_md4 netfs qrtr cfg80211 8021q garp mrp
-> stp llc xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
-> xt_owner xt_tcpudp nft_compat nf_tables mlx5_ib ib_uverbs macsec
-> binfmt_misc ib_core intel_rapl_msr intel_rapl_common
-> intel_uncore_frequency_common isst_if_common nls_iso8859_1 mlx5_core
-> btrfs mlxfw blake2b_generic psample xor tls skx_edac_common
-> crct10dif_pclmul crc32_pclmul raid6_pq polyval_clmulni polyval_generic
-> libcrc32c joydev ghash_clmulni_intel mac_hid sha256_ssse3 sha1_ssse3
-> serio_raw hid_generic aesni_intel crypto_simd cryptd hyperv_drm
-> hid_hyperv rapl hyperv_fb vmgenid hid hv_netvsc hyperv_keyboard
-> sch_fq_codel dm_multipath msr nvme_fabrics efi_pstore nfnetlink
-> ip_tables x_tables autofs4
-> [Mon Dec  2 01:57:27 2024] CPU: 1 UID: 0 PID: 152 Comm: kworker/1:1
-> Not tainted 6.13.0-rc1-mainline #9
-> [Mon Dec  2 01:57:27 2024] Hardware name: Microsoft Corporation
-> Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1
-> 08/23/2024
-> [Mon Dec  2 01:57:27 2024] Workqueue: cifsiod smb2_readv_worker [cifs]
-> [Mon Dec  2 01:57:27 2024] RIP:
-> 0010:netfs_consume_read_data.isra.0+0x715/0xbb0 [netfs]
-> [Mon Dec  2 01:57:27 2024] Code: 8b 78 08 ba 1e 00 00 00 4c 89 e6 e8
-> 75 a8 ff ff e9 d7 fc ff ff 48 8b 45 90 4c 89 80 48 02 00 00 0f 1f 44
-> 00 00 e9 c2 fb ff ff <0f> 0b 48 8b 43 70 48 8b 75 90 8b 7d 9c 0f b7 93
-> 96 00 00 00 8b b6
-> [Mon Dec  2 01:57:27 2024] RSP: 0018:ffffb2f6805dfda0 EFLAGS: 00010246
-> [Mon Dec  2 01:57:27 2024] RAX: ffff969a23360c00 RBX: ffff969a18da72c0
-> RCX: 0000000012800000
-> [Mon Dec  2 01:57:27 2024] RDX: 0000000012a00000 RSI: ffff969a23360c00
-> RDI: ffffffff9b609a30
-> [Mon Dec  2 01:57:27 2024] RBP: ffffb2f6805dfe10 R08: 0000000000000020
-> R09: 0000000000200000
-> [Mon Dec  2 01:57:27 2024] R10: 0000000000000001 R11: 0000000000000005
-> R12: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] R13: ffff969a232b97e8 R14: 0000000000200000
-> R15: 0000000000000002
-> [Mon Dec  2 01:57:27 2024] FS:  0000000000000000(0000)
-> GS:ffff96bc53480000(0000) knlGS:0000000000000000
-> [Mon Dec  2 01:57:27 2024] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050=
-033
-> [Mon Dec  2 01:57:27 2024] CR2: 000079a46e3fe000 CR3: 000000012cfda002
-> CR4: 00000000003706f0
-> [Mon Dec  2 01:57:27 2024] DR0: 0000000000000000 DR1: 0000000000000000
-> DR2: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> DR7: 0000000000000400
-> [Mon Dec  2 01:57:27 2024] Call Trace:
-> [Mon Dec  2 01:57:27 2024]  <TASK>
-> [Mon Dec  2 01:57:27 2024]  ? show_regs+0x64/0x70
-> [Mon Dec  2 01:57:27 2024]  ? __warn+0x89/0x120
-> [Mon Dec  2 01:57:27 2024]  ? netfs_consume_read_data.isra.0+0x715/0xbb0 =
-[netfs]
-> [Mon Dec  2 01:57:27 2024]  ? report_bug+0x15d/0x180
-> [Mon Dec  2 01:57:27 2024]  ? handle_bug+0x5b/0x90
-> [Mon Dec  2 01:57:27 2024]  ? exc_invalid_op+0x18/0x70
-> [Mon Dec  2 01:57:27 2024]  ? asm_exc_invalid_op+0x1b/0x20
-> [Mon Dec  2 01:57:27 2024]  ? netfs_consume_read_data.isra.0+0x715/0xbb0 =
-[netfs]
-> [Mon Dec  2 01:57:27 2024]  ? __schedule+0x401/0x16e0
-> [Mon Dec  2 01:57:27 2024]  netfs_read_subreq_terminated+0x2b2/0x390 [net=
-fs]
-> [Mon Dec  2 01:57:27 2024]  smb2_readv_worker+0x1a/0x20 [cifs]
-> [Mon Dec  2 01:57:27 2024]  process_one_work+0x170/0x330
-> [Mon Dec  2 01:57:27 2024]  worker_thread+0x2ce/0x400
-> [Mon Dec  2 01:57:27 2024]  ? _raw_spin_unlock_irqrestore+0xe/0x20
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_worker_thread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  kthread+0xd4/0x100
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_kthread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  ret_from_fork+0x3d/0x60
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_kthread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  ret_from_fork_asm+0x1a/0x30
-> [Mon Dec  2 01:57:27 2024]  </TASK>
-> [Mon Dec  2 01:57:27 2024] ---[ end trace 0000000000000000 ]---
-> [Mon Dec  2 01:57:27 2024] netfs: R=3D00002827[3] s=3D12800000-12bfffff
-> ctl=3D200000/400000/400000 sl=3D2
-> [Mon Dec  2 01:57:27 2024] netfs: folioq: orders=3D09090909
-> [Mon Dec  2 01:57:27 2024] BUG: kernel NULL pointer dereference,
-> address: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] #PF: supervisor write access in kernel mode
-> [Mon Dec  2 01:57:27 2024] #PF: error_code(0x0002) - not-present page
-> [Mon Dec  2 01:57:27 2024] PGD 0 P4D 0
-> [Mon Dec  2 01:57:27 2024] Oops: Oops: 0002 [#1] SMP PTI
-> [Mon Dec  2 01:57:27 2024] CPU: 1 UID: 0 PID: 152 Comm: kworker/1:1
-> Tainted: G        W          6.13.0-rc1-mainline #9
-> [Mon Dec  2 01:57:27 2024] Tainted: [W]=3DWARN
-> [Mon Dec  2 01:57:27 2024] Hardware name: Microsoft Corporation
-> Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1
-> 08/23/2024
-> [Mon Dec  2 01:57:27 2024] Workqueue: cifsiod smb2_readv_worker [cifs]
-> [Mon Dec  2 01:57:27 2024] RIP:
-> 0010:netfs_consume_read_data.isra.0+0x35d/0xbb0 [netfs]
-> [Mon Dec  2 01:57:27 2024] Code: 41 5f 5d c3 cc cc cc cc 44 8b 7d 9c
-> 48 89 f0 48 2b 43 60 48 89 43 78 41 83 ff 1e 0f 87 16 08 00 00 48 8b
-> 45 a0 4e 8b 64 f8 08 <f0> 41 80 0c 24 08 48 8b 45 90 48 8b 80 58 02 00
-> 00 a9 00 00 00 80
-> [Mon Dec  2 01:57:27 2024] RSP: 0018:ffffb2f6805dfda0 EFLAGS: 00010297
-> [Mon Dec  2 01:57:27 2024] RAX: ffff969a23360c00 RBX: ffff969a18da72c0
-> RCX: 0000000000200000
-> [Mon Dec  2 01:57:27 2024] RDX: 0000000000000000 RSI: 0000000012c00000
-> RDI: ffff96bc534a0a40
-> [Mon Dec  2 01:57:27 2024] RBP: ffffb2f6805dfe10 R08: 0000000000000000
-> R09: 0000000000000001
-> [Mon Dec  2 01:57:27 2024] R10: ffffb2f681b42000 R11: 0000000012a00000
-> R12: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] R13: ffff969a232b97e8 R14: 0000000000200000
-> R15: 0000000000000002
-> [Mon Dec  2 01:57:27 2024] FS:  0000000000000000(0000)
-> GS:ffff96bc53480000(0000) knlGS:0000000000000000
-> [Mon Dec  2 01:57:27 2024] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050=
-033
-> [Mon Dec  2 01:57:27 2024] CR2: 0000000000000000 CR3: 000000012cfda002
-> CR4: 00000000003706f0
-> [Mon Dec  2 01:57:27 2024] DR0: 0000000000000000 DR1: 0000000000000000
-> DR2: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> DR7: 0000000000000400
-> [Mon Dec  2 01:57:27 2024] Call Trace:
-> [Mon Dec  2 01:57:27 2024]  <TASK>
-> [Mon Dec  2 01:57:27 2024]  ? show_regs+0x64/0x70
-> [Mon Dec  2 01:57:27 2024]  ? __die+0x24/0x70
-> [Mon Dec  2 01:57:27 2024]  ? page_fault_oops+0x290/0x5b0
-> [Mon Dec  2 01:57:27 2024]  ? do_user_addr_fault+0x448/0x800
-> [Mon Dec  2 01:57:27 2024]  ? irq_work_queue+0x28/0x50
-> [Mon Dec  2 01:57:27 2024]  ? exc_page_fault+0x7a/0x160
-> [Mon Dec  2 01:57:27 2024]  ? asm_exc_page_fault+0x27/0x30
-> [Mon Dec  2 01:57:27 2024]  ? netfs_consume_read_data.isra.0+0x35d/0xbb0 =
-[netfs]
-> [Mon Dec  2 01:57:27 2024]  ? __schedule+0x401/0x16e0
-> [Mon Dec  2 01:57:27 2024]  netfs_read_subreq_terminated+0x2b2/0x390 [net=
-fs]
-> [Mon Dec  2 01:57:27 2024]  smb2_readv_worker+0x1a/0x20 [cifs]
-> [Mon Dec  2 01:57:27 2024]  process_one_work+0x170/0x330
-> [Mon Dec  2 01:57:27 2024]  worker_thread+0x2ce/0x400
-> [Mon Dec  2 01:57:27 2024]  ? _raw_spin_unlock_irqrestore+0xe/0x20
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_worker_thread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  kthread+0xd4/0x100
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_kthread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  ret_from_fork+0x3d/0x60
-> [Mon Dec  2 01:57:27 2024]  ? __pfx_kthread+0x10/0x10
-> [Mon Dec  2 01:57:27 2024]  ret_from_fork_asm+0x1a/0x30
-> [Mon Dec  2 01:57:27 2024]  </TASK>
-> [Mon Dec  2 01:57:27 2024] Modules linked in: cmac nls_utf8 cifs
-> cifs_arc4 nls_ucs2_utils cifs_md4 netfs qrtr cfg80211 8021q garp mrp
-> stp llc xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
-> xt_owner xt_tcpudp nft_compat nf_tables mlx5_ib ib_uverbs macsec
-> binfmt_misc ib_core intel_rapl_msr intel_rapl_common
-> intel_uncore_frequency_common isst_if_common nls_iso8859_1 mlx5_core
-> btrfs mlxfw blake2b_generic psample xor tls skx_edac_common
-> crct10dif_pclmul crc32_pclmul raid6_pq polyval_clmulni polyval_generic
-> libcrc32c joydev ghash_clmulni_intel mac_hid sha256_ssse3 sha1_ssse3
-> serio_raw hid_generic aesni_intel crypto_simd cryptd hyperv_drm
-> hid_hyperv rapl hyperv_fb vmgenid hid hv_netvsc hyperv_keyboard
-> sch_fq_codel dm_multipath msr nvme_fabrics efi_pstore nfnetlink
-> ip_tables x_tables autofs4
-> [Mon Dec  2 01:57:27 2024] CR2: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] ---[ end trace 0000000000000000 ]---
-> [Mon Dec  2 01:57:27 2024] RIP:
-> 0010:netfs_consume_read_data.isra.0+0x35d/0xbb0 [netfs]
-> [Mon Dec  2 01:57:27 2024] Code: 41 5f 5d c3 cc cc cc cc 44 8b 7d 9c
-> 48 89 f0 48 2b 43 60 48 89 43 78 41 83 ff 1e 0f 87 16 08 00 00 48 8b
-> 45 a0 4e 8b 64 f8 08 <f0> 41 80 0c 24 08 48 8b 45 90 48 8b 80 58 02 00
-> 00 a9 00 00 00 80
-> [Mon Dec  2 01:57:27 2024] RSP: 0018:ffffb2f6805dfda0 EFLAGS: 00010297
-> [Mon Dec  2 01:57:27 2024] RAX: ffff969a23360c00 RBX: ffff969a18da72c0
-> RCX: 0000000000200000
-> [Mon Dec  2 01:57:27 2024] RDX: 0000000000000000 RSI: 0000000012c00000
-> RDI: ffff96bc534a0a40
-> [Mon Dec  2 01:57:27 2024] RBP: ffffb2f6805dfe10 R08: 0000000000000000
-> R09: 0000000000000001
-> [Mon Dec  2 01:57:27 2024] R10: ffffb2f681b42000 R11: 0000000012a00000
-> R12: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] R13: ffff969a232b97e8 R14: 0000000000200000
-> R15: 0000000000000002
-> [Mon Dec  2 01:57:27 2024] FS:  0000000000000000(0000)
-> GS:ffff96bc53480000(0000) knlGS:0000000000000000
-> [Mon Dec  2 01:57:27 2024] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050=
-033
-> [Mon Dec  2 01:57:27 2024] CR2: 0000000000000000 CR3: 000000012cfda002
-> CR4: 00000000003706f0
-> [Mon Dec  2 01:57:27 2024] DR0: 0000000000000000 DR1: 0000000000000000
-> DR2: 0000000000000000
-> [Mon Dec  2 01:57:27 2024] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> DR7: 0000000000000400
->
->
-> --
-> Regards,
-> Shyam
+Hello,
 
-This issue is consistently reproducible for me from at least 6.12.
-It shows up when several reads are in flight in parallel.
+syzbot found the following issue on:
 
---=20
-Regards,
-Shyam
+HEAD commit:    f486c8aa16b8 Add linux-next specific files for 20241128
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1236a0df980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e348a4873516af92
+dashboard link: https://syzkaller.appspot.com/bug?extid=5621e2baf492be382fa9
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17da7f78580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138f3d30580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/beb58ebb63cf/disk-f486c8aa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b241b5609e64/vmlinux-f486c8aa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c9d817f665f2/bzImage-f486c8aa.xz
+
+The issue was bisected to:
+
+commit 1bd9011ee163e11f186b72705978fd6b21bdc07b
+Author: David Howells <dhowells@redhat.com>
+Date:   Fri Nov 8 17:32:29 2024 +0000
+
+    netfs: Change the read result collector to only use one work item
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=144ccfc0580000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=164ccfc0580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=124ccfc0580000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5621e2baf492be382fa9@syzkaller.appspotmail.com
+Fixes: 1bd9011ee163 ("netfs: Change the read result collector to only use one work item")
+
+------------[ cut here ]------------
+do not call blocking ops when !TASK_RUNNING; state=2 set at [<ffffffff8177c166>] prepare_to_wait+0x186/0x210 kernel/sched/wait.c:237
+WARNING: CPU: 0 PID: 5828 at kernel/sched/core.c:8685 __might_sleep+0xb9/0xe0 kernel/sched/core.c:8681
+Modules linked in:
+CPU: 0 UID: 0 PID: 5828 Comm: syz-executor222 Not tainted 6.12.0-next-20241128-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:__might_sleep+0xb9/0xe0 kernel/sched/core.c:8681
+Code: 94 0e 01 90 42 80 3c 23 00 74 08 48 89 ef e8 ae 30 9b 00 48 8b 4d 00 48 c7 c7 e0 2d 0a 8c 44 89 ee 48 89 ca e8 08 e6 f0 ff 90 <0f> 0b 90 90 eb b5 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 70 ff ff ff
+RSP: 0018:ffffc900039765a8 EFLAGS: 00010246
+RAX: b7d7501871149800 RBX: 1ffff1100ff252ed RCX: ffff88807f928000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff88807f929768 R08: ffffffff81601ea2 R09: fffffbfff1cfa220
+R10: dffffc0000000000 R11: fffffbfff1cfa220 R12: dffffc0000000000
+R13: 0000000000000002 R14: 000000000000004a R15: ffffffff8c1ca1a0
+FS:  0000555593050480(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055bb6dfcc068 CR3: 000000002f04e000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ wait_on_bit include/linux/wait_bit.h:74 [inline]
+ netfs_retry_reads+0xde/0x1e10 fs/netfs/read_retry.c:263
+ netfs_collect_read_results fs/netfs/read_collect.c:333 [inline]
+ netfs_read_collection+0x334e/0x4020 fs/netfs/read_collect.c:414
+ netfs_wait_for_read+0x2ba/0x4e0 fs/netfs/read_collect.c:629
+ netfs_unbuffered_read fs/netfs/direct_read.c:156 [inline]
+ netfs_unbuffered_read_iter_locked+0x11fc/0x1540 fs/netfs/direct_read.c:231
+ netfs_unbuffered_read_iter+0xbf/0xe0 fs/netfs/direct_read.c:266
+ __kernel_read+0x513/0x9d0 fs/read_write.c:523
+ integrity_kernel_read+0xb0/0x100 security/integrity/iint.c:28
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:480 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
+ ima_calc_file_hash+0xae6/0x1b30 security/integrity/ima/ima_crypto.c:568
+ ima_collect_measurement+0x520/0xb10 security/integrity/ima/ima_api.c:293
+ process_measurement+0x1351/0x1fb0 security/integrity/ima/ima_main.c:372
+ ima_file_check+0xd9/0x120 security/integrity/ima/ima_main.c:572
+ security_file_post_open+0xb9/0x280 security/security.c:3121
+ do_open fs/namei.c:3830 [inline]
+ path_openat+0x2ccd/0x3590 fs/namei.c:3987
+ do_filp_open+0x27f/0x4e0 fs/namei.c:4014
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1402
+ do_sys_open fs/open.c:1417 [inline]
+ __do_sys_open fs/open.c:1425 [inline]
+ __se_sys_open fs/open.c:1421 [inline]
+ __x64_sys_open+0x225/0x270 fs/open.c:1421
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf86d213b9
+Code: d8 5b c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdb23978f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007ffdb2397940 RCX: 00007fdf86d213b9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000340
+RBP: 00007ffdb2397948 R08: aaaaaaaaaaaa0102 R09: aaaaaaaaaaaa0102
+R10: aaaaaaaaaaaa0102 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 000000000000001d R15: 00007fdf86d983a0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
