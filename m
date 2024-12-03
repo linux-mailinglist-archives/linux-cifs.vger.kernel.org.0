@@ -1,81 +1,125 @@
-Return-Path: <linux-cifs+bounces-3520-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3523-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB3B99E1FB9
-	for <lists+linux-cifs@lfdr.de>; Tue,  3 Dec 2024 15:41:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D9DB9E22C3
+	for <lists+linux-cifs@lfdr.de>; Tue,  3 Dec 2024 16:28:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33793B31058
-	for <lists+linux-cifs@lfdr.de>; Tue,  3 Dec 2024 13:19:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10C3C28681E
+	for <lists+linux-cifs@lfdr.de>; Tue,  3 Dec 2024 15:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 258751F1316;
-	Tue,  3 Dec 2024 13:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE89A1F7554;
+	Tue,  3 Dec 2024 15:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="lFWipe3S"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B1rf9lrF"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22131EF0A9;
-	Tue,  3 Dec 2024 13:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.235.159.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CB51E3DED;
+	Tue,  3 Dec 2024 15:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733231914; cv=none; b=raE2H9Yy1LX1XPHerw5AckYzE58jLETAcn86cY6JBriL84I4KLdhmcLwzBLaTNDVPdi41xBKIRo5jdtqSLoD3lSPJbrcuStGz9bj+4eQOEBuhMeDPSj4MVjvML7Sd/KX0tHNS2sFUnXaAuQt4Wh4m6wCc53PgEDwHrinnrwRmEc=
+	t=1733239704; cv=none; b=JbQjWIuGQ9rnPbPDqfy0AVT1GOzL1HloPNzLZycoqxSaNjs+zm4WfVBhgqif5UGXq13QmHh9WjnAJ2jl/O+l1vtSZv5fIHLQPljgVWpceFU/rYh2jDiTL7icJS3+bAjGa5aQVglHxspMFDOb3exIQsaJJROPCeaXLaJryGrSyNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733231914; c=relaxed/simple;
-	bh=arkZn71AicmvNfXlYC9WFWkRS7Fpcj8pueowc+tjBhs=;
-	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
-	 MIME-Version:Content-Type; b=HtZ8UX5ao7RVSINJpfcPS00XvasZo0HcTTGZmHu/6k5+KWXTDTINW+kr8USM9kiAU+IttwcyDWsc8PyajNM7I4n6wbDNk8sjJVweR0MTcb1EhsVRPxzT3wom18uTh7QqIro6nFIhJ9AeniSc5iRZ4LOJtjEOxhHzTXb5LBuylb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=lFWipe3S; arc=none smtp.client-ip=167.235.159.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
-Message-ID: <1037557ef401a66691a4b1e765eec2e2@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1733231908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n52tYw9Pih3oWwVRYAf7wVYscUliGktjGFz4U8In5Ds=;
-	b=lFWipe3SGDa6s+W30iuE9oKcOQd1NN1i8GuDZhdFFYD+VSXlDpFS0FDbof6GvTUx7ZLOUK
-	zMTkXobdk1934CiES920BXIaIw3qAhay62NeMuYNRJrz1o4Zq5r/oft1egavBqMLq661MZ
-	ieo6uFMvsa/0en/IWw7ESsxnAAaX0AGNHRvMg2gK9u5Lzi/Wwt+a3BUxDDvRqEJhy5YSLd
-	lkRw3VYLcRyNU9CfxfOcLjDPNUTpovd4QOoxQ6FFwgQwHtT4aXB4zyHDCQTbk5zyxeLuSP
-	bMDJla89w0egPVVzdBDhw5f3Aogk3rzw6tLBrpXXelHv+ymL0ojqw6hA5c6cUA==
-From: Paulo Alcantara <pc@manguebit.com>
-To: Michael Krause <mk-debian@galax.is>, Salvatore Bonaccorso
- <carnil@debian.org>, gregkh@linuxfoundation.org, Steve French
- <stfrench@microsoft.com>, Michael <mk-debian@galax.is>
-Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
- linux-cifs@vger.kernel.org
-Subject: Re: backporting 24a9799aa8ef ("smb: client: fix UAF in
- smb2_reconnect_server()") to older stable series
-In-Reply-To: <2e1ad828-24b3-488d-881e-69232c8c6062@galax.is>
-References: <2024040834-magazine-audience-8aa4@gregkh>
- <Z0rZFrZ0Cz3LJEbI@eldamar.lan>
- <2e1ad828-24b3-488d-881e-69232c8c6062@galax.is>
-Date: Tue, 03 Dec 2024 10:18:25 -0300
+	s=arc-20240116; t=1733239704; c=relaxed/simple;
+	bh=NgY/ZSeIIjpa7hYGELJmhvjSgg8o3hYvlly3zU7NO1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YfUh5we4N3iEoMlzId5kd7Iwf0RglOK7hZVW4aNITcMgY88Y2Dxxed/ePgYEOp9AYESJFHUAPo42pSAALVHeFMI8qO7mNhCmRMvqho7S1Se5dI3MDM3SqycvoSSlA22kg0kYnd2MQyNpPhSMEb6aOlnMD/96HT50+ucvTL32fXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B1rf9lrF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048ADC4CECF;
+	Tue,  3 Dec 2024 15:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1733239704;
+	bh=NgY/ZSeIIjpa7hYGELJmhvjSgg8o3hYvlly3zU7NO1E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=B1rf9lrFGakPVm3VBUT2fco13VGS6lBkUMDmWlOihOEmQyYSvAzvpeLFdp6oYIpr7
+	 mWektDGAOBLfTVLL4gjVNHhitqLSbi3iTiJ/8Be9eTc8Vs/xZttEhUQHiqbKfkD4tv
+	 8n3JUnpjTHLr79z2AZJoDw5vbX+oSQO2HyajsmA4=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	linux-cifs@vger.kernel.org,
+	syzkaller@googlegroups.com,
+	Yunseong Kim <yskelg@gmail.com>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <stfrench@microsoft.com>
+Subject: [PATCH 6.11 705/817] ksmbd: fix use-after-free in SMB request handling
+Date: Tue,  3 Dec 2024 15:44:37 +0100
+Message-ID: <20241203144023.499149914@linuxfoundation.org>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20241203143955.605130076@linuxfoundation.org>
+References: <20241203143955.605130076@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Michael Krause <mk-debian@galax.is> writes:
+6.11-stable review patch.  If anyone has any objections, please let me know.
 
-> On 11/30/24 10:21 AM, Salvatore Bonaccorso wrote:
->> Michael, did a manual backport of 24a9799aa8ef ("smb: client: fix UAF
->> in smb2_reconnect_server()") which seems in fact to solve the issue.
->> 
->> Michael, can you please post your backport here for review from Paulo
->> and Steve?
->
-> Of course, attached.
->
-> Now I really hope I didn't screw it up :)
+------------------
 
-LGTM.  Thanks Michael for the backport.
+From: Yunseong Kim <yskelg@gmail.com>
+
+commit 9a8c5d89d327ff58e9b2517f8a6afb4181d32c6e upstream.
+
+A race condition exists between SMB request handling in
+`ksmbd_conn_handler_loop()` and the freeing of `ksmbd_conn` in the
+workqueue handler `handle_ksmbd_work()`. This leads to a UAF.
+- KASAN: slab-use-after-free Read in handle_ksmbd_work
+- KASAN: slab-use-after-free in rtlock_slowlock_locked
+
+This race condition arises as follows:
+- `ksmbd_conn_handler_loop()` waits for `conn->r_count` to reach zero:
+  `wait_event(conn->r_count_q, atomic_read(&conn->r_count) == 0);`
+- Meanwhile, `handle_ksmbd_work()` decrements `conn->r_count` using
+  `atomic_dec_return(&conn->r_count)`, and if it reaches zero, calls
+  `ksmbd_conn_free()`, which frees `conn`.
+- However, after `handle_ksmbd_work()` decrements `conn->r_count`,
+  it may still access `conn->r_count_q` in the following line:
+  `waitqueue_active(&conn->r_count_q)` or `wake_up(&conn->r_count_q)`
+  This results in a UAF, as `conn` has already been freed.
+
+The discovery of this UAF can be referenced in the following PR for
+syzkaller's support for SMB requests.
+Link: https://github.com/google/syzkaller/pull/5524
+
+Fixes: ee426bfb9d09 ("ksmbd: add refcnt to ksmbd_conn struct")
+Cc: linux-cifs@vger.kernel.org
+Cc: stable@vger.kernel.org # v6.6.55+, v6.10.14+, v6.11.3+
+Cc: syzkaller@googlegroups.com
+Signed-off-by: Yunseong Kim <yskelg@gmail.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/smb/server/server.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/fs/smb/server/server.c
++++ b/fs/smb/server/server.c
+@@ -276,8 +276,12 @@ static void handle_ksmbd_work(struct wor
+ 	 * disconnection. waitqueue_active is safe because it
+ 	 * uses atomic operation for condition.
+ 	 */
++	atomic_inc(&conn->refcnt);
+ 	if (!atomic_dec_return(&conn->r_count) && waitqueue_active(&conn->r_count_q))
+ 		wake_up(&conn->r_count_q);
++
++	if (atomic_dec_and_test(&conn->refcnt))
++		kfree(conn);
+ }
+ 
+ /**
+
+
 
