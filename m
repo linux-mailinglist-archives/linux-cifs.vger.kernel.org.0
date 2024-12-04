@@ -1,110 +1,245 @@
-Return-Path: <linux-cifs+bounces-3543-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3539-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 351659E408E
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2024 18:06:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E5E1681AB
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2024 17:06:14 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E94233D6B;
-	Wed,  4 Dec 2024 16:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/6mSWbB"
-X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 452529E400C
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2024 17:49:25 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC90233D68;
-	Wed,  4 Dec 2024 16:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F712B277EF
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Dec 2024 16:30:57 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5346823BB;
+	Wed,  4 Dec 2024 16:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+qoAJ7B"
+X-Original-To: linux-cifs@vger.kernel.org
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3231F16B
+	for <linux-cifs@vger.kernel.org>; Wed,  4 Dec 2024 16:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331532; cv=none; b=KoXM0yNNaLEw7Z2koWqnnjAXZ88VcvaoXiVXt+lPUGgXGbjFqBxA0NkNsIw9GBJ5DODMKDf5QR3gp1kqSkOGYWC78aWJVG+8RcW4j1F4hXCy+FxeJaDWIgWnIvc0IkHn9QE1d5/sFJSXdSJQHtaWQaLdxTE+Ghz4esSG/Y2MyLc=
+	t=1733329854; cv=none; b=nsSir6t6LbwSck+FzPAYcE91MwQHb4xB1+Tzb/etbL2IF1DLh7x0u9pSf0Db1hnc4Y8pRzPkbBLUBMETk+Vt3bEZYLOMLgqpJ4RRBBipol2ZIE19s4kXFrjZVhiiFCKMa2xeLmrjEyFn/1gbS5pbXOMjk0meMx94iGaPnoOUWsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331532; c=relaxed/simple;
-	bh=nRp2boy3gqrralSZ0lweFfaRojSVHtUhRfYWWpxRuSs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MUB/g6atlJs0q/OVUJVoWfuWp9CWMTOqofhebZtrGAbSqjG5zMTTh0i/hCi18wagNGfOr7DB/Hle/L9Sym5atkUN0jUmTGRD+UvixvXBrWJxlhDeQsY+gg7p84ZWK7UNELtW89RB0R+3x5eCV9m74AvYdbWD79FGOg/rugLCj+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/6mSWbB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82C7C4CECD;
-	Wed,  4 Dec 2024 16:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331531;
-	bh=nRp2boy3gqrralSZ0lweFfaRojSVHtUhRfYWWpxRuSs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c/6mSWbBZ6NN7JCOU4LaqzW54UrKhGda18ru3LfGJUi/JDfhnt4WA6zijPaA8iDie
-	 7pLT7s3irWEJ47IljNbthXMqGUU+pnko6YegJ2BNu+6DchDgONQ1wQaGn/QCEK2N8J
-	 nuyVI+pxIuaTRUJuzH0KHyaTIuTKPNyQOLLCsBvY4FM3JYNuGe6ATb7V9DVTxOPssd
-	 E6TPVRtjjkBQbYwahUUfo/TRNx+Oax7aGwsI4hsuPE4vouZB2LKVemAyy5g4vXqKXF
-	 7S3H5/CYZIJwiNj2SsM+j/vXIHUNrlI2/iMRGPHqvlMPn+n6bMfzwfS9Pq4wWrFW8h
-	 T6FTG0xaQUDfg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>,
-	sfrench@samba.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.12 32/36] smb: client: memcpy() with surrounding object base address
-Date: Wed,  4 Dec 2024 10:45:48 -0500
-Message-ID: <20241204154626.2211476-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
-References: <20241204154626.2211476-1-sashal@kernel.org>
+	s=arc-20240116; t=1733329854; c=relaxed/simple;
+	bh=DS6oou6GXrCiiwWzQWg3FcfNbSLaDiSZ/OkQ+DRi4NA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pOML+YEWPjFXsD/NGTjI0TKF0UaJttXVDJJR81sVe2OHqxNdPomympOIS6g2VtiXM/IRndqLRoigCxsjri17a648rykHFeTwnmPx+SicGFnH9sy1VsspEhnykwkgnv7awi7ooPY+/Jm05e9j/h6/anQKjYHDE8Sb7yasYkynpY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+qoAJ7B; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa549d9dffdso1097215666b.2
+        for <linux-cifs@vger.kernel.org>; Wed, 04 Dec 2024 08:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733329851; x=1733934651; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lsadV2Xputvi/aBNMCZX/pxIKDtBYvOMirWbN5uteDU=;
+        b=I+qoAJ7BiZWy+pca+/6rWW6H4LyDthk9/J5DeBnyCbl9gPalq0rmooPWi635DtYmuC
+         UjPVJidhoFUAKlhHc/zcucXmLToP2s0x7w47ApADcICmtiYjblSiMN7v3TR5ZPys+ADH
+         Is/JsnJi2k51ItXLd5Ra2vVLeGi6SnZKt1hjSkN4ro8uKdu1is3noXWv94+zRqbrv3EK
+         qRgJ9XYTyIqhBHNx1k+82NF+LLAyYMesytt3GeQK6vwL1Aq+oAiaokloyXoBCy7T6kOR
+         KIprkhuatXQQyNkGSk48qFN9QAql9e3cWSVCaLntBAGbho60mutWc+JW04xhAWuThQHT
+         Sr6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733329851; x=1733934651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lsadV2Xputvi/aBNMCZX/pxIKDtBYvOMirWbN5uteDU=;
+        b=jhzjSUDf1RgoWAzw4ktSa+TvYpIfxsatR+7Zei/AlCpoYs2xG1f7CJ1peh11M7oUie
+         KppJJQ9cyhDnZVK1ZyNCJsKYPJVXA6jZ9YF1YdxZWDz7+6oA8fDLdHAWGX/tHjlbDQuB
+         RcMzxN5FgAK2w6+PMzhPnVr+o9xs59Ypdgx0GJmspX44Qa6g+CfkTbSw5QvN/toy8dC2
+         AgjUFvCQDvBNSQ3o35ShXxmvlbt8o/q51GotJaB1d/CJrD6uHewUXDAa99PYVmjhbCdm
+         FxA4HPZ9XtZJtTVMhKKY/1qCmiy0b27Zerhy6L6yWJQndMDvOuaflxgDbA30QHIGC1PN
+         s8Lw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpNj3ICWFWKJiE68EhOZqxdtB1bw9a/2kELKgv4vbYOuQAN1V4pb81ba26Hv7ikmEA4vcb/fTqB60O@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEg+w5knKogHTBm1y5aW1JVk44MtXwD5dr6sMUhIW/DOtXVBcN
+	Fav8d7jjCcBNmJ8IBLXOQrwnei0T2Jd1XVICqL58Ib1AqVgIWovCPPoq4XOWajAH4Oyj83CO8u/
+	grLL+gmVmss9W4IaesP0xA4QdkBw=
+X-Gm-Gg: ASbGncsjbYnhGdTWNKl2qwiWGpCyyAXCOe144V5avny9MCYu/us6rxktsVPPzkrnmIb
+	sLeYzDBfWF47gsztIWxzUmWoQyr8tOa/mltyy5ZpYyDhSS/ebQy00f1qc0L3zgg==
+X-Google-Smtp-Source: AGHT+IE4XC3vcR5fok9yYKBttBI+bkGcPyDovSidq4YXZyzIRwxzmSp1z+Du+ywpNOpt/8vbNTa/oqba6GstqJ7xioo=
+X-Received: by 2002:a17:906:3097:b0:aa6:1c4b:9c5b with SMTP id
+ a640c23a62f3a-aa61c4ba102mr34523966b.7.1733329848733; Wed, 04 Dec 2024
+ 08:30:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
-Content-Transfer-Encoding: 8bit
+References: <CANT5p=pUGYwswgXM-pniMjEWwbLK0cKXPBOJB9cG_cOrkBwQhg@mail.gmail.com>
+ <CANT5p=qBwjBm-D8soFVVtswGEfmMtQXVW83=TNfUtvyHeFQZBA@mail.gmail.com>
+ <505338.1733181074@warthog.procyon.org.uk> <526707.1733224486@warthog.procyon.org.uk>
+In-Reply-To: <526707.1733224486@warthog.procyon.org.uk>
+From: Shyam Prasad N <nspmangalore@gmail.com>
+Date: Wed, 4 Dec 2024 22:00:36 +0530
+Message-ID: <CANT5p=pO28C+XEC44taAT-Z6W_spB-QzJb+MOXv68bDRGqJn=w@mail.gmail.com>
+Subject: Re: null-ptr deref found in netfs code
+To: David Howells <dhowells@redhat.com>
+Cc: Steve French <smfrench@gmail.com>, CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kees Cook <kees@kernel.org>
+On Tue, Dec 3, 2024 at 4:44=E2=80=AFPM David Howells <dhowells@redhat.com> =
+wrote:
+>
+> Okay, I think I see the problem.
+>
+> Looking at the following extraction from the trace:
+>
+> > netfs_rreq_ref: R=3D0000290e NEW         r=3D1
+> > netfs_read: R=3D0000290e READAHEAD c=3D00000000 ni=3D0 s=3D85e00000 l=
+=3D800000 sz=3D280000000
+> > netfs_folio: i=3Df1c2900000000000 ix=3D85e00-85fff read
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86000-861ff read
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86200-863ff read
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86400-865ff read
+>
+> We're requesting reads of four folios, each consisting of 512 pages for a
+> total of 8MiB.
+>
+> > netfs_sreq: R=3D0000290e[1] DOWN SUBMT f=3D02 s=3D85e00000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[2] DOWN SUBMT f=3D02 s=3D85f00000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[3] DOWN SUBMT f=3D02 s=3D86000000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[4] DOWN SUBMT f=3D02 s=3D86100000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[5] DOWN SUBMT f=3D02 s=3D86200000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[6] DOWN SUBMT f=3D02 s=3D86300000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[7] DOWN SUBMT f=3D02 s=3D86400000 0/100000 e=
+=3D0
+> > netfs_sreq: R=3D0000290e[8] DOWN SUBMT f=3D02 s=3D86500000 0/100000 e=
+=3D0
+>
+> That got broken down into 8 submissions, each for a 1MiB slice.
+>
+> > netfs_sreq: R=3D0000290e[1] DOWN IO    f=3D02 s=3D85e00000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[01] s=3D85e00000 ct=3D0/100000 pa=3D100000=
+/100000 sl=3D0
+> > netfs_donate: R=3D0000290e[01] -> [02] to-next am=3D100000
+>
+> Subrequest 1 completed, but wasn't large enough to cover a whole folio, s=
+o it
+> donated its coverage forwards to subreq 2.
+>
+> > netfs_sreq: R=3D0000290e[6] DOWN IO    f=3D02 s=3D86300000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[06] s=3D86300000 ct=3D0/100000 pa=3D100000=
+/100000 sl=3D2
+> > netfs_donate: R=3D0000290e[06] -> [05] tail-to-prev am=3D100000
+>
+> Subrequest 6 completed, but wasn't large enough to cover a whole folio, s=
+o it
+> donated its coverage backwards to subreq 5.
+>
+> > netfs_sreq: R=3D0000290e[2] DOWN IO    f=3D02 s=3D85f00000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[02] s=3D85e00000 ct=3D0/200000 pa=3D200000=
+/200000 sl=3D0
+> > netfs_folio: i=3Df1c2900000000000 ix=3D85e00-85fff read-done
+> > netfs_folio: i=3Df1c2900000000000 ix=3D85e00-85fff read-unlock
+>
+> Subreq 2 completed, and with the donation from subreq 1, had sufficient t=
+o
+> unlock the first folio.
+>
+> > netfs_sreq: R=3D0000290e[5] DOWN IO    f=3D02 s=3D86200000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[05] s=3D86200000 ct=3D0/200000 pa=3D200000=
+/200000 sl=3D2
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86200-863ff read-done
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86200-863ff read-unlock
+>
+> Subreq 5 completed, and with the donation from subreq 6, had sufficient t=
+o
+> unlock the third folio.
+>
+> > netfs_sreq: R=3D0000290e[3] DOWN IO    f=3D02 s=3D86000000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[03] s=3D86000000 ct=3D0/100000 pa=3D100000=
+/100000 sl=3D1
+> > netfs_donate: R=3D0000290e[03] -> [04] to-next am=3D100000
+>
+> Subrequest 3 completed, but wasn't large enough to cover a whole folio, s=
+o it
+> donated its coverage forwards to subreq 4.  So far, so good.
+>
+> > netfs_sreq: R=3D0000290e[7] DOWN IO    f=3D02 s=3D86400000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[07] s=3D86400000 ct=3D0/100000 pa=3D100000=
+/100000 sl=3D3
+> > netfs_donate: R=3D0000290e[07] -> [04] to-prev am=3D0
+>
+> Subreq 7 completed, but wasn't large enough to cover a whole folio, so it
+> donated its coverage backwards to subreq 4.  This is a bug as subreq 7 is=
+ not
+> contiguous with subreq 4.  It should instead have donated forwards to sub=
+req
+> 8.
+>
+> > netfs_sreq: R=3D0000290e[4] DOWN IO    f=3D02 s=3D86100000 100000/10000=
+0 e=3D0
+> > netfs_sreq: R=3D0000290e[4] DOWN +DON  f=3D02 s=3D86000000 300000/30000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[04] s=3D86000000 ct=3D0/300000 pa=3D200000=
+/300000 sl=3D1
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86000-861ff read-done
+> > netfs_folio: i=3Df1c2900000000000 ix=3D86000-861ff read-unlock
+>
+> Subreq 4 completed, and with the donation from subreq 2, had sufficient t=
+o
+> unlock the second folio.  However, it also has some excess from subreq 7 =
+that
+> it can't do anything with - and this gets lost.
+>
+> > netfs_sreq: R=3D0000290e[8] DOWN IO    f=3D02 s=3D86500000 100000/10000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[08] s=3D86500000 ct=3D0/100000 pa=3D100000=
+/100000 sl=3D3
+> > netfs_donate: R=3D0000290e[08] -> [04] tail-to-prev am=3D100000
+>
+> Here's a repeat of the bug: subreq 8 donates to subreq 4, but, again, is =
+not
+> contiguous.  As these are happening concurrently, the other thread hasn't
+> delisted subreq 4 yet.
+>
+> > netfs_sreq: R=3D0000290e[4] DOWN +DON  f=3D02 s=3D86000000 400000/40000=
+0 e=3D0
+> > netfs_progress: R=3D0000290e[04] s=3D86200000 ct=3D200000/400000 pa=3D2=
+00000/200000 sl=3D2
+>
+> The request screwed at this point: subreq 4 shows the extra stuff it has =
+been
+> donated, but it is unable to do anything with it.  There is no folio to
+> wrangle as the third slot (sl=3D2) in the queue has already been cleared.
+>
+> (Note that this bug shouldn't happen with the patches currently on my
+> netfs-writeback branch as I got rid of the donation mechanism in preferen=
+ce
+> for something simpler with single-threaded collection.)
+>
+> David
+>
 
-[ Upstream commit f69b0187f8745a7a9584f6b13f5e792594b88b2e ]
+Hi David,
 
-Like commit f1f047bd7ce0 ("smb: client: Fix -Wstringop-overflow issues"),
-adjust the memcpy() destination address to be based off the surrounding
-object rather than based off the 4-byte "Protocol" member. This avoids a
-build-time warning when compiling under CONFIG_FORTIFY_SOURCE with GCC 15:
+Tried your submitted patch "netfs: Fix non-contiguous donation between
+completed reads" with the same workload.
+It seems to be crashing elsewhere. I'm trying to get the OOPS message
+and ftrace, but it seems to be crashing the kernel.
 
-In function 'fortify_memcpy_chk',
-    inlined from 'CIFSSMBSetPathInfo' at ../fs/smb/client/cifssmb.c:5358:2:
-../include/linux/fortify-string.h:571:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-  571 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Kees Cook <kees@kernel.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/client/cifssmb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index c6f15dbe860a4..0eae60731c20c 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -5406,7 +5406,7 @@ CIFSSMBSetPathInfo(const unsigned int xid, struct cifs_tcon *tcon,
- 	param_offset = offsetof(struct smb_com_transaction2_spi_req,
- 				InformationLevel) - 4;
- 	offset = param_offset + params;
--	data_offset = (char *) (&pSMB->hdr.Protocol) + offset;
-+	data_offset = (char *)pSMB + offsetof(typeof(*pSMB), hdr.Protocol) + offset;
- 	pSMB->ParameterOffset = cpu_to_le16(param_offset);
- 	pSMB->DataOffset = cpu_to_le16(offset);
- 	pSMB->SetupCount = 1;
--- 
-2.43.0
-
+--=20
+Regards,
+Shyam
 
