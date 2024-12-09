@@ -1,123 +1,98 @@
-Return-Path: <linux-cifs+bounces-3591-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3593-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE8229E9E36
-	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 19:40:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3ECC16216B
-	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 18:39:57 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DE2175D2D;
-	Mon,  9 Dec 2024 18:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPzo9qjm"
-X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C49F9E9FB6
+	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 20:34:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1F4167DAC
-	for <linux-cifs@vger.kernel.org>; Mon,  9 Dec 2024 18:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2079F280AB0
+	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 19:34:36 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C375F194ACF;
+	Mon,  9 Dec 2024 19:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="edJVvKn6"
+X-Original-To: linux-cifs@vger.kernel.org
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C191E14E2CC
+	for <linux-cifs@vger.kernel.org>; Mon,  9 Dec 2024 19:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.235.159.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733769596; cv=none; b=gIn9KPYn4UAiWeYqr8Stm6e8DiEmQDR3jChR/IzcOCRC1N66/vwJYPQrtd47MNgbeFA9dpWZu43m5K5Ha4yDYNiTbw6LsAq9Nq95TnNWajD/KjOvIlPZ/xXd0pGBYcXx1jsM9yO7Vpx0VkMTI7sbh3s2chcdPhb/p38KhuYwGkQ=
+	t=1733772875; cv=none; b=t2v9lW1gZzlXVNOkGmgTDUGbUhiGY5VVHGq/SaQ65Ptpjl8yFsQGqGcj4COxM6TgR7zdB4YlI4CJx3/E0VsI0TDxz5o4Ugfbc2SxErF9ecSxr3hE6MTf/761sMBOds8FUjPsAzvjgmo6GJ1HED6Bh/jNlQAhCiDk1+yVgNBirAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733769596; c=relaxed/simple;
-	bh=5zLexGgNQW8FW3zzPwoHFGKKnkKPbtWfYN57yqJYcEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6abjTMeTN4MrGRblGweHJdR1l1y+Bhy4DGw8fOdolqbdu5uc/LzikZZVTX/Y4J2xNydeVLhoa+yOxx0Zu/MzQvwKYzepgwTb5oZJTVR/h+ywf7kAAjByOAbEO8ulzxB8N973wiOku5QBwsrWeTYTD/kTVgoaWCyh001g2KHGpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPzo9qjm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA8FC4CED1;
-	Mon,  9 Dec 2024 18:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733769596;
-	bh=5zLexGgNQW8FW3zzPwoHFGKKnkKPbtWfYN57yqJYcEc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LPzo9qjmFE+J8n0fJ8Oq38E5B8xxejMSGuCJaL8B+bUUFtoi+AKtTcdIGjizEg+Ew
-	 p/UpuXXgYJzZt4iNgKfSXnD2H3H44yoadu1qmxYp/Na8plhz9fzluDfDytq4fq7r4H
-	 T7ykcjZoo5LqqB6lHAs1EJIzcO5b9N640AFv4KEtrNnAXb5mTFGJNKnHb5vPoGv15P
-	 7qOI9/i9bJ23rQGjiGYBWPxWhutv4WeKyq5M+YI9WkljNsMrhLZjrOz/dGsLgVkhlp
-	 YiDIPxvJX46+zvuwvSTA1Xpd5j7a/5rr+eAB96KO9e14MrUniz1XdlrKPKOxei6+R8
-	 Rprk/FhsWlviA==
-Received: by pali.im (Postfix)
-	id E18E78A0; Mon,  9 Dec 2024 19:39:46 +0100 (CET)
-Date: Mon, 9 Dec 2024 19:39:46 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Ralph Boehme <slow@samba.org>,
-	Steven French <Steven.French@microsoft.com>,
-	Paulo Alcantara <pc@manguebit.com>
+	s=arc-20240116; t=1733772875; c=relaxed/simple;
+	bh=LPRXFfSlU+Lx8Li3nSK93IEv/EnFPxNkZQn2t2L/QiA=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=VAJ4jEH2CAD0C8FqGDn+Zp2poyl9p4Z4M3ABGSws43PkazCyhqk2yZgW5hDm2/L48QLSOseby3FdDFm6tce8B4iqEieG7UD/vz245CdPCIDwU7FVKSBoobxDoATNxoxpxXa7ber2UITLM13IQKkL3/5pHaKAfuynBNzVwkhn5n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=edJVvKn6; arc=none smtp.client-ip=167.235.159.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
+Message-ID: <1098e751d1109d8730254ada7648ae4d@manguebit.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+	s=dkim; t=1733772491;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dm7Iv+6q23cPeCU7zBqQbOfx+QUHVcj49nbJ82UIFYs=;
+	b=edJVvKn6hWjU43s30jWuxMXazkWCRCPHursrnICyZbFdrEpxZ21HoXR2Bu3DkQUdJxC5x8
+	axhJP1ROU//4kfreqZ/pOAZ1aIeZQvOpCQ3FvAZtfGaHzxDmWpOm6N8AP8zbcfdUhhUaYe
+	8rgZa7Txhay6qhg+hYNvf4QUO4N2Hz7ixjt4QXr8i2yUkuP12FLQyKF0BX8OPSQCBVBfm6
+	zpv/UTc4PzfNorqGzKKDkNPwGPVNAcfnEg9iKTpL1i66tniUkpAFCw+6iOzrudu5NhRmnv
+	AZR+0MFCwqSoQ2Fd98YkLWiwB1CVg29dl46v1HcS1KcyCUAI86galNzXtq/WDA==
+From: Paulo Alcantara <pc@manguebit.com>
+To: Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>, Ralph Boehme
+ <slow@samba.org>, Steven
+ French <Steven.French@microsoft.com>
 Cc: CIFS <linux-cifs@vger.kernel.org>
 Subject: Re: Special files broken against Samba master
-Message-ID: <20241209183946.yafga2vixfdx5edu@pali>
+In-Reply-To: <20241209183946.yafga2vixfdx5edu@pali>
 References: <458d3314-2010-4271-bb73-bff47e9de358@samba.org>
+ <20241209183946.yafga2vixfdx5edu@pali>
+Date: Mon, 09 Dec 2024 16:28:08 -0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <458d3314-2010-4271-bb73-bff47e9de358@samba.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello, this patch is incomplete and still does not fix the main problem
-that SMB2_OP_QUERY_WSL_EA command does not work with any Windows SMB
-server except the last Windows Server version. On non-recent Windows
-versions it is not possible to set both EAs and reparse point at the
-same time and Windows SMB server is returning error when trying to query
-EAs on file with reparse point.
+Pali Roh=C3=A1r <pali@kernel.org> writes:
 
-Which basically means that it is not possible to query data about the
-special files from Windows SMB server (except 2022 version).
+> Hello, this patch is incomplete and still does not fix the main problem
+> that SMB2_OP_QUERY_WSL_EA command does not work with any Windows SMB
+> server except the last Windows Server version. On non-recent Windows
+> versions it is not possible to set both EAs and reparse point at the
+> same time and Windows SMB server is returning error when trying to query
+> EAs on file with reparse point.
 
-More details are in the email which I wrote in September:
-https://lore.kernel.org/linux-cifs/20240928140939.vjndryndfngzq7x4@pali/
+No, Ralph's patch has nothing to do with your problem.  SMB3.1.1 POSIX
+will support NFS reparse points with no EAs, so makes sense skipping
+SMB2_OP_QUERY_WSL_EA altogether for posix case.
 
-I proposed similar but extended patch which skips asking for EAs based
-on reparse point:
-https://lore.kernel.org/linux-cifs/20240913200204.10660-1-pali@kernel.org/
+> Which basically means that it is not possible to query data about the
+> special files from Windows SMB server (except 2022 version).
+>
+> More details are in the email which I wrote in September:
+> https://lore.kernel.org/linux-cifs/20240928140939.vjndryndfngzq7x4@pali/
+>
+> I proposed similar but extended patch which skips asking for EAs based
+> on reparse point:
+> https://lore.kernel.org/linux-cifs/20240913200204.10660-1-pali@kernel.org/
 
-But it was somehow rejected as the proper solution should be different:
-https://lore.kernel.org/linux-cifs/20240917210707.4lt4obty7wlmm42j@pali/
+Yes, that patch looks incorrect and untested.  Can you tell me how is
+@data->reparse.tag supposed to be set, for non-readdir case, if the
+compound request wasn't sent yet?  Have you tried to stat(2) those files
+with your patch?
 
-And that is why I'm surprised that the batch below was accepted...
+> But it was somehow rejected as the proper solution should be different:
+> https://lore.kernel.org/linux-cifs/20240917210707.4lt4obty7wlmm42j@pali/
 
-Are you planning to implement a proper solution? If not that I would
-propose to reconsider my original idea, which will workaround also
-Windows SMB server, and not only Samba server.
-
-As I wrote in previous emails, I think that this is a serious issue as
-it disallow to use any reparse points against non-recent Windows Server
-systems.
-
-On Wednesday 27 November 2024 20:23:29 Ralph Boehme wrote:
-> From a57c32da874f285af266b7fbbaefb7940991d049 Mon Sep 17 00:00:00 2001
-> From: Ralph Boehme <slow@samba.org>
-> Date: Fri, 15 Nov 2024 13:15:50 +0100
-> Subject: [PATCH 1/3] fs/smb/client: avoid querying SMB2_OP_QUERY_WSL_EA for
->  SMB3 POSIX
-> 
-> ---
->  fs/smb/client/smb2inode.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
-> index e49d0c25eb03..ab069d5285c5 100644
-> --- a/fs/smb/client/smb2inode.c
-> +++ b/fs/smb/client/smb2inode.c
-> @@ -941,7 +941,8 @@ int smb2_query_path_info(const unsigned int xid,
->  		if (rc || !data->reparse_point)
->  			goto out;
->  
-> -		cmds[num_cmds++] = SMB2_OP_QUERY_WSL_EA;
-> +		if (!tcon->posix_extensions)
-> +			cmds[num_cmds++] = SMB2_OP_QUERY_WSL_EA;
->  		/*
->  		 * Skip SMB2_OP_GET_REPARSE if symlink already parsed in create
->  		 * response.
-> -- 
-> 2.47.0
+Yes.  Have you sent a patch with the proposed solution yet?
 
