@@ -1,56 +1,59 @@
-Return-Path: <linux-cifs+bounces-3592-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3594-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A799E9FB0
-	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 20:32:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D4D9E9FB9
+	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 20:35:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0959818812AC
-	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 19:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11BCE1883666
+	for <lists+linux-cifs@lfdr.de>; Mon,  9 Dec 2024 19:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E1D156F57;
-	Mon,  9 Dec 2024 19:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42A7197A68;
+	Mon,  9 Dec 2024 19:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Npb8Uv0+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ykg25dqy"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D01014E2CC
-	for <linux-cifs@vger.kernel.org>; Mon,  9 Dec 2024 19:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE0C14E2CC
+	for <linux-cifs@vger.kernel.org>; Mon,  9 Dec 2024 19:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733772734; cv=none; b=FmTB8J2mgIW1cv0JVfaZ5WQAtjOxZkQGqSkzy+7tq7XhMCjoKJ0NOYu1rfL2gvf4GW/LarnxEJl0NfghaQ5OoJollu8YmNjaoJpaHqGM6FydTZCbhyRRPRNvLyMRjQ65npN7ZKb0mVzXGGCj25151kAKHAAi1S18IucHD380mlY=
+	t=1733772894; cv=none; b=kc3zgBZI5zjr0awsXMiR7hBqiOWtLl1UFTp+sOrpTs94CKTQ3Lutz0G9Zd+IVtkmpIF0aLRYwNkM7pFB8JB6fJpb0HNo9yI6tW2xtya1rbpjIwsArCmUc8ISSVJQNmS9ABnDqobr/P19QPRyBDHeEcpPUUAmJx7MQ6+4elsr0i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733772734; c=relaxed/simple;
-	bh=K2BhyQ1O0uwaV+nIudRYaNoMH4wQMpFCmS/Qnoylv1w=;
+	s=arc-20240116; t=1733772894; c=relaxed/simple;
+	bh=G/KBEftQIe2ZLKgEC7KaR0TazY+nkOMKMbgQz4YJSO8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L+OMYEyUX1mATI6drMq9XJIBF2/Dy9TQq9LYBpmBt9sWTeUeHaX0Pfy8UChje+TFnsjJs0BdtPN7SE4tYERy1obMk9XxpDvsOigWQpuEVzlMYxDGFS6WSi6e8zpgqR3zyHb+91ifgOMK0HJ+zKoALOQKS5HUImPFDnTzckwgjqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Npb8Uv0+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DF8C4CED1;
-	Mon,  9 Dec 2024 19:32:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6FFUSsrFBlNseUESme1ikJKRIoK38R+ku4znvXzr+A4g/cJmphzhY+3zgPIYFHYb1+pUzLRUwQVk+Ql5Ryan98IwI9X+riDLyw9qjBppAEmZ8b4td8wYP886n9PuEcly0CpIsU3fHdbskusT/FhxoSn3jkBApDHXwrLY9BE/SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ykg25dqy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB05C4CED1;
+	Mon,  9 Dec 2024 19:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733772733;
-	bh=K2BhyQ1O0uwaV+nIudRYaNoMH4wQMpFCmS/Qnoylv1w=;
+	s=k20201202; t=1733772894;
+	bh=G/KBEftQIe2ZLKgEC7KaR0TazY+nkOMKMbgQz4YJSO8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Npb8Uv0+Gk+IsXMSUH1ahpyNe4A5VipPTNSSY+iRg7WXl3e9OcbmKV3vuFWT3Ilsz
-	 oZwtXT/O41jD2hLcp1nceiyzpFaNSI5QjvdjPrxadylEC2wFq4wCnMYX6xUXLOlaaS
-	 84WOCg+CnzWKXyezPyCkLh7/oHkDlAC7v7ABjJeovUW/VQWBEWydyRjzHllhxxcQVT
-	 +GLYdr86N+lXlATzThK0zhrbHJxFkoxffAcvMp16k4cdR8vVzJ4G29eKsviTBbwNZ5
-	 21WTsXk/jrKKXfgwD4fqCheiinaLXtLnVsURVFftOG96CnE547Q9pt23P08Tkwz4SP
-	 A8BnSPmPoO+hA==
+	b=Ykg25dqyEGmRWUOC23Ja5r/mU6a98+D22RvMYWIWwskfBKTlTxBfZSmJo1Yi+J4kf
+	 oE9cGI5mo5rDkxZRkVzhLExLJh4w4j0MsMsBhaSF8b4Xf5sarq5+Acn44FuHaQiv01
+	 mQ1zvHtLrvKmcao4tlHQdLjX6G2xKdVHB3jWGtV2AArjhR6eX+TbnkSoNbp5KF/MiS
+	 5cXvWznhmomoNT03pMa6sR7+lCIX0z/Amxc7hJOH2GxQKjtRUaXqLcOpLH5iXeVYK3
+	 18akgbNHHmYIaMIQHCh65awW5YfUhiNhHN+QpsF3xZTO+5XYx7JrSsopCl5BC/pfhT
+	 sBPI5eX7p0Now==
 Received: by pali.im (Postfix)
-	id CD4098A0; Mon,  9 Dec 2024 20:32:04 +0100 (CET)
-Date: Mon, 9 Dec 2024 20:32:04 +0100
+	id 819BD8A0; Mon,  9 Dec 2024 20:34:45 +0100 (CET)
+Date: Mon, 9 Dec 2024 20:34:45 +0100
 From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Steve French <smfrench@gmail.com>
-Cc: CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: [PATCH][SMB3] fix minor compile warning in
- parse_reparse_wsl_symlink
-Message-ID: <20241209193204.jbz2hhhtjcxopnd7@pali>
-References: <CAH2r5mss-vX3Fu+0MGrowFONRBshLuPicQa9nEcub7VhPqNJ9w@mail.gmail.com>
+To: Paulo Alcantara <pc@manguebit.com>
+Cc: Ralph Boehme <slow@samba.org>,
+	Steven French <Steven.French@microsoft.com>,
+	CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: Special files broken against Samba master
+Message-ID: <20241209193445.yrcaa7ciqegvs6fz@pali>
+References: <458d3314-2010-4271-bb73-bff47e9de358@samba.org>
+ <20241209183946.yafga2vixfdx5edu@pali>
+ <1098e751d1109d8730254ada7648ae4d@manguebit.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -60,74 +63,49 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH2r5mss-vX3Fu+0MGrowFONRBshLuPicQa9nEcub7VhPqNJ9w@mail.gmail.com>
+In-Reply-To: <1098e751d1109d8730254ada7648ae4d@manguebit.com>
 User-Agent: NeoMutt/20180716
 
-On Monday 09 December 2024 11:39:17 Steve French wrote:
-> utf8s_to_utf16s() specifies pwcs as a wchar_t pointer (whether big endian
-> or little endian is passed in as an additional parm), so to remove a
-> distracting compile warning it needs to be cast as (wchar_t *) in
-> parse_reparse_wsl_symlink() as done by other callers.
+On Monday 09 December 2024 16:28:08 Paulo Alcantara wrote:
+> Pali Rohár <pali@kernel.org> writes:
 > 
-> Fixes: 06a7adf318a3 ("cifs: Add support for parsing WSL-style symlinks")
+> > Hello, this patch is incomplete and still does not fix the main problem
+> > that SMB2_OP_QUERY_WSL_EA command does not work with any Windows SMB
+> > server except the last Windows Server version. On non-recent Windows
+> > versions it is not possible to set both EAs and reparse point at the
+> > same time and Windows SMB server is returning error when trying to query
+> > EAs on file with reparse point.
 > 
->   CHECK   /home/smfrench/cifs-2.6/fs/smb/client/reparse.c
-> /home/smfrench/cifs-2.6/fs/smb/client/reparse.c:679:45: warning:
-> incorrect type in argument 4 (different base types)
-> /home/smfrench/cifs-2.6/fs/smb/client/reparse.c:679:45:    expected
-> unsigned short [usertype] *pwcs
-> /home/smfrench/cifs-2.6/fs/smb/client/reparse.c:679:45:    got
-> restricted __le16 [usertype] *[assigned] symname_utf16
-> 
-> 
-> See attached patch
-> 
-> -- 
-> Thanks,
-> 
-> Steve
+> No, Ralph's patch has nothing to do with your problem.  SMB3.1.1 POSIX
+> will support NFS reparse points with no EAs, so makes sense skipping
+> SMB2_OP_QUERY_WSL_EA altogether for posix case.
 
-> From 0096f8e57b4b6e503f0abeb0a79e2b1a77157a53 Mon Sep 17 00:00:00 2001
-> From: Steve French <stfrench@microsoft.com>
-> Date: Mon, 9 Dec 2024 11:25:04 -0600
-> Subject: [PATCH] smb3: fix compiler warning in reparse code
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
-> 
-> utf8s_to_utf16s() specifies pwcs as a wchar_t pointer (whether big endian
-> or little endian is passed in as an additional parm), so to remove a
-> distracting compile warning it needs to be cast as (wchar_t *) in
-> parse_reparse_wsl_symlink() as done by other callers.
-> 
-> Fixes: 06a7adf318a3 ("cifs: Add support for parsing WSL-style symlinks")
-> Cc: Pali Rohár <pali@kernel.org>
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> ---
->  fs/smb/client/reparse.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-> index 50b1aba20008..d88b41133e00 100644
-> --- a/fs/smb/client/reparse.c
-> +++ b/fs/smb/client/reparse.c
-> @@ -676,7 +676,7 @@ static int parse_reparse_wsl_symlink(struct reparse_wsl_symlink_data_buffer *buf
->  		return -ENOMEM;
->  	symname_utf16_len = utf8s_to_utf16s(buf->PathBuffer, symname_utf8_len,
->  					    UTF16_LITTLE_ENDIAN,
-> -					    symname_utf16, symname_utf8_len * 2);
-> +					    (wchar_t *) symname_utf16, symname_utf8_len * 2);
->  	if (symname_utf16_len < 0) {
->  		kfree(symname_utf16);
->  		return symname_utf16_len;
-> -- 
-> 2.43.0
-> 
+Ok, so this is just a coincidence that skip was added at the same place.
+And I though that it is the same thing (which now I see that is not).
 
-This change looks good. I did not know what is the proper way to pass
-little endian utf-16 buffer (__le16*) to that utf8s_to_utf16s function.
+> > Which basically means that it is not possible to query data about the
+> > special files from Windows SMB server (except 2022 version).
+> >
+> > More details are in the email which I wrote in September:
+> > https://lore.kernel.org/linux-cifs/20240928140939.vjndryndfngzq7x4@pali/
+> >
+> > I proposed similar but extended patch which skips asking for EAs based
+> > on reparse point:
+> > https://lore.kernel.org/linux-cifs/20240913200204.10660-1-pali@kernel.org/
+> 
+> Yes, that patch looks incorrect and untested.  Can you tell me how is
+> @data->reparse.tag supposed to be set, for non-readdir case, if the
+> compound request wasn't sent yet?  Have you tried to stat(2) those files
+> with your patch?
 
-If this casting is the proper way, that it fine for me.
+I need to rethink about it. Basically I already dropped this patch as I
+was expecting the proper solution.
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+> > But it was somehow rejected as the proper solution should be different:
+> > https://lore.kernel.org/linux-cifs/20240917210707.4lt4obty7wlmm42j@pali/
+> 
+> Yes.  Have you sent a patch with the proposed solution yet?
+
+I have not sent, I was not working on it. I was in impression that you
+are going to implement the proper solution.
 
