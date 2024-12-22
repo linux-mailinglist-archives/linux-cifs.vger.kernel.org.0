@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-3720-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3722-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFDE09FA677
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:44:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6171F9FA679
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:45:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1F931885D3A
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 15:44:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7C681885D90
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 15:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BEE18E04D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C235E190661;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2as0Tx5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YU9heYRS"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1FC188CC9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981CD18FDA9;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734882290; cv=none; b=BuejfDH1+6WPH3vZKQPWuUa5raiU8yHp43EYgvZbgYIMM+nKNkaR/ArCSB1VgCgGj/MgBAy9Xt2SLWspdZ7f3zKVWgwU/VtK7qb+LacllDT1fyCOGLatIhq2XseFxjCMhsN202qGrvkn3d3+4kHD1WV5k9LSCf51QqUxJ0RLB5s=
+	t=1734882290; cv=none; b=enucRBJk16GdpuP+ha6+yMLft55DMfhMME1fzBoONpmdaOWUTz3iKC8+ziGDwxjg4B8U/xU5KYpqBges/rYg6SVOkwNmTiUDuatpyV7fwathbb3PpaAinTwcFZwdQLU21fUrn1QmuDQjB+N5RQ7Lzq3K/PQ+0py28QO3uThyLP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734882290; c=relaxed/simple;
-	bh=hhLFChl282HxxjSG4TJYO7INCsXhOHPkcVj3YBbRMcA=;
+	bh=JDQEZOdsea2srLQIbWI7xsM4aLspm8HPEYwnQDEVrW0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s3Q6hx9ATecoNurF7GSNnILONLf5JjLi8F5/cugpPIziqYWFAJolM8lgn4QKWkcnSeXxVLtiSyt9j38z3Li8FY4TLZa/jEUxEKk04MLs+RAhJxeDKI6i663Pnxa6VwKjr/+nsoiywurbRPcE4DRirbN7dgUj/0cvmGb3YWALYno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2as0Tx5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3DBC4CED3;
-	Sun, 22 Dec 2024 15:44:49 +0000 (UTC)
+	 MIME-Version:Content-Type; b=A/W5gvMwAX/FuYTTZmmJP72uc334Ht5tfvAi1OXAOm4a8bL7tMHq87ywGM+KGZqTAVFgZzmNNwMzQJd8YJheVjIl0H2cfht5ThtUQRtGNcc75JVreduvFOjpZqdTfzxyUFVwXocTddrkeZxqPTZqmyZOgCYk3qCgSXhZklTyFkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YU9heYRS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EE5C4CEDC;
+	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734882290;
-	bh=hhLFChl282HxxjSG4TJYO7INCsXhOHPkcVj3YBbRMcA=;
+	bh=JDQEZOdsea2srLQIbWI7xsM4aLspm8HPEYwnQDEVrW0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F2as0Tx525BoUPcfGFlp0OaBFgCRYfo1fYbircJ1kF/2n9lYLxY8Oc+ux0bMLzrEE
-	 a6n2g5W/GkYqDyshg36aG+Ex2RiX3ZyPZ4k11sevET/zEEQq67CiIUUOgmnuKaaW7+
-	 07tnf4nhsfs8ApLGPWAGh9z3FmalocvDF6FeBG2RgVx4/iFKWOrVkVJC3a6bV3B+hF
-	 eGqytPX74mus39HHyhEZZeqFz0Ogm8tFT62dbvGQfckfkqHc2GAXgBnsn6s6NDuggJ
-	 WxmKnUOp8zwWzdLmyqmKe50beSsr6k1Gfs/0BadXhnXs9GfdeeZZhV9/2PKmIJwkLy
-	 cBh0kJ87IB1Ag==
+	b=YU9heYRSJlNR5u3F+kJKG8orYtIgtee58klEetcyP/yeUfYr5YYXvH75RrE7kzOA1
+	 bQ+rVP8MW5mu2AwzAaCU1P12DzMhdM7iBkrH4vnODM1QCgyY4a/KoF2lJi4dCRhcuJ
+	 CN+uR4dyJDXeBQkmYeDpEdW8x0GuGSs3wGXN1QTQv8UdAbnPFeTWSa1jmBlUy2efPv
+	 bL88NtNTkINWQ56ookx53lKDeURHencsY97SXZBB59V2vl4LjRz1AUMyqOgM6zxsjF
+	 ED6i2h496Cfr+/487mF28/pmKEMvOWGOCo0zJ/a/F1OHH6+yy2XJE+fmX/tHpbMjh2
+	 EGqw662TQH66Q==
 Received: by pali.im (Postfix)
-	id 49B01B9A; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
+	id 70ACAD48; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] cifs: Add a new xattr system.reparse for querying repase point from SMB server
-Date: Sun, 22 Dec 2024 16:43:38 +0100
-Message-Id: <20241222154340.24104-3-pali@kernel.org>
+Subject: [PATCH 3/4] cifs: Change translation of STATUS_NOT_A_REPARSE_POINT to -ENODATA
+Date: Sun, 22 Dec 2024 16:43:39 +0100
+Message-Id: <20241222154340.24104-4-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241222154340.24104-1-pali@kernel.org>
 References: <20241222154340.24104-1-pali@kernel.org>
@@ -64,107 +64,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Currently SMB client fetches and parses only few reparse point types,
-those which directly maps to Linux file types.
+STATUS_NOT_A_REPARSE_POINT indicates that object does not have repase point
+buffer attached, for example returned by FSCTL_GET_REPARSE_POINT.
 
-This change introduce a new xattr system.reparse which allows userspace
-application to query reparse point buffer and then let application to parse
-and handle it as needed.
-
-Currently only get xattr is implemented. Setting new reparse point,
-changing it or deleting via set xattr is not implemented yet.
+Currently STATUS_NOT_A_REPARSE_POINT is translated to -EIO. Change it to
+-ENODATA which better describe the situation when no reparse point is set.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/xattr.c | 46 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ fs/smb/client/netmisc.c      | 7 +++++++
+ fs/smb/client/nterr.c        | 1 +
+ fs/smb/client/nterr.h        | 1 +
+ fs/smb/client/smb2maperror.c | 2 +-
+ 4 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/fs/smb/client/xattr.c b/fs/smb/client/xattr.c
-index b88fa04f5792..7fb7662afaea 100644
---- a/fs/smb/client/xattr.c
-+++ b/fs/smb/client/xattr.c
-@@ -39,7 +39,10 @@
- #define SMB3_XATTR_CREATETIME "smb3.creationtime"  /* user.smb3.creationtime */
- /* BB need to add server (Samba e.g) support for security and trusted prefix */
+diff --git a/fs/smb/client/netmisc.c b/fs/smb/client/netmisc.c
+index a2fb1ae14d41..0ff3ccc7a356 100644
+--- a/fs/smb/client/netmisc.c
++++ b/fs/smb/client/netmisc.c
+@@ -871,6 +871,13 @@ map_smb_to_linux_error(char *buf, bool logErr)
+ 	}
+ 	/* else ERRHRD class errors or junk  - return EIO */
  
-+#define SMB_XATTR_REPARSE "system.reparse"
-+
- enum { XATTR_USER, XATTR_CIFS_ACL, XATTR_ACL_ACCESS, XATTR_ACL_DEFAULT,
-+	XATTR_REPARSE,
- 	XATTR_CIFS_NTSD_SACL, XATTR_CIFS_NTSD_OWNER,
- 	XATTR_CIFS_NTSD, XATTR_CIFS_NTSD_FULL };
- 
-@@ -162,6 +165,11 @@ static int cifs_xattr_set(const struct xattr_handler *handler,
- 		}
- 		break;
- 
-+	case XATTR_REPARSE:
-+		/* TODO: Implementing setting, changing and deleting reparse point */
-+		rc = -EOPNOTSUPP;
-+		break;
-+
- 	case XATTR_CIFS_ACL:
- 	case XATTR_CIFS_NTSD_SACL:
- 	case XATTR_CIFS_NTSD_OWNER:
-@@ -319,6 +327,36 @@ static int cifs_xattr_get(const struct xattr_handler *handler,
- 				full_path, name, value, size, cifs_sb);
- 		break;
- 
-+	case XATTR_REPARSE: {
-+		struct reparse_data_buffer *reparse_buf;
-+		int rsp_buftype = CIFS_NO_BUFFER;
-+		struct kvec rsp_iov = {};
-+		u32 reparse_len;
-+		u32 tag;
-+
-+		if (!pTcon->ses->server->ops->query_reparse_point)
-+			goto out;
-+
-+		rc = pTcon->ses->server->ops->query_reparse_point(xid, pTcon,
-+			cifs_sb, full_path, &tag, &rsp_iov, &rsp_buftype);
-+		if (rc)
-+			goto out;
-+
-+		reparse_buf = pTcon->ses->server->ops->get_reparse_point_buffer(&rsp_iov,
-+										&reparse_len);
-+
-+		if (value) {
-+			if (reparse_len > size)
-+				reparse_len = -ERANGE;
-+			else
-+				memcpy(value, reparse_buf, reparse_len);
-+		}
-+		rc = reparse_len;
-+
-+		free_rsp_buf(rsp_buftype, rsp_iov.iov_base);
-+		break;
++	/* special cases for NT status codes which cannot be translated to DOS codes */
++	if (smb->Flags2 & SMBFLG2_ERR_STATUS) {
++		__u32 err = le32_to_cpu(smb->Status.CifsError);
++		if (err == (NT_STATUS_NOT_A_REPARSE_POINT))
++			rc = -ENODATA;
 +	}
 +
- 	case XATTR_CIFS_ACL:
- 	case XATTR_CIFS_NTSD_SACL:
- 	case XATTR_CIFS_NTSD_OWNER:
-@@ -448,6 +486,13 @@ static const struct xattr_handler cifs_os2_xattr_handler = {
- 	.set = cifs_xattr_set,
- };
+ 	cifs_dbg(FYI, "Mapping smb error code 0x%x to POSIX err %d\n",
+ 		 le32_to_cpu(smb->Status.CifsError), rc);
  
-+static const struct xattr_handler cifs_reparse_xattr_handler = {
-+	.name = SMB_XATTR_REPARSE,
-+	.flags = XATTR_REPARSE,
-+	.get = cifs_xattr_get,
-+	.set = cifs_xattr_set,
-+};
-+
- static const struct xattr_handler cifs_cifs_acl_xattr_handler = {
- 	.name = CIFS_XATTR_CIFS_ACL,
- 	.flags = XATTR_CIFS_ACL,
-@@ -525,6 +570,7 @@ static const struct xattr_handler smb3_ntsd_full_xattr_handler = {
- const struct xattr_handler * const cifs_xattr_handlers[] = {
- 	&cifs_user_xattr_handler,
- 	&cifs_os2_xattr_handler,
-+	&cifs_reparse_xattr_handler,
- 	&cifs_cifs_acl_xattr_handler,
- 	&smb3_acl_xattr_handler, /* alias for above since avoiding "cifs" */
- 	&smb3_ntsd_sacl_xattr_handler,
+diff --git a/fs/smb/client/nterr.c b/fs/smb/client/nterr.c
+index 358a766375b4..777431912e64 100644
+--- a/fs/smb/client/nterr.c
++++ b/fs/smb/client/nterr.c
+@@ -667,6 +667,7 @@ const struct nt_err_code_struct nt_errs[] = {
+ 	{"NT_STATUS_QUOTA_LIST_INCONSISTENT",
+ 	 NT_STATUS_QUOTA_LIST_INCONSISTENT},
+ 	{"NT_STATUS_FILE_IS_OFFLINE", NT_STATUS_FILE_IS_OFFLINE},
++	{"NT_STATUS_NOT_A_REPARSE_POINT", NT_STATUS_NOT_A_REPARSE_POINT},
+ 	{"NT_STATUS_NO_MORE_ENTRIES", NT_STATUS_NO_MORE_ENTRIES},
+ 	{"NT_STATUS_MORE_ENTRIES", NT_STATUS_MORE_ENTRIES},
+ 	{"NT_STATUS_SOME_UNMAPPED", NT_STATUS_SOME_UNMAPPED},
+diff --git a/fs/smb/client/nterr.h b/fs/smb/client/nterr.h
+index edd4741cab0a..180602c22355 100644
+--- a/fs/smb/client/nterr.h
++++ b/fs/smb/client/nterr.h
+@@ -546,6 +546,7 @@ extern const struct nt_err_code_struct nt_errs[];
+ #define NT_STATUS_TOO_MANY_LINKS 0xC0000000 | 0x0265
+ #define NT_STATUS_QUOTA_LIST_INCONSISTENT 0xC0000000 | 0x0266
+ #define NT_STATUS_FILE_IS_OFFLINE 0xC0000000 | 0x0267
++#define NT_STATUS_NOT_A_REPARSE_POINT 0xC0000000 | 0x0275
+ #define NT_STATUS_NO_SUCH_JOB 0xC0000000 | 0xEDE	/* scheduler */
+ 
+ #endif				/* _NTERR_H */
+diff --git a/fs/smb/client/smb2maperror.c b/fs/smb/client/smb2maperror.c
+index 00c0bd79c074..daa56b2a2a1a 100644
+--- a/fs/smb/client/smb2maperror.c
++++ b/fs/smb/client/smb2maperror.c
+@@ -871,7 +871,7 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
+ 	{STATUS_VALIDATE_CONTINUE, -EIO, "STATUS_VALIDATE_CONTINUE"},
+ 	{STATUS_NO_MATCH, -EIO, "STATUS_NO_MATCH"},
+ 	{STATUS_NO_MORE_MATCHES, -EIO, "STATUS_NO_MORE_MATCHES"},
+-	{STATUS_NOT_A_REPARSE_POINT, -EIO, "STATUS_NOT_A_REPARSE_POINT"},
++	{STATUS_NOT_A_REPARSE_POINT, -ENODATA, "STATUS_NOT_A_REPARSE_POINT"},
+ 	{STATUS_IO_REPARSE_TAG_INVALID, -EIO, "STATUS_IO_REPARSE_TAG_INVALID"},
+ 	{STATUS_IO_REPARSE_TAG_MISMATCH, -EIO,
+ 	"STATUS_IO_REPARSE_TAG_MISMATCH"},
 -- 
 2.20.1
 
