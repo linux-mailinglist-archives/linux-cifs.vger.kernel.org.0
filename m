@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-3722-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3723-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6171F9FA679
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:45:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AA389FA67A
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7C681885D90
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59DC51664C0
 	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 15:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C235E190661;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0925191F62;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YU9heYRS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsoE+Ehf"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981CD18FDA9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8541190051;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734882290; cv=none; b=enucRBJk16GdpuP+ha6+yMLft55DMfhMME1fzBoONpmdaOWUTz3iKC8+ziGDwxjg4B8U/xU5KYpqBges/rYg6SVOkwNmTiUDuatpyV7fwathbb3PpaAinTwcFZwdQLU21fUrn1QmuDQjB+N5RQ7Lzq3K/PQ+0py28QO3uThyLP0=
+	t=1734882290; cv=none; b=YDvYxZ8O2RKYIwszWkHMLV8Z+G40OI/J5BYDu3ZGjiWEkLebrXG6xlheQTH/TbRfhnR9prZ9JkErGaa+5ymqnS+hrM6ITA41fQWjKzQT7gWrCy9pefC1ErMgTg/BgV3g0F9OqDvpeORRzQLJQNqGy0kXXBLnNaaWPOtkvZlS/Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734882290; c=relaxed/simple;
-	bh=JDQEZOdsea2srLQIbWI7xsM4aLspm8HPEYwnQDEVrW0=;
+	bh=vZKFm2ZEqacVyuVEfxw0+dRyd+24gQiBndfQn3r89J0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A/W5gvMwAX/FuYTTZmmJP72uc334Ht5tfvAi1OXAOm4a8bL7tMHq87ywGM+KGZqTAVFgZzmNNwMzQJd8YJheVjIl0H2cfht5ThtUQRtGNcc75JVreduvFOjpZqdTfzxyUFVwXocTddrkeZxqPTZqmyZOgCYk3qCgSXhZklTyFkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YU9heYRS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EE5C4CEDC;
+	 MIME-Version:Content-Type; b=BRovRknQznlJ58V24nfExyRaFKuHjWU9+DKyCF13xas92eah70Tsj5gYtQA0eo7Asvb/DYSiEpKEokiapBYvlA6gzIT6rB58voXyiFqUQbFsyKxM4ysNq9tazAD21KCCvr31maelXw24NnT7o9Fy5Rjd1yBhCgo6UAL7o8jX2tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsoE+Ehf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70380C4CEDE;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734882290;
-	bh=JDQEZOdsea2srLQIbWI7xsM4aLspm8HPEYwnQDEVrW0=;
+	bh=vZKFm2ZEqacVyuVEfxw0+dRyd+24gQiBndfQn3r89J0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YU9heYRSJlNR5u3F+kJKG8orYtIgtee58klEetcyP/yeUfYr5YYXvH75RrE7kzOA1
-	 bQ+rVP8MW5mu2AwzAaCU1P12DzMhdM7iBkrH4vnODM1QCgyY4a/KoF2lJi4dCRhcuJ
-	 CN+uR4dyJDXeBQkmYeDpEdW8x0GuGSs3wGXN1QTQv8UdAbnPFeTWSa1jmBlUy2efPv
-	 bL88NtNTkINWQ56ookx53lKDeURHencsY97SXZBB59V2vl4LjRz1AUMyqOgM6zxsjF
-	 ED6i2h496Cfr+/487mF28/pmKEMvOWGOCo0zJ/a/F1OHH6+yy2XJE+fmX/tHpbMjh2
-	 EGqw662TQH66Q==
+	b=MsoE+Ehf+u7SurXPtfe8LCch7VJqvwIp/F96oTySu30g3WMryazETaNVFDcUAZg61
+	 oWoWUo1cLNHcJygfH2x6iXgOVJ0cI0M3PybzgG1ckEKqVQ/1SzemCiA0MMnsCk0J2o
+	 qFEXs/acyckSrNiyWOmvjIv/e5mlADgVcgAEt+dklyMCnUb4GYgIWZePaFPEnC+bMU
+	 Gg20U5q9fgjVZ4ntTld00+kGzOdC1XtuyEGEY/Oa7OefUOoAkJD2a8LN5Vu4hZsWZa
+	 0jO7Y2lTEG/DQX1yejwJUiA13C3L84cuCFHini+Bwy+NanwtW8BAdGthfeqbh4TrQK
+	 4oEy1ZmZqiYVA==
 Received: by pali.im (Postfix)
-	id 70ACAD48; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
+	id 9ADD1EEC; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] cifs: Change translation of STATUS_NOT_A_REPARSE_POINT to -ENODATA
-Date: Sun, 22 Dec 2024 16:43:39 +0100
-Message-Id: <20241222154340.24104-4-pali@kernel.org>
+Subject: [PATCH 4/4] cifs: Check if server supports reparse points before using them
+Date: Sun, 22 Dec 2024 16:43:40 +0100
+Message-Id: <20241222154340.24104-5-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241222154340.24104-1-pali@kernel.org>
 References: <20241222154340.24104-1-pali@kernel.org>
@@ -64,75 +64,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-STATUS_NOT_A_REPARSE_POINT indicates that object does not have repase point
-buffer attached, for example returned by FSCTL_GET_REPARSE_POINT.
-
-Currently STATUS_NOT_A_REPARSE_POINT is translated to -EIO. Change it to
--ENODATA which better describe the situation when no reparse point is set.
+Do not attempt to query or create reparse point when server fs does not
+support it. This will prevent creating unusable empty object on the server.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/netmisc.c      | 7 +++++++
- fs/smb/client/nterr.c        | 1 +
- fs/smb/client/nterr.h        | 1 +
- fs/smb/client/smb2maperror.c | 2 +-
- 4 files changed, 10 insertions(+), 1 deletion(-)
+ fs/smb/client/cifssmb.c   | 3 +++
+ fs/smb/client/link.c      | 3 ++-
+ fs/smb/client/smb2inode.c | 8 ++++++++
+ fs/smb/client/smb2ops.c   | 4 ++--
+ 4 files changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/fs/smb/client/netmisc.c b/fs/smb/client/netmisc.c
-index a2fb1ae14d41..0ff3ccc7a356 100644
---- a/fs/smb/client/netmisc.c
-+++ b/fs/smb/client/netmisc.c
-@@ -871,6 +871,13 @@ map_smb_to_linux_error(char *buf, bool logErr)
- 	}
- 	/* else ERRHRD class errors or junk  - return EIO */
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 2763db49b155..83365861a99c 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -2695,6 +2695,9 @@ int cifs_query_reparse_point(const unsigned int xid,
+ 	if (cap_unix(tcon->ses))
+ 		return -EOPNOTSUPP;
  
-+	/* special cases for NT status codes which cannot be translated to DOS codes */
-+	if (smb->Flags2 & SMBFLG2_ERR_STATUS) {
-+		__u32 err = le32_to_cpu(smb->Status.CifsError);
-+		if (err == (NT_STATUS_NOT_A_REPARSE_POINT))
-+			rc = -ENODATA;
-+	}
++	if (!(le32_to_cpu(tcon->fsAttrInfo.Attributes) & FILE_SUPPORTS_REPARSE_POINTS))
++		return -EOPNOTSUPP;
 +
- 	cifs_dbg(FYI, "Mapping smb error code 0x%x to POSIX err %d\n",
- 		 le32_to_cpu(smb->Status.CifsError), rc);
+ 	oparms = (struct cifs_open_parms) {
+ 		.tcon = tcon,
+ 		.cifs_sb = cifs_sb,
+diff --git a/fs/smb/client/link.c b/fs/smb/client/link.c
+index 6e6c09cc5ce7..a88253668286 100644
+--- a/fs/smb/client/link.c
++++ b/fs/smb/client/link.c
+@@ -643,7 +643,8 @@ cifs_symlink(struct mnt_idmap *idmap, struct inode *inode,
+ 	case CIFS_SYMLINK_TYPE_NATIVE:
+ 	case CIFS_SYMLINK_TYPE_NFS:
+ 	case CIFS_SYMLINK_TYPE_WSL:
+-		if (server->ops->create_reparse_symlink) {
++		if (server->ops->create_reparse_symlink &&
++		    (le32_to_cpu(pTcon->fsAttrInfo.Attributes) & FILE_SUPPORTS_REPARSE_POINTS)) {
+ 			rc = server->ops->create_reparse_symlink(xid, inode,
+ 								 direntry,
+ 								 pTcon,
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 379ac3cbad1f..818537c83d41 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -1289,6 +1289,14 @@ struct inode *smb2_get_reparse_inode(struct cifs_open_info_data *data,
+ 	int rc;
+ 	int i;
  
-diff --git a/fs/smb/client/nterr.c b/fs/smb/client/nterr.c
-index 358a766375b4..777431912e64 100644
---- a/fs/smb/client/nterr.c
-+++ b/fs/smb/client/nterr.c
-@@ -667,6 +667,7 @@ const struct nt_err_code_struct nt_errs[] = {
- 	{"NT_STATUS_QUOTA_LIST_INCONSISTENT",
- 	 NT_STATUS_QUOTA_LIST_INCONSISTENT},
- 	{"NT_STATUS_FILE_IS_OFFLINE", NT_STATUS_FILE_IS_OFFLINE},
-+	{"NT_STATUS_NOT_A_REPARSE_POINT", NT_STATUS_NOT_A_REPARSE_POINT},
- 	{"NT_STATUS_NO_MORE_ENTRIES", NT_STATUS_NO_MORE_ENTRIES},
- 	{"NT_STATUS_MORE_ENTRIES", NT_STATUS_MORE_ENTRIES},
- 	{"NT_STATUS_SOME_UNMAPPED", NT_STATUS_SOME_UNMAPPED},
-diff --git a/fs/smb/client/nterr.h b/fs/smb/client/nterr.h
-index edd4741cab0a..180602c22355 100644
---- a/fs/smb/client/nterr.h
-+++ b/fs/smb/client/nterr.h
-@@ -546,6 +546,7 @@ extern const struct nt_err_code_struct nt_errs[];
- #define NT_STATUS_TOO_MANY_LINKS 0xC0000000 | 0x0265
- #define NT_STATUS_QUOTA_LIST_INCONSISTENT 0xC0000000 | 0x0266
- #define NT_STATUS_FILE_IS_OFFLINE 0xC0000000 | 0x0267
-+#define NT_STATUS_NOT_A_REPARSE_POINT 0xC0000000 | 0x0275
- #define NT_STATUS_NO_SUCH_JOB 0xC0000000 | 0xEDE	/* scheduler */
++	/*
++	 * If server filesystem does not support reparse points then do not
++	 * attempt to create reparse point. This will prevent creating unusable
++	 * empty object on the server.
++	 */
++	if (!(le32_to_cpu(tcon->fsAttrInfo.Attributes) & FILE_SUPPORTS_REPARSE_POINTS))
++		return ERR_PTR(-EOPNOTSUPP);
++
+ 	oparms = CIFS_OPARMS(cifs_sb, tcon, full_path,
+ 			     SYNCHRONIZE | DELETE |
+ 			     FILE_READ_ATTRIBUTES |
+diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+index 0a91f18d4a54..50adb5cdfce9 100644
+--- a/fs/smb/client/smb2ops.c
++++ b/fs/smb/client/smb2ops.c
+@@ -5202,7 +5202,7 @@ static int smb2_make_node(unsigned int xid, struct inode *inode,
+ 			  const char *full_path, umode_t mode, dev_t dev)
+ {
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+-	int rc;
++	int rc = -EOPNOTSUPP;
  
- #endif				/* _NTERR_H */
-diff --git a/fs/smb/client/smb2maperror.c b/fs/smb/client/smb2maperror.c
-index 00c0bd79c074..daa56b2a2a1a 100644
---- a/fs/smb/client/smb2maperror.c
-+++ b/fs/smb/client/smb2maperror.c
-@@ -871,7 +871,7 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
- 	{STATUS_VALIDATE_CONTINUE, -EIO, "STATUS_VALIDATE_CONTINUE"},
- 	{STATUS_NO_MATCH, -EIO, "STATUS_NO_MATCH"},
- 	{STATUS_NO_MORE_MATCHES, -EIO, "STATUS_NO_MORE_MATCHES"},
--	{STATUS_NOT_A_REPARSE_POINT, -EIO, "STATUS_NOT_A_REPARSE_POINT"},
-+	{STATUS_NOT_A_REPARSE_POINT, -ENODATA, "STATUS_NOT_A_REPARSE_POINT"},
- 	{STATUS_IO_REPARSE_TAG_INVALID, -EIO, "STATUS_IO_REPARSE_TAG_INVALID"},
- 	{STATUS_IO_REPARSE_TAG_MISMATCH, -EIO,
- 	"STATUS_IO_REPARSE_TAG_MISMATCH"},
+ 	/*
+ 	 * Check if mounted with mount parm 'sfu' mount parm.
+@@ -5213,7 +5213,7 @@ static int smb2_make_node(unsigned int xid, struct inode *inode,
+ 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_UNX_EMUL) {
+ 		rc = cifs_sfu_make_node(xid, inode, dentry, tcon,
+ 					full_path, mode, dev);
+-	} else {
++	} else if (le32_to_cpu(tcon->fsAttrInfo.Attributes) & FILE_SUPPORTS_REPARSE_POINTS) {
+ 		rc = smb2_mknod_reparse(xid, inode, dentry, tcon,
+ 					full_path, mode, dev);
+ 	}
 -- 
 2.20.1
 
