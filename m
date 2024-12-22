@@ -1,79 +1,115 @@
-Return-Path: <linux-cifs+bounces-3705-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3706-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6F419FA1C8
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Dec 2024 18:38:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7379FA5C3
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 14:21:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F117188C4EF
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Dec 2024 17:38:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 445D5165081
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 13:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AE2186E27;
-	Sat, 21 Dec 2024 17:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195B018B482;
+	Sun, 22 Dec 2024 13:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgLYrq/l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQeCetvH"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8FC1714BF;
-	Sat, 21 Dec 2024 17:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ABF2629D;
+	Sun, 22 Dec 2024 13:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734802662; cv=none; b=I3h+Bg33o+bl987Pwog8hBaY+f8kdo5JETUEUSXOBqTqAf0v1yLP0IF/oprNAOBnWN3WwCiEEDt75LGZcAEfUCGV5j5pEyONMOsVXCapK+DOUqYjuISa+itTwqZSkmGyY3Az91+5VvRbUuDmGAXytFn7sGsUNcVI2GHQVF6CcUU=
+	t=1734873682; cv=none; b=lTjYefEv1SCpb2b5u10326DJMXkpWE8j6fqe1X9w13wLO6/hOQdqGyI3iHWBVzBWMcgw/nU9YqymctcaWRMkyt+jlMkWEVJ6SaSob9MnOtz+eT7AKnco0JXhj3mSKFNoAHNTvmiRbvAEyHnHzzZNcoqWyZrk7AmkQmnhnMv/zIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734802662; c=relaxed/simple;
-	bh=idGTWyYmc4/BfKDM6vg9AbHYb4OvA+e7VyQe7DRmBPk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Z2SsoP2ZRCkISXPXn7t5dHZ1IKfhRviSauwPXZ/kODJ9vmoEqW39HPn3uJVwecYqpqwsTP2H2B6l7VsItJinoeU2T03KGLc5Bc7WQfdfQK6ODyFoYK58WLAD6q5NWTqgVtVIa7J/WPAcHN0bYfK5xD1pLNq/ol/kxOO21JLyZNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgLYrq/l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC935C4CECE;
-	Sat, 21 Dec 2024 17:37:40 +0000 (UTC)
+	s=arc-20240116; t=1734873682; c=relaxed/simple;
+	bh=V4XWfgmm9c5zawwIzD9gN8mXOp60nkKTLY8+CwsQXE0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MTF3QkMQm1E2x8IC+8LcUFO1m5nJ+WvKVhGfitcDCssZLK0LKkipM7Yzo8vauIAijmM6fKA4yHLWMeMKd4S4s7h+LxsI5fIZLO4Ogp6yORHKAhChxy5T2TFim+ne2QTCSus8Ed4Z6/9Dc6onQ5IhkBxwDun2qP5JgwdRU9mH1f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQeCetvH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 598A1C4CED4;
+	Sun, 22 Dec 2024 13:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734802661;
-	bh=idGTWyYmc4/BfKDM6vg9AbHYb4OvA+e7VyQe7DRmBPk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=TgLYrq/lFA1VtWQCWd1jPNulRzKUIeO/1l/Y5FU+90uXafBs2XK4D57jIb/lFUh8M
-	 uJPtjORjqnUkE0o4GiWlAZf7p2ef1AulX1oyUKJ65iQoVAWETdZ1Tq97nseiRnmyQb
-	 JC8594vWA3OfZQnrTvVQPvu8xv+97+tAUEzT13sqOGX8ht5S1w+MRPq2Ah39M+Lf7Z
-	 E5LrawqAuy0ufjLRIzOJ2IkgaYBLW9W1DV0/F/IXCkqmsrkCwq8WBKc1uCpZqxiCS7
-	 EIeYdPuMYg0YGXqV8LenODEwVYKJR0RIeAzOkkR8h0rpgDpLYsdsTlZ0Ne8OwMuFxn
-	 L3e3xrtZ15k4w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C693806656;
-	Sat, 21 Dec 2024 17:38:00 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mvT2k2ToswPuhzqtcxTjAa6mAEYgZ5ZOHUeE19jYq=xoA@mail.gmail.com>
-References: <CAH2r5mvT2k2ToswPuhzqtcxTjAa6mAEYgZ5ZOHUeE19jYq=xoA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mvT2k2ToswPuhzqtcxTjAa6mAEYgZ5ZOHUeE19jYq=xoA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.13-rc3-SMB3-client-fixes
-X-PR-Tracked-Commit-Id: 92941c7f2c9529fac1b2670482d0ced3b46eac70
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: baa172c77ac52b2058ba3abae7512b7b16d0c461
-Message-Id: <173480267869.3197313.12556075687132333650.pr-tracker-bot@kernel.org>
-Date: Sat, 21 Dec 2024 17:37:58 +0000
-To: Steve French <smfrench@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>
+	s=k20201202; t=1734873681;
+	bh=V4XWfgmm9c5zawwIzD9gN8mXOp60nkKTLY8+CwsQXE0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AQeCetvHeGURVbZaaaFolsZE4fEd1apYrr6DqPh9EfwJeyt+EniKO+VfEkcpQhogi
+	 1peGAq39rUJhWag1bpduDU845HQDj9PAuSbklJpQo39w27wUpYWf8+XDEaunnkb1PA
+	 IhxlsKV+xbOV2tb3w8IOk5vrDohDph/c8sO/c+3SMInzRlj4GzDXOSkUt4HiPCl75R
+	 TJb0cNBgvSTQAncwDBx/vIikERLIKZC0/T1sZpVwpieiGCXfYto5ztA/LacLowzlM2
+	 JrrY+YcDkrmbs9+rJnX6TKhqPd0B5UhTEP5fSyzGdVvYwP47Hoy88iyf7XK9Z9+Bw4
+	 mQMRJDCJxTpow==
+Received: by pali.im (Postfix)
+	id 579997F2; Sun, 22 Dec 2024 14:21:11 +0100 (CET)
+From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To: Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] cifs: Improve access without FILE_READ_ATTRIBUTES permission
+Date: Sun, 22 Dec 2024 14:20:27 +0100
+Message-Id: <20241222132029.23431-1-pali@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241005160826.20825-1-pali@kernel.org>
+References: <20241005160826.20825-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 20 Dec 2024 21:27:28 -0600:
+Linux SMB client currently is not able to access files for which do not
+have FILE_READ_ATTRIBUTES permission.
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.13-rc3-SMB3-client-fixes
+For example it is not able to write data into file on SMB server to
+which has only write access (no read or read attributes access). And
+applications are not able to get result of stat() syscall on such file.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/baa172c77ac52b2058ba3abae7512b7b16d0c461
+Test case against Windows SMB server:
 
-Thank you!
+1) On SMB server prepare file with only GENERIC_WRITE access for Everyone:
+   ACL:S-1-1-0:ALLOWED/0x0/0x40000000
+
+2) On SMB server remove all access for file's parent directory
+
+3) Mount share by Linux SMB client and try to append data to that file:
+   echo test >> /mnt/share/dir/file
+
+4) Try to call: stat /mnt/share/dir/file
+
+Without this change the write test fails because Linux SMB client is trying
+to open SMB path "\dir\file" with GENERIC_WRITE|FILE_READ_ATTRIBUTES. With
+this change the test pass as Linux SMB client is not opening file with
+FILE_READ_ATTRIBUTES access anymore.
+
+Similarly without this change the stat test always fails as Linux SMB
+client is trying to read attributes via SMB2_OP_QUERY_INFO. With this
+change, if SMB2_OP_QUERY_INFO fails then Linux SMB client fallbacks for
+reading stat attributes via OPEN with MAXIMUM_ALLOWED access (which will
+pass if there is some permission) and OPEN reply will contain attributes
+required for stat().
+
+Changes in v2:
+* At first attempt still try to open with FILE_READ_ATTRIBUTES and
+  fallback to open without FILE_READ_ATTRIBUTES only on -EACCESS.
+
+Pali Rohár (2):
+  cifs: Add fallback for SMB2 CREATE without FILE_READ_ATTRIBUTES
+  cifs: Improve stat() to work also without FILE_READ_ATTRIBUTES
+
+ fs/smb/client/cifspdu.h   |  1 +
+ fs/smb/client/smb2file.c  | 12 ++++++-
+ fs/smb/client/smb2glob.h  |  1 +
+ fs/smb/client/smb2inode.c | 71 ++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 83 insertions(+), 2 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.20.1
+
 
