@@ -1,60 +1,57 @@
-Return-Path: <linux-cifs+bounces-3729-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3731-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D9999FA6CF
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 17:32:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F14E9FA72B
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 18:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEE0B1662B6
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:32:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C350B188714C
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 17:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E656C192B9A;
-	Sun, 22 Dec 2024 16:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A437D18FC80;
+	Sun, 22 Dec 2024 17:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bou9qV7T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJRmgx/t"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAC31925AF;
-	Sun, 22 Dec 2024 16:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B17639AEB;
+	Sun, 22 Dec 2024 17:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734885098; cv=none; b=AcW19yJK61GvKv/9RXEXLK1M/GYQ1qaPNlHWy55qOViYttCGduzoxZGIPXiekcMWUcH4/YWuFJxpBS7Niv3+OzLYvtG383tuQhyHHN1mpXbYLSHQCF84TDm79WAqteGjiRxX9WPsH5nx8i2nUXFSglln7sZYixNnGjA3PSTn74Y=
+	t=1734887737; cv=none; b=s3PP+HMbjXipYrOaLnvNxEwumSgVY48UjuewCwMdW1AwZSYyvtuRIGkit4rUVqicEfzXDYm01KVljqV+vl4WsTc7Cp+VPUDlCdzYwCpwtiVgM1kuHnJemIlQtYOfxWBivVf860skYNgtDcvGGGf6bhjOmybaTardgJLsN+zprR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734885098; c=relaxed/simple;
-	bh=roMvo+vaCtZhM+ffAECwM9kTdTDexaaoB04VHkeB1IU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c1XnYZYWmvU/EhDYtf/jo5UlNJsIg0mdFIgH/QtSK3gBHEoOTfQkZme10fgSOeATsYnlOmxaY3f2GAGdVkFV3oxpFBz06Etudm6esp5tFCQBlqjhBWI9Jd9JiCIcemRbwVX7i1Yu25O4FrFu+C4kItaMriUqIBj2wvJaNHjk8Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bou9qV7T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DD2C4CEDF;
-	Sun, 22 Dec 2024 16:31:38 +0000 (UTC)
+	s=arc-20240116; t=1734887737; c=relaxed/simple;
+	bh=LontnbXA7/QnYtjbaLg/uQhkvXruDqTutlOKd8MlNFw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=q3XNXh6+NnnDVV63UUJFgjcK9/JRUGImexR5xES7UBRGaASOr1AakEdE3eEhVl+bBtBRCiQPyPxLUYHjV46MVhD1W35FD3hu0nB0kjEATxnkPdsEm7ICW3DYj+x84Zh60A/Jq8UNQY8u0sprPYKyjxC3Om84jwbZDEM4culPrmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJRmgx/t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F0FC4CECD;
+	Sun, 22 Dec 2024 17:15:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734885098;
-	bh=roMvo+vaCtZhM+ffAECwM9kTdTDexaaoB04VHkeB1IU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bou9qV7TQncyJim9svbw5bDJcXfV9Hz/dIiV1AVFg0lVZ03jVFE9h3sKIKPfjq0P8
-	 5+DbhVH4jukBG+e1U4WQJvGh2FYEJn5jgQ/DTZyRvD3bs/XHt1pciXA060sAB+UnE1
-	 nm8Hdt29RGguaqEn59K8sDruan4hqI+IyY1mrkaa2zvwJ9pcrK9cvi57ZkFF/85Jx/
-	 MRxgL0l6EJXjzJyeH5dT0VdrurGLIw0JNZziAfDO7xOg4kBK0+YQZCybHmTQR5jEwH
-	 41k+510l3/zyJ1sQ205TcRvkyOD1dCJsc3LbbBqigUoXIaP+aNuBAhqmhZy3NFEDBG
-	 SSWEqUT6MONtQ==
+	s=k20201202; t=1734887736;
+	bh=LontnbXA7/QnYtjbaLg/uQhkvXruDqTutlOKd8MlNFw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JJRmgx/tWKVjCK+2f/5vI+nngOZzf+b3x536KWBBXVVAfVh+bwvc3Ah6814DNOAqA
+	 nu4jfoPoPQgb7FAPlEXRqUG5sIJT0NI5XQ9yj+eh6E/7TIulUelpiyB3XQwPfTxZAf
+	 FAqpPZZgHOeHRn6BTEFqPeEoCetZnsm1O/bVi2E87IaqU+MVee80fO96ZNa3vqIW6u
+	 GtjtBc3/n9TryhpSyR9ZL7obX0Js1rrjZhaaPj+sbgRQ2TfOA51DxNcseLFJHlSJGX
+	 0WPzSHFSG/e46OEg5TugA1e/GUJu4jkURdKU3hDJ5ZhPQIiap1BE7cLo7DQiqxDRYk
+	 QWKbhk6Fs7s8w==
 Received: by pali.im (Postfix)
-	id EF695F3C; Sun, 22 Dec 2024 17:31:27 +0100 (CET)
+	id 509C37F2; Sun, 22 Dec 2024 18:15:27 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] cifs: Set default Netbios RFC1001 server name to hostname in UNC
-Date: Sun, 22 Dec 2024 17:30:50 +0100
-Message-Id: <20241222163050.24359-7-pali@kernel.org>
+Subject: [PATCH] cifs: Implement is_network_name_deleted for SMB1
+Date: Sun, 22 Dec 2024 18:14:31 +0100
+Message-Id: <20241222171431.24657-1-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241222163050.24359-1-pali@kernel.org>
-References: <20241222163050.24359-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -64,48 +61,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Windows SMB servers (including SMB2+) which are working over RFC1001
-require that Netbios server name specified in RFC1001 Session Request
-packet is same as the UNC host name. Netbios server name can be already
-specified manually via -o servern= option.
+This change allows Linux SMB1 client to autoreconnect the share when it is
+modified on server by admin operation which removes and re-adds it.
 
-With this change the RFC1001 server name is set automatically by extracting
-the hostname from the mount source.
+Implementation is reused from SMB2+ is_network_name_deleted callback. There
+are just adjusted checks for error codes and access to struct smb_hdr.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/fs_context.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ fs/smb/client/smb1ops.c | 44 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
-index 3774f02f45c9..0bda7ada4f81 100644
---- a/fs/smb/client/fs_context.c
-+++ b/fs/smb/client/fs_context.c
-@@ -1125,6 +1125,7 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
- 	int i, opt;
- 	bool is_smb3 = !strcmp(fc->fs_type->name, "smb3");
- 	bool skip_parsing = false;
-+	char *hostname;
+diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
+index 0533aca770fc..76e7353f2a72 100644
+--- a/fs/smb/client/smb1ops.c
++++ b/fs/smb/client/smb1ops.c
+@@ -14,6 +14,8 @@
+ #include "cifspdu.h"
+ #include "cifs_unicode.h"
+ #include "fs_context.h"
++#include "nterr.h"
++#include "smberr.h"
  
- 	cifs_dbg(FYI, "CIFS: parsing cifs mount option '%s'\n", param->key);
+ /*
+  * An NT cancel request header looks just like the original request except:
+@@ -1075,6 +1077,47 @@ cifs_make_node(unsigned int xid, struct inode *inode,
+ 				  full_path, mode, dev);
+ }
  
-@@ -1447,6 +1448,16 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
- 			cifs_errorf(fc, "OOM when copying UNC string\n");
- 			goto cifs_parse_mount_err;
- 		}
-+		hostname = extract_hostname(ctx->UNC);
-+		if (IS_ERR(hostname)) {
-+			cifs_errorf(fc, "Cannot extract hostname from UNC string\n");
-+			goto cifs_parse_mount_err;
++static bool
++cifs_is_network_name_deleted(char *buf, struct TCP_Server_Info *server)
++{
++	struct smb_hdr *shdr = (struct smb_hdr *)buf;
++	struct TCP_Server_Info *pserver;
++	struct cifs_ses *ses;
++	struct cifs_tcon *tcon;
++
++	if (shdr->Flags2 & SMBFLG2_ERR_STATUS) {
++		if (shdr->Status.CifsError != cpu_to_le32(NT_STATUS_NETWORK_NAME_DELETED))
++			return false;
++	} else {
++		if (shdr->Status.DosError.ErrorClass != ERRSRV ||
++		    shdr->Status.DosError.Error != cpu_to_le16(ERRinvtid))
++			return false;
++	}
++
++	/* If server is a channel, select the primary channel */
++	pserver = SERVER_IS_CHAN(server) ? server->primary_server : server;
++
++	spin_lock(&cifs_tcp_ses_lock);
++	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
++		if (cifs_ses_exiting(ses))
++			continue;
++		list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
++			if (tcon->tid == le32_to_cpu(shdr->Tid)) {
++				spin_lock(&tcon->tc_lock);
++				tcon->need_reconnect = true;
++				spin_unlock(&tcon->tc_lock);
++				spin_unlock(&cifs_tcp_ses_lock);
++				pr_warn_once("Server share %s deleted.\n",
++					     tcon->tree_name);
++				return true;
++			}
 +		}
-+		/* last byte, type, is 0x20 for servr type */
-+		memset(ctx->target_rfc1001_name, 0x20, RFC1001_NAME_LEN_WITH_NULL);
-+		for (i = 0; i < RFC1001_NAME_LEN && hostname[i] != 0; i++)
-+			ctx->target_rfc1001_name[i] = toupper(hostname[i]);
-+		kfree(hostname);
- 		break;
- 	case Opt_user:
- 		kfree(ctx->username);
++	}
++	spin_unlock(&cifs_tcp_ses_lock);
++
++	return false;
++}
++
+ struct smb_version_operations smb1_operations = {
+ 	.send_cancel = send_nt_cancel,
+ 	.compare_fids = cifs_compare_fids,
+@@ -1159,6 +1202,7 @@ struct smb_version_operations smb1_operations = {
+ 	.get_acl_by_fid = get_cifs_acl_by_fid,
+ 	.set_acl = set_cifs_acl,
+ 	.make_node = cifs_make_node,
++	.is_network_name_deleted = cifs_is_network_name_deleted,
+ };
+ 
+ struct smb_version_values smb1_values = {
 -- 
 2.20.1
 
