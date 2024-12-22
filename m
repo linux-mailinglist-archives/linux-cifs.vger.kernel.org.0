@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-3721-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3720-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4FC89FA678
-	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:44:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFDE09FA677
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 16:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A451166416
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1F931885D3A
 	for <lists+linux-cifs@lfdr.de>; Sun, 22 Dec 2024 15:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C090D19006B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BEE18E04D;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yu9ec+k7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2as0Tx5"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9816218FC85;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1FC188CC9;
 	Sun, 22 Dec 2024 15:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734882290; cv=none; b=jv9v0SuzvZMzF3nrpalhkZqJvocBQ6/msO+IxtEsuWu44kWlY3ljdnHd+TD9NEBTXJHf8zI3PfEpIMYzkyxQCOsLnUuvwWcxJCeuBiKtdcJTOxUPj7tKLZkYw0TzUN2GbhcEZPqE5LcxuDMXlI6eOlJ1ES1O3/bBpzuRRppjr/Q=
+	t=1734882290; cv=none; b=BuejfDH1+6WPH3vZKQPWuUa5raiU8yHp43EYgvZbgYIMM+nKNkaR/ArCSB1VgCgGj/MgBAy9Xt2SLWspdZ7f3zKVWgwU/VtK7qb+LacllDT1fyCOGLatIhq2XseFxjCMhsN202qGrvkn3d3+4kHD1WV5k9LSCf51QqUxJ0RLB5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734882290; c=relaxed/simple;
-	bh=3onlQYxHbJn5sSsJa75CcVW58TTix8UZLOMI9JMW5UY=;
+	bh=hhLFChl282HxxjSG4TJYO7INCsXhOHPkcVj3YBbRMcA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TBfQUgsNrX611VVeHBrT1cffe16Vh+cmUDYxqA6/BQsMH/N2DEz+GK/PukRRpWZb3mOk53ikfrU/k2G1r913ojwf7VccdCA+N7WXIOuggk91h0oIJtQacQvOEVZ1IS4PoVjba6oHCNeBelUr/uhJiIRBdl8d1glxxqAGOI+mRPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yu9ec+k7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF67BC4CEDD;
+	 MIME-Version:Content-Type; b=s3Q6hx9ATecoNurF7GSNnILONLf5JjLi8F5/cugpPIziqYWFAJolM8lgn4QKWkcnSeXxVLtiSyt9j38z3Li8FY4TLZa/jEUxEKk04MLs+RAhJxeDKI6i663Pnxa6VwKjr/+nsoiywurbRPcE4DRirbN7dgUj/0cvmGb3YWALYno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2as0Tx5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3DBC4CED3;
 	Sun, 22 Dec 2024 15:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734882290;
-	bh=3onlQYxHbJn5sSsJa75CcVW58TTix8UZLOMI9JMW5UY=;
+	bh=hhLFChl282HxxjSG4TJYO7INCsXhOHPkcVj3YBbRMcA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Yu9ec+k73YXeoiaYK8q4DDiLAxjwNaTRYBdnAy2F8Tq59EsWQ6H8KnZmjw1UcPh/6
-	 +6Jn/BAhbN/gk0zoOZ5Rs6Lz8xRlBFeQKzvNDWhKlglS9L/Nb1bX2CQpx+2ABOHect
-	 r+/DFGWJp4uESrbHLXZuMAcds3e7L7Y4z8UdD2U3dJctK3wQKpVnh3CMcWuCd5yjpA
-	 9HqRkkXG8ulmAd1YbQMB3oHzRUOApCaLg7Fx2eWQKRNXLVWYPrCH+u03T7HQmtMYXL
-	 tZO8tvUSQVAMwDooTStBwp2hZ+v4y8tUew3evBEvQ4+M0+ypjVXmsPuVdfu9qa+NCH
-	 zwh3YZinIsoyw==
+	b=F2as0Tx525BoUPcfGFlp0OaBFgCRYfo1fYbircJ1kF/2n9lYLxY8Oc+ux0bMLzrEE
+	 a6n2g5W/GkYqDyshg36aG+Ex2RiX3ZyPZ4k11sevET/zEEQq67CiIUUOgmnuKaaW7+
+	 07tnf4nhsfs8ApLGPWAGh9z3FmalocvDF6FeBG2RgVx4/iFKWOrVkVJC3a6bV3B+hF
+	 eGqytPX74mus39HHyhEZZeqFz0Ogm8tFT62dbvGQfckfkqHc2GAXgBnsn6s6NDuggJ
+	 WxmKnUOp8zwWzdLmyqmKe50beSsr6k1Gfs/0BadXhnXs9GfdeeZZhV9/2PKmIJwkLy
+	 cBh0kJ87IB1Ag==
 Received: by pali.im (Postfix)
-	id 17DC2982; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
+	id 49B01B9A; Sun, 22 Dec 2024 16:44:40 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	Ronnie Sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] cifs: Split parse_reparse_point callback to functions: get buffer and parse buffer
-Date: Sun, 22 Dec 2024 16:43:37 +0100
-Message-Id: <20241222154340.24104-2-pali@kernel.org>
+Subject: [PATCH 2/4] cifs: Add a new xattr system.reparse for querying repase point from SMB server
+Date: Sun, 22 Dec 2024 16:43:38 +0100
+Message-Id: <20241222154340.24104-3-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241222154340.24104-1-pali@kernel.org>
 References: <20241222154340.24104-1-pali@kernel.org>
@@ -64,184 +64,107 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Parsing reparse point buffer is generic for all SMB versions and is already
-implemented by global function parse_reparse_point().
+Currently SMB client fetches and parses only few reparse point types,
+those which directly maps to Linux file types.
 
-Getting reparse point buffer from the SMB response is SMB version specific,
-so introduce for it a new callback get_reparse_point_buffer.
+This change introduce a new xattr system.reparse which allows userspace
+application to query reparse point buffer and then let application to parse
+and handle it as needed.
 
-This functionality split is needed for next change - getting reparse point
-buffer without parsing it.
+Currently only get xattr is implemented. Setting new reparse point,
+changing it or deleting via set xattr is not implemented yet.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifsglob.h |  6 ++----
- fs/smb/client/inode.c    | 11 +++++++----
- fs/smb/client/reparse.c  | 15 +++++----------
- fs/smb/client/reparse.h  |  5 +----
- fs/smb/client/smb1ops.c  | 17 ++++++-----------
- fs/smb/client/smb2ops.c  |  8 ++++----
- 6 files changed, 25 insertions(+), 37 deletions(-)
+ fs/smb/client/xattr.c | 46 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 369458d37f99..d4c60d85d7a4 100644
---- a/fs/smb/client/cifsglob.h
-+++ b/fs/smb/client/cifsglob.h
-@@ -629,10 +629,8 @@ struct smb_version_operations {
- 	bool (*is_status_io_timeout)(char *buf);
- 	/* Check for STATUS_NETWORK_NAME_DELETED */
- 	bool (*is_network_name_deleted)(char *buf, struct TCP_Server_Info *srv);
--	int (*parse_reparse_point)(struct cifs_sb_info *cifs_sb,
--				   const char *full_path,
--				   struct kvec *rsp_iov,
--				   struct cifs_open_info_data *data);
-+	struct reparse_data_buffer * (*get_reparse_point_buffer)(const struct kvec *rsp_iov,
-+								 u32 *plen);
- 	int (*create_reparse_symlink)(const unsigned int xid,
- 				      struct inode *inode,
- 				      struct dentry *dentry,
-diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index ed32d78971f8..b295d161373c 100644
---- a/fs/smb/client/inode.c
-+++ b/fs/smb/client/inode.c
-@@ -1207,10 +1207,13 @@ static int reparse_info_to_fattr(struct cifs_open_info_data *data,
- 		/* Check for cached reparse point data */
- 		if (data->symlink_target || data->reparse.buf) {
- 			rc = 0;
--		} else if (iov && server->ops->parse_reparse_point) {
--			rc = server->ops->parse_reparse_point(cifs_sb,
--							      full_path,
--							      iov, data);
-+		} else if (iov && server->ops->get_reparse_point_buffer) {
-+			struct reparse_data_buffer *reparse_buf;
-+			u32 reparse_len;
+diff --git a/fs/smb/client/xattr.c b/fs/smb/client/xattr.c
+index b88fa04f5792..7fb7662afaea 100644
+--- a/fs/smb/client/xattr.c
++++ b/fs/smb/client/xattr.c
+@@ -39,7 +39,10 @@
+ #define SMB3_XATTR_CREATETIME "smb3.creationtime"  /* user.smb3.creationtime */
+ /* BB need to add server (Samba e.g) support for security and trusted prefix */
+ 
++#define SMB_XATTR_REPARSE "system.reparse"
 +
-+			reparse_buf = server->ops->get_reparse_point_buffer(iov, &reparse_len);
-+			rc = parse_reparse_point(reparse_buf, reparse_len,
-+						 cifs_sb, full_path, data);
- 			/*
- 			 * If the reparse point was not handled but it is the
- 			 * name surrogate which points to directory, then treat
-diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
-index 6ffda4455f9b..f01214d6c5d4 100644
---- a/fs/smb/client/reparse.c
-+++ b/fs/smb/client/reparse.c
-@@ -1096,18 +1096,13 @@ int parse_reparse_point(struct reparse_data_buffer *buf,
- 	}
- }
+ enum { XATTR_USER, XATTR_CIFS_ACL, XATTR_ACL_ACCESS, XATTR_ACL_DEFAULT,
++	XATTR_REPARSE,
+ 	XATTR_CIFS_NTSD_SACL, XATTR_CIFS_NTSD_OWNER,
+ 	XATTR_CIFS_NTSD, XATTR_CIFS_NTSD_FULL };
  
--int smb2_parse_reparse_point(struct cifs_sb_info *cifs_sb,
--			     const char *full_path,
--			     struct kvec *rsp_iov,
--			     struct cifs_open_info_data *data)
-+struct reparse_data_buffer *smb2_get_reparse_point_buffer(const struct kvec *rsp_iov,
-+							  u32 *plen)
- {
--	struct reparse_data_buffer *buf;
- 	struct smb2_ioctl_rsp *io = rsp_iov->iov_base;
--	u32 plen = le32_to_cpu(io->OutputCount);
--
--	buf = (struct reparse_data_buffer *)((u8 *)io +
--					     le32_to_cpu(io->OutputOffset));
--	return parse_reparse_point(buf, plen, cifs_sb, full_path, data);
-+	*plen = le32_to_cpu(io->OutputCount);
-+	return (struct reparse_data_buffer *)((u8 *)io +
-+					      le32_to_cpu(io->OutputOffset));
- }
+@@ -162,6 +165,11 @@ static int cifs_xattr_set(const struct xattr_handler *handler,
+ 		}
+ 		break;
  
- static void wsl_to_fattr(struct cifs_open_info_data *data,
-diff --git a/fs/smb/client/reparse.h b/fs/smb/client/reparse.h
-index 5a753fec7e2c..c17130657def 100644
---- a/fs/smb/client/reparse.h
-+++ b/fs/smb/client/reparse.h
-@@ -119,9 +119,6 @@ int smb2_create_reparse_symlink(const unsigned int xid, struct inode *inode,
- int smb2_mknod_reparse(unsigned int xid, struct inode *inode,
- 		       struct dentry *dentry, struct cifs_tcon *tcon,
- 		       const char *full_path, umode_t mode, dev_t dev);
--int smb2_parse_reparse_point(struct cifs_sb_info *cifs_sb,
--			     const char *full_path,
--			     struct kvec *rsp_iov,
--			     struct cifs_open_info_data *data);
-+struct reparse_data_buffer *smb2_get_reparse_point_buffer(const struct kvec *rsp_iov, u32 *len);
++	case XATTR_REPARSE:
++		/* TODO: Implementing setting, changing and deleting reparse point */
++		rc = -EOPNOTSUPP;
++		break;
++
+ 	case XATTR_CIFS_ACL:
+ 	case XATTR_CIFS_NTSD_SACL:
+ 	case XATTR_CIFS_NTSD_OWNER:
+@@ -319,6 +327,36 @@ static int cifs_xattr_get(const struct xattr_handler *handler,
+ 				full_path, name, value, size, cifs_sb);
+ 		break;
  
- #endif /* _CIFS_REPARSE_H */
-diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
-index 3667fb94cbf5..01a7d6b23c7e 100644
---- a/fs/smb/client/smb1ops.c
-+++ b/fs/smb/client/smb1ops.c
-@@ -993,18 +993,13 @@ static int cifs_query_symlink(const unsigned int xid,
- 	return rc;
- }
++	case XATTR_REPARSE: {
++		struct reparse_data_buffer *reparse_buf;
++		int rsp_buftype = CIFS_NO_BUFFER;
++		struct kvec rsp_iov = {};
++		u32 reparse_len;
++		u32 tag;
++
++		if (!pTcon->ses->server->ops->query_reparse_point)
++			goto out;
++
++		rc = pTcon->ses->server->ops->query_reparse_point(xid, pTcon,
++			cifs_sb, full_path, &tag, &rsp_iov, &rsp_buftype);
++		if (rc)
++			goto out;
++
++		reparse_buf = pTcon->ses->server->ops->get_reparse_point_buffer(&rsp_iov,
++										&reparse_len);
++
++		if (value) {
++			if (reparse_len > size)
++				reparse_len = -ERANGE;
++			else
++				memcpy(value, reparse_buf, reparse_len);
++		}
++		rc = reparse_len;
++
++		free_rsp_buf(rsp_buftype, rsp_iov.iov_base);
++		break;
++	}
++
+ 	case XATTR_CIFS_ACL:
+ 	case XATTR_CIFS_NTSD_SACL:
+ 	case XATTR_CIFS_NTSD_OWNER:
+@@ -448,6 +486,13 @@ static const struct xattr_handler cifs_os2_xattr_handler = {
+ 	.set = cifs_xattr_set,
+ };
  
--static int cifs_parse_reparse_point(struct cifs_sb_info *cifs_sb,
--				    const char *full_path,
--				    struct kvec *rsp_iov,
--				    struct cifs_open_info_data *data)
-+static struct reparse_data_buffer *cifs_get_reparse_point_buffer(const struct kvec *rsp_iov,
-+								 u32 *plen)
- {
--	struct reparse_data_buffer *buf;
- 	TRANSACT_IOCTL_RSP *io = rsp_iov->iov_base;
--	u32 plen = le16_to_cpu(io->ByteCount);
--
--	buf = (struct reparse_data_buffer *)((__u8 *)&io->hdr.Protocol +
--					     le32_to_cpu(io->DataOffset));
--	return parse_reparse_point(buf, plen, cifs_sb, full_path, data);
-+	*plen = le16_to_cpu(io->ByteCount);
-+	return (struct reparse_data_buffer *)((__u8 *)&io->hdr.Protocol +
-+					      le32_to_cpu(io->DataOffset));
- }
- 
- static bool
-@@ -1139,7 +1134,7 @@ struct smb_version_operations smb1_operations = {
- 	.rename = CIFSSMBRename,
- 	.create_hardlink = CIFSCreateHardLink,
- 	.query_symlink = cifs_query_symlink,
--	.parse_reparse_point = cifs_parse_reparse_point,
-+	.get_reparse_point_buffer = cifs_get_reparse_point_buffer,
- 	.open = cifs_open_file,
- 	.set_fid = cifs_set_fid,
- 	.close = cifs_close_file,
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 87cb1872db28..0a91f18d4a54 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -5270,7 +5270,7 @@ struct smb_version_operations smb20_operations = {
- 	.unlink = smb2_unlink,
- 	.rename = smb2_rename_path,
- 	.create_hardlink = smb2_create_hardlink,
--	.parse_reparse_point = smb2_parse_reparse_point,
-+	.get_reparse_point_buffer = smb2_get_reparse_point_buffer,
- 	.query_mf_symlink = smb3_query_mf_symlink,
- 	.create_mf_symlink = smb3_create_mf_symlink,
- 	.create_reparse_symlink = smb2_create_reparse_symlink,
-@@ -5373,7 +5373,7 @@ struct smb_version_operations smb21_operations = {
- 	.unlink = smb2_unlink,
- 	.rename = smb2_rename_path,
- 	.create_hardlink = smb2_create_hardlink,
--	.parse_reparse_point = smb2_parse_reparse_point,
-+	.get_reparse_point_buffer = smb2_get_reparse_point_buffer,
- 	.query_mf_symlink = smb3_query_mf_symlink,
- 	.create_mf_symlink = smb3_create_mf_symlink,
- 	.create_reparse_symlink = smb2_create_reparse_symlink,
-@@ -5480,7 +5480,7 @@ struct smb_version_operations smb30_operations = {
- 	.unlink = smb2_unlink,
- 	.rename = smb2_rename_path,
- 	.create_hardlink = smb2_create_hardlink,
--	.parse_reparse_point = smb2_parse_reparse_point,
-+	.get_reparse_point_buffer = smb2_get_reparse_point_buffer,
- 	.query_mf_symlink = smb3_query_mf_symlink,
- 	.create_mf_symlink = smb3_create_mf_symlink,
- 	.create_reparse_symlink = smb2_create_reparse_symlink,
-@@ -5596,7 +5596,7 @@ struct smb_version_operations smb311_operations = {
- 	.unlink = smb2_unlink,
- 	.rename = smb2_rename_path,
- 	.create_hardlink = smb2_create_hardlink,
--	.parse_reparse_point = smb2_parse_reparse_point,
-+	.get_reparse_point_buffer = smb2_get_reparse_point_buffer,
- 	.query_mf_symlink = smb3_query_mf_symlink,
- 	.create_mf_symlink = smb3_create_mf_symlink,
- 	.create_reparse_symlink = smb2_create_reparse_symlink,
++static const struct xattr_handler cifs_reparse_xattr_handler = {
++	.name = SMB_XATTR_REPARSE,
++	.flags = XATTR_REPARSE,
++	.get = cifs_xattr_get,
++	.set = cifs_xattr_set,
++};
++
+ static const struct xattr_handler cifs_cifs_acl_xattr_handler = {
+ 	.name = CIFS_XATTR_CIFS_ACL,
+ 	.flags = XATTR_CIFS_ACL,
+@@ -525,6 +570,7 @@ static const struct xattr_handler smb3_ntsd_full_xattr_handler = {
+ const struct xattr_handler * const cifs_xattr_handlers[] = {
+ 	&cifs_user_xattr_handler,
+ 	&cifs_os2_xattr_handler,
++	&cifs_reparse_xattr_handler,
+ 	&cifs_cifs_acl_xattr_handler,
+ 	&smb3_acl_xattr_handler, /* alias for above since avoiding "cifs" */
+ 	&smb3_ntsd_sacl_xattr_handler,
 -- 
 2.20.1
 
