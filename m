@@ -1,56 +1,56 @@
-Return-Path: <linux-cifs+bounces-3786-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3789-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F1B9FF202
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:37:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9F5C9FF205
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:37:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6A391882AAB
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:37:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDA053A1C74
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDDC1B423B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1661B4245;
 	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLl/i9jq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0yE85i/"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1694E1B043E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DDF1B422D;
 	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735684630; cv=none; b=t1kpUiy9vTbnjb19/PKELxsSFkkHJzIhxIqCO0UiuDWmGbratwtW3g7a0+Cda226+ixrEkpS/hWJrALj5StWNt+DiQuMAQurmt3BhbZsnzHI8wT4slx55toAgtjFByBqFe3otzaHIuoP0iEL5qgbFygsyjyo/4nXDn0zZu9ds9c=
+	t=1735684630; cv=none; b=JiXNYzPd0Tnm1YyX/lPiKaqypk6j4aPdKI2JPCAZjJjk9coIRHFEXThnovKs/S2EcIYNkWB7d+DWUAPh3eycE4D8/uoXP2kPPNeX6HF9Rl4ayw5ObVgNzBgPuZHui1D2oC/pxnxGhYV0vfOXLId9julOWxO9WyEvKiaki7d7UKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735684630; c=relaxed/simple;
-	bh=y8jvzkyAzxyNwmUGiUFU/ZrZFKeYb2sh7YIJFEf7HB8=;
+	bh=l0Utkx3SUgSbQuWV7cfRUZJv8R3Vj8FAI5oHLPywygY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WVvrA2uW4zICrizETuB5PKsJW2ULZ8niF3ZuTC4Q3op9wsEKwq37Pp8hHFA4yht++gfUSQnVWmOD3ZG8CmYaGmHs3EhGlWC4xseQr7rZqNKasxjgU103O0b0YQDezVry6t+RozfHGSeUfEyKrRyoDahqY7oHkS9+knB/YsPTY5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLl/i9jq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E27C4CEDD;
+	 MIME-Version:Content-Type; b=GAyWC+pV3gpE1oBzYYYZE+pl7DLwlKdQEEKCy5XV9K/IkF5Ijr2v4wAmqPtNisylBBBu2VK1F8IwZyqEbvRJo+p7bv/m4J/eFRXdAQHl+xHM7YyAIe3+ja8Q8UZ6mIWC7ZOy8R8aIbVl1ofFsOqEE/7DDxkl3vFpJ72fcU9Mwrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0yE85i/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E468DC4CEE0;
 	Tue, 31 Dec 2024 22:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1735684630;
-	bh=y8jvzkyAzxyNwmUGiUFU/ZrZFKeYb2sh7YIJFEf7HB8=;
+	bh=l0Utkx3SUgSbQuWV7cfRUZJv8R3Vj8FAI5oHLPywygY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gLl/i9jqiCdV9ki4y6XNyFPjqjxl3quCZMB897JpN6RgNfze9zROc7VAelBNQ91YU
-	 M6GA+SZPLIzonllwazQcZHF49QaeOy8/sbjb1ursumBobX1KsLL5BkOZ2FcBMQ8xQ5
-	 eO91dkSQxvBYuGVVfwiEsZi9d6DT3xSo6RDfopSx5JXxKDl67l3MD5auchQf8hb1Sv
-	 zTogvAqctOrxqIKYfkETtnQajw5q4oDDQrCWrYS6Ldi1A+Obx3gplOfkug/ktjIJsp
-	 n5nKOUnK35Jc1Hz888yP4mn4p4cSFRobsZH8fCBSWsyXJ6F+NiSXK7TRp2UZmhzEbq
-	 Bscp2iOUn+YmA==
+	b=A0yE85i/RvaaJAxHnFBCGmrxcKnFJNcFhELP6Ae76/iJDqUZZbjDekzVqxN7Mx+/1
+	 qu2+C41k+xmHCYop8/lYXRLYdMCVY6Z8WYebKEbRiRmiBaulb7PhOv5047D4yhtTuh
+	 MtP7Q0zNIoFGdnxYmGrUVmuYa5ebt4GSOw9AAx7mb/4AjHqXemNwRai/ierquTUUjR
+	 y//F57uouLfXpahJMwxgqwAtJqnYH9S+owQ7RESG0mim7FgFP0SmgV4ldPv4HkCvC1
+	 xsevuaWQ5pp8dZNXMrrrTmT4DUgQsJrWPnqdwS+H2YoUiYllYBh2abJTGn1C5ZPLca
+	 mEXeRHBKGz/1Q==
 Received: by pali.im (Postfix)
-	id 9698DC2E; Tue, 31 Dec 2024 23:37:00 +0100 (CET)
+	id B1BE2D12; Tue, 31 Dec 2024 23:37:00 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 04/12] cifs: Fix and improve cifs_is_path_accessible() function
-Date: Tue, 31 Dec 2024 23:36:34 +0100
-Message-Id: <20241231223642.15722-4-pali@kernel.org>
+Subject: [PATCH 05/12] cifs: Fix cifs_query_path_info() for Windows NT servers
+Date: Tue, 31 Dec 2024 23:36:35 +0100
+Message-Id: <20241231223642.15722-5-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241231223642.15722-1-pali@kernel.org>
 References: <20241231223642.15722-1-pali@kernel.org>
@@ -63,68 +63,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Do not call SMBQueryInformation() command for path with SMB wildcard
-characters on non-UNICODE connection because server expands wildcards.
-Function cifs_is_path_accessible() needs to check if the real path exists
-and must not expand wildcard characters.
+For TRANS2 QUERY_PATH_INFO request when the path does not exist, the
+Windows NT SMB server returns error response STATUS_OBJECT_NAME_NOT_FOUND
+or ERRDOS/ERRbadfile without the SMBFLG_RESPONSE flag set. Similarly it
+returns STATUS_DELETE_PENDING when the file is being deleted. And looks
+like that any error response from TRANS2 QUERY_PATH_INFO does not have
+SMBFLG_RESPONSE flag set.
 
-Do not dynamically allocate memory for small FILE_ALL_INFO structure and
-instead allocate it on the stack. This structure is allocated on stack by
-all other functions.
+So relax check in check_smb_hdr() for detecting if the packet is response
+for this special case.
 
-When CAP_NT_SMBS was not negotiated then do not issue CIFSSMBQPathInfo()
-command. This command returns failure by non-NT Win9x SMB servers, so there
-is no need try it. The purpose of cifs_is_path_accessible() function is
-just to check if the path is accessible, so SMBQueryInformation() for old
-servers is enough.
+This change fixes stat() operation against Windows NT SMB servers and also
+all operations which depends on -ENOENT result from stat like creat() or
+mkdir().
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb1ops.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ fs/smb/client/misc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
-index d959097ec2d2..bef8e03edf1d 100644
---- a/fs/smb/client/smb1ops.c
-+++ b/fs/smb/client/smb1ops.c
-@@ -520,21 +520,27 @@ static int
- cifs_is_path_accessible(const unsigned int xid, struct cifs_tcon *tcon,
- 			struct cifs_sb_info *cifs_sb, const char *full_path)
- {
--	int rc;
--	FILE_ALL_INFO *file_info;
-+	int rc = -EOPNOTSUPP;
-+	FILE_ALL_INFO file_info;
+diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
+index 4373dd64b66d..5122f3895dfc 100644
+--- a/fs/smb/client/misc.c
++++ b/fs/smb/client/misc.c
+@@ -323,6 +323,14 @@ check_smb_hdr(struct smb_hdr *smb)
+ 	if (smb->Command == SMB_COM_LOCKING_ANDX)
+ 		return 0;
  
--	file_info = kmalloc(sizeof(FILE_ALL_INFO), GFP_KERNEL);
--	if (file_info == NULL)
--		return -ENOMEM;
-+	if (tcon->ses->capabilities & CAP_NT_SMBS)
-+		rc = CIFSSMBQPathInfo(xid, tcon, full_path, &file_info,
-+				      0 /* not legacy */, cifs_sb->local_nls,
-+				      cifs_remap(cifs_sb));
- 
--	rc = CIFSSMBQPathInfo(xid, tcon, full_path, file_info,
--			      0 /* not legacy */, cifs_sb->local_nls,
--			      cifs_remap(cifs_sb));
 +	/*
-+	 * Non-UNICODE variant of fallback functions below expands wildcards,
-+	 * so they cannot be used for querying paths with wildcard characters.
-+	 * Therefore for such paths returns -ENOENT as they cannot exist.
++	 * Windows NT server returns error resposne (e.g. STATUS_DELETE_PENDING
++	 * or STATUS_OBJECT_NAME_NOT_FOUND or ERRDOS/ERRbadfile or any other)
++	 * for some TRANS2 requests without the RESPONSE flag set in header.
 +	 */
-+	if ((rc == -EOPNOTSUPP || rc == -EINVAL) &&
-+	    !(tcon->ses->capabilities & CAP_UNICODE) &&
-+	    strpbrk(full_path, "*?\"><"))
-+		rc = -ENOENT;
- 
- 	if (rc == -EOPNOTSUPP || rc == -EINVAL)
--		rc = SMBQueryInformation(xid, tcon, full_path, file_info,
-+		rc = SMBQueryInformation(xid, tcon, full_path, &file_info,
- 				cifs_sb->local_nls, cifs_remap(cifs_sb));
--	kfree(file_info);
- 	return rc;
- }
- 
++	if (smb->Command == SMB_COM_TRANSACTION2 && smb->Status.CifsError != 0)
++		return 0;
++
+ 	cifs_dbg(VFS, "Server sent request, not response. mid=%u\n",
+ 		 get_mid(smb));
+ 	return 1;
 -- 
 2.20.1
 
