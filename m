@@ -1,56 +1,59 @@
-Return-Path: <linux-cifs+bounces-3779-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3777-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B07F09FF1F2
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:35:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A38E69FF1F1
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D69D33A303D
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6419A1617A5
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D3E1B043A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF01A1B0F38;
 	Tue, 31 Dec 2024 22:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWLvjDcN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3A4xnJa"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54941B0428;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53D9170A11;
 	Tue, 31 Dec 2024 22:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735684551; cv=none; b=FPslXCIcCtGGIgfQpanp7TDaVpFXYlXAsDosSKQj7ed0rEkKBImrAKRiDrZjsYlXbt7bRHstoJUwb41fqZyfVyxxhd+Gj6LhHLeg7KfWQEC5l+cRa/WsQEydx4UrbEts+m9hj8yJ7jloCMwlUV39Gw7lA6rQwpMY7SYyHUlxsgQ=
+	t=1735684551; cv=none; b=WsdvnakFHObas8qEZ7x6p4+AaTDvtakb0A3PvQ++MK3GGJuMwctF4wiKE8MmDLLX8yeJ/YJr4Te/warzhiSC9QE8sBtX6STFqRfJfFZaPpIQmDKDPkidyiNAEJ9BPoEWVCZ3IHa+9mUxumHtXlLErw4oRYF3q9/gF6k27HQRX3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735684551; c=relaxed/simple;
-	bh=W8c5iBpRMEjpMq8Amb2dRFJttRR277+4BAcA8bSbu3A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=MZMOW+UjnYF81O5PQjUDvnCIAaYGg6lbAhlQQjd4ra+TjY8oBENwgEL6YFDdq4xPqIhYdV2KqAoAhVBfzjnhhUVZpsJgyzL7Nd3z5+IaW3NrpBkWnoQ8G3fiqVuU7lBUZYUmjq2uf2lSfunJrP4NikbPC0YmeNoHXGNKpDHVBAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWLvjDcN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C385C4CED2;
+	bh=2lN8Yf08Rc70bynorQlGAxZReDCriIUXlHP9bvzS+l0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S67urFmL+cdYBbfBERLwty3DxD5Nw8HkikD7cxhKlmkCnbD0As6cBACNw7s88BU7O1Hs5hH2WWUnY0bcoFjWlExoZPqHHtUjrUbvHMil82X3eNqmfpZsGlF9WFnf7oGbgqvVbFZLEe4gydWcJjeDPkWO0vMXxBsAzVbWtyfP73I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3A4xnJa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFB9C4CEDE;
 	Tue, 31 Dec 2024 22:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1735684551;
-	bh=W8c5iBpRMEjpMq8Amb2dRFJttRR277+4BAcA8bSbu3A=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HWLvjDcN3s68YRcoPcwSx9m4MdjxaUlYzWMgHuJLKYF/rk3h2FYY38iD9HgYeuxh1
-	 v5y9G65dLu2+aV7432o2onjokC5pxwIF6pVNySQE4XI01ilW2dKR/o/h7SohSYYmdg
-	 lFZkfHBcf2mdxYoEAl//G036mrrDu/YU5/bxZtKRYcNQkkhS4A7fQDIRc+ak/CyUg3
-	 kn2m/vn72nP0UQEuGBtzE8O1EDP5FAV06b4fXvH6Fmu4bK2Idv1MjHvt5qPgJY3RDD
-	 R/rMv494CeTMpownQtw5TtyTmTzKujGpDNvFk8tKCrdLEgQq9bBcyFhwjpt00225bM
-	 9t0MV86hakzGg==
+	bh=2lN8Yf08Rc70bynorQlGAxZReDCriIUXlHP9bvzS+l0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=N3A4xnJa7xBLMk3EfYXeaOBEcaht0HgzjFqXnVnhSPReM4SDF3Vpe2PUj3ukM0xle
+	 e8YPVkC/vp5PC1sgq6d3NssSdGzi/PLQbtKlJqQ5MzTasx+3B70d0SL6Vgxs7vL0KJ
+	 nZxcBMyehlt69qvXythBVhmxmjbHxPye1KJZt+O/16SALuN61oeiMvHo6/nTHwy+Od
+	 K4UEuyi7WvEWXu3SfH7wFPbQm3xJf48/KJlV6etaXHu2P2G6IzcNkp5VxlD++AcfN3
+	 fu/KB4gE5RRi/0GkP+pk77swPUIkWNVrdm04Mm3+ZiVmmU2+dTlg2oPA3MX0pwNvTw
+	 Ycp1xNVBe7YNQ==
 Received: by pali.im (Postfix)
-	id BC23D97E; Tue, 31 Dec 2024 23:35:40 +0100 (CET)
+	id D8B35983; Tue, 31 Dec 2024 23:35:40 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] cifs: Fix access_flags_to_smbopen_mode
-Date: Tue, 31 Dec 2024 23:35:10 +0100
-Message-Id: <20241231223514.15595-1-pali@kernel.org>
+Subject: [PATCH 2/5] cifs: Do not add FILE_READ_ATTRIBUTES when using GENERIC_READ/EXECUTE/ALL
+Date: Tue, 31 Dec 2024 23:35:11 +0100
+Message-Id: <20241231223514.15595-2-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241231223514.15595-1-pali@kernel.org>
+References: <20241231223514.15595-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -60,58 +63,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When converting access_flags to SMBOPEN mode, check for all possible access
-flags, not only GENERIC_READ and GENERIC_WRITE flags.
+Individual bits GENERIC_READ, GENERIC_EXECUTE and GENERIC_ALL have meaning
+which includes also access right for FILE_READ_ATTRIBUTES. So specifying
+FILE_READ_ATTRIBUTES bit together with one of those GENERIC (except
+GENERIC_WRITE) does not do anything.
+
+This change prevents calling additional (fallback) code and sending more
+requests without FILE_READ_ATTRIBUTES when the primary request fails on
+-EACCES, as it is not needed at all.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifssmb.c | 32 ++++++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+ fs/smb/client/smb2file.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index dd71c4c8f776..604e204e3f57 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -1024,15 +1024,31 @@ static __u16 convert_disposition(int disposition)
- static int
- access_flags_to_smbopen_mode(const int access_flags)
- {
--	int masked_flags = access_flags & (GENERIC_READ | GENERIC_WRITE);
--
--	if (masked_flags == GENERIC_READ)
--		return SMBOPEN_READ;
--	else if (masked_flags == GENERIC_WRITE)
-+	/*
-+	 * SYSTEM_SECURITY grants both read and write access to SACL, treat is as read/write.
-+	 * MAXIMUM_ALLOWED grants as many access as possible, so treat it as read/write too.
-+	 * SYNCHRONIZE as is does not grant any specific access, so do not check its mask.
-+	 * If only SYNCHRONIZE bit is specified then fallback to read access.
-+	 */
-+	bool with_write_flags = access_flags & (FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_WRITE_EA |
-+						FILE_DELETE_CHILD | FILE_WRITE_ATTRIBUTES | DELETE |
-+						WRITE_DAC | WRITE_OWNER | SYSTEM_SECURITY |
-+						MAXIMUM_ALLOWED | GENERIC_WRITE | GENERIC_ALL);
-+	bool with_read_flags = access_flags & (FILE_READ_DATA | FILE_READ_EA | FILE_EXECUTE |
-+						FILE_READ_ATTRIBUTES | READ_CONTROL |
-+						SYSTEM_SECURITY | MAXIMUM_ALLOWED | GENERIC_ALL |
-+						GENERIC_EXECUTE | GENERIC_READ);
-+	bool with_execute_flags = access_flags & (FILE_EXECUTE | MAXIMUM_ALLOWED | GENERIC_ALL |
-+						GENERIC_EXECUTE);
-+
-+	if (with_write_flags && with_read_flags)
-+		return SMBOPEN_READWRITE;
-+	else if (with_write_flags)
- 		return SMBOPEN_WRITE;
--
--	/* just go for read/write */
--	return SMBOPEN_READWRITE;
-+	else if (with_execute_flags)
-+		return SMBOPEN_EXECUTE;
-+	else
-+		return SMBOPEN_READ;
- }
+diff --git a/fs/smb/client/smb2file.c b/fs/smb/client/smb2file.c
+index 1476cb824ae4..0f3d20b597d6 100644
+--- a/fs/smb/client/smb2file.c
++++ b/fs/smb/client/smb2file.c
+@@ -158,7 +158,16 @@ int smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms, __u32
+ 	if (smb2_path == NULL)
+ 		return -ENOMEM;
  
- int
++	/*
++	 * GENERIC_READ, GENERIC_EXECUTE, GENERIC_ALL and MAXIMUM_ALLOWED
++	 * contains also FILE_READ_ATTRIBUTES access right. So do not append
++	 * FILE_READ_ATTRIBUTES when not needed and prevent calling code path
++	 * for retry_without_read_attributes.
++	 */
+ 	if (!(oparms->desired_access & FILE_READ_ATTRIBUTES) &&
++	    !(oparms->desired_access & GENERIC_READ) &&
++	    !(oparms->desired_access & GENERIC_EXECUTE) &&
++	    !(oparms->desired_access & GENERIC_ALL) &&
+ 	    !(oparms->desired_access & MAXIMUM_ALLOWED)) {
+ 		oparms->desired_access |= FILE_READ_ATTRIBUTES;
+ 		retry_without_read_attributes = true;
 -- 
 2.20.1
 
