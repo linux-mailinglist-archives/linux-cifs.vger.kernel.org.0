@@ -1,56 +1,56 @@
-Return-Path: <linux-cifs+bounces-3787-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3788-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD6C9FF203
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 467639FF204
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE9831882AB7
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:37:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A5ED1881975
+	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415171B4241;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 434891B4238;
 	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q2/cBQpl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jQs/EV76"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196261B2EFB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1968B1B4124;
 	Tue, 31 Dec 2024 22:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735684630; cv=none; b=OUJ2BEpnbEz2cO4e2kJtw6R4czZxFLZudpUNRVmJRUWRJm3+vsQWgII59JgYUYX/nzBqtYdWZzoEnAcdNb1omGY1s9q/LPoe6DflG0VVTtCYcSzlzC7tD6icjPTePHHPbuNer68gV06uUWM+4RlpgQ3KtQw2Q3cxFoH4JGw1aKc=
+	t=1735684630; cv=none; b=d2VP69XHeOh4+//tFeNLZgszrCAOFITEKPROMHNxIhrjOH3ZgcGSxfoYvCo0t1bFbY+CnRmKNpeML7QcvWIovl7D83rqyaQeu/nC4hjR2roDQfY+OWKoqt9W9B1pKuKK69ONscTfuwcJnBiOMbGcxgTxtTB0+A5xytJ1WUM1hIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735684630; c=relaxed/simple;
-	bh=6GSndX9vgk1Jj7hX2LSrDyaH6Z1T2mZF8OG3lq2E9Yo=;
+	bh=qeIuosm52zyCma7WnhBPMzKwH4sWBW0yo2xCyxH0MpI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nW+19J1A/cCLOFCh2gOobRKQd+gdjE3dvEIzizo/czZKnPyYUazP5gvORMn/V5cqNORYnhfS8SKaTzTWi4+Q/bu7c4Tmw8nZhxDj0kIslHrKYkIx6RNeMNbLlEad8RZZ5qLPwG31+rUG6o8lXkbOAYDQFGUY7aKVPYY8459XlVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q2/cBQpl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDEFC4CED6;
+	 MIME-Version:Content-Type; b=X2CTX0oKYJpO8761zojuSxiEFejufSzHKvZ4wdx3ZN2/ZyCGC51Elr//XYnkhlAIzbRGejJ2vk7NE4N1wl278cRn4JIYq5DJIAGwmhQc/Z8MLD3iq7y0OZxmG+1MqXJUq9Hp3bHaAQUKXSHiPHAfidtUXVCuO5oFNOu3PsW88oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jQs/EV76; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D43C4CEDE;
 	Tue, 31 Dec 2024 22:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1735684629;
-	bh=6GSndX9vgk1Jj7hX2LSrDyaH6Z1T2mZF8OG3lq2E9Yo=;
+	bh=qeIuosm52zyCma7WnhBPMzKwH4sWBW0yo2xCyxH0MpI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q2/cBQplPCrFqdBs0EfzoJG6/668qmnaEAwXcB9bRNo1hqv6aPp4aMlwUzGFhJX6/
-	 EsZX01WBSYz11BQSodzhAifOGWlcbtKpVRzL7yLeex4alTck+m1EveWVnv9Bk6O15K
-	 iEqasx5NUFeVdG+1qDagHSwu1jzO5VWs3WYBNoVtVvW3ONH8hWS10Fdcebyp3SxJyi
-	 ewcbR80WU5uE0VVBMwp7jfwAkWH3Pqtfd1aPpr5gif51Z1FA4F7NvDlMgvEpipY6CV
-	 5ayHUwnfo2DuyL0JDw4Xe60BcpDPdyd744IlW7aoX5gaL0sUqwQdRDfYV1nUjo5No+
-	 kqniKm0hDKs0Q==
+	b=jQs/EV76vlGzoTfAno8Y9kBSDzSQyzRpRNrxPhdQkFLVRXY0dzgigPMyp6FsuhOxF
+	 PZOMDf/bKhPlfsiz1C2dZUhsAtanccn5QWMnOABxQfTiStZEaLRJMCA7G0mbHMHt5K
+	 TLczRRsHvMnDeCuXIvJ93NQuWeSsbeN6NWQuDEVXoETG0guXpzvL3QM4NLnBJslFD9
+	 fW1LgH/UWRmPCBlCAIs6knVvwujVekFjr2SYpNiLVuCoUy/V5GQBalsNV6BW7ziRKS
+	 SQwjjt5xtWVzDJIoLSvsNFXrflQoAUGr0sjSS1gYLMfb2HE/vJ2sO+1vMTu/Qk/7dm
+	 IibLmdzjWVucg==
 Received: by pali.im (Postfix)
-	id 601A6983; Tue, 31 Dec 2024 23:37:00 +0100 (CET)
+	id 7C7B898C; Tue, 31 Dec 2024 23:37:00 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 02/12] cifs: Fix calling CIFSFindFirst() for root path without msearch
-Date: Tue, 31 Dec 2024 23:36:32 +0100
-Message-Id: <20241231223642.15722-2-pali@kernel.org>
+Subject: [PATCH 03/12] cifs: Optimize CIFSFindFirst() response when not searching
+Date: Tue, 31 Dec 2024 23:36:33 +0100
+Message-Id: <20241231223642.15722-3-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241231223642.15722-1-pali@kernel.org>
 References: <20241231223642.15722-1-pali@kernel.org>
@@ -63,43 +63,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-To query root path (without msearch wildcard) it is needed to
-send pattern "\" instead of "" (empty string).
-
-This allows to use CIFSFindFirst() to query information about root path.
+When not searching for child entries with msearch wildcard pattern then ask
+server just for one output entry. There is no need to ask for more entries
+as we are interested only for one search result, as we are doing query on
+path.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifssmb.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ fs/smb/client/cifssmb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 604e204e3f57..7c42a0651138 100644
+index 7c42a0651138..c0dc404e27b3 100644
 --- a/fs/smb/client/cifssmb.c
 +++ b/fs/smb/client/cifssmb.c
-@@ -4108,6 +4108,12 @@ CIFSFindFirst(const unsigned int xid, struct cifs_tcon *tcon,
- 			pSMB->FileName[name_len] = 0;
- 			pSMB->FileName[name_len+1] = 0;
- 			name_len += 2;
-+		} else if (!searchName[0]) {
-+			pSMB->FileName[0] = CIFS_DIR_SEP(cifs_sb);
-+			pSMB->FileName[1] = 0;
-+			pSMB->FileName[2] = 0;
-+			pSMB->FileName[3] = 0;
-+			name_len = 4;
- 		}
- 	} else {
- 		name_len = copy_path_name(pSMB->FileName, searchName);
-@@ -4119,6 +4125,10 @@ CIFSFindFirst(const unsigned int xid, struct cifs_tcon *tcon,
- 			pSMB->FileName[name_len] = '*';
- 			pSMB->FileName[name_len+1] = 0;
- 			name_len += 2;
-+		} else if (!searchName[0]) {
-+			pSMB->FileName[0] = CIFS_DIR_SEP(cifs_sb);
-+			pSMB->FileName[1] = 0;
-+			name_len = 2;
- 		}
- 	}
+@@ -4155,7 +4155,7 @@ CIFSFindFirst(const unsigned int xid, struct cifs_tcon *tcon,
+ 	pSMB->SearchAttributes =
+ 	    cpu_to_le16(ATTR_READONLY | ATTR_HIDDEN | ATTR_SYSTEM |
+ 			ATTR_DIRECTORY);
+-	pSMB->SearchCount = cpu_to_le16(CIFSMaxBufSize/sizeof(FILE_UNIX_INFO));
++	pSMB->SearchCount = cpu_to_le16(msearch ? CIFSMaxBufSize/sizeof(FILE_UNIX_INFO) : 1);
+ 	pSMB->SearchFlags = cpu_to_le16(search_flags);
+ 	pSMB->InformationLevel = cpu_to_le16(psrch_inf->info_level);
  
 -- 
 2.20.1
