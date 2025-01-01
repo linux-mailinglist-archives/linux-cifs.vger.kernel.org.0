@@ -1,59 +1,56 @@
-Return-Path: <linux-cifs+bounces-3793-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3797-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178E59FF20A
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 23:37:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F9D29FF418
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jan 2025 14:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D54391619E0
-	for <lists+linux-cifs@lfdr.de>; Tue, 31 Dec 2024 22:37:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 370E8161940
+	for <lists+linux-cifs@lfdr.de>; Wed,  1 Jan 2025 13:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E84AE1B87D6;
-	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1FFB1C6F55;
+	Wed,  1 Jan 2025 13:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pRFw+9ZP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCrhijPG"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D771B87F2;
-	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7502119;
+	Wed,  1 Jan 2025 13:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735684630; cv=none; b=EEeoXvUnBbjKkEyJ1aX7pzOEIAeNmrtY6FPn3r4A7lOd0S7N0lRfmHS/vrHkbczcoD7fYt5xjI5RDgBS9dP4C88whaYQc1iUQhxB/FKsmXvtGT/5lrZe/O5YJeYwkKgEsTIZmRijO5I6a/eP3bVvW/UVGXi61AXFdtYW5TWUmRM=
+	t=1735736962; cv=none; b=TWcvGiywIWuYlWplPhvPGgY1m4p+2zDwAy8iNbBXKn562D1Ya/fsZZt1amxa/B2aY6sXk12FkN+sWNFtHAjaf5rRJeaTGj8+T0cbQX4rRGaYKlVKhm4zzZeBq/zt0kvcRNHJKfF/lsrnxYef2qEl8OVsUHgaJ7jOl0oG+/9edHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735684630; c=relaxed/simple;
-	bh=s1tawBVkNDFFClcfOVkRnxGeBPnAEZaUi3saaIWPAj4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YJlVYkeLGy5TKQmGHsE9hgeMEVlwYt6ZvzY9FNZ3hdoR6kJQ1RuZg3mVxLeYjIGtMZSiZVcUVgEKl7sVIXEYsbAiJWwlKszIWeATueDhRmNbo+NiIIktLcsF26lSiEqiAtq+crvkWA6tQsxznNypZgGeU36ZOxZ7cJmPWki3i6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pRFw+9ZP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF45C4CEDD;
-	Tue, 31 Dec 2024 22:37:10 +0000 (UTC)
+	s=arc-20240116; t=1735736962; c=relaxed/simple;
+	bh=BNVwtbOyUhp7c6NZcCDqIDu9h8NZS8dM/pr8tkCpEtQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=rsF0E99CbvKMmZy/AXlw+cXnmVmulWdyymlQ+dhSnJY3nwTwWFvKZVO0BHQEXnC2bn0UNx8ZiYVtxslxdKuCB4hIMeb7gO0SJ6ioqyNezuTncM0cvZWFZODEg0rJxs2EzUs5Pnf0KGDpoKv12NNRl0pe6jRNDZ3O2IZdDs9upzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCrhijPG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D259EC4CED1;
+	Wed,  1 Jan 2025 13:09:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735684630;
-	bh=s1tawBVkNDFFClcfOVkRnxGeBPnAEZaUi3saaIWPAj4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pRFw+9ZPNoC9wIIIUgv0pdhrfLre83v/2u+3QHLqgZDqHJOT4hc1h1LdLAe5mexzP
-	 L8BNil5pdUxVDjevODS16HR0bYW/KmUExS1DICxppSegb+RIdp5nnlfX1hycuAg3uE
-	 t9h/C5x4w8ZRODM7RT/sbL4YCIXDWfj54NJBqbJjQP/m3z5yFkBGbMNlKxehc2NT9H
-	 pkzCUdTqLu4am7Q+4X4URtA/Dd/XYb7aeMmlAikAu1iVG374GNrkIuf+wR5GeFMg1Y
-	 iUa77bF6MMqnZq2cMCx9Cr4lWfqGdo2QHIxA+6IHlKqB+00kK9o1ndWW7vMsT6QOyx
-	 i+Mu5IOotJPLQ==
+	s=k20201202; t=1735736962;
+	bh=BNVwtbOyUhp7c6NZcCDqIDu9h8NZS8dM/pr8tkCpEtQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fCrhijPGQuelKT5NjfRJUFzyvN7NBfNn/3NbI9OA2Ae0ZixWr3YgC5YkK0QcegAS/
+	 tCsQM6ElnQEOhCf1J06kvW/Cw59nVqL7b6nB+EjOe5ishuK/rVBXoNEgfdcaQDYOP/
+	 ScB2vxObe+p7NtCN8qwag5hXCJmwxhoS0i3FYIg928VJ482hHoq0wYsg9c7WxniqcN
+	 0y3Z1G7AO3c+A/hslaYDDq8beBkAlN9lZevwCg8x0mn+2kscOCvkGl/+Cf6RQtkpMC
+	 D1L6OkOwX73EvjZojMjdUt7fRxvPmpmPQsQyUKX7SkzrOMcNrJmUSisM8nTgHLTw0D
+	 RL9tU41hWW5RQ==
 Received: by pali.im (Postfix)
-	id 993D6FEC; Tue, 31 Dec 2024 23:37:01 +0100 (CET)
+	id 4BEF2768; Wed,  1 Jan 2025 14:09:11 +0100 (CET)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 12/12] cifs: Remove CIFSSMBSetPathInfoFB() fallback function
-Date: Tue, 31 Dec 2024 23:36:42 +0100
-Message-Id: <20241231223642.15722-12-pali@kernel.org>
+Subject: [PATCH] cifs: Correctly set SMB1 SessionKey field in Session Setup Request
+Date: Wed,  1 Jan 2025 14:07:34 +0100
+Message-Id: <20250101130734.19846-1-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241231223642.15722-1-pali@kernel.org>
-References: <20241231223642.15722-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -63,75 +60,94 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This fallback function CIFSSMBSetPathInfoFB() is called only from
-CIFSSMBSetPathInfo() function. CIFSSMBSetPathInfo() is used in
-smb_set_file_info() which contains all required fallback code, including
-fallback via filehandle.
+[MS-CIFS] specification in section 2.2.4.53.1 where is described
+SMB_COM_SESSION_SETUP_ANDX Request, for SessionKey field says:
 
-So the CIFSSMBSetPathInfoFB() is just code duplication, which is not needed
-anymore. Therefore remove it.
+    The client MUST set this field to be equal to the SessionKey field in
+    the SMB_COM_NEGOTIATE Response for this SMB connection.
 
-This change depends on other changes which are extending
-cifs_mkdir_setinfo() and smb_set_file_info() functions.
+Linux SMB client currently set this field to zero. This is working fine
+against Windows NT SMB servers thanks to [MS-CIFS] product behavior <94>:
+
+    Windows NT Server ignores the client's SessionKey.
+
+For compatibility with [MS-CIFS], set this SessionKey field in Session
+Setup Request to value retrieved from Negotiate response.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifssmb.c | 36 ------------------------------------
- 1 file changed, 36 deletions(-)
+ fs/smb/client/cifsglob.h | 1 +
+ fs/smb/client/cifspdu.h  | 6 +++---
+ fs/smb/client/cifssmb.c  | 1 +
+ fs/smb/client/sess.c     | 1 +
+ 4 files changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 82e819f9d24e..4cbf119af4e0 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -773,6 +773,7 @@ struct TCP_Server_Info {
+ 	char workstation_RFC1001_name[RFC1001_NAME_LEN_WITH_NULL];
+ 	__u32 sequence_number; /* for signing, protected by srv_mutex */
+ 	__u32 reconnect_instance; /* incremented on each reconnect */
++	__le32 session_key_id; /* retrieved from negotiate response and send in session setup request */
+ 	struct session_key session_key;
+ 	unsigned long lstrp; /* when we got last response from this server */
+ 	struct cifs_secmech secmech; /* crypto sec mech functs, descriptors */
+diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
+index fd114fcb1320..6ae9f045ad89 100644
+--- a/fs/smb/client/cifspdu.h
++++ b/fs/smb/client/cifspdu.h
+@@ -601,7 +601,7 @@ typedef union smb_com_session_setup_andx {
+ 		__le16 MaxBufferSize;
+ 		__le16 MaxMpxCount;
+ 		__le16 VcNumber;
+-		__u32 SessionKey;
++		__le32 SessionKey;
+ 		__le16 SecurityBlobLength;
+ 		__u32 Reserved;
+ 		__le32 Capabilities;	/* see below */
+@@ -620,7 +620,7 @@ typedef union smb_com_session_setup_andx {
+ 		__le16 MaxBufferSize;
+ 		__le16 MaxMpxCount;
+ 		__le16 VcNumber;
+-		__u32 SessionKey;
++		__le32 SessionKey;
+ 		__le16 CaseInsensitivePasswordLength; /* ASCII password len */
+ 		__le16 CaseSensitivePasswordLength; /* Unicode password length*/
+ 		__u32 Reserved;	/* see below */
+@@ -658,7 +658,7 @@ typedef union smb_com_session_setup_andx {
+ 		__le16 MaxBufferSize;
+ 		__le16 MaxMpxCount;
+ 		__le16 VcNumber;
+-		__u32 SessionKey;
++		__le32 SessionKey;
+ 		__le16 PasswordLength;
+ 		__u32 Reserved; /* encrypt key len and offset */
+ 		__le16 ByteCount;
 diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index acbdb6d92306..9dc946138f18 100644
+index 9dc946138f18..b76e3248a39d 100644
 --- a/fs/smb/client/cifssmb.c
 +++ b/fs/smb/client/cifssmb.c
-@@ -5478,38 +5478,6 @@ CIFSSMBSetFileDisposition(const unsigned int xid, struct cifs_tcon *tcon,
- 	return rc;
- }
+@@ -481,6 +481,7 @@ CIFSSMBNegotiate(const unsigned int xid,
+ 	server->max_rw = le32_to_cpu(pSMBr->MaxRawSize);
+ 	cifs_dbg(NOISY, "Max buf = %d\n", ses->server->maxBuf);
+ 	server->capabilities = le32_to_cpu(pSMBr->Capabilities);
++	server->session_key_id = pSMBr->SessionKey;
+ 	server->timeAdj = (int)(__s16)le16_to_cpu(pSMBr->ServerTimeZone);
+ 	server->timeAdj *= 60;
  
--static int
--CIFSSMBSetPathInfoFB(const unsigned int xid, struct cifs_tcon *tcon,
--		     const char *fileName, const FILE_BASIC_INFO *data,
--		     const struct nls_table *nls_codepage,
--		     struct cifs_sb_info *cifs_sb)
--{
--	int oplock = 0;
--	struct cifs_open_parms oparms;
--	struct cifs_fid fid;
--	int rc;
--
--	oparms = (struct cifs_open_parms) {
--		.tcon = tcon,
--		.cifs_sb = cifs_sb,
--		.desired_access = GENERIC_WRITE,
--		.create_options = cifs_create_options(cifs_sb, 0),
--		.disposition = FILE_OPEN,
--		.path = fileName,
--		.fid = &fid,
--	};
--
--	rc = CIFS_open(xid, &oparms, &oplock, NULL);
--	if (rc)
--		goto out;
--
--	rc = CIFSSMBSetFileInfo(xid, tcon, data, fid.netfid, current->tgid);
--	CIFSSMBClose(xid, tcon, fid.netfid);
--out:
--
--	return rc;
--}
--
- int
- CIFSSMBSetPathInfo(const unsigned int xid, struct cifs_tcon *tcon,
- 		   const char *fileName, const FILE_BASIC_INFO *data,
-@@ -5586,10 +5554,6 @@ CIFSSMBSetPathInfo(const unsigned int xid, struct cifs_tcon *tcon,
- 	if (rc == -EAGAIN)
- 		goto SetTimesRetry;
+diff --git a/fs/smb/client/sess.c b/fs/smb/client/sess.c
+index b0ee44e9a3d9..af4884952186 100644
+--- a/fs/smb/client/sess.c
++++ b/fs/smb/client/sess.c
+@@ -646,6 +646,7 @@ static __u32 cifs_ssetup_hdr(struct cifs_ses *ses,
+ 					USHRT_MAX));
+ 	pSMB->req.MaxMpxCount = cpu_to_le16(server->maxReq);
+ 	pSMB->req.VcNumber = cpu_to_le16(1);
++	pSMB->req.SessionKey = server->session_key_id;
  
--	if (rc == -EOPNOTSUPP)
--		return CIFSSMBSetPathInfoFB(xid, tcon, fileName, data,
--					    nls_codepage, cifs_sb);
--
- 	return rc;
- }
+ 	/* Now no need to set SMBFLG_CASELESS or obsolete CANONICAL PATH */
  
 -- 
 2.20.1
