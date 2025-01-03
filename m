@@ -1,54 +1,54 @@
-Return-Path: <linux-cifs+bounces-3817-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3810-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37BD3A01044
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 23:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB802A0103B
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 23:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 069173A4828
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 22:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2A953A426F
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 22:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D2D2629C;
-	Fri,  3 Jan 2025 22:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877C01C07E4;
+	Fri,  3 Jan 2025 22:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="pJqammZU"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="F8Q5CIQp"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A334219E999
-	for <linux-cifs@vger.kernel.org>; Fri,  3 Jan 2025 22:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB121BEF9D
+	for <linux-cifs@vger.kernel.org>; Fri,  3 Jan 2025 22:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.235.159.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735943563; cv=none; b=Xe5qP0WF++giWrVqfCqNK8qX+KUQo7fC2YBvipWe3BX9eMrG61IHM79a0GocO8vR69cVpN/7MA21LR4SbEHt0mNd3DG9SzW0UCk9DJjQR51viBC45fA2i5IasPYGo3tpTf49BRbWZkGsk9hBlX3tTRve5NyUpcmgWczhVy5UvSs=
+	t=1735943152; cv=none; b=Fu8ZVUbA/YDiLkG1+65goqbcVusiEKXexVNhVKS2PL3qC56sVSPRWMPBGHK1gnO/HIFaAVn/k1TkIvFaa2UWuy9dOvf8VycWlIzBUJzQmfXeypLdMrZOW/ZpDDhFKdxqkpEYAXztqbmCOIbYfMw7xV6D4lWLwZ7yj+L80vNiHRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735943563; c=relaxed/simple;
-	bh=KyV78q/IYLA8OV0SwjEvuUIlq1VQOismLBskR3jrq70=;
+	s=arc-20240116; t=1735943152; c=relaxed/simple;
+	bh=WIeT1Z7Dg+dIjPbXwAeteAFm8T4TdcIr/DwE96jPWlQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ghara9LTPcHVgBz+aBTt5q48OI8DNyVRWcyv2lOwvqfIh61kzWRUUKcz5Lu31Znz+3UeE1M/u91ydS7piCFmy+WbMlCDNm79ndXz2eFBEWDfJBLk0BefNsbyiMheRNnYHk/udTbwTE7h5esoQ1bbRR2TEUpJVz1Qt2otybGxNnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=pJqammZU; arc=none smtp.client-ip=167.235.159.17
+	 MIME-Version; b=RVthlvNMuUPLmY8gXFVcncdURd97lHacFF1haNlk7Nva8VtmPefTDxLKLbQisRgYRKDhOEjl8tqNoHj4yNnZz1KI2/XKhMS6IdU9lRUMPU6RlF5tbNcg1+gqL81PrXck6OgKQ4k5Rt54VYbhkHkbq5vDRXWWLbljQJpE8ZYSYac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=F8Q5CIQp; arc=none smtp.client-ip=167.235.159.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
 From: Paulo Alcantara <pc@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1735943145;
+	s=dkim; t=1735943148;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nPz5FKkx38z1CYegdsq4N3HpyS5qu8iJxq4FTJ06Mac=;
-	b=pJqammZUk1a46OcvGDJiVn6lbNVyJssHk6vi4cYZ6mVwuUbwaFUiaSLgh0ymRW+gx/d8VL
-	Jv1fehEiLBYnmZ8CHR/HFELrwrhuWdekLr9bomJR2zPS4Dzld2AJ09guvxZF5gkohrJq7C
-	wtk80qEzNr6kPXYLGK/YVNwpG/XMweowwitWCtOXhIcv2hAbWJZVmV37CN4y7tZcgo9m5T
-	trtJB54lKdFIiN1Iyl9yC7KXvQ2LlE0awl+jDj6mG4e6b6iU+1Fp4Xjb2ZrynDgFDdQYRy
-	NWOsrL2WtN4TRRXbAQUMC19h2fLsAPZopr4YXBQCWDcnsQzGJVuX0hwkhtBZkQ==
+	bh=Q4A0RciEHWvUEKXE9E8Jnh4UHYb1lakTO/Ck4veRFrM=;
+	b=F8Q5CIQpkMDXA+BfU5dKxXWdfQ9qSi3YzOECR8yhlh5dk4rgnD7jXRjo6mFES9eTETpdJ1
+	Who6EPoT0hIhk+n2pIAtTpnnHxYCnyrmgsGORyC8TpMy2G+AJw5FFaKrqxnSq+uRTln+Fg
+	LpbXQjEK6S+8GE8doYsy+toTsiMOpd+pMM4juwbCtTdRzdhE8f4BLWUp2dQFnVFYNcClLy
+	A3qE2Qi8+KYiLBzBfaRSpLF7JXIZ9wyzXLYiCX45wDC6Pm+g1ADsyuZPMbwr0xRQAglJts
+	e/lYIKYF7LDNUzOT+0Cy8AOLCzFddDJxblSqb7jzev9Q/Wm/SKf/4zhsGNtb+Q==
 To: smfrench@gmail.com
 Cc: linux-cifs@vger.kernel.org
-Subject: [PATCH 3/4] smb: client: fix DFS mount against old servers with NTLMSSP
-Date: Fri,  3 Jan 2025 19:25:33 -0300
-Message-ID: <20250103222534.86744-3-pc@manguebit.com>
+Subject: [PATCH 4/4] smb: client: parse DNS domain name from domain= option
+Date: Fri,  3 Jan 2025 19:25:34 -0300
+Message-ID: <20250103222534.86744-4-pc@manguebit.com>
 In-Reply-To: <20250103222534.86744-1-pc@manguebit.com>
 References: <20250103222534.86744-1-pc@manguebit.com>
 Precedence: bulk
@@ -59,372 +59,52 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Old Windows servers will return not fully qualified DFS targets by
-default as specified in
-
-  MS-DFSC 3.2.5.5 Receiving a Root Referral Request or Link Referral
-  Request
-
-    | Servers SHOULD<30> return fully qualified DNS host names of
-    | targets in responses to root referral requests and link referral
-    | requests.
-    | ...
-    | <30> Section 3.2.5.5: By default, Windows Server 2003, Windows
-    | Server 2008, Windows Server 2008 R2, Windows Server 2012, and
-    | Windows Server 2012 R2 return DNS host names that are not fully
-    | qualified for targets.
-
-Fix this by converting all NetBIOS host names from DFS targets to
-FQDNs and try resolving them first if DNS domain name was provided in
-NTLMSSP CHALLENGE_MESSAGE message from previous SMB2_SESSION_SETUP.
-This also prevents the client from translating the DFS target
-hostnames to another domain depending on the network domain search
-order.
+If the user specified a DNS domain name in domain= mount option, then
+use it instead of parsing it in NTLMSSP CHALLENGE_MESSAGE message.
 
 Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
 ---
- fs/smb/client/cifsglob.h    |  21 +++++++
- fs/smb/client/connect.c     |   5 +-
- fs/smb/client/dfs.c         |  13 ++--
- fs/smb/client/dfs_cache.c   |   3 +-
- fs/smb/client/dns_resolve.c | 118 +++++++++++++++++++++---------------
- fs/smb/client/dns_resolve.h |   3 +-
- fs/smb/client/fs_context.c  |   4 ++
- fs/smb/client/fs_context.h  |   1 +
- fs/smb/client/misc.c        |   3 +-
- 9 files changed, 113 insertions(+), 58 deletions(-)
+ fs/smb/client/connect.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index e5982136e66f..c747b6f9baca 100644
---- a/fs/smb/client/cifsglob.h
-+++ b/fs/smb/client/cifsglob.h
-@@ -828,6 +828,7 @@ struct TCP_Server_Info {
- 	 */
- 	char *leaf_fullpath;
- 	bool dfs_conn:1;
-+	char dns_dom[CIFS_MAX_DOMAINNAME_LEN + 1];
- };
- 
- static inline bool is_smb1(struct TCP_Server_Info *server)
-@@ -2312,4 +2313,24 @@ static inline bool cifs_ses_exiting(struct cifs_ses *ses)
- 	return ret;
- }
- 
-+static inline bool cifs_netbios_name(const char *name, size_t namelen)
-+{
-+	bool ret = false;
-+	size_t i;
-+
-+	if (namelen >= 1 && namelen <= RFC1001_NAME_LEN) {
-+		for (i = 0; i < namelen; i++) {
-+			const unsigned char c = name[i];
-+
-+			if (c == '\\' || c == '/' || c == ':' || c == '*' ||
-+			    c == '?' || c == '"' || c == '<' || c == '>' ||
-+			    c == '|' || c == '.')
-+				return false;
-+			if (!ret && isalpha(c))
-+				ret = true;
-+		}
-+	}
-+	return ret;
-+}
-+
- #endif	/* _CIFS_GLOB_H */
 diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index ddcc9e514a0e..d4b571d74191 100644
+index d4b571d74191..35d0243ae177 100644
 --- a/fs/smb/client/connect.c
 +++ b/fs/smb/client/connect.c
-@@ -97,7 +97,8 @@ static int reconn_set_ipaddr_from_hostname(struct TCP_Server_Info *server)
- 	ss = server->dstaddr;
- 	spin_unlock(&server->srv_lock);
- 
--	rc = dns_resolve_server_name_to_ip(unc, (struct sockaddr *)&ss, NULL);
-+	rc = dns_resolve_server_name_to_ip(server->dns_dom, unc,
-+					   (struct sockaddr *)&ss, NULL);
- 	kfree(unc);
- 
- 	if (rc < 0) {
-@@ -1711,6 +1712,8 @@ cifs_get_tcp_session(struct smb3_fs_context *ctx,
- 			goto out_err;
- 		}
- 	}
-+	if (ctx->dns_dom)
-+		strscpy(tcp_ses->dns_dom, ctx->dns_dom);
- 
- 	if (ctx->nosharesock)
- 		tcp_ses->nosharesock = true;
-diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
-index 4647df9e1e3b..09d8808cd2e0 100644
---- a/fs/smb/client/dfs.c
-+++ b/fs/smb/client/dfs.c
-@@ -9,6 +9,8 @@
- #include "fs_context.h"
- #include "dfs.h"
- 
-+#define DFS_DOM(ctx) (ctx->dfs_root_ses ? ctx->dfs_root_ses->dns_dom : NULL)
-+
- /**
-  * dfs_parse_target_referral - set fs context for dfs target referral
-  *
-@@ -46,8 +48,9 @@ int dfs_parse_target_referral(const char *full_path, const struct dfs_info3_para
- 	if (rc)
- 		goto out;
- 
--	rc = dns_resolve_server_name_to_ip(path, (struct sockaddr *)&ctx->dstaddr, NULL);
--
-+	rc = dns_resolve_server_name_to_ip(DFS_DOM(ctx), path,
-+					   (struct sockaddr *)&ctx->dstaddr,
-+					   NULL);
- out:
- 	kfree(path);
- 	return rc;
-@@ -59,8 +62,9 @@ static int get_session(struct cifs_mount_ctx *mnt_ctx, const char *full_path)
- 	int rc;
- 
- 	ctx->leaf_fullpath = (char *)full_path;
-+	ctx->dns_dom = DFS_DOM(ctx);
- 	rc = cifs_mount_get_session(mnt_ctx);
--	ctx->leaf_fullpath = NULL;
-+	ctx->leaf_fullpath = ctx->dns_dom = NULL;
- 
- 	return rc;
- }
-@@ -264,7 +268,8 @@ static int update_fs_context_dstaddr(struct smb3_fs_context *ctx)
- 	int rc = 0;
- 
- 	if (!ctx->nodfs && ctx->dfs_automount) {
--		rc = dns_resolve_server_name_to_ip(ctx->source, addr, NULL);
-+		rc = dns_resolve_server_name_to_ip(NULL, ctx->source,
-+						   addr, NULL);
- 		if (!rc)
- 			cifs_set_port(addr, ctx->port);
- 		ctx->dfs_automount = false;
-diff --git a/fs/smb/client/dfs_cache.c b/fs/smb/client/dfs_cache.c
-index 541608b0267e..c0a167c869fb 100644
---- a/fs/smb/client/dfs_cache.c
-+++ b/fs/smb/client/dfs_cache.c
-@@ -1114,7 +1114,8 @@ static bool target_share_equal(struct cifs_tcon *tcon, const char *s1)
- 	extract_unc_hostname(s1, &host, &hostlen);
- 	scnprintf(unc, sizeof(unc), "\\\\%.*s", (int)hostlen, host);
- 
--	rc = dns_resolve_server_name_to_ip(unc, (struct sockaddr *)&ss, NULL);
-+	rc = dns_resolve_server_name_to_ip(server->dns_dom, unc,
-+					   (struct sockaddr *)&ss, NULL);
- 	if (rc < 0) {
- 		cifs_dbg(FYI, "%s: could not resolve %.*s. assuming server address matches.\n",
- 			 __func__, (int)hostlen, host);
-diff --git a/fs/smb/client/dns_resolve.c b/fs/smb/client/dns_resolve.c
-index 8bf8978bc5d6..83db27f9c8f1 100644
---- a/fs/smb/client/dns_resolve.c
-+++ b/fs/smb/client/dns_resolve.c
-@@ -20,69 +20,87 @@
- #include "cifsproto.h"
- #include "cifs_debug.h"
- 
--/**
-- * dns_resolve_server_name_to_ip - Resolve UNC server name to ip address.
-- * @unc: UNC path specifying the server (with '/' as delimiter)
-- * @ip_addr: Where to return the IP address.
-- * @expiry: Where to return the expiry time for the dns record.
-- *
-- * Returns zero success, -ve on error.
-- */
--int
--dns_resolve_server_name_to_ip(const char *unc, struct sockaddr *ip_addr, time64_t *expiry)
-+static int resolve_name(const char *name, size_t namelen,
-+			struct sockaddr *addr, time64_t *expiry)
+@@ -2280,12 +2280,13 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx __attribute__((unused)),
+ struct cifs_ses *
+ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
  {
--	const char *hostname, *sep;
- 	char *ip;
--	int len, rc;
-+	int rc;
+-	int rc = 0;
++	struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&server->dstaddr;
++	struct sockaddr_in *addr = (struct sockaddr_in *)&server->dstaddr;
++	struct cifs_ses *ses;
++	unsigned int xid;
+ 	int retries = 0;
+-	unsigned int xid;
+-	struct cifs_ses *ses;
+-	struct sockaddr_in *addr = (struct sockaddr_in *)&server->dstaddr;
+-	struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&server->dstaddr;
++	size_t len;
++	int rc = 0;
  
--	if (!ip_addr || !unc)
--		return -EINVAL;
--
--	len = strlen(unc);
--	if (len < 3) {
--		cifs_dbg(FYI, "%s: unc is too short: %s\n", __func__, unc);
--		return -EINVAL;
--	}
--
--	/* Discount leading slashes for cifs */
--	len -= 2;
--	hostname = unc + 2;
--
--	/* Search for server name delimiter */
--	sep = memchr(hostname, '/', len);
--	if (sep)
--		len = sep - hostname;
--	else
--		cifs_dbg(FYI, "%s: probably server name is whole unc: %s\n",
--			 __func__, unc);
--
--	/* Try to interpret hostname as an IPv4 or IPv6 address */
--	rc = cifs_convert_address(ip_addr, hostname, len);
--	if (rc > 0) {
--		cifs_dbg(FYI, "%s: unc is IP, skipping dns upcall: %*.*s\n", __func__, len, len,
--			 hostname);
--		return 0;
--	}
--
--	/* Perform the upcall */
--	rc = dns_query(current->nsproxy->net_ns, NULL, hostname, len,
--		       NULL, &ip, expiry, false);
-+	rc = dns_query(current->nsproxy->net_ns, NULL, name,
-+		       namelen, NULL, &ip, expiry, false);
- 	if (rc < 0) {
- 		cifs_dbg(FYI, "%s: unable to resolve: %*.*s\n",
--			 __func__, len, len, hostname);
-+			 __func__, (int)namelen, (int)namelen, name);
- 	} else {
- 		cifs_dbg(FYI, "%s: resolved: %*.*s to %s expiry %llu\n",
--			 __func__, len, len, hostname, ip,
-+			 __func__, (int)namelen, (int)namelen, name, ip,
- 			 expiry ? (*expiry) : 0);
+ 	xid = get_xid();
  
--		rc = cifs_convert_address(ip_addr, ip, strlen(ip));
-+		rc = cifs_convert_address(addr, ip, strlen(ip));
- 		kfree(ip);
--
- 		if (!rc) {
--			cifs_dbg(FYI, "%s: unable to determine ip address\n", __func__);
-+			cifs_dbg(FYI, "%s: unable to determine ip address\n",
-+				 __func__);
- 			rc = -EHOSTUNREACH;
--		} else
-+		} else {
- 			rc = 0;
+@@ -2375,6 +2376,14 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
+ 		ses->domainName = kstrdup(ctx->domainname, GFP_KERNEL);
+ 		if (!ses->domainName)
+ 			goto get_ses_fail;
++
++		len = strnlen(ctx->domainname, CIFS_MAX_DOMAINNAME_LEN);
++		if (!cifs_netbios_name(ctx->domainname, len)) {
++			ses->dns_dom = kstrndup(ctx->domainname,
++						len, GFP_KERNEL);
++			if (!ses->dns_dom)
++				goto get_ses_fail;
 +		}
  	}
- 	return rc;
- }
-+
-+/**
-+ * dns_resolve_server_name_to_ip - Resolve UNC server name to ip address.
-+ * @dom: optional DNS domain name
-+ * @unc: UNC path specifying the server (with '/' as delimiter)
-+ * @ip_addr: Where to return the IP address.
-+ * @expiry: Where to return the expiry time for the dns record.
-+ *
-+ * Returns zero success, -ve on error.
-+ */
-+int dns_resolve_server_name_to_ip(const char *dom, const char *unc,
-+				  struct sockaddr *ip_addr, time64_t *expiry)
-+{
-+	const char *name;
-+	size_t namelen, len;
-+	char *s;
-+	int rc;
-+
-+	if (!ip_addr || !unc)
-+		return -EINVAL;
-+
-+	cifs_dbg(FYI, "%s: dom=%s unc=%s\n", __func__, dom, unc);
-+	if (strlen(unc) < 3)
-+		return -EINVAL;
-+
-+	extract_unc_hostname(unc, &name, &namelen);
-+	if (!namelen)
-+		return -EINVAL;
-+
-+	cifs_dbg(FYI, "%s: hostname=%.*s\n", __func__, (int)namelen, name);
-+	/* Try to interpret hostname as an IPv4 or IPv6 address */
-+	rc = cifs_convert_address(ip_addr, name, namelen);
-+	if (rc > 0) {
-+		cifs_dbg(FYI, "%s: unc is IP, skipping dns upcall: %*.*s\n",
-+			 __func__, (int)namelen, (int)namelen, name);
-+		return 0;
-+	}
-+
-+	/*
-+	 * If @name contains a NetBIOS name and @dom has been specified, then
-+	 * convert @name to an FQDN and try resolving it first.
-+	 */
-+	if (dom && *dom && cifs_netbios_name(name, namelen)) {
-+		len = strnlen(dom, CIFS_MAX_DOMAINNAME_LEN) + namelen + 2;
-+		s = kmalloc(len, GFP_KERNEL);
-+		if (!s)
-+			return -ENOMEM;
-+
-+		scnprintf(s, len, "%.*s.%s", (int)namelen, name, dom);
-+		rc = resolve_name(s, len - 1, ip_addr, expiry);
-+		kfree(s);
-+		if (!rc)
-+			return 0;
-+	}
-+	return resolve_name(name, namelen, ip_addr, expiry);
-+}
-diff --git a/fs/smb/client/dns_resolve.h b/fs/smb/client/dns_resolve.h
-index 6eb0c15a2440..64c1dd2ad39b 100644
---- a/fs/smb/client/dns_resolve.h
-+++ b/fs/smb/client/dns_resolve.h
-@@ -14,7 +14,8 @@
- #include <linux/net.h>
  
- #ifdef __KERNEL__
--int dns_resolve_server_name_to_ip(const char *unc, struct sockaddr *ip_addr, time64_t *expiry);
-+int dns_resolve_server_name_to_ip(const char *dom, const char *unc,
-+				  struct sockaddr *ip_addr, time64_t *expiry);
- #endif /* KERNEL */
- 
- #endif /* _DNS_RESOLVE_H */
-diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
-index 49123f458d0c..5381f05420bc 100644
---- a/fs/smb/client/fs_context.c
-+++ b/fs/smb/client/fs_context.c
-@@ -385,6 +385,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
- 	new_ctx->source = NULL;
- 	new_ctx->iocharset = NULL;
- 	new_ctx->leaf_fullpath = NULL;
-+	new_ctx->dns_dom = NULL;
- 	/*
- 	 * Make sure to stay in sync with smb3_cleanup_fs_context_contents()
- 	 */
-@@ -399,6 +400,7 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
- 	DUP_CTX_STR(nodename);
- 	DUP_CTX_STR(iocharset);
- 	DUP_CTX_STR(leaf_fullpath);
-+	DUP_CTX_STR(dns_dom);
- 
- 	return 0;
- }
-@@ -1863,6 +1865,8 @@ smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx)
- 	ctx->prepath = NULL;
- 	kfree(ctx->leaf_fullpath);
- 	ctx->leaf_fullpath = NULL;
-+	kfree(ctx->dns_dom);
-+	ctx->dns_dom = NULL;
- }
- 
- void
-diff --git a/fs/smb/client/fs_context.h b/fs/smb/client/fs_context.h
-index ac6baa774ad3..8813533345ee 100644
---- a/fs/smb/client/fs_context.h
-+++ b/fs/smb/client/fs_context.h
-@@ -295,6 +295,7 @@ struct smb3_fs_context {
- 	bool dfs_automount:1; /* set for dfs automount only */
- 	enum cifs_reparse_type reparse_type;
- 	bool dfs_conn:1; /* set for dfs mounts */
-+	char *dns_dom;
- };
- 
- extern const struct fs_parameter_spec smb3_fs_parameters[];
-diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
-index c23d5ba44cae..0d483cd08354 100644
---- a/fs/smb/client/misc.c
-+++ b/fs/smb/client/misc.c
-@@ -1189,7 +1189,8 @@ int match_target_ip(struct TCP_Server_Info *server,
- 
- 	cifs_dbg(FYI, "%s: target name: %s\n", __func__, target + 2);
- 
--	rc = dns_resolve_server_name_to_ip(target, (struct sockaddr *)&ss, NULL);
-+	rc = dns_resolve_server_name_to_ip(server->dns_dom, target,
-+					   (struct sockaddr *)&ss, NULL);
- 	kfree(target);
- 
- 	if (rc < 0)
+ 	strscpy(ses->workstation_name, ctx->workstation_name, sizeof(ses->workstation_name));
 -- 
 2.47.1
 
