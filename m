@@ -1,112 +1,75 @@
-Return-Path: <linux-cifs+bounces-3814-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-3818-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54731A01041
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 23:29:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06501A01045
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 23:32:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D48ED7A202B
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 22:29:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 497FB18848F7
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Jan 2025 22:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDDA1C1F37;
-	Fri,  3 Jan 2025 22:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0530A19E999;
+	Fri,  3 Jan 2025 22:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="bT/Ybrm+"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="fs92lHS7"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68011C1AB4
-	for <linux-cifs@vger.kernel.org>; Fri,  3 Jan 2025 22:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872921BC9E6
+	for <linux-cifs@vger.kernel.org>; Fri,  3 Jan 2025 22:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.235.159.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735943366; cv=none; b=EA5Mprw9aTY1MH8OBn92nLxe16g6OP2/GP7nPvSnr4QkMO6e9Eapcvi0LewhQT/8hpNgVqCsUugbUHyNA+ODlDGJkV5ozxsVQIW2J/C6sLIlOViUfz7hUK48s0aPHkj4wtXjqBxNBcMXRZRNVxLzUwBaWkZqLhUhpNUWMhhniW0=
+	t=1735943565; cv=none; b=I0Is6Rb4/AMAod9r1SbA7/Mf56t51FBORNIGKyhEFnQJCDuNhVNZaAflzCwM3YC+gQj5j0Wg59QM9L2eRhWUJGzEu6+Tfgc2+obOgPgGfHlZJJZYmMr6L7F+YY6944BlUuYU7uhTQlVuuoW1ltMzvRzFHHj74Nv1VrfPKvWdj1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735943366; c=relaxed/simple;
-	bh=WIeT1Z7Dg+dIjPbXwAeteAFm8T4TdcIr/DwE96jPWlQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eIEgKlkWXSuZ0mdFJotl3QjUgNE20zReIvRGkTjq2J3K/tJoy8WIC8EdpwWT8iQnD/ZHYYQARWa+9CL69x1rWlpOPRB7+2q+cva2KQttTphdMtxcBcwSfjuwBoC12CrEAPAqVCJ2zSbeFzjB8iK0XoSsJepUgCrYh6Hu2s9hBHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=bT/Ybrm+; arc=none smtp.client-ip=167.235.159.17
+	s=arc-20240116; t=1735943565; c=relaxed/simple;
+	bh=eWoXjFGqhqSCsBGkDECNclrej3ZAoypPI5Un/o3XM4k=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=FTvd5/UGOn7YF36quRL8D3IdnyqJq1aEh0U3d+vEAHnFpX4xI9clQRHVV2ltms/cKvwnvNG/xI7NXi12uQMdllBtwbgJVeBH9WWWwJZZ+HL4ZTWOfWWN8M69addJZpuVRWUs/wADAfXND67IcnAooQxnYQ4sR1a7YfVt3XM738M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=fs92lHS7; arc=none smtp.client-ip=167.235.159.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
-From: Paulo Alcantara <pc@manguebit.com>
+Message-ID: <311888e014bc82d449c939875f751d5b@manguebit.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-	s=dkim; t=1735943363;
+	s=dkim; t=1735943562;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Q4A0RciEHWvUEKXE9E8Jnh4UHYb1lakTO/Ck4veRFrM=;
-	b=bT/Ybrm+VYQEAyVRXB/uayRMNw8XVrV51wKWn3zL/Jhl0vqRZ9eeCmRbKd6k07NZevjRgQ
-	kRM+u/MtDXJ3u5lwCA97fj4I8bvd3jvYRDm5+TIwthenJXCkvVUMEwfG8lrsDAa6eCUD21
-	i92iL4rP4ezQpirtY6/RHK91ph84xzuLKOMc/kbeJILLM66Q6zGTgdq3EEDp5i723ys6MQ
-	2oc1tDduPkml3NXtoxLY+gBDUGb7HRHFzr1szHqxWe493KkpsuJZEGfgJkSvdHzUTcoQW2
-	wbzV09kfMRIxeMl2V3MBwPjGvL6zEqikLhhyzraCk4sBjMNGmg/2y3f2Qhzuaw==
+	bh=BpOdXyuGus1+cCxmZ1P/uaGywLocUkVUWVzGiI7BmnY=;
+	b=fs92lHS7mqLws0DdaXNBJqUoGA5CB70q5Id3Czfv2WABzjEkw+6gPn539UwDiRE0zslDi0
+	Ej5djizEfmR/ZdrWmhhMGSuu9cgxZ6QCEQOIN9jBQNwaR1KSqLKbNp3DjnAQZ22k1JRtcX
+	qXX8RY5CMElacKuIIXBtXV0eLf0GGdmReAUcC0jT8BuyIOUPEYh6CSfKDDXm4qJWv8ItTr
+	Y9z2ESO0qdzGIZcTBriqt0VAXG38+P0WhRCkZ8wfzYBEbA+vhlZ8sFT5Pc3r30aKwLTsa0
+	Yb15qCVZ10/dB+U71pYA+KyNrGzs/ZcyDM/hMOREjhNdjJXBJcD2zmOBlBFLag==
+From: Paulo Alcantara <pc@manguebit.com>
 To: smfrench@gmail.com
-Cc: linux-cifs@vger.kernel.org,
-	Paulo Alcantara <pc@manguebit.com>
-Subject: [PATCH 4/4] smb: client: parse DNS domain name from domain= option
-Date: Fri,  3 Jan 2025 19:28:58 -0300
-Message-ID: <20250103222858.87176-4-pc@manguebit.com>
-In-Reply-To: <20250103222858.87176-1-pc@manguebit.com>
-References: <20250103222858.87176-1-pc@manguebit.com>
+Cc: linux-cifs@vger.kernel.org
+Subject: Re: [PATCH 4/4] smb: client: parse DNS domain name from domain= option
+In-Reply-To: <20250103222534.86744-4-pc@manguebit.com>
+References: <20250103222534.86744-1-pc@manguebit.com>
+ <20250103222534.86744-4-pc@manguebit.com>
+Date: Fri, 03 Jan 2025 19:32:39 -0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-If the user specified a DNS domain name in domain= mount option, then
-use it instead of parsing it in NTLMSSP CHALLENGE_MESSAGE message.
+Paulo Alcantara <pc@manguebit.com> writes:
 
-Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
----
- fs/smb/client/connect.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+> If the user specified a DNS domain name in domain= mount option, then
+> use it instead of parsing it in NTLMSSP CHALLENGE_MESSAGE message.
+>
+> Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.com>
+> ---
+>  fs/smb/client/connect.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index d4b571d74191..35d0243ae177 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -2280,12 +2280,13 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx __attribute__((unused)),
- struct cifs_ses *
- cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- {
--	int rc = 0;
-+	struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&server->dstaddr;
-+	struct sockaddr_in *addr = (struct sockaddr_in *)&server->dstaddr;
-+	struct cifs_ses *ses;
-+	unsigned int xid;
- 	int retries = 0;
--	unsigned int xid;
--	struct cifs_ses *ses;
--	struct sockaddr_in *addr = (struct sockaddr_in *)&server->dstaddr;
--	struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&server->dstaddr;
-+	size_t len;
-+	int rc = 0;
- 
- 	xid = get_xid();
- 
-@@ -2375,6 +2376,14 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- 		ses->domainName = kstrdup(ctx->domainname, GFP_KERNEL);
- 		if (!ses->domainName)
- 			goto get_ses_fail;
-+
-+		len = strnlen(ctx->domainname, CIFS_MAX_DOMAINNAME_LEN);
-+		if (!cifs_netbios_name(ctx->domainname, len)) {
-+			ses->dns_dom = kstrndup(ctx->domainname,
-+						len, GFP_KERNEL);
-+			if (!ses->dns_dom)
-+				goto get_ses_fail;
-+		}
- 	}
- 
- 	strscpy(ses->workstation_name, ctx->workstation_name, sizeof(ses->workstation_name));
--- 
-2.47.1
+Please ignore this patch.  Resent the series [1].
 
+[1] https://lore.kernel.org/r/20250103222858.87176-1-pc@manguebit.com
 
