@@ -1,46 +1,46 @@
-Return-Path: <linux-cifs+bounces-4175-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4176-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD2B4A41CCD
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2025 12:31:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB287A41D1E
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2025 12:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13C1F188DF9B
-	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2025 11:29:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEC43BCD3F
+	for <lists+linux-cifs@lfdr.de>; Mon, 24 Feb 2025 11:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E7EC267B7F;
-	Mon, 24 Feb 2025 11:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07C826BDB8;
+	Mon, 24 Feb 2025 11:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MGOFre3M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKBJtPbD"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76089267B7C;
-	Mon, 24 Feb 2025 11:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B849B26BDB4;
+	Mon, 24 Feb 2025 11:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740395949; cv=none; b=bBLS+GvQIS0Vhe7uIUmvTtnfW9IoAZ2X9ZM6hC2e02EncDhxs5kSQTEt/qw8FON1ibiT1/FOHOsTgpxkmGmxZaFykNksDRyp8oHaZQnZ1Cb/CJaOlbu2yOUIOOvhDWliV4BLM5vOWt4NndquvIfr0kELd6gwwYOcx6CLJEhrREs=
+	t=1740395995; cv=none; b=dbE4V7btUy2an+ATwqmTfDzoqgqM5i8xTbtZyvYEF1RpRIG2TOBJQo/W7qP9xgXkzvmu+QPyZsBMbPAmFRYVKSjH7NQJJHx+vXCwLV5mojVN4hhQA+pAGNGpFWipoKJFmrgVh4BOyFU7TMmzP+nTb/cQanwbkatHUwJScysifSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740395949; c=relaxed/simple;
-	bh=gE5uRHqVDZjkgOWqgS95Cm71TIS3auiXFOzMFuV0Ot4=;
+	s=arc-20240116; t=1740395995; c=relaxed/simple;
+	bh=osZaV4rm0G40kP39LS28Emu7FAgBMz4vabpiAjNoTTE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=be/qwof1+dOUlqH/9kqnEvaxHsphbl+Aq+0k+QEL+XPO3ZpY3oEbCTwe5tTEPnQr4Gk55d4qYOx2uI+E6WMnK7bwUxJXYjkghJcW2Ddl4pSi/NaCnCrOJgijDNbKLARPYIwOmBHnVZTuEy4BvoyTplnMltd0dUvL7atEPsqooM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MGOFre3M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE834C4CEE8;
-	Mon, 24 Feb 2025 11:19:07 +0000 (UTC)
+	 MIME-Version:Content-Type; b=aO/uU/mvfdQg8bA9AeUOnXqOPzDN37ftbeFjj6HMwg2MT74DJBvOOJyhjw2Cua5ERHfGTNyzD7w9aN7cRRjb1XzLH6g1i1lg+4/R6wecSC+iAQ8p8UT4qUawHCzzWKp4y+Ls90lWEzO2s7s+S6+0Vefg2YUphlVLwZGVx9QywYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CKBJtPbD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD6EC4CED6;
+	Mon, 24 Feb 2025 11:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740395948;
-	bh=gE5uRHqVDZjkgOWqgS95Cm71TIS3auiXFOzMFuV0Ot4=;
+	s=k20201202; t=1740395995;
+	bh=osZaV4rm0G40kP39LS28Emu7FAgBMz4vabpiAjNoTTE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MGOFre3MS6BIh7QJVFfUTb+Pu2jhulU/qyWX7yKRPaH1As0OcRLMK9m91FLyYhmae
-	 9hVWfJRg8EFEotcjXYVvpTdClEOctSjI/8fhAjTnZUGKqk2FxPf+ox3/VjloFicrfR
-	 TxK/i4AE49P/PNNuNHrgR0UWLeLeiPDhjLWj4klAxPhS+SentrJdgPr87xjqPymC0+
-	 nCZ2oxLxxsroc4GDqqUX+f8Zz9Y3INMAU2MOQIzTwYa1QuOV98LjtpqP2MTXw+jD7r
-	 B5Tk/a2gKIyVG2YT0D5R4WDVPPWBc7lHxsCM6LiisuUeGHiJIThOmfSznfW0b5esGK
-	 3Kx1tgc1t5jaQ==
+	b=CKBJtPbDm7dq9VtV/69rwHg/wJzRPGV2a/+HsfhzrH+uoSep3y51lQkkV7O7Es2nQ
+	 mD9Y/h8pY5bt+OhUpCY/0PkGBZ06GRJUZiWKlVGYxjk6E7KtufWNTOsn5zqHCbtZtv
+	 9owtghrvgq978XVfIpiLHaIKr9JwcRZ/4ltW3SfI8Q1p3LU2PS6ddKJlrbuNJF1R4V
+	 cnNa0AIoFg74ENq9ItwjazQCYj2wMvQWC6EpqQErKPZBue7rVZflLd20/iSR1Y8xoG
+	 Gxh7v+o3XlvUGMhpoNZXz4xTUzObr26icdrJylLVO/Rqqp/KKFdypP1+9rVuFkMPxm
+	 d8sGmQ11roIMQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	linkinjeon@kernel.org,
 	linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.12 25/28] cifs: Treat unhandled directory name surrogate reparse points as mount directory nodes
-Date: Mon, 24 Feb 2025 06:17:56 -0500
-Message-Id: <20250224111759.2213772-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 17/20] cifs: Treat unhandled directory name surrogate reparse points as mount directory nodes
+Date: Mon, 24 Feb 2025 06:19:10 -0500
+Message-Id: <20250224111914.2214326-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250224111759.2213772-1-sashal@kernel.org>
-References: <20250224111759.2213772-1-sashal@kernel.org>
+In-Reply-To: <20250224111914.2214326-1-sashal@kernel.org>
+References: <20250224111914.2214326-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.16
+X-stable-base: Linux 6.6.79
 Content-Transfer-Encoding: 8bit
 
 From: Pali Rohár <pali@kernel.org>
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 16 insertions(+)
 
 diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index fafc07e38663c..295afb73fcdd6 100644
+index b3e59a7c71205..55d6e926cd8cb 100644
 --- a/fs/smb/client/inode.c
 +++ b/fs/smb/client/inode.c
-@@ -1193,6 +1193,19 @@ static int reparse_info_to_fattr(struct cifs_open_info_data *data,
+@@ -1132,6 +1132,19 @@ static int reparse_info_to_fattr(struct cifs_open_info_data *data,
  			rc = server->ops->parse_reparse_point(cifs_sb,
  							      full_path,
  							      iov, data);
@@ -117,10 +117,10 @@ index fafc07e38663c..295afb73fcdd6 100644
  		break;
  	}
 diff --git a/fs/smb/common/smbfsctl.h b/fs/smb/common/smbfsctl.h
-index 4b379e84c46b9..3253a18ecb5cb 100644
+index a94d658b88e86..6eff3a8bde096 100644
 --- a/fs/smb/common/smbfsctl.h
 +++ b/fs/smb/common/smbfsctl.h
-@@ -159,6 +159,9 @@
+@@ -158,6 +158,9 @@
  #define IO_REPARSE_TAG_LX_CHR	     0x80000025
  #define IO_REPARSE_TAG_LX_BLK	     0x80000026
  
