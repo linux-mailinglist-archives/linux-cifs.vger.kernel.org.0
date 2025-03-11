@@ -1,57 +1,58 @@
-Return-Path: <linux-cifs+bounces-4223-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4227-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFE3A5C3B7
-	for <lists+linux-cifs@lfdr.de>; Tue, 11 Mar 2025 15:25:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5367A5C3BF
+	for <lists+linux-cifs@lfdr.de>; Tue, 11 Mar 2025 15:26:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE8A516E00F
-	for <lists+linux-cifs@lfdr.de>; Tue, 11 Mar 2025 14:25:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 606DA3B4B0F
+	for <lists+linux-cifs@lfdr.de>; Tue, 11 Mar 2025 14:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED0825B689;
-	Tue, 11 Mar 2025 14:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17E125CC92;
+	Tue, 11 Mar 2025 14:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b="e1EdwjGs"
+	dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b="NL9XaaUx"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from ksmg02.maxima.ru (ksmg02.maxima.ru [81.200.124.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A488E156C62;
-	Tue, 11 Mar 2025 14:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147C725C6E7;
+	Tue, 11 Mar 2025 14:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741703147; cv=none; b=cSW1U4JRq0rFOAKYfgqhGT5iCmtbzsioyLDSFQQFW1Njh8MMgovUY6K4L4/ovWE1QN1i3q2lbaNtsjEFpn0jvEWqxR0uOepQeyxEk6W/SEHKynzX27mxOsk/uUxgkovXMEtGULKtLeYVdEOWoczKSj87fMLiXg44mF4AVS5YVdc=
+	t=1741703150; cv=none; b=Gm2q7yVIvVhbzah0D5W3Irl2K/b5QsisB/Jl/XyaadaWm+5ZzwfPzMUMBZBuwDjhH3eXgMaBWjHEnbXswslEG4V7gW9IDsmqzjei/xYktysOmN62u1fAOxNM/wPBvH4gyTyrGbXfaoKF+UlEsH0vlCL6I4KpIRXIedFbMq4eQ+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741703147; c=relaxed/simple;
-	bh=05bZVaLA9/Kh87yiopcsB70RUi/bZ2X4rpmzaPDGjRU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ChEReVoZLWyIsvqSWSqJEZfqYw1s/rvjwT0Q+cSosAtttNQz6nZUZHp8SdT9pv0BZC3INJOvPMhjtegjNUcVy1lk5HtcMH2MbwCNz8IHgO0C+FSAKqH4/8BIbXfR2w5jQILZ8VEIDRdXIPjO7W8gQzABlrIw210yPnAHUU6f3GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b=e1EdwjGs; arc=none smtp.client-ip=81.200.124.39
+	s=arc-20240116; t=1741703150; c=relaxed/simple;
+	bh=Ulht3x7Xfkshq+RA31+b7Cg6c8KF6Fuy03NB9KcU/wA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OUTR09b65RdC1sX260x+y2a3luEFtBvlA87JYY1eWhfQmwotgohV+4N7tFZAV9VfO+xIhzsd1XX8+lolB+9UI3FL7UYzpsa7j4SgKa9B0+ykJA+jA0FmEohevChnZTfMZSEf+wkfro/wJuwcmN8op4k8ltUgZDv0r0PLoujeIyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b=NL9XaaUx; arc=none smtp.client-ip=81.200.124.39
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
 Received: from ksmg02.maxima.ru (localhost [127.0.0.1])
-	by ksmg02.maxima.ru (Postfix) with ESMTP id 72DE21E0011;
-	Tue, 11 Mar 2025 17:25:35 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru 72DE21E0011
+	by ksmg02.maxima.ru (Postfix) with ESMTP id 11BF91E0018;
+	Tue, 11 Mar 2025 17:25:41 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru 11BF91E0018
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt-integration.ru;
-	s=sl; t=1741703135; bh=pVr5Bxi/FvTbaIsz7rL3SBie1NbHtO1UVIGxudFCGWg=;
+	s=sl; t=1741703141; bh=i8l90tW0lQ0g/H/CHoMHQh7J+/sv5ThipLki0A0dDA4=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=e1EdwjGs2bi1w1Xyde5W6L6U9yFZTMft2RCiTCma/+gH+qRR1AtgEqW/SY3FNudPS
-	 5MCO+wiTVpPOdntOgCNjDqQTdAA058oGfpMLZKY16x/wBcp13xjQi+G8k0lzRX4vfK
-	 RgxN4dLw4HJxHTrRbJt7YW9RtQ99HHv3iHtJ4DFut36iLN1MS+ShOpsGrTCLEEenyI
-	 3/+4750tnFdF+Z60/qqgAxE7QlwdrIJEf1dOq7BBbFnCcaVYdnWYt6/rs2WnRRDxtf
-	 KifL/Bm4HaAQ2CtzctmaaYAITYI3NMN8dENYwsTY/wMRIhzqGSMhUDFIiG57dC7JZD
-	 GQFr3EOgZuXSw==
+	b=NL9XaaUx7wS5yucHxrCe54QPCR3KF0gfNISlNmSr8Q3124LAbSd9x+JJy8zglzfLl
+	 NS7ysCe22McLtN4UYPMOM4ArlGvRC6og7HyDx8IIbi9U4kWi6l3d+OGYkH3SCL+w4I
+	 /6qYYamgHBX3dc1cUJn3WzWly1wuMHr5bqXArRxHRG/Tr8s1UJIq+KPOQfJgyv6Qy9
+	 nkM8LQvjri2T+gH7NpLyRpaFTJj0SDphdLG7pBeKSKZLH/hCjwJOca3P5nWx5QLnCq
+	 ObGt/69KDMmnABSLAwi9H6TMb82Sc0VXAwB9rl4xnSahDynko5pKXwHQdgBXxBl0WM
+	 0+mfFlREXhmzw==
 Received: from ksmg02.maxima.ru (mail.maxima.ru [81.200.124.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(Client CN "*.maxima.ru", Issuer "GlobalSign GCC R3 DV TLS CA 2020" (verified OK))
 	by ksmg02.maxima.ru (Postfix) with ESMTPS;
-	Tue, 11 Mar 2025 17:25:35 +0300 (MSK)
+	Tue, 11 Mar 2025 17:25:40 +0300 (MSK)
 Received: from GS-NOTE-190.mt.ru (10.0.246.70) by mmail-p-exch02.mt.ru
  (81.200.124.62) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.4; Tue, 11 Mar
- 2025 17:25:31 +0300
+ 2025 17:25:36 +0300
 From: Murad Masimov <m.masimov@mt-integration.ru>
 To: Steve French <sfrench@samba.org>
 CC: Paulo Alcantara <pc@manguebit.com>, Ronnie Sahlberg
@@ -61,10 +62,12 @@ CC: Paulo Alcantara <pc@manguebit.com>, Ronnie Sahlberg
  (SUSE)" <pc@cjr.nz>, <linux-cifs@vger.kernel.org>,
 	<samba-technical@lists.samba.org>, <linux-kernel@vger.kernel.org>,
 	<lvc-project@linuxtesting.org>, Murad Masimov <m.masimov@mt-integration.ru>
-Subject: [PATCH 0/4] cifs: Fix integer overflow while processing mount options
-Date: Tue, 11 Mar 2025 17:22:02 +0300
-Message-ID: <20250311142206.2045-1-m.masimov@mt-integration.ru>
+Subject: [PATCH 1/4] cifs: Fix integer overflow while processing acregmax mount option
+Date: Tue, 11 Mar 2025 17:22:03 +0300
+Message-ID: <20250311142206.2045-2-m.masimov@mt-integration.ru>
 X-Mailer: git-send-email 2.46.0.windows.1
+In-Reply-To: <20250311142206.2045-1-m.masimov@mt-integration.ru>
+References: <20250311142206.2045-1-m.masimov@mt-integration.ru>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -91,20 +94,36 @@ X-KSMG-LinksScanning: NotDetected
 X-KSMG-Message-Action: skipped
 X-KSMG-Rule-ID: 7
 
-These patches fix similar issues that have different origin commits.
-User-provided mount parameters are intended to have upper limits, but
-are validated after their values are converted from seconds to jiffies,
-which can lead to an integer overflow.
+User-provided mount parameter acregmax of type u32 is intended to have
+an upper limit, but before it is validated, the value is converted from
+seconds to jiffies which can lead to an integer overflow.
 
-Murad Masimov (4):
-  cifs: Fix integer overflow while processing acregmax mount option
-  cifs: Fix integer overflow while processing acdirmax mount option
-  cifs: Fix integer overflow while processing actimeo mount option
-  cifs: Fix integer overflow while processing closetimeo mount option
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
- fs/smb/client/fs_context.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Fixes: 5780464614f6 ("cifs: Add new parameter "acregmax" for distinct file and directory metadata timeout")
+Signed-off-by: Murad Masimov <m.masimov@mt-integration.ru>
+---
+ fs/smb/client/fs_context.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.c
+index e9b286d9a7ba..e9045fcf843e 100644
+--- a/fs/smb/client/fs_context.c
++++ b/fs/smb/client/fs_context.c
+@@ -1340,11 +1340,11 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
+ 		}
+ 		break;
+ 	case Opt_acregmax:
+-		ctx->acregmax = HZ * result.uint_32;
+-		if (ctx->acregmax > CIFS_MAX_ACTIMEO) {
++		if (result.uint_32 > CIFS_MAX_ACTIMEO / HZ) {
+ 			cifs_errorf(fc, "acregmax too large\n");
+ 			goto cifs_parse_mount_err;
+ 		}
++		ctx->acregmax = HZ * result.uint_32;
+ 		break;
+ 	case Opt_acdirmax:
+ 		ctx->acdirmax = HZ * result.uint_32;
 --
 2.39.2
 
