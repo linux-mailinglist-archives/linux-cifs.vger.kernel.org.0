@@ -1,120 +1,157 @@
-Return-Path: <linux-cifs+bounces-4286-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4288-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C20DAA68F2B
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 15:33:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 209ACA69952
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 20:30:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F321517299A
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 14:29:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 790B27ADD79
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 19:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96351A4F0A;
-	Wed, 19 Mar 2025 14:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF251E991B;
+	Wed, 19 Mar 2025 19:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HOQcU7I2"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [195.16.41.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E000D18DF93;
-	Wed, 19 Mar 2025 14:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.16.41.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FDA20AF6C;
+	Wed, 19 Mar 2025 19:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742394571; cv=none; b=j9q5Rhf9LNeETCxLhFl9fL+Y7D/yKcR98ToIaCgYjXrBYQEb4OGTQqxJahKIjClXBdSDVgXwfW7VQA4WzpZUuT4u2nRk5OsR2pDiCPo6Bd8jz/f94WJdV/g+XXe30HwnydPdgaper+sZo0YwRoEdn4oWyCNYpBVRWc+F6O0hAzw=
+	t=1742412627; cv=none; b=UfTOgSJ2eTF854xZzOqTwHd9hlZqzAPrred3/OgnsjUhIEKj8NNm5Z94cnNA4J0ka879zUyS2JlbAszEJnl634IbdyRrZi3qIDy34/KTWvJNp9YLEvsDIBIOmCZoI9b5o1AOVDDjew2ZlMr1B17aHhTpJLiYsKXLVdPOu4Rs7gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742394571; c=relaxed/simple;
-	bh=ZW+3T6vaktIkPRQIeRZ0bLzHs68fg4U8jPb2nzTGoyE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JumPdgINYGP/UsWnq0aegfoUHLRW+15cMFolF870i8C5aQXAPwrFSlh5L1iaUwMcf0fmD0Ep2U2PdsaT5kcqKMEP0yzzOYbkvT6zi/3m0xuW3dW89smQaRnjSD4GdgkRIGNOqgPGWTTmpZIhOL67If0vXWSixwZAXOC0ACNJl2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=195.16.41.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 83F101F707;
-	Wed, 19 Mar 2025 17:29:22 +0300 (MSK)
-Received: from new-mail.astralinux.ru (gca-yc-ruca-srv-mail05.astralinux.ru [10.177.185.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
-	Wed, 19 Mar 2025 17:29:20 +0300 (MSK)
-Received: from rbta-msk-lt-302690.astralinux.ru (unknown [10.198.18.214])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4ZHrgf0Zv5z1c0v4;
-	Wed, 19 Mar 2025 17:29:17 +0300 (MSK)
-From: Alexandra Diupina <adiupina@astralinux.ru>
-To: Steve French <sfrench@samba.org>
-Cc: Alexandra Diupina <adiupina@astralinux.ru>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Tom Talpey <tom@talpey.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Aurelien Aptel <aaptel@suse.com>,
-	Pavel Shilovsky <pshilov@microsoft.com>,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH v2] cifs: avoid NULL pointer dereference in dbg call
-Date: Wed, 19 Mar 2025 17:28:58 +0300
-Message-Id: <20250319142858.2166-1-adiupina@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1742412627; c=relaxed/simple;
+	bh=yuVdpLtsC60x+P5yXiu7LI/XprDS4+SULd/2llLIKxI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QwJ8xdhn+J7SBMTJgPptgKC83QumHRgITlnR78jQVwydfIBKvGIWVm3JM1saFxoBBX79I+kxh5dBfBChuyyRmkZE1erNkyCLaquNWZVR987/Gi3afo2vvTejUBSMIkj+ilUf6t0nfopm1yttYcDCbrnItXMyLLh22YY34vsmKRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HOQcU7I2; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5497590ffbbso62011e87.1;
+        Wed, 19 Mar 2025 12:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742412623; x=1743017423; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjPdZUk4Nt9PEx4A+1SO/010u3e1pVDr5a3dUVLO0X0=;
+        b=HOQcU7I2Wd1nm0P/EntmCkdRM0W3WdYphMILkhReK3wg5gfioCIV8CM6paCTIaeXD0
+         mwaupTmFon86a7CfkQV3ptxPJF1P4cJuu22Eq5wHn5GJlIEzp2V41lHlQzFC71Ye+wjM
+         LJuX1y/7oIlvTZAzbeZzPRMt0AAnLzhWZ6WwpXn+1dAZQwP4jmI5u/1NREKuxSIDk9RT
+         FiXMfz3p/kMWOOnhAnVN7S2GjOKmiw7u3hctWtbbV7juVwnng5Qk4w70vjDgfHPVX1NC
+         LlLKtK44rej/ynjtxxco1Fk/WfiuEAGAVo1SHrcM0WIc+xbv0C3eGnr+8nDPUESPJflA
+         gSPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742412623; x=1743017423;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CjPdZUk4Nt9PEx4A+1SO/010u3e1pVDr5a3dUVLO0X0=;
+        b=GKu+wUjBUU73aLqhjIaIt26UANqRuly5lUjD4/qrPChGmibZms1UOY9uN3q3flsRad
+         cC7iJAmiPz2cXgfckMe5zE91rH3JEWKDV05xU3AVnluOMwTcHSLLvA8vPBDaPAL+EtUg
+         e/nRqu6w4XGH8joiN52SSbY/490rZUiqfs9vRNShfnzh0/iPEws8xc/zmNGLD16Jo+Jj
+         uYMH4RYmwM3i2CelVYe9VcSLjgVARB7Xi6MKSwNUH89ep3qfY8tndoKvotxk5j5riXxi
+         HJGGl7/ncy89NO2f81UZOWw2xO03YaM09zr9KssYTh/A8ng1Ehriu3kDx1aD4Tvl673z
+         KE9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUpakTK45H2VDXJ96Pr6ENJua6Y7tFENhyfkykbU7Mv1+7eCPIZGSzllJuKyHIVTVN+t53BPNzzRl7iWrCa@vger.kernel.org, AJvYcCVYujSKVI39JdA+dBD0ZqyWjaCk0jzRvtyAP1kj524NwB/tAydm4+XQqN+BnOUvjOaTDA1vG9SavH53@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy69B1SBwkpiScL0hOJD2rPZNsf6+sRJFepJUgcp0b89Kp2qANa
+	6qYqB8i2yb99iXwBndQB/k/xN3jN7ThpHJDOo1azMC5+W5bpLnkHO6WMavECFT0oS0+R3D667LY
+	CYM85fOBIcKE3dxQ8ptYuuOJpYZ6Y8A==
+X-Gm-Gg: ASbGncsdB7suxinbft0xacpDRrETOc53fd5Qa9T2zaK0tw8aLBGgNHPAYhiSHOHwVZ/
+	r2gkj9+/bvWRPsJs152QNoAPZfl9pVwiBLy1hOL/AoCsXXmvZm1z5w4BHrE6NgdUImZZTKhJgf5
+	+lMsBwic1FMWNvdEosLz0VSe7E8CWRHdwzt51nyxx7Z3wQU8861OkuEXphq+v92q49XAWGTH8=
+X-Google-Smtp-Source: AGHT+IGNmednv6g3WBsP6ygVOMceOxWwcUpi3FGO7Rvzn3j0b+dP4eq642X+94uECeHnq1fFOmasbAUrs3O4JAvrnUo=
+X-Received: by 2002:a05:6512:234c:b0:549:7145:5d25 with SMTP id
+ 2adb3069b0e04-54ad067861fmr84418e87.34.1742412622784; Wed, 19 Mar 2025
+ 12:30:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: adiupina@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 51 0.3.51 68896fb0083a027476849bf400a331a2d5d94398, {Tracking_internal2}, {Tracking_from_domain_doesnt_match_to}, astralinux.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;new-mail.astralinux.ru:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 191942 [Mar 19 2025]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.11
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2025/03/19 09:15:00 #27801794
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+References: <20250319123110.21814-1-adiupina@astralinux.ru>
+ <ci4fhara55ka4mh65zn7x5vp3zjcqcytghupjzz2izudvjjejn@6qggfqf2qsxc> <6249e342-f379-4257-8a19-52b888e02c09@astralinux.ru>
+In-Reply-To: <6249e342-f379-4257-8a19-52b888e02c09@astralinux.ru>
+From: Steve French <smfrench@gmail.com>
+Date: Wed, 19 Mar 2025 14:30:10 -0500
+X-Gm-Features: AQ5f1JoRrz5Nk1_H_FVmMQADeFbuF158bvWZ_f9-0tI7AoJZYN1WrJOk2nP-bvU
+Message-ID: <CAH2r5muCakSQSh_Epm5eFDPnFu=_Ayc-wwd7a7t+FrKxziz5DA@mail.gmail.com>
+Subject: Re: [lvc-project] [PATCH] cifs: avoid NULL pointer dereference in dbg call
+To: Alexandra Diupina <adiupina@astralinux.ru>
+Cc: Fedor Pchelkin <pchelkin@ispras.ru>, Steve French <sfrench@samba.org>, 
+	Paulo Alcantara <pc@manguebit.com>, linux-cifs@vger.kernel.org, 
+	Shyam Prasad N <sprasad@microsoft.com>, samba-technical@lists.samba.org, 
+	Aurelien Aptel <aaptel@suse.com>, linux-kernel@vger.kernel.org, Tom Talpey <tom@talpey.com>, 
+	Bharath SM <bharathsm@microsoft.com>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Pavel Shilovsky <pshilov@microsoft.com>, lvc-project@linuxtesting.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-cifs_server_dbg() implies server to be non-NULL so
-move call under condition to avoid NULL pointer dereference.
+I don't mind if you also send patches as attachments (or with pointer
+to git or github commit link), especially if your email is corrupting
+whitespace
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Wed, Mar 19, 2025 at 9:33=E2=80=AFAM Alexandra Diupina
+<adiupina@astralinux.ru> wrote:
+>
+>
+>
+>
+> 19/03/25 16:20, Fedor Pchelkin =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Wed, 19. Mar 15:31, Alexandra Diupina wrote:
+> >> diff --git a/fs/smb/client/smb2misc.c b/fs/smb/client/smb2misc.c
+> >> index f3c4b70b77b9..c02aab58aade 100644
+> >> --- a/fs/smb/client/smb2misc.c
+> >> +++ b/fs/smb/client/smb2misc.c
+> >> @@ -816,11 +816,12 @@ smb2_handle_cancelled_close(struct cifs_tcon *tc=
+on, __u64 persistent_fid,
+> >>              WARN_ONCE(tcon->tc_count < 0, "tcon refcount is negative"=
+);
+> >>              spin_unlock(&cifs_tcp_ses_lock);
+> >>
+> >> -            if (tcon->ses)
+> >> +            if (tcon->ses) {
+> >>                      server =3D tcon->ses->server;
+> >> -
+> >> -            cifs_server_dbg(FYI, "tid=3D0x%x: tcon is closing, skippi=
+ng async close retry of fid %llu %llu\n",
+> >> -                            tcon->tid, persistent_fid, volatile_fid);
+> >> +                    cifs_server_dbg(FYI,
+> >> +                                                    "tid=3D0x%x: tcon=
+ is closing, skipping async close retry of fid %llu %llu\n",
+> >> +                                                    tcon->tid, persis=
+tent_fid, volatile_fid);
+> >> +            }
+> > Something is wrong with the indentation. Usually scripts/checkpatch.pl
+> > can give some feedback on this, too.
+> >
+> > CHECK: Alignment should match open parenthesis
+> > #32: FILE: fs/smb/client/smb2misc.c:822:
+> > +                     cifs_server_dbg(FYI,
+> > +                                                     "tid=3D0x%x: tcon=
+ is closing, skipping async close retry of fid %llu %llu\n",
+>
+> In the *.patch file, everything was fine with indents,
+> so the checkpatch.pl script completed without errors.
+> But when sending, the indents got corrupted for some
+> reason. I'll send the second version
+> >
+> >>
+> >>              return 0;
+> >>      }
+> >> --
+> >> 2.30.2
+>
+>
 
-Fixes: e79b0332ae06 ("cifs: ignore cached share root handle closing errors")
-Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
----
-v2: fix indentation
- fs/smb/client/smb2misc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/fs/smb/client/smb2misc.c b/fs/smb/client/smb2misc.c
-index f3c4b70b77b9..c02aab58aade 100644
---- a/fs/smb/client/smb2misc.c
-+++ b/fs/smb/client/smb2misc.c
-@@ -816,11 +816,12 @@ smb2_handle_cancelled_close(struct cifs_tcon *tcon, __u64 persistent_fid,
- 		WARN_ONCE(tcon->tc_count < 0, "tcon refcount is negative");
- 		spin_unlock(&cifs_tcp_ses_lock);
- 
--		if (tcon->ses)
-+		if (tcon->ses) {
- 			server = tcon->ses->server;
--
--		cifs_server_dbg(FYI, "tid=0x%x: tcon is closing, skipping async close retry of fid %llu %llu\n",
--				tcon->tid, persistent_fid, volatile_fid);
-+			cifs_server_dbg(FYI,
-+					"tid=0x%x: tcon is closing, skipping async close retry of fid %llu %llu\n",
-+					tcon->tid, persistent_fid, volatile_fid);
-+		}
- 
- 		return 0;
- 	}
--- 
-2.30.2
+--=20
+Thanks,
 
+Steve
 
