@@ -1,178 +1,128 @@
-Return-Path: <linux-cifs+bounces-4285-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4287-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF16A68E7C
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 15:06:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22B8DA68F24
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 15:31:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A05E7A934B
-	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 14:05:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 858C93B4173
+	for <lists+linux-cifs@lfdr.de>; Wed, 19 Mar 2025 14:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 413771C6FEE;
-	Wed, 19 Mar 2025 14:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lr4mL5vt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DAC1B2182;
+	Wed, 19 Mar 2025 14:29:50 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-gw01.astralinux.ru (mail-gw01.astralinux.ru [37.230.196.243])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127F91D514F;
-	Wed, 19 Mar 2025 14:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F658185935;
+	Wed, 19 Mar 2025 14:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.230.196.243
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742393086; cv=none; b=ItWYigyIO191QJPeUjnzB3kJMPLKAcBdEvANfy2lwAYe9mCadx667AXeafQD5R1FELsN3Hz8mOCOoT+ePP+yx9oA9LKwVxvUMgXa2lmLchxNsLD2JQrE3nj2zzqsdcpPWxj8JNQH3X7MliU7/zSTB/zjkCHootZAhKEdY5ji5lA=
+	t=1742394589; cv=none; b=m/OPcSfWGERozUSZ8Kz8bFHq9v+CDajf8YYxWeH06qBLmhNvO564Yx1vL1ZYRMePhi0JB8Aj41EHSuHaFEfc+Z+VkJeq1niexDY+AScB7TeCziZwlvclkLyH8UtUVJUkF4k9MSrN/yzvLZyoSB3Ak5p5mtIEr6JLQ6OKcypxt8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742393086; c=relaxed/simple;
-	bh=XLseAtVuZGTyV4UnXu78XBm/IOdbX1Pv0cEyqyRv/F0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TsF0PiFjkv4nDaSEuDxrbBGfPr4hCCeWsujj9YDIO5c7WBad81sqe9syMeaUuz08rfb8e2v93HVsZ4lsCvHQ39olMdmXOcyh2AeE12BF1UDQNW/MvOUgcouMZZoAL5FobQrSo+Q84YLgF0AyQditCNFMiDQmzFkE8UwUgl1vN2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lr4mL5vt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5491CC4CEE9;
-	Wed, 19 Mar 2025 14:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742393085;
-	bh=XLseAtVuZGTyV4UnXu78XBm/IOdbX1Pv0cEyqyRv/F0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lr4mL5vthnchBidBqeX/PhFJeLNf2cnh6HwecJptmGMC2gwUNW0q6ind2lia+zL95
-	 em7yXDmLmVipN7mxFXMmCONDhJk9RPEa1R5EKZ4jNpe2fzQpRwsdPHzYs9l7HBBquY
-	 CfoW+Sg1E5rdq/RXH1Sei3lvac+cCZb433qzoQVA=
-Date: Wed, 19 Mar 2025 07:03:26 -0700
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Cliff Liu <donghua.liu@windriver.com>
-Cc: stable@vger.kernel.org, sfrench@samba.org, pc@cjr.nz,
-	lsahlber@redhat.com, sprasad@microsoft.com, tom@talpey.com,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	linux-kernel@vger.kernel.org, paul@darkrain42.org,
-	Zhe.He@windriver.com
-Subject: Re: [PATCH 6.1.y] smb: prevent use-after-free due to open_cached_dir
- error paths
-Message-ID: <2025031913-unclaimed-ocean-06f5@gregkh>
-References: <20250319090839.3631424-1-donghua.liu@windriver.com>
+	s=arc-20240116; t=1742394589; c=relaxed/simple;
+	bh=gJO0u3hxyvpib82VNNauGf/zSAu6xI/C9h6UCsTUl+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uFIPndyEKg5vhhPumDaf+Q9QwO3ZdixjGbdYMrekaUSVQuTzTdYOCecXonYqyikNz6AJpI1kCoX1+2A3jsMcJVKlR9/Trmtod7JIPifG9mmbuVDxUT9zcwHAVEU4oVK/RYHZnrkB9nJKYw8Wff/g33sbxFkHW/GUI05pjUB4vww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=37.230.196.243
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+Received: from gca-sc-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
+	by mail-gw01.astralinux.ru (Postfix) with ESMTP id 37CBC25022;
+	Wed, 19 Mar 2025 17:20:04 +0300 (MSK)
+Received: from new-mail.astralinux.ru (gca-yc-ruca-srv-mail05.astralinux.ru [10.177.185.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-gw01.astralinux.ru (Postfix) with ESMTPS;
+	Wed, 19 Mar 2025 17:20:01 +0300 (MSK)
+Received: from [10.198.18.214] (unknown [10.198.18.214])
+	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4ZHrSt0cmJz1c0v1;
+	Wed, 19 Mar 2025 17:19:58 +0300 (MSK)
+Message-ID: <6249e342-f379-4257-8a19-52b888e02c09@astralinux.ru>
+Date: Wed, 19 Mar 2025 17:19:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250319090839.3631424-1-donghua.liu@windriver.com>
+User-Agent: RuPost Desktop
+Subject: Re: [lvc-project] [PATCH] cifs: avoid NULL pointer dereference in dbg
+ call
+Content-Language: ru
+To: Fedor Pchelkin <pchelkin@ispras.ru>
+Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>,
+ linux-cifs@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+ samba-technical@lists.samba.org, Aurelien Aptel <aaptel@suse.com>,
+ linux-kernel@vger.kernel.org, Tom Talpey <tom@talpey.com>,
+ Bharath SM <bharathsm@microsoft.com>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ Pavel Shilovsky <pshilov@microsoft.com>, lvc-project@linuxtesting.org
+References: <20250319123110.21814-1-adiupina@astralinux.ru>
+ <ci4fhara55ka4mh65zn7x5vp3zjcqcytghupjzz2izudvjjejn@6qggfqf2qsxc>
+From: Alexandra Diupina <adiupina@astralinux.ru>
+In-Reply-To: <ci4fhara55ka4mh65zn7x5vp3zjcqcytghupjzz2izudvjjejn@6qggfqf2qsxc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Envelope-From: adiupina@astralinux.ru
+X-KSMG-AntiSpam-Info: LuaCore: 51 0.3.51 68896fb0083a027476849bf400a331a2d5d94398, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;astralinux.ru:7.1.1;new-mail.astralinux.ru:7.1.1;127.0.0.199:7.1.2, FromAlignment: s
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiSpam-Lua-Profiles: 191942 [Mar 19 2025]
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Version: 6.1.1.11
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2025/03/19 09:15:00 #27801794
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 1
 
-On Wed, Mar 19, 2025 at 05:08:39PM +0800, Cliff Liu wrote:
-> From: Paul Aurich <paul@darkrain42.org>
-> 
-> If open_cached_dir() encounters an error parsing the lease from the
-> server, the error handling may race with receiving a lease break,
-> resulting in open_cached_dir() freeing the cfid while the queued work is
-> pending.
-> 
-> Update open_cached_dir() to drop refs rather than directly freeing the
-> cfid.
-> 
-> Have cached_dir_lease_break(), cfids_laundromat_worker(), and
-> invalidate_all_cached_dirs() clear has_lease immediately while still
-> holding cfids->cfid_list_lock, and then use this to also simplify the
-> reference counting in cfids_laundromat_worker() and
-> invalidate_all_cached_dirs().
-> 
-> Fixes this KASAN splat (which manually injects an error and lease break
-> in open_cached_dir()):
-> 
-> ==================================================================
-> BUG: KASAN: slab-use-after-free in smb2_cached_lease_break+0x27/0xb0
-> Read of size 8 at addr ffff88811cc24c10 by task kworker/3:1/65
-> 
-> CPU: 3 UID: 0 PID: 65 Comm: kworker/3:1 Not tainted 6.12.0-rc6-g255cf264e6e5-dirty #87
-> Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-> Workqueue: cifsiod smb2_cached_lease_break
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x77/0xb0
->  print_report+0xce/0x660
->  kasan_report+0xd3/0x110
->  smb2_cached_lease_break+0x27/0xb0
->  process_one_work+0x50a/0xc50
->  worker_thread+0x2ba/0x530
->  kthread+0x17c/0x1c0
->  ret_from_fork+0x34/0x60
->  ret_from_fork_asm+0x1a/0x30
->  </TASK>
-> 
-> Allocated by task 2464:
->  kasan_save_stack+0x33/0x60
->  kasan_save_track+0x14/0x30
->  __kasan_kmalloc+0xaa/0xb0
->  open_cached_dir+0xa7d/0x1fb0
->  smb2_query_path_info+0x43c/0x6e0
->  cifs_get_fattr+0x346/0xf10
->  cifs_get_inode_info+0x157/0x210
->  cifs_revalidate_dentry_attr+0x2d1/0x460
->  cifs_getattr+0x173/0x470
->  vfs_statx_path+0x10f/0x160
->  vfs_statx+0xe9/0x150
->  vfs_fstatat+0x5e/0xc0
->  __do_sys_newfstatat+0x91/0xf0
->  do_syscall_64+0x95/0x1a0
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> 
-> Freed by task 2464:
->  kasan_save_stack+0x33/0x60
->  kasan_save_track+0x14/0x30
->  kasan_save_free_info+0x3b/0x60
->  __kasan_slab_free+0x51/0x70
->  kfree+0x174/0x520
->  open_cached_dir+0x97f/0x1fb0
->  smb2_query_path_info+0x43c/0x6e0
->  cifs_get_fattr+0x346/0xf10
->  cifs_get_inode_info+0x157/0x210
->  cifs_revalidate_dentry_attr+0x2d1/0x460
->  cifs_getattr+0x173/0x470
->  vfs_statx_path+0x10f/0x160
->  vfs_statx+0xe9/0x150
->  vfs_fstatat+0x5e/0xc0
->  __do_sys_newfstatat+0x91/0xf0
->  do_syscall_64+0x95/0x1a0
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> 
-> Last potentially related work creation:
->  kasan_save_stack+0x33/0x60
->  __kasan_record_aux_stack+0xad/0xc0
->  insert_work+0x32/0x100
->  __queue_work+0x5c9/0x870
->  queue_work_on+0x82/0x90
->  open_cached_dir+0x1369/0x1fb0
->  smb2_query_path_info+0x43c/0x6e0
->  cifs_get_fattr+0x346/0xf10
->  cifs_get_inode_info+0x157/0x210
->  cifs_revalidate_dentry_attr+0x2d1/0x460
->  cifs_getattr+0x173/0x470
->  vfs_statx_path+0x10f/0x160
->  vfs_statx+0xe9/0x150
->  vfs_fstatat+0x5e/0xc0
->  __do_sys_newfstatat+0x91/0xf0
->  do_syscall_64+0x95/0x1a0
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> 
-> The buggy address belongs to the object at ffff88811cc24c00
->  which belongs to the cache kmalloc-1k of size 1024
-> The buggy address is located 16 bytes inside of
->  freed 1024-byte region [ffff88811cc24c00, ffff88811cc25000)
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paul Aurich <paul@darkrain42.org>
-> Signed-off-by: Steve French <stfrench@microsoft.com>
-> [ Do not apply the change for cfids_laundromat_worker() since there is no
->   this function and related feature on 6.1.y. Update open_cached_dir()
->   according to method of upstream patch. ]
-> Signed-off-by: Cliff Liu <donghua.liu@windriver.com>
-> Signed-off-by: He Zhe <Zhe.He@windriver.com>
-> ---
-> Verified the build test.
-> ---
->  fs/smb/client/cached_dir.c | 39 ++++++++++++++++----------------------
->  1 file changed, 16 insertions(+), 23 deletions(-)
 
-No upstream git id :(
+
+
+19/03/25 16:20, Fedor Pchelkin пишет:
+> On Wed, 19. Mar 15:31, Alexandra Diupina wrote:
+>> diff --git a/fs/smb/client/smb2misc.c b/fs/smb/client/smb2misc.c
+>> index f3c4b70b77b9..c02aab58aade 100644
+>> --- a/fs/smb/client/smb2misc.c
+>> +++ b/fs/smb/client/smb2misc.c
+>> @@ -816,11 +816,12 @@ smb2_handle_cancelled_close(struct cifs_tcon *tcon, __u64 persistent_fid,
+>>   		WARN_ONCE(tcon->tc_count < 0, "tcon refcount is negative");
+>>   		spin_unlock(&cifs_tcp_ses_lock);
+>>   
+>> -		if (tcon->ses)
+>> +		if (tcon->ses) {
+>>   			server = tcon->ses->server;
+>> -
+>> -		cifs_server_dbg(FYI, "tid=0x%x: tcon is closing, skipping async close retry of fid %llu %llu\n",
+>> -				tcon->tid, persistent_fid, volatile_fid);
+>> +			cifs_server_dbg(FYI,
+>> +							"tid=0x%x: tcon is closing, skipping async close retry of fid %llu %llu\n",
+>> +							tcon->tid, persistent_fid, volatile_fid);
+>> +		}
+> Something is wrong with the indentation. Usually scripts/checkpatch.pl
+> can give some feedback on this, too.
+>
+> CHECK: Alignment should match open parenthesis
+> #32: FILE: fs/smb/client/smb2misc.c:822:
+> +			cifs_server_dbg(FYI,
+> +							"tid=0x%x: tcon is closing, skipping async close retry of fid %llu %llu\n",
+
+In the *.patch file, everything was fine with indents,
+so the checkpatch.pl script completed without errors.
+But when sending, the indents got corrupted for some
+reason. I'll send the second version
+>
+>>   
+>>   		return 0;
+>>   	}
+>> -- 
+>> 2.30.2
+
 
