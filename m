@@ -1,144 +1,102 @@
-Return-Path: <linux-cifs+bounces-4554-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4556-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD82AA914F
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 May 2025 12:41:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E860AA943C
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 May 2025 15:21:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6E787A5FA8
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 May 2025 10:40:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69AE53A226C
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 May 2025 13:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183631FBE83;
-	Mon,  5 May 2025 10:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2091A2C25;
+	Mon,  5 May 2025 13:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GvJjzIq2"
+	dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b="ignOIzLC"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1341FBC8D
-	for <linux-cifs@vger.kernel.org>; Mon,  5 May 2025 10:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4118E846C
+	for <linux-cifs@vger.kernel.org>; Mon,  5 May 2025 13:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.235.159.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746441694; cv=none; b=SHAuI9qqCZcGtgYcABrX/XQo+XFZFYZclZxjKRLea0mNIu8dEo3uI4/wG0umMa1IxjtNkmzkaY4kStx84XQPci7AIgTpZMDd8e7a17BMuyV1WJcYFMnM/ivDCOkpATll5VjaMnSEkIbDR1IoWwx8cs8PWp/P1gJFAXV496PLC8o=
+	t=1746451266; cv=none; b=CXqu3VWzZwEV5EuiXtrT/nVvyuv2piW9ORueqD/KvR2oNtuDiu+z5X5aTxl7jE/1VYaKm72EkFqpMmBhcBpDYsQrFq7UcCrHIB9hrxLAzxX/9oFR+7yqHGPld9LWnDeTwOsp6UnyNTg5ivOsymLxgenXoCSriEtCw4ofv+cq2ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746441694; c=relaxed/simple;
-	bh=8FoBes3dKHIoLshq+YgvTFHDDMXE9lB4QgJ3xsKtY74=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ljAtgKVAN/vxyQGXSSR2iMyuexJg7Olii8L5upIOi6DyVvX/Ccb74OwBoYqhxHVSw86lYtvFJlouf+aW7uAJQ3SzaFLIIRZyNRN1sCt3LnWVzEinKgaOvktxk48bSC4L3zWd3lNKy6/6NcXGp2VkVkyGy8Vb3CUeD0hafnsTHwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GvJjzIq2; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e7297c3ce7aso3217202276.0
-        for <linux-cifs@vger.kernel.org>; Mon, 05 May 2025 03:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746441691; x=1747046491; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B45eiU8dq7sea9jml7m/GV/jIGHI5T8rrRhnB4khC5M=;
-        b=GvJjzIq2Ma61bLNEpoKSXCLT410kBWpk6fkn2zxr1EYOwRsEHN/9A298GDxWzmlwuI
-         rqqTn0KlIC/lH0WHTrmn8EEChS1ybTAY6/+Vc9c+vi4winyYq2ptQBIyBIOKr0jdKqL6
-         QYKoBZdvKZFpxy4loH/yzu7p1FOtJdWsgTc05SPrYwp/F0tZV0o/oz5K0vD9F88rYDky
-         abylJsA4weQYlD19GFUBib4fnTpSyqKwYLdZzN3VYo0oKTRvvpO3QMmRrwsBeG26mji+
-         q0FwwleIupwuRTCvD/ypUXS5p0lcxujSXl9GcuDYG4CvwfyjfPFSyR3DTHQWYhHWXaZS
-         8qfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746441691; x=1747046491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B45eiU8dq7sea9jml7m/GV/jIGHI5T8rrRhnB4khC5M=;
-        b=MiYMIUHfRn9hWsmLGnpJrW98nD+ugHGw7PYdzlG0z+Jl124BtvT7z2ojWh27LSaMx9
-         o6kEEfB94nWjSC9qrFMdaP3J5tPDyB0uNIMnebYOzepYcnSi6CCSjV3uBsFuJuvz4qfD
-         c8dyUOrnf4mpadcLwCwIdcSTJoJw7vQgfaP1t23kG7rr+Ul1KCiXQ5lbLGm7F7pmADGk
-         18hT3aX4YZxJVI0PJD+7/3DUkxBHa8h+NnshgeElyGsW80o9KC9F6wRM+2E+s8vILCCk
-         jzpezfKM8bIB5rjtIepxmbNEIpKW2aKeNbNXEuenhgNnTQslC9Eaz6PpFu1O2/CQ2LOI
-         7htw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbHwzXIUCwksO7v14WJFwDdSJ0a6df/0uGnYpStbEoMcgDyr1d5EGaItryx1HFt1pQhgW3c98OOdca@vger.kernel.org
-X-Gm-Message-State: AOJu0YySC5W38LVos6FwHc3cwj5/L65q2adHmeBfmpGVt3KWwuSunbzD
-	wY3QGLaidB+jiHl0Sfq/y3kfCdNwqDiLJMBFHPVzprBkU9fTZA0jkIWqGYaDwQ3F4rC53ddU0lk
-	9WrAB8AoM9q8RuQztjbHE4J0Ji9E=
-X-Gm-Gg: ASbGncuyg7KTnRRCDRqeigaQsPzhr9JZPW1i5OShBa3j9dXBti8v5M823S5CHP8/N4V
-	ZYao85tmDsaydDCjv+T3IsOqNFAVa8iQLCfNQUbujuM9uhKxIj1wr1ijmB/ATkbOdVgnntN2Sqp
-	SCEFcpLz+krduGyCCYMaUEdl07XOjajbXeHCKF8hPzqxuP1UXrtFSi
-X-Google-Smtp-Source: AGHT+IEA7pGT3WOdovW6Pwxff9HBRZMK7nHXwB1KFT4c4V7UOrlg5o96z4JObJRf9XElFdmhBjvQXoQ8AxyKbSATzSs=
-X-Received: by 2002:a05:6902:1407:b0:e72:97bc:a199 with SMTP id
- 3f1490d57ef6-e757d0b87ebmr6771062276.4.1746441691157; Mon, 05 May 2025
- 03:41:31 -0700 (PDT)
+	s=arc-20240116; t=1746451266; c=relaxed/simple;
+	bh=aqgq1sO0FZ00ldgKW8080tQjHqJUHNpbP2Pptuvog5E=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=SzbC0pqxJT6eCB0UEm0VDp4iqP8285pHa/GjUDP1J9qESjTarrOfY9M0IS0KJeJLzArhU6LZNR1ObRtPLxB+NZ8F5lUUBZdfb3DcUwv/0jbXoJbhyehGdGwLu+5k/ZKC0m/QlpoYj2YbGo0mF6ASU+FeONsonHHH7FFbApU/AdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com; spf=pass smtp.mailfrom=manguebit.com; dkim=pass (2048-bit key) header.d=manguebit.com header.i=@manguebit.com header.b=ignOIzLC; arc=none smtp.client-ip=167.235.159.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.com
+Message-ID: <3d7d41c055cd314342ec1f33e6332c32@manguebit.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+	s=dkim; t=1746450741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nrxPvV3tahgTgvIphw8AmB/SVo3F/ozV22cwavgsniY=;
+	b=ignOIzLC0p0JTIfE0GSWI9vdOyPnfzfLGPq7ho2PkaLlW3dYA30HkquF5+jPq/Qq8XuuWb
+	cgF9itbQPrzMMRCCh/pLr0AofTsoq/UNTTR1nddO54GxLFk7ffX5BribF3aVHCxjxQGWFT
+	zpjBMs26sXA4IQNYOjkQEa/gC89RBNGYI20mSHdF4z7/nrSKsK/yg63OSOUvrcWeySXEVl
+	dtPelVZZlnywl2BB2iUy/gzjNhKmJIdWDHkfVqL6RsHow0Z7hfoWgZa1IrzHhPWa+vha4S
+	ByzV1sTLcLmnY8rNFzl5cqusCW+QubOdRc2aY1Pp1lwa573rJd4oVFT0SCmrRA==
+From: Paulo Alcantara <pc@manguebit.com>
+To: Bharath SM <bharathsm.hsk@gmail.com>
+Cc: Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org, David
+ Howells <dhowells@redhat.com>, Pierguido Lambri <plambri@redhat.com>,
+ Bharath S M <bharathsm@microsoft.com>
+Subject: Re: [PATCH] smb: client: fix delay on concurrent opens
+In-Reply-To: <CAGypqWx0xEJRD_7kxNAiyLB5ueSGFda1bkRXECXtUhinVgvV-A@mail.gmail.com>
+References: <20250428140500.1462107-1-pc@manguebit.com>
+ <CAH2r5muGNUp9UqQZ_mPVoLiw9+xocV8OZ8hubGyQG=oTd=-BXQ@mail.gmail.com>
+ <2f76f9b0b3e5ca99fce360d19b0d6218@manguebit.com>
+ <CAGypqWx0xEJRD_7kxNAiyLB5ueSGFda1bkRXECXtUhinVgvV-A@mail.gmail.com>
+Date: Mon, 05 May 2025 10:12:16 -0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250428140500.1462107-1-pc@manguebit.com> <CAH2r5muGNUp9UqQZ_mPVoLiw9+xocV8OZ8hubGyQG=oTd=-BXQ@mail.gmail.com>
- <2f76f9b0b3e5ca99fce360d19b0d6218@manguebit.com>
-In-Reply-To: <2f76f9b0b3e5ca99fce360d19b0d6218@manguebit.com>
-From: Bharath SM <bharathsm.hsk@gmail.com>
-Date: Mon, 5 May 2025 16:11:20 +0530
-X-Gm-Features: ATxdqUFgW4JXEma_w3PR7yJEdLhree_2N2m_oE_HKuwmi5icNaum2bzj02BbtF0
-Message-ID: <CAGypqWx0xEJRD_7kxNAiyLB5ueSGFda1bkRXECXtUhinVgvV-A@mail.gmail.com>
-Subject: Re: [PATCH] smb: client: fix delay on concurrent opens
-To: Paulo Alcantara <pc@manguebit.com>
-Cc: Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org, 
-	David Howells <dhowells@redhat.com>, Pierguido Lambri <plambri@redhat.com>, 
-	Bharath S M <bharathsm@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, May 1, 2025 at 12:44=E2=80=AFAM Paulo Alcantara <pc@manguebit.com> =
-wrote:
->
-> Steve French <smfrench@gmail.com> writes:
->
-> > Did you mean
-> >
-> > downgraded "RWH to RW"  or downgraded from "RWH to RH"
->
-> Downgraded from RWH to RW.
->
-> > But it is puzzling why file would still be open if not in openfile list
->
-> The server is breaking the H lease.  cifs_close_deferred_file() will put
-> all cifsFileInfo references from deferred closes in the inode, meaning
-> that _cifsFileInfo_put() call in cifs_oplock_break() will effectively
-> put the last reference and then closing the open handle.
+Bharath SM <bharathsm.hsk@gmail.com> writes:
 
+> If the file has only deferred handles and a handle lease break occurs,
+> closing all the handles triggers an implicit acknowledgment. After the
+> last handle is closed, the server may release the structures
+> associated with the file handle. If the acknowledgment is sent after
+> closing all the handles, the server may ignore it or it may return an
+> invalid file error, as it could have already freed the handle/lease
+> key and related structures. 
 
+I couldn't find anything in the specs related to the above.  Could you
+please point me out to the correct specs or is this just theorical?
 
-> The check for a non-empty list after that makes no sense as we already
-> closed all open handles.  As I understand it, the implicit ACK would
-> work if we have no open handles at the time we receive the lease break,
-> but that couldn't work as we always get an active reference of the open
-> handle before processing the lease break.
->
-> What am I missing?
->
+Have you been able to reproduce the above?  If so, please share the
+details.
 
-If the file has only deferred handles and a handle lease break occurs,
-closing all the handles triggers an implicit acknowledgment. After the
-last handle is closed, the server may release the structures
-associated with the file handle. If the acknowledgment is sent after
-closing all the handles, the server may ignore it or it may return an
-invalid file error, as it could have already freed the handle/lease
-key and related structures. Additionally, this would result in an
-extra command being sent to the server. This check was added to avoid
-this case to send lease break ack only when openfilelist is not empty.
+If the server is returning an invalid file error for a lease break ack
+sent by the client that should be a no-op, isn't that a server bug then?
 
+> Additionally, this would result in an extra command being sent to the
+> server. This check was added to avoid this case to send lease break
+> ack only when openfilelist is not empty.
 
-> We don't know what caused it from the network traces we have.  I was
-> able to reproduce the downgrade from RWH to RW against Windows Server
-> 2022 by mounting a share twice with 'nosharesock' and then having one
-> client writing to a file and the other client remaning the file's parent
-> directory.
+I understand.  The problem with attempting to save that extra roundtrip
+has caused performance problems with our customers accessing their
+Windows Server SMB shares.
 
-> For more information, see MS-SMB2 3.3.1.4.
+> I didn't understand why a client would break 'H' lease on a file if
+> "one client writing to a file and other client remained the file's
+> parent directory."
+> Can you please help sharing more details and exact repro steps.?
 
-I didn't understand why a client would break 'H' lease on a file if
-"one client writing to a file and other client remained the file's
-parent directory."
-Can you please help sharing more details and exact repro steps.?
+mount.cifs //srv/share /mnt/1 -o ...,nosharesock
+mount.cifs //srv/share /mnt/2 -o ...,nosharesock
+tail -f /dev/null > /mnt/1/dir/foo &
+mv /mnt/2/dir /mnt/2/dir2
 
