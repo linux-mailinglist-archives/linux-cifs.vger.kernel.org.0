@@ -1,90 +1,90 @@
-Return-Path: <linux-cifs+bounces-4634-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4632-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 609FBAB24A8
-	for <lists+linux-cifs@lfdr.de>; Sat, 10 May 2025 18:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B3E0AB24A4
+	for <lists+linux-cifs@lfdr.de>; Sat, 10 May 2025 18:16:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C80A71BA18C2
-	for <lists+linux-cifs@lfdr.de>; Sat, 10 May 2025 16:16:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 238521BA1A60
+	for <lists+linux-cifs@lfdr.de>; Sat, 10 May 2025 16:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193DB288D6;
-	Sat, 10 May 2025 16:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6962343CF;
+	Sat, 10 May 2025 16:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E2UeINuh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iz0uQSwP"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7367218F2FC
-	for <linux-cifs@vger.kernel.org>; Sat, 10 May 2025 16:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBB423C505
+	for <linux-cifs@vger.kernel.org>; Sat, 10 May 2025 16:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746893794; cv=none; b=ARbxKlXEsjm32KBZrmDNo6Ltc8bNjwIDdfF1pqxKn7R8FTE5U0wcVVWHqHyC1pUosqG+fdHRbJo+mM7Pe+5KXMGfsqFeWMW6ixNDmA8YV+cCzEZj2ApA7S0wCYHH8LdLZwpSfCrcZVxDQEezspPRgGTNlMQd2o0Qou1uY21FjWA=
+	t=1746893784; cv=none; b=TleNpE8YPqztxr9xsiJIH+cKimc152MAOWGQT5SMXFmZf5t++ShOC/mNoxFDepzhZ4f7n0KZRL+iBxIFYb/+ZvDAVCKWEFBfJc/pSB6zX8rzvvbWHUMILBjdkWBvmBeKZoAgUp3AI0LA7Y7Uj5BHMn9PtEXEu3skdfsOkhtKT8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746893794; c=relaxed/simple;
-	bh=r28iAOOAikriFtZ0oQAGbICr+jQieZfce3q2GS2nZMI=;
+	s=arc-20240116; t=1746893784; c=relaxed/simple;
+	bh=j6u2Y60lDuV7eyKRxEK24qF9PWj39Kh2oBlCEMDWBqQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jbEWWVWFpDYGLziyDZvzl/LS+sGE6UqdtMG0Erk5V8N6TQsbhZCmsVjPiIk2I3VBGCG8L4/gq2nnv9dLIhUJ3vJnKrll1d98nN6MdvTx2C3Tw3s27wE+oNlGpccBTmCEmy6zcgf9Cwwm2bV9btFQYmWIhY4nHftlOFGoNGp/W8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E2UeINuh; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=Gh+w/0bOTwIyOymgo3A1t+Ka1nSW/t9Sqm28OpYTjT6wDUf93ffZx2nOPM7Z+XC+RB1kAFmA7KD8MsN86v6wJ9L5oDJyx0mFNQp3UZGa7Oub5vcciNK+44iFT8r7FABcqYt+GYQuvM2odHVFzbvozVziIc32cQVm/+6QMkYFl0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iz0uQSwP; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746893791;
+	s=mimecast20190719; t=1746893782;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=kcXEgajFsKLm+epm9RNZ9F83nNKrUNJz3GGb7s7oHqE=;
-	b=E2UeINuh08koefxvdKZTC8sxVy64rHyEpTf3TNGKZ2/fvv5tz66kZFpSlyzpUcnyS04Iej
-	ue5FwXrODwtcv4EahrbwX+RvWUuP+ElwsN0eSUW+CPc9JpeL571QOrgFFvekl3PvXvXCrj
-	MJcfjp57ws53R16NQdYnIzJkHWuCHxc=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=wWMzhCuELiuZo8qSfstPKzqK/th9KKgagJQUif+wcvc=;
+	b=iz0uQSwPUgZ0kqafQTPVPMriYbasoIP4VxvSmm5BQm9FBVNHhCrmXwaJsMmPrVKperTKa2
+	hGJmUs44CObG9AgwN6+AydN/6l8peGAnI8vl6arUKNZbuAQAx9pbThc7AzOZkvy3h5KX12
+	sw7RPuiFOrKe9PM1Oxvu744yLsaNaGQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-380-Ig-mx6yFPCaBLMyK68MhMg-1; Sat, 10 May 2025 12:16:30 -0400
-X-MC-Unique: Ig-mx6yFPCaBLMyK68MhMg-1
-X-Mimecast-MFC-AGG-ID: Ig-mx6yFPCaBLMyK68MhMg_1746893790
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-72bc266dc24so3922471a34.2
-        for <linux-cifs@vger.kernel.org>; Sat, 10 May 2025 09:16:30 -0700 (PDT)
+ us-mta-292-pDhMUMrbOd6-zOy1300E_Q-1; Sat, 10 May 2025 12:16:20 -0400
+X-MC-Unique: pDhMUMrbOd6-zOy1300E_Q-1
+X-Mimecast-MFC-AGG-ID: pDhMUMrbOd6-zOy1300E_Q_1746893780
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-476a44cec4cso50515971cf.2
+        for <linux-cifs@vger.kernel.org>; Sat, 10 May 2025 09:16:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746893789; x=1747498589;
+        d=1e100.net; s=20230601; t=1746893779; x=1747498579;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kcXEgajFsKLm+epm9RNZ9F83nNKrUNJz3GGb7s7oHqE=;
-        b=Nh8FFLTl3fZeRhKZ+ix2NF8KIB705xO2KkommTD/GS3klLMcQZ4H0SR50X6ZDYcGR1
-         COSDDuqh44VsCCVf/T9OqLbB2agUMNiUTsKWgMGim31gto7fkG360AlaIteql9YOA9D4
-         cbY8aQIR6AX/5uJlILI+7+yFskeAUGy5tWyghLXpofC/SGz6Sa5fNR0zaHUmMiHAOOuf
-         EV1mf31aajipAB76ZdA6awH5fJ6zqSqqk91/lU8dL79EU75zvfS1DUr9PSV6j+6ZG5AV
-         bIr+ff1jAZx5eaUkoF2U5YDEoOZoidVtB6D04n1jk7ZVWn+kyPUsvXbtUQ+v6WjG5lTg
-         2DoA==
-X-Gm-Message-State: AOJu0YyJ/Or0WJUnWCpIbb+ktIZXxVs+9b/yylcS0g0zWgw0IMA6oZIP
-	WHRhW71Qs7v2FUn7bndqXoujJjPlnI+Yt4rfjVtbsJNvbAvVKq5GAzcKBwYUMPeaWa2sILVvx8h
-	Dl5+ixZXLY3lJzA4jKhMCxAW3VEBHsMXn3Z1gDImHd7h330xDLLdqHwdhpZT62ZkpkiluOWtmH5
-	4IAGhVLkGVoVFVaYArARkL3yErebgaa9SGe4tAMrF2Bk4=
-X-Gm-Gg: ASbGnctEXlMFksKCWogUZ9uEu13vTw/LugNSnXVJwO8bilOHTuWfXNZUoP7pDxHV0Qa
-	uCw+WTTkZKKvnnLoZz+VP6ebS87N9yEer9ut83K271R1DdlwvjQub6bpA+4WU68Edty2jkpfn4A
-	3AsGFogLHFIu+MxBHIhfMUkHR7pHZk+PnQ6y+BK/CK6/6gPaIrgevtxvOGbVXF+5csW/j0Gs93t
-	sWEPJP2OOWW995V2yHdoRTb+29YA/MydMnGDNr1XQf4i0+mF48S3pkLUd0/sCIniCH5CsxBNFuu
-	agFl7/4+17V+TBjNFOE/zfrhkpfBkTWOBnpwYKo2bNZEivuYNCF/b17z5soRzpY7f6Mb0Ww=
-X-Received: by 2002:a05:6830:6503:b0:72b:8974:e3db with SMTP id 46e09a7af769-73226b14f21mr5308784a34.25.1746893789434;
-        Sat, 10 May 2025 09:16:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEKYXouDAYJDvLaLUZf6NmbbzAeMKG8/ZHvJCcHHzHNrzfrE5iyTpj6BhN8/vTepeeKCNm3/Q==
-X-Received: by 2002:ac8:5894:0:b0:478:f8bb:b5e with SMTP id d75a77b69052e-49452736318mr131437651cf.13.1746893778288;
-        Sat, 10 May 2025 09:16:18 -0700 (PDT)
+        bh=wWMzhCuELiuZo8qSfstPKzqK/th9KKgagJQUif+wcvc=;
+        b=sVHhJ+dj7z6UQ8Bgs+Cm/JCTwSzaRrsAHIVEyncUKmL6F5NShQjRyp1M3NSNAi6Gfu
+         Wc0EvT5+Qy35ATcuJsmTD/5mZmJrgK1sAGdPLFJMipVlXBX65yV3PuvSNFppTv3h+1vK
+         YDwRdEWDjMMz2xm1g23Dlr3lFXmBGM9XCToVOgJDBhcjPN3/EOzZ2P9qeDrriVuwCw+1
+         LXc3scxQSFUUK86kn9hiHP7QhoA803PaABFJaexinFDNBFZOka/AHFmXRWvUD1o5seiU
+         vfHPpiMIj7OaUmExwX8i9wTzQHKFVHnxBf03/60QeW7tc+i62kmsH0KUKI1gIJj42FSm
+         AdOA==
+X-Gm-Message-State: AOJu0YxrlcU7+7Qv6l7VLj91m81ST8u3lwk/ErDJs+XFXytSBbpx+mB8
+	LwT1oEg4nykLUBIBkWbTnI/5PaLcmg+G0u5vLvaEnTqi0Rd5ZTO2oH6fNrXvV39kMaYNS1jexTY
+	FIt4Z7yBob8nVGdsK6PT/Iahrpuy2RujRUfw3ilfwfIfM9Ce7Wt8rDFuiyzLy2J9JtH+pKBkxD6
+	Yi2z01n859xNuT4FqB0SGjOPVpSXO3McNnGqFQzd7DBjQ=
+X-Gm-Gg: ASbGncvZqh+42gboJpA85mpf7HbQRbEEoEdqofH/tXXJ5Z1BfZcqg/NwDXGtPGLu8iM
+	6kYGX4gFlIqIexOYXyr32RFkSNPgfhsRADvdydW8L5em1ISMtLoKnkJ8JfowxZt1SyKUg+RufP5
+	VMWap/KUuWnq/4zVNUxm1v6QlRsmy0+U5mLQyVg35UYx0OLYGghfYjA0uWY43SjULOEKf2plROP
+	siGbD/mLKZn7+O21pb69ZsEMHorNLAhoKmbuOY1YWvQwfYqW1JLBMBsRfP1QyvslkKFMIm9o5v7
+	f97WeNlGU3hqbOwuagK+qN042q+nOc8TgMR1woZ+KDiIELQircBdcKETowuU7zS/RqlN5G0=
+X-Received: by 2002:ac8:5846:0:b0:476:b783:c94d with SMTP id d75a77b69052e-494527d3d04mr116000801cf.35.1746893779508;
+        Sat, 10 May 2025 09:16:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGkXVkOJ4f6rFik8EcgVkGHVKv1pqWsyDoXoadMIy92c2CsB6WktrA5djaQSVUsLMmnjjwC0w==
+X-Received: by 2002:ac8:5846:0:b0:476:b783:c94d with SMTP id d75a77b69052e-494527d3d04mr116000371cf.35.1746893779030;
+        Sat, 10 May 2025 09:16:19 -0700 (PDT)
 Received: from bearskin.sorenson.redhat.com (c-98-227-24-213.hsd1.il.comcast.net. [98.227.24.213])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4945248d051sm27002431cf.29.2025.05.10.09.16.17
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4945248d051sm27002431cf.29.2025.05.10.09.16.18
         for <linux-cifs@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 May 2025 09:16:17 -0700 (PDT)
+        Sat, 10 May 2025 09:16:18 -0700 (PDT)
 From: Frank Sorenson <sorenson@redhat.com>
 To: linux-cifs@vger.kernel.org
-Subject: [cifs-utils RFC PATCH 09/12] upcall-helper: replace macros in upcall argument strings
-Date: Sat, 10 May 2025 11:16:06 -0500
-Message-ID: <20250510161609.2615639-10-sorenson@redhat.com>
+Subject: [cifs-utils RFC PATCH 10/12] upcall-helper: add string comparison
+Date: Sat, 10 May 2025 11:16:07 -0500
+Message-ID: <20250510161609.2615639-11-sorenson@redhat.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250510161609.2615639-1-sorenson@redhat.com>
 References: <20250510161609.2615639-1-sorenson@redhat.com>
@@ -96,64 +96,64 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace any macros in the upcall argument strings with values
-of the key variables.
+Use string comparison (as glob or regex) for 'host', 'user',
+'sec', and 'upcall_target' matching.
 
 Signed-off-by: Frank Sorenson <sorenson@redhat.com>
 ---
- contrib/upcall-helper/cifs-upcall-helper | 33 +++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
+ contrib/upcall-helper/cifs-upcall-helper | 29 +++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/contrib/upcall-helper/cifs-upcall-helper b/contrib/upcall-helper/cifs-upcall-helper
-index 18e41df..fdd0c9c 100755
+index fdd0c9c..91243bd 100755
 --- a/contrib/upcall-helper/cifs-upcall-helper
 +++ b/contrib/upcall-helper/cifs-upcall-helper
-@@ -66,15 +66,42 @@ sub log_msg {
- 		syslog($syslog_level, $msg);
+@@ -49,6 +49,8 @@ my @descriptionv2_keys = ('keyuid', 'keygid', 'perms', 'host', 'ipv', 'ip', 'sec
+ my $conf_split_re = qr/^([^\s]+)\s+(.+)/; # splitting each line of the conf file
+ my $split_char = '[,;]'; # separator for match and options fields
+ 
++my $string_comparison_re = qr/^(host|user|sec|upcall_target)(=|==|!=|~|!~)(.+)/;
++
+ sub log_msg {
+ 	my $msg_level = shift;
+ 
+@@ -180,10 +182,35 @@ sub set_upcall_opts {
  	}
  }
-+sub replace_macros {
-+	my %macros = (
-+		'%h' => 'host',
-+		'%i' => 'ip',
-+		'%s' => 'sec',
-+		'%U' => 'uid',
-+		'%c' => 'creduid',
-+		'%u' => 'user',
-+	);
-+	my $str = shift;
-+	my $result = '';
-+	my $len = length $str;
+ 
++# matching logic
++sub check_string_match {
++	my $key_field_val = shift;
++	my $comparator = shift;
++	my $match_str = shift;
 +
-+	for (my $i = 0 ; $i < $len ; $i++) {
-+		my $chars = substr $str, $i, 2;
-+		if (defined $macros{$chars}) {
-+			$result .= $key_vars{$macros{$chars}};
-+			$i += 1;
-+		} elsif ($chars eq '%%') {
-+			$result .= '%';
-+			$i += 1;
-+		} else {
-+			$result .= substr $chars, 0, 1;
-+		}
++	if ($comparator eq '=' or $comparator eq '==' or $comparator eq '!=') { # glob
++		$match_str =~ s/\./\\./g; # replace . with \.
++		$match_str =~ s/\*/\.\*/g; # replace * with .*
 +	}
++
++	my $result = 1 if ($key_field_val =~ $match_str);
++	$result = $result ^ 1 if (substr($comparator, 0, 1) eq '!');
++
 +	return $result;
 +}
- sub exec_upcall {
- 	my @upcall_args = ( '/usr/sbin/cifs.upcall' );
- 	foreach my $opt (keys %upcall_opts) {
- 		if ($opt eq 'keytab') {
--			push @upcall_args, ('-K', $upcall_opts{$opt});
-+			push @upcall_args, ('-K', replace_macros($upcall_opts{$opt}));
- 		} elsif ($opt eq 'krb5conf') {
--			push @upcall_args, ('-k', $upcall_opts{$opt});
-+			push @upcall_args, ('-k', replace_macros($upcall_opts{$opt}));
- 		} elsif ($opt eq 'krb5_trace') {
--			$ENV{'KRB5_TRACE'} = $upcall_opts{$opt};
-+			$ENV{'KRB5_TRACE'} = replace_macros($upcall_opts{$opt});
- 		} elsif ($opt eq 'use_proxy') {
- 			$ENV{'GSS_USE_PROXY'} = 'yes';
- 		} elsif ($opt eq 'legacy_uid') {
+ sub match_criterion {
+ 	my $criterion = shift;
+ 
+-	return 0;
++	my ($field, $comparator, $match_pattern);
++
++	return 1 if ($criterion eq '*');  # '*' is always true
++	if (($field, $comparator, $match_pattern) = $criterion =~ $string_comparison_re) {
++		return 0 if (! check_string_match($key_vars{$field}, $comparator, $match_pattern));
++	} else {
++		log_msg 0, "unrecognized match string: $criterion";
++		return 0;
++	}
++	return 1;
+ }
+ sub match_criteria {
+ 	my $criteria_str = shift;
 -- 
 2.49.0
 
