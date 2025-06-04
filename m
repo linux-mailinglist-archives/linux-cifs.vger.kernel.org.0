@@ -1,77 +1,77 @@
-Return-Path: <linux-cifs+bounces-4843-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4840-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8440ACDBC6
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Jun 2025 12:19:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2959ACDBC5
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Jun 2025 12:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 852781895B9B
-	for <lists+linux-cifs@lfdr.de>; Wed,  4 Jun 2025 10:19:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12978188B21C
+	for <lists+linux-cifs@lfdr.de>; Wed,  4 Jun 2025 10:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A82D18A93F;
-	Wed,  4 Jun 2025 10:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DCC22578A;
+	Wed,  4 Jun 2025 10:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7fYV6lw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwH9K80G"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C69212F94
-	for <linux-cifs@vger.kernel.org>; Wed,  4 Jun 2025 10:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0C6214811
+	for <linux-cifs@vger.kernel.org>; Wed,  4 Jun 2025 10:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749032328; cv=none; b=hFgGIyJkkByZ2kfzMUZZ3V0tWG8bjIGyvOhBSAKJdZNEf2qAXRae9Bs/OvQ0ZDoNzrocetOyWVex04aDgvNf2yPXr3Ge24/tXKCB5+DuULYoHr7ZACs4MM/fZVl6gGYElStoksoNaHpSyBnaIjSPNIbRjaTmBaJeY4k1LBrKxGQ=
+	t=1749032318; cv=none; b=LsVp3TVvUri1QecV+kr3rzBjOGP8YZpBGJtGzOgI1vwZH4L8ri/MeJRs3lto8/2h90OVx+aegUdohsvogMqrozXdWrZgFSlGTOIg+Tfx0E5nlWCT9bYDk7rEOIj3ayqaqMzeSoDmR+7Jy5jjvjoxo7XL4+UVnAEVwyj82mgQk5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749032328; c=relaxed/simple;
-	bh=jUSXwZ2JU5BfvyGxISsNxAJNOcBzyuz6dvu40OfpaqU=;
+	s=arc-20240116; t=1749032318; c=relaxed/simple;
+	bh=0kwnhdr//gYou9C5fbU1NpbT3H4FqUtSxRddSpYWh4Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qv4cziV5Fr4YaTVhKphmuB9izeR4WFDqmI160QQ4xQtiVmH+Tx2VTq8SnujZNBiT4wnny/lP75VVyDGCrlPtYuSfQLe6GrTR0JuTqtZyK1AUdUZuP/qfJjbt2o4PQoxN5dKDFAVmAN4Ei9sofjx1e7oYZHXE4ElIniqZgMqMvNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7fYV6lw; arc=none smtp.client-ip=209.85.210.182
+	 MIME-Version; b=bjKSchoj43FpR2YtIYzKoe3Nsf9Qm6U743vbMVTRuuKjzNMLFzHK3JLS84qdR+yd9a/rT4wMM449x8zKFTN/cGLqXc4Szr8b7PRFB2XZgcjxz/FltSjfs2n604rqe+GqeuQNaIsvAL9Ez7O61GraZzZNY3C/zkQ+cN/2TW9Xbuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwH9K80G; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-742c3d06de3so7153333b3a.0
-        for <linux-cifs@vger.kernel.org>; Wed, 04 Jun 2025 03:18:46 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-23035b3edf1so60396095ad.3
+        for <linux-cifs@vger.kernel.org>; Wed, 04 Jun 2025 03:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749032326; x=1749637126; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749032316; x=1749637116; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qw3PtZiVdnv/vW6tX1csKF7nxGGb2pEKG6KpB6qgCZ0=;
-        b=l7fYV6lwzWvLxpN6P/MSIJjIY2O2iHAF8207WkwOU63qzN+Zh56JgndQrSRbMRxrOH
-         mp0intzYZXZE3Ay310Ql9Dx3rt7S7OuRZXoDahubzBpmdDUvX9Gk9ovajVwNvx3Ig9Ge
-         oJazccW471Tjoyy5fmF7RmAVUY5bT1CYnOA4Sje6EbA1naTb5nfJvQix3Qam3U3csJZE
-         RLJz3MdPoXDZJ3eqVfNJdZRuboCNPC7mPfBkVGn2IKslInidVL3z5hx9sQbs+MWqM+BI
-         eK1FW6zTwzDRz8XrFUeGBrh6YuonfuvatYyOOvFJJzMzo/FqeAbVvp+LfDc5M3cVerJM
-         nJow==
+        bh=XpiyCNXXuIfWox2F20DULP4ICPhnP/XcqBXZD/I6/Pc=;
+        b=GwH9K80GOv/P7Wymh6S5RWZFolw42q6QDWSeDxY9T1ieMVFkUhcPGQaktB8NhN73d3
+         vtzopFdXBwN/WAcUq/4rkK5GeVCccHJ1IpTm7JMzRDFVjS9fSwZnrMLpYZY6CwiMKcN8
+         5AscOhHQ/Xioz1s7QEJnPyQfPAZNSPIsCCBknvZpsCQ2WUCrp6pegrEVJ51LARqHYZuj
+         eHpn/lJJQZiSjkZdtD+0O8JUAQXNsvq5BLBe3b3agS13fCY/25hAh7F+Bw/WIC9UHW9R
+         DxJhRSri2bcqkngcDZ7I0k6qOYRYV9ZlZVhIxzTKERtt4S85z8JrusczlWuvquXNsNHI
+         7jxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749032326; x=1749637126;
+        d=1e100.net; s=20230601; t=1749032316; x=1749637116;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qw3PtZiVdnv/vW6tX1csKF7nxGGb2pEKG6KpB6qgCZ0=;
-        b=asm8NUipFN5f6zn4ZTfyYeAslrgfb8lYTjJ5PH1hW5KOQIHMZDb0DiqJs8dtUXpTLQ
-         +H139bKLLkAvvVdKlxCnkbLhA1mBpqgPT1WGdwRC2LfuyiIDn9yBsoQuNCTBgWnv6W0R
-         zQt+2caAuC8aPO+tmO/aU4mRAbtm6Qn50ljtrcIg8zYFGI0uV29XVzSbrsenmRABKHzp
-         KnsFjjCU1NrwsoEkPs6hKPvmZkFIN5aFx6Qny1hNot1fPlu9n4wqwOfj89GrncLPX9i9
-         nxSj4og2k3XpzkTdZVbRQOGjAmD05K6m0t+CXx6Bu9VFuAzEQzfFT6AH+RrFO3jpErQS
-         45JQ==
-X-Gm-Message-State: AOJu0YzTp3zyRb6jhnMYAyvUBgtobtQ975hiuKZ6apuTNVgvbPV26H1/
-	RDv7KfZv67O+lpYyWE1pjY+6PZg64amEKoAaAVUdTTYM5ONgnRvAoRxFmR241ArztBk=
-X-Gm-Gg: ASbGnctXXgmYBe+6YpIZ34fowGhzzhDhC4cpA+3l26BcBmiljC4l/d2aHDEGMwGTRIY
-	qkCnteC7+JEiucmCdg49gs4wIZvtQGjFMFWZmelBvPNZRWWfaDhjs4aXOJd2vd/Q3hyBDKuVveE
-	amkYKW1ihN0PLx3MzEmSNdIMLes7th1QbScldcDhMZJEnT/szFALJZoxCK2bGS93IhOL9cZdbAo
-	HBUvOgjscpBdqDCQ+ih0D1453HaL0d2cZEC/r8RnSm4qe4vFHh3Opf11ueghqjmTa1MTU/RSIDX
-	7EcDcI8B32jYtq83PP+yIJQrVfPQNgp/VqiC1A/aTCNS2sJQTGgtDKA48Pl9i8qzOuxSXktEWAk
-	kdfQ=
-X-Google-Smtp-Source: AGHT+IGeKFOnEHPTHRUko+guia9EmB94vKNL8bHm+swr3hnPxvulr6l7xYFjtVnfUozX5GiopJZH9w==
-X-Received: by 2002:a17:902:f64d:b0:234:d292:be95 with SMTP id d9443c01a7336-235e1201291mr31773275ad.42.1749032314906;
-        Wed, 04 Jun 2025 03:18:34 -0700 (PDT)
+        bh=XpiyCNXXuIfWox2F20DULP4ICPhnP/XcqBXZD/I6/Pc=;
+        b=l3iE/mHONYdDxgazg23rPMXSVLEDXAZOZVG/OvnNGeLJJ6azGoI+q+D5PKlt8pFkKL
+         zniorcX15OK8S9raI7jP9c19b79hrMYzTJRKl9whv2ld8dD2cpKqEmjsljDNUVyaZAct
+         wRYEaLWLg87DM2r+Wno5GWHVihwh0j8WLm2zYtcgzmd3YSAOCLBv8IYIrKkzhJysVv8z
+         JWmbmAO0KHsnzNUQ1qWbokn9WLNMyVezT844NGNXiQqc9nsCQdIVPiKEvJ5ckopT7G+F
+         TtfbnMF/jx860UBUJAV5YuustcaxiunSg/bZ0UXEqlpTVDqVFih45tln2FwPuk7xQKbU
+         L2ng==
+X-Gm-Message-State: AOJu0YwwjDn33aPB51gr9RRs9ghhfMOHcA0HIpAkhyQxHoKA3lhd3dC+
+	rKi1zGWIQolWbdzF2wVmreiirSSN28JQx+2+/xy35rqmByNEyt0w7lDhvvxGj3lGyo4=
+X-Gm-Gg: ASbGncvmRY4AyeGuqjlkd/pecutr0XLfmTVD7Hz3qAkiMiqXJ4dfg+zaMto69nsVWBj
+	r19Wrum8cJwuomK15mKhLhZJolMeaIwLnOODXkxHFuVDqT6y0GrEgqbfYpRWrZ0mZzhFY3DCzPA
+	AsYeJg+0e/sCpMnui4ieYieioAOM0Nrp/kCEVQrTKbTeVJLyAXkMoQSJg1jMIAleFOvAb7Y8Am7
+	w/727GhsE56CrwxONMHaMJIhW60zDYPfIGvb+De3QqftQal26ethaU69BUXBjjRbvIlkDDExaFX
+	lY4BEd+l1PdwCdg6g+BSkwTqgp8m5XHKDQ+Rjy0U70Xs2tRVq1mgNa46wXXcFbwCX/JcMi15ljC
+	yvfE=
+X-Google-Smtp-Source: AGHT+IF0KbGSHHblUasY6wT2tMXrBhZAtxzQ9pLBIUMiMYT/HbMT69OPyIozf/WJpxibRIgd6V+uiw==
+X-Received: by 2002:a17:902:9049:b0:235:e8da:8d6 with SMTP id d9443c01a7336-235e8da0b78mr7555165ad.2.1749032315704;
+        Wed, 04 Jun 2025 03:18:35 -0700 (PDT)
 Received: from sprasad-dev1.corp.microsoft.com ([167.220.110.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23506bf8132sm100563625ad.106.2025.06.04.03.18.34
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23506bf8132sm100563625ad.106.2025.06.04.03.18.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jun 2025 03:18:34 -0700 (PDT)
+        Wed, 04 Jun 2025 03:18:35 -0700 (PDT)
 From: nspmangalore@gmail.com
 X-Google-Original-From: sprasad@microsoft.com
 To: linux-cifs@vger.kernel.org,
@@ -83,9 +83,9 @@ To: linux-cifs@vger.kernel.org,
 	henrique.carvalho@suse.com,
 	ematsumiya@suse.de
 Cc: Shyam Prasad N <sprasad@microsoft.com>
-Subject: [PATCH 4/7] cifs: serialize initialization and cleanup of cfid
-Date: Wed,  4 Jun 2025 15:48:13 +0530
-Message-ID: <20250604101829.832577-4-sprasad@microsoft.com>
+Subject: [PATCH 5/7] cifs: update the lock ordering comments with new mutex
+Date: Wed,  4 Jun 2025 15:48:14 +0530
+Message-ID: <20250604101829.832577-5-sprasad@microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250604101829.832577-1-sprasad@microsoft.com>
 References: <20250604101829.832577-1-sprasad@microsoft.com>
@@ -99,108 +99,65 @@ Content-Transfer-Encoding: 8bit
 
 From: Shyam Prasad N <sprasad@microsoft.com>
 
-Today we can have multiple processes calling open_cached_dir
-and other workers freeing the cached dir all in parallel.
-Although small sections of this code is locked to protect
-individual fields, there can be races between these threads
-which can be hard to debug.
+The lock ordering rules listed as comments in cifsglob.h were
+missing some lock details and the newly introduced cfid_mutex.
 
-This patch serializes all initialization and cleanup of
-the cfid struct and the associated resources: dentry and
-the server handle.
+Updated those notes in this commit.
 
 Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
 ---
- fs/smb/client/cached_dir.c | 16 ++++++++++++++++
- fs/smb/client/cached_dir.h |  1 +
- 2 files changed, 17 insertions(+)
+ fs/smb/client/cifsglob.h | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
-index 94538f52dfc8..2746d693d80a 100644
---- a/fs/smb/client/cached_dir.c
-+++ b/fs/smb/client/cached_dir.c
-@@ -198,6 +198,12 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 		return -ENOENT;
- 	}
- 
-+	/*
-+	 * the following is a critical section. We need to make sure that the
-+	 * callers are serialized per-cfid
-+	 */
-+	mutex_lock(&cfid->cfid_mutex);
-+
- 	/*
- 	 * check again that the cfid is valid (with mutex held this time).
- 	 * Return cached fid if it is valid (has a lease and has a time).
-@@ -208,11 +214,13 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 	spin_lock(&cfid->fid_lock);
- 	if (cfid->has_lease && cfid->time) {
- 		spin_unlock(&cfid->fid_lock);
-+		mutex_unlock(&cfid->cfid_mutex);
- 		*ret_cfid = cfid;
- 		kfree(utf16_path);
- 		return 0;
- 	} else if (!cfid->has_lease) {
- 		spin_unlock(&cfid->fid_lock);
-+		mutex_unlock(&cfid->cfid_mutex);
- 		/* drop the ref that we have */
- 		kref_put(&cfid->refcount, smb2_close_cached_fid);
- 		kfree(utf16_path);
-@@ -229,6 +237,7 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 	 */
- 	npath = path_no_prefix(cifs_sb, path);
- 	if (IS_ERR(npath)) {
-+		mutex_unlock(&cfid->cfid_mutex);
- 		rc = PTR_ERR(npath);
- 		goto out;
- 	}
-@@ -389,6 +398,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
- 		*ret_cfid = cfid;
- 		atomic_inc(&tcon->num_remote_opens);
- 	}
-+	mutex_unlock(&cfid->cfid_mutex);
-+
- 	kfree(utf16_path);
- 
- 	if (is_replayable_error(rc) &&
-@@ -432,6 +443,9 @@ smb2_close_cached_fid(struct kref *ref)
- 					       refcount);
- 	int rc;
- 
-+	/* make sure not to race with server open */
-+	mutex_lock(&cfid->cfid_mutex);
-+
- 	spin_lock(&cfid->cfids->cfid_list_lock);
- 	if (cfid->on_list) {
- 		list_del(&cfid->entry);
-@@ -452,6 +466,7 @@ smb2_close_cached_fid(struct kref *ref)
- 		if (rc) /* should we retry on -EBUSY or -EAGAIN? */
- 			cifs_dbg(VFS, "close cached dir rc %d\n", rc);
- 	}
-+	mutex_unlock(&cfid->cfid_mutex);
- 
- 	free_cached_dir(cfid);
- }
-@@ -666,6 +681,7 @@ static struct cached_fid *init_cached_dir(const char *path)
- 	INIT_LIST_HEAD(&cfid->entry);
- 	INIT_LIST_HEAD(&cfid->dirents.entries);
- 	mutex_init(&cfid->dirents.de_mutex);
-+	mutex_init(&cfid->cfid_mutex);
- 	spin_lock_init(&cfid->fid_lock);
- 	kref_init(&cfid->refcount);
- 	return cfid;
-diff --git a/fs/smb/client/cached_dir.h b/fs/smb/client/cached_dir.h
-index 1dfe79d947a6..93c936af2253 100644
---- a/fs/smb/client/cached_dir.h
-+++ b/fs/smb/client/cached_dir.h
-@@ -42,6 +42,7 @@ struct cached_fid {
- 	struct kref refcount;
- 	struct cifs_fid fid;
- 	spinlock_t fid_lock;
-+	struct mutex cfid_mutex;
- 	struct cifs_tcon *tcon;
- 	struct dentry *dentry;
- 	struct work_struct put_work;
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 0c80ca352f3f..a56d52951b00 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -1989,13 +1989,14 @@ require use of the stronger protocol */
+  * TCP_Server_Info->		TCP_Server_Info			cifs_get_tcp_session
+  * reconnect_mutex
+  * TCP_Server_Info->srv_mutex	TCP_Server_Info			cifs_get_tcp_session
+- * cifs_ses->session_mutex		cifs_ses		sesInfoAlloc
+- *				cifs_tcon
++ * cifs_ses->session_mutex	cifs_ses			sesInfoAlloc
++ * cached_fid->cfid_mutex	cached_fid			init_cached_dir
+  * cifs_tcon->open_file_lock	cifs_tcon->openFileList		tconInfoAlloc
+  *				cifs_tcon->pending_opens
+  * cifs_tcon->stat_lock		cifs_tcon->bytes_read		tconInfoAlloc
+  *				cifs_tcon->bytes_written
+  * cifs_tcp_ses_lock		cifs_tcp_ses_list		sesInfoAlloc
++ * cached_fids->cfid_list_lock	cifs_tcon->cfids->entries	init_cached_dirs
+  * GlobalMid_Lock		GlobalMaxActiveXid		init_cifs
+  *				GlobalCurrentXid
+  *				GlobalTotalActiveXid
+@@ -2009,21 +2010,24 @@ require use of the stronger protocol */
+  *				->oplock_credits
+  *				->reconnect_instance
+  * cifs_ses->ses_lock		(anything that is not protected by another lock and can change)
++ *								sesInfoAlloc
+  * cifs_ses->iface_lock		cifs_ses->iface_list		sesInfoAlloc
+  *				->iface_count
+  *				->iface_last_update
+- * cifs_ses->chan_lock		cifs_ses->chans
++ * cifs_ses->chan_lock		cifs_ses->chans			sesInfoAlloc
+  *				->chans_need_reconnect
+  *				->chans_in_reconnect
+  * cifs_tcon->tc_lock		(anything that is not protected by another lock and can change)
++ *								tcon_info_alloc
+  * inode->i_rwsem, taken by fs/netfs/locking.c e.g. should be taken before cifsInodeInfo locks
+  * cifsInodeInfo->open_file_lock	cifsInodeInfo->openFileList	cifs_alloc_inode
+  * cifsInodeInfo->writers_lock	cifsInodeInfo->writers		cifsInodeInfo_alloc
+  * cifsInodeInfo->lock_sem	cifsInodeInfo->llist		cifs_init_once
+  *				->can_cache_brlcks
+  * cifsInodeInfo->deferred_lock	cifsInodeInfo->deferred_closes	cifsInodeInfo_alloc
+- * cached_fids->cfid_list_lock	cifs_tcon->cfids->entries	 init_cached_dirs
+- * cifsFileInfo->fh_mutex		cifsFileInfo			cifs_new_fileinfo
++ * cached_fid->fid_lock		(anything that is not protected by another lock and can change)
++ *								init_cached_dir
++ * cifsFileInfo->fh_mutex	cifsFileInfo			cifs_new_fileinfo
+  * cifsFileInfo->file_info_lock	cifsFileInfo->count		cifs_new_fileinfo
+  *				->invalidHandle			initiate_cifs_search
+  *				->oplock_break_cancelled
 -- 
 2.43.0
 
