@@ -1,95 +1,145 @@
-Return-Path: <linux-cifs+bounces-4941-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-4944-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A576EAD63EA
-	for <lists+linux-cifs@lfdr.de>; Thu, 12 Jun 2025 01:38:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DE6CAD6622
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Jun 2025 05:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3997A17E589
-	for <lists+linux-cifs@lfdr.de>; Wed, 11 Jun 2025 23:38:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB1073AC290
+	for <lists+linux-cifs@lfdr.de>; Thu, 12 Jun 2025 03:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785BF2C17A1;
-	Wed, 11 Jun 2025 23:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A072D1DA60D;
+	Thu, 12 Jun 2025 03:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="SkOC0izJ"
+	dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="5d6xbEy+";
+	dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b="s/H+Xz4h"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from o-chul.darkrain42.org (o-chul.darkrain42.org [74.207.241.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820831EDA02;
-	Wed, 11 Jun 2025 23:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207EE10957
+	for <linux-cifs@vger.kernel.org>; Thu, 12 Jun 2025 03:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.207.241.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749685130; cv=none; b=Tt9QRJ/L4qth7u1r7lbI8AUceaTfuoGtIsBV3WCtUyJ7bYZA2f3vVdbt+O5MW8OccMuXlS/FiHYAbkvoK2s+JaBszywaJzSrnvFHDvvjNrL3RejyfeRvF9sfdZm+kra9dG746B1Zt0ZcUTJO9J7w7MHhm7hIIjyudHMpnuK9NtI=
+	t=1749698798; cv=none; b=GnE9WwCHn4FLWhvhuPJQzEdt/lDRyYWyeG2//P+XdJDdb5B80qvbQL8q4uwNErARaQ0zwcHvllUlKHvbMiORGJO6dxAYcLcdQwISTefTKKVqByzNi7tc+wg6PRQ6wtZx9NtLOOqDKabi2DIsaKsHMrE+gj/KAeztA63nlYhBo/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749685130; c=relaxed/simple;
-	bh=uqIVC5lH/KYq5ZMQbr3eDBFaQXB3hBnr+NN6nQseTn4=;
+	s=arc-20240116; t=1749698798; c=relaxed/simple;
+	bh=a79qoluoy1srk151sjKF3ZJYIeFU5H1W4VrjbSvhIEE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OSJAoBJduYildjYvle/t8WIkGJGyDB1MQfdQYI3qRfx/JQsto6oP7PXsNvb/LXZN9KCc0Txaic5xdLNG/I02OrXzz25QFdAOl6vZpxwGJkHxwm/572PROlyO+Y+c91Bs9vJmSxpwYtDbOF/y+yBzR5b+mvizcxfyhvjBxIYABmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=SkOC0izJ; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gLi4q1Pf3yDQ5vkEwYbNMTHh4i7xmaOkqjOyF6eoxyY=; b=SkOC0izJuVXFGh34DQzhYDj8zh
-	QW74OV6eD0JNGnHnwPHRLcn4XY2IKgNhhCYpsjGEbqULwmSvXGMmmD03+SPscjR8dWURgpWETCk5T
-	iC2NhXHfhXUW+1nAc6woomfmw1ogDuzFWOES4UBm5FPmVtLes2JL9j4EfMDxpyNsN1D8AaiX1NccH
-	D4DD36XY0cEkv1fzSYaQX1Xs4XU2s/94sA+CkYvopDQA39sLvPlwJ08IVJ7XyA9guodDq0sdFCKcV
-	3mjgVKeDlrVpasSeIaWn2LdNvdmRoaiJ1pFomuYxWWL59cg9c/UOSbpICGIj/z9p8y8HOBGIyITU2
-	VHG2Wpxw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uPV1m-00000007mdR-3qHi;
-	Wed, 11 Jun 2025 23:38:42 +0000
-Date: Thu, 12 Jun 2025 00:38:42 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: NeilBrown <neil@brown.name>
-Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	David Howells <dhowells@redhat.com>, Tyler Hicks <code@tyhicks.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Amir Goldstein <amir73il@gmail.com>, Kees Cook <kees@kernel.org>,
-	Joel Granados <joel.granados@kernel.org>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <smfrench@gmail.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	netfs@lists.linux.dev, linux-kernel@vger.kernel.org,
-	ecryptfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org
-Subject: Re: [PATCH 1/2] VFS: change old_dir and new_dir in struct renamedata
- to dentrys
-Message-ID: <20250611233842.GB1647736@ZenIV>
-References: <20250611225848.1374929-1-neil@brown.name>
- <20250611225848.1374929-2-neil@brown.name>
+	 Content-Type:Content-Disposition:In-Reply-To; b=czUk98GFhZJ6dBiGgqmri6TlvyEv9l/oVfc+3J0l8q3XL3f+YJ4QWtqV+k+mZ+2WFoxMLCsYL4GbsrxWGaCh7YgVbQ/zuk5hOaCxtC4Cugnv7/pawPkgpEKyGg9czNuqJxzM9gg5YqTkPBFgVpdQETIMnJ8lR468OTkebY+dfEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org; spf=pass smtp.mailfrom=darkrain42.org; dkim=permerror (0-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=5d6xbEy+; dkim=pass (2048-bit key) header.d=darkrain42.org header.i=@darkrain42.org header.b=s/H+Xz4h; arc=none smtp.client-ip=74.207.241.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=darkrain42.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=darkrain42.org
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=darkrain42.org; i=@darkrain42.org; q=dns/txt; s=ed25519-2022-03;
+ t=1749698669; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : in-reply-to : from;
+ bh=vsa2CuuEm4AyAqI7a1Qurdo+dQWvL4EXfFXRtNM5698=;
+ b=5d6xbEy+aEM+V3Lq/fPEBMjMHJPeEzb1poknr9Oa78L2T/vpz8Mk/ma1/0sqM1N717Djq
+ VPlD6fYVAe7EMFbDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=darkrain42.org;
+ i=@darkrain42.org; q=dns/txt; s=rsa-2022-03; t=1749698669; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : in-reply-to : from;
+ bh=vsa2CuuEm4AyAqI7a1Qurdo+dQWvL4EXfFXRtNM5698=;
+ b=s/H+Xz4hAr6m8ct0bnszYgtQgOHTcobKAzRvDO65j9habzvFGSdAB5mIbQd/VNlxyjddi
+ Kx1xKO8sM5K2XNKKoNP/sRFM5S67kO92THsVS6fMVV3nOukqtVfXAe12smFCIUWYCGFxIni
+ 31SPYtiWRWHUIm91zFOoZ9LPCkZCzavjbOXDOeUTw9E3O7lvIsFAqPDmYsnZnHW3TXNjkfC
+ mPfJ2MQF4rAIQVvvU8TN8KLNhAYFObzVLwfoIlwHNLGBq1hyR+tMmCTxoxK4V1NoYcsGkzC
+ wxkB6iaUH0spLqTQpYKY5ca9Xqads0unmBEJR4vmwRarOpGyUAFuCP4uwlqw==
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256
+	 client-signature ED25519)
+	(Client CN "otters", Issuer "otters" (not verified))
+	by o-chul.darkrain42.org (Postfix) with ESMTPS id D6BC78186;
+	Wed, 11 Jun 2025 20:24:29 -0700 (PDT)
+Received: by vaarsuvius.home.arpa (Postfix, from userid 1000)
+	id DE8378C1E05; Wed, 11 Jun 2025 20:24:28 -0700 (PDT)
+Date: Wed, 11 Jun 2025 20:24:28 -0700
+From: Paul Aurich <paul@darkrain42.org>
+To: nspmangalore@gmail.com
+Cc: linux-cifs@vger.kernel.org, smfrench@gmail.com, bharathsm.hsk@gmail.com,
+	meetakshisetiyaoss@gmail.com, pc@manguebit.com,
+	henrique.carvalho@suse.com, ematsumiya@suse.de,
+	Shyam Prasad N <sprasad@microsoft.com>
+Subject: Re: [PATCH 6/7] cifs: tc_count updates should be done with tc_lock
+Message-ID: <aEpIbMKyUh-6eqsR@vaarsuvius.home.arpa>
+Mail-Followup-To: nspmangalore@gmail.com, linux-cifs@vger.kernel.org,
+	smfrench@gmail.com, bharathsm.hsk@gmail.com,
+	meetakshisetiyaoss@gmail.com, pc@manguebit.com,
+	henrique.carvalho@suse.com, ematsumiya@suse.de,
+	Shyam Prasad N <sprasad@microsoft.com>
+References: <20250604101829.832577-1-sprasad@microsoft.com>
+ <20250604101829.832577-6-sprasad@microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250611225848.1374929-2-neil@brown.name>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20250604101829.832577-6-sprasad@microsoft.com>
 
-On Thu, Jun 12, 2025 at 08:57:02AM +1000, NeilBrown wrote:
-> all users of 'struct renamedata' have the dentry for the old and new
-> directories, and often have no use for the inode except to store it in
-> the renamedata.
-> 
-> This patch changes struct renamedata to hold the dentry, rather than
-> the inode, for the old and new directories, and changes callers to
-> match.
-> 
-> This results in the removal of several local variables and several
-> dereferences of ->d_inode at the cost of adding ->d_inode dereferences
-> to vfs_rename().
+On 2025-06-04 15:48:15 +0530, nspmangalore@gmail.com wrote:
+>From: Shyam Prasad N <sprasad@microsoft.com>
+>
+>We had problems with deadlocks using the cifs_tcp_ses_lock for
+>protecting a lot of structures. So we broke it down into smaller
+>spinlocks. cifs_tcon struct fields are protected by tc_lock now.
+>Hence we should stick to using that.
 
-Umm...  No objections, as long as overlayfs part is correct; it seems
-to be, but I hadn't checked every chunk there...
+Is it really safe to adjust this to tc_lock?
+
+There are a number of other points in the smb client that (AFAICT) only hold 
+cifs_tcp_ses_lock while adjusting the tc_count (which is why I used that 
+here).  See smb2_handle_cancelled_close, smb2_get_dfs_refer, 
+smb2_reconnect_server, smb2_find_smb_tcon.
+
+~Paul
+
+>Fixes: 3fa640d035e5 ("smb: During unmount, ensure all cached dir instances drop their dentry")
+>Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+>---
+> fs/smb/client/cached_dir.c | 6 ++++--
+> 1 file changed, 4 insertions(+), 2 deletions(-)
+>
+>diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
+>index 2746d693d80a..4abf5bbd8baf 100644
+>--- a/fs/smb/client/cached_dir.c
+>+++ b/fs/smb/client/cached_dir.c
+>@@ -650,10 +650,12 @@ int cached_dir_lease_break(struct cifs_tcon *tcon, __u8 lease_key[16])
+> 			spin_unlock(&cfid->fid_lock);
+> 			cfids->num_entries--;
+>
+>+			spin_lock(&cfid->tcon->tc_lock);
+> 			++tcon->tc_count;
+> 			trace_smb3_tcon_ref(tcon->debug_id, tcon->tc_count,
+> 					    netfs_trace_tcon_ref_get_cached_lease_break);
+> 			queue_work(cfid_put_wq, &cfid->put_work);
+>+			spin_unlock(&cfid->tcon->tc_lock);
+> 			spin_unlock(&cfids->cfid_list_lock);
+> 			return true;
+> 		}
+>@@ -767,11 +769,11 @@ static void cfids_laundromat_worker(struct work_struct *work)
+> 		dput(dentry);
+>
+> 		if (cfid->is_open) {
+>-			spin_lock(&cifs_tcp_ses_lock);
+>+			spin_lock(&cfid->tcon->tc_lock);
+> 			++cfid->tcon->tc_count;
+> 			trace_smb3_tcon_ref(cfid->tcon->debug_id, cfid->tcon->tc_count,
+> 					    netfs_trace_tcon_ref_get_cached_laundromat);
+>-			spin_unlock(&cifs_tcp_ses_lock);
+>+			spin_unlock(&cfid->tcon->tc_lock);
+> 			queue_work(serverclose_wq, &cfid->close_work);
+> 		} else
+> 			/*
+>-- 
+>2.43.0
+>
+
 
