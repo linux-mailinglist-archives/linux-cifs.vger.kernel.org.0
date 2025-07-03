@@ -1,63 +1,58 @@
-Return-Path: <linux-cifs+bounces-5230-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5233-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1079AAF78D4
-	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 16:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D32FAF79FA
+	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 17:08:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B5DA16ADF5
-	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 14:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC6F2173CED
+	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 15:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436B52EF9C3;
-	Thu,  3 Jul 2025 14:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9AF2ED17E;
+	Thu,  3 Jul 2025 15:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eJHfbN2v"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="G+/46zpf"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFF32EF9B3;
-	Thu,  3 Jul 2025 14:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D462EA149;
+	Thu,  3 Jul 2025 15:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751554346; cv=none; b=IqV6aYY3AzxlLoieAPRZLQlg9RyS59gFrMrTno50rO8T/13AaIGhOquW9GiLIHPPtT7cIiARdno5Lc3r/wTPshvwujUDtPFyWRz5yawO4gu2Q+cHt4rsgA8tPDAhEFdkC0rqDCYEwR3nw0H0akbrnzoGfuKewc6f3kIIwNdePEk=
+	t=1751555077; cv=none; b=fi40MVEfzlyNtCkopD8dY19IWkZvAFPIu7YfXvqvYqJPxowKFu7VY8eee6UtEQDwxkub4WZpjIxOL9p6yx7s1arPXekk92qktwARGFUKHeI0KQfCt7Dv7BsJNo4p9H7+mdEecUC8vx3SxOCDrF/nzqTBWvDo6wm0o202eQD0qJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751554346; c=relaxed/simple;
-	bh=eRgT+2Gph9S7743DvzrG0+LQa+QYTUPzMjRICc6+qns=;
+	s=arc-20240116; t=1751555077; c=relaxed/simple;
+	bh=31HfznZZiBY6L3XY2/G6mMsaXjAt9DPDBgW7ECyZwag=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ku/GGh89/FRehi8zLcKS1pljRPcm9s1YddvK5m5k6WwvwAdgZM8fqRcrBI21DeBu+RQbIjoD3zdCuaPoox5UnaEXg/6nou2z/23bK8zIT72O/wiUISFVTfA+vkafIsdUzpILit3upz88xxK3+EX0ok0USRvX7y7Z3sTuBNzfH+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eJHfbN2v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59886C4CEE3;
-	Thu,  3 Jul 2025 14:52:25 +0000 (UTC)
+	 MIME-Version; b=SgzwtabipojQK68KlpSN+J5g6f+2+YrGvydPt3xMqpsH0l85+KHq1ofErvCwV5STnfZ21elOq6OMN2w5g+iLBRJm2aYkOSHtZa5YwZIOW9CbFolL1L1hfHsGjw0XL7PJr4v9eHEXf0jHCYJF/2uCftbrLQc5fwE9PQeKjxj7OM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=G+/46zpf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623E3C4CEE3;
+	Thu,  3 Jul 2025 15:04:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751554345;
-	bh=eRgT+2Gph9S7743DvzrG0+LQa+QYTUPzMjRICc6+qns=;
+	s=korg; t=1751555076;
+	bh=31HfznZZiBY6L3XY2/G6mMsaXjAt9DPDBgW7ECyZwag=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eJHfbN2vVpoQ9v/GzP9DpWLYONyCS+ELxH+fBoFgk2KrqhJxj3UF+Jn6ecusxMDR3
-	 wxnVoqNyyaoZoXyYGD/80HW5tvMbdgvh6lk5CJPx+Qg3kOiWJ0MGGxxacbOVLmmWFt
-	 aBmyZnkTOXFI3mzo/j2L2+7/srGb/0kRoz0JatFo=
+	b=G+/46zpfrnnsNu8rXh5QNAYO/eedoHJJSGEU5cIOl0QJEqE2iyNbYjNbUAyLcIOjh
+	 +DFVwSgNtLsQIsjODSHFDtJDET3BWt6gTdSPO5zxP2+ljLkPa8zu8O6LS/e1oD3wg/
+	 RsUvH2dQMaOY5BRQ+n2I+KTqXkCTSewaP2NFvkVE=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
-	Stefan Metzmacher <metze@samba.org>,
-	David Howells <dhowells@redhat.com>,
-	Tom Talpey <tom@talpey.com>,
-	"Paulo Alcantara (Red Hat)" <pc@manguebit.com>,
-	Matthew Wilcox <willy@infradead.org>,
 	linux-cifs@vger.kernel.org,
-	netfs@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.12 126/218] cifs: Fix reading into an ITER_FOLIOQ from the smbdirect code
-Date: Thu,  3 Jul 2025 16:41:14 +0200
-Message-ID: <20250703144001.150104592@linuxfoundation.org>
+Subject: [PATCH 6.15 170/263] smb: client: fix potential deadlock when reconnecting channels
+Date: Thu,  3 Jul 2025 16:41:30 +0200
+Message-ID: <20250703144011.170170013@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250703143955.956569535@linuxfoundation.org>
-References: <20250703143955.956569535@linuxfoundation.org>
+In-Reply-To: <20250703144004.276210867@linuxfoundation.org>
+References: <20250703144004.276210867@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -69,204 +64,216 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+6.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
-From: David Howells <dhowells@redhat.com>
+From: Paulo Alcantara <pc@manguebit.org>
 
-[ Upstream commit 263debecb4aa7cec0a86487e6f409814f6194a21 ]
+[ Upstream commit 711741f94ac3cf9f4e3aa73aa171e76d188c0819 ]
 
-When performing a file read from RDMA, smbd_recv() prints an "Invalid msg
-type 4" error and fails the I/O.  This is due to the switch-statement there
-not handling the ITER_FOLIOQ handed down from netfslib.
+Fix cifs_signal_cifsd_for_reconnect() to take the correct lock order
+and prevent the following deadlock from happening
 
-Fix this by collapsing smbd_recv_buf() and smbd_recv_page() into
-smbd_recv() and just using copy_to_iter() instead of memcpy().  This
-future-proofs the function too, in case more ITER_* types are added.
+======================================================
+WARNING: possible circular locking dependency detected
+6.16.0-rc3-build2+ #1301 Tainted: G S      W
+------------------------------------------------------
+cifsd/6055 is trying to acquire lock:
+ffff88810ad56038 (&tcp_ses->srv_lock){+.+.}-{3:3}, at: cifs_signal_cifsd_for_reconnect+0x134/0x200
 
-Fixes: ee4cdf7ba857 ("netfs: Speed up buffered reading")
-Reported-by: Stefan Metzmacher <metze@samba.org>
+but task is already holding lock:
+ffff888119c64330 (&ret_buf->chan_lock){+.+.}-{3:3}, at: cifs_signal_cifsd_for_reconnect+0xcf/0x200
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&ret_buf->chan_lock){+.+.}-{3:3}:
+       validate_chain+0x1cf/0x270
+       __lock_acquire+0x60e/0x780
+       lock_acquire.part.0+0xb4/0x1f0
+       _raw_spin_lock+0x2f/0x40
+       cifs_setup_session+0x81/0x4b0
+       cifs_get_smb_ses+0x771/0x900
+       cifs_mount_get_session+0x7e/0x170
+       cifs_mount+0x92/0x2d0
+       cifs_smb3_do_mount+0x161/0x460
+       smb3_get_tree+0x55/0x90
+       vfs_get_tree+0x46/0x180
+       do_new_mount+0x1b0/0x2e0
+       path_mount+0x6ee/0x740
+       do_mount+0x98/0xe0
+       __do_sys_mount+0x148/0x180
+       do_syscall_64+0xa4/0x260
+       entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+-> #1 (&ret_buf->ses_lock){+.+.}-{3:3}:
+       validate_chain+0x1cf/0x270
+       __lock_acquire+0x60e/0x780
+       lock_acquire.part.0+0xb4/0x1f0
+       _raw_spin_lock+0x2f/0x40
+       cifs_match_super+0x101/0x320
+       sget+0xab/0x270
+       cifs_smb3_do_mount+0x1e0/0x460
+       smb3_get_tree+0x55/0x90
+       vfs_get_tree+0x46/0x180
+       do_new_mount+0x1b0/0x2e0
+       path_mount+0x6ee/0x740
+       do_mount+0x98/0xe0
+       __do_sys_mount+0x148/0x180
+       do_syscall_64+0xa4/0x260
+       entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+-> #0 (&tcp_ses->srv_lock){+.+.}-{3:3}:
+       check_noncircular+0x95/0xc0
+       check_prev_add+0x115/0x2f0
+       validate_chain+0x1cf/0x270
+       __lock_acquire+0x60e/0x780
+       lock_acquire.part.0+0xb4/0x1f0
+       _raw_spin_lock+0x2f/0x40
+       cifs_signal_cifsd_for_reconnect+0x134/0x200
+       __cifs_reconnect+0x8f/0x500
+       cifs_handle_standard+0x112/0x280
+       cifs_demultiplex_thread+0x64d/0xbc0
+       kthread+0x2f7/0x310
+       ret_from_fork+0x2a/0x230
+       ret_from_fork_asm+0x1a/0x30
+
+other info that might help us debug this:
+
+Chain exists of:
+  &tcp_ses->srv_lock --> &ret_buf->ses_lock --> &ret_buf->chan_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ret_buf->chan_lock);
+                               lock(&ret_buf->ses_lock);
+                               lock(&ret_buf->chan_lock);
+  lock(&tcp_ses->srv_lock);
+
+ *** DEADLOCK ***
+
+3 locks held by cifsd/6055:
+ #0: ffffffff857de398 (&cifs_tcp_ses_lock){+.+.}-{3:3}, at: cifs_signal_cifsd_for_reconnect+0x7b/0x200
+ #1: ffff888119c64060 (&ret_buf->ses_lock){+.+.}-{3:3}, at: cifs_signal_cifsd_for_reconnect+0x9c/0x200
+ #2: ffff888119c64330 (&ret_buf->chan_lock){+.+.}-{3:3}, at: cifs_signal_cifsd_for_reconnect+0xcf/0x200
+
+Cc: linux-cifs@vger.kernel.org
+Reported-by: David Howells <dhowells@redhat.com>
+Fixes: d7d7a66aacd6 ("cifs: avoid use of global locks for high contention data")
+Reviewed-by: David Howells <dhowells@redhat.com>
+Tested-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
 Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: Paulo Alcantara (Red Hat) <pc@manguebit.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-cifs@vger.kernel.org
-cc: netfs@lists.linux.dev
-cc: linux-fsdevel@vger.kernel.org
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/client/smbdirect.c | 112 ++++++--------------------------------
- 1 file changed, 17 insertions(+), 95 deletions(-)
+ fs/smb/client/cifsglob.h |  1 +
+ fs/smb/client/connect.c  | 58 +++++++++++++++++++++++++---------------
+ 2 files changed, 37 insertions(+), 22 deletions(-)
 
-diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index b7932f63b4650..ac06f2617f346 100644
---- a/fs/smb/client/smbdirect.c
-+++ b/fs/smb/client/smbdirect.c
-@@ -1755,35 +1755,39 @@ struct smbd_connection *smbd_get_connection(
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 214e53acf72a8..56381cbb63990 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -709,6 +709,7 @@ inc_rfc1001_len(void *buf, int count)
+ struct TCP_Server_Info {
+ 	struct list_head tcp_ses_list;
+ 	struct list_head smb_ses_list;
++	struct list_head rlist; /* reconnect list */
+ 	spinlock_t srv_lock;  /* protect anything here that is not protected */
+ 	__u64 conn_id; /* connection identifier (useful for debugging) */
+ 	int srv_count; /* reference counter */
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index f9aef60f1901a..e92c7b71626fd 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -124,6 +124,14 @@ static void smb2_query_server_interfaces(struct work_struct *work)
+ 			   (SMB_INTERFACE_POLL_INTERVAL * HZ));
  }
  
- /*
-- * Receive data from receive reassembly queue
-+ * Receive data from the transport's receive reassembly queue
-  * All the incoming data packets are placed in reassembly queue
-- * buf: the buffer to read data into
-+ * iter: the buffer to read data into
-  * size: the length of data to read
-  * return value: actual data read
-- * Note: this implementation copies the data from reassebmly queue to receive
-+ *
-+ * Note: this implementation copies the data from reassembly queue to receive
-  * buffers used by upper layer. This is not the optimal code path. A better way
-  * to do it is to not have upper layer allocate its receive buffers but rather
-  * borrow the buffer from reassembly queue, and return it after data is
-  * consumed. But this will require more changes to upper layer code, and also
-  * need to consider packet boundaries while they still being reassembled.
-  */
--static int smbd_recv_buf(struct smbd_connection *info, char *buf,
--		unsigned int size)
-+int smbd_recv(struct smbd_connection *info, struct msghdr *msg)
- {
- 	struct smbdirect_socket *sc = &info->socket;
- 	struct smbd_response *response;
- 	struct smbdirect_data_transfer *data_transfer;
-+	size_t size = iov_iter_count(&msg->msg_iter);
- 	int to_copy, to_read, data_read, offset;
- 	u32 data_length, remaining_data_length, data_offset;
- 	int rc;
- 
-+	if (WARN_ON_ONCE(iov_iter_rw(&msg->msg_iter) == WRITE))
-+		return -EINVAL; /* It's a bug in upper layer to get there */
++#define set_need_reco(server) \
++do { \
++	spin_lock(&server->srv_lock); \
++	if (server->tcpStatus != CifsExiting) \
++		server->tcpStatus = CifsNeedReconnect; \
++	spin_unlock(&server->srv_lock); \
++} while (0)
 +
- again:
- 	/*
- 	 * No need to hold the reassembly queue lock all the time as we are
- 	 * the only one reading from the front of the queue. The transport
- 	 * may add more entries to the back of the queue at the same time
- 	 */
--	log_read(INFO, "size=%d info->reassembly_data_length=%d\n", size,
-+	log_read(INFO, "size=%zd info->reassembly_data_length=%d\n", size,
- 		info->reassembly_data_length);
- 	if (info->reassembly_data_length >= size) {
- 		int queue_length;
-@@ -1821,7 +1825,10 @@ static int smbd_recv_buf(struct smbd_connection *info, char *buf,
- 			if (response->first_segment && size == 4) {
- 				unsigned int rfc1002_len =
- 					data_length + remaining_data_length;
--				*((__be32 *)buf) = cpu_to_be32(rfc1002_len);
-+				__be32 rfc1002_hdr = cpu_to_be32(rfc1002_len);
-+				if (copy_to_iter(&rfc1002_hdr, sizeof(rfc1002_hdr),
-+						 &msg->msg_iter) != sizeof(rfc1002_hdr))
-+					return -EFAULT;
- 				data_read = 4;
- 				response->first_segment = false;
- 				log_read(INFO, "returning rfc1002 length %d\n",
-@@ -1830,10 +1837,9 @@ static int smbd_recv_buf(struct smbd_connection *info, char *buf,
- 			}
+ /*
+  * Update the tcpStatus for the server.
+  * This is used to signal the cifsd thread to call cifs_reconnect
+@@ -137,39 +145,45 @@ void
+ cifs_signal_cifsd_for_reconnect(struct TCP_Server_Info *server,
+ 				bool all_channels)
+ {
+-	struct TCP_Server_Info *pserver;
++	struct TCP_Server_Info *nserver;
+ 	struct cifs_ses *ses;
++	LIST_HEAD(reco);
+ 	int i;
  
- 			to_copy = min_t(int, data_length - offset, to_read);
--			memcpy(
--				buf + data_read,
--				(char *)data_transfer + data_offset + offset,
--				to_copy);
-+			if (copy_to_iter((char *)data_transfer + data_offset + offset,
-+					 to_copy, &msg->msg_iter) != to_copy)
-+				return -EFAULT;
+-	/* If server is a channel, select the primary channel */
+-	pserver = SERVER_IS_CHAN(server) ? server->primary_server : server;
+-
+ 	/* if we need to signal just this channel */
+ 	if (!all_channels) {
+-		spin_lock(&server->srv_lock);
+-		if (server->tcpStatus != CifsExiting)
+-			server->tcpStatus = CifsNeedReconnect;
+-		spin_unlock(&server->srv_lock);
++		set_need_reco(server);
+ 		return;
+ 	}
  
- 			/* move on to the next buffer? */
- 			if (to_copy == data_length - offset) {
-@@ -1898,90 +1904,6 @@ static int smbd_recv_buf(struct smbd_connection *info, char *buf,
- 	goto again;
+-	spin_lock(&cifs_tcp_ses_lock);
+-	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
+-		if (cifs_ses_exiting(ses))
+-			continue;
+-		spin_lock(&ses->chan_lock);
+-		for (i = 0; i < ses->chan_count; i++) {
+-			if (!ses->chans[i].server)
++	if (SERVER_IS_CHAN(server))
++		server = server->primary_server;
++	scoped_guard(spinlock, &cifs_tcp_ses_lock) {
++		set_need_reco(server);
++		list_for_each_entry(ses, &server->smb_ses_list, smb_ses_list) {
++			spin_lock(&ses->ses_lock);
++			if (ses->ses_status == SES_EXITING) {
++				spin_unlock(&ses->ses_lock);
+ 				continue;
+-
+-			spin_lock(&ses->chans[i].server->srv_lock);
+-			if (ses->chans[i].server->tcpStatus != CifsExiting)
+-				ses->chans[i].server->tcpStatus = CifsNeedReconnect;
+-			spin_unlock(&ses->chans[i].server->srv_lock);
++			}
++			spin_lock(&ses->chan_lock);
++			for (i = 1; i < ses->chan_count; i++) {
++				nserver = ses->chans[i].server;
++				if (!nserver)
++					continue;
++				nserver->srv_count++;
++				list_add(&nserver->rlist, &reco);
++			}
++			spin_unlock(&ses->chan_lock);
++			spin_unlock(&ses->ses_lock);
+ 		}
+-		spin_unlock(&ses->chan_lock);
+ 	}
+-	spin_unlock(&cifs_tcp_ses_lock);
++
++	list_for_each_entry_safe(server, nserver, &reco, rlist) {
++		list_del_init(&server->rlist);
++		set_need_reco(server);
++		cifs_put_tcp_session(server, 0);
++	}
  }
  
--/*
-- * Receive a page from receive reassembly queue
-- * page: the page to read data into
-- * to_read: the length of data to read
-- * return value: actual data read
-- */
--static int smbd_recv_page(struct smbd_connection *info,
--		struct page *page, unsigned int page_offset,
--		unsigned int to_read)
--{
--	struct smbdirect_socket *sc = &info->socket;
--	int ret;
--	char *to_address;
--	void *page_address;
--
--	/* make sure we have the page ready for read */
--	ret = wait_event_interruptible(
--		info->wait_reassembly_queue,
--		info->reassembly_data_length >= to_read ||
--			sc->status != SMBDIRECT_SOCKET_CONNECTED);
--	if (ret)
--		return ret;
--
--	/* now we can read from reassembly queue and not sleep */
--	page_address = kmap_atomic(page);
--	to_address = (char *) page_address + page_offset;
--
--	log_read(INFO, "reading from page=%p address=%p to_read=%d\n",
--		page, to_address, to_read);
--
--	ret = smbd_recv_buf(info, to_address, to_read);
--	kunmap_atomic(page_address);
--
--	return ret;
--}
--
--/*
-- * Receive data from transport
-- * msg: a msghdr point to the buffer, can be ITER_KVEC or ITER_BVEC
-- * return: total bytes read, or 0. SMB Direct will not do partial read.
-- */
--int smbd_recv(struct smbd_connection *info, struct msghdr *msg)
--{
--	char *buf;
--	struct page *page;
--	unsigned int to_read, page_offset;
--	int rc;
--
--	if (iov_iter_rw(&msg->msg_iter) == WRITE) {
--		/* It's a bug in upper layer to get there */
--		cifs_dbg(VFS, "Invalid msg iter dir %u\n",
--			 iov_iter_rw(&msg->msg_iter));
--		rc = -EINVAL;
--		goto out;
--	}
--
--	switch (iov_iter_type(&msg->msg_iter)) {
--	case ITER_KVEC:
--		buf = msg->msg_iter.kvec->iov_base;
--		to_read = msg->msg_iter.kvec->iov_len;
--		rc = smbd_recv_buf(info, buf, to_read);
--		break;
--
--	case ITER_BVEC:
--		page = msg->msg_iter.bvec->bv_page;
--		page_offset = msg->msg_iter.bvec->bv_offset;
--		to_read = msg->msg_iter.bvec->bv_len;
--		rc = smbd_recv_page(info, page, page_offset, to_read);
--		break;
--
--	default:
--		/* It's a bug in upper layer to get there */
--		cifs_dbg(VFS, "Invalid msg type %d\n",
--			 iov_iter_type(&msg->msg_iter));
--		rc = -EINVAL;
--	}
--
--out:
--	/* SMBDirect will read it all or nothing */
--	if (rc > 0)
--		msg->msg_iter.count = 0;
--	return rc;
--}
--
  /*
-  * Send data to transport
-  * Each rqst is transported as a SMBDirect payload
 -- 
 2.39.5
 
