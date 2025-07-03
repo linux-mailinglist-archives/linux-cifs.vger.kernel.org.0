@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-5233-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5234-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D32FAF79FA
-	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 17:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C03AF7B3C
+	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 17:23:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC6F2173CED
-	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 15:04:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E8135A1DFB
+	for <lists+linux-cifs@lfdr.de>; Thu,  3 Jul 2025 15:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9AF2ED17E;
-	Thu,  3 Jul 2025 15:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A9B19D8AC;
+	Thu,  3 Jul 2025 15:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="G+/46zpf"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="x7OIIP59"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D462EA149;
-	Thu,  3 Jul 2025 15:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9871624D5;
+	Thu,  3 Jul 2025 15:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751555077; cv=none; b=fi40MVEfzlyNtCkopD8dY19IWkZvAFPIu7YfXvqvYqJPxowKFu7VY8eee6UtEQDwxkub4WZpjIxOL9p6yx7s1arPXekk92qktwARGFUKHeI0KQfCt7Dv7BsJNo4p9H7+mdEecUC8vx3SxOCDrF/nzqTBWvDo6wm0o202eQD0qJ8=
+	t=1751555706; cv=none; b=XoFpOl2v4AqEOVtfYLw+S9XPsTChCrBdSiBkkhlC33d8rr/OwiOSapySPdwqAmpGdsLrA4zkjGDBJsqqBpd7t6Odzq5129qRSm5vyxXiSu2N5uEvG4B/lDaPfen3Zn3vSfP11Rk40SGlS0AcFKQ4UaESFtJQkqzerjAnNFWsgqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751555077; c=relaxed/simple;
-	bh=31HfznZZiBY6L3XY2/G6mMsaXjAt9DPDBgW7ECyZwag=;
+	s=arc-20240116; t=1751555706; c=relaxed/simple;
+	bh=rR8wrrPTey2g11zlNeru1bwM+SUNxabqiluy5LeRLsk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SgzwtabipojQK68KlpSN+J5g6f+2+YrGvydPt3xMqpsH0l85+KHq1ofErvCwV5STnfZ21elOq6OMN2w5g+iLBRJm2aYkOSHtZa5YwZIOW9CbFolL1L1hfHsGjw0XL7PJr4v9eHEXf0jHCYJF/2uCftbrLQc5fwE9PQeKjxj7OM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=G+/46zpf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623E3C4CEE3;
-	Thu,  3 Jul 2025 15:04:36 +0000 (UTC)
+	 MIME-Version; b=V3cx1erH55om9Wy4ui/rwKy/fPffmR0HUYQF17P9mR1z/qjIvtFQX+Csakst5NSOHoEbnretZBu8Q+v3+PQbnacDaseG6Ci5Lz5p3iW3jYm0JOqMNCnF0APc5nPWzIAjuBB2TEHiFYVrFhDI/2wg7HkCS7+BlzMo2iqmmbh44uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=x7OIIP59; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038BCC4CEE3;
+	Thu,  3 Jul 2025 15:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751555076;
-	bh=31HfznZZiBY6L3XY2/G6mMsaXjAt9DPDBgW7ECyZwag=;
+	s=korg; t=1751555706;
+	bh=rR8wrrPTey2g11zlNeru1bwM+SUNxabqiluy5LeRLsk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G+/46zpfrnnsNu8rXh5QNAYO/eedoHJJSGEU5cIOl0QJEqE2iyNbYjNbUAyLcIOjh
-	 +DFVwSgNtLsQIsjODSHFDtJDET3BWt6gTdSPO5zxP2+ljLkPa8zu8O6LS/e1oD3wg/
-	 RsUvH2dQMaOY5BRQ+n2I+KTqXkCTSewaP2NFvkVE=
+	b=x7OIIP59tfopK8lrkpfKCjoq6+unRDYdNv/zFlnSxtsASZ6/eR2lyBy8OM66btqHZ
+	 H3C0lrUZGqFhtc4pZTrB3HsikA+GDCnV8qxTN8LI0+MauBwLpWjTd4Dc0zcnBzm6wK
+	 PWjVfWFojoOUGevRbZpGyJE1uhGR06VtU1amTeRg=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,12 +47,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.15 170/263] smb: client: fix potential deadlock when reconnecting channels
-Date: Thu,  3 Jul 2025 16:41:30 +0200
-Message-ID: <20250703144011.170170013@linuxfoundation.org>
+Subject: [PATCH 6.6 094/139] smb: client: fix potential deadlock when reconnecting channels
+Date: Thu,  3 Jul 2025 16:42:37 +0200
+Message-ID: <20250703143944.832605810@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250703144004.276210867@linuxfoundation.org>
-References: <20250703144004.276210867@linuxfoundation.org>
+In-Reply-To: <20250703143941.182414597@linuxfoundation.org>
+References: <20250703143941.182414597@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.15-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -176,10 +176,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 37 insertions(+), 22 deletions(-)
 
 diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 214e53acf72a8..56381cbb63990 100644
+index c7da6bf2f44be..d776340ad91ce 100644
 --- a/fs/smb/client/cifsglob.h
 +++ b/fs/smb/client/cifsglob.h
-@@ -709,6 +709,7 @@ inc_rfc1001_len(void *buf, int count)
+@@ -677,6 +677,7 @@ inc_rfc1001_len(void *buf, int count)
  struct TCP_Server_Info {
  	struct list_head tcp_ses_list;
  	struct list_head smb_ses_list;
@@ -188,10 +188,10 @@ index 214e53acf72a8..56381cbb63990 100644
  	__u64 conn_id; /* connection identifier (useful for debugging) */
  	int srv_count; /* reference counter */
 diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index f9aef60f1901a..e92c7b71626fd 100644
+index 8fa5fe0a8c5c5..454420aa02220 100644
 --- a/fs/smb/client/connect.c
 +++ b/fs/smb/client/connect.c
-@@ -124,6 +124,14 @@ static void smb2_query_server_interfaces(struct work_struct *work)
+@@ -140,6 +140,14 @@ static void smb2_query_server_interfaces(struct work_struct *work)
  			   (SMB_INTERFACE_POLL_INTERVAL * HZ));
  }
  
@@ -206,7 +206,7 @@ index f9aef60f1901a..e92c7b71626fd 100644
  /*
   * Update the tcpStatus for the server.
   * This is used to signal the cifsd thread to call cifs_reconnect
-@@ -137,39 +145,45 @@ void
+@@ -153,39 +161,45 @@ void
  cifs_signal_cifsd_for_reconnect(struct TCP_Server_Info *server,
  				bool all_channels)
  {
