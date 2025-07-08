@@ -1,97 +1,198 @@
-Return-Path: <linux-cifs+bounces-5270-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5273-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D062AFCDBE
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Jul 2025 16:35:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9B34AFD1F5
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Jul 2025 18:41:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 844AA3AC775
-	for <lists+linux-cifs@lfdr.de>; Tue,  8 Jul 2025 14:34:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FB5F16E236
+	for <lists+linux-cifs@lfdr.de>; Tue,  8 Jul 2025 16:39:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21EE02DCF69;
-	Tue,  8 Jul 2025 14:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9812E3385;
+	Tue,  8 Jul 2025 16:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dw3TnR2j"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Zg3XJbA6"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A6F2AF07;
-	Tue,  8 Jul 2025 14:34:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE54C289E2C;
+	Tue,  8 Jul 2025 16:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751985270; cv=none; b=frInH9mz17eyDgm93FsanGLGQyM1ZsIkp1HAJEaOzwcjtaZAes4LbwYFr5gf/e7NjOMCMw2Q+xmZPeEXVq6lEkE8LFJ1DP4FhB50vvt3rZxmQau5gQzYGRZoGbTe3irtNR6Xug5KnOgwYcn5YkyNfYhs1n4oZZTAeDGVFNnKUc4=
+	t=1751992767; cv=none; b=JIKrgOHDsEVVtlD/JP6dwVhXNBh192XvhrGuvJ9Y4bs5FzaNsSeUgziDAVT2IvaeymXYuqyALHIrNI0NPxtEwl/Gq5abbDjC+ocem8++uuUdz0y+Pf6eTUHa8vM0vptFPgme2iX+zwMfuYArN5siPMK7IeLORn7Pu22KDzgPQvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751985270; c=relaxed/simple;
-	bh=5tduTloL7o58Qv0JYfn4WgvECx8dhVTHJ7cQroK1ivM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tnKPdKD4Uo3E9pEb+tsFqR23s/akbDATIL3deWh7cEzGOxEP+oMTsGiIHlwgKWwXAUnCJhx1p9xKVGCVsmvN9EukswozQbKioRhHda9+/XLTYjsAtqYiKv1grVsGIiJ6HV8wDdFbrK3LkhdFY5ZVJn5HrkUOdCvTPPw4AS3odsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dw3TnR2j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0213AC4CEED;
-	Tue,  8 Jul 2025 14:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751985269;
-	bh=5tduTloL7o58Qv0JYfn4WgvECx8dhVTHJ7cQroK1ivM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dw3TnR2jP3B6YiC5TeCFZdBjn23BoGVjN3kr1F4Th88b0dzAkmpsZ/2LGzaltUSxQ
-	 PH/r9NVuiAO4cVEuUtFCMBDn4TskePd802dJ9xaDyBb8QtwuiF8YRUWUidGSWsx24y
-	 Jprt3uoD+s8hJFCmD6y98PRpBhUNuMVp8vnq1N/idi/NrEdlytnOteNUZqzhDsucWj
-	 MkuO1p6Y0/A19x0K3tOuihyJC5esIcvbLGv8Nj6XVEZ8DzY+e4JIt8Bkx0OqNvr2pF
-	 ycf8i5sColU+22mFEHv/1FtyV1RHkuiYMUzWCX3hhd7hvw0WE6Gz6AIw6FqW577CwQ
-	 kOf9RJa252zAA==
-Date: Tue, 8 Jul 2025 07:34:27 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xin Long <lucien.xin@gmail.com>
-Cc: network dev <netdev@vger.kernel.org>, davem@davemloft.net, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Stefan Metzmacher <metze@samba.org>, Moritz Buhl
- <mbuhl@openbsd.org>, Tyler Fanelli <tfanelli@redhat.com>, Pengtao He
- <hepengtao@xiaomi.com>, linux-cifs@vger.kernel.org, Steve French
- <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>, Paulo Alcantara
- <pc@manguebit.com>, Tom Talpey <tom@talpey.com>,
- kernel-tls-handshake@lists.linux.dev, Chuck Lever <chuck.lever@oracle.com>,
- Jeff Layton <jlayton@kernel.org>, Benjamin Coddington
- <bcodding@redhat.com>, Steve Dickson <steved@redhat.com>, Hannes Reinecke
- <hare@suse.de>, Alexander Aring <aahringo@redhat.com>, Cong Wang
- <xiyou.wangcong@gmail.com>, "D . Wythe" <alibuda@linux.alibaba.com>, Jason
- Baron <jbaron@akamai.com>, illiliti <illiliti@protonmail.com>, Sabrina
- Dubroca <sd@queasysnail.net>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Daniel Stenberg <daniel@haxx.se>, Andy
- Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: Re: [PATCH net-next 05/15] quic: provide quic.h header files for
- kernel and userspace
-Message-ID: <20250708073427.6ba38b45@kernel.org>
-In-Reply-To: <74b62316e4a265bf2e5c0b3cf7061b4a6fde68b1.1751743914.git.lucien.xin@gmail.com>
-References: <cover.1751743914.git.lucien.xin@gmail.com>
-	<74b62316e4a265bf2e5c0b3cf7061b4a6fde68b1.1751743914.git.lucien.xin@gmail.com>
+	s=arc-20240116; t=1751992767; c=relaxed/simple;
+	bh=LtgKvg67uNF79qLg+wFSsv3WcGBYCSxFp5Kv2kuGr24=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Bq4NGu1uBlQJ9N4oQQOJBXOkigOoKc7GTCpdevsreoC+wpRSiyh/9RO810Q3J22Yt+9MGzUSAexn4nKnGXtIaw6YUZtjOJXBK0urmOmYuAX/Agg+M1zs0bnYnQZTHhgd7aU/onXO0UvAyePeDBH5ZsychpMMV1ryaayHfltojJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Zg3XJbA6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374E2C4CEED;
+	Tue,  8 Jul 2025 16:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751992767;
+	bh=LtgKvg67uNF79qLg+wFSsv3WcGBYCSxFp5Kv2kuGr24=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Zg3XJbA6vXSkp3pANRhBf9qnAwEOp+9/dKKMEFGdoo7vcX5WIW7pSbL3vQHLEbXHf
+	 VbzFXT9Iomkc2yRLbM87bFUHbys3owVrEP7OwcUDd/yJ9MVQ/cQuzoMdRvlFVsxquI
+	 mk4qE8JWMc0oGYi56lWKbGrB61rtg/G84OyB9PxI=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	linux-cifs@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	Shyam Prasad N <nspmangalore@gmail.com>,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.12 074/232] smb: client: fix warning when reconnecting channel
+Date: Tue,  8 Jul 2025 18:21:10 +0200
+Message-ID: <20250708162243.386847613@linuxfoundation.org>
+X-Mailer: git-send-email 2.50.0
+In-Reply-To: <20250708162241.426806072@linuxfoundation.org>
+References: <20250708162241.426806072@linuxfoundation.org>
+User-Agent: quilt/0.68
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sat,  5 Jul 2025 15:31:44 -0400 Xin Long wrote:
-> This commit adds quic.h to include/uapi/linux, providing the necessary
-> definitions for the QUIC socket API. Exporting this header allows both
-> user space applications and kernel subsystems to access QUIC-related
-> control messages, socket options, and event/notification interfaces.
-> 
-> Since kernel_get/setsockopt() is no longer available to kernel consumers,
-> a corresponding internal header, include/linux/quic.h, is added. This
-> provides kernel subsystems with the necessary declarations to handle
-> QUIC socket options directly.
-> 
-> Detailed descriptions of these structures are available in [1], and will
-> be also provided when adding corresponding socket interfaces in the
-> later patches.
+6.12-stable review patch.  If anyone has any objections, please let me know.
 
-Warning: net/quic/socket.c:142 No description found for return value of 'quic_kernel_setsockopt'
-Warning: net/quic/socket.c:175 No description found for return value of 'quic_kernel_getsockopt'
+------------------
+
+From: Paulo Alcantara <pc@manguebit.org>
+
+[ Upstream commit 3bbe46716092d8ef6b0df4b956f585c5cd0fc78e ]
+
+When reconnecting a channel in smb2_reconnect_server(), a dummy tcon
+is passed down to smb2_reconnect() with ->query_interface
+uninitialized, so we can't call queue_delayed_work() on it.
+
+Fix the following warning by ensuring that we're queueing the delayed
+worker from correct tcon.
+
+WARNING: CPU: 4 PID: 1126 at kernel/workqueue.c:2498 __queue_delayed_work+0x1d2/0x200
+Modules linked in: cifs cifs_arc4 nls_ucs2_utils cifs_md4 [last unloaded: cifs]
+CPU: 4 UID: 0 PID: 1126 Comm: kworker/4:0 Not tainted 6.16.0-rc3 #5 PREEMPT(voluntary)
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-4.fc42 04/01/2014
+Workqueue: cifsiod smb2_reconnect_server [cifs]
+RIP: 0010:__queue_delayed_work+0x1d2/0x200
+Code: 41 5e 41 5f e9 7f ee ff ff 90 0f 0b 90 e9 5d ff ff ff bf 02 00
+00 00 e8 6c f3 07 00 89 c3 eb bd 90 0f 0b 90 e9 57 f> 0b 90 e9 65 fe
+ff ff 90 0f 0b 90 e9 72 fe ff ff 90 0f 0b 90 e9
+RSP: 0018:ffffc900014afad8 EFLAGS: 00010003
+RAX: 0000000000000000 RBX: ffff888124d99988 RCX: ffffffff81399cc1
+RDX: dffffc0000000000 RSI: ffff888114326e00 RDI: ffff888124d999f0
+RBP: 000000000000ea60 R08: 0000000000000001 R09: ffffed10249b3331
+R10: ffff888124d9998f R11: 0000000000000004 R12: 0000000000000040
+R13: ffff888114326e00 R14: ffff888124d999d8 R15: ffff888114939020
+FS:  0000000000000000(0000) GS:ffff88829f7fe000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe7a2b4038 CR3: 0000000120a6f000 CR4: 0000000000750ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ queue_delayed_work_on+0xb4/0xc0
+ smb2_reconnect+0xb22/0xf50 [cifs]
+ smb2_reconnect_server+0x413/0xd40 [cifs]
+ ? __pfx_smb2_reconnect_server+0x10/0x10 [cifs]
+ ? local_clock_noinstr+0xd/0xd0
+ ? local_clock+0x15/0x30
+ ? lock_release+0x29b/0x390
+ process_one_work+0x4c5/0xa10
+ ? __pfx_process_one_work+0x10/0x10
+ ? __list_add_valid_or_report+0x37/0x120
+ worker_thread+0x2f1/0x5a0
+ ? __kthread_parkme+0xde/0x100
+ ? __pfx_worker_thread+0x10/0x10
+ kthread+0x1fe/0x380
+ ? kthread+0x10f/0x380
+ ? __pfx_kthread+0x10/0x10
+ ? local_clock_noinstr+0xd/0xd0
+ ? ret_from_fork+0x1b/0x1f0
+ ? local_clock+0x15/0x30
+ ? lock_release+0x29b/0x390
+ ? rcu_is_watching+0x20/0x50
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork+0x15b/0x1f0
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork_asm+0x1a/0x30
+ </TASK>
+irq event stamp: 1116206
+hardirqs last  enabled at (1116205): [<ffffffff8143af42>] __up_console_sem+0x52/0x60
+hardirqs last disabled at (1116206): [<ffffffff81399f0e>] queue_delayed_work_on+0x6e/0xc0
+softirqs last  enabled at (1116138): [<ffffffffc04562fd>] __smb_send_rqst+0x42d/0x950 [cifs]
+softirqs last disabled at (1116136): [<ffffffff823d35e1>] release_sock+0x21/0xf0
+
+Cc: linux-cifs@vger.kernel.org
+Reported-by: David Howells <dhowells@redhat.com>
+Fixes: 42ca547b13a2 ("cifs: do not disable interface polling on failure")
+Reviewed-by: David Howells <dhowells@redhat.com>
+Tested-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Shyam Prasad N <nspmangalore@gmail.com>
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Tested-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/client/cifsglob.h |  1 +
+ fs/smb/client/smb2pdu.c  | 10 ++++------
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index c66655adecb2c..e77c0b3e49624 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -1275,6 +1275,7 @@ struct cifs_tcon {
+ 	bool use_persistent:1; /* use persistent instead of durable handles */
+ 	bool no_lease:1;    /* Do not request leases on files or directories */
+ 	bool use_witness:1; /* use witness protocol */
++	bool dummy:1; /* dummy tcon used for reconnecting channels */
+ 	__le32 capabilities;
+ 	__u32 share_flags;
+ 	__u32 maximal_access;
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index c6ae395a46925..3e501da62880c 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -440,9 +440,9 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
+ 		free_xid(xid);
+ 		ses->flags &= ~CIFS_SES_FLAGS_PENDING_QUERY_INTERFACES;
+ 
+-		/* regardless of rc value, setup polling */
+-		queue_delayed_work(cifsiod_wq, &tcon->query_interfaces,
+-				   (SMB_INTERFACE_POLL_INTERVAL * HZ));
++		if (!tcon->ipc && !tcon->dummy)
++			queue_delayed_work(cifsiod_wq, &tcon->query_interfaces,
++					   (SMB_INTERFACE_POLL_INTERVAL * HZ));
+ 
+ 		mutex_unlock(&ses->session_mutex);
+ 
+@@ -4234,10 +4234,8 @@ void smb2_reconnect_server(struct work_struct *work)
+ 		}
+ 		goto done;
+ 	}
+-
+ 	tcon->status = TID_GOOD;
+-	tcon->retry = false;
+-	tcon->need_reconnect = false;
++	tcon->dummy = true;
+ 
+ 	/* now reconnect sessions for necessary channels */
+ 	list_for_each_entry_safe(ses, ses2, &tmp_ses_list, rlist) {
 -- 
-pw-bot: cr
+2.39.5
+
+
+
 
