@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-5345-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5347-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77CB4B05C2E
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jul 2025 15:28:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49F59B05EF0
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jul 2025 15:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FA061C21EA6
-	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jul 2025 13:29:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D4CB188925A
+	for <lists+linux-cifs@lfdr.de>; Tue, 15 Jul 2025 13:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D39332E49B7;
-	Tue, 15 Jul 2025 13:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21ECE2E3363;
+	Tue, 15 Jul 2025 13:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="t7zgDED8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tezsGdj/"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8C62E49AE;
-	Tue, 15 Jul 2025 13:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7AA26D4F2;
+	Tue, 15 Jul 2025 13:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752585930; cv=none; b=nQX0bp2GXTeK++bsuFxSdOQb8IlAPoTjqL+Y8SbXKSlbsPzOD3uKCXlnYN+Xo1HCglUqzd/DkcvETxiXwNq2nE5mUa2s4sUUJFHg8+W3ZY3ePUHd5u5ST5JOykAs3dk5wJfzPbgOJP6T8sQ4oogZ62pece6Vq8LSqgrvWKYru+M=
+	t=1752586979; cv=none; b=B7xRr1ZvcA6R2wgcA7hMq1EkE/pDZdsBSUY6mL6mO4eDtbvh8KNOrZ9udX4Pg7+zZf4CJemtKDehYnMrbTxwuB+aI4RMvfKqLbJdoWsxBt64ez8CW71Ml8O3YV12xK3zeQMQ8Km5Wm0Komc+ovQGD9Wrb8O1gLGKMIWZnMLWCSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752585930; c=relaxed/simple;
-	bh=FJSd5ZW6j1Km+LxB5v4Ye/HApt+w+afUT9CPI+Jv/a8=;
+	s=arc-20240116; t=1752586979; c=relaxed/simple;
+	bh=dzAD5IRDnweDKX7utVEkexM2eEOIPdWp0Jo6C1sUI4Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YAXA3bb15ac5ebtwV1Jqg3Ww2Imv+fDvaqVJgA4d3pNAoRudIb3rIdkqyvWnE3O/0EjabGaniiNe/Ks4YjUmGOhAEVTKiW/PlT0SigyVY6Exc8EWAk9qjG4pYHfDFX5dvqq4g05m2ZKrxpTb5C2s/7nhPS6QlCCNkAIw7yglspY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=t7zgDED8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA47C4CEE3;
-	Tue, 15 Jul 2025 13:25:30 +0000 (UTC)
+	 MIME-Version; b=cE/n4uOM2uQe3ZM4t25kQKKSkb2uoIOtd94NoYHgG5yVFU0bwRa+igsUg12Gks7bgmlhD5l5MPp2RjAhtkYpxqvNmrV40mF/uKfTe/uofIvY/8ceIeJYJSMqLoxCqi/AUxh0Zd3+uUOA6OSr0gW54O1c2IOFXzIw86yFjLyj0+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tezsGdj/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB89C4CEE3;
+	Tue, 15 Jul 2025 13:42:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752585930;
-	bh=FJSd5ZW6j1Km+LxB5v4Ye/HApt+w+afUT9CPI+Jv/a8=;
+	s=korg; t=1752586978;
+	bh=dzAD5IRDnweDKX7utVEkexM2eEOIPdWp0Jo6C1sUI4Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t7zgDED8Fwc+0Vf9kN1HFRcZQb6HUySkXKBUelpUJ7Jdx+ozTCHZNfKiIyzEZ7JUW
-	 gybmdTVcqtqX6NcHuu9chL8/1Xh4cJi6jRKWVobYfbNAfQFEbcLHYN3mEo2WxwgOEN
-	 3s3EH/PSwbsjgftxgZVis1vdzOVqzrZRzvLR5rMk=
+	b=tezsGdj/4J3FSeT3w7rJGnd8S3KNMDME4rCt4Kj8Qscx9Jzj/PbnvkpC0iARGsuO0
+	 dx7S6oW++MzrAMvfrqaBF+jXNjXzGwlN6+O9pWtE9mFrM92RH2x/pgS9Iok2ISfw9N
+	 97L0Lk2ntfiSYXec3D2ZkBisKtGHGWB5d1N/KAbo=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -49,12 +49,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Tom Talpey <tom@talpey.com>,
 	linux-cifs@vger.kernel.org,
 	Stefan Metzmacher <metze@samba.org>
-Subject: [PATCH 6.6 061/109] smb: server: make use of rdma_destroy_qp()
-Date: Tue, 15 Jul 2025 15:13:17 +0200
-Message-ID: <20250715130801.328374722@linuxfoundation.org>
+Subject: [PATCH 6.15 119/192] smb: server: make use of rdma_destroy_qp()
+Date: Tue, 15 Jul 2025 15:13:34 +0200
+Message-ID: <20250715130819.665683443@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250715130758.864940641@linuxfoundation.org>
-References: <20250715130758.864940641@linuxfoundation.org>
+In-Reply-To: <20250715130814.854109770@linuxfoundation.org>
+References: <20250715130814.854109770@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -112,7 +112,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/smb/server/transport_rdma.c
 +++ b/fs/smb/server/transport_rdma.c
-@@ -426,7 +426,8 @@ static void free_transport(struct smb_di
+@@ -433,7 +433,8 @@ static void free_transport(struct smb_di
  	if (t->qp) {
  		ib_drain_qp(t->qp);
  		ib_mr_pool_destroy(t->qp, &t->qp->rdma_mrs);
@@ -122,7 +122,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	}
  
  	ksmbd_debug(RDMA, "drain the reassembly queue\n");
-@@ -1934,8 +1935,8 @@ static int smb_direct_create_qpair(struc
+@@ -1940,8 +1941,8 @@ static int smb_direct_create_qpair(struc
  	return 0;
  err:
  	if (t->qp) {
