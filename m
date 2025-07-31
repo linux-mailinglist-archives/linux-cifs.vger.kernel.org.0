@@ -1,356 +1,185 @@
-Return-Path: <linux-cifs+bounces-5426-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5428-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 345E2B172A6
-	for <lists+linux-cifs@lfdr.de>; Thu, 31 Jul 2025 16:00:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53B1DB174E2
+	for <lists+linux-cifs@lfdr.de>; Thu, 31 Jul 2025 18:26:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BAE3166761
-	for <lists+linux-cifs@lfdr.de>; Thu, 31 Jul 2025 14:00:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 898101C24E3A
+	for <lists+linux-cifs@lfdr.de>; Thu, 31 Jul 2025 16:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309121474DA;
-	Thu, 31 Jul 2025 14:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D723A1F78E0;
+	Thu, 31 Jul 2025 16:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HYeB5u/F"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="YG8LVwZR"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A673A1B6
-	for <linux-cifs@vger.kernel.org>; Thu, 31 Jul 2025 14:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574534689
+	for <linux-cifs@vger.kernel.org>; Thu, 31 Jul 2025 16:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753970430; cv=none; b=ma2XHbUUdVQH58GdkjgWwA6dSOELvgOltengU/JL9ZR2YjrBp9OcuvvZTfKRPkeE+IFt0dvoC6DKRAsQ97cvJ7H6g3TIZUAVB6a2VR+pUnsgSHI2LDnEqROT9kUTDzBMzko1G537uvrvdBoixzbn4XWVfc6fzYfw9HLFsYiCoEA=
+	t=1753979170; cv=none; b=YsjsfsSmNBdjyPMMGudF0BpK/F0Krk7azUPPQah2I7wO37iK1Ljv3lBhyGtMc2rlJ9s15vwiM/BQchKnFFZrepJSceyFQdhzp2F/XuOZQZBKB9DRf7dCDUdIdqXT0lvdgRynXkKErLD+KPb7FTBc0wABzI9yaiey2eXDWHQka9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753970430; c=relaxed/simple;
-	bh=6MRP0d7lRPwyud43AOHepHiGOzyPSKbXSsR3DViac7g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZVWyj//CTyGV90LW0uyMklEdtcm43/ddlli9M+swA9f0vKn/7v5c9O4ooTvInOuGtvKsfuDR3qDp3g03GQoNAAqdlypj6bYLeF5ySUpBGVscD3iKSf/F7/F2hexaxvoIeDXBUOpmie1CeNVZntooHN8AuPcIjBTdZ1ExIiELEBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HYeB5u/F; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6fadd3ad18eso9455376d6.2
-        for <linux-cifs@vger.kernel.org>; Thu, 31 Jul 2025 07:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753970427; x=1754575227; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vhn9JbqxY6+MlILzyCmjqllaKBii5Z4mUdyeJUwwv9Y=;
-        b=HYeB5u/F6YJ9wD4dKcrM7jKmnX7S7n+r+D3Sp1ot0WKfP4mdVjWYztHqpdsV1rXLrP
-         V2EwY7l5lRzTWXcopk/EG5xB7q6O8+PfS2KQebYrO3mterks9QuSxeqyOHPrR4ix8QN1
-         a8lGKzaFrhhSRQMZwTmEwP977OKDgtLzVvs1ZpD94vg+S9me+Dk5mQblxnZXltQmZxGK
-         XwjoAFG2NmOJT1KrWurl3ZxfPL4sQlZOF/K4SeE5Nc6LvwmTZYMliL/jBX/PHk8Byuxm
-         LvJaNy2/P7K+w3BEyUGUjE31j40qU3Q3LoJMqjyFqDCd6XhHZ0oXGhPFhylsB65fmhu6
-         O1Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753970427; x=1754575227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vhn9JbqxY6+MlILzyCmjqllaKBii5Z4mUdyeJUwwv9Y=;
-        b=H9FGH4K3uRmZ+6Vd2orU1avhYUV/laG5PWq374UUqY9YR4T+suoGPy1E8eyQHAQE/2
-         G60mqI0Y4R1K2XjYWYP4mWa6vg7K91WX0TxGeygyTTSh298XBLZ3klJDaFBgDV5fDu62
-         kpFD2XoCzDWoIHC9cCHwc8BVM1+YmNn6j2ucovFd8qTVhBS+3bHaLObw8bvGWW7FBze8
-         7MIYw2e7fYhygeCnYKdiqOh8r/dEEGnAUMLoTHpL60I0H7r6jbDg1cYFrsaq/UadPXVl
-         i+F35/igtVRAecu0wjs7HYKWuhHI28ZQYChY1BwHJUPLmi7Ei1a/mQiX8j1XqAeD7sP9
-         cEPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwcRrRfTXCSPS+uXzpCqA0HDppABHwflcfRevIF2pQ4VuRcHt+Qf4/uMH+gQ6kFS0q2MxOqyClAhcR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy16DT/uAwlp7Z0f+ajpVTbtG6MfuET3eYrR8jiM/fQijGNNeB4
-	pFFS6kqd5a4V55WgoPLIu7VIWvZnU1y6xLuh/5rVzlXe4GVXkxi1sXI7jMfXOWTZhCK1Z3RqoJ5
-	Pmv2/vnD4OTipQ8V9LkDRx+NZGALDYgQ=
-X-Gm-Gg: ASbGncuM80abCfYPHnGsiCMDFAXRtVze1sKQRvlojrEB2m1aaco+pcjfxfiGOeXQ+Ij
-	ydNcEsImZjW2oNiu5jF4eew7hy6Ta+QExTF+cY2K2ZlnE6fc7+j3/4AcItIvf34d3MOPzRnn5p5
-	rWnCX54C5BFQyV3Fs/N07bOIM9GpyqvBATqH4LEcvSQRm3FxtlPgICdLsyHlDsPbSXuQB0if8Ed
-	FTgW92QT8JehSDurobQuLL/a6ukvUVlJAXndyovUw==
-X-Google-Smtp-Source: AGHT+IHMelhZCjPmtrZE7nkO6WfmoTLROWL+dInzPVyV86zG5qa1vR+amg2JYvs6Kx9j0Vh/uuF57YM9UGpNRaMd7aA=
-X-Received: by 2002:ad4:5fcc:0:b0:707:38e8:d10b with SMTP id
- 6a1803df08f44-707671e8ed0mr79775066d6.24.1753970425723; Thu, 31 Jul 2025
- 07:00:25 -0700 (PDT)
+	s=arc-20240116; t=1753979170; c=relaxed/simple;
+	bh=neKR1dx4gT/lZI7f6wQ8wi6Ij/7yMv1mux8VSuqv65M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=Cmc7aQZCoBxWwwrrmJAA+MIeXVkvA8rHbGvjhTrWDLdVZTk8kRPTdqGapZsgWrS1FUwq17CRu1ksjKmJXaEq7LZAEBPLs9tbVuqzWcE3xMbxEUmzGbTuEORsowytpePxMzliertSJ1ChV3Jm4SALtccbNPa7+/t9PXhpMeISDmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=YG8LVwZR; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=From:Cc:To:Date:Message-ID;
+	bh=neKR1dx4gT/lZI7f6wQ8wi6Ij/7yMv1mux8VSuqv65M=; b=YG8LVwZRAmzcn6wdGiqalGYWWw
+	lRL1r+CfER8k/bSvWxVYXTPMS5SrbmhLh4RYqu2zvHyK0eOHQQjNOfVBQTyCuBqBju+OqRjbCY5ka
+	zca0KZWezXb+G9ndKhVeLBlcnez5QBy+t/XvnqmwbtD8GrnjSDaxNtfEdlcx0dOwJYHMtBIGcjsEO
+	iFjrAky+BlAYksl7DV3+MIWNpa7r0PFXwDOzDc67GrQlhF7b+EXyE6lq7zZLfvyEaG8adknUWNpva
+	WiIt2STw5wdu2ux1a6Ym0yfNtM4A59KGxC7mBW3CyFWpzN3SHy7Oad1n2tABeiUYxsmC9OzK11C4K
+	nHC1yIWTjop8FcXsSxm1ME2QMjkCokOysrTw3p0gZPo2DKWcrjGqYABAVvTan5/gCUhPf26UQDn2y
+	IECi/fzGIQ5cC+gu/NkexGX9y22FBvwmHwHTw7TyiKaQ3K72jyF6Q4tQmaAVecaS8F6QaSeRjvxPc
+	IcGmqER6K8aoDj6tZ5UOe8uO;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1uhVtO-000NxP-0j;
+	Thu, 31 Jul 2025 16:12:30 +0000
+Message-ID: <45403dd0-b481-431b-8641-234978e48b1b@samba.org>
+Date: Thu, 31 Jul 2025 18:12:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250516152201.201385-1-alxvmr@altlinux.org> <43os6kphihnry2wggqykiwmusz@pony.office.basealt.ru>
- <3d3160fd-e29d-495d-a02e-e28558cfec1a@altlinux.org> <CAH2r5mtG5pwFMRtu3EeXKPBdq0LJwjt84SbGtL0J4QuCg+AsgQ@mail.gmail.com>
- <CAH2r5msnTMCHJ9kZmFWCbUUUnejOLv8mzGussaidc3yj3nk+qQ@mail.gmail.com> <8f2ad82d-0dd4-4195-b414-59f25f859a9e@altlinux.org>
-In-Reply-To: <8f2ad82d-0dd4-4195-b414-59f25f859a9e@altlinux.org>
-From: Steve French <smfrench@gmail.com>
-Date: Thu, 31 Jul 2025 09:00:13 -0500
-X-Gm-Features: Ac12FXzbyFiRSt3CuGBx5KjwUEGB3A3k_T7XKVkBoWzhj1t2v-Gao59X1XFhkms
-Message-ID: <CAH2r5mvDa8E8NKNHevoWYARY_52DJ+WQX3oetYw-pwysMyAKYQ@mail.gmail.com>
-Subject: Re: [PATCH] fs/smb/client/fs_context: Add hostname option for CIFS
- module to work with domain-based dfs resources with Kerberos authentication
-To: alxvmr@altlinux.org
-Cc: pc@manguebit.com, linux-cifs@vger.kernel.org, 
-	Ivan Volchenko <ivolchenko86@gmail.com>, samba-technical@lists.samba.org, 
-	Vitaly Chikunov <vt@altlinux.org>, Tom Talpey <tom@talpey.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Samba] SMB3 Unix Extensions - creating special files
+To: Matthew Richardson <m.richardson@ed.ac.uk>
+References: <1124e7cd-6a46-40a6-9f44-b7664a66654b@ed.ac.uk>
+ <7082aea3-b28b-4ef5-9b5c-64d5d8b78cbc@samba.org>
+ <a4a32c8e-3b7f-4748-8c50-48f18e8980b9@ed.ac.uk>
+Content-Language: en-US, de-DE
+Cc: samba@lists.samba.org, CIFS <linux-cifs@vger.kernel.org>,
+ Steve French <smfrench@gmail.com>
+From: Ralph Boehme <slow@samba.org>
+Autocrypt: addr=slow@samba.org; keydata=
+ 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
+ R3NApzHw2ZqQDtSdciR9og==
+In-Reply-To: <a4a32c8e-3b7f-4748-8c50-48f18e8980b9@ed.ac.uk>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------NB6m2zrGgPJLyO808NlPQgg8"
 
-I don't have any strong opinion on: "dfs_server_hostname" vs
-"dfs_domain_hostname" whichever makes more sense.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------NB6m2zrGgPJLyO808NlPQgg8
+Content-Type: multipart/mixed; boundary="------------GejD4nVtYMDHpAeDA120Z0Ys";
+ protected-headers="v1"
+From: Ralph Boehme <slow@samba.org>
+To: Matthew Richardson <m.richardson@ed.ac.uk>
+Cc: samba@lists.samba.org, CIFS <linux-cifs@vger.kernel.org>,
+ Steve French <smfrench@gmail.com>
+Message-ID: <45403dd0-b481-431b-8641-234978e48b1b@samba.org>
+Subject: Re: [Samba] SMB3 Unix Extensions - creating special files
+References: <1124e7cd-6a46-40a6-9f44-b7664a66654b@ed.ac.uk>
+ <7082aea3-b28b-4ef5-9b5c-64d5d8b78cbc@samba.org>
+ <a4a32c8e-3b7f-4748-8c50-48f18e8980b9@ed.ac.uk>
+In-Reply-To: <a4a32c8e-3b7f-4748-8c50-48f18e8980b9@ed.ac.uk>
 
-I will look to see if I can find any more threads on this in earlier email
+--------------GejD4nVtYMDHpAeDA120Z0Ys
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Wed, Jul 30, 2025 at 11:54=E2=80=AFAM Maria Alexeeva <alxvmr@altlinux.or=
-g> wrote:
->
-> Steve,
-> It seems some of the discussion with review comments fell outside this
-> thread (I can only find vt@altlinux.org Vitaly Chikunov's remarks).
-> Could you please point me to where the rest of the feedback can be
-> found (e.g., about fixing the noisy warning the patch adds and
-> other comments)?
->
-> An updated patch for fs/smb/client/fs_context has been prepared, renaming
-> the option to dfs_domain_hostname. There's suggestion to further rename
-> it to dfs_server_hostname - what are your thoughts on this?
->
-> The patches will follow in subsequent messages.
->
-> Thanks!
->
-> On 7/25/25 02:50, Steve French via samba-technical wrote:
-> > Maria,
-> > Since this looks like it depends on a cifs-utils change, can you
-> > update your kernel patch with review comments (e.g. changing mount
-> > parm to "dfs_domain_hostname", and there were at least two others in
-> > the thread, e.g. fixing the noisy warning that the patch adds) and
-> > then show the cifs-utils change, so we can make the upcoming merge
-> > window.
-> >
-> > On Thu, Jul 24, 2025 at 5:14=E2=80=AFPM Steve French <smfrench@gmail.co=
-m> wrote:
-> >>
-> >> I will update the mount parm name, similar to what Tom suggested to
-> >> "dfs_domain_hostname" to be less confusing.
-> >>
-> >> Let me know if you had a v2 of the patch with other changes
-> >>
-> >> On Thu, Jul 3, 2025 at 8:00=E2=80=AFAM Maria Alexeeva via samba-techni=
-cal
-> >> <samba-technical@lists.samba.org> wrote:
-> >>>
-> >>> On 6/14/25 07:42, Vitaly Chikunov wrote:
-> >>>> Maria,
-> >>>>
-> >>>> On Fri, May 16, 2025 at 07:22:01PM +0400, Maria Alexeeva wrote:
-> >>>>> Paths to domain-based dfs resources are defined using the domain na=
-me
-> >>>>> of the server in the format:
-> >>>>> \\DOMAIN.NAME>\<dfsroot>\<path>
-> >>>>>
-> >>>>> The CIFS module, when requesting a TGS, uses the server name
-> >>>>> (<DOMAIN.NAME>) it obtained from the UNC for the initial connection=
-.
-> >>>>> It then composes an SPN that does not match any entities
-> >>>>> in the domain because it is the domain name itself.
-> >>>> For a casual reader like me it's hard to understand (this abbreviati=
-on
-> >>>> filled message) what it's all about. And why we can't just change sy=
-stem
-> >>>> hostname for example.
-> >>>
-> >>> This option is needed to transfer the real name of the server to whic=
-h
-> >>> the connection is taking place,
-> >>> when using the UNC path in the form of domain-based DFS. The system
-> >>> hostname has nothing to do with it.
-> >>>
-> >>>> Also, the summary (subject) message is 180 character which is way ab=
-ove
-> >>>> 75 characters suggested in submitting-patches.rst.
-> >>>>
-> >>>>> To eliminate this behavior, a hostname option is added, which is
-> >>>>> the name of the server to connect to and is used in composing the S=
-PN.
-> >>>>> In the future this option will be used in the cifs-utils developmen=
-t.
-> >>>>>
-> >>>>> Suggested-by: Ivan Volchenko <ivolchenko86@gmail.com>
-> >>>>> Signed-off-by: Maria Alexeeva <alxvmr@altlinux.org>
-> >>>>> ---
-> >>>>>    fs/smb/client/fs_context.c | 35 +++++++++++++++++++++++++++++---=
----
-> >>>>>    fs/smb/client/fs_context.h |  3 +++
-> >>>>>    2 files changed, 32 insertions(+), 6 deletions(-)
-> >>>>>
-> >>>>> diff --git a/fs/smb/client/fs_context.c b/fs/smb/client/fs_context.=
-c
-> >>>>> index a634a34d4086..74de0a9de664 100644
-> >>>>> --- a/fs/smb/client/fs_context.c
-> >>>>> +++ b/fs/smb/client/fs_context.c
-> >>>>> @@ -177,6 +177,7 @@ const struct fs_parameter_spec smb3_fs_paramete=
-rs[] =3D {
-> >>>>>       fsparam_string("password2", Opt_pass2),
-> >>>>>       fsparam_string("ip", Opt_ip),
-> >>>>>       fsparam_string("addr", Opt_ip),
-> >>>>> +    fsparam_string("hostname", Opt_hostname),
-> >>>>>       fsparam_string("domain", Opt_domain),
-> >>>>>       fsparam_string("dom", Opt_domain),
-> >>>>>       fsparam_string("srcaddr", Opt_srcaddr),
-> >>>>> @@ -825,16 +826,23 @@ static int smb3_fs_context_validate(struct fs=
-_context *fc)
-> >>>>>               return -ENOENT;
-> >>>>>       }
-> >>>>>
-> >>>>> +    if (ctx->got_opt_hostname) {
-> >>>>> +            kfree(ctx->server_hostname);
-> >>>>> +            ctx->server_hostname =3D ctx->opt_hostname;
-> >>>> I am not familiar with the smb codebase but are you sure this will n=
-ot
-> >>>> cause a race?
-> >>>
-> >>> The race condition will not occur.
-> >>> ctx->server_hostname is also used in smb3_parse_devname inside
-> >>> smb3_fs_context_parse_param.
-> >>> smb3_fs_context_parse_param is called earlier than the updated
-> >>> smb3_fs_context_validate, which is called inside smb3_get_tree:
-> >>>
-> >>> static const struct fs_context_operations smb3_fs_context_ops =3D {
-> >>>    .free   =3D smb3_fs_context_free,
-> >>>    .parse_param  =3D smb3_fs_context_parse_param,
-> >>>    .parse_monolithic =3D smb3_fs_context_parse_monolithic,
-> >>>    .get_tree  =3D smb3_get_tree,
-> >>>    .reconfigure  =3D smb3_reconfigure,
-> >>> };
-> >>>
-> >>>>> +            pr_notice("changing server hostname to name provided i=
-n hostname=3D option\n");
-> >>>>> +    }
-> >>>>> +
-> >>>>>       if (!ctx->got_ip) {
-> >>>>>               int len;
-> >>>>> -            const char *slash;
-> >>>>>
-> >>>>> -            /* No ip=3D option specified? Try to get it from UNC *=
-/
-> >>>>> -            /* Use the address part of the UNC. */
-> >>>>> -            slash =3D strchr(&ctx->UNC[2], '\\');
-> >>>>> -            len =3D slash - &ctx->UNC[2];
-> >>>>> +            /*
-> >>>>> +             * No ip=3D option specified? Try to get it from serve=
-r_hostname
-> >>>>> +             * Use the address part of the UNC parsed into server_=
-hostname
-> >>>>> +             * or hostname=3D option if specified.
-> >>>>> +             */
-> >>>>> +            len =3D strlen(ctx->server_hostname);
-> >>>>>               if (!cifs_convert_address((struct sockaddr *)&ctx->ds=
-taddr,
-> >>>>> -                                      &ctx->UNC[2], len)) {
-> >>>>> +                                      ctx->server_hostname, len)) =
-{
-> >>>>>                       pr_err("Unable to determine destination addre=
-ss\n");
-> >>>>>                       return -EHOSTUNREACH;
-> >>>>>               }
-> >>>>> @@ -1518,6 +1526,21 @@ static int smb3_fs_context_parse_param(struc=
-t fs_context *fc,
-> >>>>>               }
-> >>>>>               ctx->got_ip =3D true;
-> >>>>>               break;
-> >>>>> +    case Opt_hostname:
-> >>>>> +            if (strnlen(param->string, CIFS_NI_MAXHOST) =3D=3D CIF=
-S_NI_MAXHOST) {
-> >>>>> +                    pr_warn("host name too long\n");
-> >>>>> +                    goto cifs_parse_mount_err;
-> >>>>> +            }
-> >>>>> +
-> >>>>> +            kfree(ctx->opt_hostname);
-> >>>>> +            ctx->opt_hostname =3D kstrdup(param->string, GFP_KERNE=
-L);
-> >>>>> +            if (ctx->opt_hostname =3D=3D NULL) {
-> >>>>> +                    cifs_errorf(fc, "OOM when copying hostname str=
-ing\n");
-> >>>>> +                    goto cifs_parse_mount_err;
-> >>>>> +            }
-> >>>>> +            cifs_dbg(FYI, "Host name set\n");
-> >>>>> +            ctx->got_opt_hostname =3D true;
-> >>>>> +            break;
-> >>>>>       case Opt_domain:
-> >>>>>               if (strnlen(param->string, CIFS_MAX_DOMAINNAME_LEN)
-> >>>>>                               =3D=3D CIFS_MAX_DOMAINNAME_LEN) {
-> >>>>> diff --git a/fs/smb/client/fs_context.h b/fs/smb/client/fs_context.=
-h
-> >>>>> index 9e83302ce4b8..cf0478b1eff9 100644
-> >>>>> --- a/fs/smb/client/fs_context.h
-> >>>>> +++ b/fs/smb/client/fs_context.h
-> >>>>> @@ -184,6 +184,7 @@ enum cifs_param {
-> >>>>>       Opt_pass,
-> >>>>>       Opt_pass2,
-> >>>>>       Opt_ip,
-> >>>>> +    Opt_hostname,
-> >>>>>       Opt_domain,
-> >>>>>       Opt_srcaddr,
-> >>>>>       Opt_iocharset,
-> >>>>> @@ -214,6 +215,7 @@ struct smb3_fs_context {
-> >>>>>       bool gid_specified;
-> >>>>>       bool sloppy;
-> >>>>>       bool got_ip;
-> >>>>> +    bool got_opt_hostname;
-> >>>>>       bool got_version;
-> >>>>>       bool got_rsize;
-> >>>>>       bool got_wsize;
-> >>>>> @@ -226,6 +228,7 @@ struct smb3_fs_context {
-> >>>>>       char *domainname;
-> >>>>>       char *source;
-> >>>>>       char *server_hostname;
-> >>>>> +    char *opt_hostname;
-> >>>> Perhaps, smb3_fs_context_dup and smb3_cleanup_fs_context_contents sh=
-ould
-> >>>> be aware of these new fields too.
-> >>>
-> >>> smb3_cleanup_fs_context_contents should be aware of these new fields =
-too.
-> >>>
-> >>> Clearing in smb3_cleanup_fs_context_contents is not necessary, becaus=
-e
-> >>> if opt_hostname !=3D NULL,
-> >>> then the pointer in server_hostname is replaced (it is pre-cleared by
-> >>> kfree), respectively, everything
-> >>> will be cleared by itself with the current code.
-> >>>
-> >>> In smb3_fs_context_dup, opt_hostname does not need to be processed,
-> >>> since this variable is
-> >>> essentially temporary. Immediately after parsing with the parameter, =
-its
-> >>> value goes to
-> >>> server_hostname and it is no longer needed by itself.
-> >>>
-> >>>> Thanks,
-> >>>>
-> >>>>>       char *UNC;
-> >>>>>       char *nodename;
-> >>>>>       char workstation_name[CIFS_MAX_WORKSTATION_LEN];
-> >>>>>
-> >>>>> base-commit: bec6f00f120ea68ba584def5b7416287e7dd29a7
-> >>>>> --
-> >>>>> 2.42.2
-> >>>>>
-> >>>
-> >>> Apologies for the overly long subject line and unclear description.
-> >>> Thanks.
-> >>>
-> >>
-> >>
-> >> --
-> >> Thanks,
-> >>
-> >> Steve
-> >
-> >
-> >
->
+Li4uYWRkaW5nIGxpbnV4LWNpZnMgYW5kIFN0ZXZlIHRvIHRoZSBsb29wLi4uLg0KDQpMb29r
+cyB0byBiZSBhIGNsaWVudCBpc3N1ZTogdGhlIGNsaWVudCBpcyBjaGVja2luZyBmb3IgZXhp
+c3RlbmNlIG9mIHRoZSANCnRhcmdldHMsIHRoZSBzZXJ2ZXIgcmV0dXJucyBFTk9FTlQgYW5k
+IHRoZW4gdGhhdCdzIGl0LiBUaGVyZSBubyBhdHRlbXB0IA0KdG8gY3JlYXRlIGVpdGhlciBh
+IHN5bWxpbmsgbm9yIHRoZSBmaWZvIGFzIHJlcGFyc2UgcG9pbnRzLg0KDQpAU3RldmU6IGFu
+eSBpZGVhIG9mIHdoYXQgY291bGQgYmUgZ29pbmcgd3Jvbmc/IElpcmMgdGhpcyBpcyBzdXBw
+b3NlZCB0byANCmJlIHdvcmtpbmcgaW4gdGhlIGNsaWVudC4NCg0KLXNsb3cNCg0KT24gNy8z
+MC8yNSAyOjMxIFBNLCBNYXR0aGV3IFJpY2hhcmRzb24gd3JvdGU6DQo+IEhpLA0KPiANCj4g
+SSd2ZSBjcmVhdGVkIGEgZmV3IG5ldHdvcmsgdHJhY2VzIHdoaWNoIHdpbGwgaG9wZWZ1bGx5
+IGhlbHAuIEVhY2ggb25lIA0KPiBjb250YWlucyB0aGUgaW5pdGlhbCBtb3VudCBjb21tYW5k
+LCBmb2xsb3dlZCBieSBhIHNpbmdsZSBjb21tYW5kLiANCj4gVGhleSdyZSBob3N0ZWQgaGVy
+ZToNCj4gDQo+IGh0dHBzOi8vZmlsZWJpbi5uZXQvenZkeDA3aTJtM2x0YTEyOQ0KPiANCj4g
+V29ya2luZzoNCj4gDQo+IHNhbWJhX3N0YXRfc3ltbGluay5wY2FwID0gc3RhdCAvbW50L3N5
+bV9hX2xvY2FsDQo+IA0KPiBOb3Qgd29ya2luZzoNCj4gDQo+IHNhbWJhX2xuX3MucGNhcCA9
+IGxuIC1zIC9tbnQvYS50eHQgL21udC9hLnN5bWxpbmsNCj4gDQo+IHNhbWJhX21rZmlmby5w
+Y2FwID0gbWtmaWZvIC9tbnQvZmlmb19uZXcNCj4gDQo+IEhvcGVmdWxseSB0aGF0IHdpbGwg
+Z2l2ZSBzb21lIGlkZWEgYWJvdXQgd2hhdCdzIGhhcHBlbmluZ8KgIGJ1dCBsZXQgbWUgDQo+
+IGtub3cgaWYgeW91IG5lZWQgYW55IG90aGVyIHRyYWNlcyBvciBkZWJ1ZyBpbmZvLg0KPiAN
+Cj4gVGhhbmtzLA0KPiANCj4gTWF0dGhldw0KPiANCj4gDQo+IE9uIDI5LzA3LzIwMjUgMTg6
+MjIsIFJhbHBoIEJvZWhtZSB3cm90ZToNCj4+IEhpIE1hdHRoZXcsDQo+Pg0KPj4gYXMgYSBz
+dGFydGluZyBwb2ludDogY2FuIHlvdSBzZW5kIHVzIGEgbmV0d29yayB0cmFjZSBvZiB0aGlz
+Pw0KPj4NCj4+IElpcmMgdGhlIG1haWxpbmcgbGlzdCBzZXJ2ZXIgaXMgbm90IHBhcnRpY3Vs
+YXJpbHkgZm9uZCBvZiANCj4+IGF0dGFjaGVtZW50cywgc28gZWl0aGVyIHB1dCBpdCBzb21l
+d2hlcmUgdG8gZ3JhYiBpdCBvciBmaWxlIGEgU2FtYmEgDQo+PiBidWcgYW5kIGF0dGFjaCBp
+dCB0aGVyZS4NCj4+DQo+PiBDaGVlcnMhDQo+PiAtc2xvdw0KPj4NCj4gDQoNCg==
 
+--------------GejD4nVtYMDHpAeDA120Z0Ys--
 
---=20
-Thanks,
+--------------NB6m2zrGgPJLyO808NlPQgg8
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-Steve
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEE+uLGCIokJSBRxVnkqh6bcSY5nkYFAmiLlewFAwAAAAAACgkQqh6bcSY5nkZg
+Hw/7BMMLlkKtLAQM0Y3aJo0ie1rWZvxrFLFsjXT4Rfylk+7YMRZba090QGtirSIag8V+VyQ30+Ab
+HRIQNTZE2yvAeS9Wec2e77ItQwI/IPXDU6CIII71OMoBlG4253QXnb20yb47pimLovMi5fgUm001
+dyNlcLfH8mGLD+XoEqBULkFh6fqWoX0mWPTQ13eDGJK67qKTYywp7mbuSEmLnRvm19wITGY3oIp7
+1D6+B+6RQNZzXLZOwrbTtzTyRMFJ6f2z3dOFio6ccFe+qOZWWas6/ii83jrvHLt1QmcUO0Dd3kk/
+QsPovfICTor3QI+OawnnudsArucEEWEYNetOpeHrp76Nbijb3D0/PG62dg3jQGk0azcQkvAEpyP1
+HFd7SR0/3gNLncTzvGiJaNhQGbyqWsWTpO+8qPtD5SWIh2aNkqnkzkIdd8IFSey+xMq2PAuxyP13
+ouw/QguM9gwGXL9J6Ds7lH9p24BuZawF2887SIoHjk7c3+cgJCsdWf0NTzo3uURuyk3rl6OWRhxp
+WFRJyjdAnbE22TLDtxMeitWQK3VxxLGYDGl07KpKLkbSWMie9JojZq4S42p3y+UU2XHMQ15bocGz
+Ogh6eM/Qkgqi3FER51zRsRy+2jk9/h+WfV6NPs+xtsNH766MKdfBN8jQ3rBE7sL1RQO8Y9nn7JeX
+M/4=
+=REyA
+-----END PGP SIGNATURE-----
+
+--------------NB6m2zrGgPJLyO808NlPQgg8--
 
