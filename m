@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-5722-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5714-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 031FAB23696
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 21:02:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA1E3B23666
+	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 21:00:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FFC01892246
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 19:00:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 759AB681183
+	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 18:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865F02FE582;
-	Tue, 12 Aug 2025 19:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E582FF160;
+	Tue, 12 Aug 2025 18:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0Tu4Sx1F"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mAepaCXI"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3532F90F1;
-	Tue, 12 Aug 2025 19:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE882FE598;
+	Tue, 12 Aug 2025 18:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755025207; cv=none; b=PW+XdIyg9dAHJF64SBS2RmjwtQGDax7wsGtK78mF0C1Xix5UOdFz9Z/LLcpglwMZI7/uDCfbEY5IABCDSujIU5hyPDuQhxxPIstTfH1V1dPRF/D9H/HSNu+piP5/oWukCPeSZa1ne+x1PgKO74x2+xSbCsDaEwtLzap5bhRrtIY=
+	t=1755025099; cv=none; b=HPH9sPCKfTD/2W5BiZUMoIrlWwhrKBNX3EqkfZ1W4j+U/fFX2mqpIZMfDMMewvBMvA1vq7EPnwAwZn97/Q4PIcwcMQnzJBXUc3sqcMII4zRr8XnbLfeTgyNDiwWs/jWHCsa5LMgpm0O5U6dKYoQdetFfQMNXtjkWCEEYpRVZpKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755025207; c=relaxed/simple;
-	bh=xUYJQ2Key9ozI4GqlK8IAEJT76gzZMAbyuwcdS6g/50=;
+	s=arc-20240116; t=1755025099; c=relaxed/simple;
+	bh=C7EmWK4JZbY66OWGnGx9HNRcJDXezGcE6e4CDlHpvQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ols3bQBLfHqPrxQ30XTeTWnmhN4RwfxBww4ggxpiMRnNhHTisnaVyi3i2OztDwcNuNte6eFDT28qZa/uwqZ1KJK+2bX+JZo6JbLY4fGMbcNcI/2PvR6jnSUn6kt+ia3H1CAMlubZ1SkodC8tbkyavPMNqf2/tiQ9H6B58KpGv08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0Tu4Sx1F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C121BC4CEF0;
-	Tue, 12 Aug 2025 19:00:06 +0000 (UTC)
+	 MIME-Version; b=E+HjtZWNxgKVR1c7cTb0nM7UGe4kAgyyCoIKOyCbm2RtDqS4Mwo2hVS5yU8i9I0RerO/fh4ILVU1fw7CMeiPlKdkYCf7hP0uNI/yK0gMEXenWOaAmFT7uQjasLqB+3NDRm1lvcsezgZpCP45datq+f+/LJWsR0gQOzja9tZv0oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mAepaCXI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA879C4CEF0;
+	Tue, 12 Aug 2025 18:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755025207;
-	bh=xUYJQ2Key9ozI4GqlK8IAEJT76gzZMAbyuwcdS6g/50=;
+	s=korg; t=1755025099;
+	bh=C7EmWK4JZbY66OWGnGx9HNRcJDXezGcE6e4CDlHpvQ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=0Tu4Sx1F4RPZIKpBQCot6lP+MXOkDQ0LBzhhr6R46KbKQR50p6x8PkEb4/GDrkz9c
-	 rYMJK+L8ayRWCKhoTgbeMw/7p7QwV5FclZ5AEFICcyoxQarPoADvCKnP9p3tZ5I4A4
-	 /a09yXadLv9q8YX9YQQmhp7g9ynyLO8J+atYXsSY=
+	b=mAepaCXI1vnLhf6tpwdJpmClukYCUXh6VFregyXFMigFqiaDksnhWfPzsz73SwCEm
+	 l0Jkl48fdkh93/eGl9h8jZSy5Nh+7/EfZfseX0h4h8MZ3OM2PkaET2Un75MiYHug5q
+	 G92IXumPh3xKKiLZ347XPz8EG5NILsvqubRZexIk=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,9 +50,9 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.16 567/627] smb: client: let recv_done() avoid touching data_transfer after cleanup/move
-Date: Tue, 12 Aug 2025 19:34:22 +0200
-Message-ID: <20250812173453.452553902@linuxfoundation.org>
+Subject: [PATCH 6.16 570/627] smb: client: return an error if rdma_connect does not return within 5 seconds
+Date: Tue, 12 Aug 2025 19:34:25 +0200
+Message-ID: <20250812173453.565501067@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250812173419.303046420@linuxfoundation.org>
 References: <20250812173419.303046420@linuxfoundation.org>
@@ -73,12 +73,9 @@ Content-Transfer-Encoding: 8bit
 
 From: Stefan Metzmacher <metze@samba.org>
 
-[ Upstream commit 24eff17887cb45c25a427e662dda352973c5c171 ]
+[ Upstream commit 03537826f77f1c829d0593d211b38b9c876c1722 ]
 
-Calling enqueue_reassembly() and wake_up_interruptible(&info->wait_reassembly_queue)
-or put_receive_buffer() means the response/data_transfer pointer might
-get re-used by another thread, which means these should be
-the last operations before calling return.
+This matches the timeout for tcp connections.
 
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
@@ -90,59 +87,26 @@ Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/client/smbdirect.c | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ fs/smb/client/smbdirect.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index d26b8cef82d6..47f2a6cc1c0c 100644
+index 47f2a6cc1c0c..60b160219f0a 100644
 --- a/fs/smb/client/smbdirect.c
 +++ b/fs/smb/client/smbdirect.c
-@@ -479,10 +479,6 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 		data_transfer = smbd_response_payload(response);
- 		data_length = le32_to_cpu(data_transfer->data_length);
- 
--		/*
--		 * If this is a packet with data playload place the data in
--		 * reassembly queue and wake up the reading thread
--		 */
- 		if (data_length) {
- 			if (info->full_packet_received)
- 				response->first_segment = true;
-@@ -491,16 +487,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 				info->full_packet_received = false;
- 			else
- 				info->full_packet_received = true;
--
--			enqueue_reassembly(
--				info,
--				response,
--				data_length);
--		} else
--			put_receive_buffer(info, response);
--
--		if (data_length)
--			wake_up_interruptible(&info->wait_reassembly_queue);
-+		}
- 
- 		atomic_dec(&info->receive_credits);
- 		info->receive_credit_target =
-@@ -528,6 +515,16 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 			info->keep_alive_requested = KEEP_ALIVE_PENDING;
- 		}
- 
-+		/*
-+		 * If this is a packet with data playload place the data in
-+		 * reassembly queue and wake up the reading thread
-+		 */
-+		if (data_length) {
-+			enqueue_reassembly(info, response, data_length);
-+			wake_up_interruptible(&info->wait_reassembly_queue);
-+		} else
-+			put_receive_buffer(info, response);
-+
- 		return;
+@@ -1636,8 +1636,10 @@ static struct smbd_connection *_smbd_get_connection(
+ 		goto rdma_connect_failed;
  	}
  
+-	wait_event_interruptible(
+-		info->conn_wait, sc->status != SMBDIRECT_SOCKET_CONNECTING);
++	wait_event_interruptible_timeout(
++		info->conn_wait,
++		sc->status != SMBDIRECT_SOCKET_CONNECTING,
++		msecs_to_jiffies(RDMA_RESOLVE_TIMEOUT));
+ 
+ 	if (sc->status != SMBDIRECT_SOCKET_CONNECTED) {
+ 		log_rdma_event(ERR, "rdma_connect failed port=%d\n", port);
 -- 
 2.39.5
 
