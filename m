@@ -1,171 +1,194 @@
-Return-Path: <linux-cifs+bounces-5680-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5740-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EACA6B21A30
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 03:34:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABD92B23C7C
+	for <lists+linux-cifs@lfdr.de>; Wed, 13 Aug 2025 01:53:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8AE84200DE
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 01:34:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF6B16274CB
+	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 23:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD9D347C7;
-	Tue, 12 Aug 2025 01:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hV3yqPrD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA352E2DC8;
+	Tue, 12 Aug 2025 23:53:04 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from neil.brown.name (neil.brown.name [103.29.64.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76292CA8
-	for <linux-cifs@vger.kernel.org>; Tue, 12 Aug 2025 01:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D46B2DAFCE;
+	Tue, 12 Aug 2025 23:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.29.64.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754962441; cv=none; b=hkRxwX6CrgUbB/baHY3lVSxx3LM0Dvz/Fs2L7EHXV8OPYGbXwVhwplX3mF8gFHQkFBNSnMIO/sVlw0i1Z5UjQh3qUvcdn2XGk764GXej35SBxM6tKXZJmckFa3xZ9+RMaSzeK49yVzkulPVN3V5vnj6/Y2KTxIKwheygLMrfXXQ=
+	t=1755042784; cv=none; b=qaD+ynXvSLH3xtSxD0AEqeyO/GzZDmpIPFvgh64IUR86OXISxzaXxxJkUnFLoFC3UNxCdBxeYfiClfrCnGxjRKw6ISULmcsEUBWDxtdRM6ubXAoyj67nVS9hdvnAmrAz2kgfPhGcvHfhbfmtV/+CBCNCdUZrExu96/nIq9mts/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754962441; c=relaxed/simple;
-	bh=8EtIZ6FEyuvxi2R7D+9HOVsOL2F1UDEdrzp7//HxEqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VNLE7GPi0fits4y2/Al0mukfKg1/cJbwar7UntjJS9VQT8Mmq4TRoc7wXj0PMJT8diTFaQVWn5zbNFOO60K1WH7f1T4yVoj8Dhy5rtgK7l/wL7vYT0a7P1LB1tSXlypyl1nXZWBEbRh2ijiWXSpEsVEGrgpabcmezXZQIoNpTdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hV3yqPrD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45865C4CEF5
-	for <linux-cifs@vger.kernel.org>; Tue, 12 Aug 2025 01:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754962441;
-	bh=8EtIZ6FEyuvxi2R7D+9HOVsOL2F1UDEdrzp7//HxEqs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hV3yqPrD8D+lAsxZFM8GMLH3a4FlPSSpdh2SrlaG+3HHJhYU/TUyGqRYbZ/aGYN3q
-	 HsF+aCSvnStIVEgZ3ZmgFM1QJh1sciWwBsDkJ9dJFc2vuW5v7taGeRJB+M+ct6RPd2
-	 dDELjs1iYooHxznNyUelzlQ5QvS3RgtLrTZYM+drrHOsEYmU7FFkEFGweBOLos7DLD
-	 Tp09uaoG49Xb9W72O2q5WOOmvICHh9UsLMZAAdMTSEtQ+6pD0NnjyeWgHS9RrhLo/f
-	 zwLMCotoeCU7eqUsrHhloGyIKr1iVnx6q6m+qMuIw4ZN9BdpQrMiL6YG3TfUdvI4tS
-	 FiEhWqxBG1TBA==
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-af9180a11bcso960332566b.0
-        for <linux-cifs@vger.kernel.org>; Mon, 11 Aug 2025 18:34:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWDV3FDSwuyzkeJs6R0T84HnvGfOrnf1FbLvLOlI1RLUZv5oi0t7xFD9RhSh8s9JgGUk1mA6lMpWpUc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBGaEZHtzmlctH49oc7FLa4ryGptCvROrULnkY1QL39ASJNPi5
-	f59JQbtLHDXJukS0dKsldQdnpNrXQ17pTHL/p3wgpXkrEIr3jet5/A6JX8LmJ1A07ola+y7qRov
-	/y2nQkGjdT1N2c1oeg2DWcRD3VVVcxZY=
-X-Google-Smtp-Source: AGHT+IF1+XKoYDCZ9KuhbPTibRtzIc/dMbhIJT8cH8IkQsyCO08/38UMwhR71kPg7UwWXhp/ZeSmFoDsBjr6to4FNCg=
-X-Received: by 2002:a17:907:1b0e:b0:ae3:6038:ad60 with SMTP id
- a640c23a62f3a-afa1d6173ecmr144131466b.1.1754962439833; Mon, 11 Aug 2025
- 18:33:59 -0700 (PDT)
+	s=arc-20240116; t=1755042784; c=relaxed/simple;
+	bh=gn54IA1/q/Cn2j1DUaCUAMg4l43QdpVX0r604C6RKaY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sCDw1VF2S9Abc2JQPlRxAHaZtQqIS8HoQm2Iav8kVbIFb4Ssio3zWCX1WvMMGEfRgj4/mHt5qJDVMhbKJtzzXTqulEjLs2e9a5/aaOPgggn7A0r7grVEbmbNDd5UOXFUHTWpd+rZJudamba+eYGim4VhUA/rVciF8KDX5IG5ubw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name; spf=pass smtp.mailfrom=neil.brown.name; arc=none smtp.client-ip=103.29.64.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neil.brown.name
+Received: from 196.186.233.220.static.exetel.com.au ([220.233.186.196] helo=home.neil.brown.name)
+	by neil.brown.name with esmtp (Exim 4.95)
+	(envelope-from <mr@neil.brown.name>)
+	id 1ulynI-005Y1s-6o;
+	Tue, 12 Aug 2025 23:52:41 +0000
+From: NeilBrown <neil@brown.name>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>
+Cc: David Howells <dhowells@redhat.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Xiubo Li <xiubli@redhat.com>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Tyler Hicks <code@tyhicks.com>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Steve French <sfrench@samba.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Carlos Maiolino <cem@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-afs@lists.infradead.org,
+	netfs@lists.linux.dev,
+	ceph-devel@vger.kernel.org,
+	ecryptfs@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-nfs@vger.kernel.org,
+	linux-unionfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	linux-xfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] VFS: prepare for changes to directory locking
+Date: Tue, 12 Aug 2025 12:25:03 +1000
+Message-ID: <20250812235228.3072318-1-neil@brown.name>
+X-Mailer: git-send-email 2.50.0.107.gf914562f5916.dirty
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d0df2b2556fac975c764c0c7c914c6e3c42f16a1.camel@rx2.rx-server.de>
- <CAKYAXd-t27uzNLdXjPRuvbaaBnA-Z8qVqd_1W7v=97vp2Sd+rw@mail.gmail.com>
- <CAH2r5ms-v=UwFzXZpZ-5KBgiRPkvSqQyJnLBhxP5YaAuqMAG5A@mail.gmail.com>
- <CAKYAXd8rN+RVJB8ak_SPNX07L8BeastngMhQsXVGdUW0D0QLSw@mail.gmail.com>
- <4fb764ff-f229-4827-9f45-0f54ed3b9771@samba.org> <CAKYAXd8FJcfFpGBkevgZaymcHiicJgs-time4r7fbD6n2hBg7w@mail.gmail.com>
- <CAKYAXd9BPqg=0QKrpsOHaVDQkM8=Q6fragLmpTPve=pJdNjovw@rx2.rx-server.de> <f9401718e2be2ab22058b45a6817db912784ef61.camel@rx2.rx-server.de>
-In-Reply-To: <f9401718e2be2ab22058b45a6817db912784ef61.camel@rx2.rx-server.de>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Tue, 12 Aug 2025 10:33:48 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-niMc+73jbw8V80S3OdntUpDVij=yd_krnqcAM1e=TbA@mail.gmail.com>
-X-Gm-Features: Ac12FXwaum8yW6_NBTGNqNQiHd1A1uK3HBlOx9-WKiu1CTcEp3-_u8iI6LK-V38
-Message-ID: <CAKYAXd-niMc+73jbw8V80S3OdntUpDVij=yd_krnqcAM1e=TbA@mail.gmail.com>
-Subject: Re: ksmbd and special characters in file names
-To: Philipp Kerling <pkerling@casix.org>
-Cc: Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org, 
-	=?UTF-8?B?UmFscGggQsO2aG1l?= <slow@samba.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 12, 2025 at 2:32=E2=80=AFAM Philipp Kerling <pkerling@casix.org=
-> wrote:
->
-> Hi,
-Hi Philipp,
->
-> 2025-05-27 (=E7=81=AB) =E3=81=AE 11:57 +0900 =E3=81=AB Namjae Jeon =E3=81=
-=95=E3=82=93=E3=81=AF=E6=9B=B8=E3=81=8D=E3=81=BE=E3=81=97=E3=81=9F:
-> > On Mon, May 26, 2025 at 11:24=E2=80=AFPM Namjae Jeon <linkinjeon@kernel=
-.org>
-> > wrote:
-> > >
-> > > On Mon, May 26, 2025 at 9:39=E2=80=AFPM Ralph Boehme <slow@samba.org>
-> > > wrote:
-> > > >
-> > > > On 5/26/25 1:37 PM, Namjae Jeon wrote:
-> > > > > On Mon, May 26, 2025 at 7:45=E2=80=AFAM Steve French
-> > > > > <smfrench@gmail.com> wrote:
-> > > > > > If the POSIX/Linux context is included in the SMB3.1.1 open
-> > > > > > then we
-> > > > > > mounted with ("linux" or "posix")
-> > > > > Such a context could be created in smb2_create context like
-> > > > > apple context(AAPL).
-> > > > > However, I wonder if there is any plan to add it to SMB3.1.1
-> > > > > posix
-> > > > > extension specification.
-> > > > It's been part of the spec since the beginning. You can find it
-> > > > here:
-> > > Right, I found it.
-> > > Thanks for your reply.
-> > > >
-> > > > https://gitlab.com/samba-team/smb3-posix-spec/-/releases
-> > > >
-> > > > POSIX-SMB2 2.2.13.2.16 SMB2_CREATE_POSIX_CONTEXT
-> > Philipp,
-> >
-> > Can you confirm if your issue is fixed with the attached patch ?
-> after some more testing, I've found out that there is still (at least)
-> one special character causing problems. It is the ':' (colon), because
-> it is used to distinguish alternate data streams on NTFS, but is a
-> perfectly valid path character in POSIX as well. I have attached a
-> draft patch on top of the current master that fixes the problem on my
-> end. It does mean that alternate data streams cannot be accessed when a
-> posix create context is specified though. Anyway, I guess you can't
-> really have it both ways given the current specification. If you think
-> this is a valid approach, I can submit as a proper patch.
-Okay, Looks ok.
-Could you submit this patch to the list after filling the patch description=
- ?
+This is the first of 3 sets of patches which, together, allow
+filesystems to opt-out of having the directory inode lock held over
+directory operations (except readdir).
+- This set creates some new APIs in the VFS and makes a few changes in
+  callers either because they are trivial (patch 08) or because they
+  involve a flag-day change (patches 06, 07, and 09).
+- The second set rolls the new APIs out to all non-VFS code which 
+  invokes directory operations.
+- The third (which isn't yet bug-free) changes the implementation
+  of these APIs to make the use of inode_lock() optional.
 
-Thanks.
->
->
-> Before (being on the client in an smb3-mounted directory with -o
-> unix,posixpaths):
->
-> [philipp@atami smbmnt]$ echo 'hello' > 'a:b'
-> bash: a:b: No such file or directory
-> [philipp@atami smbmnt]$ echo 'hello' > 'a'
-> [philipp@atami smbmnt]$ cat a
-> hello
-> [philipp@atami smbmnt]$ mv a 'a:b'
-> mv: cannot move 'a' to 'a:b': Device or resource busy
-> [philipp@atami smbmnt]$ mkdir 'f:g'
-> mkdir: cannot create directory 'f:g': No such file or directory
-> [philipp@atami smbmnt]$ ls -l | grep 'test'
-> drwxr-xr-x?   2 root root        23 Aug 11 19:10 test:dir
-> [philipp@atami smbmnt]$ ls -l 'test:dir'
-> ls: cannot access 'test:dir': No such file or directory
-> [philipp@atami smbmnt]$
->
-> After:
->
-> [philipp@atami smbmnt]$ echo 'hello' > 'a:b'
-> [philipp@atami smbmnt]$ cat 'a:b'
-> hello
-> [philipp@atami smbmnt]$ echo 'hello' > 'a'
-> [philipp@atami smbmnt]$ cat 'a'
-> hello
-> [philipp@atami smbmnt]$ mv a 'a:b'
-> [philipp@atami smbmnt]$ mkdir 'f:g'
-> [philipp@atami smbmnt]$ ls -l | grep 'test'
-> drwxr-xr-x   2 root root        23 Aug 11 19:10 test:dir
-> [philipp@atami smbmnt]$ ls -l 'test:dir'
-> total 0
-> -rw-r--r-- 1 root root 0 Aug 11 19:10 a
-> [philipp@atami smbmnt]$
->
->
-> Best regards,
-> Philipp
->
+I imagine these three set landing in three different merge windows,
+though some of the second set could get in the same window as the first.
+
+The patches are listed below and are available at 
+   https://github.com/neilbrown/linux
+in branch pdirops.
+
+This first set adds and updates APIs with three particular goals:
+1/ centralising all lookup and locking for directory ops.  This
+  includes a variety of dentry_lookup() calls with done_dentry_lookup(),
+  and rename_lookup() with done_rename_lookup().
+2/ Removing the use of d_drop() during a directory operation (it is
+   OK for d_drop to happen at the end).  As the goal is for locks
+   to be based on the dentry, a dropped dentry will no longer protect the name.
+   The only change in this patch set is 08 which changes d_splice_alias()
+   and d_add() to not require a preceding d_drop(), and then removes
+   the unnecessary d_drop()s.
+3/ No blocking in d_alloc_parallel() within readdir() (iterate_shared()) requests.
+   We will need to invert the ordering between d_alloc_parallel() and
+   inode_lock(), so blocking in d_alloc_parallel() to, e.g., prime the
+   dcache during readdir must be avoided.  The last patch introduces
+   new interfaces that can be used instead and explains them.
+   Patches 9 and 10 prepare for this.
+
+Please review and consider for 6.18.
+
+Thanks,
+NeilBrown
+
+ [PATCH 01/11] VFS: discard err2 in filename_create()
+ [PATCH 02/11] VFS: introduce dentry_lookup() and friends
+ [PATCH 03/11] VFS: add dentry_lookup_killable()
+ [PATCH 04/11] VFS: introduce dentry_lookup_continue()
+ [PATCH 05/11] VFS: add rename_lookup()
+ [PATCH 06/11] VFS: unify old_mnt_idmap and new_mnt_idmap in
+ [PATCH 07/11] VFS: Change vfs_mkdir() to unlock on failure.
+ [PATCH 08/11] VFS: allow d_splice_alias() and d_add() to work on
+ [PATCH 09/11] VFS: use global wait-queue table for d_alloc_parallel()
+ [PATCH 10/11] VFS: use d_alloc_parallel() in lookup_one_qstr_excl().
+ [PATCH 11/11] VFS: introduce d_alloc_noblock() and d_alloc_locked()
+
+Future patches:
+
+set 2:
+ devtmpfs: use new dentry locking APIs
+ audit: use new dentry locking APIs
+ debugfs: use new dentry locking APIs.
+ binderfs: use new dentry locking APIs.
+ binfmt_misc: use new dentry locking APIs.
+ kernel/bpf: use new dentry locking APIs.
+ devpts: use new dentry locking APIs.
+ ipc/mqueue: use new dentry locking APIs.
+ s390/hypfs: use new dentry locking APIs.
+ security: use new dentry locking APIs.
+ tracefs: use new dentry locking APIs.
+
+ ecryptfs: use dentry_lookup_continue() in lock_parent()
+ ecryptfs: use rename_lookup()
+
+ fs/proc: Don't look root inode when creating "self" and "thread-self"
+ proc: use d_alloc_locked() and lock_lookup()
+
+ bcachefs: use new dentry locking APIs
+ exfat: use d_splice_alias(), don't d_drop()
+ coda: don't d_drop() early.
+ smb/server: use new dentry locking APIs.
+ nfsd: use new dentry locking APIs.
+ cachefiles: use new dentry locking APIs.
+ btrfs: use dentry_lookup_killable()
+ fuse: use new dentry locking APIs.
+ sunrpc/rpc_pipe: use new dentry locking APIs.
+ xfs: use new dentry locking APIs.
+
+ ovl: use is_subdir() for testing if one thing is a subdir of another
+ ovl: introduce ovl_upper_dentry_lookup() and use it.
+ ovl: switch from parent_lock() to dentry_lookup_continue() except for rename.
+ ovl: use dentry_lookup_killable() in ovl_check_whiteouts()
+ ovl: split ovl_tempname() out from ovl_lookup_temp().
+ ovl: Change ovl_lookup_temp() to use ovl_upper_dentry_lookup()
+ ovl: Change all rename code to use rename_lookup_noperm()
+ ovl: don't dget_parent() in ovl_lookup_real_one()
+ ovl: use new APIs in ovl_lookup_real_one()
+ ovl: use new dir apis in ovl_cache_update()
+
+ NFS: remove d_drop() from nfs_atomic_open()
+ nfs: use d_alloc_noblock() in silly-rename
+
+ afs: use d_splice_alias() in afs_vnode_new_inode()
+ afs: use d_time instead of d_fsdata
+ afs: don't unhash/rehash dentries during unlink/rename
+ AFS: use new dir access APIs.
+
+set 3:
+ VFS: make various namei.c functions static.
+ VFS: Remove lookup_one() and lookup_noperm()
+ VFS: Introduce S_DYING which warns that S_DEAD might follow.
+ VFS: lift d_alloc_parallel above inode_lock
+ VFS: provide alternative to s_vfs_rename_mutex
+ VFS: Add ability to exclusively lock a dentry
+ VFS: use new dentry locking for open/create/remove/rename
+ VFS: allow a filesystem to opt out of directory locking.
+ NFS: allow concurrent dir ops.
+
 
