@@ -1,59 +1,58 @@
-Return-Path: <linux-cifs+bounces-5717-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5724-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CE10B2367F
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 21:01:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4D88B23827
+	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 21:20:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E36E18906C1
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 19:00:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EC53B3529
+	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 19:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BCE2FFDC6;
-	Tue, 12 Aug 2025 18:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C2221ABD0;
+	Tue, 12 Aug 2025 19:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YgMV0F/L"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JtW+34xP"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B092FFDC1;
-	Tue, 12 Aug 2025 18:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875D2305E2D;
+	Tue, 12 Aug 2025 19:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755025169; cv=none; b=PB+jKDlRzsAH1cKr9o2E6wLlt1Q5H7WIZNiGhhKS6rKo0lfzQzmu8MwocM2atM38b733cG0LjNDvF1VH9Utq10Tba8G+IQV1cBqXwAsXemZH4Sgn6dntTBwIZ9GSeXvlYLN1lJkjNJsxoBKcrz03Uo4283rcMbHC1idff8yO4qY=
+	t=1755026364; cv=none; b=pytem2+FZic1JhJT2mZ81pm4CtWS8tFPsj95wO5gQAsfEqJmrWI5yHgSqLRTyAMj6O2KKYv+Q1Tl5YSzDimJYUWSYQ07PMDeRyssT9SHwktG9zA/zGjr/FR8dPvaO+TjUJZmq6mqafFO7ajCfpH6KG28lZzndwMKsZc2upug7lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755025169; c=relaxed/simple;
-	bh=/sVL/4oOkwSsnOXUp6nVESNu1w4q+E/k3x6CACZGLWE=;
+	s=arc-20240116; t=1755026364; c=relaxed/simple;
+	bh=dpA5L/9E72DSOw9P99yVLKfW0fYxzHhb1MrgrDqCsrI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JnUpHXVb+yQrtBUzJAIbTjJ524jqG+rlrz7gVtT4e2mzgnwUFmSFHOQz6lM0OrBZUj6yMIjr3awkRtiX97N4TvSH4mAFdWaXzPyTQAnu2yzXmOPrkYuZlCwYaa5Q0SZQ9FxJoyNFI9TLuX3R0XtbfJJ6/29nEpUJdxRi0cVZlGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YgMV0F/L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA30C4CEF6;
-	Tue, 12 Aug 2025 18:59:28 +0000 (UTC)
+	 MIME-Version; b=pCTYzBMw4ESjMjdkiJSmeX85Vo94BdhAYKaGzKE8CJpk8rBA9r+crq4TkM7iNXo5XcaE9hRlrQBJsdsySIqYhOUwK6O5XJoKxqudyPDY5dtgHZQcqnkWY+7umv6HAjUhp+PMJUru0eshOOqeuRFbVPPCV7F1ryy9SU3VkESiM7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JtW+34xP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E20C5C4CEF0;
+	Tue, 12 Aug 2025 19:19:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755025169;
-	bh=/sVL/4oOkwSsnOXUp6nVESNu1w4q+E/k3x6CACZGLWE=;
+	s=korg; t=1755026364;
+	bh=dpA5L/9E72DSOw9P99yVLKfW0fYxzHhb1MrgrDqCsrI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YgMV0F/L+NMFmwpvq1j1mIyU00TNtzvEJ8YspfR4R0wdOioxSgsliDBTynkD3cuNA
-	 0wPaEhNO37Hzu7sgB8Z6dU4n5fym2KYYUBcNGIeHWCK22z1f0MCd9khUlhnogBC3Jg
-	 TE5+HNQ91i8a+HERn0WeHIEvdvxVdzyjbldi6K0M=
+	b=JtW+34xPIio12hV2BjN1SshojsYsaAHA+layAJ2kjhkfnFnrJqJpE0haV12H30cFe
+	 Vd38hdNNb82XHpbeTVN9f2I7f8bzDN8DwvfRh56ZrXrzR7JVX7Ixmxa3vdCwTcMpCc
+	 ZTd+vut6rHxrxazaETd6aTIgpySzBZrNbgFvNPTc=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
 	linux-cifs@vger.kernel.org,
-	Ralph Boehme <slow@samba.org>,
 	David Howells <dhowells@redhat.com>,
-	Matthew Richardson <m.richardson@ed.ac.uk>,
 	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
-	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.16 589/627] smb: client: default to nonativesocket under POSIX mounts
-Date: Tue, 12 Aug 2025 19:34:44 +0200
-Message-ID: <20250812173454.278647546@linuxfoundation.org>
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.15 315/480] smb: client: allow parsing zero-length AV pairs
+Date: Tue, 12 Aug 2025 19:48:43 +0200
+Message-ID: <20250812174410.424333540@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250812173419.303046420@linuxfoundation.org>
-References: <20250812173419.303046420@linuxfoundation.org>
+In-Reply-To: <20250812174357.281828096@linuxfoundation.org>
+References: <20250812174357.281828096@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -65,40 +64,52 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.16-stable review patch.  If anyone has any objections, please let me know.
+6.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
 From: Paulo Alcantara <pc@manguebit.org>
 
-commit 6b445309eec2bc0594f3e24c7777aeef891d386e upstream.
+[ Upstream commit be77ab6b9fbe348daf3c2d3ee40f23ca5110a339 ]
 
-SMB3.1.1 POSIX mounts require sockets to be created with NFS reparse
-points.
+Zero-length AV pairs should be considered as valid target infos.
+Don't skip the next AV pairs that follow them.
 
 Cc: linux-cifs@vger.kernel.org
-Cc: Ralph Boehme <slow@samba.org>
 Cc: David Howells <dhowells@redhat.com>
-Cc: <stable@vger.kernel.org>
-Reported-by: Matthew Richardson <m.richardson@ed.ac.uk>
-Closes: https://marc.info/?i=1124e7cd-6a46-40a6-9f44-b7664a66654b@ed.ac.uk
+Fixes: 0e8ae9b953bc ("smb: client: parse av pair type 4 in CHALLENGE_MESSAGE")
 Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/client/fs_context.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/smb/client/cifsencrypt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/smb/client/fs_context.c
-+++ b/fs/smb/client/fs_context.c
-@@ -1674,6 +1674,7 @@ static int smb3_fs_context_parse_param(s
- 				pr_warn_once("conflicting posix mount options specified\n");
- 			ctx->linux_ext = 1;
- 			ctx->no_linux_ext = 0;
-+			ctx->nonativesocket = 1; /* POSIX mounts use NFS style reparse points */
- 		}
- 		break;
- 	case Opt_nocase:
+diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+index 35892df7335c..6be850d2a346 100644
+--- a/fs/smb/client/cifsencrypt.c
++++ b/fs/smb/client/cifsencrypt.c
+@@ -343,7 +343,7 @@ static struct ntlmssp2_name *find_next_av(struct cifs_ses *ses,
+ 	len = AV_LEN(av);
+ 	if (AV_TYPE(av) == NTLMSSP_AV_EOL)
+ 		return NULL;
+-	if (!len || (u8 *)av + sizeof(*av) + len > end)
++	if ((u8 *)av + sizeof(*av) + len > end)
+ 		return NULL;
+ 	return av;
+ }
+@@ -363,7 +363,7 @@ static int find_av_name(struct cifs_ses *ses, u16 type, char **name, u16 maxlen)
+ 
+ 	av_for_each_entry(ses, av) {
+ 		len = AV_LEN(av);
+-		if (AV_TYPE(av) != type)
++		if (AV_TYPE(av) != type || !len)
+ 			continue;
+ 		if (!IS_ALIGNED(len, sizeof(__le16))) {
+ 			cifs_dbg(VFS | ONCE, "%s: bad length(%u) for type %u\n",
+-- 
+2.39.5
+
 
 
 
