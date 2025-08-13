@@ -1,104 +1,92 @@
-Return-Path: <linux-cifs+bounces-5736-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5749-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E44E9B238DF
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 21:29:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7815BB23CE2
+	for <lists+linux-cifs@lfdr.de>; Wed, 13 Aug 2025 02:01:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68EA9686801
-	for <lists+linux-cifs@lfdr.de>; Tue, 12 Aug 2025 19:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25EDE3B3FB9
+	for <lists+linux-cifs@lfdr.de>; Wed, 13 Aug 2025 00:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71DC2D3A94;
-	Tue, 12 Aug 2025 19:26:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38DF3FC2;
+	Wed, 13 Aug 2025 00:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a9ZJ7EFF"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="cZbBypAr"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7E029BD9D;
-	Tue, 12 Aug 2025 19:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAC1163;
+	Wed, 13 Aug 2025 00:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755026813; cv=none; b=pHz4qWa3r71we8zdQLqo2dd7kYY0qxP4/h+C1YcjVl7et4XKqzjheoAz44C3V7apd3ZkIoMygoCjs8CoUc7u9/tgnhLWSvr7E1N08BplMBHUQ/Zl93pMWZ5+MQZYqSe4mMmI5Gqg6SbtqQLkOk5YA+DWeg7tIFwahPakqfVqdlw=
+	t=1755043281; cv=none; b=mhkrT0POOITMy7Gu4PJVSFZIihL428GpZxf7fqHP1BFe1ZRHlKG+NOOl1PU3b3j/qKJIc8xgL9cC5E5D48ONBlBJTkZuDDUg4X5a86yewpb/5OEH6M9VLqjJ92rWeMwfxfPlU4D2GA8q+a5fu+hX/RpLciyDblC2MVfvK2TRBeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755026813; c=relaxed/simple;
-	bh=f0YYuxN8kBxeAKAjDwfzG+Oj1HcGaj3bTaeLb8y00S4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L6qWVAUePAlYeilMgi4d7fR6UqRs/n9eLwvWJdhHhaYfsqYnVvcxIVU8DAXawkmR9qenEtp569Er0XOwzpkqEH7PduzgBkH44/4Iz4+NMbTn92t8tPMmPUFuAIViXKF1jS2UvpIEx2nE8qXY/48m1P4YcdHrKdIIs0UmLdf72d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a9ZJ7EFF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D86C4CEF0;
-	Tue, 12 Aug 2025 19:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755026813;
-	bh=f0YYuxN8kBxeAKAjDwfzG+Oj1HcGaj3bTaeLb8y00S4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=a9ZJ7EFFb0rG8QPagz29dg8J7ghHX7b6hxwBZ7BR9UVsxSeoLi3W8OdVVtr0YvNOu
-	 lFx6hn//SU59QtuzaGm2MZ37k3pU3fp3SIF6ohfaaaH8+CnHKaEkO4IBDwoCWX99DV
-	 sNmGRdljz11tb7tPnxefEg8P2NjxiX80mbomrxx4=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	linux-cifs@vger.kernel.org,
-	Ralph Boehme <slow@samba.org>,
+	s=arc-20240116; t=1755043281; c=relaxed/simple;
+	bh=j4r1hppquktqtYidrhW4W0wl7fe8offrZaopf6cG3G0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dhfPFzbd/82yY6tDiLtDkCoR7YhAWEwQrRxkDreopdzzoi0J1d4SylvlE5o7NqN3auxnljo8eqCfyHWmlhj72qisNVPuhDCpMMYThw/dyZDS0GEt7InEtiR8bjf0hsm3TXNvSlPAS4bcWMDa1WdRhGzCE0i8V3omEqwBZBEpvC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=cZbBypAr; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=j4r1hppquktqtYidrhW4W0wl7fe8offrZaopf6cG3G0=; b=cZbBypArsAwEupU5gvJSbx81kI
+	Qosd5QsgwcTBqjCvjrl9+522yt1DsRHkxW3rP4QAtNBLuPkNqySvn9xNhx4W8UKAuQRjCZFER9Q+q
+	OU7f9ZV2fnoJgxNmuLvs+ROm2HQIttuS7sdzJM4TKl8JXUJt7kHFJ0HzLbIvH539ChpirDHa95hk0
+	0jIldmck0numN0slLAIZ1NO2d/wYZ2QGgElgnPrudAOXVUCPogdbljQ+lo4cAZuF/fAYQ7+h58qa0
+	Y+ivu7VmgfbRR4UATQ5PHl9u0DWkjAMVf4kUbfjIu4pzP85eSzA7U8m0V2v8gQf19C/Fc36DoyW7p
+	DX85i4rQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ulyvN-00000003Gyx-2z1h;
+	Wed, 13 Aug 2025 00:01:01 +0000
+Date: Wed, 13 Aug 2025 01:01:01 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: NeilBrown <neil@brown.name>
+Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
 	David Howells <dhowells@redhat.com>,
-	Matthew Richardson <m.richardson@ed.ac.uk>,
-	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
-	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.15 449/480] smb: client: default to nonativesocket under POSIX mounts
-Date: Tue, 12 Aug 2025 19:50:57 +0200
-Message-ID: <20250812174415.921690062@linuxfoundation.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250812174357.281828096@linuxfoundation.org>
-References: <20250812174357.281828096@linuxfoundation.org>
-User-Agent: quilt/0.68
-X-stable: review
-X-Patchwork-Hint: ignore
+	Marc Dionne <marc.dionne@auristor.com>,
+	Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+	Tyler Hicks <code@tyhicks.com>, Miklos Szeredi <miklos@szeredi.hu>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Steve French <sfrench@samba.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Carlos Maiolino <cem@kernel.org>, linux-fsdevel@vger.kernel.org,
+	linux-afs@lists.infradead.org, netfs@lists.linux.dev,
+	ceph-devel@vger.kernel.org, ecryptfs@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-nfs@vger.kernel.org,
+	linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/11] VFS: prepare for changes to directory locking
+Message-ID: <20250813000101.GW222315@ZenIV>
+References: <20250812235228.3072318-1-neil@brown.name>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812235228.3072318-1-neil@brown.name>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-6.15-stable review patch.  If anyone has any objections, please let me know.
+On Tue, Aug 12, 2025 at 12:25:03PM +1000, NeilBrown wrote:
+> This is the first of 3 sets of patches which, together, allow
+> filesystems to opt-out of having the directory inode lock held over
+> directory operations (except readdir).
 
-------------------
-
-From: Paulo Alcantara <pc@manguebit.org>
-
-commit 6b445309eec2bc0594f3e24c7777aeef891d386e upstream.
-
-SMB3.1.1 POSIX mounts require sockets to be created with NFS reparse
-points.
-
-Cc: linux-cifs@vger.kernel.org
-Cc: Ralph Boehme <slow@samba.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: <stable@vger.kernel.org>
-Reported-by: Matthew Richardson <m.richardson@ed.ac.uk>
-Closes: https://marc.info/?i=1124e7cd-6a46-40a6-9f44-b7664a66654b@ed.ac.uk
-Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- fs/smb/client/fs_context.c |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/fs/smb/client/fs_context.c
-+++ b/fs/smb/client/fs_context.c
-@@ -1674,6 +1674,7 @@ static int smb3_fs_context_parse_param(s
- 				pr_warn_once("conflicting posix mount options specified\n");
- 			ctx->linux_ext = 1;
- 			ctx->no_linux_ext = 0;
-+			ctx->nonativesocket = 1; /* POSIX mounts use NFS style reparse points */
- 		}
- 		break;
- 	case Opt_nocase:
-
-
+[just a quick reply for now - I'm going to be away for about an hour,
+then will review and reply]
 
