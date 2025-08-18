@@ -1,62 +1,61 @@
-Return-Path: <linux-cifs+bounces-5821-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5825-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4ED4B2A715
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 15:50:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2A9BB2A9B5
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 16:23:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D223581B94
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 13:42:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7CED5B62AC8
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 14:16:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 743B2321F46;
-	Mon, 18 Aug 2025 13:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451AF1D63EF;
+	Mon, 18 Aug 2025 14:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2O53Bp0t"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IvGYF/jR"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4876431E115;
-	Mon, 18 Aug 2025 13:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B27E31E115;
+	Mon, 18 Aug 2025 14:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755524423; cv=none; b=NWAu0BddLGTZizKra9x9zhdWW2XiiCkmlD6SmpPPaNmCx8/8AmieWlUS+5csOmN3eoyKIS7gKji7rL3tbUFIKltHC4qDKTvl48RBCZHkxfyMJ+NFZX2SC5irLDXHIDXKzXi0YNy2cNO8vclwXJlKwse8VzODf7pg3OJZF8Pn+KY=
+	t=1755526087; cv=none; b=SHmNuZwheWx2LE67WWZO801fJii1euRqX6QjR30y83rfoWkghjNO5/jfFQaGs9U9S74B+qZ+J2f1cXDp5sS0jXAXomYGEQrmES8ict3zzoJ8NyrfCqPXmzP/e8IWfDCcT8uEzgva0Z8ozgEIYLfI1Uw+eSp36xFgGVhzPd2Aj9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755524423; c=relaxed/simple;
-	bh=8nIojMQm2ypYmC9hdDff95GxIbCA8jCk0PdU0t7NsGc=;
+	s=arc-20240116; t=1755526087; c=relaxed/simple;
+	bh=XUO/HOu64xn0aV2mRSED/5w0tMBAeOVHWd1oI0YB+NE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Re+GypXoeDqXvE1X59/ZrmGuJz8EvnCnqZHmOmL/j3E3zFLUUggEXBDbJQaaPZ6TOXTmHsdbg+AP50Zo15+PHjsBluWM8DNSRrhCtvUq4O0DUqbumNP9iE6jlNQSyBaTDCedkPn7JnEHkPJRyW4rTAHBoP/HSO+3YtvYuO16KbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2O53Bp0t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898A5C4CEF1;
-	Mon, 18 Aug 2025 13:40:22 +0000 (UTC)
+	 MIME-Version; b=hH1TBe6H7+Lmqf4BnFNBD2UCRt4PdVyZnvjAEBvt4B4xxhkmFFUZfT0eJFYfH0cgAVlHumVM81JCszmJotpGOIFGCXWmJCvE54H3HCzW9+aXxrQ3KC6lnTjXD3i2oEhShMoLC7j+0qGiI21Nd8golMhXjJyF6kMBpYo4DD+vZY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IvGYF/jR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2960FC4CEEB;
+	Mon, 18 Aug 2025 14:08:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755524422;
-	bh=8nIojMQm2ypYmC9hdDff95GxIbCA8jCk0PdU0t7NsGc=;
+	s=korg; t=1755526086;
+	bh=XUO/HOu64xn0aV2mRSED/5w0tMBAeOVHWd1oI0YB+NE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=2O53Bp0tQreXjOfaL5yrDl+a1dykpEpzOi27T7SoKOKOkKBkyb8gLjtyzx7n5o6Wk
-	 08CWHZ9nE4jTEGzlo3x4LUC0WvuEtU8dQQvIUTYmgz+3P+N2DmjW9c/Usxq7/ZgxL7
-	 mz4YzWIAoFiPZok7ql0F23GdZYMAOeoKsdOt/rJQ=
+	b=IvGYF/jR2llRZR6fslrWXvKQawkAN2U8qhofFxG6w5ra6RGg83y+zIuJ21gOeNVbd
+	 xTUWuaeAnA/DvAOOp9YqL2esjymYgZp+MBjKSqREee0/UfsghNF216iy6e0mW2cpuR
+	 JI9o1s4k2wsutYN2CtmOVjMwW24msaW6zEJbIvn4=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
-	Enzo Matsumiya <ematsumiya@suse.de>,
-	Shyam Prasad N <sprasad@microsoft.com>,
+	Steve French <smfrench@gmail.com>,
 	Tom Talpey <tom@talpey.com>,
+	Long Li <longli@microsoft.com>,
 	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.15 435/515] cifs: Fix collect_sample() to handle any iterator type
-Date: Mon, 18 Aug 2025 14:47:01 +0200
-Message-ID: <20250818124515.174262128@linuxfoundation.org>
+Subject: [PATCH 6.16 455/570] smb: client: dont call init_waitqueue_head(&info->conn_wait) twice in _smbd_get_connection
+Date: Mon, 18 Aug 2025 14:47:22 +0200
+Message-ID: <20250818124523.348923151@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818124458.334548733@linuxfoundation.org>
-References: <20250818124458.334548733@linuxfoundation.org>
+In-Reply-To: <20250818124505.781598737@linuxfoundation.org>
+References: <20250818124505.781598737@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -68,134 +67,42 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.15-stable review patch.  If anyone has any objections, please let me know.
+6.16-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
-From: David Howells <dhowells@redhat.com>
+From: Stefan Metzmacher <metze@samba.org>
 
-[ Upstream commit b63335fb3d32579c5ff0b7038b9cc23688fff528 ]
+[ Upstream commit 550a194c5998e4e77affc6235e80d3766dc2d27e ]
 
-collect_sample() is used to gather samples of the data in a Write op for
-analysis to try and determine if the compression algorithm is likely to
-achieve anything more quickly than actually running the compression
-algorithm.
+It is already called long before we may hit this cleanup code path.
 
-However, collect_sample() assumes that the data it is going to be sampling
-is stored in an ITER_XARRAY-type iterator (which it now should never be)
-and doesn't actually check that it is before accessing the underlying
-xarray directly.
-
-Fix this by replacing the code with a loop that just uses the standard
-iterator functions to sample every other 2KiB block, skipping the
-intervening ones.  It's not quite the same as the previous algorithm as it
-doesn't necessarily align to the pages within an ordinary write from the
-pagecache.
-
-Note that the btrfs code from which this was derived samples the inode's
-pagecache directly rather than the iterator - but that doesn't necessarily
-work for network filesystems if O_DIRECT is in operation.
-
-Fixes: 94ae8c3fee94 ("smb: client: compress: LZ77 code improvements cleanup")
-Signed-off-by: David Howells <dhowells@redhat.com>
-Acked-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
-cc: Enzo Matsumiya <ematsumiya@suse.de>
-cc: Shyam Prasad N <sprasad@microsoft.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
+Cc: Steve French <smfrench@gmail.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: Long Li <longli@microsoft.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: samba-technical@lists.samba.org
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/smb/client/compress.c | 71 ++++++++++++----------------------------
- 1 file changed, 21 insertions(+), 50 deletions(-)
+ fs/smb/client/smbdirect.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/fs/smb/client/compress.c b/fs/smb/client/compress.c
-index 766b4de13da7..db709f5cd2e1 100644
---- a/fs/smb/client/compress.c
-+++ b/fs/smb/client/compress.c
-@@ -155,58 +155,29 @@ static int cmp_bkt(const void *_a, const void *_b)
- }
- 
- /*
-- * TODO:
-- * Support other iter types, if required.
-- * Only ITER_XARRAY is supported for now.
-+ * Collect some 2K samples with 2K gaps between.
-  */
--static int collect_sample(const struct iov_iter *iter, ssize_t max, u8 *sample)
-+static int collect_sample(const struct iov_iter *source, ssize_t max, u8 *sample)
- {
--	struct folio *folios[16], *folio;
--	unsigned int nr, i, j, npages;
--	loff_t start = iter->xarray_start + iter->iov_offset;
--	pgoff_t last, index = start / PAGE_SIZE;
--	size_t len, off, foff;
--	void *p;
--	int s = 0;
--
--	last = (start + max - 1) / PAGE_SIZE;
--	do {
--		nr = xa_extract(iter->xarray, (void **)folios, index, last, ARRAY_SIZE(folios),
--				XA_PRESENT);
--		if (nr == 0)
--			return -EIO;
--
--		for (i = 0; i < nr; i++) {
--			folio = folios[i];
--			npages = folio_nr_pages(folio);
--			foff = start - folio_pos(folio);
--			off = foff % PAGE_SIZE;
--
--			for (j = foff / PAGE_SIZE; j < npages; j++) {
--				size_t len2;
--
--				len = min_t(size_t, max, PAGE_SIZE - off);
--				len2 = min_t(size_t, len, SZ_2K);
--
--				p = kmap_local_page(folio_page(folio, j));
--				memcpy(&sample[s], p, len2);
--				kunmap_local(p);
--
--				s += len2;
--
--				if (len2 < SZ_2K || s >= max - SZ_2K)
--					return s;
--
--				max -= len;
--				if (max <= 0)
--					return s;
--
--				start += len;
--				off = 0;
--				index++;
--			}
--		}
--	} while (nr == ARRAY_SIZE(folios));
-+	struct iov_iter iter = *source;
-+	size_t s = 0;
-+
-+	while (iov_iter_count(&iter) >= SZ_2K) {
-+		size_t part = umin(umin(iov_iter_count(&iter), SZ_2K), max);
-+		size_t n;
-+
-+		n = copy_from_iter(sample + s, part, &iter);
-+		if (n != part)
-+			return -EFAULT;
-+
-+		s += n;
-+		max -= n;
-+
-+		if (iov_iter_count(&iter) < PAGE_SIZE - SZ_2K)
-+			break;
-+
-+		iov_iter_advance(&iter, SZ_2K);
-+	}
- 
- 	return s;
- }
+diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
+index cd4c61932cb2..b9bb531717a6 100644
+--- a/fs/smb/client/smbdirect.c
++++ b/fs/smb/client/smbdirect.c
+@@ -1689,7 +1689,6 @@ static struct smbd_connection *_smbd_get_connection(
+ 	cancel_delayed_work_sync(&info->idle_timer_work);
+ 	destroy_caches_and_workqueue(info);
+ 	sc->status = SMBDIRECT_SOCKET_NEGOTIATE_FAILED;
+-	init_waitqueue_head(&info->conn_wait);
+ 	rdma_disconnect(sc->rdma.cm_id);
+ 	wait_event(info->conn_wait,
+ 		sc->status == SMBDIRECT_SOCKET_DISCONNECTED);
 -- 
-2.50.1
+2.39.5
 
 
 
