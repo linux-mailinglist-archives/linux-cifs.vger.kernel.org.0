@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-5818-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5822-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF4C2B2A53D
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 15:31:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B356B2A72F
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 15:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79C977BE9C4
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 13:24:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 412897B427E
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 13:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63419322747;
-	Mon, 18 Aug 2025 13:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10EA0335BB7;
+	Mon, 18 Aug 2025 13:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R0WDs1km"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MKxaybWw"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B71F30C37D;
-	Mon, 18 Aug 2025 13:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52A4335BA8;
+	Mon, 18 Aug 2025 13:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755523152; cv=none; b=dpu/Qa5AgiDgHV+wKyE4vsZXZKeuh3MeZ95iLzmTGg0vzDIVVL9ye4YfMo68YnTgbnTRQQBqsqvOM5fuFkcmtx6D8uBmeCis55AjQhxhVBjiNN2imocrt6jQfq7z2NR8HzvRDbErct7yEQmXtgRu6R+gePFNrUwQVFCLV9tFHsA=
+	t=1755524774; cv=none; b=JGgiXU44wzaEbl7/WB23BARskGenWBVxliBWCXa3BywMoo0EeUBH9I59jcoGpax3zY3MG7v8tIXwjz3bCdkjlZMnlrvR/JmHvwBJwoU6BAflo0McxiXzNtSFlOLwUSCC9d0sfKtxs+/VU+ZYRJXjULt9MYqpSsfLSQ38px8JYsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755523152; c=relaxed/simple;
-	bh=njnO65N1FUdQsTPZZA0jmoNzSulQnCmYwm6RgIUOLHA=;
+	s=arc-20240116; t=1755524774; c=relaxed/simple;
+	bh=EIAAQKGbmcvxbgaEIe9HenLnyUbAPXv+GK1GARJ9dvY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pd/elinJ3ECSiZlNO6/XyNjPx/hb0XrTjrEfE+rBJK7nGYuiFTY1jmYO72Cd44DcoBD1ngsln3MSp1WxR5cPVyI3v6MVau7P0ZcOBUnPPIiDwBb2FXgeErIWzYEcnhQjx8l0CZK+TeCSSFcL4NT+bA5xpgTd0PGKES+l2u+3EHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R0WDs1km; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF9CC4CEEB;
-	Mon, 18 Aug 2025 13:19:09 +0000 (UTC)
+	 MIME-Version; b=GUrmT0LmiHJbd0MKlie7kpZdUn8MGnszo9126DFCj2D/z9g+SiTI0JrU0uAxxwiAeQQ89xTAv+6o7FubVrP7CACjvrkcNRhd5hcvN1VsYU37ghzjdQInsAWr1E5XqSPYapAtjAXJUkyT8Pe6LD6bqs+hrEpsIQBjWVg9SVS/tvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MKxaybWw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520B1C4CEEB;
+	Mon, 18 Aug 2025 13:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755523149;
-	bh=njnO65N1FUdQsTPZZA0jmoNzSulQnCmYwm6RgIUOLHA=;
+	s=korg; t=1755524773;
+	bh=EIAAQKGbmcvxbgaEIe9HenLnyUbAPXv+GK1GARJ9dvY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R0WDs1kmFyHNK0f+5pJvveuKJ+LDaseghEMVAEsa6eyTJ0EXcmewmPiD2mzRqushk
-	 NA7ypPJJbKUuWINqMv78uR4h0vPuFUzX2xEq2njjMOiNQPLZAot+3GQfwaTLEs+SpG
-	 6y6W/JPi4naYR76mcVfkKlHVIveiGltsY5czr+k8=
+	b=MKxaybWwiDBoVq3P/UBWnWxKaiu0di3THR4fTLZprFyvrr/pcsxp0CNj0AXKRFE8E
+	 QRg9AtwL+fbaDhNXKP0XmG6vqIGoJqKUZ7TQ/KcyK7ESM4WGjoDjK0pomQ+2xukC9r
+	 1M+0Eywr3Qe2ViE/NW/uUVI+LGDiIpcoWWkGz14U=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -49,12 +49,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	samba-technical@lists.samba.org,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.15 054/515] smb: client: dont wait for info->send_pending == 0 on error
-Date: Mon, 18 Aug 2025 14:40:40 +0200
-Message-ID: <20250818124500.498960157@linuxfoundation.org>
+Subject: [PATCH 6.16 057/570] smb: client: let send_done() cleanup before calling smbd_disconnect_rdma_connection()
+Date: Mon, 18 Aug 2025 14:40:44 +0200
+Message-ID: <20250818124508.009465778@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818124458.334548733@linuxfoundation.org>
-References: <20250818124458.334548733@linuxfoundation.org>
+In-Reply-To: <20250818124505.781598737@linuxfoundation.org>
+References: <20250818124505.781598737@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -66,59 +66,62 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.15-stable review patch.  If anyone has any objections, please let me know.
+6.16-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
 From: Stefan Metzmacher <metze@samba.org>
 
-commit 8c48e1c7520321cc87ff651e96093e2f412785fb upstream.
+commit 5349ae5e05fa37409fd48a1eb483b199c32c889b upstream.
 
-We already called ib_drain_qp() before and that makes sure
-send_done() was called with IB_WC_WR_FLUSH_ERR, but
-didn't called atomic_dec_and_test(&sc->send_io.pending.count)
+We should call ib_dma_unmap_single() and mempool_free() before calling
+smbd_disconnect_rdma_connection().
 
-So we may never reach the info->send_pending == 0 condition.
+And smbd_disconnect_rdma_connection() needs to be the last function to
+call as all other state might already be gone after it returns.
 
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
 Cc: Long Li <longli@microsoft.com>
 Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
-Fixes: 5349ae5e05fa ("smb: client: let send_done() cleanup before calling smbd_disconnect_rdma_connection()")
+Fixes: f198186aa9bb ("CIFS: SMBD: Establish SMB Direct connection")
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/smb/client/smbdirect.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ fs/smb/client/smbdirect.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
 --- a/fs/smb/client/smbdirect.c
 +++ b/fs/smb/client/smbdirect.c
-@@ -1316,10 +1316,6 @@ void smbd_destroy(struct TCP_Server_Info
- 	log_rdma_event(INFO, "cancelling idle timer\n");
- 	cancel_delayed_work_sync(&info->idle_timer_work);
+@@ -277,18 +277,20 @@ static void send_done(struct ib_cq *cq,
+ 	log_rdma_send(INFO, "smbd_request 0x%p completed wc->status=%d\n",
+ 		request, wc->status);
  
--	log_rdma_event(INFO, "wait for all send posted to IB to finish\n");
--	wait_event(info->wait_send_pending,
--		atomic_read(&info->send_pending) == 0);
+-	if (wc->status != IB_WC_SUCCESS || wc->opcode != IB_WC_SEND) {
+-		log_rdma_send(ERR, "wc->status=%d wc->opcode=%d\n",
+-			wc->status, wc->opcode);
+-		smbd_disconnect_rdma_connection(request->info);
+-	}
 -
- 	/* It's not possible for upper layer to get to reassembly */
- 	log_rdma_event(INFO, "drain the reassembly queue\n");
- 	do {
-@@ -1965,7 +1961,11 @@ int smbd_send(struct TCP_Server_Info *se
- 	 */
+ 	for (i = 0; i < request->num_sge; i++)
+ 		ib_dma_unmap_single(sc->ib.dev,
+ 			request->sge[i].addr,
+ 			request->sge[i].length,
+ 			DMA_TO_DEVICE);
  
- 	wait_event(info->wait_send_pending,
--		atomic_read(&info->send_pending) == 0);
-+		atomic_read(&info->send_pending) == 0 ||
-+		sc->status != SMBDIRECT_SOCKET_CONNECTED);
++	if (wc->status != IB_WC_SUCCESS || wc->opcode != IB_WC_SEND) {
++		log_rdma_send(ERR, "wc->status=%d wc->opcode=%d\n",
++			wc->status, wc->opcode);
++		mempool_free(request, info->request_mempool);
++		smbd_disconnect_rdma_connection(info);
++		return;
++	}
 +
-+	if (sc->status != SMBDIRECT_SOCKET_CONNECTED && rc == 0)
-+		rc = -EAGAIN;
+ 	if (atomic_dec_and_test(&request->info->send_pending))
+ 		wake_up(&request->info->wait_send_pending);
  
- 	return rc;
- }
 
 
 
