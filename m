@@ -1,202 +1,144 @@
-Return-Path: <linux-cifs+bounces-5826-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-5814-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3D05B2AABB
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 16:35:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57DAEB2A2F7
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 15:04:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9C6E1BA833F
-	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 14:19:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C3757B290C
+	for <lists+linux-cifs@lfdr.de>; Mon, 18 Aug 2025 13:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3571B32A3C6;
-	Mon, 18 Aug 2025 14:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mZOr8yDa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8BA31CA57;
+	Mon, 18 Aug 2025 13:03:53 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0807A183CC3;
-	Mon, 18 Aug 2025 14:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96DE31CA48;
+	Mon, 18 Aug 2025 13:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755526156; cv=none; b=OenkqdJ6LZSVmpVN9cIfR4wzq/rrMXdSAFmkvzMNmODXqd81eAySd48i3x3cfrYxGUkoHAuWjJQ1KRIaPx4Q4flK6NMw53uX195xnU9TqGrvfUgmOJ4K1i6VN84ZfpupuKcv1nvgW6Um9s9TsNblPudkQsQCjxz6L1EBrSdjLaI=
+	t=1755522233; cv=none; b=DvVSTE/fNPvAgj1eRbD2AKxVDcKV+aUwO8zeqWuoyMQVpV6D32kRMEXLlnISWEK0QnqhXkB0cbL98keNlVLzQjW+cLeXWDVY7wjCum2EkNU3tX42J5nrkoB5hkHZ0cWsa/SgwuCo4bhKWQDDMSQO4R3br2AK8adI//BysZ8kvro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755526156; c=relaxed/simple;
-	bh=uHinza1r+FpZd8ytjP/XxB+mSOCXk6ERC6D6cWYInzk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rr+hOzzFx2YMeL7+dh1CZJXWXJyGz+MmC6jpFsYo7LkMuPKX7impdPnSjQOvR6i45mljlf+ZxGD0tczvijr8YBwmJtkL7u582aviCPyHC5V7SxcznqKP3sLIeoojGYtcHoF7dGkOyIN4XxHd7tWncPXMiXmuvmhnI8JKJSsEJW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mZOr8yDa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB37C4CEEB;
-	Mon, 18 Aug 2025 14:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755526155;
-	bh=uHinza1r+FpZd8ytjP/XxB+mSOCXk6ERC6D6cWYInzk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mZOr8yDaUHvgYX8ah4JQBs//GDwRmbVQs3+++Z5Hm1qpdF79/A6K/gzcniX1ETLB6
-	 NcHb+i78dAijQ8rjaMPrINM3xKDP5s3427lPKZlZeV0f6jW7FhDIj2evPzOh/boGDw
-	 F9uqduLCEj+9WJunRsGYfhP3+XRaER7FExGRIMGE=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
-	Enzo Matsumiya <ematsumiya@suse.de>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Tom Talpey <tom@talpey.com>,
-	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.16 474/570] cifs: Fix collect_sample() to handle any iterator type
-Date: Mon, 18 Aug 2025 14:47:41 +0200
-Message-ID: <20250818124524.148858735@linuxfoundation.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818124505.781598737@linuxfoundation.org>
-References: <20250818124505.781598737@linuxfoundation.org>
-User-Agent: quilt/0.68
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1755522233; c=relaxed/simple;
+	bh=3eSzentkqOibXZaENmGblqSTCJYk6IoR9S8VOJLZgsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R8ToxDeH4+q+YBw3iI2E61Gh1q0d6pRPhtyCMjdOd6gaxnEIO3PI899aT7+nZSr7rO/n3IjYKGFgFlD3kNWsLJS/ceSnhepyBIMXEk8P5S1jvf6e6lGkYXI/YF4gL8h3a+5XccongXHgjDgUFbTkvSqDlbk0zAkycIOT9u5RdnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4c5CZr3RglzKHMVL;
+	Mon, 18 Aug 2025 21:03:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id D97FB1A0875;
+	Mon, 18 Aug 2025 21:03:47 +0800 (CST)
+Received: from [10.174.178.209] (unknown [10.174.178.209])
+	by APP4 (Coremail) with SMTP id gCh0CgDHjxCwJKNoY2JrEA--.45177S3;
+	Mon, 18 Aug 2025 21:03:46 +0800 (CST)
+Message-ID: <89a2023c-e383-4780-83e3-ba8f9e44c015@huaweicloud.com>
+Date: Mon, 18 Aug 2025 21:03:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-6.16-stable review patch.  If anyone has any objections, please let me know.
-
-------------------
-
-From: David Howells <dhowells@redhat.com>
-
-[ Upstream commit b63335fb3d32579c5ff0b7038b9cc23688fff528 ]
-
-collect_sample() is used to gather samples of the data in a Write op for
-analysis to try and determine if the compression algorithm is likely to
-achieve anything more quickly than actually running the compression
-algorithm.
-
-However, collect_sample() assumes that the data it is going to be sampling
-is stored in an ITER_XARRAY-type iterator (which it now should never be)
-and doesn't actually check that it is before accessing the underlying
-xarray directly.
-
-Fix this by replacing the code with a loop that just uses the standard
-iterator functions to sample every other 2KiB block, skipping the
-intervening ones.  It's not quite the same as the previous algorithm as it
-doesn't necessarily align to the pages within an ordinary write from the
-pagecache.
-
-Note that the btrfs code from which this was derived samples the inode's
-pagecache directly rather than the iterator - but that doesn't necessarily
-work for network filesystems if O_DIRECT is in operation.
-
-Fixes: 94ae8c3fee94 ("smb: client: compress: LZ77 code improvements cleanup")
-Signed-off-by: David Howells <dhowells@redhat.com>
-Acked-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
-cc: Enzo Matsumiya <ematsumiya@suse.de>
-cc: Shyam Prasad N <sprasad@microsoft.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/client/compress.c | 71 ++++++++++++----------------------------
- 1 file changed, 21 insertions(+), 50 deletions(-)
-
-diff --git a/fs/smb/client/compress.c b/fs/smb/client/compress.c
-index 766b4de13da7..db709f5cd2e1 100644
---- a/fs/smb/client/compress.c
-+++ b/fs/smb/client/compress.c
-@@ -155,58 +155,29 @@ static int cmp_bkt(const void *_a, const void *_b)
- }
- 
- /*
-- * TODO:
-- * Support other iter types, if required.
-- * Only ITER_XARRAY is supported for now.
-+ * Collect some 2K samples with 2K gaps between.
-  */
--static int collect_sample(const struct iov_iter *iter, ssize_t max, u8 *sample)
-+static int collect_sample(const struct iov_iter *source, ssize_t max, u8 *sample)
- {
--	struct folio *folios[16], *folio;
--	unsigned int nr, i, j, npages;
--	loff_t start = iter->xarray_start + iter->iov_offset;
--	pgoff_t last, index = start / PAGE_SIZE;
--	size_t len, off, foff;
--	void *p;
--	int s = 0;
--
--	last = (start + max - 1) / PAGE_SIZE;
--	do {
--		nr = xa_extract(iter->xarray, (void **)folios, index, last, ARRAY_SIZE(folios),
--				XA_PRESENT);
--		if (nr == 0)
--			return -EIO;
--
--		for (i = 0; i < nr; i++) {
--			folio = folios[i];
--			npages = folio_nr_pages(folio);
--			foff = start - folio_pos(folio);
--			off = foff % PAGE_SIZE;
--
--			for (j = foff / PAGE_SIZE; j < npages; j++) {
--				size_t len2;
--
--				len = min_t(size_t, max, PAGE_SIZE - off);
--				len2 = min_t(size_t, len, SZ_2K);
--
--				p = kmap_local_page(folio_page(folio, j));
--				memcpy(&sample[s], p, len2);
--				kunmap_local(p);
--
--				s += len2;
--
--				if (len2 < SZ_2K || s >= max - SZ_2K)
--					return s;
--
--				max -= len;
--				if (max <= 0)
--					return s;
--
--				start += len;
--				off = 0;
--				index++;
--			}
--		}
--	} while (nr == ARRAY_SIZE(folios));
-+	struct iov_iter iter = *source;
-+	size_t s = 0;
-+
-+	while (iov_iter_count(&iter) >= SZ_2K) {
-+		size_t part = umin(umin(iov_iter_count(&iter), SZ_2K), max);
-+		size_t n;
-+
-+		n = copy_from_iter(sample + s, part, &iter);
-+		if (n != part)
-+			return -EFAULT;
-+
-+		s += n;
-+		max -= n;
-+
-+		if (iov_iter_count(&iter) < PAGE_SIZE - SZ_2K)
-+			break;
-+
-+		iov_iter_advance(&iter, SZ_2K);
-+	}
- 
- 	return s;
- }
--- 
-2.50.1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH next] smb: client: Fix NULL vs ERR_PTR() returns in
+ cifs_get_tcon_super()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+ Bharath SM <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+References: <aKL5dUyf7UWcQNvW@stanley.mountain>
+From: Wang Zhaolong <wangzhaolong@huaweicloud.com>
+In-Reply-To: <aKL5dUyf7UWcQNvW@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDHjxCwJKNoY2JrEA--.45177S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw1kXF1fJryxXr43WF4Uurg_yoW8tr4UpF
+	4Yk34UCFs8J3yDXw4xZFn5C3WF9w1DCFyDCrn5C3Wvvw45ZrWjqFyUK34jvF1SyrWUW348
+	WFsFyasIv3y8ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: pzdqw6xkdrz0tqj6x35dzhxuhorxvhhfrp/
 
 
+
+> The cifs_get_tcon_super() function returns NULL on error but the caller
+> expect it to return error pointers instead.  Change it to return error
+> pointers.  Otherwise it results in a NULL pointer dereference.
+> 
+> Fixes: 0938b093b1ae ("smb: client: Fix mount deadlock by avoiding super block iteration in DFS reconnect")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+Hi Dan,
+
+Thank you for your patch and for taking the time to address this issue.
+
+I would like to mention that I have recently sent out the V4 version of
+the patch series, which addresses the issues related to `cifs_get_tcon_super()`.
+In the latest version, the issue of NULL pointer dereference has already
+been resolved.
+
+https://lore.kernel.org/all/CAH2r5msLMNdqdo6EBuTvrQ0hwrqSRC-LSZuN2WpwV+PkDwsCOw@mail.gmail.com/
+
+I avoid null pointer dereferencing by performing a null pointer check on
+the return value of cifs_get_dfs_tcon_super().
+
+
+> ---
+>   fs/smb/client/misc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
+> index 3b6920a52daa..d73c36862e97 100644
+> --- a/fs/smb/client/misc.c
+> +++ b/fs/smb/client/misc.c
+> @@ -1116,7 +1116,7 @@ static struct super_block *cifs_get_tcon_super(struct cifs_tcon *tcon)
+>   	struct cifs_sb_info *cifs_sb;
+>   
+>   	if (!tcon)
+> -		return NULL;
+> +		return ERR_PTR(-EINVAL);
+>   
+>   	spin_lock(&tcon->sb_list_lock);
+>   	list_for_each_entry(cifs_sb, &tcon->cifs_sb_list, tcon_sb_link) {
+> @@ -1141,7 +1141,7 @@ static struct super_block *cifs_get_tcon_super(struct cifs_tcon *tcon)
+>   	}
+>   	spin_unlock(&tcon->sb_list_lock);
+>   
+> -	return NULL;
+> +	return ERR_PTR(-ENOENT);
+>   }
+>   
+>   struct super_block *cifs_get_dfs_tcon_super(struct cifs_tcon *tcon)
+
+Additionally, I think it somewhat peculiar that in the current
+implementation, cifs_get_tcon_super() returns -EINVAL.
+
+I would greatly appreciate it if you could review my latest patch series to
+confirm if it resolves the concerns. If there are any additional improvements, I
+would be happy to collaborate further to ensure the best possible solution.
+
+Best regards,
+Wang Zhaolong
 
 
