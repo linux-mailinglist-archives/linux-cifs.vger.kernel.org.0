@@ -1,112 +1,103 @@
-Return-Path: <linux-cifs+bounces-6060-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6072-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803E5B35E57
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 13:56:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53B97B36E2A
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 17:43:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 682C8189548A
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 11:49:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 292C78E0CD1
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 15:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A29B29BDB8;
-	Tue, 26 Aug 2025 11:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF30F3570AD;
+	Tue, 26 Aug 2025 15:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mKXP9Nzg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THVl6cg8"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B53A284B5B;
-	Tue, 26 Aug 2025 11:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6423568E8
+	for <linux-cifs@vger.kernel.org>; Tue, 26 Aug 2025 15:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756208919; cv=none; b=ouLs+/g8/GR1q25xelaCrYjx6HaX35VezDqkRRXvO0Ln4IGTrg6UM5ialjY72vnOicwsYcwiQmgRFr7ISw79xQ9JEdU+3EM+koMYey2yBQZm/kRGu9qsCcYsXht67hjzztZjIH4/dvUeDjmtXBaDIW+GIZnU8Gp4BVSpYkjJU7o=
+	t=1756222871; cv=none; b=k4w5JRZcFN1CKUAaQkhRC3fisWJJOZoznOOMxNWuOVMPVqIvn51MY4F/yhex3TiP10YvpfxAwTSX9LpmKq/NWEIixD5qJwiI/du9eobIbm414Is8H56bewrJi+DEoiSmC8HZpTOcnDAVVvY3wZYYx/cP1cPzAJj0wcam/+vHHE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756208919; c=relaxed/simple;
-	bh=mgqUr5FCm8v0m8VuC5jqd29L3rQZyqOXb9+OdcGn2K0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QFc8tKH/KfxsFHXqR3f8RXAqhz5Og8DZJUBkSsQg5NcuRlUcsYh67I9UbpUMYN+DzmJ8RXl191HxG8Yz2XpOQbPbQyJfoXWgLg+f/psFMP506Rjo2z/8gMwbR9Y4lloMmDt9I3ISeqwzQIMRPu3DFVLCBzJGpa079QqWcP7LyYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mKXP9Nzg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2BDC4CEF1;
-	Tue, 26 Aug 2025 11:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756208918;
-	bh=mgqUr5FCm8v0m8VuC5jqd29L3rQZyqOXb9+OdcGn2K0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mKXP9NzgaGuS1r/EodzUTtOI9qyZec79gJfUwk273T82I+V7I23VoCaQccB0nRkES
-	 SjPE6qo/1mblaWXDko7EaaxY8dMi7Z1yzZvzWoZEYl/dR2ZNQ0sDsOVF7SiUH9NA5n
-	 d2HyPOR4dw91ud23ADfzaRBoEoCfnrIPz5uQNL6M=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.org>,
-	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.12 295/322] cifs: Fix oops due to uninitialised variable
-Date: Tue, 26 Aug 2025 13:11:50 +0200
-Message-ID: <20250826110923.186345837@linuxfoundation.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250826110915.169062587@linuxfoundation.org>
-References: <20250826110915.169062587@linuxfoundation.org>
-User-Agent: quilt/0.68
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1756222871; c=relaxed/simple;
+	bh=pEp3IJXmmCTgNdYq9GBP+pw7hhtQPwM3/c1PJBTV0XA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=XRyVXwtVHbjjGVrmY9WJRwlwf6Ry1E3VRsU1J6CJsb27Puo7duCLAML5129YxZvavsr2T9+2be79isTW8s4PxIeE0gcW4lZRE/9hdQ4VsXBOqNDdy/CHK/GQatEPSerioMQdKDmf2o8qc2hMPF5iqwEG/HNcm96vgmz/z9FNHsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THVl6cg8; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7e8704da966so392824485a.1
+        for <linux-cifs@vger.kernel.org>; Tue, 26 Aug 2025 08:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756222864; x=1756827664; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S4Qxtfh0XTA1uBqaz5CYZj55f9pkrEroKUb8W6Xu5Gg=;
+        b=THVl6cg8hQ+ckynsSnnColpygqVTOUcrj3LQjzutaJhUJlYRFJ1m8Wu6uD3lWbe1II
+         Bco1LrR7q1bEfZ8oouXVMoB3SA7rBjilkGlk6qomo6XDchduRYBBMyLlnYw4WA2pE0j0
+         4p2NYEqLFuMCH/Cep5j0keXpZV1jkE26uRraegLQcDpJfB0nBHN3qmO2kltxF9i1m6Zb
+         zwvVveSjx6cBMNT+pmwWswuz2QaAl9ovQZbzIQZwwgYeYEJAP6vKQrh6yP0uQz5PMpWS
+         u6zcs7AAocwKa3JuYrPrnYFyIAD1zs0wy/GxpTCdqduQqlriR+nJxueCvVpioH7d0Acu
+         NlVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756222864; x=1756827664;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S4Qxtfh0XTA1uBqaz5CYZj55f9pkrEroKUb8W6Xu5Gg=;
+        b=ILGqYKk3m1U3+DmIUxVf2QQwXhr0Dw35EN4wzVg9I+xzngqzhVqsxJl2pHwNGejl+y
+         A9kFqaq9cgfaadozSgIAmZYyOuKQv8OMu4TC7EqKJcrib0JLWPJ+LGDwHf4ow5IoKr7d
+         YJPsXeNy5fAlMVYIn5QqZTP9iPlx8gWOkCGCKqsgwcZDKXwYEx+aOVDIZynSVtU6dp+S
+         /GtWH0W69l8jROh/gpXOqgkVQGnqBKiWxmGp2TfmUjDm6cqsWamFZ/NtqC8DHTM8dhEh
+         eSrqQjxiOp/Yl2NBF6WDm/MjOMBtOKABX/+sBIv/oiYFPIh8ozpgwJhGhdC0rU8FPb5p
+         8Lnw==
+X-Forwarded-Encrypted: i=1; AJvYcCXCJ5PD+vXqQCjc9S+AsoPCY69wuVfYpAuENOZghJFNhi/HxEFWzbBR7u6OFe9u1hWphnGajBYBCtXd@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws/WhavrUNiyobFmYmaO+4YQRk9yA2NdV+RAa2pebeRwBW/RXo
+	mHDWQIOmWo12fabq6xua5GfbOcCy93UniCfFISogJbb1ONCE3/NYQe+s/2dff0HWdJC6YTT3wEw
+	+efzmIT0bESYVgFol+L8M951seSeVtVk=
+X-Gm-Gg: ASbGncsvrFzOD0/2fP3MPqMux2LxOVwqpWhxfxalmjjpak05KdRxwSpYN0EZWaMKPB3
+	wOI8ux2/qPa59EULgJPL3vLYmA7oCVzCrO1v5C/potr5+nuROebn4imCNc3TYmCX7y9Gw9e6suX
+	mi2WMKEsBfYkb+OefS8aezllIZvzdBzRADHKFZL5uxpcOIF5CI5nXUeEp1kNYjBru2LH5xlh8n6
+	pDg+60/tksC+9CAAPi/cjPwGVFlc58+sfIQg6+dSVf47EmQDqecmHAl2FOH0WWOnu10ozXoW3UO
+	R0Amqu6kr00MpMKBp3f4
+X-Google-Smtp-Source: AGHT+IFaWRcwWSYYL2GJ0tpaJjji9bJet8F3zFdssn2sdZB5LvdFAov6MicGKG93ElUd/OofeiRdVc4rUNf5x6XODJg=
+X-Received: by 2002:ad4:4eae:0:b0:707:76a8:ee9b with SMTP id
+ 6a1803df08f44-70d9738c033mr171436726d6.37.1756222864171; Tue, 26 Aug 2025
+ 08:41:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Steve French <smfrench@gmail.com>
+Date: Tue, 26 Aug 2025 10:40:53 -0500
+X-Gm-Features: Ac12FXxsiiZG7BKsv-_eN2DLSK9HWXzc-emowStdhvK1Oef0ABx-oEDMbutKbyk
+Message-ID: <CAH2r5mvpzK1NMmbKE-wUDHLhtm_fiPAp=zVm1egw3=cLbUh38w@mail.gmail.com>
+Subject: smb2_copychunk_range() reset max_bytes_chunk to 0
+To: Namjae Jeon <linkinjeon@kernel.org>, CIFS <linux-cifs@vger.kernel.org>
+Cc: Paulo Alcantara <pc@manguebit.org>
+Content-Type: text/plain; charset="UTF-8"
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+I noticed what looks like a bug in smb2_copychunk_range() - I see it
+when ksmbd returns ChunkBytesWritten as 0 we reset the
+tcon->max_bytes_chunk to 0 which causes all subsequent copy_chunks to
+ksmbd to fail with invalid parameter.  I don't see it Samba (but maybe
+because they never returned ChunksBytesWritten as 0).  Any thoughts -
+the logic looks wrong?
 
-------------------
+/* Check that server is not asking us to grow size */
+if (le32_to_cpu(retbuf->ChunkBytesWritten) < tcon->max_bytes_chunk)
+     tcon->max_bytes_chunk = le32_to_cpu(retbuf->ChunkBytesWritten);
+else
+     goto cchunk_out; /* server gave us bogus size */
 
-From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 453a6d2a68e54a483d67233c6e1e24c4095ee4be ]
-
-Fix smb3_init_transform_rq() to initialise buffer to NULL before calling
-netfs_alloc_folioq_buffer() as netfs assumes it can append to the buffer it
-is given.  Setting it to NULL means it should start a fresh buffer, but the
-value is currently undefined.
-
-Fixes: a2906d3316fc ("cifs: Switch crypto buffer to use a folio_queue rather than an xarray")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Paulo Alcantara <pc@manguebit.org>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/client/smb2ops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 4bababee965a..ab911a967246 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -4522,7 +4522,7 @@ smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
- 	for (int i = 1; i < num_rqst; i++) {
- 		struct smb_rqst *old = &old_rq[i - 1];
- 		struct smb_rqst *new = &new_rq[i];
--		struct folio_queue *buffer;
-+		struct folio_queue *buffer = NULL;
- 		size_t size = iov_iter_count(&old->rq_iter);
- 
- 		orig_len += smb_rqst_len(server, old);
 -- 
-2.50.1
+Thanks,
 
-
-
+Steve
 
