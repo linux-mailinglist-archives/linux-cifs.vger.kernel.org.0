@@ -1,62 +1,61 @@
-Return-Path: <linux-cifs+bounces-6055-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6065-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3FA2B35B2E
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 13:20:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD05EB36686
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 15:58:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBB417AD776
-	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 11:18:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01442564E3D
+	for <lists+linux-cifs@lfdr.de>; Tue, 26 Aug 2025 13:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F18346A1A;
-	Tue, 26 Aug 2025 11:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD1828314A;
+	Tue, 26 Aug 2025 13:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AdFVZWzb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AQw2Rzv7"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25173346A07;
-	Tue, 26 Aug 2025 11:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B60393DC0;
+	Tue, 26 Aug 2025 13:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756207096; cv=none; b=baABdjtWfanX/8bkVKkIHBaOEWtBJSEtwBF330BCGZP4No0qs4jwfOqAHIesoDh3NhePSV+jxVvG+FFRe/XyFaE8Fnw9mcEKn5wOqpAeZGVcFttTxwhXuzOfdSKVQOhHf58CiD6J2H7376qpU9SET1nnAvtWi1ZZVgPWZLJgrcw=
+	t=1756215979; cv=none; b=jCtSVAIJ5b1dpCHSMRqsKV3+VFxcWR2WuPc0C1U5YfgMtlq7AZwtTgh1+vgSq8JiSAdujqBvm1IYz/5hAm1fECcytD37RMN4W+niqzvAB3qIIIhyVyqC1ViDaknhJlaTOpRJ8ZXeQ448dWIQw3jook8Lv/lml/aSvaJzZu89qDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756207096; c=relaxed/simple;
-	bh=Y7AwznA5BMvQAxHYM2NsSWm1PH3p4s+aHTL24ME0qOs=;
+	s=arc-20240116; t=1756215979; c=relaxed/simple;
+	bh=jBd32yUU/8ZwdxsO7Uj08eANt8mo9ZuUcNDxPl8Bk2Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ui3ERWmM6BKL8j4KfqXFWAW97n2KmsiyJ4Q7GwUwSRkbTWUUYv7teSidLOIDzCQi62r5oTAh95Da6GsaW0978ovCuTF6KTZFz9ZLDeJ/BEHcVTSZuygTNQjHAxIeQ38oGGJw0OoYTtVC6piXZtLTaR6IGYrDsOGg5TIgzELCHjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AdFVZWzb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B3E3C113CF;
-	Tue, 26 Aug 2025 11:18:15 +0000 (UTC)
+	 MIME-Version; b=NCR9mq776xLdHPqquyGD/B0yZvQ8i3ULoVuT1ec2ynWK9FWW+nEjNuBRNEsZUuSWyfFM22EZruDqhCAJ0niK3mZkDEnn0VCzyRFQ8/S8N/nT67CntxsD/TO5VKe9A6MHlMmlIITz3a/swxJ9CVdYEs3vwNpVmdWyTIRrmNF1sa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AQw2Rzv7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A610C4CEF1;
+	Tue, 26 Aug 2025 13:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756207096;
-	bh=Y7AwznA5BMvQAxHYM2NsSWm1PH3p4s+aHTL24ME0qOs=;
+	s=korg; t=1756215979;
+	bh=jBd32yUU/8ZwdxsO7Uj08eANt8mo9ZuUcNDxPl8Bk2Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AdFVZWzbB3UgBrY4i6jz0ESHryU2y3rEnpCBZxXBX9EG8iAEFK4KLm3aHPmCYTQLS
-	 OKZp9MIevUY3d/bBFkHYxHCqE8mBKCwSYrtjFgIpu8TJD73lT4fzCCxNr5Y89c18Y4
-	 o29Np7H/ncqb5uy7PlbkQXcCOovuw4E2AsR3iy1Q=
+	b=AQw2Rzv7/qb7mOOGwtq344kmTb/353ocOItDSBDd6U0FItneWp9r5y65p/fQa2OSo
+	 HSZZG3MTNIcLcB/Fl4SHXMnVARI/QUVtNtOORY6WmL7P2IQadTDNUX9KMbzIqj4brY
+	 /A2lrN9xTo+ZnaUlg5jZj3aOPAG6A965oQA6pvqI=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
-	Xiaoli Feng <fengxiaoli0714@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Paulo Alcantara <pc@manguebit.org>,
-	Steve French <sfrench@samba.org>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	netfs@lists.linux.dev,
+	Steve French <smfrench@gmail.com>,
+	Tom Talpey <tom@talpey.com>,
 	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 6.16 019/457] netfs: Fix unbuffered write error handling
-Date: Tue, 26 Aug 2025 13:05:03 +0200
-Message-ID: <20250826110937.803379923@linuxfoundation.org>
+	samba-technical@lists.samba.org,
+	Stefan Metzmacher <metze@samba.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 239/644] smb: server: remove separate empty_recvmsg_queue
+Date: Tue, 26 Aug 2025 13:05:30 +0200
+Message-ID: <20250826110952.324314803@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250826110937.289866482@linuxfoundation.org>
-References: <20250826110937.289866482@linuxfoundation.org>
+In-Reply-To: <20250826110946.507083938@linuxfoundation.org>
+References: <20250826110946.507083938@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -68,168 +67,174 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.16-stable review patch.  If anyone has any objections, please let me know.
+5.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
-From: David Howells <dhowells@redhat.com>
+From: Stefan Metzmacher <metze@samba.org>
 
-commit a3de58b12ce074ec05b8741fa28d62ccb1070468 upstream.
+[ Upstream commit 01027a62b508c48c762096f347de925eedcbd008 ]
 
-If all the subrequests in an unbuffered write stream fail, the subrequest
-collector doesn't update the stream->transferred value and it retains its
-initial LONG_MAX value.  Unfortunately, if all active streams fail, then we
-take the smallest value of { LONG_MAX, LONG_MAX, ... } as the value to set
-in wreq->transferred - which is then returned from ->write_iter().
+There's no need to maintain two lists, we can just
+have a single list of receive buffers, which are free to use.
 
-LONG_MAX was chosen as the initial value so that all the streams can be
-quickly assessed by taking the smallest value of all stream->transferred -
-but this only works if we've set any of them.
-
-Fix this by adding a flag to indicate whether the value in
-stream->transferred is valid and checking that when we integrate the
-values.  stream->transferred can then be initialised to zero.
-
-This was found by running the generic/750 xfstest against cifs with
-cache=none.  It splices data to the target file.  Once (if) it has used up
-all the available scratch space, the writes start failing with ENOSPC.
-This causes ->write_iter() to fail.  However, it was returning
-wreq->transferred, i.e. LONG_MAX, rather than an error (because it thought
-the amount transferred was non-zero) and iter_file_splice_write() would
-then try to clean up that amount of pipe bufferage - leading to an oops
-when it overran.  The kernel log showed:
-
-    CIFS: VFS: Send error in write = -28
-
-followed by:
-
-    BUG: kernel NULL pointer dereference, address: 0000000000000008
-
-with:
-
-    RIP: 0010:iter_file_splice_write+0x3a4/0x520
-    do_splice+0x197/0x4e0
-
-or:
-
-    RIP: 0010:pipe_buf_release (include/linux/pipe_fs_i.h:282)
-    iter_file_splice_write (fs/splice.c:755)
-
-Also put a warning check into splice to announce if ->write_iter() returned
-that it had written more than it was asked to.
-
-Fixes: 288ace2f57c9 ("netfs: New writeback implementation")
-Reported-by: Xiaoli Feng <fengxiaoli0714@gmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220445
-Signed-off-by: David Howells <dhowells@redhat.com>
-Link: https://lore.kernel.org/915443.1755207950@warthog.procyon.org.uk
-cc: Paulo Alcantara <pc@manguebit.org>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <sprasad@microsoft.com>
-cc: netfs@lists.linux.dev
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: stable@vger.kernel.org
-Signed-off-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Steve French <smfrench@gmail.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: samba-technical@lists.samba.org
+Fixes: 0626e6641f6b ("cifsd: add server handler for central processing and tranport layers")
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/netfs/read_collect.c  |    4 +++-
- fs/netfs/write_collect.c |   10 ++++++++--
- fs/netfs/write_issue.c   |    4 ++--
- fs/splice.c              |    3 +++
- include/linux/netfs.h    |    1 +
- 5 files changed, 17 insertions(+), 5 deletions(-)
+ fs/ksmbd/transport_rdma.c | 60 ++++++---------------------------------
+ 1 file changed, 8 insertions(+), 52 deletions(-)
 
---- a/fs/netfs/read_collect.c
-+++ b/fs/netfs/read_collect.c
-@@ -281,8 +281,10 @@ reassess:
- 		} else if (test_bit(NETFS_RREQ_SHORT_TRANSFER, &rreq->flags)) {
- 			notes |= MADE_PROGRESS;
- 		} else {
--			if (!stream->failed)
-+			if (!stream->failed) {
- 				stream->transferred += transferred;
-+				stream->transferred_valid = true;
-+			}
- 			if (front->transferred < front->len)
- 				set_bit(NETFS_RREQ_SHORT_TRANSFER, &rreq->flags);
- 			notes |= MADE_PROGRESS;
---- a/fs/netfs/write_collect.c
-+++ b/fs/netfs/write_collect.c
-@@ -254,6 +254,7 @@ reassess_streams:
- 			if (front->start + front->transferred > stream->collected_to) {
- 				stream->collected_to = front->start + front->transferred;
- 				stream->transferred = stream->collected_to - wreq->start;
-+				stream->transferred_valid = true;
- 				notes |= MADE_PROGRESS;
- 			}
- 			if (test_bit(NETFS_SREQ_FAILED, &front->flags)) {
-@@ -356,6 +357,7 @@ bool netfs_write_collection(struct netfs
- {
- 	struct netfs_inode *ictx = netfs_inode(wreq->inode);
- 	size_t transferred;
-+	bool transferred_valid = false;
- 	int s;
+diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
+index 91e663d5d5bc..2644117305c2 100644
+--- a/fs/ksmbd/transport_rdma.c
++++ b/fs/ksmbd/transport_rdma.c
+@@ -128,9 +128,6 @@ struct smb_direct_transport {
+ 	spinlock_t		recvmsg_queue_lock;
+ 	struct list_head	recvmsg_queue;
  
- 	_enter("R=%x", wreq->debug_id);
-@@ -376,12 +378,16 @@ bool netfs_write_collection(struct netfs
- 			continue;
- 		if (!list_empty(&stream->subrequests))
- 			return false;
--		if (stream->transferred < transferred)
-+		if (stream->transferred_valid &&
-+		    stream->transferred < transferred) {
- 			transferred = stream->transferred;
-+			transferred_valid = true;
-+		}
+-	spinlock_t		empty_recvmsg_queue_lock;
+-	struct list_head	empty_recvmsg_queue;
+-
+ 	int			send_credit_target;
+ 	atomic_t		send_credits;
+ 	spinlock_t		lock_new_recv_credits;
+@@ -274,32 +271,6 @@ static void put_recvmsg(struct smb_direct_transport *t,
+ 	spin_unlock(&t->recvmsg_queue_lock);
+ }
+ 
+-static struct
+-smb_direct_recvmsg *get_empty_recvmsg(struct smb_direct_transport *t)
+-{
+-	struct smb_direct_recvmsg *recvmsg = NULL;
+-
+-	spin_lock(&t->empty_recvmsg_queue_lock);
+-	if (!list_empty(&t->empty_recvmsg_queue)) {
+-		recvmsg = list_first_entry(&t->empty_recvmsg_queue,
+-					   struct smb_direct_recvmsg, list);
+-		list_del(&recvmsg->list);
+-	}
+-	spin_unlock(&t->empty_recvmsg_queue_lock);
+-	return recvmsg;
+-}
+-
+-static void put_empty_recvmsg(struct smb_direct_transport *t,
+-			      struct smb_direct_recvmsg *recvmsg)
+-{
+-	ib_dma_unmap_single(t->cm_id->device, recvmsg->sge.addr,
+-			    recvmsg->sge.length, DMA_FROM_DEVICE);
+-
+-	spin_lock(&t->empty_recvmsg_queue_lock);
+-	list_add_tail(&recvmsg->list, &t->empty_recvmsg_queue);
+-	spin_unlock(&t->empty_recvmsg_queue_lock);
+-}
+-
+ static void enqueue_reassembly(struct smb_direct_transport *t,
+ 			       struct smb_direct_recvmsg *recvmsg,
+ 			       int data_length)
+@@ -384,9 +355,6 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
+ 	spin_lock_init(&t->recvmsg_queue_lock);
+ 	INIT_LIST_HEAD(&t->recvmsg_queue);
+ 
+-	spin_lock_init(&t->empty_recvmsg_queue_lock);
+-	INIT_LIST_HEAD(&t->empty_recvmsg_queue);
+-
+ 	init_waitqueue_head(&t->wait_send_pending);
+ 	atomic_set(&t->send_pending, 0);
+ 
+@@ -548,7 +516,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 			       wc->opcode);
+ 			smb_direct_disconnect_rdma_connection(t);
+ 		}
+-		put_empty_recvmsg(t, recvmsg);
++		put_recvmsg(t, recvmsg);
+ 		return;
  	}
  
- 	/* Okay, declare that all I/O is complete. */
--	wreq->transferred = transferred;
-+	if (transferred_valid)
-+		wreq->transferred = transferred;
- 	trace_netfs_rreq(wreq, netfs_rreq_trace_write_done);
+@@ -562,7 +530,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 	switch (recvmsg->type) {
+ 	case SMB_DIRECT_MSG_NEGOTIATE_REQ:
+ 		if (wc->byte_len < sizeof(struct smb_direct_negotiate_req)) {
+-			put_empty_recvmsg(t, recvmsg);
++			put_recvmsg(t, recvmsg);
+ 			return;
+ 		}
+ 		t->negotiation_requested = true;
+@@ -579,7 +547,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
  
- 	if (wreq->io_streams[1].active &&
---- a/fs/netfs/write_issue.c
-+++ b/fs/netfs/write_issue.c
-@@ -118,12 +118,12 @@ struct netfs_io_request *netfs_create_wr
- 	wreq->io_streams[0].prepare_write	= ictx->ops->prepare_write;
- 	wreq->io_streams[0].issue_write		= ictx->ops->issue_write;
- 	wreq->io_streams[0].collected_to	= start;
--	wreq->io_streams[0].transferred		= LONG_MAX;
-+	wreq->io_streams[0].transferred		= 0;
+ 		if (wc->byte_len <
+ 		    offsetof(struct smb_direct_data_transfer, padding)) {
+-			put_empty_recvmsg(t, recvmsg);
++			put_recvmsg(t, recvmsg);
+ 			return;
+ 		}
  
- 	wreq->io_streams[1].stream_nr		= 1;
- 	wreq->io_streams[1].source		= NETFS_WRITE_TO_CACHE;
- 	wreq->io_streams[1].collected_to	= start;
--	wreq->io_streams[1].transferred		= LONG_MAX;
-+	wreq->io_streams[1].transferred		= 0;
- 	if (fscache_resources_valid(&wreq->cache_resources)) {
- 		wreq->io_streams[1].avail	= true;
- 		wreq->io_streams[1].active	= true;
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -739,6 +739,9 @@ iter_file_splice_write(struct pipe_inode
- 		sd.pos = kiocb.ki_pos;
- 		if (ret <= 0)
- 			break;
-+		WARN_ONCE(ret > sd.total_len - left,
-+			  "Splice Exceeded! ret=%zd tot=%zu left=%zu\n",
-+			  ret, sd.total_len, left);
+@@ -587,7 +555,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 		if (data_length) {
+ 			if (wc->byte_len < sizeof(struct smb_direct_data_transfer) +
+ 			    (u64)data_length) {
+-				put_empty_recvmsg(t, recvmsg);
++				put_recvmsg(t, recvmsg);
+ 				return;
+ 			}
  
- 		sd.num_spliced += ret;
- 		sd.total_len -= ret;
---- a/include/linux/netfs.h
-+++ b/include/linux/netfs.h
-@@ -150,6 +150,7 @@ struct netfs_io_stream {
- 	bool			active;		/* T if stream is active */
- 	bool			need_retry;	/* T if this stream needs retrying */
- 	bool			failed;		/* T if this stream failed */
-+	bool			transferred_valid; /* T is ->transferred is valid */
- };
+@@ -607,7 +575,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 			avail_recvmsg_count = t->count_avail_recvmsg;
+ 			spin_unlock(&t->receive_credit_lock);
+ 		} else {
+-			put_empty_recvmsg(t, recvmsg);
++			put_recvmsg(t, recvmsg);
  
- /*
+ 			spin_lock(&t->receive_credit_lock);
+ 			receive_credits = --(t->recv_credits);
+@@ -805,7 +773,6 @@ static void smb_direct_post_recv_credits(struct work_struct *work)
+ 	struct smb_direct_recvmsg *recvmsg;
+ 	int receive_credits, credits = 0;
+ 	int ret;
+-	int use_free = 1;
+ 
+ 	spin_lock(&t->receive_credit_lock);
+ 	receive_credits = t->recv_credits;
+@@ -813,18 +780,9 @@ static void smb_direct_post_recv_credits(struct work_struct *work)
+ 
+ 	if (receive_credits < t->recv_credit_target) {
+ 		while (true) {
+-			if (use_free)
+-				recvmsg = get_free_recvmsg(t);
+-			else
+-				recvmsg = get_empty_recvmsg(t);
+-			if (!recvmsg) {
+-				if (use_free) {
+-					use_free = 0;
+-					continue;
+-				} else {
+-					break;
+-				}
+-			}
++			recvmsg = get_free_recvmsg(t);
++			if (!recvmsg)
++				break;
+ 
+ 			recvmsg->type = SMB_DIRECT_MSG_DATA_TRANSFER;
+ 			recvmsg->first_segment = false;
+@@ -1800,8 +1758,6 @@ static void smb_direct_destroy_pools(struct smb_direct_transport *t)
+ 
+ 	while ((recvmsg = get_free_recvmsg(t)))
+ 		mempool_free(recvmsg, t->recvmsg_mempool);
+-	while ((recvmsg = get_empty_recvmsg(t)))
+-		mempool_free(recvmsg, t->recvmsg_mempool);
+ 
+ 	mempool_destroy(t->recvmsg_mempool);
+ 	t->recvmsg_mempool = NULL;
+-- 
+2.39.5
+
 
 
 
