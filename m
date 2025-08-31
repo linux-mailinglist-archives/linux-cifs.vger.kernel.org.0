@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6119-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6110-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66ACBB3D311
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E329B3D307
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 091123BDE12
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:37:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1BBC189974C
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF08A267729;
-	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64262638BC;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYsmgHwx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BSIGQFQX"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61F226738B;
-	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F226262FCD;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643797; cv=none; b=XI2sGWDvwsdrH0vR1z9hwDJHyxHrzRi5JF8PnevGQ7n01Z7bkKPTy2Zpt1FGYwwbhnZ+IvG4ZAUNmqyqehl16rJ6mKD2dmpOsD3ZJbn9vQxOmnaD/aSCrD3mOhyKNjlBqowRq26kcP2CRWrBiBPLtyh86U2roBxOTUoFIw6/70s=
+	t=1756643796; cv=none; b=W92tnl61HYKwJWTNsuhagToBc4aXkv7Yc+eNaZEpQWGgW+CaBNbJwv4EPzThTokygmEKhJYWxh0o/6nPDbAUTh5eSA0kgIX5ZXKsuddi4IpERojIDAOVixMY5iM+yNTyZD9V5Q+XFRPsNFB4lmnTRvCyTgW/zcO0ZrVR7RHXwb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643797; c=relaxed/simple;
-	bh=BXUcj05D0nzaBygjxeeEalRlR274ycVXMEtvJz86+vc=;
+	s=arc-20240116; t=1756643796; c=relaxed/simple;
+	bh=TnPcF/6qorEoK+kPpWDJGGJ4T8oJ3meDyJpxJleBazA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FGShzMQk6bNaTHU9IHNiItIHRr+FjYrWI8UEv7Sq+LRWYG71BWKWudSHpIktqQa6DMeKMJgWBycM+4cVDzDIf7E/OLjWpQByWzll3kd+LqMcQt6cqQQxwIBWO+wDByuSMRoMrdhk4cA9/aG/s1ROzwkj5bDKDzeelEb/fsvRWCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYsmgHwx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CF9C4CEFB;
-	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
+	 MIME-Version:Content-Type; b=b7Qlq/N0FeYS08BjYL74K3cOs1aN2EuXzfiKZey6UMldv386MtE/sh+fch/2czlqxuxIU/2mUaO7gz9vzFUrCl3OiyIHoEFcjfi59Bca145Hy/pIHPcbW6bds2JzUQxPm/mV8gTptEJMHfAbodtjQqn5jXKbiaxERPGZn26FZTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BSIGQFQX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F72C4CEF5;
+	Sun, 31 Aug 2025 12:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643797;
-	bh=BXUcj05D0nzaBygjxeeEalRlR274ycVXMEtvJz86+vc=;
+	s=k20201202; t=1756643796;
+	bh=TnPcF/6qorEoK+kPpWDJGGJ4T8oJ3meDyJpxJleBazA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UYsmgHwxRnzDZXYkUeNdrxqbkbWhEHx1l+62UWnV44irYXz970jrYPCFjF48Veynz
-	 HY8FMM9LQfurcI4zGnP7xiVoCGi2pNhhW/i4f0C5O7RorFr84JGl7JLXTYVQomFawL
-	 lLpQ9MmV2UMKCzVs9L2uxWRabWoLOfGrxCzTWaCF+5Ouwmxq78JqmDotwP3F4qyMyF
-	 V6Jk/kRKYp1CM8Kp599sRgT5VT9ad0v1ef9EDrScHWEtOQ5DCECLNpcgUvt4OlzQBv
-	 UJJkflc8chXFZmJMvOAHKkEFE2eY2zhoZ6HL1iUGzST/Axri+d6ITcM/EYSN9uKEpU
-	 iG+wFH2GRoYKA==
+	b=BSIGQFQXTmIbJGwFAu2Q0/ZROKk5VUz8SK21TD90twLwTURjNPTtW/20V6JhGp/ke
+	 wKiGx2lpdFyDyeuX1ga+m/Ercee6OHmCy3eIcNxO96RBZ2ktU8r+UwKCmElr4fGZBd
+	 pT19AsXObJTqOJs1RcAd3GQdotBesz8gAiSFITfejTCay4pFSKwAYo8dt96g8qtqkt
+	 MZBvrzGs5ZwdX1PFu/BuBFZsjfYfxggPMVhAnRwWm8X3rjaATCAMDnW4GlGZMEKZG5
+	 1+1RzFnaOFCHa3LBIBOE6yPw5bo+Htz/OKd1I133j9ENbYFqjQcW/k9uDDykBTEssc
+	 D9uUh+pP3lcLw==
 Received: by pali.im (Postfix)
-	id 629CE12A7; Sun, 31 Aug 2025 14:36:32 +0200 (CEST)
+	id 9D92812DE; Sun, 31 Aug 2025 14:36:32 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 09/35] cifs: Improve SMB1 stat() to work also for paths in DELETE_PENDING state
-Date: Sun, 31 Aug 2025 14:35:36 +0200
-Message-Id: <20250831123602.14037-10-pali@kernel.org>
+Subject: [PATCH 10/35] cifs: Improve detect_directory_symlink_target() function
+Date: Sun, 31 Aug 2025 14:35:37 +0200
+Message-Id: <20250831123602.14037-11-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,39 +64,137 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Windows NT SMB server may return -EBUSY (STATUS_DELETE_PENDING) from
-CIFSSMBQPathInfo() function for files which are in DELETE_PENDING state.
-When this happens, it is still possible to use CIFSFindFirst() fallback.
-So allow to use CIFSFindFirst() fallback also for -EBUSY error.
+Function detect_directory_symlink_target() is not currently able to detect
+if the target path is directory in case the path is in the DELETE_PENDING
+state or the user has not granted FILE_READ_ATTRIBUTES permission on the
+path. This limitation is written in TODO comment.
 
-This change fixes stat() to work also against Windows Server 2022 for files
-in DELETE_PENDING state.
+Resolve this problem by replacing code which determinate path type by the
+query_path_info() callback, which now is able to handle all these cases.
 
-Depends on "cifs: Change translation of STATUS_DELETE_PENDING to -EBUSY".
+Depends on "cifs: Improve SMB2+ stat() to work also for paths in
+DELETE_PENDING state".
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb1ops.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/smb/client/reparse.c | 75 ++++++++++++++---------------------------
+ 1 file changed, 25 insertions(+), 50 deletions(-)
 
-diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
-index 55ab8a5b150c..176bc2a211bf 100644
---- a/fs/smb/client/smb1ops.c
-+++ b/fs/smb/client/smb1ops.c
-@@ -583,10 +583,11 @@ static int cifs_query_path_info(const unsigned int xid,
+diff --git a/fs/smb/client/reparse.c b/fs/smb/client/reparse.c
+index 7869cec58f52..236629778e1c 100644
+--- a/fs/smb/client/reparse.c
++++ b/fs/smb/client/reparse.c
+@@ -250,18 +250,16 @@ static int detect_directory_symlink_target(struct cifs_sb_info *cifs_sb,
+ 					   bool *directory)
+ {
+ 	char sep = CIFS_DIR_SEP(cifs_sb);
+-	struct cifs_open_parms oparms;
++	struct cifs_open_info_data query_info;
+ 	struct tcon_link *tlink;
+ 	struct cifs_tcon *tcon;
+ 	const char *basename;
+-	struct cifs_fid fid;
+ 	char *resolved_path;
+ 	int full_path_len;
+ 	int basename_len;
+ 	int symname_len;
+ 	char *path_sep;
+-	__u32 oplock;
+-	int open_rc;
++	int query_rc;
  
  	/*
- 	 * Then fallback to CIFSFindFirst() which works also with non-NT servers
--	 * but does not does not provide NumberOfLinks.
-+	 * but does not does not provide NumberOfLinks. Also it works for files
-+	 * in DELETE_PENDING state (CIFSSMBQPathInfo() returns -EBUSY for them).
- 	 * Can be used with backup intent flag to overcome -EACCES error.
- 	 */
--	if ((rc == -EOPNOTSUPP || rc == -EINVAL ||
-+	if ((rc == -EOPNOTSUPP || rc == -EINVAL || rc == -EBUSY ||
- 	     (backup_cred(cifs_sb) && rc == -EACCES)) &&
- 	    !non_unicode_wildcard) {
- 		if (!(tcon->ses->capabilities & tcon->ses->server->vals->cap_nt_find))
+ 	 * First do some simple check. If the original Linux symlink target ends
+@@ -284,7 +282,8 @@ static int detect_directory_symlink_target(struct cifs_sb_info *cifs_sb,
+ 	if (symname[0] == '/') {
+ 		cifs_dbg(FYI,
+ 			 "%s: cannot determinate if the symlink target path '%s' "
+-			 "is directory or not, creating '%s' as file symlink\n",
++			 "is directory or not because path is absolute, "
++			 "creating '%s' as file symlink\n",
+ 			 __func__, symname, full_path);
+ 		return 0;
+ 	}
+@@ -322,58 +321,34 @@ static int detect_directory_symlink_target(struct cifs_sb_info *cifs_sb,
+ 	if (sep == '\\')
+ 		convert_delimiter(path_sep, sep);
+ 
++	/*
++	 * Query resolved SMB symlink path and check if it is a directory or not.
++	 * Callback query_path_info() already handles cases when the server does
++	 * not grant FILE_READ_ATTRIBUTES permission for object, or when server
++	 * denies opening the object (e.g. because of DELETE_PENDING state).
++	 */
+ 	tcon = tlink_tcon(tlink);
+-	oparms = CIFS_OPARMS(cifs_sb, tcon, resolved_path,
+-			     FILE_READ_ATTRIBUTES, FILE_OPEN, 0, ACL_NO_MODE);
+-	oparms.fid = &fid;
+-
+-	/* Try to open as a directory (NOT_FILE) */
+-	oplock = 0;
+-	oparms.create_options = cifs_create_options(cifs_sb,
+-						    CREATE_NOT_FILE | OPEN_REPARSE_POINT);
+-	open_rc = tcon->ses->server->ops->open(xid, &oparms, &oplock, NULL);
+-	if (open_rc == 0) {
+-		/* Successful open means that the target path is definitely a directory. */
+-		*directory = true;
+-		tcon->ses->server->ops->close(xid, tcon, &fid);
+-	} else if (open_rc == -ENOTDIR) {
+-		/* -ENOTDIR means that the target path is definitely a file. */
+-		*directory = false;
+-	} else if (open_rc == -ENOENT) {
++	query_rc = tcon->ses->server->ops->query_path_info(xid, tcon, cifs_sb,
++							   resolved_path, &query_info);
++	if (query_rc == 0) {
++		/* Query on path was successful, so just check for directory attr. */
++		*directory = le32_to_cpu(query_info.fi.Attributes) & ATTR_DIRECTORY;
++	} else if (query_rc == -ENOENT) {
+ 		/* -ENOENT means that the target path does not exist. */
+ 		cifs_dbg(FYI,
+ 			 "%s: symlink target path '%s' does not exist, "
+ 			 "creating '%s' as file symlink\n",
+ 			 __func__, symname, full_path);
+ 	} else {
+-		/* Try to open as a file (NOT_DIR) */
+-		oplock = 0;
+-		oparms.create_options = cifs_create_options(cifs_sb,
+-							    CREATE_NOT_DIR | OPEN_REPARSE_POINT);
+-		open_rc = tcon->ses->server->ops->open(xid, &oparms, &oplock, NULL);
+-		if (open_rc == 0) {
+-			/* Successful open means that the target path is definitely a file. */
+-			*directory = false;
+-			tcon->ses->server->ops->close(xid, tcon, &fid);
+-		} else if (open_rc == -EISDIR) {
+-			/* -EISDIR means that the target path is definitely a directory. */
+-			*directory = true;
+-		} else {
+-			/*
+-			 * This code branch is called when we do not have a permission to
+-			 * open the resolved_path or some other client/process denied
+-			 * opening the resolved_path.
+-			 *
+-			 * TODO: Try to use ops->query_dir_first on the parent directory
+-			 * of resolved_path, search for basename of resolved_path and
+-			 * check if the ATTR_DIRECTORY is set in fi.Attributes. In some
+-			 * case this could work also when opening of the path is denied.
+-			 */
+-			cifs_dbg(FYI,
+-				 "%s: cannot determinate if the symlink target path '%s' "
+-				 "is directory or not, creating '%s' as file symlink\n",
+-				 __func__, symname, full_path);
+-		}
++		/*
++		 * This code branch is called when we do not have a permission to
++		 * query the resolved_path or some other error occurred during query.
++		 */
++		cifs_dbg(FYI,
++			 "%s: cannot determinate if the symlink target path '%s' "
++			 "is directory or not because query path failed (%d), "
++			 "creating '%s' as file symlink\n",
++			 __func__, symname, query_rc, full_path);
+ 	}
+ 
+ 	kfree(resolved_path);
 -- 
 2.20.1
 
