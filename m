@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6127-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6134-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1E22B3D31B
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74874B3D32C
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C76C17D0E1
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:37:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4621517D60C
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A99426B0AE;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CBAE26F45A;
+	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtcIanKN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xst19Egx"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B22926A0C6;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769FF26F2A6;
+	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643798; cv=none; b=oGzrqqDX3eY1lcinddvHL5imGIY9BhUQajfbWnQxO53URBQByPR5RDkxbCVGAQA56ef3geCnQrhbHgZoNQP03iCeZL+3eG7Dbrzhz/Fi2WRY3HidLtyVVbipfZCVECnGtT+mAhRuELjebq4bfmrhxQ/g5wXLRJ1u9wBFYna4dPw=
+	t=1756643800; cv=none; b=A1mvEqWthVLIkPPd/JGyDIKRO4a86bl/wD0cl8KehCjXTrvgR4a4FIvgY+Qy8rgyC+q9fMVa14PaW0TywU3nDmi6SHOyYDKgDmH52CSZEPv/USnJt0U8A2DFXRJhyDECxAfbJA3YjUPDy7JueFdDBRmJa+IglRMu+mScguca8VA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643798; c=relaxed/simple;
-	bh=L+Fz/PQmKe5w+IjKQjmONfWxzNRhm8SNMsCPELs3dkU=;
+	s=arc-20240116; t=1756643800; c=relaxed/simple;
+	bh=uA/HDvBMaiWbGDSPGBQm5JB6alpNsa8hljEovxFjYFE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nnZ2xTv4zXEwxm+F6ET+wOGhKqT43RIBnI+IdvZxgN6ejFCFDNByzlkKe1qG39RGn2y3kd5BJXYzVUI8YjO49Qc7fuUeMKngytuMM4uM0YMFzJmhGVQlOy9JFnsDHTMK0wUxuWzDpyQMD4Gt96vZ7wOaq8T9KPP2LYjJjHMIy94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtcIanKN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D795C4CEFA;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=RzXUgDG5QyyZ7S8t8e2dUTSHIianLGHgR/2sNgXgSszbhYygv0aPw/VVmNk+9TDJAlpdF5+KsDsU/ctJevTWILrdh5P1vyNpa7CTxfEfFZxBPUzFCM8k9+J7N8d2diYEP+ZbcrtpITwrhUyOpIp3S/y2MZSlTXHNz3BJk0XRnhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xst19Egx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB061C4CEF5;
+	Sun, 31 Aug 2025 12:36:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643798;
-	bh=L+Fz/PQmKe5w+IjKQjmONfWxzNRhm8SNMsCPELs3dkU=;
+	s=k20201202; t=1756643800;
+	bh=uA/HDvBMaiWbGDSPGBQm5JB6alpNsa8hljEovxFjYFE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MtcIanKNV2Tkhpo2R9yNTlXb90wPMtXajJjYFUG74uhB+I6k/sr0tFKfU+CTSlUkK
-	 p2iHq5jw39GqUpKUoNqEtZw78+6RjaA8lujuQk3o5G70Q6IyaNsBHu9w1KiETxhwof
-	 wGyRpQB6HBbwh3Osxa8ckkcuj2VswcK0ZFDTLwvRCgAIToLRXf0Vwkpwf8Ci1fcnIP
-	 flapPzddpa8zm+luNfx/oT8Lnx4/9HObyAcUh7pQjYxwvFfAJwRtfupxmRmj/OIdtm
-	 EyVtkLK4leerpyWqI4jBrb3sWq/JYjl0rpsGfKWHoL0kSUs+M4VAojogwcvdp1rIu+
-	 VxMJO0g3cMjzg==
+	b=Xst19Egx39dh/ALGVIAgUA17QxKkzijLuU4k9BH6KNEi4Rcxe877rwbRpAMUDdo+M
+	 R4w+fStIarbJTYA81TYOGDmWFxk2ObZPhZ08PmppgJJBKdpnxlO1nKy2/P/2YiYTJi
+	 JlGiOvSaEXeAiTrnZscCK/e9yDCqfIU/8D9aC8POZ8HraAbwPkqS5tDPrbaCJbdKd+
+	 6e09IyrszbFGD/EEyYK+Q58Jel5kfMXTWnTjxEB6SWmlVRjUfZlhr6uvYtxVKzCnK3
+	 6nMhUFoS4nCjpoUC5w3o6tXs6dWyxpEs9qUKrDWjlUlp/6lZ+8drYiOA0praCSLh1q
+	 DOIIAk8MuYBWw==
 Received: by pali.im (Postfix)
-	id E8A3112DE; Sun, 31 Aug 2025 14:36:36 +0200 (CEST)
+	id 217B912ED; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 30/35] cifs: Simplify SMB2_OP_DELETE API usage
-Date: Sun, 31 Aug 2025 14:35:57 +0200
-Message-Id: <20250831123602.14037-31-pali@kernel.org>
+Subject: [PATCH 31/35] cifs: Deduplicate smb2_unlink() and smb2_rmdir() into one common function
+Date: Sun, 31 Aug 2025 14:35:58 +0200
+Message-Id: <20250831123602.14037-32-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,45 +64,98 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Currently the caller of SMB2_OP_DELETE operation has to specify also the
-CREATE_DELETE_ON_CLOSE flag. Simplify API usage and let the callee
-smb2_compound_op() to automatically set this flag when issuing the
-SMB2_OP_DELETE operation.
+These two functions smb2_unlink() and smb2_rmdir() share lot of common
+logic. Deduplicate them into one common static function smb2_remove().
 
-No functional change.
+No functional change. All logic and handling stay same.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb2inode.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/smb/client/smb2inode.c | 57 +++++++++++++++++++++++----------------
+ 1 file changed, 34 insertions(+), 23 deletions(-)
 
 diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
-index 59d73e01ccd2..a3b1ed53a860 100644
+index a3b1ed53a860..0dd4a77dfb64 100644
 --- a/fs/smb/client/smb2inode.c
 +++ b/fs/smb/client/smb2inode.c
-@@ -255,6 +255,13 @@ static int smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
- 	vars->oparms = *oparms;
- 	vars->oparms.fid = &fid;
+@@ -1332,43 +1332,54 @@ smb2_mkdir_setinfo(struct inode *inode, const char *name,
+ 		cifs_i->cifsAttrs = dosattrs;
+ }
  
-+	for (i = 0; i < num_cmds; i++) {
-+		if (cmds[i] == SMB2_OP_DELETE) {
-+			vars->oparms.create_options |= CREATE_DELETE_ON_CLOSE;
-+			break;
-+		}
+-int
+-smb2_rmdir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+-	   struct cifs_sb_info *cifs_sb)
++static int
++smb2_remove(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
++	    struct cifs_sb_info *cifs_sb, struct dentry *dentry, bool is_dir)
+ {
+ 	struct cifs_open_parms oparms;
++	int op_flags;
++	int op;
++	int rc;
+ 
+-	drop_cached_dir_by_name(xid, tcon, name, cifs_sb);
+-	oparms = CIFS_OPARMS(cifs_sb, tcon, name, DELETE,
+-			     FILE_OPEN, CREATE_NOT_FILE | OPEN_REPARSE_POINT, ACL_NO_MODE);
+-	return smb2_compound_op(xid, tcon, cifs_sb,
+-				name, &oparms, NULL,
+-				&(int){SMB2_OP_RMDIR}, 1,
+-				NULL, NULL, NULL, NULL);
+-}
+-
+-int
+-smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+-	    struct cifs_sb_info *cifs_sb, struct dentry *dentry)
+-{
+-	struct cifs_open_parms oparms;
++	if (is_dir)
++		drop_cached_dir_by_name(xid, tcon, name, cifs_sb);
+ 
++	if (is_dir) {
++		op = SMB2_OP_RMDIR;
++		op_flags = CREATE_NOT_FILE;
++	} else {
++		op = SMB2_OP_DELETE;
++		op_flags = CREATE_NOT_DIR;
 +	}
-+
- 	rqst[num_rqst].rq_iov = &vars->open_iov[0];
- 	rqst[num_rqst].rq_nvec = SMB2_CREATE_IOV_SIZE;
- 	rc = SMB2_open_init(tcon, server,
-@@ -1348,7 +1355,7 @@ smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
- 
  	oparms = CIFS_OPARMS(cifs_sb, tcon, name,
  			     DELETE, FILE_OPEN,
--			     CREATE_DELETE_ON_CLOSE | CREATE_NOT_DIR | OPEN_REPARSE_POINT,
-+			     CREATE_NOT_DIR | OPEN_REPARSE_POINT,
+-			     CREATE_NOT_DIR | OPEN_REPARSE_POINT,
++			     OPEN_REPARSE_POINT | op_flags,
  			     ACL_NO_MODE);
- 	int rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
- 				  NULL, &(int){SMB2_OP_DELETE}, 1,
+-	int rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
+-				  NULL, &(int){SMB2_OP_DELETE}, 1,
+-				  NULL, NULL, NULL, dentry);
+-	if (rc == -EINVAL) {
++	rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
++			      NULL, &op, 1, NULL, NULL, NULL, dentry);
++	if (rc == -EINVAL && dentry) {
+ 		cifs_dbg(FYI, "invalid lease key, resending request without lease");
+ 		rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
+-				      NULL, &(int){SMB2_OP_DELETE}, 1,
++				      NULL, &op, 1,
+ 				      NULL, NULL, NULL, NULL);
+ 	}
+ 	return rc;
+ }
+ 
++int
++smb2_rmdir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
++	   struct cifs_sb_info *cifs_sb)
++{
++	return smb2_remove(xid, tcon, name, cifs_sb, NULL, true /* is_dir */);
++}
++
++int
++smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
++	    struct cifs_sb_info *cifs_sb, struct dentry *dentry)
++{
++	return smb2_remove(xid, tcon, name, cifs_sb, dentry, false /* is_dir */);
++}
++
+ static int smb2_set_path_attr(const unsigned int xid, struct cifs_tcon *tcon,
+ 			      const char *from_name, const char *to_name,
+ 			      struct cifs_sb_info *cifs_sb,
 -- 
 2.20.1
 
