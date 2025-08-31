@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6134-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6130-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74874B3D32C
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBDEEB3D31F
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4621517D60C
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 599064416F2
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CBAE26F45A;
-	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9AAF26C393;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xst19Egx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYb5lgmR"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769FF26F2A6;
-	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB19C26B771;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643800; cv=none; b=A1mvEqWthVLIkPPd/JGyDIKRO4a86bl/wD0cl8KehCjXTrvgR4a4FIvgY+Qy8rgyC+q9fMVa14PaW0TywU3nDmi6SHOyYDKgDmH52CSZEPv/USnJt0U8A2DFXRJhyDECxAfbJA3YjUPDy7JueFdDBRmJa+IglRMu+mScguca8VA=
+	t=1756643798; cv=none; b=W/WBxiM+MUNn5fC0m+KnSj5ivjn5VRwLoU8dqqe9TDkeiyUtfh41s4uDx2Nv6lgaZetznqKlujYHMfpk+3rJilZ8869SZ3A0RdOb7ebM1VG+zTmLTDfyCVmadKOjDwTOuPqCBYplN9dL+9GJV1R5ErP6NzaK4v2qGGD7v1gP9Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643800; c=relaxed/simple;
-	bh=uA/HDvBMaiWbGDSPGBQm5JB6alpNsa8hljEovxFjYFE=;
+	s=arc-20240116; t=1756643798; c=relaxed/simple;
+	bh=Evg3ZKUpfOo+CCek78zw3g7JYbEmPfCRAo9GGRXMLTw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RzXUgDG5QyyZ7S8t8e2dUTSHIianLGHgR/2sNgXgSszbhYygv0aPw/VVmNk+9TDJAlpdF5+KsDsU/ctJevTWILrdh5P1vyNpa7CTxfEfFZxBPUzFCM8k9+J7N8d2diYEP+ZbcrtpITwrhUyOpIp3S/y2MZSlTXHNz3BJk0XRnhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xst19Egx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB061C4CEF5;
-	Sun, 31 Aug 2025 12:36:39 +0000 (UTC)
+	 MIME-Version:Content-Type; b=nx1JOYhXWfmUHv7heziQx9I+LLUjuVkBoprnU7u4gNHLRt+t1aLvuOMyWSbaMD4Zxv0oHYpPLkk/sOuEx+PveUOdcAKCbK/0tiHg0k33/GTLkBKFfyTB393HsDpJP8/oEA0mFc/bRAJP6l3jII2scePSi3SpEo+05beE9ALVoTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYb5lgmR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0D2C4CEF9;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643800;
-	bh=uA/HDvBMaiWbGDSPGBQm5JB6alpNsa8hljEovxFjYFE=;
+	s=k20201202; t=1756643798;
+	bh=Evg3ZKUpfOo+CCek78zw3g7JYbEmPfCRAo9GGRXMLTw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xst19Egx39dh/ALGVIAgUA17QxKkzijLuU4k9BH6KNEi4Rcxe877rwbRpAMUDdo+M
-	 R4w+fStIarbJTYA81TYOGDmWFxk2ObZPhZ08PmppgJJBKdpnxlO1nKy2/P/2YiYTJi
-	 JlGiOvSaEXeAiTrnZscCK/e9yDCqfIU/8D9aC8POZ8HraAbwPkqS5tDPrbaCJbdKd+
-	 6e09IyrszbFGD/EEyYK+Q58Jel5kfMXTWnTjxEB6SWmlVRjUfZlhr6uvYtxVKzCnK3
-	 6nMhUFoS4nCjpoUC5w3o6tXs6dWyxpEs9qUKrDWjlUlp/6lZ+8drYiOA0praCSLh1q
-	 DOIIAk8MuYBWw==
+	b=MYb5lgmRvtWY30A8xQ33KjLRglLvOpPYDMTaw3jUz1gUtjDqbgHsNYyuO4PmoqMTp
+	 f8v4agv2MOU4cBodeybsBF7oHJE0Zt06P9cagsNA58dAxBoO+xS3WacTbvUpjaSQxH
+	 5uiL4NYTNJX/ZjEQ7juPAt+lNLozEfmtunWTtjwuiS/Hm1kWScpTxHhnl2IDBgZkxW
+	 w1zFHsOD2YTAJyXohsmfMfofVXBXZjrJ/xrCwaDlBUcbfzArynKvMFRoZXJnIOlbVR
+	 RUVPq9iq10NOVoM8a7DiySuLdc47SQM+qkYYaVk+zkRdV8lW1x/XgjJNthqt3sIsgD
+	 DrtZDaXigdC2Q==
 Received: by pali.im (Postfix)
-	id 217B912ED; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
+	id 51A591308; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 31/35] cifs: Deduplicate smb2_unlink() and smb2_rmdir() into one common function
-Date: Sun, 31 Aug 2025 14:35:58 +0200
-Message-Id: <20250831123602.14037-32-pali@kernel.org>
+Subject: [PATCH 32/35] cifs: Use cifs_rename_pending_delete() fallback also for rmdir()
+Date: Sun, 31 Aug 2025 14:35:59 +0200
+Message-Id: <20250831123602.14037-33-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,98 +64,63 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-These two functions smb2_unlink() and smb2_rmdir() share lot of common
-logic. Deduplicate them into one common static function smb2_remove().
+When ->rmdir() callback fails on the -EBUSY error then use the silly rename
+functionality fallback. Removing of directories has exactly same problem
+with DELETE_PENDING state as removal of the files.
 
-No functional change. All logic and handling stay same.
+Empty directory which is opened on Windows server will stay in
+DELETE_PENDING state until the last user on server does not close it.
+Directory itself is not immediately unlinked at remove call, like file.
+
+Note that currently the ->rmdir() callbacks do not return -EBUSY error.
+This will be implemented in follow up changes.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb2inode.c | 57 +++++++++++++++++++++++----------------
- 1 file changed, 34 insertions(+), 23 deletions(-)
+ fs/smb/client/inode.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
-index a3b1ed53a860..0dd4a77dfb64 100644
---- a/fs/smb/client/smb2inode.c
-+++ b/fs/smb/client/smb2inode.c
-@@ -1332,43 +1332,54 @@ smb2_mkdir_setinfo(struct inode *inode, const char *name,
- 		cifs_i->cifsAttrs = dosattrs;
- }
- 
--int
--smb2_rmdir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
--	   struct cifs_sb_info *cifs_sb)
-+static int
-+smb2_remove(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
-+	    struct cifs_sb_info *cifs_sb, struct dentry *dentry, bool is_dir)
+diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
+index 545964cac9cd..abe3108e4963 100644
+--- a/fs/smb/client/inode.c
++++ b/fs/smb/client/inode.c
+@@ -1700,6 +1700,7 @@ static int
+ cifs_rename_pending_delete(const unsigned int xid,
+ 			   struct cifs_tcon *tcon,
+ 			   const char *full_path,
++			   bool is_dir,
+ 			   struct dentry *dentry)
  {
- 	struct cifs_open_parms oparms;
-+	int op_flags;
-+	int op;
-+	int rc;
- 
--	drop_cached_dir_by_name(xid, tcon, name, cifs_sb);
--	oparms = CIFS_OPARMS(cifs_sb, tcon, name, DELETE,
--			     FILE_OPEN, CREATE_NOT_FILE | OPEN_REPARSE_POINT, ACL_NO_MODE);
--	return smb2_compound_op(xid, tcon, cifs_sb,
--				name, &oparms, NULL,
--				&(int){SMB2_OP_RMDIR}, 1,
--				NULL, NULL, NULL, NULL);
--}
--
--int
--smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
--	    struct cifs_sb_info *cifs_sb, struct dentry *dentry)
--{
--	struct cifs_open_parms oparms;
-+	if (is_dir)
-+		drop_cached_dir_by_name(xid, tcon, name, cifs_sb);
- 
-+	if (is_dir) {
-+		op = SMB2_OP_RMDIR;
-+		op_flags = CREATE_NOT_FILE;
-+	} else {
-+		op = SMB2_OP_DELETE;
-+		op_flags = CREATE_NOT_DIR;
-+	}
- 	oparms = CIFS_OPARMS(cifs_sb, tcon, name,
- 			     DELETE, FILE_OPEN,
--			     CREATE_NOT_DIR | OPEN_REPARSE_POINT,
-+			     OPEN_REPARSE_POINT | op_flags,
- 			     ACL_NO_MODE);
--	int rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
--				  NULL, &(int){SMB2_OP_DELETE}, 1,
--				  NULL, NULL, NULL, dentry);
--	if (rc == -EINVAL) {
-+	rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
-+			      NULL, &op, 1, NULL, NULL, NULL, dentry);
-+	if (rc == -EINVAL && dentry) {
- 		cifs_dbg(FYI, "invalid lease key, resending request without lease");
- 		rc = smb2_compound_op(xid, tcon, cifs_sb, name, &oparms,
--				      NULL, &(int){SMB2_OP_DELETE}, 1,
-+				      NULL, &op, 1,
- 				      NULL, NULL, NULL, NULL);
+ 	int oplock = 0;
+@@ -1811,7 +1812,8 @@ cifs_rename_pending_delete(const unsigned int xid,
+ 		.tcon = tcon,
+ 		.cifs_sb = cifs_sb,
+ 		.desired_access = DELETE,
+-		.create_options = cifs_create_options(cifs_sb, CREATE_NOT_DIR),
++		.create_options = cifs_create_options(cifs_sb,
++					is_dir ? CREATE_NOT_FILE : CREATE_NOT_DIR),
+ 		.disposition = FILE_OPEN,
+ 		.path = full_path,
+ 		.fid = &fid,
+@@ -1962,7 +1964,7 @@ int cifs_unlink(struct inode *dir, struct dentry *dentry)
+ 	} else if (rc == -ENOENT) {
+ 		d_drop(dentry);
+ 	} else if (rc == -EBUSY) {
+-		rc = cifs_rename_pending_delete(xid, tcon, full_path, dentry);
++		rc = cifs_rename_pending_delete(xid, tcon, full_path, false /* is_dir */, dentry);
+ 		if (rc == 0) {
+ 			cifs_mark_open_handles_for_deleted_file(inode, full_path);
+ 			cifs_drop_nlink(inode);
+@@ -2298,6 +2300,9 @@ int cifs_rmdir(struct inode *inode, struct dentry *direntry)
  	}
- 	return rc;
- }
  
-+int
-+smb2_rmdir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
-+	   struct cifs_sb_info *cifs_sb)
-+{
-+	return smb2_remove(xid, tcon, name, cifs_sb, NULL, true /* is_dir */);
-+}
+ 	rc = server->ops->rmdir(xid, tcon, full_path, cifs_sb);
++	if (rc == -EBUSY)
++		rc = cifs_rename_pending_delete(xid, tcon, full_path, true /* is_dir */, direntry);
 +
-+int
-+smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
-+	    struct cifs_sb_info *cifs_sb, struct dentry *dentry)
-+{
-+	return smb2_remove(xid, tcon, name, cifs_sb, dentry, false /* is_dir */);
-+}
-+
- static int smb2_set_path_attr(const unsigned int xid, struct cifs_tcon *tcon,
- 			      const char *from_name, const char *to_name,
- 			      struct cifs_sb_info *cifs_sb,
+ 	cifs_put_tlink(tlink);
+ 
+ 	if (!rc) {
 -- 
 2.20.1
 
