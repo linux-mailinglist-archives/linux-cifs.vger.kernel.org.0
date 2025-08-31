@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6128-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6113-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B57B3D31C
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B44FB3D30B
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F155E189B751
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA3943A6CDA
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999D926B74D;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F2E26463A;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6w09TsT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LxD166UV"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7113326A1B5;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE876263F54;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643798; cv=none; b=gYSX9wB9DSz2PIGwWFPb4Psk6ivtN9F50pgTJdvKggbhc5ewClH/Pa/jPSZye2JtPsz6eVOUU3OjfVFzlAEN6HsGZIdGvSsXrFKKITHV+UmTbjT05tArOotB752i6P+kuKO2nVAyzaRzGVP2SUbc6TCCDfblWWKZLdmloQ1IBts=
+	t=1756643796; cv=none; b=KrKx4Hbcr/bHmR6h5YIF501xIpZo03f1zH0T4inw07gPDEwQZpK7jFmkEJS+lkf+L0N78nRmCg0eMWzDRJNcolW32JPx9xPK3y+mxhRwuUVEtbCuPu1D+Tu7fWBPSBVAslILX9S+YUm3/8n2zoLtbTAeccLPxKBqrc2+FHCl6SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643798; c=relaxed/simple;
-	bh=bf7MNX1yDmW4c/5HyYGIxpycUcryAysX16+cXoiPGH8=;
+	s=arc-20240116; t=1756643796; c=relaxed/simple;
+	bh=RS6jv98pnSxASt8tSXB8W9+iiLL49EZrErEKsIhDzvI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hlnHeg7wCEY5isom6BXdzuVcYq64nT0taBRW5uYo03oJw+n1OsC6ifRM/5yUNMbjYYMu5L+3UOp0odlrTBH7ljSR+a+g1+aiOLuPiSqdz2hql2eCljKxGvHzK5WgsBnw77Gf+LFQRKWw7frthQQ4xByj0Tp7X4E8BHdelaPC1yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6w09TsT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D96C4CEF5;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=hM0gt9IZYy0bsDwlwB/y/FcHrldulBlfsOC3+QrP9byGhu3L55ja+c3LnCFKbNjVxE5qWe3H6CRkOVL1NRvA+yqK70KBKyqdhOMkQ2Mmo5i2T6leh8ooyxg4XjisYWfcjOcTR7i98tV12m5e36S6nWpA9lK7Bqmk2Tl+wRvfbIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LxD166UV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92775C4CEED;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643798;
-	bh=bf7MNX1yDmW4c/5HyYGIxpycUcryAysX16+cXoiPGH8=;
+	s=k20201202; t=1756643796;
+	bh=RS6jv98pnSxASt8tSXB8W9+iiLL49EZrErEKsIhDzvI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D6w09TsT9Rg/oxH9nY68HHBbgba+ITmO33hXijm8x/fBWXbFuJzA3rfnmqHPAXqDg
-	 QUbhXdLewhTCgC/ndzBCId4sZKp3e1XArHkl2IX4JHvTdguC2K8AI51DYTdKGK0+8Z
-	 8WE+FQpygMIkVlJIgjdtUTISPbetzpQ/IMwmi0ZFqeYCjamN8RZmo/GFfTJmgiXuzc
-	 rUMh4VQfx38KpcCnzk6uoXa8ZR/B94J3OrbTRmOfJuEumkPsFLiHnurFr9qcf4IubU
-	 kzwlxv/DsyqQE21cahQ6D3Zn/n7R7GSJx5z8vDkWr1dj733uH3nmrUsUpDSUDOnq2R
-	 e9CSuRfDeVSsg==
+	b=LxD166UVZNwifmFSwn5mOgLaEozK1LEW8jt+FwkTEQ5w2gSub7gOw04WXxLRcx0Ul
+	 6Xn3EZkOhRk7ef1U6Glepc05Pdpqwm84TUz9hMLMdIF5q1HiBOn3f7wcbCpP74F5AV
+	 hgSnyJN7tnQYmBGb7Eyg69EBF2BoJyk51JaNOjkg1ZT1gNLxC/Ijn8+/u/yT/ch0Xn
+	 L2w27I48TlpPKz+yS8TM/NKs21mrrYeFyxW53quLsZGwqy7Yh9Z5SOipPDY1Smokrg
+	 JNBpTou7VW68EB+5LqIWzA5Uy1mir0BWtAaGb3qVU0JuMXlt1klCtylzOeYq0DloL2
+	 F/wzC2KpZBy0g==
 Received: by pali.im (Postfix)
-	id 7E3691407; Sun, 31 Aug 2025 14:36:33 +0200 (CEST)
+	id AB4CF14A3; Sun, 31 Aug 2025 14:36:33 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 14/35] cifs: Extend CIFSSMBRenameOpenFile() function for overwrite parameter
-Date: Sun, 31 Aug 2025 14:35:41 +0200
-Message-Id: <20250831123602.14037-15-pali@kernel.org>
+Subject: [PATCH 15/35] cifs: Do not try to overwrite existing sillyname in cifs_rename_pending_delete()
+Date: Sun, 31 Aug 2025 14:35:42 +0200
+Message-Id: <20250831123602.14037-16-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,83 +64,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Currently CIFSSMBRenameOpenFile() function always overwrite the target
-location. This new overwrite parameter allows to specify if the rename
-should fail when the target location exists. This new parameter would be
-used in follow up changes.
-
-No functional change.
+If the target location for newly generated sillyname file already exists
+then do not try to rename file to that new target name. It would either
+fail (because file is still in use) or it will unexpectedly remove
+additional file which was not requested.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifsproto.h | 2 +-
- fs/smb/client/cifssmb.c   | 4 ++--
- fs/smb/client/inode.c     | 3 +++
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ fs/smb/client/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/smb/client/cifsproto.h b/fs/smb/client/cifsproto.h
-index f467b24fd984..f248b18f1cf3 100644
---- a/fs/smb/client/cifsproto.h
-+++ b/fs/smb/client/cifsproto.h
-@@ -470,7 +470,7 @@ int CIFSSMBRename(const unsigned int xid, struct cifs_tcon *tcon,
- 		  const char *from_name, const char *to_name,
- 		  struct cifs_sb_info *cifs_sb);
- extern int CIFSSMBRenameOpenFile(const unsigned int xid, struct cifs_tcon *tcon,
--				 int netfid, const char *target_name,
-+				 int netfid, const char *target_name, bool overwrite,
- 				 const struct nls_table *nls_codepage,
- 				 int remap_special_chars);
- int CIFSCreateHardLink(const unsigned int xid,
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 8d9f6f28c17e..f12bc0f4d0c1 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -2313,7 +2313,7 @@ int CIFSSMBRename(const unsigned int xid, struct cifs_tcon *tcon,
- }
- 
- int CIFSSMBRenameOpenFile(const unsigned int xid, struct cifs_tcon *pTcon,
--		int netfid, const char *target_name,
-+		int netfid, const char *target_name, bool overwrite,
- 		const struct nls_table *nls_codepage, int remap)
- {
- 	struct smb_com_transaction2_sfi_req *pSMB  = NULL;
-@@ -2353,7 +2353,7 @@ int CIFSSMBRenameOpenFile(const unsigned int xid, struct cifs_tcon *pTcon,
- 	pSMB->TotalParameterCount = pSMB->ParameterCount;
- 	pSMB->ParameterOffset = cpu_to_le16(param_offset);
- 	pSMB->DataOffset = cpu_to_le16(offset);
--	rename_info->overwrite = cpu_to_le32(1);
-+	rename_info->overwrite = cpu_to_le32(overwrite);
- 	rename_info->root_fid  = 0;
- 	/* unicode only call */
- 	len_of_str = cifsConvertToUTF16((__le16 *)rename_info->target_name,
 diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index 2889fa6625af..be8e5e5ca6cd 100644
+index be8e5e5ca6cd..89d1b82ac55c 100644
 --- a/fs/smb/client/inode.c
 +++ b/fs/smb/client/inode.c
-@@ -1793,6 +1793,7 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
+@@ -1793,7 +1793,7 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
  
  	/* rename the file */
  	rc = CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, sillyname,
-+				   true /* overwrite */,
+-				   true /* overwrite */,
++				   false /* overwrite */,
  				   cifs_sb->local_nls,
  				   cifs_remap(cifs_sb));
  	if (rc != 0) {
-@@ -1834,6 +1835,7 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
- 	 */
- undo_rename:
- 	CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, dentry->d_name.name,
-+				true /* overwrite */,
- 				cifs_sb->local_nls, cifs_remap(cifs_sb));
- undo_setattr:
- 	if (dosattr != origattr) {
-@@ -2374,6 +2376,7 @@ cifs_do_rename(const unsigned int xid, struct dentry *from_dentry,
- 	if (rc == 0) {
- 		rc = CIFSSMBRenameOpenFile(xid, tcon, fid.netfid,
- 				(const char *) to_dentry->d_name.name,
-+				true /* overwrite */,
- 				cifs_sb->local_nls, cifs_remap(cifs_sb));
- 		CIFSSMBClose(xid, tcon, fid.netfid);
- 	}
 -- 
 2.20.1
 
