@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6118-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6123-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90CA6B3D310
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F011BB3D315
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06488189A71B
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:37:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AAD2189ABB4
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D0F2676DE;
-	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3BE269CE5;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WvPEG5sy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmlH9VDO"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C49267386;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F793268690;
 	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643797; cv=none; b=eq0RwkEdAIGHRe2q6+6E7GPhOWzwynWcAdMN8MqcqoThv40P8ProD+ypIy9NTLngOKjvARoWYUcy2UtndKVPlB5oNefBFV5VfHRgaOQMgBMcdsFUUaRnKsoyKlta6GXNQLw/TVEAoZdoWNo+dduT7/XJr000+zLOSZaGLvpG1Vc=
+	t=1756643798; cv=none; b=sNX/6Sn2085SLT5C2/XWtiPbvdxJHb46TI3Bqz3rrUq2UqlAO+sKUgATaJhUHQw83DoOIWYXeK/ib//2vbybcbdHv2K0y4sdIoyhPmETsTilrth2nOPcf/2456SFGZ67rdmcuMO7yAqJWdkw6SIp+miKFuTXoY1CtIGUiE1C6pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643797; c=relaxed/simple;
-	bh=jS3iUQivvb7RhPhXLqpAYxJyCsCjn5OHdf4ysw4mfY4=;
+	s=arc-20240116; t=1756643798; c=relaxed/simple;
+	bh=ZLF42ulSn4oztGUtexC/05mImgiTglF5VFIenWM/R94=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HRJgn7S7niapt9VoEIvfoUiTf+orHZqJAl8uCClzDJnqk6AKG6FOibXPeNlh7jt4p2KWIzlSyy8F6QVV+yVY5wlq8MAsDqSkAZ0uCtmx91KUSDHOrQbuP4zMiEy8Cg7qaX5K3z31UJBAU/yc7Io5D2W4NfHcERGqEwF/a/PEGgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WvPEG5sy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDBAC4CEED;
+	 MIME-Version:Content-Type; b=JZomm0YJaPNeuQ0apHk9+ZEvZ4Ynomq9A8C4Nvk0Dh5vSJCP/HepB1JffeNMUTE5L5lQ2cSvjWeHzMrDEuy39BOaTWQYCJwNB3ugrqRbeamMWVyF5mcvP9uVsvV0RvdYyilwmHk9peH1yP51ynp24PO3n1DI356wFC3U7fG/sd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmlH9VDO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A941C4CEF5;
 	Sun, 31 Aug 2025 12:36:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1756643797;
-	bh=jS3iUQivvb7RhPhXLqpAYxJyCsCjn5OHdf4ysw4mfY4=;
+	bh=ZLF42ulSn4oztGUtexC/05mImgiTglF5VFIenWM/R94=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WvPEG5syvUXoLTUgCcpHdsg/AZpLl+V9iXVuoX4d5laUEg3Hz3AaXYR2ZvaXVl5kT
-	 Q7Mmm+/yjCCggf80fQ7onDQGFu8Z75o8/xvMJpkzXhSWR1L4Cpab3WYVmcMcIJYdD6
-	 +9e/rF+ZHc1IDfA/yZjEZ0ElfiaPGoKotBeGnm/lJ4lRM2bGFBjD9V+ekeGmaSxI9f
-	 nB5+1h2O88A2Y5BdwD2SlqcOnIaNn0DysitPVftDEj0BQxanCV0cu2COqXf/zgxhTd
-	 PQ76EEHp+i9+OUUt92bHj7Hl5XjodcbjILxzPaB5TS7L9v/32RC+UP0hU93tWhw5aY
-	 AVorBa9V5P0bA==
+	b=HmlH9VDOPQw2LRQdaradMDTvNfbtjZgl7WPT9jqHmNs3QnIPjv1sdbX6rUHmf401c
+	 eot98YGuza9eDBYSAL4QVUQT2UqaUdUE3XuO8RtoxAdRhb6GH9GxF5gLMlw2RBtgxl
+	 c/DNIj4qf37pkfsVujA4OdnDZV6iuyXm49ZzW3sujfzTxtzrCOeMZjTPsm76Nq2fhr
+	 WzJbR/yatBZQMDRbMkQvL5QZ6l39xeApyNCrWr0hr3WfZt9ATzgeCd6n+/Q7XykENQ
+	 j+ozLlQqTZHkd6BO+MODWIPzN5aJ9fQV5NiBcNPmiTN41nDyW2wQEv3+Lji+tYRPd5
+	 F4MDfgi8Tu9LA==
 Received: by pali.im (Postfix)
-	id 21B10598; Sun, 31 Aug 2025 14:36:35 +0200 (CEST)
+	id 64455D70; Sun, 31 Aug 2025 14:36:35 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 22/35] cifs: Improve cifs_rename_pending_delete() to work without the PASSTHRU support
-Date: Sun, 31 Aug 2025 14:35:49 +0200
-Message-Id: <20250831123602.14037-23-pali@kernel.org>
+Subject: [PATCH 23/35] cifs: Fix SMBLegacyOpen() function
+Date: Sun, 31 Aug 2025 14:35:50 +0200
+Message-Id: <20250831123602.14037-24-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,144 +64,161 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-If PASSTHRU support is not supported by SMB server (which is currently
-required for renaming the opened file) then rename the file via path before
-opening it. This does not require PASSTHRU support on SMB server.
+Function SMBLegacyOpen() contains many FIXME comments, commented code and
+missing handling of different flags.
+
+Fix the FIXME comments, add missing handling of different flags and use
+named macros as constants instead of magic numbers.
+
+This is done according to MS-CIFS spec.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/inode.c | 63 ++++++++++++++++++++++++++++++++++---------
- 1 file changed, 50 insertions(+), 13 deletions(-)
+ fs/smb/client/cifspdu.h |  4 +++
+ fs/smb/client/cifssmb.c | 73 +++++++++++++++++++++++++++--------------
+ fs/smb/client/smb1ops.c |  4 ++-
+ 3 files changed, 55 insertions(+), 26 deletions(-)
 
-diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index b0526787138d..9a5504a3406d 100644
---- a/fs/smb/client/inode.c
-+++ b/fs/smb/client/inode.c
-@@ -1711,9 +1711,13 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
- 	struct tcon_link *tlink;
- 	struct cifs_tcon *tcon;
- 	__u32 dosattr, origattr;
-+	char *sillyname_full_path = NULL;
-+	bool can_rename_opened_file = true;
- 	FILE_BASIC_INFO info_buf = {};
- 	unsigned char sillyname[SILLYNAME_LEN + 1];
- 	int sillyname_len;
-+	const char *dirpath_end;
-+	size_t dirpath_len;
- 
- 	tlink = cifs_sb_tlink(cifs_sb);
- 	if (IS_ERR(tlink))
-@@ -1747,13 +1751,26 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
+diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
+index d9cf7db0ac35..cb1f99d22dd7 100644
+--- a/fs/smb/client/cifspdu.h
++++ b/fs/smb/client/cifspdu.h
+@@ -137,6 +137,10 @@
+  * Flags on SMB open
+  */
+ #define SMBOPEN_WRITE_THROUGH 0x4000
++#define SMBOPEN_DO_NOT_CACHE  0x1000
++#define SMBOPEN_RANDOM_ACCESS 0x0200
++#define SMBOPEN_SEQUENTIAL    0x0100
++#define SMBOPEN_DENY_COMPAT   0x0000
+ #define SMBOPEN_DENY_ALL      0x0010
+ #define SMBOPEN_DENY_WRITE    0x0020
+ #define SMBOPEN_DENY_READ     0x0030
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 2a83fbc65395..c09713ebdc7c 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -1103,32 +1103,41 @@ SMBLegacyOpen(const unsigned int xid, struct cifs_tcon *tcon,
+ 		count = 0;      /* no pad */
+ 		name_len = copy_path_name(pSMB->fileName, fileName);
  	}
- 
- 	/*
--	 * We cannot rename the file if the server doesn't support
--	 * CAP_INFOLEVEL_PASSTHRU
-+	 * We cannot rename the opened file if the SMB1 server doesn't
-+	 * support CAP_INFOLEVEL_PASSTHRU. But we can rename file via path.
- 	 */
--	if (!(tcon->ses->capabilities & CAP_INFOLEVEL_PASSTHRU)) {
--		rc = -EBUSY;
-+	if (!(tcon->ses->capabilities & CAP_INFOLEVEL_PASSTHRU))
-+		can_rename_opened_file = false;
+-	if (*pOplock & REQ_OPLOCK)
+-		pSMB->OpenFlags = cpu_to_le16(REQ_OPLOCK);
+-	else if (*pOplock & REQ_BATCHOPLOCK)
 +
-+	dirpath_end = strrchr(full_path, CIFS_DIR_SEP(cifs_sb));
-+	if (!dirpath_end) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+	dirpath_len = dirpath_end + 1 - full_path;
++	if (*pOplock & REQ_BATCHOPLOCK)
+ 		pSMB->OpenFlags = cpu_to_le16(REQ_BATCHOPLOCK);
++	else if (*pOplock & REQ_OPLOCK)
++		pSMB->OpenFlags = cpu_to_le16(REQ_OPLOCK);
 +
-+	sillyname_full_path = kzalloc(dirpath_len + sillyname_len + 1, GFP_KERNEL);
-+	if (!sillyname_full_path) {
-+		rc = -ENOMEM;
- 		goto out;
- 	}
-+	memcpy(sillyname_full_path, full_path, dirpath_len);
-+	memcpy(sillyname_full_path + dirpath_len, sillyname, sillyname_len);
++	if (pfile_info)
++		pSMB->OpenFlags |= cpu_to_le16(REQ_MORE_INFO);
  
- 	origattr = cifsInode->cifsAttrs & ~ATTR_NORMAL;
- 
-@@ -1784,6 +1801,16 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
- 			dosattr = origattr; /* since not able to change them */
- 	}
- 
-+	/* rename the file path (before open if server does not support renaming opened file) */
-+	if (!can_rename_opened_file) {
-+		rc = tcon->ses->server->ops->rename(xid, tcon, dentry, full_path,
-+						    sillyname_full_path, cifs_sb);
-+		if (rc != 0) {
-+			rc = -EBUSY;
-+			goto undo_setattr;
-+		}
-+	}
+-	pSMB->OpenFlags |= cpu_to_le16(REQ_MORE_INFO);
+ 	pSMB->Mode = cpu_to_le16(access_flags_to_smbopen_mode(access_flags));
+-	pSMB->Mode |= cpu_to_le16(0x40); /* deny none */
++	pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_NONE);
 +
- 	oparms = (struct cifs_open_parms) {
- 		.tcon = tcon,
- 		.cifs_sb = cifs_sb,
-@@ -1796,16 +1823,18 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
++	if (create_options & CREATE_WRITE_THROUGH)
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_WRITE_THROUGH);
++
++	if (create_options & CREATE_NO_BUFFER)
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_DO_NOT_CACHE);
++
++	if (create_options & CREATE_RANDOM_ACCESS)
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_RANDOM_ACCESS);
++	else if (create_options & CREATE_SEQUENTIAL)
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_SEQUENTIAL);
++
+ 	/* set file as system file if special file such as fifo,
+ 	 * socket, char or block and server expecting SFU style and
+ 	   no Unix extensions */
+-
+ 	if (create_options & CREATE_OPTION_SPECIAL)
+ 		pSMB->FileAttributes = cpu_to_le16(ATTR_SYSTEM);
+-	else /* BB FIXME BB */
+-		pSMB->FileAttributes = cpu_to_le16(0/*ATTR_NORMAL*/);
++	else
++		pSMB->FileAttributes = cpu_to_le16(0);
  
- 	rc = CIFS_open(xid, &oparms, &oplock, NULL);
- 	if (rc != 0)
--		goto undo_setattr;
-+		goto undo_rename_path;
+ 	if (create_options & CREATE_OPTION_READONLY)
+ 		pSMB->FileAttributes |= cpu_to_le16(ATTR_READONLY);
  
--	/* rename the file */
--	rc = CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, sillyname,
-+	/* rename the opened file (if it was not already renamed before the open) */
-+	if (can_rename_opened_file) {
-+		rc = CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, sillyname,
- 				   false /* overwrite */,
- 				   cifs_sb->local_nls,
- 				   cifs_remap(cifs_sb));
--	if (rc != 0) {
--		rc = -EBUSY;
--		goto undo_close;
-+		if (rc != 0) {
-+			rc = -EBUSY;
-+			goto undo_close;
-+		}
- 	}
+-	/* BB FIXME BB */
+-/*	pSMB->CreateOptions = cpu_to_le32(create_options &
+-						 CREATE_OPTIONS_MASK); */
+-	/* BB FIXME END BB */
+-
+-	pSMB->Sattr = cpu_to_le16(ATTR_HIDDEN | ATTR_SYSTEM | ATTR_DIRECTORY);
++	pSMB->Sattr = cpu_to_le16(ATTR_READONLY | ATTR_HIDDEN | ATTR_SYSTEM | ATTR_ARCHIVE);
+ 	pSMB->OpenFunction = cpu_to_le16(convert_disposition(openDisposition));
+ 	count += name_len;
+ 	inc_rfc1001_len(pSMB, count);
+@@ -1139,24 +1148,38 @@ SMBLegacyOpen(const unsigned int xid, struct cifs_tcon *tcon,
+ 	cifs_stats_inc(&tcon->stats.cifs_stats.num_opens);
+ 	if (rc) {
+ 		cifs_dbg(FYI, "Error in Open = %d\n", rc);
++	} else if (pSMBr->hdr.WordCount != 15) {
++		rc = -EIO;
+ 	} else {
+-	/* BB verify if wct == 15 */
+-
+-/*		*pOplock = pSMBr->OplockLevel; */ /* BB take from action field*/
++		if (!(pSMBr->Action & 0x8000))
++			*pOplock = OPLOCK_NONE;
++		else if (*pOplock & REQ_BATCHOPLOCK)
++			*pOplock = OPLOCK_BATCH;
++		else if (*pOplock & REQ_OPLOCK)
++			*pOplock = OPLOCK_EXCLUSIVE;
++		else
++			*pOplock = OPLOCK_NONE;
  
- 	/* try to set DELETE_PENDING */
-@@ -1823,13 +1852,14 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
- 		if (rc == -ENOENT)
- 			rc = 0;
- 		else if (rc != 0)
--			goto undo_rename;
-+			goto undo_rename_opened_file;
- 		set_bit(CIFS_INO_DELETE_PENDING, &cifsInode->flags);
- 	}
+ 		*netfid = pSMBr->Fid;   /* cifs fid stays in le */
++
+ 		/* Let caller know file was created so we can set the mode. */
+ 		/* Do we care about the CreateAction in any other cases? */
+-	/* BB FIXME BB */
+-/*		if (cpu_to_le32(FILE_CREATE) == pSMBr->CreateAction)
+-			*pOplock |= CIFS_CREATE_ACTION; */
+-	/* BB FIXME END */
++		if ((pSMBr->Action & 0x0003) == 2)
++			*pOplock |= CIFS_CREATE_ACTION;
  
- 	CIFSSMBClose(xid, tcon, fid.netfid);
- 
- out:
-+	kfree(sillyname_full_path);
- 	cifs_put_tlink(tlink);
- 	return rc;
- 
-@@ -1838,12 +1868,19 @@ cifs_rename_pending_delete(const char *full_path, struct dentry *dentry,
- 	 * dealing with errors here since we can't do anything about
- 	 * them anyway.
- 	 */
--undo_rename:
--	CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, dentry->d_name.name,
-+undo_rename_opened_file:
-+	if (can_rename_opened_file)
-+		CIFSSMBRenameOpenFile(xid, tcon, fid.netfid, dentry->d_name.name,
- 				true /* overwrite */,
- 				cifs_sb->local_nls, cifs_remap(cifs_sb));
- undo_close:
- 	CIFSSMBClose(xid, tcon, fid.netfid);
-+undo_rename_path:
-+	if (!can_rename_opened_file)
-+		CIFSSMBRename(xid, tcon, dentry,
-+				sillyname_full_path,
-+				full_path,
-+				cifs_sb);
- undo_setattr:
- 	if (dosattr != origattr) {
- 		info_buf.Attributes = cpu_to_le32(origattr);
+ 		if (pfile_info) {
+-			pfile_info->CreationTime = 0; /* BB convert CreateTime*/
+-			pfile_info->LastAccessTime = 0; /* BB fixme */
+-			pfile_info->LastWriteTime = 0; /* BB fixme */
+-			pfile_info->ChangeTime = 0;  /* BB fixme */
++			struct timespec64 ts;
++			__u32 time = le32_to_cpu(pSMBr->LastWriteTime);
++
++			ts.tv_nsec = 0;
++			ts.tv_sec = time;
++			pfile_info->LastWriteTime = cpu_to_le64(cifs_UnixTimeToNT(ts));
++			pfile_info->ChangeTime = pfile_info->LastWriteTime;
++			if (*pOplock & CIFS_CREATE_ACTION)
++				pfile_info->CreationTime = pfile_info->LastWriteTime;
++			else
++				pfile_info->CreationTime = 0;
++			pfile_info->LastAccessTime = 0;
+ 			pfile_info->Attributes =
+ 				cpu_to_le32(le16_to_cpu(pSMBr->FileAttributes));
+ 			/* the file_info buf is endian converted by caller */
+diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
+index 6e928e90d72b..73d3dc83faa6 100644
+--- a/fs/smb/client/smb1ops.c
++++ b/fs/smb/client/smb1ops.c
+@@ -853,7 +853,9 @@ static int cifs_open_file(const unsigned int xid, struct cifs_open_parms *oparms
+ 				   oparms->disposition,
+ 				   oparms->desired_access,
+ 				   oparms->create_options,
+-				   &oparms->fid->netfid, oplock, &fi,
++				   &oparms->fid->netfid,
++				   oplock,
++				   data ? &fi : NULL,
+ 				   oparms->cifs_sb->local_nls,
+ 				   cifs_remap(oparms->cifs_sb));
+ 	else
 -- 
 2.20.1
 
