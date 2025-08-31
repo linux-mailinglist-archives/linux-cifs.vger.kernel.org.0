@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6130-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6129-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBDEEB3D31F
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59CA9B3D31E
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 599064416F2
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4E48189B6B5
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9AAF26C393;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF5326B777;
 	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYb5lgmR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOKqoz04"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB19C26B771;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F99826B2CE;
 	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643798; cv=none; b=W/WBxiM+MUNn5fC0m+KnSj5ivjn5VRwLoU8dqqe9TDkeiyUtfh41s4uDx2Nv6lgaZetznqKlujYHMfpk+3rJilZ8869SZ3A0RdOb7ebM1VG+zTmLTDfyCVmadKOjDwTOuPqCBYplN9dL+9GJV1R5ErP6NzaK4v2qGGD7v1gP9Co=
+	t=1756643798; cv=none; b=lc6yui3MF8wXwRNZfjeFcVHIRNIPLXja0U7flIBnVLz8MMz91rYMN3jqEulHtJnO+1pb9Fs84O/e9s0oRU+OIPSRcaEG2e5UaWIDYM+4Lhp9OQC8iXD2uK/XTEybPfph+isNyKXkNcvYCV+MElTykptgVhZwLn4SCyLzgSBw3BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756643798; c=relaxed/simple;
-	bh=Evg3ZKUpfOo+CCek78zw3g7JYbEmPfCRAo9GGRXMLTw=;
+	bh=hOE+inZuHZaLIQCHjscJllPWfxWi/52CVw/HvGIY4Ek=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nx1JOYhXWfmUHv7heziQx9I+LLUjuVkBoprnU7u4gNHLRt+t1aLvuOMyWSbaMD4Zxv0oHYpPLkk/sOuEx+PveUOdcAKCbK/0tiHg0k33/GTLkBKFfyTB393HsDpJP8/oEA0mFc/bRAJP6l3jII2scePSi3SpEo+05beE9ALVoTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYb5lgmR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0D2C4CEF9;
+	 MIME-Version:Content-Type; b=B36PpX05E9LWehGUcI43IgZfoiWFmaz21qcsO3meKcBkE5fdbQHd+DVm9xLMtKphLSAdP7zc2pr3RNiwhR4CyM5eCfASQetSE+QqbZEWxIqunEh+fKws/dfEcQjZwXU45Y78vfRh0oCxMDcmBlXL2XH3RqIb1rI/bczB6ZzTwQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOKqoz04; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E78C4CEFC;
 	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1756643798;
-	bh=Evg3ZKUpfOo+CCek78zw3g7JYbEmPfCRAo9GGRXMLTw=;
+	bh=hOE+inZuHZaLIQCHjscJllPWfxWi/52CVw/HvGIY4Ek=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MYb5lgmRvtWY30A8xQ33KjLRglLvOpPYDMTaw3jUz1gUtjDqbgHsNYyuO4PmoqMTp
-	 f8v4agv2MOU4cBodeybsBF7oHJE0Zt06P9cagsNA58dAxBoO+xS3WacTbvUpjaSQxH
-	 5uiL4NYTNJX/ZjEQ7juPAt+lNLozEfmtunWTtjwuiS/Hm1kWScpTxHhnl2IDBgZkxW
-	 w1zFHsOD2YTAJyXohsmfMfofVXBXZjrJ/xrCwaDlBUcbfzArynKvMFRoZXJnIOlbVR
-	 RUVPq9iq10NOVoM8a7DiySuLdc47SQM+qkYYaVk+zkRdV8lW1x/XgjJNthqt3sIsgD
-	 DrtZDaXigdC2Q==
+	b=YOKqoz041/IhI6ZjPYvY3Fx8W7DB/sCLuLhBamA5ihjZ+K/NPkE4bsrf9J7sAE61b
+	 /CkDxMmEJqCzgRnqCfomIVxN4kxXOyiVjAR7645vJpZ5y/gWYgVprVGs8+rh3FzA91
+	 Sz8yYtlyLKgDUM6LNrZmTUsnRqKJDGgtsCgPC5TszvtUAHAYg1BrY01vrT1LOsYMRO
+	 xWeamE4+Fx6LIsudGnTj/4nOeDgYls1NFQvLkSwXUT/npm++p+OhuI82/YRFk5m2qa
+	 FM8x/3ar4sTW90xOHC3IyNZIEkX+LSf1nMnYlisv8GlfdwMzALnNUUMEdZ0gFku4oy
+	 quci1DWzdBIaw==
 Received: by pali.im (Postfix)
-	id 51A591308; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
+	id 7984013DE; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 32/35] cifs: Use cifs_rename_pending_delete() fallback also for rmdir()
-Date: Sun, 31 Aug 2025 14:35:59 +0200
-Message-Id: <20250831123602.14037-33-pali@kernel.org>
+Subject: [PATCH 33/35] cifs: Add a new open flag CREATE_OPTION_EXCLUSIVE to open with deny all shared reservation
+Date: Sun, 31 Aug 2025 14:36:00 +0200
+Message-Id: <20250831123602.14037-34-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,63 +64,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When ->rmdir() callback fails on the -EBUSY error then use the silly rename
-functionality fallback. Removing of directories has exactly same problem
-with DELETE_PENDING state as removal of the files.
-
-Empty directory which is opened on Windows server will stay in
-DELETE_PENDING state until the last user on server does not close it.
-Directory itself is not immediately unlinked at remove call, like file.
-
-Note that currently the ->rmdir() callbacks do not return -EBUSY error.
-This will be implemented in follow up changes.
+This is just an internal flag for cifs.ko code, not exported to userspace.
+It allows cifs.ko code to take an exclusive open with deny all shared
+reservation. It is going to be used by the upcoming fixes for the unlink()
+and rmdir() silly rename support.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/inode.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/smb/client/cifspdu.h |  1 +
+ fs/smb/client/cifssmb.c | 12 ++++++++++--
+ fs/smb/client/smb2pdu.c |  6 +++++-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index 545964cac9cd..abe3108e4963 100644
---- a/fs/smb/client/inode.c
-+++ b/fs/smb/client/inode.c
-@@ -1700,6 +1700,7 @@ static int
- cifs_rename_pending_delete(const unsigned int xid,
- 			   struct cifs_tcon *tcon,
- 			   const char *full_path,
-+			   bool is_dir,
- 			   struct dentry *dentry)
- {
- 	int oplock = 0;
-@@ -1811,7 +1812,8 @@ cifs_rename_pending_delete(const unsigned int xid,
- 		.tcon = tcon,
- 		.cifs_sb = cifs_sb,
- 		.desired_access = DELETE,
--		.create_options = cifs_create_options(cifs_sb, CREATE_NOT_DIR),
-+		.create_options = cifs_create_options(cifs_sb,
-+					is_dir ? CREATE_NOT_FILE : CREATE_NOT_DIR),
- 		.disposition = FILE_OPEN,
- 		.path = full_path,
- 		.fid = &fid,
-@@ -1962,7 +1964,7 @@ int cifs_unlink(struct inode *dir, struct dentry *dentry)
- 	} else if (rc == -ENOENT) {
- 		d_drop(dentry);
- 	} else if (rc == -EBUSY) {
--		rc = cifs_rename_pending_delete(xid, tcon, full_path, dentry);
-+		rc = cifs_rename_pending_delete(xid, tcon, full_path, false /* is_dir */, dentry);
- 		if (rc == 0) {
- 			cifs_mark_open_handles_for_deleted_file(inode, full_path);
- 			cifs_drop_nlink(inode);
-@@ -2298,6 +2300,9 @@ int cifs_rmdir(struct inode *inode, struct dentry *direntry)
- 	}
+diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
+index cb1f99d22dd7..90b0b82e23b1 100644
+--- a/fs/smb/client/cifspdu.h
++++ b/fs/smb/client/cifspdu.h
+@@ -395,6 +395,7 @@
+ #define CREATE_OPTIONS_MASK     0x007FFFFF
+ #define CREATE_OPTION_READONLY	0x10000000
+ #define CREATE_OPTION_SPECIAL   0x20000000   /* system. NB not sent over wire */
++#define CREATE_OPTION_EXCLUSIVE 0x40000000   /* exclusive open, NB not set over wire */
  
- 	rc = server->ops->rmdir(xid, tcon, full_path, cifs_sb);
-+	if (rc == -EBUSY)
-+		rc = cifs_rename_pending_delete(xid, tcon, full_path, true /* is_dir */, direntry);
+ /* ImpersonationLevel flags */
+ #define SECURITY_ANONYMOUS      0
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 3a0452479a69..37bc0541bc21 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -1125,7 +1125,11 @@ SMBLegacyOpen(const unsigned int xid, struct cifs_tcon *tcon,
+ 		pSMB->OpenFlags |= cpu_to_le16(REQ_MORE_INFO);
+ 
+ 	pSMB->Mode = cpu_to_le16(access_flags_to_smbopen_mode(access_flags));
+-	pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_NONE);
 +
- 	cifs_put_tlink(tlink);
++	if (create_options & CREATE_OPTION_EXCLUSIVE)
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_ALL);
++	else
++		pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_NONE);
  
- 	if (!rc) {
+ 	if (create_options & CREATE_WRITE_THROUGH)
+ 		pSMB->Mode |= cpu_to_le16(SMBOPEN_WRITE_THROUGH);
+@@ -1281,7 +1285,11 @@ CIFS_open(const unsigned int xid, struct cifs_open_parms *oparms, int *oplock,
+ 	if (create_options & CREATE_OPTION_READONLY)
+ 		req->FileAttributes |= cpu_to_le32(ATTR_READONLY);
+ 
+-	req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
++	if (create_options & CREATE_OPTION_EXCLUSIVE)
++		req->ShareAccess = cpu_to_le32(FILE_NO_SHARE);
++	else
++		req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
++
+ 	req->CreateDisposition = cpu_to_le32(disposition);
+ 	req->CreateOptions = cpu_to_le32(create_options & CREATE_OPTIONS_MASK);
+ 
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index a6c69b01ec6b..8315213d699e 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -3034,7 +3034,11 @@ SMB2_open_init(struct cifs_tcon *tcon, struct TCP_Server_Info *server,
+ 	req->DesiredAccess = cpu_to_le32(oparms->desired_access);
+ 	/* File attributes ignored on open (used in create though) */
+ 	req->FileAttributes = cpu_to_le32(file_attributes);
+-	req->ShareAccess = FILE_SHARE_ALL_LE;
++
++	if (oparms->create_options & CREATE_OPTION_EXCLUSIVE)
++		req->ShareAccess = cpu_to_le32(FILE_NO_SHARE);
++	else
++		req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
+ 
+ 	req->CreateDisposition = cpu_to_le32(oparms->disposition);
+ 	req->CreateOptions = cpu_to_le32(oparms->create_options & CREATE_OPTIONS_MASK);
 -- 
 2.20.1
 
