@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6103-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6106-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5694B3D2FC
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:36:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA4DB3D302
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:36:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DF8117CDE4
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:36:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78C9317C9A6
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A8425D209;
-	Sun, 31 Aug 2025 12:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43959261B71;
+	Sun, 31 Aug 2025 12:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJlIgbxW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0EVwz/R"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B48F25BF1B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAAE260566;
 	Sun, 31 Aug 2025 12:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643795; cv=none; b=rQQeygHRvkjfQerUMxSU14c2PdYXzbNQNAiEQGjB9meKYM8ScxY0gMrQsAZn/kH+4h7NPCSCIx64ivX9xaQH7hv+Uv1pIecPLAPfLRPe07e+DhqH+jX4OAcJASOEpxV6H4i3fxh9yeDUw9tWCdaGM46XJXm+92duN1/rKOsSj34=
+	t=1756643796; cv=none; b=E8h4/DEPBIkCgRO6mDm92iH3Cn9w4LcjlFaHTzLhN/nS52z14RxSsYSjX7lEIDy0xPCffyE1Rmpb5bSh25KLHMZpz0KcgJDMk9glSOuYzjevxmm41I5+dq4kKihLLE1rqdMY2QYzS9Y0oobgA6FHHcv1+4LTQm8y4YmCIhS7SHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643795; c=relaxed/simple;
-	bh=2yaxe8JvAoaujWsh6C/ntd9QE+7VcZOUC9n6I84/Phs=;
+	s=arc-20240116; t=1756643796; c=relaxed/simple;
+	bh=Xq06GFTx1+d7lXTSarZu2S3z+Y49rpz/H7is/9UlQFY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o8HZAeot1Mzb3721NViRPyGMVjQTUzDOo8yEMPPmPEYGcU5Wyh7IodHkrc03o1N1lxYytmu7S04+S2Cyqrdn/ijj+InR85vESQ+tLhD1Pq0VH0qeI/j3izOt0K74P0U2ctl0hFCr2OVqMCMB4R5mq9U7QD3K3cu6c/wyLjGspsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJlIgbxW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B29C4CEF6;
-	Sun, 31 Aug 2025 12:36:34 +0000 (UTC)
+	 MIME-Version:Content-Type; b=BdrPzUUro2uHgZz8mB0XZVOCBFGAu7v44I8EJgTbPnKbhEQYNaa+KT1xQ1+5Yzgw3dlIQkHbaKV+9LOCtBUGgt8gGlekC2P3bD/EOMYt3dkNbVlCGNV38GVBN8k4mZKY1lNvEbKCMOqzNzcyEBzNNFEyf6HTu1AViU4eor6ixuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0EVwz/R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95379C4CEF8;
+	Sun, 31 Aug 2025 12:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1756643795;
-	bh=2yaxe8JvAoaujWsh6C/ntd9QE+7VcZOUC9n6I84/Phs=;
+	bh=Xq06GFTx1+d7lXTSarZu2S3z+Y49rpz/H7is/9UlQFY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iJlIgbxWuvAvhorbe5j+m5xZR80aeqoHXvlZr9qahtFtPGiqNFdnvds9m2LoMbl8H
-	 AAINj0tJptOQ1ZFKD6SrnEODpYzCDze8aLKwXARKPfYG/yCSSmm3x0WsWwQsG+YbwJ
-	 GoFP5ZaXl+cN/Q3PCm1orsjKTS70y+/3kY5swmp/+eF0N24BeP07aL20v7OjsD/zzZ
-	 myymSa00xEg/Q80A6+moVKfQ4e1Vjz3nQPsE84YpF+CSqnvlKRTkl7ZaucIcIrjorU
-	 R0ZvpmlC3LRPjkLjdUO7YmoHlXQ2EXiTkaYdHiEjwp0cm9cKyP8hF05pX1K5SfbTIt
-	 YO9zQuavWjeDA==
+	b=k0EVwz/R2fTzK+KEFX+oSnvS/HQdxa6Y1yCp4oqPW1X3jqAe1Y6XdCoOFh8l9NiEf
+	 sSGuCPfXc1fSMfrMJc0UCAyeRipirCW05T1gVbpWawDuXBxbg8ZQxfvMR6xvlBesYa
+	 cYmI4c+yKwig8dem/b42G1OqniFcN3wlfXK6AMEUesselbppYrS0JnYfhfEFXh1XbK
+	 jkloLh9fqtJxhqbH2WxtQtZDjyGlduo3JumknC23YIgcSRPkn/ZwtoIWjTpGdI3d76
+	 pWA8F7dWMwgvVb+A/nuVkopVdDFWK5bwk5DZgVBIDzBVuQ0bfBoQUE80LgdC5u6xfr
+	 TNSLasdpAemrA==
 Received: by pali.im (Postfix)
-	id 1B937D70; Sun, 31 Aug 2025 14:36:31 +0200 (CEST)
+	id 41CB0EB3; Sun, 31 Aug 2025 14:36:31 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 02/35] cifs: Allow fallback code in smb_set_file_info() also for directories
-Date: Sun, 31 Aug 2025 14:35:29 +0200
-Message-Id: <20250831123602.14037-3-pali@kernel.org>
+Subject: [PATCH 03/35] cifs: Add fallback code path for cifs_mkdir_setinfo()
+Date: Sun, 31 Aug 2025 14:35:30 +0200
+Message-Id: <20250831123602.14037-4-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,32 +64,31 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On NT systems, it is possible to do SMB open call also for directories.
-Open argument CREATE_NOT_DIR disallows opening directories. So in fallback
-code path in smb_set_file_info() remove CREATE_NOT_DIR restriction to allow
-it also for directories.
-
-Similar fallback is implemented also in CIFSSMBSetPathInfoFB() function and
-this function already allows to call operation for directories.
+Use SMBSetInformation() as a fallback function (when CIFSSMBSetPathInfo()
+fails) which can set attribudes on the directory, including changing
+read-only attribute.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb1ops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/smb/client/smb1ops.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
-index 1772f30419a9..cc4feebbdd11 100644
+index cc4feebbdd11..de415b9945ee 100644
 --- a/fs/smb/client/smb1ops.c
 +++ b/fs/smb/client/smb1ops.c
-@@ -980,7 +980,7 @@ smb_set_file_info(struct inode *inode, const char *full_path,
- 		.tcon = tcon,
- 		.cifs_sb = cifs_sb,
- 		.desired_access = SYNCHRONIZE | FILE_WRITE_ATTRIBUTES,
--		.create_options = cifs_create_options(cifs_sb, CREATE_NOT_DIR),
-+		.create_options = cifs_create_options(cifs_sb, 0),
- 		.disposition = FILE_OPEN,
- 		.path = full_path,
- 		.fid = &fid,
+@@ -824,6 +824,11 @@ cifs_mkdir_setinfo(struct inode *inode, const char *full_path,
+ 	info.Attributes = cpu_to_le32(dosattrs);
+ 	rc = CIFSSMBSetPathInfo(xid, tcon, full_path, &info, cifs_sb->local_nls,
+ 				cifs_sb);
++	if (rc == -EOPNOTSUPP || rc == -EINVAL)
++		rc = SMBSetInformation(xid, tcon, full_path,
++				       info.Attributes,
++				       0 /* do not change write time */,
++				       cifs_sb->local_nls, cifs_sb);
+ 	if (rc == 0)
+ 		cifsInode->cifsAttrs = dosattrs;
+ }
 -- 
 2.20.1
 
