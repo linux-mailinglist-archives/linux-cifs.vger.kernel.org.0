@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6129-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6135-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CA9B3D31E
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A231B3D32D
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4E48189B6B5
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA0FC44189A
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF5326B777;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C988126FDB2;
+	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOKqoz04"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHsiVXXI"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F99826B2CE;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7F526F462;
+	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643798; cv=none; b=lc6yui3MF8wXwRNZfjeFcVHIRNIPLXja0U7flIBnVLz8MMz91rYMN3jqEulHtJnO+1pb9Fs84O/e9s0oRU+OIPSRcaEG2e5UaWIDYM+4Lhp9OQC8iXD2uK/XTEybPfph+isNyKXkNcvYCV+MElTykptgVhZwLn4SCyLzgSBw3BY=
+	t=1756643800; cv=none; b=EPW4zV3Ec42n54Ul2mPohdO+P+E1IeGd33TnN6BgoPTnRcMmHgMbf8QDyzISTBBBkUUCYmr+0J4JMHdGSA4bwUgnEolaXwpXkV3R9PQ9EtvOKYojQEHSQL48FNQ8JI2dVBVjblsOdflZMo2UIzO60pcqLIYD59mop5LbjVDvP9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643798; c=relaxed/simple;
-	bh=hOE+inZuHZaLIQCHjscJllPWfxWi/52CVw/HvGIY4Ek=;
+	s=arc-20240116; t=1756643800; c=relaxed/simple;
+	bh=UJXNLpnVpXaGQJ6zhTJTdyv91uluTCE+NBjb7TBcAcQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B36PpX05E9LWehGUcI43IgZfoiWFmaz21qcsO3meKcBkE5fdbQHd+DVm9xLMtKphLSAdP7zc2pr3RNiwhR4CyM5eCfASQetSE+QqbZEWxIqunEh+fKws/dfEcQjZwXU45Y78vfRh0oCxMDcmBlXL2XH3RqIb1rI/bczB6ZzTwQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOKqoz04; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E78C4CEFC;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=rl3EzX8LADnjrzvAg6msRottzci361e82ifKMDdpY5l7l5Sko9SU7yyh+0Q+oxsHHYFtqJBtOEpXBKXiONkg9VS0zr+li0uewV7IFxjcYhLMmErQEY0heoaD1SyPxcwRJmj/QAWAN6Uea7Y8Mvr4bL4XKg58oqx/3CKZNgXkiXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHsiVXXI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128BAC4CEF8;
+	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643798;
-	bh=hOE+inZuHZaLIQCHjscJllPWfxWi/52CVw/HvGIY4Ek=;
+	s=k20201202; t=1756643800;
+	bh=UJXNLpnVpXaGQJ6zhTJTdyv91uluTCE+NBjb7TBcAcQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YOKqoz041/IhI6ZjPYvY3Fx8W7DB/sCLuLhBamA5ihjZ+K/NPkE4bsrf9J7sAE61b
-	 /CkDxMmEJqCzgRnqCfomIVxN4kxXOyiVjAR7645vJpZ5y/gWYgVprVGs8+rh3FzA91
-	 Sz8yYtlyLKgDUM6LNrZmTUsnRqKJDGgtsCgPC5TszvtUAHAYg1BrY01vrT1LOsYMRO
-	 xWeamE4+Fx6LIsudGnTj/4nOeDgYls1NFQvLkSwXUT/npm++p+OhuI82/YRFk5m2qa
-	 FM8x/3ar4sTW90xOHC3IyNZIEkX+LSf1nMnYlisv8GlfdwMzALnNUUMEdZ0gFku4oy
-	 quci1DWzdBIaw==
+	b=fHsiVXXINRKNTbpuvedxPPYy3k8d6xI1iseS9FtDnVQ3TKXa1cr467rRK3b/O34R1
+	 COMATIhRjG+zpT4tICv94QA/YSdJ3TqkHj2bkLIFkEJ68nig2ocVu+o1hSQk3Lc+XC
+	 wGWsT62xF3NxP+I3ec1Ywc39gNQYor6gxSfcG6Dh/Hth9YDfniRh7KdK0Oh/dCPv2F
+	 jSVXSaKxZ+7DP2uEwdZA0TqBY1p2Ezmp0VShyB6/h7UGL9h2aN25hj53yrSoBNyQm8
+	 8UC9qfUQVtcCrgVCxL8ui5XneKn42NQH2zHLWzcvQtSZJJHB3dJ8HHSEbjAZaNjE8/
+	 UyofhXJZ8M/Xg==
 Received: by pali.im (Postfix)
-	id 7984013DE; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
+	id A056B14A3; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 33/35] cifs: Add a new open flag CREATE_OPTION_EXCLUSIVE to open with deny all shared reservation
-Date: Sun, 31 Aug 2025 14:36:00 +0200
-Message-Id: <20250831123602.14037-34-pali@kernel.org>
+Subject: [PATCH 34/35] cifs: Use CREATE_OPTION_EXCLUSIVE when opening file/dir for SMB2+ non-POSIX unlink/rmdir
+Date: Sun, 31 Aug 2025 14:36:01 +0200
+Message-Id: <20250831123602.14037-35-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,77 +64,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This is just an internal flag for cifs.ko code, not exported to userspace.
-It allows cifs.ko code to take an exclusive open with deny all shared
-reservation. It is going to be used by the upcoming fixes for the unlink()
-and rmdir() silly rename support.
+Using of CREATE_OPTION_EXCLUSIVE against non-POSIX SMB2+ server ensures
+that the smb2_remove() function either success and removes the directory
+entry or it returns an error that file or directory is in use by other SMB
+client and silly rename is required to use.
+
+POSIX-based SMB2+ servers do not have this problems as they should unlink
+the directory entry immediately and not transition them into delete pending
+state.
+
+This allows the cifs_unlink() and cifs_rmdir() functions against non-POSIX
+servers to detect these failures via -EBUSY error from smb2_unlink() and
+smb2_rmdir() calls and fallbacks to cifs_rename_pending_delete() which
+implements silly rename.
+
+This is the final change which enables the silly rename functionality for
+the unlink and rmdir calls in SMB2+ dialects on mounted exports from
+Windows servers.
+
+With this change Linux unlink() and rmdir() syscalls called on SMB2+ mounts
+from Windows servers cause that on success the path would not exist anymore
+and new file or directory with that path can be created.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/cifspdu.h |  1 +
- fs/smb/client/cifssmb.c | 12 ++++++++++--
- fs/smb/client/smb2pdu.c |  6 +++++-
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ fs/smb/client/smb2inode.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
-index cb1f99d22dd7..90b0b82e23b1 100644
---- a/fs/smb/client/cifspdu.h
-+++ b/fs/smb/client/cifspdu.h
-@@ -395,6 +395,7 @@
- #define CREATE_OPTIONS_MASK     0x007FFFFF
- #define CREATE_OPTION_READONLY	0x10000000
- #define CREATE_OPTION_SPECIAL   0x20000000   /* system. NB not sent over wire */
-+#define CREATE_OPTION_EXCLUSIVE 0x40000000   /* exclusive open, NB not set over wire */
- 
- /* ImpersonationLevel flags */
- #define SECURITY_ANONYMOUS      0
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 3a0452479a69..37bc0541bc21 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -1125,7 +1125,11 @@ SMBLegacyOpen(const unsigned int xid, struct cifs_tcon *tcon,
- 		pSMB->OpenFlags |= cpu_to_le16(REQ_MORE_INFO);
- 
- 	pSMB->Mode = cpu_to_le16(access_flags_to_smbopen_mode(access_flags));
--	pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_NONE);
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 0dd4a77dfb64..727349ed76b9 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -1351,6 +1351,23 @@ smb2_remove(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+ 		op = SMB2_OP_DELETE;
+ 		op_flags = CREATE_NOT_DIR;
+ 	}
 +
-+	if (create_options & CREATE_OPTION_EXCLUSIVE)
-+		pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_ALL);
-+	else
-+		pSMB->Mode |= cpu_to_le16(SMBOPEN_DENY_NONE);
- 
- 	if (create_options & CREATE_WRITE_THROUGH)
- 		pSMB->Mode |= cpu_to_le16(SMBOPEN_WRITE_THROUGH);
-@@ -1281,7 +1285,11 @@ CIFS_open(const unsigned int xid, struct cifs_open_parms *oparms, int *oplock,
- 	if (create_options & CREATE_OPTION_READONLY)
- 		req->FileAttributes |= cpu_to_le32(ATTR_READONLY);
- 
--	req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
-+	if (create_options & CREATE_OPTION_EXCLUSIVE)
-+		req->ShareAccess = cpu_to_le32(FILE_NO_SHARE);
-+	else
-+		req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
++	/*
++	 * CREATE_OPTION_EXCLUSIVE ensures exclusive access to the path.
++	 * If some other client has that path opened then our open fails.
++	 * So together with remove operation it cause that either the path
++	 * is immediately unlinked or the command fails with -EBUSY.
++	 * It should not let the path in the delete pending state.
++	 *
++	 * When using POSIX extensions then we do not need any exclusive
++	 * access to the file or directory.
++	 * In this case the path is unlinked immediately even if it is opened
++	 * by other client. Unlink fails only in case path is directory and
++	 * that directory is not empty.
++	 */
++	if (!tcon->posix_extensions)
++		op_flags |= CREATE_OPTION_EXCLUSIVE;
 +
- 	req->CreateDisposition = cpu_to_le32(disposition);
- 	req->CreateOptions = cpu_to_le32(create_options & CREATE_OPTIONS_MASK);
- 
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index a6c69b01ec6b..8315213d699e 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -3034,7 +3034,11 @@ SMB2_open_init(struct cifs_tcon *tcon, struct TCP_Server_Info *server,
- 	req->DesiredAccess = cpu_to_le32(oparms->desired_access);
- 	/* File attributes ignored on open (used in create though) */
- 	req->FileAttributes = cpu_to_le32(file_attributes);
--	req->ShareAccess = FILE_SHARE_ALL_LE;
-+
-+	if (oparms->create_options & CREATE_OPTION_EXCLUSIVE)
-+		req->ShareAccess = cpu_to_le32(FILE_NO_SHARE);
-+	else
-+		req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
- 
- 	req->CreateDisposition = cpu_to_le32(oparms->disposition);
- 	req->CreateOptions = cpu_to_le32(oparms->create_options & CREATE_OPTIONS_MASK);
+ 	oparms = CIFS_OPARMS(cifs_sb, tcon, name,
+ 			     DELETE, FILE_OPEN,
+ 			     OPEN_REPARSE_POINT | op_flags,
 -- 
 2.20.1
 
