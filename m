@@ -1,147 +1,200 @@
-Return-Path: <linux-cifs+bounces-6131-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6136-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8D3FB3D320
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53881B3D36F
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:55:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C7A17D233
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BF8B17CF92
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC10C26C39B;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC468634C;
+	Sun, 31 Aug 2025 12:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pk5HlR9a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfRmB8Tp"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFF026B942;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DDF45029
+	for <linux-cifs@vger.kernel.org>; Sun, 31 Aug 2025 12:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643798; cv=none; b=VCDXENep3TK6dkWIVwEVmMo7CVHwC+pNCspr3fwaxslejPiCpJJBz22ZB7py0Vi3PKLd0NX6tAY9z3rVGZ6NaHX6MeJZhrZQHJTvaS9+ug6qM2qJ7nUoY/pndYDntoMW6hVJHziPBP88JgQxb0HxtODvHll4M7mK1e85w1yY3H0=
+	t=1756644908; cv=none; b=AsRK71ttNDcXPjWEH+bSosKFTEoM3lh6pasAtauBw0p5JoQqycUDBTpjYIuvmBScvW0zGe8WG9fQhXUbFPd+xRD7fec/xnBweJND83v4qtYLdPMJPvK7tOoIHBTi7eD8qoyuDwU7BcuJysssUhSUJpaQFimBY36eW/EUbZstNBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643798; c=relaxed/simple;
-	bh=BndpzTZJgGQ5KAp6GobzpPt6z1nG2dr2yHF9QYRGqmo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pE8Z8UH+WFs9jb6HuVUFzyNbbvDizc5MvbQxr05Hk/BPNreHGs79drUpu5yBz3/oIRu3lG1eb/LDy5LXSmXFIiMk9ZOrNUrQVxKZMs9NR4yjxw59s8GfZ5MK704UxBQCGiIXKfZhod4FMFIZgYuO5hQw/31Ht6LvDWZ02Vk3his=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pk5HlR9a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82794C4CEED;
-	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
+	s=arc-20240116; t=1756644908; c=relaxed/simple;
+	bh=kiFFe3mgqJBmcgGxYQ+jbqxD6G/Pr9zpMAMawQMGJiY=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BpA+zJeDzL/XWOz02eKR5gdA6YXJeR3JCE17iY4RKMOAjERmkXRm1jtCzBZXdzuEZ/3QGrVcK9H0GcuC12+t50jGvgsZ68STvcvfUN4iDSH7KSXV6MLzW4kCfTyHzV64th9J45VW3arA8lqxCPT4FNQK7DLOrfM4WCd4cA3wOhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfRmB8Tp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA734C4CEED;
+	Sun, 31 Aug 2025 12:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643798;
-	bh=BndpzTZJgGQ5KAp6GobzpPt6z1nG2dr2yHF9QYRGqmo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Pk5HlR9a3ZewV0KhjQxW0El0EfA02bYCIaaQE6m2cMlHR3Fk7D8gQQqUcqEmrVr+v
-	 0GzvPJJ3nBv+HBziEMURGVXiLp15Bx1Ohk3/H/lWk5CJbnya+9NCoaBo8ajZkL+0d2
-	 otFD8GkLihydpkJrsU7iWD6xRk9G2HySxz3C7lczg4L8Q0wsRJLJHaX2gpJj5e+sNy
-	 ATuzhXUsRz0IdoDIlwV49UNK9VvFbNF5kgIuI3gVZb+Z4J6KBh8zyxISVj0oYVdeEI
-	 yMYNJFUce/W1OaSvf3kYe4RPkaqg1JWMTpK5fayPYaE6y/Z5w7+sx7Pe7VC8wzQyME
-	 bIXV3L39WdtzQ==
+	s=k20201202; t=1756644908;
+	bh=kiFFe3mgqJBmcgGxYQ+jbqxD6G/Pr9zpMAMawQMGJiY=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=JfRmB8TpA3Z/FAJIiangOZYzy6dcH4ltdL3P+tfstjy2cQcX3LMFI3WRrlIROr03J
+	 HUj9zUWENJekIHZP5WlbtbrO5GtwH1pCwPQj5dBh8JRK6DOhRwVfH2wRXqj6aXnvKN
+	 QU/jy5mO/HjIJNxzC74xwKfsGUv7cC6I2fk+hyDtvGX71EQYr9GuOH9tCo22oimpzw
+	 H/aIMk4SfymiMB1w7sqVJj1NuUD/DMfXGLK0eccbamz6qE05iuV48PPMayUw5EfNZ/
+	 UIgrR0T8npNEIltObA3tHlyFXVVv29V+MPZgRtz34uwKMAwFtIF858BKzxm2Zkl0li
+	 8wKTr1J1EEI9A==
 Received: by pali.im (Postfix)
-	id C97641857; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
-From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To: Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc: linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 35/35] cifs: Use CREATE_OPTION_EXCLUSIVE when doing SMB1 rmdir on NT server
-Date: Sun, 31 Aug 2025 14:36:02 +0200
-Message-Id: <20250831123602.14037-36-pali@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
-References: <20250831123602.14037-1-pali@kernel.org>
+	id 49731598; Sun, 31 Aug 2025 14:55:05 +0200 (CEST)
+Date: Sun, 31 Aug 2025 14:55:05 +0200
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Ralph Boehme <slow@samba.org>, smfrench <smfrench@gmail.com>,
+	tom <tom@talpey.com>, CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: [EXTERNAL] Fwd: SMB2 DELETE vs UNLINK -
+ TrackingID#2504090040009564
+Message-ID: <20250831125505.4ggqt2bzz4rtzhqt@pali>
+References: <20250408224309.kscufcpvgiedx27v@pali>
+ <6f5031e9-36d4-4521-a07a-6892cc5ce8a3@samba.org>
+ <MWHPR21MB45241411805698FB51F0F4F294B42@MWHPR21MB4524.namprd21.prod.outlook.com>
+ <LV2PR21MB31576391E902DD819ADE3A5AC6B72@LV2PR21MB3157.namprd21.prod.outlook.com>
+ <LV2PR21MB315742A5FFB78BC2889E138AC689A@LV2PR21MB3157.namprd21.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <LV2PR21MB315742A5FFB78BC2889E138AC689A@LV2PR21MB3157.namprd21.prod.outlook.com>
+User-Agent: NeoMutt/20180716
 
-Windows NT servers just set the DELETE_PENDING flag when executing the SMB1
-SMB_COM_DELETE_DIRECTORY command. This is opposite of the SMB_COM_DELETE
-command (can be used only on files) which completely removes the file and
-not just transition it into DELETE_PENDING state.
+Hello Ralph,
 
-This means that the SMB1 rmdir against Windows NT servers has same issues
-as SMB2+ rmdir and silly rename needs to be used. As in SMB2+ rmdir, use
-the CREATE_OPTION_EXCLUSIVE logic for issuing SMB1 rmdir when communicating
-with NT-based SMB1 server.
+In [MS-SMB] 54.0 from 8/11/2025 in Change Tracking section
+http://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb/4caa15a3-700f-479f-90ce-53e2ecca945d
+is now documented that TRANS2_SET_FILE_INFORMATION supports
+FileDispositionInformationEx which allows to do POSIX unlink.
 
-With this change Linux rmdir() syscall called on SMB1 mounts from Windows
-NT servers cause that on success the path would not exist anymore and new
-file or directory with that path can be created.
+And now also [MS-FSA] was updated for POSIX semantics support.
+In version 41.0 from 8/11/2025 is in Change Tracking section
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fsa/78f36c85-889c-4804-ab11-6af3565e01b1
+documented new volatile field DeleteUsingPosixSemantics and other
+sections were extended for POSIX support, including the description how
+to handle FileDispositionInformationEx requests.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- fs/smb/client/cifssmb.c | 45 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Pali
 
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 37bc0541bc21..31638b71ee0c 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -823,8 +823,53 @@ CIFSSMBRmDir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
- 	int bytes_returned;
- 	int name_len;
- 	int remap = cifs_remap(cifs_sb);
-+	struct cifs_open_parms oparms;
-+	struct cifs_fid fid;
-+	int oplock;
- 
- 	cifs_dbg(FYI, "In CIFSSMBRmDir\n");
-+
-+	/*
-+	 * Do not send SMB_COM_DELETE_DIRECTORY to NT servers. NT servers just
-+	 * sets the DELETE PENDING state on the directory and in case that
-+	 * directory is opened by some other client, it stay in this state and
-+	 * direntry stay present in the parent directory.
-+	 *
-+	 * So for NT servers use NT OPEN in exclusive mode. It fails when some
-+	 * other SMB client has the directory opened, and it triggers the
-+	 * sillyrename code path. After successful NT OPEN in exclusive mode,
-+	 * sets the DELETE PENDING state and close the directory.
-+	 *
-+	 * Servers with UNIX extensions should support SMB_COM_DELETE_DIRECTORY
-+	 * with correct UNIX semantics, so use this NT OPEN + DELETE PENDING
-+	 * only against non-UNIX NT servers.
-+	 */
-+	if ((tcon->ses->capabilities & CAP_NT_SMBS) &&
-+	    !(cap_unix(tcon->ses) &&
-+	      (le64_to_cpu(tcon->fsUnixInfo.Capability) & CIFS_UNIX_POSIX_PATH_OPS_CAP))) {
-+		oparms = CIFS_OPARMS(cifs_sb, tcon, name, DELETE, FILE_OPEN,
-+				     CREATE_OPTION_EXCLUSIVE | CREATE_NOT_FILE | OPEN_REPARSE_POINT,
-+				     ACL_NO_MODE);
-+		oparms.fid = &fid;
-+		oplock = 0;
-+		rc = CIFS_open(xid, &oparms, &oplock, NULL);
-+		if (rc)
-+			return rc;
-+		rc = CIFSSMBSetFileDisposition(xid, tcon, true, fid.netfid, current->tgid);
-+		/*
-+		 * some samba versions return -ENOENT when we try to set the
-+		 * file disposition here. Likely a samba bug, but work around
-+		 * it for now. This means that some cifsXXX files may hang
-+		 * around after they shouldn't.
-+		 *
-+		 * BB: remove this hack after more servers have the fix
-+		 */
-+		if (rc == -ENOENT)
-+			rc = 0;
-+		CIFSSMBClose(xid, tcon, fid.netfid);
-+		return rc;
-+	}
-+
- RmDirRetry:
- 	rc = smb_init(SMB_COM_DELETE_DIRECTORY, 0, tcon, (void **) &pSMB,
- 		      (void **) &pSMBr);
--- 
-2.20.1
-
+On Tuesday 06 May 2025 19:00:17 Obaid Farooqi wrote:
+> Hi Ralph:
+> FileDispositionInformationEx, is for use locally, as documented in MS-FSCC. MS-SMB2 and MS-SMB both do not support it but Pali have been able to use MS-SMB pass-through mechanism to send this information level to the object store who acts on it and deletes the file.
+> MS-FSCC is already updated and you can see the changes in the current release.
+> MS-SMB was updated as follows:
+> "
+> <133> Section 3.3.5.10.6:
+> ...
+> If Information Level is set to an undefined value (0x0428) in the request, Windows Server 2022
+> does not process the request but sends a success response.
+> "
+> The above statement is to document the pass through behavior that Pali was able to produce. This does not tell the whole story, so I have filed a bug to make it more complete.
+> 
+> MS-FSA does not mention FileDispositionInformationEx. The reason is because FileDispositionInformationEx is local. But since Pali has been able to send FileDispositionInformationEx on the wire, I have filed a bug to add a section about FileDispositionInformationEx and information about POSIX semantics.
+> 
+> Please let me know if this does not answer your question.
+> 
+> Regards,
+> Obaid Farooqi
+> Escalation Engineer | Microsoft
+> 
+> -----Original Message-----
+> From: Obaid Farooqi
+> Sent: Thursday, April 10, 2025 6:07 AM
+> To: Ralph Boehme <slow@samba.org>
+> Cc: smfrench <smfrench@gmail.com>; tom <tom@talpey.com>; Pali Rohár <pali@kernel.org>; CIFS <linux-cifs@vger.kernel.org>; Microsoft Support <supportmail@microsoft.com>
+> Subject: RE: [EXTERNAL] Fwd: SMB2 DELETE vs UNLINK - TrackingID#2504090040009564
+> 
+> Hi Ralph, Tom:
+> I'll help you with this issue and will be in touch as soon as I have an answer.
+> 
+> Regards,
+> Obaid Farooqi
+> Escalation Engineer | Microsoft
+> -----Original Message-----
+> From: Michael Bowen <Mike.Bowen@microsoft.com>
+> Sent: Wednesday, April 9, 2025 8:57 PM
+> To: Ralph Boehme <slow@samba.org>
+> Cc: smfrench <smfrench@gmail.com>; tom <tom@talpey.com>; Pali Rohár <pali@kernel.org>; CIFS <linux-cifs@vger.kernel.org>; Microsoft Support <supportmail@microsoft.com>
+> Subject: RE: [EXTERNAL] Fwd: SMB2 DELETE vs UNLINK - TrackingID#2504090040009564
+> 
+> [DocHelp to bcc]
+> 
+> Hi Ralph,
+> 
+> Thanks for your question about SMB2. We've created case number 2504090040009564 to track this issue. One of our engineers will contact you soon.
+> 
+> Best regards,
+> Michael Bowen
+> Microsoft Open Specifications Support
+> 
+> -----Original Message-----
+> From: Ralph Boehme <slow@samba.org>
+> Sent: Tuesday, April 8, 2025 11:51 PM
+> To: Interoperability Documentation Help <dochelp@microsoft.com>
+> Cc: smfrench <smfrench@gmail.com>; tom <tom@talpey.com>; Pali Rohár <pali@kernel.org>; CIFS <linux-cifs@vger.kernel.org>
+> Subject: [EXTERNAL] Fwd: SMB2 DELETE vs UNLINK
+> 
+> Hello dochelp,
+> 
+> it seems the updates for POSIX unlink and rename made it into MS-FSCC
+> 
+> <https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/f1f88b22-15c6-4081-a899-788511ae2ed9>
+> 
+> but I don't see accompanying updates to MS-FSA and, if supported over SMB, MS-SMB2.
+> 
+> Is this coming? If this is supported over SMB by Windows it is not sufficient to have it burried in MS-FSCC. :)
+> 
+> Thanks!
+> -slow
+> 
+> -------- Forwarded Message --------
+> Subject: Re: SMB2 DELETE vs UNLINK
+> Date: Wed, 9 Apr 2025 00:43:09 +0200
+> From: Pali Rohár <pali@kernel.org>
+> To: linux-cifs@vger.kernel.org
+> CC: Tom Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>, Namjae Jeon <linkinjeon@kernel.org>, Ralph Boehme <slow@samba.org>
+> 
+> On Friday 27 December 2024 19:51:30 Pali Rohár wrote:
+> > On Friday 27 December 2024 11:43:58 Tom Talpey wrote:
+> > > On 12/27/2024 11:32 AM, Pali Rohár wrote:
+> > > > On Friday 27 December 2024 11:21:49 Tom Talpey wrote:
+> > > > > Feel free to raise the issue yourself! Simply email "dochelp@microsoft.com".
+> > > > > Send as much supporting evidence as you have gathered.
+> > > > >
+> > > > > Tom.
+> > > >
+> > > > Ok. I can do it. Should I include somebody else into copy?
+> > >
+> > > Sure, you may include me, tell them I sent you. :)
+> > >
+> > > Tom.
+> > >
+> >
+> > Just note for others that I have already sent email to dochelp.
+> 
+> Hello, I have good news!
+> 
+> dochelp on 04/07/2025 updated MS-FSCC documentation and now it contains the structures to issue the POSIX UNLINK and RENAME operations.
+> 
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/f1f88b22-15c6-4081-a899-788511ae2ed9
+> MS-FSCC 7 Change Tracking
+> 
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/2e860264-018a-47b3-8555-565a13b35a45
+> MS-FSCC 2.4.12 FileDispositionInformationEx has FILE_DISPOSITION_POSIX_SEMANTICS
+> 
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/4217551b-d2c0-42cb-9dc1-69a716cf6d0c
+> MS-FSCC 2.4.43 FileRenameInformationEx has FILE_RENAME_REPLACE_IF_EXISTS
+> + FILE_RENAME_POSIX_SEMANTICS
+> 
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/ebc7e6e5-4650-4e54-b17c-cf60f6fbeeaa
+> MS-FSCC 2.5.1 FileFsAttributeInformation has FILE_SUPPORTS_POSIX_UNLINK_RENAME
+> 
+> So now both classic Windows DELETE and POSIX UNLINK is available and documented.
 
