@@ -1,57 +1,57 @@
-Return-Path: <linux-cifs+bounces-6135-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6131-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A231B3D32D
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:39:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D3FB3D320
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 14:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA0FC44189A
-	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:39:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C7A17D233
+	for <lists+linux-cifs@lfdr.de>; Sun, 31 Aug 2025 12:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C988126FDB2;
-	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC10C26C39B;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHsiVXXI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pk5HlR9a"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7F526F462;
-	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFF026B942;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756643800; cv=none; b=EPW4zV3Ec42n54Ul2mPohdO+P+E1IeGd33TnN6BgoPTnRcMmHgMbf8QDyzISTBBBkUUCYmr+0J4JMHdGSA4bwUgnEolaXwpXkV3R9PQ9EtvOKYojQEHSQL48FNQ8JI2dVBVjblsOdflZMo2UIzO60pcqLIYD59mop5LbjVDvP9E=
+	t=1756643798; cv=none; b=VCDXENep3TK6dkWIVwEVmMo7CVHwC+pNCspr3fwaxslejPiCpJJBz22ZB7py0Vi3PKLd0NX6tAY9z3rVGZ6NaHX6MeJZhrZQHJTvaS9+ug6qM2qJ7nUoY/pndYDntoMW6hVJHziPBP88JgQxb0HxtODvHll4M7mK1e85w1yY3H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756643800; c=relaxed/simple;
-	bh=UJXNLpnVpXaGQJ6zhTJTdyv91uluTCE+NBjb7TBcAcQ=;
+	s=arc-20240116; t=1756643798; c=relaxed/simple;
+	bh=BndpzTZJgGQ5KAp6GobzpPt6z1nG2dr2yHF9QYRGqmo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rl3EzX8LADnjrzvAg6msRottzci361e82ifKMDdpY5l7l5Sko9SU7yyh+0Q+oxsHHYFtqJBtOEpXBKXiONkg9VS0zr+li0uewV7IFxjcYhLMmErQEY0heoaD1SyPxcwRJmj/QAWAN6Uea7Y8Mvr4bL4XKg58oqx/3CKZNgXkiXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHsiVXXI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128BAC4CEF8;
-	Sun, 31 Aug 2025 12:36:40 +0000 (UTC)
+	 MIME-Version:Content-Type; b=pE8Z8UH+WFs9jb6HuVUFzyNbbvDizc5MvbQxr05Hk/BPNreHGs79drUpu5yBz3/oIRu3lG1eb/LDy5LXSmXFIiMk9ZOrNUrQVxKZMs9NR4yjxw59s8GfZ5MK704UxBQCGiIXKfZhod4FMFIZgYuO5hQw/31Ht6LvDWZ02Vk3his=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pk5HlR9a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82794C4CEED;
+	Sun, 31 Aug 2025 12:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756643800;
-	bh=UJXNLpnVpXaGQJ6zhTJTdyv91uluTCE+NBjb7TBcAcQ=;
+	s=k20201202; t=1756643798;
+	bh=BndpzTZJgGQ5KAp6GobzpPt6z1nG2dr2yHF9QYRGqmo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fHsiVXXINRKNTbpuvedxPPYy3k8d6xI1iseS9FtDnVQ3TKXa1cr467rRK3b/O34R1
-	 COMATIhRjG+zpT4tICv94QA/YSdJ3TqkHj2bkLIFkEJ68nig2ocVu+o1hSQk3Lc+XC
-	 wGWsT62xF3NxP+I3ec1Ywc39gNQYor6gxSfcG6Dh/Hth9YDfniRh7KdK0Oh/dCPv2F
-	 jSVXSaKxZ+7DP2uEwdZA0TqBY1p2Ezmp0VShyB6/h7UGL9h2aN25hj53yrSoBNyQm8
-	 8UC9qfUQVtcCrgVCxL8ui5XneKn42NQH2zHLWzcvQtSZJJHB3dJ8HHSEbjAZaNjE8/
-	 UyofhXJZ8M/Xg==
+	b=Pk5HlR9a3ZewV0KhjQxW0El0EfA02bYCIaaQE6m2cMlHR3Fk7D8gQQqUcqEmrVr+v
+	 0GzvPJJ3nBv+HBziEMURGVXiLp15Bx1Ohk3/H/lWk5CJbnya+9NCoaBo8ajZkL+0d2
+	 otFD8GkLihydpkJrsU7iWD6xRk9G2HySxz3C7lczg4L8Q0wsRJLJHaX2gpJj5e+sNy
+	 ATuzhXUsRz0IdoDIlwV49UNK9VvFbNF5kgIuI3gVZb+Z4J6KBh8zyxISVj0oYVdeEI
+	 yMYNJFUce/W1OaSvf3kYe4RPkaqg1JWMTpK5fayPYaE6y/Z5w7+sx7Pe7VC8wzQyME
+	 bIXV3L39WdtzQ==
 Received: by pali.im (Postfix)
-	id A056B14A3; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
+	id C97641857; Sun, 31 Aug 2025 14:36:37 +0200 (CEST)
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To: Steve French <sfrench@samba.org>,
 	Paulo Alcantara <pc@manguebit.com>,
 	ronnie sahlberg <ronniesahlberg@gmail.com>
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 34/35] cifs: Use CREATE_OPTION_EXCLUSIVE when opening file/dir for SMB2+ non-POSIX unlink/rmdir
-Date: Sun, 31 Aug 2025 14:36:01 +0200
-Message-Id: <20250831123602.14037-35-pali@kernel.org>
+Subject: [PATCH 35/35] cifs: Use CREATE_OPTION_EXCLUSIVE when doing SMB1 rmdir on NT server
+Date: Sun, 31 Aug 2025 14:36:02 +0200
+Message-Id: <20250831123602.14037-36-pali@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250831123602.14037-1-pali@kernel.org>
 References: <20250831123602.14037-1-pali@kernel.org>
@@ -64,61 +64,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Using of CREATE_OPTION_EXCLUSIVE against non-POSIX SMB2+ server ensures
-that the smb2_remove() function either success and removes the directory
-entry or it returns an error that file or directory is in use by other SMB
-client and silly rename is required to use.
+Windows NT servers just set the DELETE_PENDING flag when executing the SMB1
+SMB_COM_DELETE_DIRECTORY command. This is opposite of the SMB_COM_DELETE
+command (can be used only on files) which completely removes the file and
+not just transition it into DELETE_PENDING state.
 
-POSIX-based SMB2+ servers do not have this problems as they should unlink
-the directory entry immediately and not transition them into delete pending
-state.
+This means that the SMB1 rmdir against Windows NT servers has same issues
+as SMB2+ rmdir and silly rename needs to be used. As in SMB2+ rmdir, use
+the CREATE_OPTION_EXCLUSIVE logic for issuing SMB1 rmdir when communicating
+with NT-based SMB1 server.
 
-This allows the cifs_unlink() and cifs_rmdir() functions against non-POSIX
-servers to detect these failures via -EBUSY error from smb2_unlink() and
-smb2_rmdir() calls and fallbacks to cifs_rename_pending_delete() which
-implements silly rename.
-
-This is the final change which enables the silly rename functionality for
-the unlink and rmdir calls in SMB2+ dialects on mounted exports from
-Windows servers.
-
-With this change Linux unlink() and rmdir() syscalls called on SMB2+ mounts
-from Windows servers cause that on success the path would not exist anymore
-and new file or directory with that path can be created.
+With this change Linux rmdir() syscall called on SMB1 mounts from Windows
+NT servers cause that on success the path would not exist anymore and new
+file or directory with that path can be created.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/smb/client/smb2inode.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ fs/smb/client/cifssmb.c | 45 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
-index 0dd4a77dfb64..727349ed76b9 100644
---- a/fs/smb/client/smb2inode.c
-+++ b/fs/smb/client/smb2inode.c
-@@ -1351,6 +1351,23 @@ smb2_remove(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
- 		op = SMB2_OP_DELETE;
- 		op_flags = CREATE_NOT_DIR;
- 	}
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 37bc0541bc21..31638b71ee0c 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -823,8 +823,53 @@ CIFSSMBRmDir(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+ 	int bytes_returned;
+ 	int name_len;
+ 	int remap = cifs_remap(cifs_sb);
++	struct cifs_open_parms oparms;
++	struct cifs_fid fid;
++	int oplock;
+ 
+ 	cifs_dbg(FYI, "In CIFSSMBRmDir\n");
 +
 +	/*
-+	 * CREATE_OPTION_EXCLUSIVE ensures exclusive access to the path.
-+	 * If some other client has that path opened then our open fails.
-+	 * So together with remove operation it cause that either the path
-+	 * is immediately unlinked or the command fails with -EBUSY.
-+	 * It should not let the path in the delete pending state.
++	 * Do not send SMB_COM_DELETE_DIRECTORY to NT servers. NT servers just
++	 * sets the DELETE PENDING state on the directory and in case that
++	 * directory is opened by some other client, it stay in this state and
++	 * direntry stay present in the parent directory.
 +	 *
-+	 * When using POSIX extensions then we do not need any exclusive
-+	 * access to the file or directory.
-+	 * In this case the path is unlinked immediately even if it is opened
-+	 * by other client. Unlink fails only in case path is directory and
-+	 * that directory is not empty.
++	 * So for NT servers use NT OPEN in exclusive mode. It fails when some
++	 * other SMB client has the directory opened, and it triggers the
++	 * sillyrename code path. After successful NT OPEN in exclusive mode,
++	 * sets the DELETE PENDING state and close the directory.
++	 *
++	 * Servers with UNIX extensions should support SMB_COM_DELETE_DIRECTORY
++	 * with correct UNIX semantics, so use this NT OPEN + DELETE PENDING
++	 * only against non-UNIX NT servers.
 +	 */
-+	if (!tcon->posix_extensions)
-+		op_flags |= CREATE_OPTION_EXCLUSIVE;
++	if ((tcon->ses->capabilities & CAP_NT_SMBS) &&
++	    !(cap_unix(tcon->ses) &&
++	      (le64_to_cpu(tcon->fsUnixInfo.Capability) & CIFS_UNIX_POSIX_PATH_OPS_CAP))) {
++		oparms = CIFS_OPARMS(cifs_sb, tcon, name, DELETE, FILE_OPEN,
++				     CREATE_OPTION_EXCLUSIVE | CREATE_NOT_FILE | OPEN_REPARSE_POINT,
++				     ACL_NO_MODE);
++		oparms.fid = &fid;
++		oplock = 0;
++		rc = CIFS_open(xid, &oparms, &oplock, NULL);
++		if (rc)
++			return rc;
++		rc = CIFSSMBSetFileDisposition(xid, tcon, true, fid.netfid, current->tgid);
++		/*
++		 * some samba versions return -ENOENT when we try to set the
++		 * file disposition here. Likely a samba bug, but work around
++		 * it for now. This means that some cifsXXX files may hang
++		 * around after they shouldn't.
++		 *
++		 * BB: remove this hack after more servers have the fix
++		 */
++		if (rc == -ENOENT)
++			rc = 0;
++		CIFSSMBClose(xid, tcon, fid.netfid);
++		return rc;
++	}
 +
- 	oparms = CIFS_OPARMS(cifs_sb, tcon, name,
- 			     DELETE, FILE_OPEN,
- 			     OPEN_REPARSE_POINT | op_flags,
+ RmDirRetry:
+ 	rc = smb_init(SMB_COM_DELETE_DIRECTORY, 0, tcon, (void **) &pSMB,
+ 		      (void **) &pSMBr);
 -- 
 2.20.1
 
