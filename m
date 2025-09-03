@@ -1,280 +1,178 @@
-Return-Path: <linux-cifs+bounces-6157-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6159-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32FC8B41E38
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Sep 2025 14:04:29 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4A6BB425D9
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Sep 2025 17:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A40484D70
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Sep 2025 12:03:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A2DC64E50FC
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Sep 2025 15:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D912FC886;
-	Wed,  3 Sep 2025 12:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F4628980E;
+	Wed,  3 Sep 2025 15:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="To6TInIl"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="Y4PeWRH7"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A362DE70B
-	for <linux-cifs@vger.kernel.org>; Wed,  3 Sep 2025 12:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09739286D7B
+	for <linux-cifs@vger.kernel.org>; Wed,  3 Sep 2025 15:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756900949; cv=none; b=rNm4ZrLahC+4k5Pufrk0QG1RSUh0MWcLYQCRe2SCP6HultQ81eGC2yrrXOVXJQTJvwg3oOoif09I+qZ7ulIlJHM37tFRBy4Io2pthjgARG6icVVf9DkaG3JvbvmSHPzTbsnPjyx3ToGoGmRLI9vBHH2wPzp/n1x1yjFTrVWKb40=
+	t=1756914529; cv=none; b=jB/fQPVNiQk0poHBjCVQKm0vw97sB/DB5Bt64KGcumr22VsCqKqq238UUkRWiJdP1+wT/JBq48qeK7M4pdtlKuuNMe4MRDWycdyYQK6JY59XN9dXdIzTkyr5feY19YA7QP+6LjgK0rY8DbcTD505kBmbk2IsH0csKIKnKPmq5E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756900949; c=relaxed/simple;
-	bh=KoNPUn7kI8MGjzCwP8b/gzQgxcS+YbXibeTIk0hv5pU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gF7Yh6v9pYRnDaS6H+v9V7sse+lUyy/tiPIVPAI0W3hbFj8wwJShXWKNh2T5iC5OkJefuEduUfiqFGQKRIrwnUqim3woLHevikcbuhIsh/tpKaNbTPQVMLFKcKOHUKj5+fCpRZFv5mVpfnKJp+7sOxr0JK+vaoqAEcu9tdM5U4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=To6TInIl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756900946;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XqEopCUVV6AIxWgJeMrxsHn0rkjOl/HkbJLHlKDiYUQ=;
-	b=To6TInIlhy+gdYH9RjTBYEJiuiGicYBucp8UzgOsTrRD3g71TPjeNlUKV8vhMPKOb9F4N5
-	+7+duoYmfcCvg6XcIhypYBjLT5K9TITx7dSfyyKUX+T/UYqtNVkrD2C8gBL04PlKHmxPpY
-	EKLxXcNYjsBYJxRurrok+BhE3R5Nt4w=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-641-7OHjWuu0Mmy7MlEaHpbjCA-1; Wed,
- 03 Sep 2025 08:02:23 -0400
-X-MC-Unique: 7OHjWuu0Mmy7MlEaHpbjCA-1
-X-Mimecast-MFC-AGG-ID: 7OHjWuu0Mmy7MlEaHpbjCA_1756900941
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7F36C1955D61;
-	Wed,  3 Sep 2025 12:02:16 +0000 (UTC)
-Received: from warthog.procyon.org.com (unknown [10.42.28.6])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2FE8819560B8;
-	Wed,  3 Sep 2025 12:02:11 +0000 (UTC)
-From: David Howells <dhowells@redhat.com>
-To: Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <christian@brauner.io>
-Cc: David Howells <dhowells@redhat.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Jeffrey Altman <jaltman@auristor.com>,
-	Steve French <sfrench@samba.org>,
-	linux-afs@lists.infradead.org,
-	openafs-devel@openafs.org,
-	linux-cifs@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Etienne Champetier <champetier.etienne@gmail.com>,
-	Chet Ramey <chet.ramey@case.edu>,
-	Cheyenne Wills <cwills@sinenomine.net>,
-	Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 2/2] afs, bash: Fix open(O_CREAT) on an extant AFS file in a sticky dir
-Date: Wed,  3 Sep 2025 13:01:54 +0100
-Message-ID: <20250903120157.899182-3-dhowells@redhat.com>
-In-Reply-To: <20250903120157.899182-1-dhowells@redhat.com>
-References: <20250903120157.899182-1-dhowells@redhat.com>
+	s=arc-20240116; t=1756914529; c=relaxed/simple;
+	bh=99ewMKPJ0gG75qCVLXl1KnshjsdQ8d1sbQkbU3XXgGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pA4sTuafuNv0J7e+DKbgxF8ar6xq61mezpoRshLzlddYiiH9iVtxosvrF/1XYYeghufyUxowhRjJAcSZUUq5u6FQvGkof5Zq4JMr3Xo7Y4iXbzbOTad8A7kBZXj8GGuVEq/Tw4OUIKc67CVvWlfi1ys8Fbznk5InQbE/qqqq4xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=Y4PeWRH7; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=From:Cc:To:Date:Message-ID;
+	bh=99ewMKPJ0gG75qCVLXl1KnshjsdQ8d1sbQkbU3XXgGU=; b=Y4PeWRH74G1EyuFB9JI+pkwG6D
+	1ELc4Xtgl5pWDdV1mFdx/45xn0z5Nq2q/JBql98HDMdWlfKrula8ISSKQPz1L64hj9XmTGoD+bV1r
+	Zt5+wROZsz19giISYXFvvaMdHJzmZRJFO98IkRkBAzchf9oNpF08UoY3r05EzXbkM5qjwn2AewWjo
+	nBrbqMOUAXVIWnRNWqaBGmdPgVwt+kwtFw626d/OaIQokQcpTVimCE9XuIiBwVICtDg7jiAlq3I28
+	r2DSPAUZQcnY+rAd/zH3yinGGW78i5F+km1mx6UlSU8H5xhv3bWGHfdEhdzpc58N2JlnsrLAjEYwc
+	wZaLOwfr+1LAKeSIw8bCCQAxARLpg6hc4bDlnG2ex4V6WDWYCCb3AKaFagDHo364HKDz6haJKJeyh
+	evRHmBnPzDeGsif+1W9g+nN8i2FYSmKpQzL45w5NKu164HcTDAsaHgGON3xo7ZKFVOxiZHyTOD07z
+	34hVCS2bEf4/FkzIxyt/y/me;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1utpiw-002GuW-1q;
+	Wed, 03 Sep 2025 15:48:38 +0000
+Message-ID: <e2a50c26-42ad-4060-9da4-96f89517ee1b@samba.org>
+Date: Wed, 3 Sep 2025 17:48:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] smb: client: fix data loss due to broken rename(2)
+To: Paulo Alcantara <pc@manguebit.org>, Steve French <smfrench@gmail.com>
+Cc: Jean-Baptiste Denis <jbdenis@pasteur.fr>,
+ Frank Sorenson <sorenson@redhat.com>, Olga Kornievskaia
+ <okorniev@redhat.com>, Benjamin Coddington <bcodding@redhat.com>,
+ Scott Mayhew <smayhew@redhat.com>, CIFS <linux-cifs@vger.kernel.org>
+References: <20250902165451.892165-1-pc@manguebit.org>
+ <cd16cf45-efc8-4324-9d40-0b92f15f179a@samba.org>
+ <CAH2r5mvqJXfgQwKLSWrfBDw8Rc88ys8a_cWB5DtD19HSDmFn5w@mail.gmail.com>
+ <e66bfd26-9766-4075-bb8e-89df33e88e59@samba.org>
+ <b29ed180e00cf6197644e54d944c59fc@manguebit.org>
+Content-Language: en-US, de-DE
+From: Ralph Boehme <slow@samba.org>
+Autocrypt: addr=slow@samba.org; keydata=
+ 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
+ R3NApzHw2ZqQDtSdciR9og==
+In-Reply-To: <b29ed180e00cf6197644e54d944c59fc@manguebit.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fCwaHAalYrn1JKN6v458qnQ2"
 
-Since version 1.11 (January 1992) Bash has a work around in redir_open()
-that causes open(O_CREAT) of a file to be retried without O_CREAT if open()
-fails with an EACCES error if bash was built with AFS workarounds
-configured:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fCwaHAalYrn1JKN6v458qnQ2
+Content-Type: multipart/mixed; boundary="------------qK02CW3SI0ReWJgQUpPmhlWj";
+ protected-headers="v1"
+From: Ralph Boehme <slow@samba.org>
+To: Paulo Alcantara <pc@manguebit.org>, Steve French <smfrench@gmail.com>
+Cc: Jean-Baptiste Denis <jbdenis@pasteur.fr>,
+ Frank Sorenson <sorenson@redhat.com>, Olga Kornievskaia
+ <okorniev@redhat.com>, Benjamin Coddington <bcodding@redhat.com>,
+ Scott Mayhew <smayhew@redhat.com>, CIFS <linux-cifs@vger.kernel.org>
+Message-ID: <e2a50c26-42ad-4060-9da4-96f89517ee1b@samba.org>
+Subject: Re: [PATCH v2] smb: client: fix data loss due to broken rename(2)
+References: <20250902165451.892165-1-pc@manguebit.org>
+ <cd16cf45-efc8-4324-9d40-0b92f15f179a@samba.org>
+ <CAH2r5mvqJXfgQwKLSWrfBDw8Rc88ys8a_cWB5DtD19HSDmFn5w@mail.gmail.com>
+ <e66bfd26-9766-4075-bb8e-89df33e88e59@samba.org>
+ <b29ed180e00cf6197644e54d944c59fc@manguebit.org>
+In-Reply-To: <b29ed180e00cf6197644e54d944c59fc@manguebit.org>
 
-        #if defined (AFS)
-              if ((fd < 0) && (errno == EACCES))
-            {
-              fd = open (filename, flags & ~O_CREAT, mode);
-              errno = EACCES;    /* restore errno */
-            }
+--------------qK02CW3SI0ReWJgQUpPmhlWj
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-        #endif /* AFS */
+T24gOS8yLzI1IDk6MzkgUE0sIFBhdWxvIEFsY2FudGFyYSB3cm90ZToNCj4gUmFscGggQm9l
+aG1lIDxzbG93QHNhbWJhLm9yZz4gd3JpdGVzOg0KPiANCj4+IExpa2VseT8gSG93PyBEb2Vz
+IGEgV2luZG93cyBjbGllbnQgYWxzbyBkbyB0aGlzIHN0dWZmIHdoZW4gdGhlIHJlbmFtZQ0K
+Pj4gZGVzdGluYXRpb24gaXMgb3Blbj8gQWxsIHRoaXMgYWRkaXRpb25hbHkgY29tcGxleGl0
+eSBpcyBvbmx5IHdhaXRpbmcgZm9yDQo+PiBidWdzIHRvIGhhcHBlbiBhbmQgbm93IHRoYXQg
+d2UgaGF2ZSBQT1NJWCBFeHRlbnNpb25zIGJhY2sgd2Ugc2hvdWxkDQo+PiBwaGFzZSBvdXQg
+dGhpcyBjcmFwLg0KPiANCj4gQ2xhaW1pbmcgUE9TSVggc3VwcG9ydCBhbmQgYmVpbmcgdW5h
+YmxlIHRvIHJlbmFtZSBvcGVuIGZpbGVzLCB0aGF0IHdvdWxkDQo+IGJlIGV2ZW4gd29yc2Us
+IG5vPw0KDQp3aXRoIFNNQjMgUE9TSVggc3VwcG9ydCBhbGwgdGhpcyBqdXN0IHdvcmtzIGlu
+Y2x1ZGluZyByZW5hbWVzLCB3aGF0IGFyZSANCnlvdSBhbGx1ZGluZyB0bz8NCg==
 
-The ~O_CREAT fallback logic was introduced to workaround a bug[1] in the
-IBM AFS 3.1 cache manager and server which can return EACCES in preference
-to EEXIST if the requested file exists but the caller is neither granted
-explicit PRSFS_READ permission nor is the file owner and is granted
-PRSFS_INSERT permission on the directory.  IBM AFS 3.2 altered the cache
-manager permission checks but failed to correct the permission checks in
-the AFS server.  As of this writing, all IBM AFS derived servers continue
-to return EACCES in preference to EEXIST when these conditions are met.
-Bug reports have been filed with all implementations.
+--------------qK02CW3SI0ReWJgQUpPmhlWj--
 
-As an unintended side effect, the Bash fallback logic also undermines the
-Linux kernel protections against O_CREAT opening FIFOs and regular files
-not owned by the user in world writeable sticky directories - unless the
-owner is the same as that of the directory - as was added in commit
-30aba6656f61e ("namei: allow restricted O_CREAT of FIFOs and regular
-files").
+--------------fCwaHAalYrn1JKN6v458qnQ2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-As a result the Bash fallback logic masks an incompatibility between the
-ownership checks performed by may_create_in_sticky() and network
-filesystems such as AFS where the uid namespace is disjoint from the uid
-namespace of the local system.
+-----BEGIN PGP SIGNATURE-----
 
-However, the bash work around is going to be removed[2].
+wsF4BAABCAAjFiEE+uLGCIokJSBRxVnkqh6bcSY5nkYFAmi4Y1UFAwAAAAAACgkQqh6bcSY5nkbG
+RA/2K8cqUzaqBHCG6leJqSCh1T8zhxeuO74sGJ+EWl9eow35vm9OYNDjvoVs8FpVMX6Qf5dvvix7
+MRPZin6rrIclJOuU/pxw3HpJWS2KGqtxFQqU0lRARJN5ZlCYXuuRUEOVsWYSCbCGklyW+oqzj06e
+NKYhuc31grqsAGA3Typa2NqzQM4f+D6tR5OucFDpGwP2CaA2y0ENS4a6AhmRvW/5ukiZXMXTSgT6
+SpWPpMOoCsZs2qpgjDPIXZBa+9M5rIw8mIXbVmnsFu+ACYtXAWRmgFrlDm+a3JJo4g9g+adMowUP
+bzXF2HMsMjKCkDrKbIqo+if73261aBZ6qwPk0pciW0bp4F9ii6eu4bpYXtoCC4wJi/X3Onoqp4d3
+XEPI11O1Xob4RP2TJf6RHu/2ImNTXsLE8GLOR9gwyDuuGaRpJnXZmJ0ErVlPJ00mzsK8/6MXmhvE
+3fxUJra75mJN34mW2ocDbaRSzSmG9IVxBDFdvCOaCU5b5dWBrRcT57GoGNq6mSR3TsH+YVx3RyLb
+LL2g8MOUEw3xPAtllW40KRjEj4rR2BfGjqCRxAiZEZV6oTuHDXA8MG72pidmMhm9MF4j0Udk0ZAm
+NQX1j7C/zqxuONPp3OvXG4zX8wQGhlWo6gZcVxzPXd1NoZYmDKLShH15+J31A3TKYUc5WvTRaXsR
+6w==
+=kDS8
+-----END PGP SIGNATURE-----
 
-Fix this in the kernel by using a preceding patch that allows the user ID
-comparisons to be overridden by:
-
- (1) Implement the ->is_owned_by_me() inode op for kafs to determine if the
-     caller owns the file by checking to see if the server indicated the
-     ADMINISTER bit was set in the access rights returned by the
-     FS.FetchStatus and suchlike instead of checking the i_uid to
-     current_fsuid().
-
-     Unfortunately, this check doesn't work for directories, but none of
-     the ops should require that.
-
-     Note that anonymous accesses to AFS will never see the ADMINISTER bit
-     being set and so will not be perceived as owning an anonymously-owned
-     file.
-
- (2) Implement the ->have_same_owner() inode op, for kafs to compare the
-     AFS owner IDs retrieved by FS.FetchStatus (which are 64-bit integers
-     with AuriStor's YFS server and, as such, won't fit in a kuid_t).
-
-     Note that whilst an anonymously-owned file will match an
-     anonymously-owned parent directory, an anonymously-owned directory
-     cannot have the sticky bit set.
-
-This can be tested by creating a sticky directory (the user must have a
-token to do this) and creating a file in it.  Then strace bash doing "echo
-foo >>file" and look at whether bash does a single, successful O_CREAT open
-on the file or whether that one fails and then bash does one without
-O_CREAT that succeeds.
-
-Fixes: 30aba6656f61 ("namei: allow restricted O_CREAT of FIFOs and regular files")
-Reported-by: Etienne Champetier <champetier.etienne@gmail.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Jeffrey Altman <jaltman@auristor.com>
-cc: Chet Ramey <chet.ramey@case.edu>
-cc: Cheyenne Wills <cwills@sinenomine.net>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Steve French <sfrench@samba.org>
-cc: linux-afs@lists.infradead.org
-cc: openafs-devel@openafs.org
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-Link: https://groups.google.com/g/gnu.bash.bug/c/6PPTfOgFdL4/m/2AQU-S1N76UJ [1]
-Link: https://git.savannah.gnu.org/cgit/bash.git/tree/redir.c?h=bash-5.3-rc1#n733 [2]
----
- fs/afs/dir.c      |  2 ++
- fs/afs/file.c     |  2 ++
- fs/afs/internal.h |  3 +++
- fs/afs/security.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 53 insertions(+)
-
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index bfb69e066672..644782a416d7 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -65,6 +65,8 @@ const struct inode_operations afs_dir_inode_operations = {
- 	.permission	= afs_permission,
- 	.getattr	= afs_getattr,
- 	.setattr	= afs_setattr,
-+	.is_owned_by_me	= afs_is_owned_by_me,
-+	.have_same_owner = afs_have_same_owner,
- };
- 
- const struct address_space_operations afs_dir_aops = {
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index f66a92294284..399a40c45d0a 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -47,6 +47,8 @@ const struct inode_operations afs_file_inode_operations = {
- 	.getattr	= afs_getattr,
- 	.setattr	= afs_setattr,
- 	.permission	= afs_permission,
-+	.is_owned_by_me	= afs_is_owned_by_me,
-+	.have_same_owner = afs_have_same_owner,
- };
- 
- const struct address_space_operations afs_file_aops = {
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index 1124ea4000cb..8c2ca00ac237 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -1515,6 +1515,9 @@ extern struct key *afs_request_key(struct afs_cell *);
- extern struct key *afs_request_key_rcu(struct afs_cell *);
- extern int afs_check_permit(struct afs_vnode *, struct key *, afs_access_t *);
- extern int afs_permission(struct mnt_idmap *, struct inode *, int);
-+int afs_is_owned_by_me(struct mnt_idmap *idmap, struct inode *inode);
-+int afs_have_same_owner(struct mnt_idmap *idmap, struct inode *inode1,
-+			struct inode *inode2);
- extern void __exit afs_clean_up_permit_cache(void);
- 
- /*
-diff --git a/fs/afs/security.c b/fs/afs/security.c
-index 6a7744c9e2a2..19b11c7cb1ff 100644
---- a/fs/afs/security.c
-+++ b/fs/afs/security.c
-@@ -477,6 +477,52 @@ int afs_permission(struct mnt_idmap *idmap, struct inode *inode,
- 	return ret;
- }
- 
-+/*
-+ * Determine if an inode is owned by 'me' - whatever that means for the
-+ * filesystem.  In the case of AFS, this means that the file is owned by the
-+ * AFS user represented by the Rx Security Class token held in a key.  Returns
-+ * 0 if owned by me, 1 if not; can also return an error.
-+ */
-+int afs_is_owned_by_me(struct mnt_idmap *idmap, struct inode *inode)
-+{
-+	struct afs_vnode *vnode = AFS_FS_I(inode);
-+	afs_access_t access;
-+	struct key *key;
-+	int ret;
-+
-+	if (S_ISDIR(inode->i_mode))
-+		return 1; /* The ADMIN right check doesn't work for directories. */
-+
-+	key = afs_request_key(vnode->volume->cell);
-+	if (IS_ERR(key))
-+		return PTR_ERR(key);
-+
-+	/* Get the access rights for the key on this file. */
-+	ret = afs_check_permit(vnode, key, &access);
-+	if (ret < 0)
-+		goto error;
-+
-+	/* We get the ADMINISTER bit if we own the file. */
-+	ret = (access & AFS_ACE_ADMINISTER) ? 0 : 1;
-+error:
-+	key_put(key);
-+	return ret;
-+}
-+
-+/*
-+ * Determine if a file has the same owner as its parent - whatever that means
-+ * for the filesystem.  In the case of AFS, this means comparing their AFS
-+ * UIDs.  Returns 0 if same, 1 if not same; can also return an error.
-+ */
-+int afs_have_same_owner(struct mnt_idmap *idmap, struct inode *inode1,
-+			struct inode *inode2)
-+{
-+	const struct afs_vnode *vnode1 = AFS_FS_I(inode1);
-+	const struct afs_vnode *vnode2 = AFS_FS_I(inode2);
-+
-+	return vnode1->status.owner != vnode2->status.owner;
-+}
-+
- void __exit afs_clean_up_permit_cache(void)
- {
- 	int i;
-
+--------------fCwaHAalYrn1JKN6v458qnQ2--
 
