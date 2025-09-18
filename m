@@ -1,93 +1,122 @@
-Return-Path: <linux-cifs+bounces-6267-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6271-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BB2B824BC
-	for <lists+linux-cifs@lfdr.de>; Thu, 18 Sep 2025 01:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 51082B825E6
+	for <lists+linux-cifs@lfdr.de>; Thu, 18 Sep 2025 02:24:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B4C77ADF37
-	for <lists+linux-cifs@lfdr.de>; Wed, 17 Sep 2025 23:26:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A9BA7B0A6C
+	for <lists+linux-cifs@lfdr.de>; Thu, 18 Sep 2025 00:23:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D776A313D46;
-	Wed, 17 Sep 2025 23:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9A81922FD;
+	Thu, 18 Sep 2025 00:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="CFE2DqPY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3l+CyN0"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C377313540;
-	Wed, 17 Sep 2025 23:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0DF185B67
+	for <linux-cifs@vger.kernel.org>; Thu, 18 Sep 2025 00:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758151667; cv=none; b=HoXYCuT6qWjLaDhkLyHtu3JjY9T3wHYz2kVEFEyvCuz+Cew8wKZ11YLy9+3tfFUJS2rrTgWNOHT2jiZBhcfjCTgAGyGld3cBAtmxq5l4zUc9tQjdQLdUlIMQEy6Lcjsgik66GUxOROlq0QimsF9yOyePDYhjaO9YXzz0FzDIy6c=
+	t=1758155086; cv=none; b=jlNEjGU8eKXtyuG3iZCQAMWi93L7S0rFhfolQ8I9r17NaSmawzz5FSqN5KU8/3jiidE4JOL8rsPvZ0HUGun+ANUuBEK8VXhd8kNsx2CpyNHGpkBLh3QPS0q4P/yzpGzVqpIm7XG/AO5OSsWNLIkku+Cp2H8PfV8hiJa4so84B94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758151667; c=relaxed/simple;
-	bh=v0ORbOYTQuPC+Lk1UcrMbyUyyP2Sj8S5nGAxGAeua5o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cajHey4BdrlELpsyPofS5ZWjNqfewVLYNpMCan3i0Eug9WzW2+U4KE76u/z62XUAMFshpO0ErjyBdMK7XrWUlJ0kpAvMtlS7J2eqeF9U4VpthoxW4h7E/9DXiG3DXnnLF/d1fSHfl1+HNhcWTCE5bjtosj4OpZFl6XYdESu8EWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=CFE2DqPY; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=9wTihei3CR8ifsWFMqxwRfG92M/T58JiLp+ifoDanQg=; b=CFE2DqPYNYofWjgsFkrcOJ9vtl
-	YHav2Ad84icp91CnKsx+bpo6ZVIxn0ysCgaFhBiF4cxTkZ5cWj6YTZBYadGP7k4WGQ+W5QjkiNZlg
-	o/2bV/GJy6vzVWX9gyUXpvkfwWajCppQkEJpEOf1weGiainW/DNaMZOy2XfKZJoVyNjrTtHRLk/wD
-	mCaNHzkBBebGFfgt2w8GxBbcwuQUGCN6x7AinAU4vQLAPN4ab+wT1A39N5yIGNbXq1aWVOrigMyxF
-	z1fIxRle670fy3oac1iYOxuWXqfM5DXHZRjxO0wCnRImd9zwZ6Hcvfr9Js3+kZ8sAoWFlcc3ajc0f
-	UToNWqZA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uz1Yn-0000000Aj6r-3gti;
-	Wed, 17 Sep 2025 23:27:37 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: v9fs@lists.linux.dev,
-	miklos@szeredi.hu,
-	agruenba@redhat.com,
-	linux-nfs@vger.kernel.org,
-	hansg@kernel.org,
-	linux-cifs@vger.kernel.org
-Subject: [PATCH 9/9] slightly simplify nfs_atomic_open()
-Date: Thu, 18 Sep 2025 00:27:36 +0100
-Message-ID: <20250917232736.2556586-9-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250917232736.2556586-1-viro@zeniv.linux.org.uk>
-References: <20250917232416.GG39973@ZenIV>
- <20250917232736.2556586-1-viro@zeniv.linux.org.uk>
+	s=arc-20240116; t=1758155086; c=relaxed/simple;
+	bh=aqa3HyW4izEedzN2M7rAgsR/LkZTNRFE/QQpCiqhopE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dzSGidP6q60aVI4blS6tJ6RCWQF0VaBbMz8lv6JajcTI7AbGJm/z84z+APdzJEYpnezCqrZYPtNAivnyuQRDheVITfvuUrEH/VZta++wwTGXrv+soTFg0yL1VRQ57Vgs/YutjnmUvOytB/WxZ9WZ+lj/rIjgSx5O+SPuVWXpVQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3l+CyN0; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-791875a9071so3871746d6.1
+        for <linux-cifs@vger.kernel.org>; Wed, 17 Sep 2025 17:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758155084; x=1758759884; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AAXfVbKrj81Yrvk5S99ka61ApJPAF5+mvHdEE3dMmkE=;
+        b=H3l+CyN0+X4DRDmDvIeMO8W26J1phrmYxGauoc3V//ih0oCsyVw3aDQbq9kWcDBVh5
+         so8lJ8kSahN+2Rgi7WzTK5lQfJtlHcbnMwGylb3iMQnj9iQ2YlxaIK8/qEa2Ye155UAM
+         U0TPIS2V5I9fl8njAXsty7esJQsX0+MP6vOg1M4cmbeBFbxWg39LzxRq2Jh5ClRV8VYV
+         QjTMnfArEMVnH4ou1NWEvksvUJ3gAOht1XUhl+gArp26uC2vb7BpwReK787MkNmz7iSq
+         XQTM+hIYl/8n/QbC/aAvdikoWdDEMisAPF6oyTaMCAppeHQfdIdGuneePbw/vjgL3WmN
+         IEeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758155084; x=1758759884;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AAXfVbKrj81Yrvk5S99ka61ApJPAF5+mvHdEE3dMmkE=;
+        b=WSVCntnvGb2WMErq6wS/Uj10sy0VQm/IU9MoLvjt3Rt7pOK2ilx2NmGN3PunKtQE5x
+         uS740yvzY7xILalmhazDhDNa3zmeS/NBEPYW6H5SkUhZ2qCBZnwQcq2rxTlF+CMblrou
+         FQroNJX25Awv3L5eiJZCTBDzr7Kv6klbNk//PGH/8uVxIP5p9w5zysaE1QvALXIxMdAc
+         TMYfJqC0KOL+sE/kYcDZVJd7FRosVBdOBd0XWfo6OWa3DqPhJV7h0gtSL4x+/W322Ya9
+         AzWlNmxdD1Sc+FH1d9jTB36CGWhR8r4SV5A+MVlGDopYA9E3sWeklXP1k+6VqmJ8TzNk
+         ZURg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhV+LblkLTyFMKb0vzs76YUsIP4d6By5wMyPFEISeh/nV/Otmkue5dp6noLqZe1krZ6H/knGqTHLxb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8Yc2ny/QW0Ykci6SUJhzHskMEx++1rUG0xYZuj5EWNMREmylK
+	Wj5zy2jo5dxVjHgZsvdbBcLVhUwK/l8XxEMd8Q1sVuInIBm9/egXLBmLtLoyLgq0qlqhtq6H1ge
+	VPGkFWxmH6nYyWpb11jH8yIn0YJ2Q2rs=
+X-Gm-Gg: ASbGncvPh/oLVIWm4EGnGGocEA/GGx4aTL+2VwijbEi1JtE7ylHO0plYkG6fZYMmZWJ
+	xvniHBPGzUZjzRoUs7+6pC6tr53e2AmAORW2UnGc5ZkZp+EHkcFp0r9RvOZkNX/i9WRiPNIyF30
+	A7nGI5bTTqG/L+hn+JKm4fC8qZqA+f5ybqW99AIZa1PY6YHNcdZngHXyAgzDR9VCMdaQ6nbwGof
+	jmolLqkNZmw3d2HlyT4kXyINFF+qnHiwcwnL1/5TN40bvUTLoQm8aucx+lZuJabElRRgCU2763T
+	PFIzZ5RV6pQtDD0dqDiCdCyepw+dMW+xKYlv0kRKjr8POs/kHeecQwt1lw==
+X-Google-Smtp-Source: AGHT+IGUH+Vo5ah/BOcidk5QhkanPaPPGQuYC3QJ2qzogXag5pL1GyIB63O7MImSt5xi0DjpoDoPL0PfcM83Oi+Oc3w=
+X-Received: by 2002:a05:6214:412:b0:782:9454:ac8a with SMTP id
+ 6a1803df08f44-78ecf4fdc10mr43901236d6.57.1758155083710; Wed, 17 Sep 2025
+ 17:24:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+From: Steve French <smfrench@gmail.com>
+Date: Wed, 17 Sep 2025 19:24:31 -0500
+X-Gm-Features: AS18NWBPu6sGfW3hnPreMxF2wFj2Jem45fHu6Sahx8yNzeyFoZ-xTePQClKaY-I
+Message-ID: <CAH2r5mveqnRsJ4Fi8pQjTY2WrtDbys1f3JPR+OR=w-eskUoiyw@mail.gmail.com>
+Subject: [GIT PULL] ksmbd server fixes
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Namjae Jeon <linkinjeon@kernel.org>, "Stefan (metze) Metzmacher" <metze@samba.org>, 
+	CIFS <linux-cifs@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Reviewed-by: NeilBrown <neil@brown.name>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/nfs/dir.c | 2 --
- 1 file changed, 2 deletions(-)
+Please pull the following changes since commit
+f83ec76bf285bea5727f478a68b894f5543ca76e:
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index c8dd1d0b8d85..5f7d9be6f022 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -2198,8 +2198,6 @@ int nfs_atomic_open(struct inode *dir, struct dentry *dentry,
- 		else
- 			dput(dentry);
- 	}
--	if (IS_ERR(res))
--		return PTR_ERR(res);
- 	return finish_no_open(file, res);
- }
- EXPORT_SYMBOL_GPL(nfs_atomic_open);
+  Linux 6.17-rc6 (2025-09-14 14:21:14 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/ksmbd.git tags/6.17-rc6-ksmbd-fixes
+
+for you to fetch changes up to e1868ba37fd27c6a68e31565402b154beaa65df0:
+
+  ksmbd: smbdirect: verify remaining_data_length respects
+max_fragmented_recv_size (2025-09-14 22:17:10 -0500)
+
+----------------------------------------------------------------
+Three ksmbd fixes, all for stable
+- Two fixes for remaining_data_length and offset checks in receive path
+- Don't go over max SGEs which caused smbdirect send to fail (and
+trigger disconnect)
+----------------------------------------------------------------
+Namjae Jeon (1):
+      ksmbd: smbdirect: validate data_offset and data_length field of
+smb_direct_data_transfer
+
+Stefan Metzmacher (2):
+      smb: server: let smb_direct_writev() respect SMB_DIRECT_MAX_SEND_SGES
+      ksmbd: smbdirect: verify remaining_data_length respects
+max_fragmented_recv_size
+
+ fs/smb/server/transport_rdma.c | 183 ++++++++++++++++++++++++++-------------
+ 1 file changed, 125 insertions(+), 58 deletions(-)
+
 -- 
-2.47.3
+Thanks,
 
+Steve
 
