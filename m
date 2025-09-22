@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-6376-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6374-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94DAFB92EAB
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 21:38:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642BBB92D8E
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 21:34:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AED721907178
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 19:38:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ED9D2A74AF
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 19:34:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDD62F0C5C;
-	Mon, 22 Sep 2025 19:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26112F0C62;
+	Mon, 22 Sep 2025 19:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KVIp2P0+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c4j67MVm"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CE727B320;
-	Mon, 22 Sep 2025 19:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EBF1FDA89;
+	Mon, 22 Sep 2025 19:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758569899; cv=none; b=IgJ2Zxonx3QwlPiMK5G2a3BIooRXH6jCHTrGKaqOrIVoVb1H3cDuVTku/oWa/DuGC2oKaI35aSq/6OWsnae8ESsbO7b+F3hXp9nrZHIXOtQnKxc8sOuAranfL9GqET8RTdrOb3m7kzWqtnQ9aUc4nH7TCgeck8SggFUxJirMSzs=
+	t=1758569681; cv=none; b=ZIWb2IY63wDebG2EOqNLJQGOeiUl/rVVEGFelZ79FREgdWeuR3wWWtTC1fT+8l2jTnmx0aKG0muzCf+hDcATS4Zk6t4I7Bal2uelojURdp0J4X6fzH/ySQ23St5qtFZ92A/JDuhPiRbkyktsBBuXF8G73kJq6LLxP/SYbrtICgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758569899; c=relaxed/simple;
-	bh=NmcV47SRVRnbJmVC1h3O9ORsWnN/wf/D6Qf8wq91Ex0=;
+	s=arc-20240116; t=1758569681; c=relaxed/simple;
+	bh=dcjT9okpzy3BmcRq28rgo4MjdnV7GQkdXUYS/0z49dA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gx/zkjfs5wEq+NzTu65B819LDj/wU2KoOW6DrR58Pwsfxva532ymMRZr+2Nh9X6vnK/uc5dqGYus54i0bqbeilTerfnGJLEo21hqc5hO5AWoWI3I3Gib+cvK1joV2+EhPxbY/HQAQH7ldRgedVKDH42+NBP2uemLn9hWGA/0QR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KVIp2P0+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8D7C4CEF0;
-	Mon, 22 Sep 2025 19:38:18 +0000 (UTC)
+	 MIME-Version; b=VZYqAgZwiz22T0bECSU104V3JSgUixZhFFFiq9u6Qq+YTMXzigt56lJdap6sJz+LwS52KTM8c0BB3Ycdg1U8eCbk6o9cbSHCbIm3k87wjhPbWOIK4QljvNV2QO1ngj03V95N3BZB0xqaFtcFa/TOdLWG9ENbT+mav3gI65V8jb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c4j67MVm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87F5C4CEF0;
+	Mon, 22 Sep 2025 19:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758569899;
-	bh=NmcV47SRVRnbJmVC1h3O9ORsWnN/wf/D6Qf8wq91Ex0=;
+	s=korg; t=1758569681;
+	bh=dcjT9okpzy3BmcRq28rgo4MjdnV7GQkdXUYS/0z49dA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KVIp2P0+v8jxBSnnKanefdOuAY2csjfWTom8slIAZ+ij9xPiAtCU+RKw9L0x1Vp2u
-	 mhlioeP/Cs9WWieIplvCtVvLO4XNnaTuiRXI953vvMzZ59T3tJA45nzEdnKhtFuRH/
-	 yu/M5srGkoL/Vrmtjs8hfjOp1/T/0FASYkax49/I=
+	b=c4j67MVm4OKT/dsl/Fk/VN0sP8VZPzDhq8tY3a1Cd0S0fizfJ1KN/TI3j3ASahDOT
+	 sTA9ye1Xylgu4fTdjcq3ZvTbHRgGuRKgsX21r1lYlVm+CTCd1aMZolk61S//uYc1kr
+	 3HrXAGbErr2yxPvZF8XYwWh4S+OfHh/0rUeeQgao=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -49,12 +49,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Namjae Jeon <linkinjeon@kernel.org>,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.12 035/105] ksmbd: smbdirect: verify remaining_data_length respects max_fragmented_recv_size
-Date: Mon, 22 Sep 2025 21:29:18 +0200
-Message-ID: <20250922192409.835051635@linuxfoundation.org>
+Subject: [PATCH 6.6 27/70] ksmbd: smbdirect: verify remaining_data_length respects max_fragmented_recv_size
+Date: Mon, 22 Sep 2025 21:29:27 +0200
+Message-ID: <20250922192405.307453170@linuxfoundation.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250922192408.913556629@linuxfoundation.org>
-References: <20250922192408.913556629@linuxfoundation.org>
+In-Reply-To: <20250922192404.455120315@linuxfoundation.org>
+References: <20250922192404.455120315@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
