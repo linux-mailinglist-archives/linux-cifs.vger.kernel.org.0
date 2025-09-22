@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-6373-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6375-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C29A1B92D1C
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 21:33:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58AB4B92E15
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 21:36:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D6DE2A5DC1
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 19:33:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21C5944495D
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Sep 2025 19:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B4D191F66;
-	Mon, 22 Sep 2025 19:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BB42F0C64;
+	Mon, 22 Sep 2025 19:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KpwEf1nm"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J/y3J4EX"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89588C8E6;
-	Mon, 22 Sep 2025 19:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85572EDD5D;
+	Mon, 22 Sep 2025 19:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758569601; cv=none; b=HxSVkEFzDz/1gh00rhEHCAkjKN08q7f26j5+eC4qLS4f0lZplgogpq1uEn920iOm/H53dekoTapKFrbOqVVC1yeROhOfIiBw3d15Ce0CJvR6i7DM4SjZRh4/LeDRB1h93EhoBzqrejP6WR77x6veN/IoTJBZJK9EBjV72lcH2OI=
+	t=1758569777; cv=none; b=rwOBvtzc+/gJM2DO5fZ9mO5Hc9jjsQQUCouZhFwtSeOa66a45EHD3+18ONS1b4ytGALSc0pbmPBYT8zFgzwtvmxFDMOvNYzcK33O/aV5hYO9JynipTXJtEXPRNJGP/l8KGcrMxreSzUGGvgf7dul7SiIoacL+35jIzhpG2gG9Sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758569601; c=relaxed/simple;
-	bh=BLVtAvvOI9l9nyKOakCo6O3gEHUseulk5jE5cAtPVRM=;
+	s=arc-20240116; t=1758569777; c=relaxed/simple;
+	bh=U167C+QGuTBgb1He854QVnBKvVY1JfwN3YmT2oi8Zy4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f6w0DjA2Pp6haAYwRg6OwY8aBDhGlmlTEV2ecZHEPiCbiqpB6tct57h7C5nUGcb+SDzvcStpbh8XoEup8BL4DJeZ8zbwMAojnaZ3A1eEP0h0YT6yXc7i/RcGyzoeG0f4XWHXpqod2Xf6PXOh62GQXYrzS5CHYQsN9oXqediI8JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KpwEf1nm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B05C4CEF0;
-	Mon, 22 Sep 2025 19:33:20 +0000 (UTC)
+	 MIME-Version; b=AZ2g84PGtNOETH8BD5oy2ZB+JpTEf5ZIiZd+hOVuTIm+xWX2EF5cGuL76d77EeaHQxG+/EoHl9O4tBNFbZlrvQ+SkWJ0HLeMD34tOSxw+NIjQnMOPQkK+xu518Frm2uaqXCOkBZHEtCLioOhuNSEK04xyAGbQ00AZJC7/ECMXTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=J/y3J4EX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2856C4CEF0;
+	Mon, 22 Sep 2025 19:36:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758569601;
-	bh=BLVtAvvOI9l9nyKOakCo6O3gEHUseulk5jE5cAtPVRM=;
+	s=korg; t=1758569775;
+	bh=U167C+QGuTBgb1He854QVnBKvVY1JfwN3YmT2oi8Zy4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KpwEf1nmHDK1pb2FJk40NxIBkHjODdb/4xfInxJtSLpEsi7j3QkfPdpfbuxzTXC4P
-	 KzU7LtkTES4gA7w7tzaQTCdTWyd7BnKFXSFO+al1pcpGnM1UPKZ7Hv5BEZyWClzQb8
-	 Rog6aqIsSnYhwOGSJebxi1pizcN694Jwy1DUyIqo=
+	b=J/y3J4EXkW4RqeiFZXXR7tu9KpeMfsZgmswJvOndD+RZLAwkXNZ6ExCumxMvZhgDh
+	 WXcfVadyodwbL2PBsK6nfYYv4l/TfRXpmmXzkI9DUD1Yu3TmxPiyTH87j2DBFfoLfB
+	 N0bpgS83rs+P1wAeIDC5GOyQRTjA1DRgI26FMslo=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -51,12 +51,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 45/61] smb: client: fix smbdirect_recv_io leak in smbd_negotiate() error path
-Date: Mon, 22 Sep 2025 21:29:38 +0200
-Message-ID: <20250922192404.830838087@linuxfoundation.org>
+Subject: [PATCH 6.6 56/70] smb: client: fix smbdirect_recv_io leak in smbd_negotiate() error path
+Date: Mon, 22 Sep 2025 21:29:56 +0200
+Message-ID: <20250922192406.105845403@linuxfoundation.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250922192403.524848428@linuxfoundation.org>
-References: <20250922192403.524848428@linuxfoundation.org>
+In-Reply-To: <20250922192404.455120315@linuxfoundation.org>
+References: <20250922192404.455120315@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index d47eae133a202..b648bb30401d5 100644
+index 713bd1dcd39cc..be9be8f363319 100644
 --- a/fs/smb/client/smbdirect.c
 +++ b/fs/smb/client/smbdirect.c
-@@ -1084,8 +1084,10 @@ static int smbd_negotiate(struct smbd_connection *info)
+@@ -1064,8 +1064,10 @@ static int smbd_negotiate(struct smbd_connection *info)
  	log_rdma_event(INFO, "smbd_post_recv rc=%d iov.addr=0x%llx iov.length=%u iov.lkey=0x%x\n",
  		       rc, response->sge.addr,
  		       response->sge.length, response->sge.lkey);
