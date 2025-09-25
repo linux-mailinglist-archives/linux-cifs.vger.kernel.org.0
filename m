@@ -1,590 +1,188 @@
-Return-Path: <linux-cifs+bounces-6479-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6481-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F2DBA06F4
-	for <lists+linux-cifs@lfdr.de>; Thu, 25 Sep 2025 17:48:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADB3BA0733
+	for <lists+linux-cifs@lfdr.de>; Thu, 25 Sep 2025 17:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 350EA7A8728
-	for <lists+linux-cifs@lfdr.de>; Thu, 25 Sep 2025 15:47:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CC85324B7D
+	for <lists+linux-cifs@lfdr.de>; Thu, 25 Sep 2025 15:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACB830649E;
-	Thu, 25 Sep 2025 15:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8AE2FFFBE;
+	Thu, 25 Sep 2025 15:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUb1LJvw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f/lxhIT5"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2DD3009EF
-	for <linux-cifs@vger.kernel.org>; Thu, 25 Sep 2025 15:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C9030171E
+	for <linux-cifs@vger.kernel.org>; Thu, 25 Sep 2025 15:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758815293; cv=none; b=Q6zCw9V8wLEcZzXGw4CYrXT9BU53c9uPfpukxWtlp7bN/Gw40JY40lu+yOokt4QnpWSj4Im4BOjyCV3aOdQpjKnJjCVK+4ucTazAGumNekkzmWLXtLvA0bbEZi64SCLxuuO9HptIgmUjthfDHZ8PqdAz+oPBntt5H65EF9apbNY=
+	t=1758815417; cv=none; b=N9NVYhPIKT7rGeDSNEcOsPBzYhXZ5DOMjOreIFqfzyElkd4Mv/rc2/xpaKi2KVuKdtpVLk7hG+bzwcTsoAN8pDHNYLgkf/tSNjHijbK8i5YGqSagxim30NjbA69gE/FW/5lt6IosiZchcunS8ophcgiXdKc+qR61MWk0gW+qelo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758815293; c=relaxed/simple;
-	bh=OhCmUIsc5CSNlJdE0XDcNREL58H2lhiETZ3SMJByiF0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qktWHoXYSlnVDnOBbpxcaqyXrEGuEELBK0rJiRnwiUiv5adi0Ebs58iQKE2eQUdupUIhdi8ZlacwhkgstTcz55VgEL7k/9zbhaGXtgTrD76MjB9a/K/pRsFe/P1IdVbxlGhUE1NH4DfyMIk93FxNsSPosO2f5skPCuP/YGtAXeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUb1LJvw; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-795be3a3644so5284066d6.0
-        for <linux-cifs@vger.kernel.org>; Thu, 25 Sep 2025 08:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758815290; x=1759420090; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PeKsQObSVCYyJFfh1E99huodAkXqyNDlJERnAWNe1cU=;
-        b=KUb1LJvwe5knkZODn7WYgEY9pa/ZBtnBIoyZDVQjI/Q5cU6onvyC7YnjcWZgXg02nl
-         peijtIGlcEvXJsmY3BMBmE31/AL0frHBjEw6e9KxjS6N42E+YLvihnrLMWIN9XBcca5r
-         6mh8NGjjjmu7db+q4c3R9KdgtZi9WnCFeEZKi2aIzi3DJU/7cBvv+w2wejMmELDK0Pek
-         o7ba8DgAH0DdJ1xY4BjKvSSmZEfUA6TyuWfzmjjctI1RUYlNs1IcFjTq2qqYZFe3qRNV
-         OaPi3lLhwInT+unnxt1tsplYpxKWF/Yo7NDaZngBbsfcImvZqgR+uOem+MI09D3lnXaj
-         4q6g==
+	s=arc-20240116; t=1758815417; c=relaxed/simple;
+	bh=6U561RsZS+7ehXxxbAaXaCZdLb/rf1WSXkRONpEB64k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AxOHghL3NiOcY95L93tG6uQ08dUwrD4R5+ua7kBRLJL4KvUEIs8TiAsLQjZp/bH28et4D+Cqw3Xm9Rb/BjL2mp/R58AXU+PAOp4U9w/F7jn6hY+F4bIUuJErfJAnLCc6XPUshxz5EWYJTkftni3cTBHBoCKtSXa8LLwO3HisFgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f/lxhIT5; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758815414;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lPOIdtGuD9l53wCDZgvs8CoLuOUrw0SyvwaoNtPWj00=;
+	b=f/lxhIT5Pu9HHugrqnOg/sGfGsJlZF6xuEwo/F7FNWkZ3VQDTUOVRn+iFvtqBWAhasXQJp
+	3NDeJn2Zf1YKRyhw9lT1dAm2j6PhXul1ODKN9JAWlele3e+ZkATclWKykZeArh77c2D94R
+	dRd+xIEyjR4qpaw55mCuZmbsld9OkoY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-187-pM4gC_bnMYGxR90kjzS9RQ-1; Thu, 25 Sep 2025 11:50:11 -0400
+X-MC-Unique: pM4gC_bnMYGxR90kjzS9RQ-1
+X-Mimecast-MFC-AGG-ID: pM4gC_bnMYGxR90kjzS9RQ_1758815410
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-46b303f6c9cso9023255e9.2
+        for <linux-cifs@vger.kernel.org>; Thu, 25 Sep 2025 08:50:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758815290; x=1759420090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PeKsQObSVCYyJFfh1E99huodAkXqyNDlJERnAWNe1cU=;
-        b=q+cGTR0o/jRwbHATOTRzMiJfbf42TNNIi5cAmubg7N9HwCJ24GLaTArrC86v40WikC
-         tihPI/xiqE33jMH2U7Sy90h1PiKO2XqsQ00cQ9P1a/Go+qGcW3B21gZFXpC01yGGXJ7S
-         Gu23b40jEuYYtTf5xxcd6oEYNoyhErZAJlhF1eV9tAm822fhdMYlCRVlwLdSPiFLzg2B
-         PctV8uFGFdCQnbgR3CFMzSMqfTRLtutUVwX1hyk0XIuqR9+s36ZNUkM+adFL2gKv/X/0
-         8Iw3dgiCLu2XaO7i0mvWdDqoTazfWjqSgYzcTwdE/YEOsJ9w8vXLW6arbBQN0gYD4wyp
-         geQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWwQQqYn1/Ud+YbHTvX1UimTHjozBdhCCIYqf3fnxDvWH0xsbgjqQRIHRP7U6WROG7fxunmI5unkRMY@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4by3eTYPVS5nhyyL6ezoPBzusO4I8SbeWjd7Hd5Kflwzpo6KV
-	fY7A2Kkt54aaUfKel96nKLUbLHiM8FxjzA03oGpLmyhwzUtWc7WKcfg+OLm96IgfGiTo4LD/EVE
-	ELYZDgM3Z2T6Al7Neri3FwnT0x/5S2EY=
-X-Gm-Gg: ASbGncukTadteuHH1imCigxHkUg0FjLmHsTK+Y79ymeLTKWjm8Y/t8OnM/+hci0grV2
-	gbd7BEnBdvfxpo8s7uXQEFRMRfa98e0/omPWibDcniouk9MzHLI6KqkySxmAKbf70FawirFJER3
-	jniSnLh/GIg1ZOFeFEjAumMhNN8/chvw3zIyDo/kiL0MiT7Dv3fYTouUYKv7rx8HDK/XDAuXiIz
-	qFqBUZzol4PSInC2utCDFylVloXjZ8+0TmYrCKWXpWX0TjB90LADuDeNeYwp1DrGeZ+I7qtJUH9
-	La5HS8JjolX6awXV588NJ14lgfUlT5jAl45uDfxDfuIjZpOjwtCDSuLpQXJhKB+FSrnOQXzFZEB
-	m4/riK+4pSUNIlw9nZF1yvQ==
-X-Google-Smtp-Source: AGHT+IHdMA8ivFQ1fgFmz5C78GlrFuYOIElJ3pKv+aRRSF/vGQvjn9QL/p17dNr/kEjVWcELaalXOkPQu42l7M+fZwA=
-X-Received: by 2002:ad4:5bc9:0:b0:76a:fcee:97aa with SMTP id
- 6a1803df08f44-7fc309ec826mr53929946d6.29.1758815290243; Thu, 25 Sep 2025
- 08:48:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758815410; x=1759420210;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPOIdtGuD9l53wCDZgvs8CoLuOUrw0SyvwaoNtPWj00=;
+        b=Fy9OYP60Lb0+HxiKcqjxZIfZvaV1Sr0K8m6Qid+ZsU1tmjejkUsXcBRAuqG65HC1Pp
+         d/hBZg3hvM41yQM+Pu7rN92ChUJGURUxUUiG2q5MDdogehq77VnStAIzlIM85FFNB7dz
+         xbCIWgWU4gMv7fcFQumhP1IsP4xk3UBjTeV87D33qum7Qf4uhEW9nqo++xfih7N0+fV/
+         eCHFwZ7hshq+v4YHibcOkDuhj4vXRR3U3ly2NFOV+oEbywTt4sGgfPcxDIhooAczvoQq
+         FFiEGLaNXcAZWYBtHs52rlYrelV9IqgR07pbM/JnMHccfokiZKPGDnjmOQ9A/zsIkQwn
+         pZ0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUBBjxJFxImTLPGO4yPEcCX8fYdCkB6GYQvSmE8W1MJLltTEfCb0a/lG+VjNfClAEUaduyESx/2fXSW@vger.kernel.org
+X-Gm-Message-State: AOJu0YybJos+ff99AKxh6VmZsPJNTdpaAAkFCrLceMPPALwICYoAMFah
+	Sm+ijhJoDVFg5vHS52J58/WXoKTo+rfDVxmzelE8ha30JrnlbEgTZGGaXrfa0+4vfoe81bAnID2
+	zCrMdDVW6zetO2v4/h6ZfHyZYqEga5cInRwqn03SQ0bW7m73zLQiJWcACIcrqbl8=
+X-Gm-Gg: ASbGncuOm2MEs33dvyT6XxesIs/bOUBDkWF8EpGvpPjv+McxX64+TqAXUrt9jmwfiUb
+	i405M6cjaU8/+4IdlCZ9MyRXANBmrKCk/rjUEl99a6wMpThvg5w8QD+ljHkz5aDE7vLGBrzJaAH
+	+C/IB97OaqhuCK8qImjibwTjnFyNRbrFJxnyoYUc4BgNH49ro37kA8gBKI90Gnfdo/LIIJ+Kyf5
+	W8rHY64XV0vi1LY5W5k4INqwieiQ4txxXUU6G+qqlAmaKvVsWPn/Ym1CmfmfTcvkJ5xruWJrIKp
+	/EXbxuKXK/ZChth5nn9tB9je21Kz1fOT1mW9KhG3lOA54/yrxdjZlXl2wOsXBkLj4OIza1LPDGh
+	7H0N9TE6RuT0o
+X-Received: by 2002:a05:600c:1ca5:b0:46e:2637:d182 with SMTP id 5b1f17b1804b1-46e32a08feamr49009105e9.28.1758815410209;
+        Thu, 25 Sep 2025 08:50:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFifX77hGxL2O4FYAU+ptB+L8YPLKwsnLSuT5OPi4ABcaTgR4jE6/4IbKEl3gD+G+IQTmbShw==
+X-Received: by 2002:a05:600c:1ca5:b0:46e:2637:d182 with SMTP id 5b1f17b1804b1-46e32a08feamr49008725e9.28.1758815409731;
+        Thu, 25 Sep 2025 08:50:09 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e33bf6ecbsm42448815e9.22.2025.09.25.08.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 08:50:09 -0700 (PDT)
+Message-ID: <2152c576-68ce-4bc4-9658-bb1e8ccce423@redhat.com>
+Date: Thu, 25 Sep 2025 17:50:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250925141920.166230-1-henrique.carvalho@suse.com>
-In-Reply-To: <20250925141920.166230-1-henrique.carvalho@suse.com>
-From: Steve French <smfrench@gmail.com>
-Date: Thu, 25 Sep 2025 10:47:58 -0500
-X-Gm-Features: AS18NWCDfP_C0RGU0mx42PPyFIXfKkOGVtlmhzNX5cyg2Q_ifYKbbSSF-N11u6I
-Message-ID: <CAH2r5murE3rQzNNf3hfccoScXqFSmxO_dg_2dKrdMkAMw+ry_A@mail.gmail.com>
-Subject: Re: [PATCH v2] smb: client: batch SRV_COPYCHUNK entries to cut roundtrips
-To: Henrique Carvalho <henrique.carvalho@suse.com>
-Cc: sfrench@samba.org, dan.carpenter@linaro.org, pc@manguebit.org, 
-	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
-	bharathsm@microsoft.com, ematsumiya@suse.de, linux-cifs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 03/15] quic: provide common utilities and data
+ structures
+To: Xin Long <lucien.xin@gmail.com>
+Cc: network dev <netdev@vger.kernel.org>, quic@lists.linux.dev,
+ davem@davemloft.net, kuba@kernel.org, Eric Dumazet <edumazet@google.com>,
+ Simon Horman <horms@kernel.org>, Stefan Metzmacher <metze@samba.org>,
+ Moritz Buhl <mbuhl@openbsd.org>, Tyler Fanelli <tfanelli@redhat.com>,
+ Pengtao He <hepengtao@xiaomi.com>, linux-cifs@vger.kernel.org,
+ Steve French <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>,
+ Paulo Alcantara <pc@manguebit.com>, Tom Talpey <tom@talpey.com>,
+ kernel-tls-handshake@lists.linux.dev, Chuck Lever <chuck.lever@oracle.com>,
+ Jeff Layton <jlayton@kernel.org>, Benjamin Coddington <bcodding@redhat.com>,
+ Steve Dickson <steved@redhat.com>, Hannes Reinecke <hare@suse.de>,
+ Alexander Aring <aahringo@redhat.com>, David Howells <dhowells@redhat.com>,
+ Matthieu Baerts <matttbe@kernel.org>, John Ericson <mail@johnericson.me>,
+ Cong Wang <xiyou.wangcong@gmail.com>, "D . Wythe"
+ <alibuda@linux.alibaba.com>, Jason Baron <jbaron@akamai.com>,
+ illiliti <illiliti@protonmail.com>, Sabrina Dubroca <sd@queasysnail.net>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Daniel Stenberg <daniel@haxx.se>,
+ Andy Gospodarek <andrew.gospodarek@broadcom.com>
+References: <cover.1758234904.git.lucien.xin@gmail.com>
+ <a7fb75136c7c2e51b7081d3bff421e01b435288f.1758234904.git.lucien.xin@gmail.com>
+ <871ed254-c3d8-49aa-9aac-eeb72e82f55d@redhat.com>
+ <CADvbK_e20TrcgprXmnZzvoEO6yzoo4Zx7B0qFS0kQPT8Sf63LQ@mail.gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <CADvbK_e20TrcgprXmnZzvoEO6yzoo4Zx7B0qFS0kQPT8Sf63LQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-merged into cifs-2.6.git for-next pending additional review and testing
+On 9/23/25 6:06 PM, Xin Long wrote:
+> On Tue, Sep 23, 2025 at 7:21 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>> On 9/19/25 12:34 AM, Xin Long wrote:
+>>> +static int quic_uhash_table_init(struct quic_uhash_table *ht, u32 max_size, int order)
+>>> +{
+>>> +     int i, max_order, size;
+>>> +
+>>> +     /* Same sizing logic as in quic_shash_table_init(). */
+>>> +     max_order = get_order(max_size * sizeof(struct quic_uhash_head));
+>>> +     order = min(order, max_order);
+>>> +     do {
+>>> +             ht->hash = (struct quic_uhash_head *)
+>>> +                     __get_free_pages(GFP_KERNEL | __GFP_NOWARN, order);
+>>> +     } while (!ht->hash && --order > 0);
+>>
+>> You can avoid a little complexity, and see more consistent behaviour,
+>> using plain vmalloc() or alloc_large_system_hash() with no fallback.
+>>
+> I wanted to use alloc_large_system_hash(), but the memory allocated
+> by it is usually NOT meant to be freed at runtime. I don't see a free_
+> function to do it either.
+> 
+> If QUIC works as a kernel module, what should I do with this memory
+> in module_exit()?
 
-On Thu, Sep 25, 2025 at 9:27=E2=80=AFAM Henrique Carvalho
-<henrique.carvalho@suse.com> wrote:
->
-> smb2_copychunk_range() used to send a single SRV_COPYCHUNK per
-> SRV_COPYCHUNK_COPY IOCTL.
->
-> Implement variable Chunks[] array in struct copychunk_ioctl and fill it
-> with struct copychunk (MS-SMB2 2.2.31.1.1), bounded by server-advertised
-> limits.
->
-> This reduces the number of IOCTLs requests for large copies.
->
-> While we are at it, rename a couple variables to follow the terminology
-> used in the specification.
->
-> Signed-off-by: Henrique Carvalho <henrique.carvalho@suse.com>
-> ---
-> V1 -> V2:
-> - initialize ret_data_len to 0
->
->  fs/smb/client/smb2ops.c | 281 ++++++++++++++++++++++++++--------------
->  fs/smb/client/smb2pdu.h |  16 ++-
->  fs/smb/client/trace.h   |   3 +-
->  3 files changed, 198 insertions(+), 102 deletions(-)
->
-> diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-> index e586f3f4b5c9..c469120bb4f6 100644
-> --- a/fs/smb/client/smb2ops.c
-> +++ b/fs/smb/client/smb2ops.c
-> @@ -1806,140 +1806,231 @@ smb2_ioctl_query_info(const unsigned int xid,
->         return rc;
->  }
->
-> +/*
-> + * calc_chunk_count - calculates the number chunks to be filled in the C=
-hunks[]
-> + * array of struct copychunk_ioctl
-> + *
-> + * @tcon: destination file tcon
-> + * @bytes_left: how many bytes are left to copy
-> + *
-> + * Return: maximum number of chunks with which Chunks[] can be filled.
-> + */
-> +static inline u32
-> +calc_chunk_count(struct cifs_tcon *tcon, u64 bytes_left)
-> +{
-> +       if (!tcon->max_bytes_chunk || !tcon->max_bytes_copy || !tcon->max=
-_chunks)
-> +               return 0;
-> +
-> +       return min_t(u32, DIV_ROUND_UP_ULL(bytes_left, tcon->max_bytes_ch=
-unk),
-> +                    umin(tcon->max_chunks,
-> +                         DIV_ROUND_UP(tcon->max_bytes_copy, tcon->max_by=
-tes_chunk)));
-> +}
-> +
-> +/*
-> + * smb2_copychunk_range - server-side copy of data range
-> + *
-> + * @xid: transaction id
-> + * @src_file: source file
-> + * @dst_file: destination file
-> + * @src_off: source file byte offset
-> + * @len: number of bytes to copy
-> + * @dst_off: destination file byte offset
-> + *
-> + * Obtains a resume key for @src_file and issues FSCTL_SRV_COPYCHUNK_WRI=
-TE
-> + * IOCTLs, splitting the request into chunks limited by tcon->max_*.
-> + *
-> + * Return: @len on success; negative errno on failure.
-> + */
->  static ssize_t
->  smb2_copychunk_range(const unsigned int xid,
-> -                       struct cifsFileInfo *srcfile,
-> -                       struct cifsFileInfo *trgtfile, u64 src_off,
-> -                       u64 len, u64 dest_off)
-> +                    struct cifsFileInfo *src_file,
-> +                    struct cifsFileInfo *dst_file,
-> +                    u64 src_off,
-> +                    u64 len,
-> +                    u64 dst_off)
->  {
-> -       int rc;
-> -       unsigned int ret_data_len;
-> -       struct copychunk_ioctl *pcchunk;
-> -       struct copychunk_ioctl_rsp *retbuf =3D NULL;
-> +       int rc =3D 0;
-> +       unsigned int ret_data_len =3D 0;
-> +       struct copychunk_ioctl *cc_req =3D NULL;
-> +       struct copychunk_ioctl_rsp *cc_rsp =3D NULL;
->         struct cifs_tcon *tcon;
-> -       int chunks_copied =3D 0;
-> -       bool chunk_sizes_updated =3D false;
-> -       ssize_t bytes_written, total_bytes_written =3D 0;
-> +       struct copychunk *chunk;
-> +       u32 chunks, chunk_count, chunk_bytes;
-> +       u32 copy_bytes, copy_bytes_left;
-> +       u32 chunks_written, bytes_written;
-> +       u64 total_bytes_left =3D len;
-> +       u64 src_off_prev, dst_off_prev;
-> +       u32 retries =3D 0;
-> +
-> +       tcon =3D tlink_tcon(dst_file->tlink);
-> +
-> +       trace_smb3_copychunk_enter(xid, src_file->fid.volatile_fid,
-> +                                  dst_file->fid.volatile_fid, tcon->tid,
-> +                                  tcon->ses->Suid, src_off, dst_off, len=
-);
-> +
-> +retry:
-> +       chunk_count =3D calc_chunk_count(tcon, total_bytes_left);
-> +       if (!chunk_count) {
-> +               rc =3D -EOPNOTSUPP;
-> +               goto cchunk_out;
-> +       }
->
-> -       pcchunk =3D kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
-> -       if (pcchunk =3D=3D NULL)
-> -               return -ENOMEM;
-> +       cc_req =3D kzalloc(struct_size(cc_req, Chunks, chunk_count), GFP_=
-KERNEL);
-> +       if (!cc_req) {
-> +               rc =3D -ENOMEM;
-> +               goto cchunk_out;
-> +       }
->
-> -       cifs_dbg(FYI, "%s: about to call request res key\n", __func__);
->         /* Request a key from the server to identify the source of the co=
-py */
-> -       rc =3D SMB2_request_res_key(xid, tlink_tcon(srcfile->tlink),
-> -                               srcfile->fid.persistent_fid,
-> -                               srcfile->fid.volatile_fid, pcchunk);
-> +       rc =3D SMB2_request_res_key(xid,
-> +                                 tlink_tcon(src_file->tlink),
-> +                                 src_file->fid.persistent_fid,
-> +                                 src_file->fid.volatile_fid,
-> +                                 cc_req);
->
-> -       /* Note: request_res_key sets res_key null only if rc !=3D0 */
-> +       /* Note: request_res_key sets res_key null only if rc !=3D 0 */
->         if (rc)
->                 goto cchunk_out;
->
-> -       /* For now array only one chunk long, will make more flexible lat=
-er */
-> -       pcchunk->ChunkCount =3D cpu_to_le32(1);
-> -       pcchunk->Reserved =3D 0;
-> -       pcchunk->Reserved2 =3D 0;
-> +       while (total_bytes_left > 0) {
-> +
-> +               /* Store previous offsets to allow rewind */
-> +               src_off_prev =3D src_off;
-> +               dst_off_prev =3D dst_off;
-> +
-> +               trace_smb3_copychunk_iter(xid, src_file->fid.volatile_fid=
-,
-> +                                         dst_file->fid.volatile_fid, tco=
-n->tid,
-> +                                         tcon->ses->Suid, src_off, dst_o=
-ff, len);
->
-> -       tcon =3D tlink_tcon(trgtfile->tlink);
-> +               chunks =3D 0;
-> +               copy_bytes =3D 0;
-> +               copy_bytes_left =3D umin(total_bytes_left, tcon->max_byte=
-s_copy);
-> +               while (copy_bytes_left > 0 && chunks < chunk_count) {
-> +                       chunk =3D &cc_req->Chunks[chunks++];
->
-> -       trace_smb3_copychunk_enter(xid, srcfile->fid.volatile_fid,
-> -                                  trgtfile->fid.volatile_fid, tcon->tid,
-> -                                  tcon->ses->Suid, src_off, dest_off, le=
-n);
-> +                       chunk->SourceOffset =3D cpu_to_le64(src_off);
-> +                       chunk->TargetOffset =3D cpu_to_le64(dst_off);
->
-> -       while (len > 0) {
-> -               pcchunk->SourceOffset =3D cpu_to_le64(src_off);
-> -               pcchunk->TargetOffset =3D cpu_to_le64(dest_off);
-> -               pcchunk->Length =3D
-> -                       cpu_to_le32(min_t(u64, len, tcon->max_bytes_chunk=
-));
-> +                       chunk_bytes =3D umin(copy_bytes_left, tcon->max_b=
-ytes_chunk);
-> +
-> +                       chunk->Length =3D cpu_to_le32(chunk_bytes);
-> +                       chunk->Reserved =3D 0;
-> +
-> +                       src_off +=3D chunk_bytes;
-> +                       dst_off +=3D chunk_bytes;
-> +
-> +                       copy_bytes_left -=3D chunk_bytes;
-> +                       copy_bytes +=3D chunk_bytes;
-> +               }
-> +
-> +               cc_req->ChunkCount =3D cpu_to_le32(chunks);
-> +               /* Buffer is zeroed, no need to set pcchunk->Reserved =3D=
- 0 */
->
->                 /* Request server copy to target from src identified by k=
-ey */
-> -               kfree(retbuf);
-> -               retbuf =3D NULL;
-> -               rc =3D SMB2_ioctl(xid, tcon, trgtfile->fid.persistent_fid=
-,
-> -                       trgtfile->fid.volatile_fid, FSCTL_SRV_COPYCHUNK_W=
-RITE,
-> -                       (char *)pcchunk, sizeof(struct copychunk_ioctl),
-> -                       CIFSMaxBufSize, (char **)&retbuf, &ret_data_len);
-> +               kfree(cc_rsp);
-> +               cc_rsp =3D NULL;
-> +               rc =3D SMB2_ioctl(xid, tcon, dst_file->fid.persistent_fid=
-,
-> +                       dst_file->fid.volatile_fid, FSCTL_SRV_COPYCHUNK_W=
-RITE,
-> +                       (char *)cc_req, struct_size(cc_req, Chunks, chunk=
-s),
-> +                       CIFSMaxBufSize, (char **)&cc_rsp, &ret_data_len);
-> +
-> +               if (ret_data_len !=3D sizeof(struct copychunk_ioctl_rsp))=
- {
-> +                       cifs_tcon_dbg(VFS, "Copychunk invalid response: r=
-esponse size does not match expected size\n");
-> +                       rc =3D -EIO;
-> +                       goto cchunk_out;
-> +               }
-> +
->                 if (rc =3D=3D 0) {
-> -                       if (ret_data_len !=3D
-> -                                       sizeof(struct copychunk_ioctl_rsp=
-)) {
-> -                               cifs_tcon_dbg(VFS, "Invalid cchunk respon=
-se size\n");
-> +                       bytes_written =3D le32_to_cpu(cc_rsp->TotalBytesW=
-ritten);
-> +                       if (bytes_written =3D=3D 0) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk invalid res=
-ponse: no bytes copied\n");
->                                 rc =3D -EIO;
->                                 goto cchunk_out;
->                         }
-> -                       if (retbuf->TotalBytesWritten =3D=3D 0) {
-> -                               cifs_dbg(FYI, "no bytes copied\n");
-> +                       /* Check if server claimed to write more than we =
-asked */
-> +                       if (bytes_written > copy_bytes) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk invalid res=
-ponse: unexpected value for TotalBytesWritten\n");
->                                 rc =3D -EIO;
->                                 goto cchunk_out;
->                         }
-> -                       /*
-> -                        * Check if server claimed to write more than we =
-asked
-> -                        */
-> -                       if (le32_to_cpu(retbuf->TotalBytesWritten) >
-> -                           le32_to_cpu(pcchunk->Length)) {
-> -                               cifs_tcon_dbg(VFS, "Invalid copy chunk re=
-sponse\n");
-> +
-> +                       chunks_written =3D le32_to_cpu(cc_rsp->ChunksWrit=
-ten);
-> +                       if (chunks_written > chunks) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk invalid res=
-ponse: Invalid num chunks written\n");
->                                 rc =3D -EIO;
->                                 goto cchunk_out;
->                         }
-> -                       if (le32_to_cpu(retbuf->ChunksWritten) !=3D 1) {
-> -                               cifs_tcon_dbg(VFS, "Invalid num chunks wr=
-itten\n");
-> -                               rc =3D -EIO;
-> -                               goto cchunk_out;
-> +
-> +                       /* Partial write: rewind */
-> +                       if (bytes_written < copy_bytes) {
-> +                               u32 delta =3D copy_bytes - bytes_written;
-> +
-> +                               src_off -=3D delta;
-> +                               dst_off -=3D delta;
->                         }
-> -                       chunks_copied++;
-> -
-> -                       bytes_written =3D le32_to_cpu(retbuf->TotalBytesW=
-ritten);
-> -                       src_off +=3D bytes_written;
-> -                       dest_off +=3D bytes_written;
-> -                       len -=3D bytes_written;
-> -                       total_bytes_written +=3D bytes_written;
-> -
-> -                       cifs_dbg(FYI, "Chunks %d PartialChunk %d Total %z=
-u\n",
-> -                               le32_to_cpu(retbuf->ChunksWritten),
-> -                               le32_to_cpu(retbuf->ChunkBytesWritten),
-> -                               bytes_written);
-> -                       trace_smb3_copychunk_done(xid, srcfile->fid.volat=
-ile_fid,
-> -                               trgtfile->fid.volatile_fid, tcon->tid,
-> -                               tcon->ses->Suid, src_off, dest_off, len);
-> -               } else if (rc =3D=3D -EINVAL) {
-> -                       if (ret_data_len !=3D sizeof(struct copychunk_ioc=
-tl_rsp))
-> -                               goto cchunk_out;
->
-> -                       cifs_dbg(FYI, "MaxChunks %d BytesChunk %d MaxCopy=
- %d\n",
-> -                               le32_to_cpu(retbuf->ChunksWritten),
-> -                               le32_to_cpu(retbuf->ChunkBytesWritten),
-> -                               le32_to_cpu(retbuf->TotalBytesWritten));
-> +                       total_bytes_left -=3D bytes_written;
->
-> +               } else if (rc =3D=3D -EINVAL) {
->                         /*
-> -                        * Check if this is the first request using these=
- sizes,
-> -                        * (ie check if copy succeed once with original s=
-izes
-> -                        * and check if the server gave us different size=
-s after
-> -                        * we already updated max sizes on previous reque=
-st).
-> -                        * if not then why is the server returning an err=
-or now
-> +                        * Check if server is not asking us to reduce siz=
-e.
-> +                        *
-> +                        * Note: As per MS-SMB2 2.2.32.1, the values retu=
-rned
-> +                        * in cc_rsp are not strictly lower than what exi=
-sted
-> +                        * before.
-> +                        *
->                          */
-> -                       if ((chunks_copied !=3D 0) || chunk_sizes_updated=
-)
-> -                               goto cchunk_out;
-> -
-> -                       /* Check that server is not asking us to grow siz=
-e */
-> -                       if (le32_to_cpu(retbuf->ChunkBytesWritten) <
-> -                                       tcon->max_bytes_chunk)
-> -                               tcon->max_bytes_chunk =3D
-> -                                       le32_to_cpu(retbuf->ChunkBytesWri=
-tten);
-> -                       else
-> -                               goto cchunk_out; /* server gave us bogus =
-size */
-> +                       if (le32_to_cpu(cc_rsp->ChunksWritten) < tcon->ma=
-x_chunks) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk MaxChunks u=
-pdated: %u -> %u\n",
-> +                                             tcon->max_chunks,
-> +                                             le32_to_cpu(cc_rsp->ChunksW=
-ritten));
-> +                               tcon->max_chunks =3D le32_to_cpu(cc_rsp->=
-ChunksWritten);
-> +                       }
-> +                       if (le32_to_cpu(cc_rsp->ChunkBytesWritten) < tcon=
-->max_bytes_chunk) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk MaxBytesChu=
-nk updated: %u -> %u\n",
-> +                                             tcon->max_bytes_chunk,
-> +                                             le32_to_cpu(cc_rsp->ChunkBy=
-tesWritten));
-> +                               tcon->max_bytes_chunk =3D le32_to_cpu(cc_=
-rsp->ChunkBytesWritten);
-> +                       }
-> +                       if (le32_to_cpu(cc_rsp->TotalBytesWritten) < tcon=
-->max_bytes_copy) {
-> +                               cifs_tcon_dbg(VFS, "Copychunk MaxBytesCop=
-y updated: %u -> %u\n",
-> +                                             tcon->max_bytes_copy,
-> +                                             le32_to_cpu(cc_rsp->TotalBy=
-tesWritten));
-> +                               tcon->max_bytes_copy =3D le32_to_cpu(cc_r=
-sp->TotalBytesWritten);
-> +                       }
->
-> -                       /* No need to change MaxChunks since already set =
-to 1 */
-> -                       chunk_sizes_updated =3D true;
-> -               } else
-> +                       trace_smb3_copychunk_err(xid, src_file->fid.volat=
-ile_fid,
-> +                                                dst_file->fid.volatile_f=
-id, tcon->tid,
-> +                                                tcon->ses->Suid, src_off=
-, dst_off, len, rc);
-> +
-> +                       /* Rewind */
-> +                       if (retries++ < 2) {
-> +                               src_off =3D src_off_prev;
-> +                               dst_off =3D dst_off_prev;
-> +                               kfree(cc_req);
-> +                               cc_req =3D NULL;
-> +                               goto retry;
-> +                       } else
-> +                               goto cchunk_out;
-> +               } else { /* Unexpected */
-> +                       trace_smb3_copychunk_err(xid, src_file->fid.volat=
-ile_fid,
-> +                                                dst_file->fid.volatile_f=
-id, tcon->tid,
-> +                                                tcon->ses->Suid, src_off=
-, dst_off, len, rc);
->                         goto cchunk_out;
-> +               }
->         }
->
-> +       trace_smb3_copychunk_done(xid, src_file->fid.volatile_fid,
-> +                                 dst_file->fid.volatile_fid, tcon->tid,
-> +                                 tcon->ses->Suid, src_off, dst_off, len)=
-;
-> +
->  cchunk_out:
-> -       kfree(pcchunk);
-> -       kfree(retbuf);
-> +       kfree(cc_req);
-> +       kfree(cc_rsp);
->         if (rc)
->                 return rc;
->         else
-> -               return total_bytes_written;
-> +               return len;
->  }
->
->  static int
-> diff --git a/fs/smb/client/smb2pdu.h b/fs/smb/client/smb2pdu.h
-> index 3c09a58dfd07..101024f8f725 100644
-> --- a/fs/smb/client/smb2pdu.h
-> +++ b/fs/smb/client/smb2pdu.h
-> @@ -201,16 +201,20 @@ struct resume_key_req {
->         char    Context[];      /* ignored, Windows sets to 4 bytes of ze=
-ro */
->  } __packed;
->
-> +
-> +struct copychunk {
-> +       __le64 SourceOffset;
-> +       __le64 TargetOffset;
-> +       __le32 Length;
-> +       __le32 Reserved;
-> +} __packed;
-> +
->  /* this goes in the ioctl buffer when doing a copychunk request */
->  struct copychunk_ioctl {
->         char SourceKey[COPY_CHUNK_RES_KEY_SIZE];
-> -       __le32 ChunkCount; /* we are only sending 1 */
-> +       __le32 ChunkCount;
->         __le32 Reserved;
-> -       /* array will only be one chunk long for us */
-> -       __le64 SourceOffset;
-> -       __le64 TargetOffset;
-> -       __le32 Length; /* how many bytes to copy */
-> -       __u32 Reserved2;
-> +       struct copychunk Chunks[];
->  } __packed;
->
->  struct copychunk_ioctl_rsp {
-> diff --git a/fs/smb/client/trace.h b/fs/smb/client/trace.h
-> index fd650e2afc76..63871321b464 100644
-> --- a/fs/smb/client/trace.h
-> +++ b/fs/smb/client/trace.h
-> @@ -266,7 +266,7 @@ DEFINE_EVENT(smb3_copy_range_err_class, smb3_##name, =
-\
->         TP_ARGS(xid, src_fid, target_fid, tid, sesid, src_offset, target_=
-offset, len, rc))
->
->  DEFINE_SMB3_COPY_RANGE_ERR_EVENT(clone_err);
-> -/* TODO: Add SMB3_COPY_RANGE_ERR_EVENT(copychunk_err) */
-> +DEFINE_SMB3_COPY_RANGE_ERR_EVENT(copychunk_err);
->
->  DECLARE_EVENT_CLASS(smb3_copy_range_done_class,
->         TP_PROTO(unsigned int xid,
-> @@ -319,6 +319,7 @@ DEFINE_SMB3_COPY_RANGE_DONE_EVENT(copychunk_enter);
->  DEFINE_SMB3_COPY_RANGE_DONE_EVENT(clone_enter);
->  DEFINE_SMB3_COPY_RANGE_DONE_EVENT(copychunk_done);
->  DEFINE_SMB3_COPY_RANGE_DONE_EVENT(clone_done);
-> +DEFINE_SMB3_COPY_RANGE_DONE_EVENT(copychunk_iter);
->
->
->  /* For logging successful read or write */
-> --
-> 2.50.1
->
->
+Right, I did not think about such case. I suggest using a plain
+vmalloc() without the loop than.
 
+>>> +/* rfc9000#section-a.3: DecodePacketNumber()
+>>> + *
+>>> + * Reconstructs the full packet number from a truncated one.
+>>> + */
+>>> +s64 quic_get_num(s64 max_pkt_num, s64 pkt_num, u32 n)
+>>> +{
+>>> +     s64 expected = max_pkt_num + 1;
+>>> +     s64 win = BIT_ULL(n * 8);
+>>> +     s64 hwin = win / 2;
+>>> +     s64 mask = win - 1;
+>>> +     s64 cand;
+>>> +
+>>> +     cand = (expected & ~mask) | pkt_num;
+>>> +     if (cand <= expected - hwin && cand < (1ULL << 62) - win)
+>>> +             return cand + win;
+>>> +     if (cand > expected + hwin && cand >= win)
+>>> +             return cand - win;
+>>> +     return cand;
+>>
+>> The above is a bit obscure to me; replacing magic nubers (62) with macro
+>> could help. Some more comments also would do.
+>>
+> The code is exactly from the commented doc:
+> /* rfc9000#section-a.3: DecodePacketNumber()
+> 
+> See:
+> https://datatracker.ietf.org/doc/html/rfc9000#section-a.3
+> 
+> I will bring some comments from there.
 
---=20
+You can quote or make a synopsis of the RFC where it makes sense. In any
+case, please try to reduce magic numbers usage.
+
 Thanks,
 
-Steve
+Paolo
+
 
