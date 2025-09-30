@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-6541-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6540-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36EF4BADBF4
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Sep 2025 17:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1931BADAB0
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Sep 2025 17:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41A827AA436
-	for <lists+linux-cifs@lfdr.de>; Tue, 30 Sep 2025 15:20:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 394AD7AAAD8
+	for <lists+linux-cifs@lfdr.de>; Tue, 30 Sep 2025 15:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651232F39C0;
-	Tue, 30 Sep 2025 15:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C7B2FFDE6;
+	Tue, 30 Sep 2025 15:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cn+jIIoj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xBSr7F0U"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39049205E3B;
-	Tue, 30 Sep 2025 15:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADB42F39C0;
+	Tue, 30 Sep 2025 15:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759245718; cv=none; b=nEerdgL9TwJUDFD5gUeq64LpBLKlCGe3vcHz3ON86JxV8GoqlkQFCLhxP304Yk7SqFoDgNSP+HkFGoY67ielyGBM/F9aDYP2hf2awa55JP9F4NPK2iNBzRjl9ZZiBkCouoHAP0CYTx5GCGuakAG9yaZEjcTdtiGulbwgAdvjfE8=
+	t=1759245463; cv=none; b=nQ7/qoXqtKymcOvXQrS/MPLPc5xLlbt2Kfz8lJ81aSuFgdgjpivjLzQBJ55fJqpPB13lneVCPLZW+AE49wSopfGB8wfsc9pfLKCbIZCn5g6TpGZpMIjosup4yUqzBrIWisasICFfeSfqMmfdwGK1raV1q7EhAvME5v9z/xFXyNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759245718; c=relaxed/simple;
-	bh=e3LhdmCnmHKP+Qd/lhEJFrbMenFHkYyiuFr1/W6EDc0=;
+	s=arc-20240116; t=1759245463; c=relaxed/simple;
+	bh=/d5Y5g5ReAwxQ2HvzNc1OYtuNjzvcrE21mUkD8wkELA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C4u8CM0Wq1H0wy2X2IRZLbkzU0huFgugQsA2uF0K6rSN4P41OV0Sf1z+FbRuwGfa6uGKygYPLbPco0Bd580j+/rmfEH98yWrZ7H8C/j7r3MZ4vmnX2UPHPJq8R1DAdORIVrGVtWJkpftpj1lDkKBE0uJGuNOBqnL/JS4ozfq8f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cn+jIIoj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B370BC116C6;
-	Tue, 30 Sep 2025 15:21:57 +0000 (UTC)
+	 MIME-Version; b=BR3UrfcmOgJaPpDVlIde1rheWlE3X/AHdZP9XQpeIgVEhG5H8/Sg6d8HJt3K0LZ86BTwKtliq5+VIFMHXnShgck4YLtUlK2YDJHEdAarrWoRGwFeFlTEuXVgEVjMVmD8SwwOBvreISifvv4WfiC0J5pP+8r8E8oNo4Rs1+qb26s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xBSr7F0U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C353C4CEF0;
+	Tue, 30 Sep 2025 15:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1759245718;
-	bh=e3LhdmCnmHKP+Qd/lhEJFrbMenFHkYyiuFr1/W6EDc0=;
+	s=korg; t=1759245462;
+	bh=/d5Y5g5ReAwxQ2HvzNc1OYtuNjzvcrE21mUkD8wkELA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cn+jIIojtt85uiZU6fo0yWIILivnS+cSgi75P/qK/JJTZYVbqRCaehpsnqyaLDDLM
-	 NNCw44vqFGZWsebNkVZUvHdOXFwi5jx+DEBrj4368BDMnfF7nTLaahElTE34Ilmnmy
-	 oL4wEBFvrplHYsFvKq0Ch8GFBKDUk+37JD7SRp5A=
+	b=xBSr7F0UX7QFlqXlSfEqhQui8s0pWc97csEvuUxZeR1F369cTHlmwcq3cdnDUlCfp
+	 rbwWJ4nrNg2oW73WU0hGk7iM7iSAtJbbzkOCE9xWB+4yw6gEcZsqgK7JU9qMFwHfyh
+	 8yqX47waR3HtkAX7ZhO/18aumZd4obDsBojga8fI=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,12 +50,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 30/91] smb: server: dont use delayed_work for post_recv_credits_work
+Subject: [PATCH 6.1 25/73] smb: server: dont use delayed_work for post_recv_credits_work
 Date: Tue, 30 Sep 2025 16:47:29 +0200
-Message-ID: <20250930143822.399146501@linuxfoundation.org>
+Message-ID: <20250930143821.620863819@linuxfoundation.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250930143821.118938523@linuxfoundation.org>
-References: <20250930143821.118938523@linuxfoundation.org>
+In-Reply-To: <20250930143820.537407601@linuxfoundation.org>
+References: <20250930143820.537407601@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -96,7 +96,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index 3720304d67929..504e2a1cf33b8 100644
+index 323b8a401a8c0..84b5b2f5df998 100644
 --- a/fs/smb/server/transport_rdma.c
 +++ b/fs/smb/server/transport_rdma.c
 @@ -147,7 +147,7 @@ struct smb_direct_transport {
@@ -108,7 +108,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  	struct work_struct	send_immediate_work;
  	struct work_struct	disconnect_work;
  
-@@ -366,8 +366,8 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
+@@ -365,8 +365,8 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
  
  	spin_lock_init(&t->lock_new_recv_credits);
  
@@ -119,7 +119,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  	INIT_WORK(&t->send_immediate_work, smb_direct_send_immediate_work);
  	INIT_WORK(&t->disconnect_work, smb_direct_disconnect_rdma_work);
  
-@@ -399,7 +399,7 @@ static void free_transport(struct smb_direct_transport *t)
+@@ -393,7 +393,7 @@ static void free_transport(struct smb_direct_transport *t)
  		   atomic_read(&t->send_pending) == 0);
  
  	cancel_work_sync(&t->disconnect_work);
@@ -128,7 +128,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  	cancel_work_sync(&t->send_immediate_work);
  
  	if (t->qp) {
-@@ -614,8 +614,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+@@ -609,8 +609,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
  			wake_up_interruptible(&t->wait_send_credits);
  
  		if (is_receive_credit_post_required(receive_credits, avail_recvmsg_count))
@@ -138,7 +138,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  
  		if (data_length) {
  			enqueue_reassembly(t, recvmsg, (int)data_length);
-@@ -772,8 +771,7 @@ static int smb_direct_read(struct ksmbd_transport *t, char *buf,
+@@ -767,8 +766,7 @@ static int smb_direct_read(struct ksmbd_transport *t, char *buf,
  		st->count_avail_recvmsg += queue_removed;
  		if (is_receive_credit_post_required(st->recv_credits, st->count_avail_recvmsg)) {
  			spin_unlock(&st->receive_credit_lock);
@@ -148,7 +148,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  		} else {
  			spin_unlock(&st->receive_credit_lock);
  		}
-@@ -800,7 +798,7 @@ static int smb_direct_read(struct ksmbd_transport *t, char *buf,
+@@ -795,7 +793,7 @@ static int smb_direct_read(struct ksmbd_transport *t, char *buf,
  static void smb_direct_post_recv_credits(struct work_struct *work)
  {
  	struct smb_direct_transport *t = container_of(work,
@@ -157,7 +157,7 @@ index 3720304d67929..504e2a1cf33b8 100644
  	struct smb_direct_recvmsg *recvmsg;
  	int receive_credits, credits = 0;
  	int ret;
-@@ -1681,7 +1679,7 @@ static int smb_direct_prepare_negotiation(struct smb_direct_transport *t)
+@@ -1676,7 +1674,7 @@ static int smb_direct_prepare_negotiation(struct smb_direct_transport *t)
  		goto out_err;
  	}
  
