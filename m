@@ -1,122 +1,171 @@
-Return-Path: <linux-cifs+bounces-6559-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6561-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F37E6BB7543
-	for <lists+linux-cifs@lfdr.de>; Fri, 03 Oct 2025 17:34:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F9FDBB76F1
+	for <lists+linux-cifs@lfdr.de>; Fri, 03 Oct 2025 18:03:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BAA03B5C72
-	for <lists+linux-cifs@lfdr.de>; Fri,  3 Oct 2025 15:34:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C70B2427CA1
+	for <lists+linux-cifs@lfdr.de>; Fri,  3 Oct 2025 16:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491AA47F4A;
-	Fri,  3 Oct 2025 15:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5867029D27F;
+	Fri,  3 Oct 2025 16:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CXsl4Bk0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCgUIWgp"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F02C1E51EF;
-	Fri,  3 Oct 2025 15:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13F84A23
+	for <linux-cifs@vger.kernel.org>; Fri,  3 Oct 2025 16:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759505660; cv=none; b=d+UzotIQf6axZdJf1wjucKNlX+Zy9v7UKTsl6mFIPiwGeUie9l2vz+FUw3IpdvOCLdtRKD1/HRhgpyGHqHfZNaW4uHBm812SEb9if9fXWwB3K/lI4fxfAe4cOMQzNQL9DZHyuHsshh8hGx3IDpA3gErzT+5uI1ZDmzi00N4jJp0=
+	t=1759507394; cv=none; b=A4R8baNlXE27mpz1v6mYc3D7x1B+sSdi0bBqaw7RY2HKvM7+gFz6a/5qUAiux22AN6eFq2PVP0H/hEJCNQ+FV5OsJ3Lt6U7zqIQr+0wQhtr5xY2cuNLJz1mA+3+AOG1ArvjfCAjmVLUXGw6XUn41UnsNVFGmngas6+4rHZbZyxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759505660; c=relaxed/simple;
-	bh=34Oe3kkIvVXPNFYZj3oBbSWA8hLsUlehHfqT+ggMRUw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WgFqRFdHhyoMi6OcXahKgfb2pHCIWUOF0IeqBCVtB4Dq8yOsbokzELljECrt7lOXtk2N+PK5xEil2VYPLgn6k0J6CtFpnIcvTjTYayPAawV01CEjXlh1pzZOSYnQckeErH5BpJkm5SSc6B5j0ozv/UymYqgOUXsiIoKJHknb04Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CXsl4Bk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DB1C4CEF5;
-	Fri,  3 Oct 2025 15:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759505658;
-	bh=34Oe3kkIvVXPNFYZj3oBbSWA8hLsUlehHfqT+ggMRUw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CXsl4Bk0Fj5qEAD2O2MjUbvQHXgWqGzEFtWsfGMIYi1mj605pyHK3cTOms8hI5RY1
-	 dt3P9gmnNyikqJBKZmUeS//EB3SWgSD7F2VEjCqEdmOfwV5Q2e7VWFJroi0KaVJsn9
-	 G60G0dkZeKQCpo2QoSwFMZBq0UusGXZJYOxk+ny6kSFndooGsw2P3uZFbFmfS96HtJ
-	 XDk9A3NUBgx4ptXkKubhAONaWd7rIDDTRgml1T2QCLn6Sci7pNqKsIrG4pgrqmQI9f
-	 bWQ1OGbA54b+cyww9eSzImJEviiX33/AexQY6iVxuiunMF/e9HPhtuEQX9ANPa6C6p
-	 G1mw6PC+6rOxA==
-Message-ID: <28ffeb31-beec-4c7a-ad41-696d0fd54afe@kernel.org>
-Date: Fri, 3 Oct 2025 11:34:17 -0400
+	s=arc-20240116; t=1759507394; c=relaxed/simple;
+	bh=z0h3Tu/KOtHPZ8+AACzKVO4cAeHzBa44OsQyYlpA3bc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=qPtb6X37waldZOf+5gGOqInThO6dQMhNiBmUncXZkCLZ/iXBNzA3wqQ5FZFHvng9I01vopIMsS7L8qJ1KRr9wbZ0SYdvWyxgA8whgPPPjsYR2NisdtqOyHt5qCcPIFQr3HK7iP6xf5NfeMR6mGAmK9QlT1pPIoRhKkuweMl7kyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCgUIWgp; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-799572d92b0so21791326d6.3
+        for <linux-cifs@vger.kernel.org>; Fri, 03 Oct 2025 09:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759507391; x=1760112191; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=L3nWcPfR0+ZIvptj+Lev/cZAzIGOU9pUYfZtwr+0fGs=;
+        b=cCgUIWgpGIeBgzl0doWaQWyuDyAdoeDa5lF4rEAvnOgE5hIS1IdtTsfm6nnBRS8Ol0
+         tJ3pQH0bX+mfDkExXQdeUkV6OPtlwMiDHvwn4mzaJuum758jZTnenSD04UiH79bqoBQh
+         7KMVLDyPkGvrRjcwHFWMyUtig4ChiXw8OMgXnOhEO/Ts6d4W3FZ1qMfMAR+Sy+utuYy+
+         zy0qnk31AUQJtr3OidROTlmpuvqr3fN8Okb6ulLboUCrHJCrkaG66FPY+7ZJmwUpZTDx
+         Ut+ztD6q2OWadI44aR7GmfzS0fFnMTou9THdIbJ0ddUF9GN/6LodGEhgwxMrUvf8U40o
+         ek4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759507391; x=1760112191;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L3nWcPfR0+ZIvptj+Lev/cZAzIGOU9pUYfZtwr+0fGs=;
+        b=M2/PSjGFx6sTIu5Tb9kwWCMcsm2r3MwLkXL6snHfR3kCe7Wz7WTV2vLoIvW5TarheL
+         PGsU8EzbHKyENgiQRCbwoSJsheC+gPlbG6A9UxHUr9YK77QxtD/eCvYKNq25gU4gvq29
+         PRkKKJIA9urG8vHfXycJVvwWp4y83H1F3sSgQ5elwLXxhAMkva/LS9E+XtjkkW01eBOy
+         Fyu/B20VlR/NK7HhLIR44L2cYULQWj6Fjw9rlpXNYsN/qqNtmWI3j8825jvyqmcSrGVZ
+         v5oxVRkLIyY7P738tumk4KXl24q/sg8m23l9/Rib5wRYg+z6lzQgJSUY9syK9gPcPG4U
+         SUCw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3Ag9BtPlkxX8pqFZlRggYvSDsS3hPmhs2+AIkdHqNlw83ZZMe0a8aUhiA0AMUvn9eWpWDRwKBm/sh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2/0MCdLiwrBVwz5PPzq29TPhBbAowoUCVkZxmKeiWyfmM07iP
+	+OBozmkOd55DrFt6i/nJihKtTpCASHSsxTLiEChg/z0U/I63Xi8uK/8tn29pQ6WbNOH3axOyNQY
+	JstDswGTexfdHHcADaC2sWVxc4groS18=
+X-Gm-Gg: ASbGncvkwu95Dp+k9hWUFHMV43EXLBhsxKYl/mcFL8lHaZhspljWdXg15aKNAGU7UY/
+	u8fuO8zJvj34VJc9JTAI7jmR9IcQt6+gqwR/aLsFEaSlKn6kvakqyJRb3tD7tzKbCHtPjvsbHEo
+	KoX26uAZySUSY2MHYODu7ZoDgbfetbhG8n4jZ98ZZ6zztn+Rs8kWE5K6v5n4bInKKX5F+NXndg+
+	tRYx6eBtHCUFsiA92s7yygns/o0yCuwOo3PZpDWsr94FghEGBzmsEK93WQe7oK2KLAsRqK7AgBt
+	pUsoBy3iqA43zzaWHohSTLKurwGv9nK6WmEPT+t28znXK4Cy8elNPLY7Gp0d+khK6qZVvLuwD/w
+	ouWxxSyJl+Q==
+X-Google-Smtp-Source: AGHT+IFIs6Y0psEXE2wRJR5zXHyzkp5gNpm3M8PGNt8TtnmwXHc69OBKZFycaHpo3VpI2S5YX0fvm559DmIFtDvpNKI=
+X-Received: by 2002:ad4:5ec8:0:b0:77c:6e39:b652 with SMTP id
+ 6a1803df08f44-879dc7a46ddmr48015516d6.5.1759507390877; Fri, 03 Oct 2025
+ 09:03:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] fs: Plumb case sensitivity bits into statx
-To: Gabriel Krisman Bertazi <gabriel@krisman.be>,
- Amir Goldstein <amir73il@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
- Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>,
- Volker Lendecke <Volker.Lendecke@sernet.de>,
- CIFS <linux-cifs@vger.kernel.org>
-References: <20250925151140.57548-1-cel@kernel.org>
- <CAOQ4uxj-d87B+L+WgbFgmBQqdrYzrPStyfOKtVfcQ19bOEV6CQ@mail.gmail.com>
- <87tt0gqa8f.fsf@mailhost.krisman.be>
-Content-Language: en-US
-From: Chuck Lever <cel@kernel.org>
-Organization: kernel.org
-In-Reply-To: <87tt0gqa8f.fsf@mailhost.krisman.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Steve French <smfrench@gmail.com>
+Date: Fri, 3 Oct 2025 11:02:59 -0500
+X-Gm-Features: AS18NWB9vvfDBbaTpguGRJjLCPV7v1NVz19bLXfr6sowwaPS6p_45KQCJxCXzP4
+Message-ID: <CAH2r5muO=jZMFwi+Hnr9mvvT+8wQqOFJgBZ0ArZhRZQNccNT=Q@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/3/25 11:24 AM, Gabriel Krisman Bertazi wrote:
-> Amir Goldstein <amir73il@gmail.com> writes:
-> 
->> On Thu, Sep 25, 2025 at 5:21 PM Chuck Lever <cel@kernel.org> wrote:
+Please pull the following changes since commit
+a9401710a5f5681abd2a6f21f9e76bc9f2e81891:
 
->>> diff --git a/include/uapi/linux/stat.h b/include/uapi/linux/stat.h
->>> index 1686861aae20..e929b30d64b6 100644
->>> --- a/include/uapi/linux/stat.h
->>> +++ b/include/uapi/linux/stat.h
->>> @@ -219,6 +219,7 @@ struct statx {
->>>  #define STATX_SUBVOL           0x00008000U     /* Want/got stx_subvol */
->>>  #define STATX_WRITE_ATOMIC     0x00010000U     /* Want/got atomic_write_* fields */
->>>  #define STATX_DIO_READ_ALIGN   0x00020000U     /* Want/got dio read alignment info */
->>> +#define STATX_CASE_INFO                0x00040000U     /* Want/got case folding info */
->>>
->>>  #define STATX__RESERVED                0x80000000U     /* Reserved for future struct statx expansion */
->>>
->>> @@ -257,4 +258,18 @@ struct statx {
->>>  #define STATX_ATTR_WRITE_ATOMIC                0x00400000 /* File supports atomic write operations */
->>>
->>>
->>> +/*
->>> + * File system support for case folding is available via a bitmap.
->>> + */
->>> +#define STATX_CASE_PRESERVING          0x80000000 /* File name case is preserved */
->>> +
->>> +/* Values stored in the low-order byte of .case_info */
->>> +enum {
->>> +       statx_case_sensitive = 0,
->>> +       statx_case_ascii,
->>> +       statx_case_utf8,
->>> +       statx_case_utf16,
->>> +};
->>> +#define STATX_CASE_FOLDING_TYPE                0x000000ff
-> 
-> Does the protocol care about unicode version?  For userspace, it would
-> be very relevant to expose it, as well as other details such as
-> decomposition type.
+  Merge tag 'v6.18-rc-part1-smb3-common' of git://git.samba.org/ksmbd
+(2025-09-29 14:57:08 -0700)
 
-For the purposes of indicating case sensitivity and preservation, the
-NFS protocol does not currently care about unicode version.
+are available in the Git repository at:
 
-But this is a very flexible proposal right now. Please recommend what
-you'd like to see here. I hope I've given enough leeway that a unicode
-version could be provided for other API consumers.
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.18-rc-part1-smb3-client-fixes
 
-(As I mentioned to Jeff, there is no user space statx component in the
-current proposal, but it should get one if it is agreed that's useful to
-include).
+for you to fetch changes up to 37e263e68c5e27d5f1fbc1377f64f9373dc5bf15:
+
+  cifs: client: force multichannel=off when max_channels=1 (2025-10-01
+22:42:15 -0500)
+
+----------------------------------------------------------------
+16 smb3 client fixes
+- Fix oops in crypt message
+- Remove duplicate arc4 code
+- Fix potential io_uring reconnect
+- Two important directory leases fixes and three perf improvements
+- Three minor cleanups
+- Four debug improvements (e.g. for showing more information on
+leases, and one for adding more helpful information on reconnect)
+----------------------------------------------------------------
+Bharath SM (4):
+      smb: client: show lease state as R/H/W (or NONE) in open_files
+      smb: client: add drop_dir_cache module parameter to invalidate
+cached dirents
+      smb: client: account smb directory cache usage and per-tcon totals
+      smb client: fix bug with newly created file in cached dir
+
+Enzo Matsumiya (1):
+      smb: client: fix crypto buffers in non-linear memory
+
+Eric Biggers (1):
+      smb: Use arc4 library instead of duplicate arc4 code
+
+Fiona Ebner (2):
+      smb: client: transport: avoid reconnects triggered by pending task work
+      smb: client: transport: minor indentation style fix
+
+Henrique Carvalho (6):
+      smb: client: add tcon information to smb2_reconnect() debug messages
+      smb: client: update cfid->last_access_time in open_cached_dir_by_dentry()
+      smb: client: remove unused fid_lock
+      smb: client: remove pointless cfid->has_lease check
+      smb: client: short-circuit in open_cached_dir_by_dentry() if !dentry
+      smb: client: short-circuit negative lookups when parent dir is
+fully cached
+
+Rajasi Mandal (1):
+      cifs: client: force multichannel=off when max_channels=1
+
+Steve French (1):
+      smb: client: ensure open_cached_dir_by_dentry() only returns valid cfid
+
+ fs/smb/client/Kconfig       |  1 +
+ fs/smb/client/cached_dir.c  | 50 +++++++++++++++++++++++++----------------
+ fs/smb/client/cached_dir.h  | 16 +++++++++++++-
+ fs/smb/client/cifs_debug.c  | 41 +++++++++++++++++++++++++++++-----
+ fs/smb/client/cifsencrypt.c |  8 +++----
+ fs/smb/client/cifsfs.c      | 40 +++++++++++++++++++++++++++++++++
+ fs/smb/client/dir.c         | 46 ++++++++++++++++++++++++++++++++++++--
+ fs/smb/client/fs_context.c  |  7 ++++++
+ fs/smb/client/inode.c       |  2 +-
+ fs/smb/client/readdir.c     | 40 ++++++++++++++++++++++-----------
+ fs/smb/client/smb2ops.c     | 22 ++++++------------
+ fs/smb/client/smb2pdu.c     | 18 +++++++--------
+ fs/smb/client/transport.c   | 13 ++++++++---
+ fs/smb/common/Makefile      |  1 -
+ fs/smb/common/arc4.h        | 23 -------------------
+ fs/smb/common/cifs_arc4.c   | 75
+--------------------------------------------------------------
+ fs/smb/server/Kconfig       |  1 +
+ fs/smb/server/auth.c        |  9 ++++----
+ 18 files changed, 236 insertions(+), 177 deletions(-)
+ delete mode 100644 fs/smb/common/arc4.h
+ delete mode 100644 fs/smb/common/cifs_arc4.c
+
 
 -- 
-Chuck Lever
+Thanks,
+
+Steve
 
