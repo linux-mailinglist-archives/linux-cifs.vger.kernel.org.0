@@ -1,245 +1,197 @@
-Return-Path: <linux-cifs+bounces-6638-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6641-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46EC1BC27ED
-	for <lists+linux-cifs@lfdr.de>; Tue, 07 Oct 2025 21:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8AF5BC28B3
+	for <lists+linux-cifs@lfdr.de>; Tue, 07 Oct 2025 21:45:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 211A14E2FEA
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Oct 2025 19:23:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6650F4E95BC
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Oct 2025 19:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D05922D4C3;
-	Tue,  7 Oct 2025 19:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677B11DAC95;
+	Tue,  7 Oct 2025 19:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="O5Prn/oK"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="N2gXkEaU"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A24220E31C
-	for <linux-cifs@vger.kernel.org>; Tue,  7 Oct 2025 19:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33C71A267;
+	Tue,  7 Oct 2025 19:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759865017; cv=none; b=BlyeJQ0GMG1KSX/q6lTcmPj1Lk9pfmHG+X2+E/SiRN1sOkP7WXuRk+f/eYiRA5fLf6iY2JXiEau1QuxEQC/ebBBcJupW0eGZQ8xmwCHHNfggBbbGapDplzCmpG3T+rJZ0VV/31lz5cDgfDq3d6eO7r8RGUaT09dfsv//hoYWGyM=
+	t=1759866344; cv=none; b=AZlA3pj30kvfVtlih/l5ozdgfhYUOCuuCTwiPclaE1tI2mR9BFTDQeOMy29cKoqHlteVnf2cmlwtNnJ282t+h+yeqxBlp0CCmQu1/10bkxVQZrN8nZ5Lu4BL80pbUvlba/c7XnlVmeK/0ddH3Mf+9RHAmE44UYS1jyFvm+BH9G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759865017; c=relaxed/simple;
-	bh=2QLXb7bNkeWm+V5WTvED4MLjtFTGX16zSXWvrP65CQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DNgm4rAzgtcX884T5nmQVWYpdfrvHW6sfYa9vlW4GY/6k+S0JcO5fubej3qNWR5gdxhchwHgXWEgWZ9scwGDP14ylf9Ojrwx4Lw43SgpXvBW//USgosPU9AXz0s7UgFO+mUIVzp37ZpzA6Ah9JmIdElFbOJPpcnuiuVjFYUlNy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=O5Prn/oK; arc=none smtp.client-ip=143.255.12.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=manguebit.org; s=dkim; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Content-Type:Reply-To:
-	Content-ID:Content-Description;
-	bh=psdhGCxRBHsCfXUTdXo1uDDLOpsm6N69q3vYyP2p0io=; b=O5Prn/oKTZ79ODiT7Ue2QylNs4
-	oFWYSastFNiHvxlpGjQ4DV9BUYUhUbdvZAl3zhqHDqRj/8krULW/JuYvh9HpjSTaLrVgklZhTFxyV
-	4giy0Rzr8vg3EU85tCupAI2Wo/k63+HuDVLEuvRobrEtP7OVcayV70B9yIFCSjN1Kbkfzgq9jBrpY
-	RKiWIEaCjOMpXSxdb/CU27ZiAZaYwG6UiGnOlKARdA+fSi9+aGyJk0ocuDY9RpUVXlI1lDV4L0r9Q
-	LKPSusAn2Cdg4/EFKpqWQEVbjh7hGKL9vvWAnQn/9roKkgpBFoNtBrLHr2eGfjfwyVr2JIViL4RHB
-	7IQeeX0g==;
-Received: from pc by mx1.manguebit.org with local (Exim 4.98.2)
-	id 1v6DHR-00000000twi-2ZYa;
-	Tue, 07 Oct 2025 16:23:26 -0300
-From: Paulo Alcantara <pc@manguebit.org>
-To: smfrench@gmail.com
-Cc: "Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
-	David Howells <dhowells@redhat.com>,
-	Frank Sorenson <sorenson@redhat.com>,
-	linux-cifs@vger.kernel.org
-Subject: [PATCH v3 4/4] smb: client: fix race with fallocate(2) and AIO+DIO
-Date: Tue,  7 Oct 2025 16:23:25 -0300
-Message-ID: <20251007192326.234467-4-pc@manguebit.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251007192326.234467-1-pc@manguebit.org>
-References: <20251007192326.234467-1-pc@manguebit.org>
+	s=arc-20240116; t=1759866344; c=relaxed/simple;
+	bh=kq/+ai7eaI+xs+SQ3Kpvylx9911pdxsqYTHch4jeCzw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=g/8HY67PxHl8NPOCEK/wBVFl7PCUhbmUL3zrpupJQejVqJ4hTHYmptqSJu/yYwPChzpTw0TnbrfRgZCu+my5DYswfC9KshouZIqCGZ6Vy6iJmS3nOKOuu1NT6LflVKcDUtFL9X/eIQX9/FYgdnKe7sqmijbm2iARPm4TAaOMMc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=N2gXkEaU; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1759866335; x=1760471135; i=markus.elfring@web.de;
+	bh=nHxGcVyoMz80gSBeu065Qiu4WFZZoPGdHL0N5KXsfk8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=N2gXkEaUhryE+YiHJBDnxi0dZqCXeyUewDlj6iGW5Ph+SYRpLLfnAH9ZuTmqgjHl
+	 0d/4iPiNbdxdsUkGnWekfqqhzPOBo4KfOKxSGtzaNd9jL7LJqOPlK51apH+cbbpVz
+	 p/o17vvST2rAzjlrOGSc3PbTDsJjtPzfyLuzpTVug3YY8GwKdxJhU44hWlP4gfOiR
+	 4ti3QDr/qQa4LlL2MMWBEkXyXoo6LsRCuyW4dlsjV1mznHcQ85FvY0qFVQQ3lEsal
+	 xBXJ3Ehfb+KXLtRq88UMMtSeKMuZN9+ZDfZbnI/xPcDWcxa80G3O/DgN6mb3uS0kZ
+	 Mo9OrrVgQ40xu1cPbw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.202]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mx0N5-1uMNGO0WDr-00y5uI; Tue, 07
+ Oct 2025 21:45:35 +0200
+Message-ID: <6396d7d3-ef88-4b81-8d8e-f7f81a80ca0f@web.de>
+Date: Tue, 7 Oct 2025 21:45:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB, de-DE
+To: linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+ Bharath SM <bharathsm@microsoft.com>, Paulo Alcantara <pc@manguebit.org>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ Shyam Prasad N <sprasad@microsoft.com>, Steve French <sfrench@samba.org>,
+ Tom Talpey <tom@talpey.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] smb: client: Use common code in smb2_push_mandatory_locks()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:O+PfjrkT0ZySx22WnxF5wIK3HQiRQZ5zbkCL1wbjyW764zaqJkM
+ YPb3546q/faBo6x/3qe7DbbuPc2DRHGfR9AWF3L6/uRxBgYxl2Zenyn0a2dONTJwyVlbnfR
+ G36Iy9fBtTu8O6+ENqnQegpSmUfQLfg1irdmNxK1GiNE4bl2elgC3DZJtrCDC8QCcYqdEQm
+ c8xkF+O9lRNaX2FoyUzKw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:mWzMGXDE9Xg=;2jSzE7ZhCPY74/0pVGPEXhiLdtI
+ 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
+ YZsBwtx7/jysvJRgw=
 
-AIO+DIO may extend the file size, hence we need to make sure ->i_size
-is stable across the entire fallocate(2) operation, otherwise it would
-become a truncate and then inode size reduced back down when it
-finishes.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Tue, 7 Oct 2025 21:37:18 +0200
 
-Fix this by calling netfs_wait_for_outstanding_io() right after
-acquiring ->i_rwsem exclusively in cifs_fallocate() and then guarantee
-a stable ->i_size across fallocate(2).
+Use an additional label so that a bit of common code can be better reused
+at the end of this function implementation.
 
-Also call netfs_wait_for_outstanding_io() after truncating pagecache
-to avoid any potential races with writeback.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ fs/smb/client/smb2file.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
-Reviewed-by: David Howells <dhowells@redhat.com>
-Cc: Frank Sorenson <sorenson@redhat.com>
-Cc: linux-cifs@vger.kernel.org
----
- fs/smb/client/cifsfs.c  | 22 +++++++++++++++++++---
- fs/smb/client/inode.c   |  1 +
- fs/smb/client/smb2ops.c | 18 ++++++------------
- 3 files changed, 26 insertions(+), 15 deletions(-)
-
-diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
-index 1775c2b7528f..05b1fa76e8cc 100644
---- a/fs/smb/client/cifsfs.c
-+++ b/fs/smb/client/cifsfs.c
-@@ -392,11 +392,27 @@ static long cifs_fallocate(struct file *file, int mode, loff_t off, loff_t len)
- 	struct cifs_sb_info *cifs_sb = CIFS_FILE_SB(file);
- 	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
- 	struct TCP_Server_Info *server = tcon->ses->server;
-+	struct inode *inode = file_inode(file);
-+	int rc;
- 
--	if (server->ops->fallocate)
--		return server->ops->fallocate(file, tcon, mode, off, len);
-+	if (!server->ops->fallocate)
-+		return -EOPNOTSUPP;
- 
--	return -EOPNOTSUPP;
-+	rc = inode_lock_killable(inode);
-+	if (rc)
-+		return rc;
-+
-+	netfs_wait_for_outstanding_io(inode);
-+
-+	rc = file_modified(file);
-+	if (rc)
-+		goto out_unlock;
-+
-+	rc = server->ops->fallocate(file, tcon, mode, off, len);
-+
-+out_unlock:
-+	inode_unlock(inode);
-+	return rc;
- }
- 
- static int cifs_permission(struct mnt_idmap *idmap,
-diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index fbfd5b556815..239dd84a336f 100644
---- a/fs/smb/client/inode.c
-+++ b/fs/smb/client/inode.c
-@@ -3012,6 +3012,7 @@ void cifs_setsize(struct inode *inode, loff_t offset)
- 	spin_unlock(&inode->i_lock);
- 	inode_set_mtime_to_ts(inode, inode_set_ctime_current(inode));
- 	truncate_pagecache(inode, offset);
-+	netfs_wait_for_outstanding_io(inode);
- }
- 
- int cifs_file_set_size(const unsigned int xid, struct dentry *dentry,
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 80114292e2c9..6226dc787860 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -3367,7 +3367,6 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
- 	trace_smb3_zero_enter(xid, cfile->fid.persistent_fid, tcon->tid,
- 			      ses->Suid, offset, len);
- 
--	inode_lock(inode);
- 	filemap_invalidate_lock(inode->i_mapping);
- 
- 	i_size = i_size_read(inode);
-@@ -3385,6 +3384,7 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
- 	 * first, otherwise the data may be inconsistent with the server.
+diff --git a/fs/smb/client/smb2file.c b/fs/smb/client/smb2file.c
+index a7f629238830..42ac00f7e728 100644
+=2D-- a/fs/smb/client/smb2file.c
++++ b/fs/smb/client/smb2file.c
+@@ -413,8 +413,8 @@ smb2_push_mandatory_locks(struct cifsFileInfo *cfile)
  	 */
- 	truncate_pagecache_range(inode, offset, offset + len - 1);
-+	netfs_wait_for_outstanding_io(inode);
- 
- 	/* if file not oplocked can't be sure whether asking to extend size */
- 	rc = -EOPNOTSUPP;
-@@ -3413,7 +3413,6 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
- 
-  zero_range_exit:
- 	filemap_invalidate_unlock(inode->i_mapping);
--	inode_unlock(inode);
- 	free_xid(xid);
- 	if (rc)
- 		trace_smb3_zero_err(xid, cfile->fid.persistent_fid, tcon->tid,
-@@ -3437,7 +3436,6 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 
- 	xid = get_xid();
- 
--	inode_lock(inode);
- 	/* Need to make file sparse, if not already, before freeing range. */
- 	/* Consider adding equivalent for compressed since it could also work */
- 	if (!smb2_set_sparse(xid, tcon, cfile, inode, set_sparse)) {
-@@ -3451,6 +3449,7 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- 	 * caches first, otherwise the data may be inconsistent with the server.
- 	 */
- 	truncate_pagecache_range(inode, offset, offset + len - 1);
-+	netfs_wait_for_outstanding_io(inode);
- 
- 	cifs_dbg(FYI, "Offset %lld len %lld\n", offset, len);
- 
-@@ -3485,7 +3484,6 @@ static long smb3_punch_hole(struct file *file, struct cifs_tcon *tcon,
- unlock:
- 	filemap_invalidate_unlock(inode->i_mapping);
- out:
--	inode_unlock(inode);
+ 	max_buf =3D tlink_tcon(cfile->tlink)->ses->server->maxBuf;
+ 	if (max_buf < sizeof(struct smb2_lock_element)) {
+-		free_xid(xid);
+-		return -EINVAL;
++		rc =3D -EINVAL;
++		goto free_xid;
+ 	}
+=20
+ 	BUILD_BUG_ON(sizeof(struct smb2_lock_element) > PAGE_SIZE);
+@@ -422,8 +422,8 @@ smb2_push_mandatory_locks(struct cifsFileInfo *cfile)
+ 	max_num =3D max_buf / sizeof(struct smb2_lock_element);
+ 	buf =3D kcalloc(max_num, sizeof(struct smb2_lock_element), GFP_KERNEL);
+ 	if (!buf) {
+-		free_xid(xid);
+-		return -ENOMEM;
++		rc =3D -ENOMEM;
++		goto free_xid;
+ 	}
+=20
+ 	list_for_each_entry(fdlocks, &cinode->llist, llist) {
+@@ -433,6 +433,7 @@ smb2_push_mandatory_locks(struct cifsFileInfo *cfile)
+ 	}
+=20
+ 	kfree(buf);
++free_xid:
  	free_xid(xid);
  	return rc;
  }
-@@ -3749,8 +3747,6 @@ static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
- 
- 	xid = get_xid();
- 
--	inode_lock(inode);
--
- 	old_eof = i_size_read(inode);
- 	if ((off >= old_eof) ||
- 	    off + len >= old_eof) {
-@@ -3765,6 +3761,7 @@ static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
- 
- 	truncate_pagecache_range(inode, off, old_eof);
- 	ictx->zero_point = old_eof;
-+	netfs_wait_for_outstanding_io(inode);
- 
- 	rc = smb2_copychunk_range(xid, cfile, cfile, off + len,
- 				  old_eof - off - len, off);
-@@ -3785,8 +3782,7 @@ static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
- 	fscache_resize_cookie(cifs_inode_cookie(inode), new_eof);
- out_2:
- 	filemap_invalidate_unlock(inode->i_mapping);
-- out:
--	inode_unlock(inode);
-+out:
- 	free_xid(xid);
- 	return rc;
- }
-@@ -3803,8 +3799,6 @@ static long smb3_insert_range(struct file *file, struct cifs_tcon *tcon,
- 
- 	xid = get_xid();
- 
--	inode_lock(inode);
--
- 	old_eof = i_size_read(inode);
- 	if (off >= old_eof) {
- 		rc = -EINVAL;
-@@ -3819,6 +3813,7 @@ static long smb3_insert_range(struct file *file, struct cifs_tcon *tcon,
- 	if (rc < 0)
- 		goto out_2;
- 	truncate_pagecache_range(inode, off, old_eof);
-+	netfs_wait_for_outstanding_io(inode);
- 
- 	rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
- 			  cfile->fid.volatile_fid, cfile->pid, new_eof);
-@@ -3841,8 +3836,7 @@ static long smb3_insert_range(struct file *file, struct cifs_tcon *tcon,
- 	rc = 0;
- out_2:
- 	filemap_invalidate_unlock(inode->i_mapping);
-- out:
--	inode_unlock(inode);
-+out:
- 	free_xid(xid);
- 	return rc;
- }
--- 
+=2D-=20
 2.51.0
 
 
