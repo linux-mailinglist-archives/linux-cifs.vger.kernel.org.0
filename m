@@ -1,48 +1,48 @@
-Return-Path: <linux-cifs+bounces-6640-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6637-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D69DEBC27F3
-	for <lists+linux-cifs@lfdr.de>; Tue, 07 Oct 2025 21:23:43 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C500BC27EA
+	for <lists+linux-cifs@lfdr.de>; Tue, 07 Oct 2025 21:23:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B2CE54E1A1A
-	for <lists+linux-cifs@lfdr.de>; Tue,  7 Oct 2025 19:23:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 39DB54E01A5
+	for <lists+linux-cifs@lfdr.de>; Tue,  7 Oct 2025 19:23:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8110B22A4D6;
-	Tue,  7 Oct 2025 19:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498282236F2;
+	Tue,  7 Oct 2025 19:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="xCvyoOps"
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="cYLvG2xy"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1E478F59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A19F2CCC0
 	for <linux-cifs@vger.kernel.org>; Tue,  7 Oct 2025 19:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759865019; cv=none; b=lgvTBGihqRaK7zxXfEGjG40ASFbFxN+zi+Glo6VlJjRZUF4ndoWIfA/DXPPm2AoZ87N3bk0753x4Tjhpwb8qYreTPd3XXjSRVfAAw9wpb9hDcKf0yW0hNFLc3Z6aWM6z6tCyPVaZWtGM5/nHaOPPEgU5DV9bkgFTezOJqwBO3a0=
+	t=1759865017; cv=none; b=pF15WyrpWc8Al/ufg6B5Tqr2i8wUcPLL8UkoTU2CQzjKRDdoLc/AtepKDo8VN3arM9NIM3b692U7zGCcetw4MtArhtBmOn+Ig8iSXl0z3qIO3FHOUOdcHV9p9Ly79sP7N97xjVk9pLCRjNyzoYWWc1Ao7UW72/WQDqseDUgl1N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759865019; c=relaxed/simple;
-	bh=822sRqwN3KNETc+t6GP1xD7J2xYrugoJRDfQpUeh9YI=;
+	s=arc-20240116; t=1759865017; c=relaxed/simple;
+	bh=OATEN0HbmPXY1ygU7EbWPSPvplXNQDNROPuIFe7j3UE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lcqG5ZfmUesQ2l8cE6qLQYxL2UEG1pXciPuwo4aG1MgE2emScuk4BJzv3IBixgE8SheqgDpcpdFG5chToeaBlJLnzfoG/kYLxNVIn5Aqaw+flaUfkO0BnMFvh6rpK9/HH9exw+EgcXGmz1e2npSvW+A/BHU/ZZAuFJXnl6W3yPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=xCvyoOps; arc=none smtp.client-ip=143.255.12.172
+	 MIME-Version; b=WCdJjr0Pq0j9L9p3Ju7H4Mfnlli7H+7lFxAh1AKK/yyLnhlwGKXoQ1CXJncPf1SJncYNJokKntMcRc4dB1UOJedKHek4eddgpKigTt5cU7QLlVIb03UYf1r8D2MCcenR+LUDUIqME/vbV7Jv8OCgv9yAsW8ILWtzRRH924nclJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=cYLvG2xy; arc=none smtp.client-ip=143.255.12.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=manguebit.org; s=dkim; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Content-Type:Reply-To:
 	Content-ID:Content-Description;
-	bh=clIEPIkssuJ6wb8fz5QFEDr0ymJ5vGwWiJK3tiGhefo=; b=xCvyoOpsjmJ7hBdHnrWRAEaQFQ
-	BWe+I8QjN5A6tEBoeFjOw2xcjFvLiSaiiSrQ54oJJ35+34W24oUQQ1BbYcZlmAV7qXALF6QVzNa5B
-	JTecJks587Qqd1FqM/p7vKtdLl7MAoxLDaeoAStaN1HJTzMfjOSsa0nfQsXSV+ouMMLejZhDn/uPj
-	dYx4Vj3S8fDI35rfNS4PxFjNjfRXldDxv8QZi302A2yVPoqrwGM+bv09X1EJz8RsqvJ0dD1fmlVpd
-	3O0ilE9toQGbPK5CH3dmqgIHuPxlfq4MLlKyX68jCoqz3DtDKemB38ue+iHZR4EpZxGM7K6m2pT6G
-	FtOqvCXg==;
+	bh=a9wSQfwdxHebOZy6nqWvwCngBBA32s552TTHGI3rERw=; b=cYLvG2xy2o4L/03K7QxYjBWsai
+	msq91Zpr48u/FICyeeVbnaKez+LVAK9XE7eYG+v2/T8k0bBK+Bxz5UF1Ep9UFiCVqBDjkxiO4D8J6
+	wicWF3agIZulhY+T9Sq+y405WrDPRei7XgesdQTti9xlYmmYH7uE411YA4XrftPnHDv67rt2NsgYE
+	S+lMRPyLmFL+yKG1cLapjjhLzLfE4dnPoH0jZB0u0py25VT238u9u99ocL9E8BauDEdARFew9fqRT
+	D++zVsEhC9Bjn8dsJOwp1IS8HbR5tBoJ0tldkjQTjRR3N3kRYbwBObz2soNp9sKVBRVXH1SRqBP/G
+	UUmZ/3qA==;
 Received: from pc by mx1.manguebit.org with local (Exim 4.98.2)
-	id 1v6DHR-00000000twY-1GSW;
+	id 1v6DHR-00000000twd-1vA7;
 	Tue, 07 Oct 2025 16:23:26 -0300
 From: Paulo Alcantara <pc@manguebit.org>
 To: smfrench@gmail.com
@@ -50,9 +50,9 @@ Cc: "Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
 	Frank Sorenson <sorenson@redhat.com>,
 	David Howells <dhowells@redhat.com>,
 	linux-cifs@vger.kernel.org
-Subject: [PATCH v3 2/4] smb: client: fix missing timestamp updates after ftruncate(2)
-Date: Tue,  7 Oct 2025 16:23:23 -0300
-Message-ID: <20251007192326.234467-2-pc@manguebit.org>
+Subject: [PATCH v3 3/4] smb: client: fix missing timestamp updates after utime(2)
+Date: Tue,  7 Oct 2025 16:23:24 -0300
+Message-ID: <20251007192326.234467-3-pc@manguebit.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251007192326.234467-1-pc@manguebit.org>
 References: <20251007192326.234467-1-pc@manguebit.org>
@@ -64,9 +64,8 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Mask off ATTR_MTIME|ATTR_CTIME bits on ATTR_SIZE (e.g. ftruncate(2))
-to prevent the client from sending set info calls and then disabling
-automatic timestamp updates on server side as per MS-FSA 2.1.4.17.
+Don't reuse open handle when changing timestamps to prevent the server
+from disabling automatic timestamp updates as per MS-FSA 2.1.4.17.
 
 ---8<---
 import os
@@ -80,7 +79,7 @@ def print_stat(prefix):
 
 fd = os.open(filename, os.O_CREAT|os.O_TRUNC|os.O_WRONLY, 0o644)
 print_stat('old')
-os.ftruncate(fd, 10)
+os.utime(fd, None)
 time.sleep(2)
 os.write(fd, b'foo')
 os.close(fd)
@@ -92,62 +91,78 @@ Before patch:
 
 $ mount.cifs //srv/share /mnt -o ...
 $ python3 run.py
-old :  Fri Oct  3 13:47:03 2025 Fri Oct  3 13:47:03 2025
-new :  Fri Oct  3 13:47:00 2025 Fri Oct  3 13:47:03 2025
+old :  Fri Oct  3 14:01:21 2025 Fri Oct  3 14:01:21 2025
+new :  Fri Oct  3 14:01:21 2025 Fri Oct  3 14:01:21 2025
 
 After patch:
 
 $ mount.cifs //srv/share /mnt -o ...
 $ python3 run.py
-old :  Fri Oct  3 13:48:39 2025 Fri Oct  3 13:48:39 2025
-new :  Fri Oct  3 13:48:41 2025 Fri Oct  3 13:48:41 2025
+old :  Fri Oct  3 17:03:34 2025 Fri Oct  3 17:03:34 2025
+new :  Fri Oct  3 17:03:36 2025 Fri Oct  3 17:03:36 2025
 
+Fixes: b6f2a0f89d7e ("cifs: for compound requests, use open handle if possible")
 Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
 Cc: Frank Sorenson <sorenson@redhat.com>
 Cc: David Howells <dhowells@redhat.com>
 Cc: linux-cifs@vger.kernel.org
 ---
- fs/smb/client/inode.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ fs/smb/client/smb2inode.c | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-index ce88bef4e44c..fbfd5b556815 100644
---- a/fs/smb/client/inode.c
-+++ b/fs/smb/client/inode.c
-@@ -3156,12 +3156,11 @@ cifs_setattr_unix(struct dentry *direntry, struct iattr *attrs)
- 		if (rc != 0)
- 			goto out;
- 		/*
--		 * The man page of truncate says if the size changed,
--		 * then the st_ctime and st_mtime fields for the file
--		 * are updated.
-+		 * Avoid setting timestamps on the server for ftruncate(2) to
-+		 * prevent it from disabling automatic timestamp updates as per
-+		 * MS-FSA 2.1.4.17.
- 		 */
--		attrs->ia_ctime = attrs->ia_mtime = current_time(inode);
--		attrs->ia_valid |= ATTR_CTIME | ATTR_MTIME;
-+		attrs->ia_valid &= ~(ATTR_CTIME | ATTR_MTIME);
- 	}
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 0985db9f86e5..e441fa2e7689 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -1382,31 +1382,33 @@ int
+ smb2_set_file_info(struct inode *inode, const char *full_path,
+ 		   FILE_BASIC_INFO *buf, const unsigned int xid)
+ {
+-	struct cifs_open_parms oparms;
+-	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+-	struct tcon_link *tlink;
+-	struct cifs_tcon *tcon;
+-	struct cifsFileInfo *cfile;
+ 	struct kvec in_iov = { .iov_base = buf, .iov_len = sizeof(*buf), };
+-	int rc;
++	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
++	struct cifsFileInfo *cfile = NULL;
++	struct cifs_open_parms oparms;
++	struct tcon_link *tlink;
++	struct cifs_tcon *tcon;
++	int rc = 0;
++
++	tlink = cifs_sb_tlink(cifs_sb);
++	if (IS_ERR(tlink))
++		return PTR_ERR(tlink);
++	tcon = tlink_tcon(tlink);
  
- 	/* skip mode change if it's just for clearing setuid/setgid */
-@@ -3335,12 +3334,11 @@ cifs_setattr_nounix(struct dentry *direntry, struct iattr *attrs)
- 		if (rc != 0)
- 			goto cifs_setattr_exit;
- 		/*
--		 * The man page of truncate says if the size changed,
--		 * then the st_ctime and st_mtime fields for the file
--		 * are updated.
-+		 * Avoid setting timestamps on the server for ftruncate(2) to
-+		 * prevent it from disabling automatic timestamp updates as per
-+		 * MS-FSA 2.1.4.17.
- 		 */
--		attrs->ia_ctime = attrs->ia_mtime = current_time(inode);
--		attrs->ia_valid |= ATTR_CTIME | ATTR_MTIME;
-+		attrs->ia_valid &= ~(ATTR_CTIME | ATTR_MTIME);
- 	}
+ 	if ((buf->CreationTime == 0) && (buf->LastAccessTime == 0) &&
+-	    (buf->LastWriteTime == 0) && (buf->ChangeTime == 0) &&
+-	    (buf->Attributes == 0))
+-		return 0; /* would be a no op, no sense sending this */
++	    (buf->LastWriteTime == 0) && (buf->ChangeTime == 0)) {
++		if (buf->Attributes == 0)
++			goto out; /* would be a no op, no sense sending this */
++		cifs_get_writable_path(tcon, full_path, FIND_WR_ANY, &cfile);
++	}
  
- 	if (attrs->ia_valid & ATTR_UID)
+-	tlink = cifs_sb_tlink(cifs_sb);
+-	if (IS_ERR(tlink))
+-		return PTR_ERR(tlink);
+-	tcon = tlink_tcon(tlink);
+-
+-	cifs_get_writable_path(tcon, full_path, FIND_WR_ANY, &cfile);
+ 	oparms = CIFS_OPARMS(cifs_sb, tcon, full_path, FILE_WRITE_ATTRIBUTES,
+ 			     FILE_OPEN, 0, ACL_NO_MODE);
+ 	rc = smb2_compound_op(xid, tcon, cifs_sb,
+ 			      full_path, &oparms, &in_iov,
+ 			      &(int){SMB2_OP_SET_INFO}, 1,
+ 			      cfile, NULL, NULL, NULL);
++out:
+ 	cifs_put_tlink(tlink);
+ 	return rc;
+ }
 -- 
 2.51.0
 
