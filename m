@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6732-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6735-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BBEDBD05B4
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25252BD05B7
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C32CC3B3EE5
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 11D674EAB67
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1B92EC08F;
-	Sun, 12 Oct 2025 15:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044702ECD15;
+	Sun, 12 Oct 2025 15:24:18 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD212EBBB8;
-	Sun, 12 Oct 2025 15:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5462EBB9A;
+	Sun, 12 Oct 2025 15:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760282651; cv=none; b=BlCqvyUQ0HUH+OgLdXHBbXEfz03pNfS3dzm3IPRjEWP7pz01Ei46kJtSsyh7YzO8wtAKnm9hRkIYwyZZWXtL49RIfsb2a9TXvlWzOktt6BGGnZ1sH4SkGbOIePq0MAoW6ZQOWcB4qULQjLAY8S6N8FmG95Dt8PnHizpbyKoST7w=
+	t=1760282656; cv=none; b=i1uUhb7b8Vu/KSeANu20pGyrcO4s40QrroFCW/B21GlG74JmRcVvZzM9LFARt/WCdrBUZavtqmIB5cNnL86QCgUP0tvGMqnqlpb8pkNEwz02Yzw6dXJT1mDxLWgKMC6yesMglP6VY9ZzQaa+cF3mSmAgyKKTCpR4I4Ng4DZhfVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760282651; c=relaxed/simple;
-	bh=TdL36T/j3jgWpAt/N06fhUUzW/dR9NYMD1/D7X/JCdw=;
+	s=arc-20240116; t=1760282656; c=relaxed/simple;
+	bh=5IMVy24+l6yn6QhpNLwcgEJtk2PtES/mK4kXXRSryxc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NRcgxTqBspfc9phxEBFs2pLvPf8rVkTzehlZchv9OMJvG4kvz2LyzOwcKmZj4koMvSy/Uk2A4l0sBIPCcW8MJfMZVrl5nnPxhNXoAmRGioH1PcUH+Xv8KyfMMmDw/XmL2kxfKDUDFTcqnlp/FSXX96lvnwyvNJ3d70M/mMLYyvU=
+	 MIME-Version; b=n815vfTWhhiG/4BSgRYKZX5/o9P8U4v0Z0KAyBtGUKKTM2Ddte+VE6JsQWtijJkeakeRPxZpOKcB0EqrWeJUSl8hRKTpj/1QmEkkhPzk3S1ydgVirhz5TWx/l7REsYPcgLkQ0aDR/qnHe+H6ZzaLwCPlz3p+dMs4pFnKop7akHY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=15.184.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: zesmtpgz3t1760282595te077306a
-X-QQ-Originating-IP: y2p3X3sUEXtEAAAIWRhGYrXe0NtEqZFjaSV+oVBddtU=
+X-QQ-mid: zesmtpgz3t1760282597t6d2e04f9
+X-QQ-Originating-IP: /6nZrIqZTTL9/noKQDA3h9hikjc1eWO5ztcDzmIheqE=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 12 Oct 2025 23:23:14 +0800 (CST)
+	id ; Sun, 12 Oct 2025 23:23:16 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18391076085035711852
+X-BIZMAIL-ID: 463370740963289350
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH RESEND 04/22] smb: move smb_version_values to common/cifsglob.h
-Date: Sun, 12 Oct 2025 23:22:29 +0800
-Message-ID: <81DDE71686DED494+20251012152247.2992573-5-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH RESEND 05/22] smb: move get_rfc1002_len() to common/cifsglob.h
+Date: Sun, 12 Oct 2025 23:22:30 +0800
+Message-ID: <A15A011B492599D1+20251012152247.2992573-6-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
 References: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
@@ -69,336 +69,174 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: OL6xLCBcODC5X83EAKTe5CXnez+Pi0Qven1U9S7jnUkbnT1VDwQJs/s+
-	bNQ0/yjbbA2uCPe6yMimAvTpPbZcQakiPZTtACCuC6EqhLSl2u6y+XYTwgE5L1cXDVynyHR
-	HDgHkVkrsCZngMm1o4Terf4I2VjpF9pgFL8ZH3pOIxPBYzSBEH+n+x6dttuRxR1TrKNwkoD
-	QuzOlCQyaSdLpJtUodfj5lzuxasLdF/6VY5dzjJvBc/d9wb8IM/3yOGpq1pK0G9D5d+RCGN
-	YqndjKj6FxHBNbJq+dSpEp8B8dn+UVcIDde4suaq6JG6MSM0LSHnqfHzfA78eHOX7HqEsDV
-	s2nzYKjyVJoAPQwFiNMU5Znq7flJ/F781RV1KQfucN6D2OfaV7v52ZolT3qKDvXOl9c1HdA
-	lEdjTXcluq38/c4RreLrRUBHYuRNRch86vsiH3+eELDo7TE0CifY95gP4jDYbxvqJ2m2Xlj
-	LnUZKShdMOG7bZz4H1wsVhptCuT+bhT7US17iL8Zocc8EEy6BgmDZKNKmLoWvReynkQPa26
-	tLmnmaEnGuwKWi1HBbACXvfpdu35YYUeWkcEF4cbQeyxrGodejeQCobymh9W14GVtiuyGGU
-	CtFuwdEJmRGJeCDdj50fXzE7KXL+djMh81kCZzj0YiHD5cH1Y5em0xCEfV23YDg6jghw/Kx
-	MVTSLBpX8BijvSfrQWuZhi5NFtgmqh7J6S4xe5AZTKAwVwzjgyLCiGXy3NSu9M/mF58kYNS
-	W8oAkZ/k7vXm0CQbXO5GncKuPsgDUiCxg2pgXQ5+fq6hbZ6MVclT5GTa+X/kYfgecVajQ3O
-	fEnRFocdaHTTWrwMhTCP4EBhiaLsb0Uj6SnqnRQdN+R3r/tSqttXapsb2ePxj7YE9GSOkMr
-	CAhmYywd26th/TEGQWAvxEu9/OATcEY9CuAyQ7H+PxUA9iea/b07NrQ76ZvaALMAW4bjWPG
-	y8CX3QYdq2FHLzKKqzxTvqraiVA7U4yYjm4xiPcJHxA4JnVnjKdNU3gBqLoM2yGZGR43Bfx
-	yV/HYpMRUt4t2FvzqHzolI08yIlFBnEsAmXGBg0V81gB85B3AcY7ixgsVpbglX54K6rCVrn
-	g==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-XMAILINFO: MAu4Ycv3XufafByMU3k5EG89I2X8BQEcOBGhdpXwGAmlkp+N+RT9Mur+
+	+/fEPYIG89MIBsLnlsMauXKEKjh8fdc+g0dQiOp9i8UOcvxgQqo8d+6Ck2GtNbRpS7XbuTC
+	/crqzduXwf/kWozJb7X1GUF3xh6/HGCJeEwkstlyihzIgeRaCKb5eXPUzhSAjNqbcfA36En
+	eUKLo9XYzOfNjzujBeDvpFzr+Vs76sQ8l7MUeOmRZPAMEepyaLC5IV063FGAIhHDlC0nGej
+	XG9m0PHN1lMuVLvGg6nV9lzsXjy67+FnRR8B8tEUlcjgG1Mv0ODdCRarOMmT9Tg+sRrri+K
+	apfSuTVV36LynutrFlsQA+V0rDSfIwK9utZlUoWIQSNbLkKKYz8JSS8ru5UY9tTu50+aDyN
+	KBDST4wGa2UEVvd+GySvnTCLg1da60AHLB0tZ3G+xuqcNDS3O+Qg37Qp2fDwBJ3CCrdiHey
+	OO1P/XoEbkc+ZaR7CX6fZnQk9DriL/Ja856oSXKlnTbr9zmoooIFq8gArKZ7mYHqMWrxGdb
+	d66WBAK6VD8THfu96U83DGs3fYiSnpQKVXldyOJu6dnh5XTXN6QIUYKWUKk7fegdAzPGkoh
+	12OOBVUCR4OleOKEWNiUB+1P76zOtiJlCIgNrIhGi4u2R06TlKk5iK8KVJhQ62wwF+cw9A6
+	y+SVb0pNtq5vVAG3s099qQCuy8NXLgy4D3l9BKOZMyUseXLl/ig+SfqNcIWHJTkc+dlZM3V
+	nxk25v3Tf+aQMOMszfb/nKsBy3iqZW0FIEdCnrU8XiSK+A8RNw7vtoRCi9i1v86NVQRIYcU
+	mVs72wVLNfGuQasp+ju6Sh+mcPL530Niijp+5HOheY71VZ8uweu3zR6rfo2GYiix33eOgGJ
+	pdfeFBN7miiFcHlkUwXrYpj72gI6mxkJASn/tqzHGlnb5LrqU1QpkkJlRPUpLfB6t43BupD
+	sP78vV9XUHTSxU+SIDxCi4fyVDRXS6P4UmmaYmaW96UpbdC2VS67+cv7pjcHwWHqMwFPXwJ
+	lxpTD//8uf5VulLh7SPI5Pp8k2IBr5J/Aoehu7bGvXVvk/aeprAHviA+GmAsLmka7s1Ik+R
+	sgUoDiegUiDGlzgygLD0MY=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 X-QQ-RECHKSPAM: 0
 
 From: ZhangGuoDong <zhangguodong@kylinos.cn>
 
-Merge the struct members of the server and the client, then move duplicate
+Rename get_rfc1002_length() to get_rfc1002_len(), then move duplicate
 definitions to common header file.
 
 Co-developed-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
 ---
- fs/smb/client/cifsglob.h   | 22 ----------------------
- fs/smb/common/cifsglob.h   | 31 +++++++++++++++++++++++++++++++
- fs/smb/server/smb2misc.c   |  2 +-
- fs/smb/server/smb2ops.c    | 32 ++++++++++++++++----------------
- fs/smb/server/smb2pdu.c    | 10 +++++-----
- fs/smb/server/smb_common.h | 29 -----------------------------
- 6 files changed, 53 insertions(+), 73 deletions(-)
+ fs/smb/client/cifsglob.h      | 6 ------
+ fs/smb/client/cifssmb.c       | 6 +++---
+ fs/smb/client/cifstransport.c | 8 ++++----
+ fs/smb/client/connect.c       | 2 +-
+ fs/smb/common/cifsglob.h      | 5 +++++
+ fs/smb/server/smb_common.h    | 5 -----
+ 6 files changed, 13 insertions(+), 19 deletions(-)
 
 diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index c5034cf9ac9e..88a428e3903a 100644
+index 88a428e3903a..81f77eb9a01e 100644
 --- a/fs/smb/client/cifsglob.h
 +++ b/fs/smb/client/cifsglob.h
-@@ -638,28 +638,6 @@ struct smb_version_operations {
- 					       struct kvec *xattr_iov);
+@@ -675,12 +675,6 @@ struct cifs_mnt_data {
+ 	int flags;
  };
  
--struct smb_version_values {
--	char		*version_string;
--	__u16		protocol_id;
--	__u32		req_capabilities;
--	__u32		large_lock_type;
--	__u32		exclusive_lock_type;
--	__u32		shared_lock_type;
--	__u32		unlock_lock_type;
--	size_t		header_preamble_size;
--	size_t		header_size;
--	size_t		max_header_size;
--	size_t		read_rsp_size;
--	__le16		lock_cmd;
--	unsigned int	cap_unix;
--	unsigned int	cap_nt_find;
--	unsigned int	cap_large_files;
--	unsigned int	cap_unicode;
--	__u16		signing_enabled;
--	__u16		signing_required;
--	size_t		create_lease_size;
--};
+-static inline unsigned int
+-get_rfc1002_length(void *buf)
+-{
+-	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
+-}
 -
- #define HEADER_SIZE(server) (server->vals->header_size)
- #define MAX_HEADER_SIZE(server) (server->vals->max_header_size)
- #define HEADER_PREAMBLE_SIZE(server) (server->vals->header_preamble_size)
+ struct TCP_Server_Info {
+ 	struct list_head tcp_ses_list;
+ 	struct list_head smb_ses_list;
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 2881efcbe09a..9a346d67e298 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -614,7 +614,7 @@ CIFSSMBEcho(struct TCP_Server_Info *server)
+ 
+ 	iov[0].iov_len = 4;
+ 	iov[0].iov_base = smb;
+-	iov[1].iov_len = get_rfc1002_length(smb);
++	iov[1].iov_len = get_rfc1002_len(smb);
+ 	iov[1].iov_base = (char *)smb + 4;
+ 
+ 	rc = cifs_call_async(server, &rqst, NULL, cifs_echo_callback, NULL,
+@@ -1435,7 +1435,7 @@ cifs_async_readv(struct cifs_io_subrequest *rdata)
+ 	rdata->iov[0].iov_base = smb;
+ 	rdata->iov[0].iov_len = 4;
+ 	rdata->iov[1].iov_base = (char *)smb + 4;
+-	rdata->iov[1].iov_len = get_rfc1002_length(smb);
++	rdata->iov[1].iov_len = get_rfc1002_len(smb);
+ 
+ 	rc = cifs_call_async(tcon->ses->server, &rqst, cifs_readv_receive,
+ 			     cifs_readv_callback, NULL, rdata, 0, NULL);
+@@ -1800,7 +1800,7 @@ cifs_async_writev(struct cifs_io_subrequest *wdata)
+ 	/* 4 for RFC1001 length + 1 for BCC */
+ 	iov[0].iov_len = 4;
+ 	iov[0].iov_base = smb;
+-	iov[1].iov_len = get_rfc1002_length(smb) + 1;
++	iov[1].iov_len = get_rfc1002_len(smb) + 1;
+ 	iov[1].iov_base = (char *)smb + 4;
+ 
+ 	rqst.rq_iov = iov;
+diff --git a/fs/smb/client/cifstransport.c b/fs/smb/client/cifstransport.c
+index e98b95eff8c9..4c4f5befb6d3 100644
+--- a/fs/smb/client/cifstransport.c
++++ b/fs/smb/client/cifstransport.c
+@@ -165,7 +165,7 @@ SendReceiveNoRsp(const unsigned int xid, struct cifs_ses *ses,
+ 	int resp_buf_type;
+ 
+ 	iov[0].iov_base = in_buf;
+-	iov[0].iov_len = get_rfc1002_length(in_buf) + 4;
++	iov[0].iov_len = get_rfc1002_len(in_buf) + 4;
+ 	flags |= CIFS_NO_RSP_BUF;
+ 	rc = SendReceive2(xid, ses, iov, 1, &resp_buf_type, flags, &rsp_iov);
+ 	cifs_dbg(NOISY, "SendRcvNoRsp flags %d rc %d\n", flags, rc);
+@@ -177,7 +177,7 @@ int
+ cifs_check_receive(struct mid_q_entry *mid, struct TCP_Server_Info *server,
+ 		   bool log_error)
+ {
+-	unsigned int len = get_rfc1002_length(mid->resp_buf) + 4;
++	unsigned int len = get_rfc1002_len(mid->resp_buf) + 4;
+ 
+ 	dump_smb(mid->resp_buf, min_t(u32, 92, len));
+ 
+@@ -370,7 +370,7 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
+ 		goto out;
+ 	}
+ 
+-	*pbytes_returned = get_rfc1002_length(midQ->resp_buf);
++	*pbytes_returned = get_rfc1002_len(midQ->resp_buf);
+ 	memcpy(out_buf, midQ->resp_buf, *pbytes_returned + 4);
+ 	rc = cifs_check_receive(midQ, server, 0);
+ out:
+@@ -554,7 +554,7 @@ SendReceiveBlockingLock(const unsigned int xid, struct cifs_tcon *tcon,
+ 		goto out;
+ 	}
+ 
+-	*pbytes_returned = get_rfc1002_length(midQ->resp_buf);
++	*pbytes_returned = get_rfc1002_len(midQ->resp_buf);
+ 	memcpy(out_buf, midQ->resp_buf, *pbytes_returned + 4);
+ 	rc = cifs_check_receive(midQ, server, 0);
+ out:
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index dd12f3eb61dc..22f37ae7a66a 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -1299,7 +1299,7 @@ cifs_demultiplex_thread(void *p)
+ 		 * The right amount was read from socket - 4 bytes,
+ 		 * so we can now interpret the length field.
+ 		 */
+-		pdu_length = get_rfc1002_length(buf);
++		pdu_length = get_rfc1002_len(buf);
+ 
+ 		cifs_dbg(FYI, "RFC1002 header 0x%x\n", pdu_length);
+ 		if (!is_smb_response(server, buf[0]))
 diff --git a/fs/smb/common/cifsglob.h b/fs/smb/common/cifsglob.h
-index 00fd215e3eb5..eda5e666a761 100644
+index eda5e666a761..371160fec1cd 100644
 --- a/fs/smb/common/cifsglob.h
 +++ b/fs/smb/common/cifsglob.h
-@@ -9,6 +9,37 @@
- #ifndef _COMMON_CIFS_GLOB_H
- #define _COMMON_CIFS_GLOB_H
+@@ -40,6 +40,11 @@ struct smb_version_values {
+ 	size_t		create_posix_size;
+ };
  
-+struct smb_version_values {
-+	char		*version_string;
-+	__u16		protocol_id;
-+	__le16		lock_cmd;
-+	__u32		req_capabilities;
-+	__u32		max_read_size;
-+	__u32		max_write_size;
-+	__u32		max_trans_size;
-+	__u32		max_credits;
-+	__u32		large_lock_type;
-+	__u32		exclusive_lock_type;
-+	__u32		shared_lock_type;
-+	__u32		unlock_lock_type;
-+	size_t		header_preamble_size;
-+	size_t		header_size;
-+	size_t		max_header_size;
-+	size_t		read_rsp_size;
-+	unsigned int	cap_unix;
-+	unsigned int	cap_nt_find;
-+	unsigned int	cap_large_files;
-+	unsigned int	cap_unicode;
-+	__u16		signing_enabled;
-+	__u16		signing_required;
-+	size_t		create_lease_size;
-+	size_t		create_durable_size;
-+	size_t		create_durable_v2_size;
-+	size_t		create_mxac_size;
-+	size_t		create_disk_id_size;
-+	size_t		create_posix_size;
-+};
++static inline unsigned int get_rfc1002_len(void *buf)
++{
++	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
++}
 +
  static inline void inc_rfc1001_len(void *buf, int count)
  {
  	be32_add_cpu((__be32 *)buf, count);
-diff --git a/fs/smb/server/smb2misc.c b/fs/smb/server/smb2misc.c
-index ae501024665e..67a2d7a793f6 100644
---- a/fs/smb/server/smb2misc.c
-+++ b/fs/smb/server/smb2misc.c
-@@ -460,7 +460,7 @@ int ksmbd_smb2_check_message(struct ksmbd_work *work)
- 	}
- 
- validate_credit:
--	if ((work->conn->vals->capabilities & SMB2_GLOBAL_CAP_LARGE_MTU) &&
-+	if ((work->conn->vals->req_capabilities & SMB2_GLOBAL_CAP_LARGE_MTU) &&
- 	    smb2_validate_credit_charge(work->conn, hdr))
- 		return 1;
- 
-diff --git a/fs/smb/server/smb2ops.c b/fs/smb/server/smb2ops.c
-index 606aa3c5189a..bcf05caa2304 100644
---- a/fs/smb/server/smb2ops.c
-+++ b/fs/smb/server/smb2ops.c
-@@ -15,7 +15,7 @@
- static struct smb_version_values smb21_server_values = {
- 	.version_string = SMB21_VERSION_STRING,
- 	.protocol_id = SMB21_PROT_ID,
--	.capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
-+	.req_capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
- 	.max_read_size = SMB21_DEFAULT_IOSIZE,
- 	.max_write_size = SMB21_DEFAULT_IOSIZE,
- 	.max_trans_size = SMB21_DEFAULT_IOSIZE,
-@@ -41,7 +41,7 @@ static struct smb_version_values smb21_server_values = {
- static struct smb_version_values smb30_server_values = {
- 	.version_string = SMB30_VERSION_STRING,
- 	.protocol_id = SMB30_PROT_ID,
--	.capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
-+	.req_capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
- 	.max_read_size = SMB3_DEFAULT_IOSIZE,
- 	.max_write_size = SMB3_DEFAULT_IOSIZE,
- 	.max_trans_size = SMB3_DEFAULT_TRANS_SIZE,
-@@ -68,7 +68,7 @@ static struct smb_version_values smb30_server_values = {
- static struct smb_version_values smb302_server_values = {
- 	.version_string = SMB302_VERSION_STRING,
- 	.protocol_id = SMB302_PROT_ID,
--	.capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
-+	.req_capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
- 	.max_read_size = SMB3_DEFAULT_IOSIZE,
- 	.max_write_size = SMB3_DEFAULT_IOSIZE,
- 	.max_trans_size = SMB3_DEFAULT_TRANS_SIZE,
-@@ -95,7 +95,7 @@ static struct smb_version_values smb302_server_values = {
- static struct smb_version_values smb311_server_values = {
- 	.version_string = SMB311_VERSION_STRING,
- 	.protocol_id = SMB311_PROT_ID,
--	.capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
-+	.req_capabilities = SMB2_GLOBAL_CAP_LARGE_MTU,
- 	.max_read_size = SMB3_DEFAULT_IOSIZE,
- 	.max_write_size = SMB3_DEFAULT_IOSIZE,
- 	.max_trans_size = SMB3_DEFAULT_TRANS_SIZE,
-@@ -204,7 +204,7 @@ void init_smb2_1_server(struct ksmbd_conn *conn)
- 	conn->signing_algorithm = SIGNING_ALG_HMAC_SHA256_LE;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_LEASING;
- }
- 
- /**
-@@ -221,20 +221,20 @@ void init_smb3_0_server(struct ksmbd_conn *conn)
- 	conn->signing_algorithm = SIGNING_ALG_AES_CMAC_LE;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING |
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_LEASING |
- 			SMB2_GLOBAL_CAP_DIRECTORY_LEASING;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_ENCRYPTION &&
- 	    conn->cli_cap & SMB2_GLOBAL_CAP_ENCRYPTION)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_ENCRYPTION ||
- 	    (!(server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_ENCRYPTION_OFF) &&
- 	     conn->cli_cap & SMB2_GLOBAL_CAP_ENCRYPTION))
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
- }
- 
- /**
-@@ -251,19 +251,19 @@ void init_smb3_02_server(struct ksmbd_conn *conn)
- 	conn->signing_algorithm = SIGNING_ALG_AES_CMAC_LE;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING |
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_LEASING |
- 			SMB2_GLOBAL_CAP_DIRECTORY_LEASING;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_ENCRYPTION ||
- 	    (!(server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_ENCRYPTION_OFF) &&
- 	     conn->cli_cap & SMB2_GLOBAL_CAP_ENCRYPTION))
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_DURABLE_HANDLE)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_PERSISTENT_HANDLES;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_PERSISTENT_HANDLES;
- }
- 
- /**
-@@ -280,14 +280,14 @@ int init_smb3_11_server(struct ksmbd_conn *conn)
- 	conn->signing_algorithm = SIGNING_ALG_AES_CMAC_LE;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING |
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_LEASING |
- 			SMB2_GLOBAL_CAP_DIRECTORY_LEASING;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
- 
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_DURABLE_HANDLE)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_PERSISTENT_HANDLES;
-+		conn->vals->req_capabilities |= SMB2_GLOBAL_CAP_PERSISTENT_HANDLES;
- 
- 	INIT_LIST_HEAD(&conn->preauth_sess_table);
- 	return 0;
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index b731d9b09408..8a615e8c600f 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -282,7 +282,7 @@ int init_smb2_neg_rsp(struct ksmbd_work *work)
- 	/* Not setting conn guid rsp->ServerGUID, as it
- 	 * not used by client for identifying connection
- 	 */
--	rsp->Capabilities = cpu_to_le32(conn->vals->capabilities);
-+	rsp->Capabilities = cpu_to_le32(conn->vals->req_capabilities);
- 	/* Default Max Message Size till SMB2.0, 64K*/
- 	rsp->MaxTransactSize = cpu_to_le32(conn->vals->max_trans_size);
- 	rsp->MaxReadSize = cpu_to_le32(conn->vals->max_read_size);
-@@ -956,7 +956,7 @@ bool smb3_encryption_negotiated(struct ksmbd_conn *conn)
- 	 * SMB 3.0 and 3.0.2 dialects use the SMB2_GLOBAL_CAP_ENCRYPTION flag.
- 	 * SMB 3.1.1 uses the cipher_type field.
- 	 */
--	return (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
-+	return (conn->vals->req_capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
- 	    conn->cipher_type;
- }
- 
-@@ -1210,7 +1210,7 @@ int smb2_handle_negotiate(struct ksmbd_work *work)
- 		rc = -EINVAL;
- 		goto err_out;
- 	}
--	rsp->Capabilities = cpu_to_le32(conn->vals->capabilities);
-+	rsp->Capabilities = cpu_to_le32(conn->vals->req_capabilities);
- 
- 	/* For stats */
- 	conn->connection_type = conn->dialect;
-@@ -3474,7 +3474,7 @@ int smb2_open(struct ksmbd_work *work)
- 	share_ret = ksmbd_smb_check_shared_mode(fp->filp, fp);
- 	if (!test_share_config_flag(work->tcon->share_conf, KSMBD_SHARE_FLAG_OPLOCKS) ||
- 	    (req_op_level == SMB2_OPLOCK_LEVEL_LEASE &&
--	     !(conn->vals->capabilities & SMB2_GLOBAL_CAP_LEASING))) {
-+	     !(conn->vals->req_capabilities & SMB2_GLOBAL_CAP_LEASING))) {
- 		if (share_ret < 0 && !S_ISDIR(file_inode(fp->filp)->i_mode)) {
- 			rc = share_ret;
- 			goto err_out1;
-@@ -7977,7 +7977,7 @@ static int fsctl_validate_negotiate_info(struct ksmbd_conn *conn,
- 		goto err_out;
- 	}
- 
--	neg_rsp->Capabilities = cpu_to_le32(conn->vals->capabilities);
-+	neg_rsp->Capabilities = cpu_to_le32(conn->vals->req_capabilities);
- 	memset(neg_rsp->Guid, 0, SMB2_CLIENT_GUID_SIZE);
- 	neg_rsp->SecurityMode = cpu_to_le16(conn->srv_sec_mode);
- 	neg_rsp->Dialect = cpu_to_le16(conn->dialect);
 diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index 863716207a0d..dac783b46545 100644
+index dac783b46545..9c0db206624b 100644
 --- a/fs/smb/server/smb_common.h
 +++ b/fs/smb/server/smb_common.h
-@@ -338,35 +338,6 @@ struct file_id_full_dir_info {
- 	char FileName[];
- } __packed; /* level 0x105 FF rsp data */
- 
--struct smb_version_values {
--	char		*version_string;
--	__u16		protocol_id;
--	__le16		lock_cmd;
--	__u32		capabilities;
--	__u32		max_read_size;
--	__u32		max_write_size;
--	__u32		max_trans_size;
--	__u32		max_credits;
--	__u32		large_lock_type;
--	__u32		exclusive_lock_type;
--	__u32		shared_lock_type;
--	__u32		unlock_lock_type;
--	size_t		header_size;
--	size_t		max_header_size;
--	size_t		read_rsp_size;
--	unsigned int	cap_unix;
--	unsigned int	cap_nt_find;
--	unsigned int	cap_large_files;
--	__u16		signing_enabled;
--	__u16		signing_required;
--	size_t		create_lease_size;
--	size_t		create_durable_size;
--	size_t		create_durable_v2_size;
--	size_t		create_mxac_size;
--	size_t		create_disk_id_size;
--	size_t		create_posix_size;
--};
+@@ -423,9 +423,4 @@ unsigned int ksmbd_server_side_copy_max_chunk_size(void);
+ unsigned int ksmbd_server_side_copy_max_total_size(void);
+ bool is_asterisk(char *p);
+ __le32 smb_map_generic_desired_access(__le32 daccess);
 -
- struct filesystem_posix_info {
- 	/* For undefined recommended transfer size return -1 in that field */
- 	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
+-static inline unsigned int get_rfc1002_len(void *buf)
+-{
+-	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
+-}
+ #endif /* __SMB_COMMON_H__ */
 -- 
 2.43.0
 
