@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6767-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6769-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDB81BD0732
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 18:23:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BD6CBD0738
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 18:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AF163C0C37
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 16:21:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A0FC3C14F2
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 16:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4C002EE612;
-	Sun, 12 Oct 2025 16:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C305C258CD0;
+	Sun, 12 Oct 2025 16:21:21 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265982EDD7E;
-	Sun, 12 Oct 2025 16:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DB72ECEAC;
+	Sun, 12 Oct 2025 16:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760286074; cv=none; b=UKNL08bVqHJvEs+Nv/AsyAk00Q4JE8noTGyWq0QLTgMVVrsQPLbMyUXvkBRbgnTY/iptzuCUvjH3+LPr52hU4u/4v4idMvKe1VUsiFxVNTylU87HjtzXxrUQjd+29we43hXAjOKvtV9rAeb7beYhjdaB2KM2Ip1bv6RT6OVz5K8=
+	t=1760286078; cv=none; b=mtEw9JeA3j0eCSF7gR7GpkzIFG7OeChmoR5znjpVnspJRjptfvwrsTQgXvLnhvQczKyTfmfGe3/8XQ/CitphY40LWM9PfNkSO/lC/IxV2aWjXXNOv9mHBvFCOerBUfdgkZXrIOcbKaA7pHMPGJHoB86SU0Pb6+Wsk3CRs70UUG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760286074; c=relaxed/simple;
-	bh=9HFwudJ35eQC7DM+YM0J+EEops91L9kfN+PkBQyF7N4=;
+	s=arc-20240116; t=1760286078; c=relaxed/simple;
+	bh=KmGhgnmR0m6tPFO5dxwalQMc+FUg7axJAvjjwY79eSI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s8Qu9H9fadZDGUCqamWafdQwe+DOhHJGbhmvt91wh8+LFCt6/zXRw6AU2MM8rn5k5wV4QBEhkGs3Nh/4WaSFRFKg2Db0dVmhkRn6B6tcMPyrUfUyQcjvAzh1JGqfW9MJi26ul0JCNyg/ITKUfgauyU4p6s49t1fOdWJ1VYxGr6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=18.132.163.193
+	 MIME-Version; b=WAK89ujpMH2aByhndcPYO1TBg7D5wQjcn3F47Pe1t03mzUDrgNeDkVyiBnYwsplzRqAPgFgpWqprMaqY3FavtP2KIh0rM0rTLRpRE6fJJHGo0WBc/ky8QByPl8AdMF5WjgN2IZE38QLczMlP7Zy1SQMjLnAzmqySwCLDL0dE2DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: esmtpgz15t1760285927tb789d326
-X-QQ-Originating-IP: pcxo/70rjxin7I1eumam0esFt8mVKBkt9c1xZIdVXR4=
+X-QQ-mid: esmtpgz15t1760285929t289b3b83
+X-QQ-Originating-IP: F0VIxI/Nc5rXr6OmviA91EoO8clNh19NouB5LYSCKMY=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 13 Oct 2025 00:18:46 +0800 (CST)
+	id ; Mon, 13 Oct 2025 00:18:48 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13789738382234321181
+X-BIZMAIL-ID: 14640092560663702799
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v2 16/22] smb: move FILE_SYSTEM_DEVICE_INFO to common/cifspdu.h
-Date: Mon, 13 Oct 2025 00:17:43 +0800
-Message-ID: <32507DF8FDDE3006+20251012161749.2994033-17-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH v2 17/22] smb: move FILE_SYSTEM_INFO to common/cifspdu.h
+Date: Mon, 13 Oct 2025 00:17:44 +0800
+Message-ID: <98825614B51DB683+20251012161749.2994033-18-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
 References: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
@@ -69,104 +69,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: NP3iUBCWMtGbCK5kR3sKMDJyzhT7gmzbFz2NKvpJU75XvoOlXAMBp5wc
-	UiqvLP95aaelJ6nxzkvhiN+6hGitazGyQyLNexzhxwSjIQibqT9hYCeXKne+BLtVHSV1Qjl
-	NxuYRjdg3zyhr2Hai5eVtP6ntyxNtj+b/aZBQ5TD6cPY9IZ/GLYq8LMSujD4dmpOssJvUtv
-	lwT0zHtNl2JvemS4n59lcrDsd93DaU4/lhrK1H5QpJPCZyJppnlvfDTJ7oO5W+fTvnY3H1z
-	PbCXMO057mQpm5RVWzKKo1iR51KxG9AqLgB8VuWO8asoaU905PAtOK/6j8tDcXKa2H8FGX3
-	cuUj9xQBSG8736YDdffGRonCk0PdbD5Br5jSmmewOaQptRnpKPLu6BRcQD8WJnJANBz8q9W
-	jp/Ug3KzRzAh5hZsEHEfCH9PMYADWO1WHxP72r/9aZnDqe34DRpzJXEdbFeW/yFI8BP92XG
-	DVS66MDGUCtqVR9ASW0XLhT6D8ztyB2U93A2wxbesgRusX4tgncRTWAbv/Udfn51nHXUR6o
-	ZTaaD2h8XnJC9dU/agTCKCCkyZPC3mWyF8zy6pZXkpj14bn46cJ6s55ywRvaybqgV2pCHda
-	ASVWLVtzS3qc5wZaQDMYZ+hehyE3NPVF33aTYF3KsNEWJoX5UfcSOUgEKbtZb9xGQLMC61r
-	BgpsCtoNActp7x6wgLnwFcRAxfF/Z7TqDsLfEyuR4rVT4tb+uVc8UZT3aD83K4dDWWYIkb1
-	C4u0iatcQL8tYs2T2SfrEQF6bhI6QVyu8AqSVyeQGtQc2ZZHXMM7nAovOnpyu2bphTViI3A
-	zM6Vfs4/XSCRIzpDKVlxbecNACkXLhab2AwZ/hPjZo0TbdLBWrPTc6zgWVCk3MPKmuEpvck
-	MAaUYv+gJdcsTmIy76rqRG+CgxB3iaao4dFo1YQcqTyXS/GjN1B71//ImqvXteDv2B8toby
-	CQi/vttJhfphRu+uVFKNJQ2gll9qocs/kCMURB6fVS6qzGBaQE83kXTc7oX4R1GEsQwWB7r
-	0+h6Cox6wwC+FtdhcEk/g4A1Zowr8oNQm8CordubyEq9jToDWNMzjk5HPSS/QCvG6inza6W
-	FXI/w/PoTFq
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-XMAILINFO: ONMinSPvVgZRaoZ5hBjc23AJsw3c7QzYyipsJSxRE+24kCWqDn1vhHuv
+	WAP97j3YbYBob1Jw2z6AXyfmWDIeI/yzF0cwoUCGCHdBzIXOlaf6bBOcvNBzF3aK+1e85tV
+	BM1lnvBItQGYMi5YzHkL6NuhpdhVukU+VSj5vpyAGyBIs75ggdTA+1svY5o6TtnE7QcGEfz
+	bfe1jRII+dyZxsaxoV8DDOYjIanPtqKR7sWRA+NOWKXsD7AFq3SSb6Ql+MBtzLh64erEMJ8
+	3hKwGhRUPSLwAokK+oYOdEgSRPcl3PDL3tBdo43T3mfTTAcTIFx92I3z1G5Q6NVsfPJsmSk
+	FUOkhm4luO1rbt3UurEFuzQ1tCGku+YzXte2mmBofba2wQ2kJmAd+GeGfYSI7TJP2etfyEV
+	7LIJZadXez74IbAAFFA42areGSu60PrTMWTrE494UlKuLMJHh34z1pn0oCVTA6oAL5sEvMA
+	A5V+OZT9oKBTz/gP2zoL3s9dzZpCkFU6zSNxX84w6OCV4uD2fhR1xWxTQWmuswIeHvHtDY8
+	Wu7YWT0EtOhvUvI/M39TJLIBsDLXecE7cyTeGz+D6sB1Gz4mBx4AALvvuEQ6lZlCrwxtpKa
+	xtG8G7CNMwCEb6hX+siAAKAsfsJVFrl6yYxOY9XGpqm6bsgTMJlaMNfKdKdvW2d3juTeMUq
+	jXMVPZTU/rXbc/k55KfCQlpJNsZl/1tFB7oZ6o+Y8dW95yUtOuG0Ps1ogjybfwqxDPyC655
+	JEsAItbeBI8F1R3xz4BtSsYOtu10ThihjzecWC375G+4U5PLfZRZLIMGBx8GzbKJCloNw6j
+	1F5HmcGDmwEE6LmRHmHfnIHhI1h8cUWtKWzFGE4xtU6XQQ+FaAAjG1g6pDkANoSV9G7PNdx
+	KXI3aOkxtHto21eO4tZfW+kuUhtEUIRq3SmM1/t/UrZPVch5trvvtqXAftMACaOMnMuD9t4
+	qeFcL579hUq6yBmQJJd+A1zPIza7BbMXnitHNCPbf5akyznmR2E0voTQSLMwaGufjaVPp8V
+	IRoXcVohQqOhfsowAna9oEN/qyUX4tgmb2KBnImZr8I9d82jEVeIRXIcDKVVk0Nivk3GmeW
+	QF5eyCWOWBK
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
 X-QQ-RECHKSPAM: 0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Rename "struct filesystem_device_info" to "FILE_SYSTEM_DEVICE_INFO",
+Rename "struct filesystem_info" to "FILE_SYSTEM_INFO",
 then move duplicate definitions to common header file.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
- fs/smb/client/cifspdu.h    | 5 -----
- fs/smb/common/cifspdu.h    | 6 ++++++
+ fs/smb/client/cifspdu.h    | 7 -------
+ fs/smb/common/cifspdu.h    | 8 ++++++++
  fs/smb/server/smb2pdu.c    | 4 ++--
- fs/smb/server/smb_common.h | 5 -----
- 4 files changed, 8 insertions(+), 12 deletions(-)
+ fs/smb/server/smb_common.h | 7 -------
+ 4 files changed, 10 insertions(+), 16 deletions(-)
 
 diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
-index a6f7e168961e..17255d7a4615 100644
+index 17255d7a4615..889be409146c 100644
 --- a/fs/smb/client/cifspdu.h
 +++ b/fs/smb/client/cifspdu.h
-@@ -1929,11 +1929,6 @@ typedef struct {
- #define FILE_PORTABLE_DEVICE			0x00004000
- #define FILE_DEVICE_ALLOW_APPCONTAINER_TRAVERSAL 0x00020000
+@@ -1819,13 +1819,6 @@ struct aliasInfo92 {
+ 	int shareNameOffset;
+ } __attribute__((packed));
  
 -typedef struct {
--	__le32 DeviceType;
--	__le32 DeviceCharacteristics;
--} __attribute__((packed)) FILE_SYSTEM_DEVICE_INFO; /* device info level 0x104 */
+-	__le64 TotalAllocationUnits;
+-	__le64 FreeAllocationUnits;
+-	__le32 SectorsPerAllocationUnit;
+-	__le32 BytesPerSector;
+-} __attribute__((packed)) FILE_SYSTEM_INFO;	/* size info, level 0x103 */
 -
- /* minimum includes first three fields, and empty FS Name */
- #define MIN_FS_ATTR_INFO_SIZE 12
- 
+ typedef struct {
+ 	__le32 fsid;
+ 	__le32 SectorsPerAllocationUnit;
 diff --git a/fs/smb/common/cifspdu.h b/fs/smb/common/cifspdu.h
-index 560900617be7..055c6577b4e9 100644
+index 055c6577b4e9..548d621ec233 100644
 --- a/fs/smb/common/cifspdu.h
 +++ b/fs/smb/common/cifspdu.h
-@@ -321,6 +321,12 @@ typedef struct server_negotiate_rsp {
+@@ -321,6 +321,14 @@ typedef struct server_negotiate_rsp {
  	__le16 ByteCount;
  } __attribute__((packed)) SERVER_NEGOTIATE_RSP;
  
-+/* See MS-CIFS 2.2.8.2.5 */
++/* See MS-CIFS 2.2.8.2.4 */
 +typedef struct {
-+	__le32 DeviceType;
-+	__le32 DeviceCharacteristics;
-+} __attribute__((packed)) FILE_SYSTEM_DEVICE_INFO; /* device info level 0x104 */
++	__le64 TotalAllocationUnits;
++	__le64 FreeAllocationUnits;
++	__le32 SectorsPerAllocationUnit;
++	__le32 BytesPerSector;
++} __attribute__((packed)) FILE_SYSTEM_INFO;	/* size info, level 0x103 */
 +
- /* List of FileSystemAttributes - see 2.5.1 of MS-FSCC */
- #define FILE_SUPPORTS_SPARSE_VDL	0x10000000 /* faster nonsparse extend */
- #define FILE_SUPPORTS_BLOCK_REFCOUNTING	0x08000000 /* allow ioctl dup extents */
+ /* See MS-CIFS 2.2.8.2.5 */
+ typedef struct {
+ 	__le32 DeviceType;
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index a05b04799c0d..41167e7cca77 100644
+index 41167e7cca77..2ad46a11e7ef 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -5469,9 +5469,9 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
- 	switch (fsinfoclass) {
- 	case FS_DEVICE_INFORMATION:
+@@ -5539,9 +5539,9 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
+ 	}
+ 	case FS_SIZE_INFORMATION:
  	{
--		struct filesystem_device_info *info;
-+		FILE_SYSTEM_DEVICE_INFO *info;
+-		struct filesystem_info *info;
++		FILE_SYSTEM_INFO *info;
  
--		info = (struct filesystem_device_info *)rsp->Buffer;
-+		info = (FILE_SYSTEM_DEVICE_INFO *)rsp->Buffer;
- 
- 		info->DeviceType = cpu_to_le32(FILE_DEVICE_DISK);
- 		info->DeviceCharacteristics =
+-		info = (struct filesystem_info *)(rsp->Buffer);
++		info = (FILE_SYSTEM_INFO *)(rsp->Buffer);
+ 		info->TotalAllocationUnits = cpu_to_le64(stfs.f_blocks);
+ 		info->FreeAllocationUnits = cpu_to_le64(stfs.f_bfree);
+ 		info->SectorsPerAllocationUnit = cpu_to_le32(1);
 diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index 016ec93e6df4..86d18a8badff 100644
+index 86d18a8badff..d6351b0ee62a 100644
 --- a/fs/smb/server/smb_common.h
 +++ b/fs/smb/server/smb_common.h
-@@ -56,11 +56,6 @@
- 		FILE_EXECUTE | FILE_DELETE_CHILD | \
- 		FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES)
+@@ -64,13 +64,6 @@ struct filesystem_vol_info {
+ 	__le16 VolumeLabel[];
+ } __packed;
  
--struct filesystem_device_info {
--	__le32 DeviceType;
--	__le32 DeviceCharacteristics;
--} __packed; /* device info level 0x104 */
+-struct filesystem_info {
+-	__le64 TotalAllocationUnits;
+-	__le64 FreeAllocationUnits;
+-	__le32 SectorsPerAllocationUnit;
+-	__le32 BytesPerSector;
+-} __packed;     /* size info, level 0x103 */
 -
- struct filesystem_vol_info {
- 	__le64 VolumeCreationTime;
- 	__le32 SerialNumber;
+ #define EXTENDED_INFO_MAGIC 0x43667364	/* Cfsd */
+ #define STRING_LENGTH 28
+ 
 -- 
 2.43.0
 
