@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6728-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6734-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F68BBD05A5
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49396BD05BD
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93D3B3A83C9
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 666A8188FD6A
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E4B2EC097;
-	Sun, 12 Oct 2025 15:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A272EBB89;
+	Sun, 12 Oct 2025 15:24:16 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF842EC0A4;
-	Sun, 12 Oct 2025 15:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BB52EC097;
+	Sun, 12 Oct 2025 15:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760282640; cv=none; b=KZzv9CMKdLfocBadYbR9lgJz2InPSkjelI09WDUWoNqUIIzMNVetLp0fHjUrvK7wqrhqNz2xoFNlLf5xwX0WPIKflqp5P0bSPk+MAv945gObtV3gXmgJr9oLXB4l5qm4tWC/WggFxT+EWkEvsxndJCSJRl1sUIC+eZeuuqAioXs=
+	t=1760282654; cv=none; b=XQouqljkrztDBXP88jLAKKH7PAE682xAwGXkWivDXzFI+Iisa7k56cKyATwVBrGj4XymXHnPXQbDUHRit6iwtmL3ppJm1WZk5+NNgc3sRqMGlZle60wYS51or+saQg1M7W91qg3cvGrTE9fS1H8ktQ0HU2v4HDK++xrk+sOdK7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760282640; c=relaxed/simple;
-	bh=+Y1i4ZX5YAVz0aE+JKDU1tjQg9Po8/DgENzqiLN/5r0=;
+	s=arc-20240116; t=1760282654; c=relaxed/simple;
+	bh=LzJ+/nuwdxTRfBvOPshybE9q6IX8QoFZJsWv+HEV83w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O5GJ572tgLGjp58WF5wKNQ1SYJ0hbca4Ip9jXpeZvvjLD9i+1uUV3/9bGzerwwh2+70JjNRSm9MxYxAHu8vEaFz4+irIizqvt3rt9lyXpiC+zTD2K92GL4u/17xESacDlCJlM3a/z9LQp9sOUpzdIxsas3iH5vEZrkSCpAK46no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.206.34.216
+	 MIME-Version; b=Y2DU62qOymRVNKNT5vC/RKcS3IPy6Xnhf5CG9Odz/rWlfs87nMBOIFxm6gudQOm8tnQGtEjBUcZj21KCQiq4BKY8OZRXrSs5Sz0zx13AwMA2pPqlmdJGijhxMcif5SuIZxWSS6lSZh7VmrCjte+ujJMm5fEp90pogj0UjQZA4xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: zesmtpgz3t1760282588tf6b7d71a
-X-QQ-Originating-IP: VWQnEKf58oe2EdsKBkJpAUO7Tdy1kaE7uSB6iW9p+6I=
+X-QQ-mid: zesmtpgz3t1760282591ta3bdd2b1
+X-QQ-Originating-IP: SEyL7S5qpA4WwYpthX6mdLh+E1OOH5iTBDqCBvn3g84=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 12 Oct 2025 23:23:07 +0800 (CST)
+	id ; Sun, 12 Oct 2025 23:23:10 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2849665947815525843
+X-BIZMAIL-ID: 1132431418211425726
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH RESEND 01/22] smb/server: fix possible memory leak in smb2_read()
-Date: Sun, 12 Oct 2025 23:22:26 +0800
-Message-ID: <9836A3F274B62345+20251012152247.2992573-2-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH RESEND 02/22] smb/server: fix possible refcount leak in smb2_sess_setup()
+Date: Sun, 12 Oct 2025 23:22:27 +0800
+Message-ID: <282F68460576D756+20251012152247.2992573-3-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
 References: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
@@ -69,30 +69,30 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: OQDheyKMdrW9H6cc2sFeGDtnNpRjgSra2AwrczGRde0p6VCytTNjgNQA
-	XxaZyV+AVi8AeKIj2ydsIsHz3VNfGtPckDrgjncf8h4zp49qAERJCS1fDXagNx454F4WpJY
-	owytGfxurXkremQd4yB8txQiTS4MOj1h8a3Xhs5EmBDFiuOV2bfFR2PD0R3qGv4es4Kxvji
-	5XrgQLHa1bFjLAAxg7ZOoGw1Si6Cq+oph9WwUhUQfrc8NEgOLIo6EGUEs1yjrWUuzHlYJSC
-	tO/I6zIKufb2jw3hvLYcFvuVLrHedkiwZVL9xH8iSJZ40uk+NabmVFxARchmvSKBcHGnbqT
-	PldWrw05LPdKNaqvnjzMXmQNh5gq7+qtLMc70EY3FFrwldvhjMfDyzx/3/eIp3WdNl9qmRR
-	EWcWwFwmEjdUrqyfZD/PPjLU6n6aGsL8X0uGozOlLuux5dMtZk3M980nQpw7zQrGvkMrbEP
-	m1qSCsAYodPZuxUkt0knBb4G5dU/TChfppKi33q1AcbLD5qlxmD8L72cRYfoXZAL2p1w5bT
-	kaDtjDAlwQ+O/duq97SmFGT9hiqSXwk5kPFUp0vr5vdZ+WYakdrKo+ZB8kur/oNrlDWxVvj
-	/xZBGCQNqoRpjCP/Vi559V/qShmmRf7LkzwjAzjytvWmYjruvkUK2A8Me1Uxf8x1KKwYFj6
-	HJugrF9DI1RIlYtn6tfcbNB93Cx+QjTE9DjZQhg/Z80HPqykQGoqUvLKe9DUs3RsztaT6N4
-	4RUOc5pji0sRnQHUeiBkcnVeDehkFvrBwHoRihiucrWTiyG/ITBmUHF+0VeTpFV7HixcMXk
-	s3SYy8Im1rgHqv33UgbNqJFywTIQM1umb7TJIioBpDrE+vmZ2Poldqo/epJa3TOP5cjj4an
-	P65T0oiYKNO0NXxJNlPvc2XhRX4TSpYehcCjwBn8a+Nkwc+2Ic+JhDMLgxGv48MTwbGMiLc
-	QxORwNQyZ1TttK0ckKPjZCMG00TrnqELgO/MsjWrYJMZeoeOkwU8fcP4NGeKU+wv6iYQmCp
-	GaFiemCRAdK9dNnA18GUfE7FlEeh0+ep3vnSsGefU8REX2sfQML1Gw99xrYakIUX/PbVdUC
-	ggCrS9qs2BS
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-XMAILINFO: Oa2shA1LYpbMFFFQ6qFROplspGUR1uRyAcjk5s26Qxl0XgK2FN+f2ahh
+	A/tfYWEee3UGCaojoWy3SChZUsnlvT8NA5GiVVPQRV4/FC+MWHNY8ACOMzestdWD6+L1DIT
+	Qs6u+6iSnW4+GqP4hIFjuA3nA18pjhO4mPy/K+lBaMVyz203AQzLRFsoALSZCmAngus1iZ4
+	VNdE3SExV71JV81diUViHvXERrP9hRYxWGJ7nbTmOq/bU9sviJmpWnoudkn+TsObXbJS3a1
+	ayE9iRWBUMswkT747ENT/rpaTT14eoSDOFdNufPtO0ezeWJiwoaxxazpJ09dIXPIEapQBQn
+	EiN4mwucxBWjikArJ7TPqCwK91GJ/xbn72qVDFUUjjpoZ5wQjt5ZD/BwjVXIcyTX6+I0E1N
+	SDBPobHObtfc/aNPOvltTV5XbOsvvz9YpBujrIAPzhJLqI01zRmIhY4pB36nNMmqeebb/d6
+	HBX1S7ALvTKU05HWoxS8niyN7XQbbK9jSo6R73zYrsxSYvkNoCsI7nPn0vMNfcuq4jlySsY
+	VkOGDDQcZ/tlqLGyAwq5zWWFCQVuNujz9SUQ7ExEAErPyvOUsPpYmln6e+Y7fdoqb0ojMpE
+	KSuwvPFx3ZWZglms6Buuow54uclm2JMeUeMxQSOqXA05Z4Vwexg7dBPbYGSm19lSYizjvpq
+	R6AlgWEl4tyF4wakDgo1EFBvGrZEEFrCrQeY7eLjNnr5Z0mYW/sGBNlKuKtyZ/wRjRTbCCD
+	3C8r63AveJguD7wmAn7xQv3Cf8q6ZgbXY/tCNxevXfxxKUt6NAXXLY5Pvhd98QgKC86IWL+
+	ekYGJNWFdbhEnL1Xm5AwYnEbJq99BnEDTXGpPcUCRuvBHYwH4I1WfIxODdDwjABVQzo5Kx4
+	UWYkRoSv6aliRxp0h8pRw/ODr2xX319AYF5aYjqcBZ351zAkeLbGhee/fs1KGoUqCgHeilN
+	y9fF7w890fXTcDSiRGp3qIEm5oGxysOkuF31CZAsSAVqFSxw2QD36g2KUqkKmTHcbl3K0T1
+	igbt0t/NxuiaadDTpqbBSqHmb3QRe2++VB3Kh7LDFz62bWtAhEab88y48543J92J/qXJVjH
+	457pbM5hUdh
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 X-QQ-RECHKSPAM: 0
 
 From: ZhangGuoDong <zhangguodong@kylinos.cn>
 
-Memory leak occurs when ksmbd_vfs_read() fails.
-Fix this by adding the missing kvfree().
+Reference count of ksmbd_session will leak when session need reconnect.
+Fix this by adding the missing ksmbd_user_session_put().
 
 Co-developed-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
@@ -102,17 +102,17 @@ Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
  1 file changed, 1 insertion(+)
 
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index ab1d45fcebde..e81e615f322a 100644
+index e81e615f322a..b731d9b09408 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -6824,6 +6824,7 @@ int smb2_read(struct ksmbd_work *work)
+@@ -1806,6 +1806,7 @@ int smb2_sess_setup(struct ksmbd_work *work)
  
- 	nbytes = ksmbd_vfs_read(work, fp, length, &offset, aux_payload_buf);
- 	if (nbytes < 0) {
-+		kvfree(aux_payload_buf);
- 		err = nbytes;
- 		goto out;
- 	}
+ 		if (ksmbd_conn_need_reconnect(conn)) {
+ 			rc = -EFAULT;
++			ksmbd_user_session_put(sess);
+ 			sess = NULL;
+ 			goto out_err;
+ 		}
 -- 
 2.43.0
 
