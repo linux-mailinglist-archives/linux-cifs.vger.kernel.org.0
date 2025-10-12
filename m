@@ -1,51 +1,51 @@
-Return-Path: <linux-cifs+bounces-6774-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6776-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6CF9BD0A7B
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 21:10:57 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2056FBD0A81
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 21:11:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 198661892168
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 19:11:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C39484E7346
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 19:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4712EE616;
-	Sun, 12 Oct 2025 19:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF422F1FCF;
+	Sun, 12 Oct 2025 19:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="XPixa6zg"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="Ks/iFauu"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03B22EE274
-	for <linux-cifs@vger.kernel.org>; Sun, 12 Oct 2025 19:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C88F2F1FD6
+	for <linux-cifs@vger.kernel.org>; Sun, 12 Oct 2025 19:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760296253; cv=none; b=Hq+7pBLtVY/kkSpTjaour+ujgxsWKtwe3X5HoU0IRAylYsqb3ooSZEqflmN+wjcVRyOlJvUX0Y8YT91ZkhLSr5spO9+reFrIlSd2bm2k1RE9YF+WUPIPYJpRHFpBra9n2hRZ55FUm5bgOuJQIh9tngVEo3fUMg47cNd1UPihHT0=
+	t=1760296261; cv=none; b=KORjsoEeja8wX5P+mTWPUmUhYnnwbxxtZiuqfsm+BbNoYss+P+tS7FxjL8dYgQk+0gLk9nrNDHdbQT/rhf/meCbOsE8eLPn6vAqiQ6UlcT81t/bGiM9qiqkkM0HQHHUxtcCql84Ut69DxS4IEdC0ltucaN3b0Ax+YzWs38KVS60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760296253; c=relaxed/simple;
-	bh=P1FIH25b2uGocTXChbSz3TDLDvFghefeVTMas4dlYmk=;
+	s=arc-20240116; t=1760296261; c=relaxed/simple;
+	bh=VFqkl4xTq/PtjhnJdshUU7U2Si2jqsenkT1OgkQyGP0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D/IRWwt/g7u5KO83pEBG4qi/TGg16nuaGIVPgvgl+awwYdGQspPO1KFFhZ0E42K0qkrE1fHG5riwk4uM8sAVX0ipdr7qSHhgQowL689OAs1jTlMj/APDGq08ixcpF7T3ELF85qL1nmXKIvaTxnclJLBh3YXj1Z9+fNCzJfD8VwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=XPixa6zg; arc=none smtp.client-ip=144.76.82.148
+	 MIME-Version; b=LE6f4vG3ViTjBniswrjReFPIHJTTYUn2NvIWuBgpCc8r3RSAti121AXPNMXueKA6jyPIOcA5eFjjqtiwTipjMR0Esql+ls0AEwMYDHyKkv6y9WI0CUt4csXyDViUouADsxQgMlU7jkLZdBNTeO3T8A0GeGpUY2PtaTlX2/KP6PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=Ks/iFauu; arc=none smtp.client-ip=144.76.82.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
 	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=2IY+UvlfeOluyTVIvEJK1FsjZyuU9vFWeuHWuf/B6Cc=; b=XPixa6zglg66FFktIg9JxmbX1E
-	MC61PiciDOAUt0HFruY1usNl//M11flktCjAPswmJU+DsgNTu5AwWviAERVX/dLSk9doILn9gLn+p
-	sL4h17yyS5YYqs14UB+F9PdPMwqptjpJRu6bS3SpLTXCSzyPAZxRkmnqu2Cx9j1NEYqrDEKozaNAI
-	AF3mKita+OJhybNj0vw/tmbas8pT+IUCPvrvkm17o7J5LO2GDVAoGAbl70UxOXZXpdH3mk4EGs79C
-	yUR7CGJxoY10ikUboIdO5oUdDvKziu/4XHb7DH1fM4D1a+EEf5gPSW4W/3Eq2q8e8Xg2Kaq41nG5V
-	wDrZ+GtQ/v+hulvemm37RzSoTRA7mhvIlCDc0poZWMbQ9IitelFU3Gw/PWoNIzOagjR/24g/wKEeR
-	75TdNn8kytQwxB+2XiZlh/uHFXxrylZ+wJxM8zsQehSy3Xk8ZVOdRVEvR2S6M2X5m9YNhMWlfoFGE
-	b+6Wy8O/keDSowj7NJGWpfoZ;
+	bh=EczH4a/lE4mr5DCu0Qj5rfn+wCdiHyux9zcbz5iTCjQ=; b=Ks/iFauuZhHCEEPhD7ZLk4ctyl
+	ReNdcZbBP+8oQX8pnvKlJTtBe7FfVnATQQQVUoJ73I3QtvQqUHEitnYkSttZwskYOsO1xhIhbAbCV
+	TWCi3f9s59NjMxXUw4ta3kW1GpCjbubiRmQDvVrsT42NehMyrN86nKMsQbqWZLyNORaPMWlJrf7bA
+	dazCWtLM3cJKqXKSL+PzjR0AdsfhuJLy+h6w6pw069OYnK5oH1FOY/r5/vXRmKNg3/4mEueU4Sh1K
+	qn24i6l0rS5GIVjD6GFeDjnnwkTo8OKZsEeOuJIgL/XX4zrzHZIu4SxlWoqXAJcWp9jWvDvEIaFtR
+	Aij/SZM2sj0ASBiqTwcTxXzsSnznlPhwPp6x4xQHp6I3Lu7l7uIfwr7yEIjBHc5q4psNV81hXMu4J
+	1pftxPK7R/QsB2CVfuxgxE+yG6j+B4wKaa8QxGwgPNmZE7zzlvS9L1O07+Cg6JXQQxfPtiR29wqyQ
+	K+KrA0npQO17dLxNo+hAXAkz;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
 	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
 	(Exim)
-	id 1v81Sy-008nzg-10;
-	Sun, 12 Oct 2025 19:10:48 +0000
+	id 1v81T5-008nzt-1e;
+	Sun, 12 Oct 2025 19:10:55 +0000
 From: Stefan Metzmacher <metze@samba.org>
 To: linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
@@ -54,9 +54,9 @@ Cc: metze@samba.org,
 	Tom Talpey <tom@talpey.com>,
 	Long Li <longli@microsoft.com>,
 	Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 01/10] smb: smbdirect: introduce smbdirect_mr_io.{kref,mutex} and SMBDIRECT_MR_DISABLED
-Date: Sun, 12 Oct 2025 21:10:21 +0200
-Message-ID: <6e733a250194e07943238c8318880231e3803760.1760295528.git.metze@samba.org>
+Subject: [PATCH 02/10] smb: client: change smbd_deregister_mr() to return void
+Date: Sun, 12 Oct 2025 21:10:22 +0200
+Message-ID: <bbb80797eba59ed159bb60525edd601b0de448a2.1760295528.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1760295528.git.metze@samba.org>
 References: <cover.1760295528.git.metze@samba.org>
@@ -68,11 +68,8 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This will be used in the next commits in order to improve the
-client code.
-
-A broken connection can just disable the smbdirect_mr_io while
-keeping the memory arround for the caller.
+No callers checks the return value and this makes further
+changes easier.
 
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
@@ -82,37 +79,45 @@ Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/smb/common/smbdirect/smbdirect_socket.h | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ fs/smb/client/smbdirect.c | 4 +---
+ fs/smb/client/smbdirect.h | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/fs/smb/common/smbdirect/smbdirect_socket.h b/fs/smb/common/smbdirect/smbdirect_socket.h
-index db22a1d0546b..361db7f9f623 100644
---- a/fs/smb/common/smbdirect/smbdirect_socket.h
-+++ b/fs/smb/common/smbdirect/smbdirect_socket.h
-@@ -437,13 +437,22 @@ enum smbdirect_mr_state {
- 	SMBDIRECT_MR_READY,
- 	SMBDIRECT_MR_REGISTERED,
- 	SMBDIRECT_MR_INVALIDATED,
--	SMBDIRECT_MR_ERROR
-+	SMBDIRECT_MR_ERROR,
-+	SMBDIRECT_MR_DISABLED
- };
+diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
+index 316f398c70f4..a20aa2ddf57d 100644
+--- a/fs/smb/client/smbdirect.c
++++ b/fs/smb/client/smbdirect.c
+@@ -2612,7 +2612,7 @@ static void local_inv_done(struct ib_cq *cq, struct ib_wc *wc)
+  * and we have to locally invalidate the buffer to prevent data is being
+  * modified by remote peer after upper layer consumes it
+  */
+-int smbd_deregister_mr(struct smbdirect_mr_io *smbdirect_mr)
++void smbd_deregister_mr(struct smbdirect_mr_io *smbdirect_mr)
+ {
+ 	struct ib_send_wr *wr;
+ 	struct smbdirect_socket *sc = smbdirect_mr->socket;
+@@ -2662,8 +2662,6 @@ int smbd_deregister_mr(struct smbdirect_mr_io *smbdirect_mr)
+ done:
+ 	if (atomic_dec_and_test(&sc->mr_io.used.count))
+ 		wake_up(&sc->mr_io.cleanup.wait_queue);
+-
+-	return rc;
+ }
  
- struct smbdirect_mr_io {
- 	struct smbdirect_socket *socket;
- 	struct ib_cqe cqe;
+ static bool smb_set_sge(struct smb_extract_to_rdma *rdma,
+diff --git a/fs/smb/client/smbdirect.h b/fs/smb/client/smbdirect.h
+index d67ac5ddaff4..577d37dbeb8a 100644
+--- a/fs/smb/client/smbdirect.h
++++ b/fs/smb/client/smbdirect.h
+@@ -60,7 +60,7 @@ int smbd_send(struct TCP_Server_Info *server,
+ struct smbdirect_mr_io *smbd_register_mr(
+ 	struct smbd_connection *info, struct iov_iter *iter,
+ 	bool writing, bool need_invalidate);
+-int smbd_deregister_mr(struct smbdirect_mr_io *mr);
++void smbd_deregister_mr(struct smbdirect_mr_io *mr);
  
-+	/*
-+	 * We can have up to two references:
-+	 * 1. by the connection
-+	 * 2. by the registration
-+	 */
-+	struct kref kref;
-+	struct mutex mutex;
-+
- 	struct list_head list;
- 
- 	enum smbdirect_mr_state state;
+ #else
+ #define cifs_rdma_enabled(server)	0
 -- 
 2.43.0
 
