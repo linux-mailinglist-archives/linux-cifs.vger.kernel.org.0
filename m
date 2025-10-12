@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6722-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6723-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88F70BD0532
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:14:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58D8BBD055A
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC8751897436
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:15:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9896C3AA899
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948F52D9487;
-	Sun, 12 Oct 2025 15:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8707A2D7DCC;
+	Sun, 12 Oct 2025 15:15:48 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB37A2D739B;
-	Sun, 12 Oct 2025 15:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E642D7813;
+	Sun, 12 Oct 2025 15:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760282055; cv=none; b=sIaRCbcfKsf3Y9q5TDOHfxfgp6hLc9+952Nn67qbYMg5Dcc8Tf/pr3ROmHOi7q54htleCskuc//luxMbvnZL+zdlM9MHGn/XDiZRgun9tileddrTdp2LZxkqD9KhuB+JZnTxFVuR252Af9L+EJ8Uy6mkJysbMZhV5qUf6+1Wmr8=
+	t=1760282143; cv=none; b=ivrz8ZxakPaXYcg/FAzUjuk27QZ1sGCslu7vdykjfXBdLhoG/tlq+l8NuywVWB+2Qpxct2OfWzxfTj/Y3C52IYsrtpu1tdK/12r9sHkKZkgo8SmdOt/1O+dbYTlBRDhIhIQ/TbIF/K0fG4kUc+gnneGN2sRsag8IzHU0gaMow+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760282055; c=relaxed/simple;
-	bh=9fhG8rUC2Y67xiXJfY2hEFKpnkRKB2gNIMJ6ia+D7cM=;
+	s=arc-20240116; t=1760282143; c=relaxed/simple;
+	bh=oBWHsb5ZrCzAgydcykXvb0C1NNG8ufvsu6D1kbmawFI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EvjkcVMg2o54KQwi9ksxNS39MzgSvAvf+bCAag5kj8/86x7bJJO4cL93nc8rUAabned7O6ebt+p2GqOCor46ZGx6J2xo1VWyblTN0Rjxu0vD04k2gvakIETfgSjztFGvqTHXKbX55tiLdsvZJKVDhdpupg0TVpJ2o5YfnVNr9o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=52.59.177.22
+	 MIME-Version; b=C2NcKg/bb5XH4BJ9CGrGe/vJGPqzdAvLmavIYD+w1kwm72HA0DGLSuUKIU0LMUjIoUClgqMOMuAFe0d4hij18pCYhdh+zubghrmF8aBUztk6Q8RlUl3pPK+yjIcPkuYYShFumORwKJp6ppZwV3SQ4A4m0DqM9qAihIOfaVN4O4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.204.34.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: zesmtpgz9t1760281847t3bcad29a
-X-QQ-Originating-IP: 7fdZq8rvWj067Vat6YuiZlCdCTNLKewesOZqESftJgs=
+X-QQ-mid: zesmtpgz9t1760281849t26cc5e19
+X-QQ-Originating-IP: rxK9gF6jd/5yml2QKbsVIZVMOQRDMWO6LSwISpe3TOY=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 12 Oct 2025 23:10:46 +0800 (CST)
+	id ; Sun, 12 Oct 2025 23:10:48 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15875391227853962137
+X-BIZMAIL-ID: 7713201603210895249
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH 19/22] smb: move FILE_FULL_DIRECTORY_INFO to common/cifspdu.h
-Date: Sun, 12 Oct 2025 23:09:12 +0800
-Message-ID: <F1114E31F698FF94+20251012150915.2992220-20-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH 20/22] smb: move FILE_BOTH_DIRECTORY_INFO to common/cifspdu.h
+Date: Sun, 12 Oct 2025 23:09:13 +0800
+Message-ID: <9C9A6E7C8B3D4819+20251012150915.2992220-21-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012150915.2992220-1-chenxiaosong@chenxiaosong.com>
 References: <20251012150915.2992220-1-chenxiaosong@chenxiaosong.com>
@@ -69,45 +69,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: NbxtxvLq7lKKhKLAEMpmztwJEPZtCa2lIqR5x+/Hcatadt8c4NXzPEro
-	n8nD/TJ5w+f3nRy0uQchUPjANI8IS7PIDYE6FU55ne2hjnNyUsI54NG0kHslOeJF9lqR/23
-	uRs/cEYT5oWx2/jdmRiXipU8Kk7R9LXT7HM0owa+a591v2RSOkJlxyrp49dUMAQGFdUvqLx
-	38JmxvcMdvL4cZm+ikxBgSogI/En+BqrTFbo8fEfPBBQ6ksDgRPykuAI7JHQ0zdyqcx7t3n
-	yPZaYP6Av5588pq0lrJZgnBy479Nn8zlNgnpldmlPuIJ9foxzKQ9YFI53CUkqOcCFgsochv
-	+aom7XW0AYmKdqfKzASvI8tgbk1k42bN122i1webwlvzh/e2LbKt8RjBfYovwm0RKZreFEA
-	JWG3Efe3JRgjk9vmRwHcavNpZiZUelJouJmWSMT+E4F6bgXwARupU0YhDH9XMxIDA9lOCvh
-	68FWQCBKL3eFkuip4TP+JU8Q5F2OV5ZU4P9VW56Cr4wxwuDUtC4+mFsvq+ARATyvesxAHjf
-	+e8wna6PNX1h7rWZgr3i6nVtm213W4np20422jyIigQxVBxc+wAUGZzGH4kPEi2IUltNeUW
-	HbJUcjIvOicuty/6VnHqMUXVu3AI1EhLy8luGzokAlymKa1w1rZq5IewvyzwFtcu5nfShzM
-	HKJS6FS0bHKZ8d7ZmIBQoTY1p1ifRD8qy1Fajngd8GJ7TXn30V8Bf+4BhH8/b/Dq7nOyTEa
-	Q7U13NAVjWiZPXWypjjZgwmN9dTcOzRYXYO/JV5AmqIQaBzqqMmPZ4WEnr0gxuufnBUJt27
-	9aOtxP81/poe6mGxq1iRJuzciTs/i4h9XnwVNv/8Adm5tNm0c6LTNB/hvZsJj6nt6MjyTlt
-	ZXR5KLQfrFa5p6krjFb95s/CoPjSRfmGsMaOKtXFiEVmzCSpKO22qE9n2rRpxbZ/grZEGv+
-	26s4Xs7M/wq6v8rm7s61OPQig3PU11hHags57aQuM0IVP7JeDcSQ47+dhMvNVjlbBk/V/aW
-	4MAJpSyojFirQFc4rZouGjeFCG0Y2l4jx+/xUKtzpCJ5zb+dtsF3GNsqwTHHI=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-QQ-XMAILINFO: NRYSeI3Ux+UPdkoGIKGn+J8Iek9V8smFgxDs5CHHmtlRReZCGmmU3YiV
+	dZ8MqsDdLRpnlY/blf1Wg9TT7bVy8luS3AGgSW/mo6SmTN3b9YDsP/IgxndtrTAmg0RwQ+D
+	eA0lqrb+felMKJCK/YpqQ7KvkEV9RUYyum8VTrA4I3ZCXHEURH1JIJbfAILePUSawamnrNW
+	O2z8JzE0zl3pRzT2uAZ+SyyM5HUVKF1IZ1f+krtgOu9X9WQqPJQG1F483MYaXDwlSImUhKy
+	O7Otib3xsqpqiM8s3q7quoH9qVTdIJvxfowFG9mSjt9sbYk1jxWM7+YaKL/0uozK1GQTECO
+	MFZto3nP94mUEBHGv0qUhCTDtOb0yVeybDiAuHtGfvoaaxNpntw2ZWZ8pvXyiiduzFoBMle
+	mN2cRLaV9pRTvzI0PkQyzNIpadz1zsMGV0IvjDgJQoVVfEllOYori6+buMvb+zZPh7O5h+B
+	GKGsWaqSpD3ocOkwp9zJiUX6tHttOUNb0lAA4E06mmc3uCmKWK6YMRgX54k3LluwpRgUvsw
+	dfoa+wH4aNEcPME/bBFoEAVBj2VqgJhfq62J6kxCQY3MIXO4a9uWg/8RE3uP/4SDryEfsqq
+	dmVKs22ZHdgpI+pSRT89KygsND3v689g92hyv4oCxZjRm12iDlYYhRzgH6N8Gd4yhSBPq0O
+	oYA38bwylItdVevPIUt5QtDt0146ozkefv2oiExJwF84IXlHbvchOkNgeeJxRR15wN7tkic
+	kjMa4JqB8dwdDFDQPvzsVNfurMilO+dpZQn2rgiM/N7adR4uVkuXVLYOWVljl5smS7Uqz04
+	LTtHfbMiBZ/ZgRaz2yZ6WexoGMYPVbUwRdBIQ/gX5kKm+nkJkSRoM2XKG30ptavn37qOsE/
+	SZ//lN1o0Q0IcmiTGh/IyFID2it7S5C2TwvUdaqNC4ZTq+L2eJJlspBsM7wC8EwD3c+Laav
+	IotkEtBbM0yUhqqicQGyt74EPL6mNLv2ScYgMLzZkwrJE3iLUo1DvPmaop/jdKjT4Bmz4sh
+	gQGNoOLJa8043MlSc8NLxxP9tuyFAOP+fd07I4+Q==
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
 X-QQ-RECHKSPAM: 0
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Rename "struct file_full_directory_info" to "FILE_FULL_DIRECTORY_INFO",
+Rename "struct file_both_directory_info" to "FILE_BOTH_DIRECTORY_INFO",
 then move duplicate definitions to common header file.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
- fs/smb/client/cifspdu.h    | 15 ---------------
- fs/smb/common/cifspdu.h    | 16 ++++++++++++++++
+ fs/smb/client/cifspdu.h    | 18 ------------------
+ fs/smb/common/cifspdu.h    | 19 +++++++++++++++++++
  fs/smb/server/smb2pdu.c    | 14 +++++++-------
- fs/smb/server/smb_common.h | 15 ---------------
- 4 files changed, 23 insertions(+), 37 deletions(-)
+ fs/smb/server/smb_common.h | 18 ------------------
+ 4 files changed, 26 insertions(+), 43 deletions(-)
 
 diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
-index 8031e24234a9..f89abcb88dee 100644
+index f89abcb88dee..3db5e7e6172e 100644
 --- a/fs/smb/client/cifspdu.h
 +++ b/fs/smb/client/cifspdu.h
-@@ -2150,21 +2150,6 @@ typedef struct {
- 	};
- } __attribute__((packed)) FILE_UNIX_INFO; /* level 0x202 */
+@@ -2167,24 +2167,6 @@ typedef struct {
+ 	char FileName[];
+ } __attribute__((packed)) SEARCH_ID_FULL_DIR_INFO; /* level 0x105 FF rsp data */
  
 -typedef struct {
 -	__le32 NextEntryOffset;
@@ -121,21 +121,24 @@ index 8031e24234a9..f89abcb88dee 100644
 -	__le32 ExtFileAttributes;
 -	__le32 FileNameLength;
 -	__le32 EaSize; /* length of the xattrs */
+-	__u8   ShortNameLength;
+-	__u8   Reserved;
+-	__u8   ShortName[24];
 -	char FileName[];
--} __attribute__((packed)) FILE_FULL_DIRECTORY_INFO; /* level 0x102 rsp data */
+-} __attribute__((packed)) FILE_BOTH_DIRECTORY_INFO; /* level 0x104 FFrsp data */
 -
  typedef struct {
- 	__le32 NextEntryOffset;
- 	__u32 FileIndex;
+ 	__u32  ResumeKey;
+ 	__le16 CreationDate; /* SMB Date */
 diff --git a/fs/smb/common/cifspdu.h b/fs/smb/common/cifspdu.h
-index 82d57ba275ee..d7c9f17ed220 100644
+index d7c9f17ed220..cf5e3ee577d0 100644
 --- a/fs/smb/common/cifspdu.h
 +++ b/fs/smb/common/cifspdu.h
-@@ -385,4 +385,20 @@ typedef struct {
+@@ -401,4 +401,23 @@ typedef struct {
  	char FileName[];
- } __attribute__((packed)) FILE_DIRECTORY_INFO;   /* level 0x101 FF resp data */
+ } __attribute__((packed)) FILE_FULL_DIRECTORY_INFO; /* level 0x102 rsp data */
  
-+/* See MS-CIFS 2.2.8.1.5 */
++/* See MS-CIFS 2.2.8.1.7 */
 +typedef struct {
 +	__le32 NextEntryOffset;
 +	__u32 FileIndex;
@@ -148,68 +151,71 @@ index 82d57ba275ee..d7c9f17ed220 100644
 +	__le32 ExtFileAttributes;
 +	__le32 FileNameLength;
 +	__le32 EaSize; /* length of the xattrs */
++	__u8   ShortNameLength;
++	__u8   Reserved;
++	__u8   ShortName[24];
 +	char FileName[];
-+} __attribute__((packed)) FILE_FULL_DIRECTORY_INFO; /* level 0x102 rsp data */
++} __attribute__((packed)) FILE_BOTH_DIRECTORY_INFO; /* level 0x104 FFrsp data */
 +
  #endif /* _COMMON_CIFSPDU_H */
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 679318afdce3..6121060d84ae 100644
+index 6121060d84ae..8c5700102cc6 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -3796,7 +3796,7 @@ static int readdir_info_level_struct_sz(int info_level)
- {
- 	switch (info_level) {
+@@ -3798,7 +3798,7 @@ static int readdir_info_level_struct_sz(int info_level)
  	case FILE_FULL_DIRECTORY_INFORMATION:
--		return sizeof(struct file_full_directory_info);
-+		return sizeof(FILE_FULL_DIRECTORY_INFO);
+ 		return sizeof(FILE_FULL_DIRECTORY_INFO);
  	case FILE_BOTH_DIRECTORY_INFORMATION:
- 		return sizeof(struct file_both_directory_info);
+-		return sizeof(struct file_both_directory_info);
++		return sizeof(FILE_BOTH_DIRECTORY_INFO);
  	case FILE_DIRECTORY_INFORMATION:
-@@ -3819,9 +3819,9 @@ static int dentry_name(struct ksmbd_dir_info *d_info, int info_level)
- 	switch (info_level) {
- 	case FILE_FULL_DIRECTORY_INFORMATION:
+ 		return sizeof(FILE_DIRECTORY_INFO);
+ 	case FILE_NAMES_INFORMATION:
+@@ -3829,9 +3829,9 @@ static int dentry_name(struct ksmbd_dir_info *d_info, int info_level)
+ 	}
+ 	case FILE_BOTH_DIRECTORY_INFORMATION:
  	{
--		struct file_full_directory_info *ffdinfo;
-+		FILE_FULL_DIRECTORY_INFO *ffdinfo;
+-		struct file_both_directory_info *fbdinfo;
++		FILE_BOTH_DIRECTORY_INFO *fbdinfo;
  
--		ffdinfo = (struct file_full_directory_info *)d_info->rptr;
-+		ffdinfo = (FILE_FULL_DIRECTORY_INFO *)d_info->rptr;
- 		d_info->rptr += le32_to_cpu(ffdinfo->NextEntryOffset);
- 		d_info->name = ffdinfo->FileName;
- 		d_info->name_len = le32_to_cpu(ffdinfo->FileNameLength);
-@@ -3944,9 +3944,9 @@ static int smb2_populate_readdir_entry(struct ksmbd_conn *conn, int info_level,
- 	switch (info_level) {
- 	case FILE_FULL_DIRECTORY_INFORMATION:
+-		fbdinfo = (struct file_both_directory_info *)d_info->rptr;
++		fbdinfo = (FILE_BOTH_DIRECTORY_INFO *)d_info->rptr;
+ 		d_info->rptr += le32_to_cpu(fbdinfo->NextEntryOffset);
+ 		d_info->name = fbdinfo->FileName;
+ 		d_info->name_len = le32_to_cpu(fbdinfo->FileNameLength);
+@@ -3960,9 +3960,9 @@ static int smb2_populate_readdir_entry(struct ksmbd_conn *conn, int info_level,
+ 	}
+ 	case FILE_BOTH_DIRECTORY_INFORMATION:
  	{
--		struct file_full_directory_info *ffdinfo;
-+		FILE_FULL_DIRECTORY_INFO *ffdinfo;
+-		struct file_both_directory_info *fbdinfo;
++		FILE_BOTH_DIRECTORY_INFO *fbdinfo;
  
--		ffdinfo = (struct file_full_directory_info *)kstat;
-+		ffdinfo = (FILE_FULL_DIRECTORY_INFO *)kstat;
- 		ffdinfo->FileNameLength = cpu_to_le32(conv_len);
- 		ffdinfo->EaSize =
+-		fbdinfo = (struct file_both_directory_info *)kstat;
++		fbdinfo = (FILE_BOTH_DIRECTORY_INFO *)kstat;
+ 		fbdinfo->FileNameLength = cpu_to_le32(conv_len);
+ 		fbdinfo->EaSize =
  			smb2_get_reparse_tag_special_file(ksmbd_kstat->kstat->mode);
-@@ -4206,9 +4206,9 @@ static int reserve_populate_dentry(struct ksmbd_dir_info *d_info,
- 	switch (info_level) {
- 	case FILE_FULL_DIRECTORY_INFORMATION:
+@@ -4217,9 +4217,9 @@ static int reserve_populate_dentry(struct ksmbd_dir_info *d_info,
+ 	}
+ 	case FILE_BOTH_DIRECTORY_INFORMATION:
  	{
--		struct file_full_directory_info *ffdinfo;
-+		FILE_FULL_DIRECTORY_INFO *ffdinfo;
+-		struct file_both_directory_info *fbdinfo;
++		FILE_BOTH_DIRECTORY_INFO *fbdinfo;
  
--		ffdinfo = (struct file_full_directory_info *)d_info->wptr;
-+		ffdinfo = (FILE_FULL_DIRECTORY_INFO *)d_info->wptr;
- 		memcpy(ffdinfo->FileName, d_info->name, d_info->name_len);
- 		ffdinfo->FileName[d_info->name_len] = 0x00;
- 		ffdinfo->FileNameLength = cpu_to_le32(d_info->name_len);
+-		fbdinfo = (struct file_both_directory_info *)d_info->wptr;
++		fbdinfo = (FILE_BOTH_DIRECTORY_INFO *)d_info->wptr;
+ 		memcpy(fbdinfo->FileName, d_info->name, d_info->name_len);
+ 		fbdinfo->FileName[d_info->name_len] = 0x00;
+ 		fbdinfo->FileNameLength = cpu_to_le32(d_info->name_len);
 diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index ea1c64f84ff1..e325c2e89aa5 100644
+index e325c2e89aa5..9e72c45c100b 100644
 --- a/fs/smb/server/smb_common.h
 +++ b/fs/smb/server/smb_common.h
-@@ -87,21 +87,6 @@ struct file_names_info {
+@@ -87,24 +87,6 @@ struct file_names_info {
  	char FileName[];
  } __packed;   /* level 0xc FF resp data */
  
--struct file_full_directory_info {
+-struct file_both_directory_info {
 -	__le32 NextEntryOffset;
 -	__u32 FileIndex;
 -	__le64 CreationTime;
@@ -220,11 +226,14 @@ index ea1c64f84ff1..e325c2e89aa5 100644
 -	__le64 AllocationSize;
 -	__le32 ExtFileAttributes;
 -	__le32 FileNameLength;
--	__le32 EaSize;
+-	__le32 EaSize; /* length of the xattrs */
+-	__u8   ShortNameLength;
+-	__u8   Reserved;
+-	__u8   ShortName[24];
 -	char FileName[];
--} __packed; /* level 0x102 FF resp */
+-} __packed; /* level 0x104 FFrsp data */
 -
- struct file_both_directory_info {
+ struct file_id_both_directory_info {
  	__le32 NextEntryOffset;
  	__u32 FileIndex;
 -- 
