@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6736-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6739-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED1A6BD05DE
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:25:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30295BD05E4
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:26:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A6CB54EB10C
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:25:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 824583A2F82
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4972EFD95;
-	Sun, 12 Oct 2025 15:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B842F1FDD;
+	Sun, 12 Oct 2025 15:24:43 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4461C2EDD6D;
-	Sun, 12 Oct 2025 15:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.155.65.254
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D322EC541;
+	Sun, 12 Oct 2025 15:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.154.54.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760282673; cv=none; b=V2e6fib0RRjmsB4emFk2Cy6nZBAdviQ+I6nnqhO+Z5TysKbjG2UV+r2Za+v9xqoL2pPapotfP8aZU9t7AucZAbPiFOMaPkxdYYrWPIp1FcVHeTwf/0f29WcCxkvnAkbtOY6AN6LFS+4oXk3kZWuEtgCS7terG7q/0FDcoqHDOFE=
+	t=1760282681; cv=none; b=ZuCZ2Z8/gU01jQ05RqlPQZH2XTr/sU3ngV9UBDpfpZuPHU6kIbMrWTBBhzTSC+KyzBMriimbkXsVGhD6rR6CeuUZZdIi1HJpYlqq0/JScqIlOXKRzb5+nK6Jm8zyo9rYVa6UyeQmXo3+Fx0x0Dzy3SssRT317QcQ4HIlgZvgI4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760282673; c=relaxed/simple;
-	bh=fUKthNy2wlDGAqzuUnZdkSIU7ZaaNp3xh67aJrzdFvQ=;
+	s=arc-20240116; t=1760282681; c=relaxed/simple;
+	bh=Y9wrdmUvcRzPjtXYSUCxLg+ZW9FFrwdIQIEu9DqTqJY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yx3WLlYZUZQ4XSqXAFdOgoXnwjTsf/zPNTarRfmHcBV23/uOa/T/c3dvmizgdVmvLCSIQD4CYy88OD4Avbi7TyCv4azfHsTxrDYWDq7nKJ9kIJLA4FUIj1czbrrUHVWpt6w90qrhmHLJuRMthW8EHszMmPNmPJvbBWdFL4Tq0GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=43.155.65.254
+	 MIME-Version; b=IAvgY5JDFgTOEn7oayKne0pp0olkXZ2rp+PHmkqlQOgN05r8i6iBuivS9+oKrU23bLHIV5GX5UurVkme6seB1t28/mZc6LfhOts27DN2w9pwcNeYuOucm02vdN5mB1a6aIgirRzQYtZBm7mR0KWlj65iaYD37qWnG1CXXs5I5YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=43.154.54.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: zesmtpgz3t1760282607t0748f230
-X-QQ-Originating-IP: kD22IJkaGa+JVEBzM1Ey9RJPVR/aPuHzRaegwAwVlrE=
+X-QQ-mid: zesmtpgz3t1760282608ta3a44a83
+X-QQ-Originating-IP: +JS9k5Gx5nL9UGzAb5m572L5KDZNC6Wt+Ap79wazYk8=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 12 Oct 2025 23:23:25 +0800 (CST)
+	id ; Sun, 12 Oct 2025 23:23:27 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8893172405107320436
+X-BIZMAIL-ID: 3089997548282611321
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH RESEND 10/22] smb: move resume_key_ioctl_rsp to common/smb2pdu.h
-Date: Sun, 12 Oct 2025 23:22:35 +0800
-Message-ID: <070E98BAA8DB648C+20251012152247.2992573-11-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH RESEND 11/22] smb: move smb2_file_network_open_info to common/smb2pdu.h
+Date: Sun, 12 Oct 2025 23:22:36 +0800
+Message-ID: <C0AE180503D37CB6+20251012152247.2992573-12-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
 References: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
@@ -69,141 +69,144 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: OZGW2/3qAmIfqJpqkUSBquOFHEjvlP/oo2HUPGsnVpGrw7s+Vvq1rYHo
-	6bgFTMl8kd4o1W0KlgNVZndtpC5ztQHXFRcZcAMCEFgvYbjs7F5F7WPVW5Em/mXuTyU5C+5
-	w3rmsD122CFAX48s3PbgnSe0tjk7z8Y2ca4zi5dllj/ArDNPPPJMvDGZ34kKDDUGxIGKGNE
-	Cve1FUD3P2FRpYqGxDz4r1VMxVRpL2euFxMs95JRiJQ9Z0gAt62xQ0443MNMcApFWsWCl0z
-	Q7W8gb7uJWePr+dkStxKM0JrMj9noGcCU3m4935pn1imNu55gu2GeJzQTdbAmMLErYR1Yq1
-	YNA8eUllAxUDlr9wAzSBdgGBFgxCdw5QTuKzcsBCUcakIlHdmgn/gMz6RJfX59O3AMSZRVe
-	vufGRVk0V6qoNU5apkSVyMAmIFSaOB7xAEJhJ+/hrmZAAy7v7uvPzlDORwxusyjZQyDMX3x
-	cJPx2jLCW3SiEEoHWaVpoEBbJZt/7sgqJJU8XdA2MtzP8ShbPdPxayHUJMIl41x/UdQLLoR
-	5ecE8/91JFmqX80GHGynoxyfYurO3HOkD29JIwpQ2IArhQzKf2N7lQJsHcljQl/eI8VCH2p
-	cf3zhvpEHrPWjnVkZo4sQeaBRtvjXV1uHuxm/4BXrD3xmTGemgktJ6GzGmwk1yFV128mYGr
-	e1lIguKC/V4JaxJI76bGOOvE8UMlF0Bzq98w5ZV4//A3cM79QyMTVnrv25skD3+GygOxjNk
-	JwSNZbUjEbRp5F1WE6SWHqzW7bBdeieIYM1sRM+K5A3OVwXmIRHPVjTa5q0AJi8uUtzprYd
-	6/jWdzleZ9Cb2lFQq7HPnR6i2lhctiva7KreES7TnOZCrp1WGN+5lvwoe7BHyj+IKqaKkem
-	X17kTvYnUxY6W5eIwvM9B8IFbiyJJiOBMBA7+/tD+dXcvfWDcp2iCl4IGa8vKQJu5YK3GoZ
-	pjicsjizx/bGdlhGmxgUVqVJYDn8XskBavlFfTa1jODkcJgmNA9CE7IFXKlGiIiS3EScfxc
-	ftB4cFZjzj285lqmD5yIj/7NZC6ap9nDwoO5RBA9Goa757ZPcTWnMyA5qpZYfJ4qtDoPaz4
-	8HV26SEb8m3tIicgLgWOUZu4yw7hGVe1g==
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-QQ-XMAILINFO: N++dizDpbYWyi9iZFCCTHLNFaFKqmlD8SxowQAtxfY4+MV1wLkdAj6MC
+	3av94ZUaaeEPWKbI/2ispSyFMxsjHKILICTCZfSecDyauF5o4tNFJSHukJ0unRUVhG1xeTl
+	ZCgI7lbgmmfu8vVTZ50bupJw1b9LnkRsUeG9qODdxGbmkhS/kOacszyhNQ1B49T25T8Ivme
+	3nG1h+jeuYjZhxYXZDvdPhNz7N5htDxQfrK0IRCfJDo4fZhyd48mrFi4TAgWIqpF1JHHGNJ
+	Via4WphPCz7Q3nqz0bFJ4WPG/1L3sLVVN2bo4zQ3OT52S2HcisUccDQG7Z06fjsZ7kK89fc
+	v46xpzQJbEem6NnbexsJ9cD/nuwhTymJ4fyAGiyMYcNB5zY2VaMHg+c6n40BxxaIHFqUlER
+	8f90/4bY7Kk4jaaxW9hwsAaMOmX7P0qE0Vepjuho/1rXSQcCm5LsmJZm6ow7wO0PzEZFUUr
+	PJNlufNLt/KItuFaJAIJ/36YziIKUpkhJT/O/3eOWld0e0I3/5MnZkY3kmSvNRlyfYvS4d8
+	2axgTkRFd/WHNFgkhjih6qnFV3pRMsuznXAT9kmzRsih1N9a+IlzDjdRIREDShHykCLXJXI
+	SG4LgoYhd7JsHxeAywPr/feZ6c2wZnhP26N7nzWFM5Okv98KZ+Q8jlOhhjZg3ieYbi5AQTC
+	gf7LP+CzGo9kN1usa2aJDatkg95hXwGhSadjjXyIfGUefvd6286eNnO0gaqrFYhYvRvveSH
+	AYHj34IW/1MglKODkcRF8bO/F8xN+JPa8l0o37lv/00KibnKqEdcmnbghJB2MBvycAGuf/n
+	SOpXiP6YfOUjU+jY5qWsy6R6h4FWGWKpfeN7suly+3d05hh6UG2ShKViak4VtJwW+CV9xqP
+	J1X8LbAv5WQrwJp84q3dQ6YflDRDEf2Z98+dnDaFpgl2ZwNNqXVPgMEnzr1XKQ7FlAXoVRE
+	IRom5mrFNXVg/a95BjSuWbiAnzoGtKzKZHAojgew42j7FQPnZtSGY+I9ME4VJMENxSFpzUe
+	ltCqKX/RfBGAWzqvBS458ZfDeG3YOUdELBhSxY1OFlQE/dsfumVMd0xChlUGdDO5J9e44pH
+	N7OT7OvNuF5zezZTLkKWcJJBj+oJbwHNw==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 X-QQ-SPAM: true
 X-QQ-RECHKSPAM: 3
 
-From: ZhangGuoDong <zhangguodong@kylinos.cn>
+From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Rename 2 places:
+Rename smb2_file_ntwrk_info to smb2_file_network_open_info,
+then move duplicate definitions to common header file.
 
-  - resume_key_req -> resume_key_ioctl_rsp
-  - server: ResumeKey -> ResumeKeyU64
-
-Merge the struct members of the server and the client, then move duplicate
-definitions to common header file.
-
-Co-developed-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
-Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
 ---
- fs/smb/client/smb2ops.c |  4 ++--
- fs/smb/client/smb2pdu.h |  6 ------
- fs/smb/common/smb2pdu.h | 10 ++++++++++
- fs/smb/server/smb2pdu.c |  4 ++--
- fs/smb/server/smb2pdu.h |  6 ------
- 5 files changed, 14 insertions(+), 16 deletions(-)
+ fs/smb/client/smb2pdu.h | 13 -------------
+ fs/smb/common/smb2pdu.h | 14 ++++++++++++++
+ fs/smb/server/smb2pdu.c |  6 +++---
+ fs/smb/server/smb2pdu.h | 11 -----------
+ 4 files changed, 17 insertions(+), 27 deletions(-)
 
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index ea9709d81851..8da5fe4efa2d 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -1528,7 +1528,7 @@ SMB2_request_res_key(const unsigned int xid, struct cifs_tcon *tcon,
- {
- 	int rc;
- 	unsigned int ret_data_len;
--	struct resume_key_req *res_key;
-+	struct resume_key_ioctl_rsp *res_key;
- 
- 	rc = SMB2_ioctl(xid, tcon, persistent_fid, volatile_fid,
- 			FSCTL_SRV_REQUEST_RESUME_KEY, NULL, 0 /* no input */,
-@@ -1541,7 +1541,7 @@ SMB2_request_res_key(const unsigned int xid, struct cifs_tcon *tcon,
- 		cifs_tcon_dbg(VFS, "refcpy ioctl error %d getting resume key\n", rc);
- 		goto req_res_key_exit;
- 	}
--	if (ret_data_len < sizeof(struct resume_key_req)) {
-+	if (ret_data_len < sizeof(struct resume_key_ioctl_rsp)) {
- 		cifs_tcon_dbg(VFS, "Invalid refcopy resume key length\n");
- 		rc = -EINVAL;
- 		goto req_res_key_exit;
 diff --git a/fs/smb/client/smb2pdu.h b/fs/smb/client/smb2pdu.h
-index 9b5880e60a4e..77dceca20240 100644
+index 77dceca20240..70976a212128 100644
 --- a/fs/smb/client/smb2pdu.h
 +++ b/fs/smb/client/smb2pdu.h
-@@ -191,12 +191,6 @@ struct crt_sd_ctxt {
- 	struct smb3_sd sd;
+@@ -262,19 +262,6 @@ struct smb2_file_reparse_point_info {
+ 	__le32 Tag;
  } __packed;
  
--struct resume_key_req {
--	char ResumeKey[COPY_CHUNK_RES_KEY_SIZE];
--	__le32	ContextLength;	/* MBZ */
--	char	Context[];	/* ignored, Windows sets to 4 bytes of zero */
--} __packed;
+-struct smb2_file_network_open_info {
+-	struct_group_attr(network_open_info, __packed,
+-		__le64 CreationTime;
+-		__le64 LastAccessTime;
+-		__le64 LastWriteTime;
+-		__le64 ChangeTime;
+-		__le64 AllocationSize;
+-		__le64 EndOfFile;
+-		__le32 Attributes;
+-	);
+-	__le32 Reserved;
+-} __packed; /* level 34 Query also similar returned in close rsp and open rsp */
 -
- /* See MS-FSCC 2.3.29 and 2.3.30 */
- struct get_retrieval_pointer_count_req {
- 	__le64 StartingVcn; /* virtual cluster number (signed) */
+ /* See MS-FSCC 2.4.21 */
+ struct smb2_file_id_information {
+ 	__le64	VolumeSerialNumber;
 diff --git a/fs/smb/common/smb2pdu.h b/fs/smb/common/smb2pdu.h
-index 857e6a577e84..15932ee05c98 100644
+index 15932ee05c98..f5c8c72b8959 100644
 --- a/fs/smb/common/smb2pdu.h
 +++ b/fs/smb/common/smb2pdu.h
-@@ -1421,6 +1421,16 @@ struct copychunk_ioctl_rsp {
- 	__le32 TotalBytesWritten;
+@@ -1971,6 +1971,20 @@ struct smb2_lease_ack {
+ 	__le64 LeaseDuration;
  } __packed;
  
-+/* See MS-SMB2 2.2.32.3 */
-+struct resume_key_ioctl_rsp {
-+	union {
-+		char ResumeKey[COPY_CHUNK_RES_KEY_SIZE];
-+		__u64 ResumeKeyU64[3];
-+	};
-+	__le32	ContextLength;	/* MBZ */
-+	char	Context[];	/* ignored, Windows sets to 4 bytes of zero */
-+} __packed;
++/* See MS-FSCC 2.4.34 */
++struct smb2_file_network_open_info {
++	struct_group_attr(network_open_info, __packed,
++		__le64 CreationTime;
++		__le64 LastAccessTime;
++		__le64 LastWriteTime;
++		__le64 ChangeTime;
++		__le64 AllocationSize;
++		__le64 EndOfFile;
++		__le32 Attributes;
++	);
++	__le32 Reserved;
++} __packed; /* level 34 Query also similar returned in close rsp and open rsp */
 +
- struct smb2_ioctl_rsp {
- 	struct smb2_hdr hdr;
- 	__le16 StructureSize; /* Must be 49 */
+ #define OP_BREAK_STRUCT_SIZE_20		24
+ #define OP_BREAK_STRUCT_SIZE_21		36
+ #endif				/* _COMMON_SMB2PDU_H */
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 846cca45195b..200bce13b467 100644
+index 200bce13b467..a46d4ddade9e 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -8115,8 +8115,8 @@ static int fsctl_request_resume_key(struct ksmbd_work *work,
- 		return -ENOENT;
+@@ -5126,7 +5126,7 @@ static int get_file_internal_info(struct smb2_query_info_rsp *rsp,
+ static int get_file_network_open_info(struct smb2_query_info_rsp *rsp,
+ 				      struct ksmbd_file *fp, void *rsp_org)
+ {
+-	struct smb2_file_ntwrk_info *file_info;
++	struct smb2_file_network_open_info *file_info;
+ 	struct kstat stat;
+ 	u64 time;
+ 	int ret;
+@@ -5142,7 +5142,7 @@ static int get_file_network_open_info(struct smb2_query_info_rsp *rsp,
+ 	if (ret)
+ 		return ret;
  
- 	memset(key_rsp, 0, sizeof(*key_rsp));
--	key_rsp->ResumeKey[0] = req->VolatileFileId;
--	key_rsp->ResumeKey[1] = req->PersistentFileId;
-+	key_rsp->ResumeKeyU64[0] = req->VolatileFileId;
-+	key_rsp->ResumeKeyU64[1] = req->PersistentFileId;
- 	ksmbd_fd_put(work, fp);
+-	file_info = (struct smb2_file_ntwrk_info *)rsp->Buffer;
++	file_info = (struct smb2_file_network_open_info *)rsp->Buffer;
  
+ 	file_info->CreationTime = cpu_to_le64(fp->create_time);
+ 	time = ksmbd_UnixTimeToNT(stat.atime);
+@@ -5161,7 +5161,7 @@ static int get_file_network_open_info(struct smb2_query_info_rsp *rsp,
+ 	}
+ 	file_info->Reserved = cpu_to_le32(0);
+ 	rsp->OutputBufferLength =
+-		cpu_to_le32(sizeof(struct smb2_file_ntwrk_info));
++		cpu_to_le32(sizeof(struct smb2_file_network_open_info));
  	return 0;
+ }
+ 
 diff --git a/fs/smb/server/smb2pdu.h b/fs/smb/server/smb2pdu.h
-index eecd1f1f5505..3d000c5d964b 100644
+index 3d000c5d964b..8c8e775b601e 100644
 --- a/fs/smb/server/smb2pdu.h
 +++ b/fs/smb/server/smb2pdu.h
-@@ -151,12 +151,6 @@ struct file_object_buf_type1_ioctl_rsp {
- 	__u8 DomainId[16];
+@@ -245,17 +245,6 @@ struct smb2_file_stream_info {
+ 	char   StreamName[];
  } __packed;
  
--struct resume_key_ioctl_rsp {
--	__u64 ResumeKey[3];
--	__le32 ContextLength;
--	__u8 Context[4]; /* ignored, Windows sets to 4 bytes of zero */
+-struct smb2_file_ntwrk_info {
+-	__le64 CreationTime;
+-	__le64 LastAccessTime;
+-	__le64 LastWriteTime;
+-	__le64 ChangeTime;
+-	__le64 AllocationSize;
+-	__le64 EndOfFile;
+-	__le32 Attributes;
+-	__le32 Reserved;
 -} __packed;
 -
- struct file_sparse {
- 	__u8	SetSparse;
- } __packed;
+ struct smb2_file_standard_info {
+ 	__le64 AllocationSize;
+ 	__le64 EndOfFile;
 -- 
 2.43.0
+
 
 
