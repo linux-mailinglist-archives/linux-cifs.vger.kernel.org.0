@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6760-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6754-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E72BD06FC
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 18:20:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B407ABD06DB
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 18:19:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0A333C0BF8
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 16:19:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC6B5189493A
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 16:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465E22ED87F;
-	Sun, 12 Oct 2025 16:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EC62EDD64;
+	Sun, 12 Oct 2025 16:19:15 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642972D248D;
-	Sun, 12 Oct 2025 16:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5840D2EC0A6;
+	Sun, 12 Oct 2025 16:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760285972; cv=none; b=jxHuIG0/3PoQyZV+lw7DxkxIpq0vY4xe/YwUIJTLXgbQO6C1Z1pGY9e/x6/72pOJfLKPNdD4VGpLdt+LGsA7DUZ8Ott12XDAJ1EhepcnR6f2q8Ewr+8l+igCE+16g5iXvgMRMVy89C8Pe432lSz+MXJn/9iuuBhn9f8LjGv+SYo=
+	t=1760285952; cv=none; b=aAnP4mj6N7dT52JGRjQDAWsr395h6cA0U85zZsoelDmDg2wTKOKMUmkIIrPGtqbqOa2lle5zkelkNnc7/ljpbbDHugXK+WjmZE498dFp0v09UVT18m7jj2+0VHk8JPfd1NhqK26V/VGMzV6Y0qAsZxUkRBoFGME8L82mg6z0Ccg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760285972; c=relaxed/simple;
-	bh=5IMVy24+l6yn6QhpNLwcgEJtk2PtES/mK4kXXRSryxc=;
+	s=arc-20240116; t=1760285952; c=relaxed/simple;
+	bh=aIPSHapUj79vhPrBmRJ9AVe1MQuxkmkJYsP/82h50xk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I0koCfYpkVFzqi4iwh84mQQPfH5rLA8a7gluRNvPkNgVJ/2doP3qQM1WX4xrSeAjNeDx0ZzfCCQ7Ctrd4n2Ej6LAC0W6qkyBxiPTpHiZx3WHE0lYP60X5UahOCCWbWNQgl0CJorKR2iK0EY0pe2Gd8COAusvLEofIHBgH8Erhfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.207.19.206
+	 MIME-Version; b=mUEj5SIWRFmBGlNYhbrg9Me7ZIMRBLweVTIfsSX8iS1ZIYeVBgUo3t4Oncj+V+e9InoJn3RRWiZF3qwkWkg0FUsQg/mgOus5l0mGwJarLAN2R537ugsFfGhZvI1Dp4ICFrM07yNp0NBfjjaD7tJY8d9Du/an5vnHL92yqgUXzAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=18.132.163.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: esmtpgz15t1760285903t1fc4f44f
-X-QQ-Originating-IP: umaOsC16BBfxQUm5u2FVaiAr2fyegtrcWzBtt0jEarM=
+X-QQ-mid: esmtpgz15t1760285905t6d4a9fbb
+X-QQ-Originating-IP: 8spMUJACftzZkW9xsqk9YVC2Ad1tWTHHhp6+LwxlXQ4=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 13 Oct 2025 00:18:22 +0800 (CST)
+	id ; Mon, 13 Oct 2025 00:18:24 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1845786713367488962
+X-BIZMAIL-ID: 15088085253703853393
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -53,10 +53,11 @@ To: stfrench@microsoft.com,
 	zhangguodong@kylinos.cn
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v2 05/22] smb: move get_rfc1002_len() to common/cifsglob.h
-Date: Mon, 13 Oct 2025 00:17:32 +0800
-Message-ID: <264D015A28B88B5E+20251012161749.2994033-6-chenxiaosong@chenxiaosong.com>
+	ChenXiaoSong <chenxiaosong@kylinos.cn>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v2 06/22] smb: move SMB1_PROTO_NUMBER to common/cifsglob.h
+Date: Mon, 13 Oct 2025 00:17:33 +0800
+Message-ID: <66942D4891D3E571+20251012161749.2994033-7-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
 References: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
@@ -69,173 +70,79 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: ND1mcvCvQRzZH5zgRsMpE8wSYanijexAHaR+21docniaQZ0PZNp8SYxC
-	6xZOx7Us4Xf/3bqlPYhRE1ikPQ1bd4Ivx1gipPWTHcOrypmiijdJLVaH1Nb3UP9rGiefSvN
-	ZovO7WPHOZ6D3pEh6GhcOMRhC/lpg5RJ1/2nnDFJg0SlITZYfd5dHmLM+XMkrXf+Ak7Sowr
-	ntd97Gb3ibF5QBB5mPpF6UulyjdBSTMYqfxav/D/DplGX1mWgkxUCctPqmBviqrDEJwnCb1
-	KxGMPheUnZL3O0rMyEU3Y3aNvJHAK4xiWZONzXw/DaVc28L8M8V6QnTbXhqJ7z9HeF1eOMY
-	+TF/MHxP0TKiGQje/b/4cdxSOZAX90MRuRAoqEYwdKfzW38/InqT94AyQSUqzEHJWAJT/Z/
-	pJWVPdUBri1SpQPnKWCp+NRypAmWa2icTWzhTNuR2EnVP0mXvnXCOTTEMf0RoCqlhimgOXg
-	k7ilPXsX1iKlV6iGhqtFT7Ifwg+wSkhUWX6984cXUWJBboCxwVKWvH/DiE+OnlLEQ7I6Kfe
-	eT9Jhkva28eLIMRErXnk4Q0HwcXLcYojDcLs+KfMPuvJfYzeZqdwESJScHP2a3F20XFWYS7
-	rKAoMCkhKDj7K89jX4BufAJsqgFikFzYHZK01cq4uC2a5y56XfxXJDuFJYPFFzTbgs4Et+o
-	HumpfUlL8Jtof9m9GkTlLTWWv4naSLH8eoVK0nYNGmJSPy4c6YT4vbW0KBqKuAZHj0BGnL6
-	4DMThAJOGgF/kR4TOsXfwBWyKzeNVX4G8vDYcUy9y+Xg06CtlkZcQpzwXHKa6bHU4f9dY+S
-	YTXP4U0mqEnQ8stIThWFPLNdqX/spLNYPz2mcnpYnUqaagGsXbb6Dykj26s2hAt1ZaqiWsJ
-	ehCWN5bsnSqtywfZi6lZ103ii/xLNbMJ65QUEX6dKfYyLuim7hciGZ4NA3jkTkbkYblPVh4
-	c6idAkK+I69gjh5EKYHnx5sec2X5A1NF642h2cuQOG9JFPbsPl48B8Zb6Gsis/kRM8jUiYE
-	Hh8wRLtIHcCsNVzN8a549sp00cIbBaL+WcSMhstnbBofT7XP6hiQQ64/IqKgE=
+X-QQ-XMAILINFO: OCFGt05vYz7Ym+ixKr1Rf2uiJD5ldkeIO5V8tQdwJ1JOCWAIw4hdXcjr
+	0MU/nVlWWyR6KQ44smTbYkp1CxHE1cOw8IdYdQee9tDHZ678aqthxAOSYEE40HAJARSvp7s
+	tWJqXXnyoK2M9jV0fnC2au0LOqclTqQJcGr3x1kq/KUclZtJ97cw7IhaXoovJzxi5tDfyOh
+	5U0VaEomc8tEv/qv+1eUb57R04VPS3h7nLPu4hoLJblmmimlrtiMDF+eqfpGZj4s48/RnOv
+	FLjE9eEQcjiX2lQJ0ZEwNzxTlbK7Kki0Xi2pMrV3sL/71MgwqGRq/SS4k+7gCGOl0SHP8z3
+	6o9V6pG7Zp6ymWTWKbuBKAexbbOTjGKN7p6ReDA3PCJY3N1h1pjjjES603nPNgxT7CcO7gJ
+	CU3508YmKU0mxtF0DIWUTBMp0qLllXDRUeyKgJWPmaD6VeTCVrqTpQ4AHKJJBT3c95Kk0Cb
+	ibMP2/NIf+ce9oq03Rx9lHqoBmDJV1E/HPMXfE1KYt1s+lsiGlpUJBQextxziWuxJgAWSZO
+	vyac4uiL64gvGHDagLFXdihMFuTvzggAWbWjKz1OUmpX6t9d+o9vMv2lKBOq38l+sdbYp9u
+	WzhVWuaXqM1UDOxJhXC+jOrUUyil5hDIg8F3yErso0uRoJcVygL3BuRTLsZaTzY7JaNtNoH
+	vqaYYHtDe7KkgnsheV7L4IzY2tBs0vziknsUCQeWsYSQp2JWpAmYMRRXoNEhHK7iQkfaM+/
+	PGNnNmBh3yJR4QEt/aKLsSc+nqGQra9idYolihW5iD/7g4O+ndlTkdkQmYIr9PXxOseesV5
+	Pyc9M2KTKXFeuVfjmnEKfKmo6d5tOjp7+ir/6jmV912SQqWcYSDnguKTtJ9LG7XjlBzwzJF
+	G8sD9ZRFlSRhUR+AbbWvIA8BrR594R4fb3J11HHMyE8pAxJlnC7c5orSY9wlNPs2nnKSxSD
+	DjPap0FCWC4tY0afMEIwoUm766maWpElROnU61ZKsYEMfJp5+oS8tlkUyWaGEHVpaRPhlAZ
+	iKKsk/3oUZdPJSZjcFwgGxTcU15y6s2YPBRLwr5Uyrdr+OmGxeUC/4ISmb/+OtZwD6D8zrT
+	Q==
 X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
 X-QQ-RECHKSPAM: 0
 
 From: ZhangGuoDong <zhangguodong@kylinos.cn>
 
-Rename get_rfc1002_length() to get_rfc1002_len(), then move duplicate
-definitions to common header file.
+Replace the constant of client with SMB1_PROTO_NUMBER, then move the
+macro definition from server/smb_common.h to common/cifsglob.h.
 
 Co-developed-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
+Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- fs/smb/client/cifsglob.h      | 6 ------
- fs/smb/client/cifssmb.c       | 6 +++---
- fs/smb/client/cifstransport.c | 8 ++++----
- fs/smb/client/connect.c       | 2 +-
- fs/smb/common/cifsglob.h      | 5 +++++
- fs/smb/server/smb_common.h    | 5 -----
- 6 files changed, 13 insertions(+), 19 deletions(-)
+ fs/smb/client/misc.c       | 2 +-
+ fs/smb/common/cifsglob.h   | 2 ++
+ fs/smb/server/smb_common.h | 1 -
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
-index 88a428e3903a..81f77eb9a01e 100644
---- a/fs/smb/client/cifsglob.h
-+++ b/fs/smb/client/cifsglob.h
-@@ -675,12 +675,6 @@ struct cifs_mnt_data {
- 	int flags;
- };
- 
--static inline unsigned int
--get_rfc1002_length(void *buf)
--{
--	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
--}
--
- struct TCP_Server_Info {
- 	struct list_head tcp_ses_list;
- 	struct list_head smb_ses_list;
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 2881efcbe09a..9a346d67e298 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -614,7 +614,7 @@ CIFSSMBEcho(struct TCP_Server_Info *server)
- 
- 	iov[0].iov_len = 4;
- 	iov[0].iov_base = smb;
--	iov[1].iov_len = get_rfc1002_length(smb);
-+	iov[1].iov_len = get_rfc1002_len(smb);
- 	iov[1].iov_base = (char *)smb + 4;
- 
- 	rc = cifs_call_async(server, &rqst, NULL, cifs_echo_callback, NULL,
-@@ -1435,7 +1435,7 @@ cifs_async_readv(struct cifs_io_subrequest *rdata)
- 	rdata->iov[0].iov_base = smb;
- 	rdata->iov[0].iov_len = 4;
- 	rdata->iov[1].iov_base = (char *)smb + 4;
--	rdata->iov[1].iov_len = get_rfc1002_length(smb);
-+	rdata->iov[1].iov_len = get_rfc1002_len(smb);
- 
- 	rc = cifs_call_async(tcon->ses->server, &rqst, cifs_readv_receive,
- 			     cifs_readv_callback, NULL, rdata, 0, NULL);
-@@ -1800,7 +1800,7 @@ cifs_async_writev(struct cifs_io_subrequest *wdata)
- 	/* 4 for RFC1001 length + 1 for BCC */
- 	iov[0].iov_len = 4;
- 	iov[0].iov_base = smb;
--	iov[1].iov_len = get_rfc1002_length(smb) + 1;
-+	iov[1].iov_len = get_rfc1002_len(smb) + 1;
- 	iov[1].iov_base = (char *)smb + 4;
- 
- 	rqst.rq_iov = iov;
-diff --git a/fs/smb/client/cifstransport.c b/fs/smb/client/cifstransport.c
-index e98b95eff8c9..4c4f5befb6d3 100644
---- a/fs/smb/client/cifstransport.c
-+++ b/fs/smb/client/cifstransport.c
-@@ -165,7 +165,7 @@ SendReceiveNoRsp(const unsigned int xid, struct cifs_ses *ses,
- 	int resp_buf_type;
- 
- 	iov[0].iov_base = in_buf;
--	iov[0].iov_len = get_rfc1002_length(in_buf) + 4;
-+	iov[0].iov_len = get_rfc1002_len(in_buf) + 4;
- 	flags |= CIFS_NO_RSP_BUF;
- 	rc = SendReceive2(xid, ses, iov, 1, &resp_buf_type, flags, &rsp_iov);
- 	cifs_dbg(NOISY, "SendRcvNoRsp flags %d rc %d\n", flags, rc);
-@@ -177,7 +177,7 @@ int
- cifs_check_receive(struct mid_q_entry *mid, struct TCP_Server_Info *server,
- 		   bool log_error)
+diff --git a/fs/smb/client/misc.c b/fs/smb/client/misc.c
+index dda6dece802a..68607b7a68ca 100644
+--- a/fs/smb/client/misc.c
++++ b/fs/smb/client/misc.c
+@@ -318,7 +318,7 @@ static int
+ check_smb_hdr(struct smb_hdr *smb)
  {
--	unsigned int len = get_rfc1002_length(mid->resp_buf) + 4;
-+	unsigned int len = get_rfc1002_len(mid->resp_buf) + 4;
- 
- 	dump_smb(mid->resp_buf, min_t(u32, 92, len));
- 
-@@ -370,7 +370,7 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
- 		goto out;
- 	}
- 
--	*pbytes_returned = get_rfc1002_length(midQ->resp_buf);
-+	*pbytes_returned = get_rfc1002_len(midQ->resp_buf);
- 	memcpy(out_buf, midQ->resp_buf, *pbytes_returned + 4);
- 	rc = cifs_check_receive(midQ, server, 0);
- out:
-@@ -554,7 +554,7 @@ SendReceiveBlockingLock(const unsigned int xid, struct cifs_tcon *tcon,
- 		goto out;
- 	}
- 
--	*pbytes_returned = get_rfc1002_length(midQ->resp_buf);
-+	*pbytes_returned = get_rfc1002_len(midQ->resp_buf);
- 	memcpy(out_buf, midQ->resp_buf, *pbytes_returned + 4);
- 	rc = cifs_check_receive(midQ, server, 0);
- out:
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index dd12f3eb61dc..22f37ae7a66a 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -1299,7 +1299,7 @@ cifs_demultiplex_thread(void *p)
- 		 * The right amount was read from socket - 4 bytes,
- 		 * so we can now interpret the length field.
- 		 */
--		pdu_length = get_rfc1002_length(buf);
-+		pdu_length = get_rfc1002_len(buf);
- 
- 		cifs_dbg(FYI, "RFC1002 header 0x%x\n", pdu_length);
- 		if (!is_smb_response(server, buf[0]))
+ 	/* does it have the right SMB "signature" ? */
+-	if (*(__le32 *) smb->Protocol != cpu_to_le32(0x424d53ff)) {
++	if (*(__le32 *) smb->Protocol != SMB1_PROTO_NUMBER) {
+ 		cifs_dbg(VFS, "Bad protocol string signature header 0x%x\n",
+ 			 *(unsigned int *)smb->Protocol);
+ 		return 1;
 diff --git a/fs/smb/common/cifsglob.h b/fs/smb/common/cifsglob.h
-index eda5e666a761..371160fec1cd 100644
+index 371160fec1cd..5928d35c7f30 100644
 --- a/fs/smb/common/cifsglob.h
 +++ b/fs/smb/common/cifsglob.h
-@@ -40,6 +40,11 @@ struct smb_version_values {
- 	size_t		create_posix_size;
- };
+@@ -9,6 +9,8 @@
+ #ifndef _COMMON_CIFS_GLOB_H
+ #define _COMMON_CIFS_GLOB_H
  
-+static inline unsigned int get_rfc1002_len(void *buf)
-+{
-+	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
-+}
++#define SMB1_PROTO_NUMBER		cpu_to_le32(0x424d53ff)
 +
- static inline void inc_rfc1001_len(void *buf, int count)
- {
- 	be32_add_cpu((__be32 *)buf, count);
+ struct smb_version_values {
+ 	char		*version_string;
+ 	__u16		protocol_id;
 diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index dac783b46545..9c0db206624b 100644
+index 9c0db206624b..6d427dbed5fd 100644
 --- a/fs/smb/server/smb_common.h
 +++ b/fs/smb/server/smb_common.h
-@@ -423,9 +423,4 @@ unsigned int ksmbd_server_side_copy_max_chunk_size(void);
- unsigned int ksmbd_server_side_copy_max_total_size(void);
- bool is_asterisk(char *p);
- __le32 smb_map_generic_desired_access(__le32 daccess);
--
--static inline unsigned int get_rfc1002_len(void *buf)
--{
--	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
--}
- #endif /* __SMB_COMMON_H__ */
+@@ -151,7 +151,6 @@
+ 		FILE_EXECUTE | FILE_DELETE_CHILD | \
+ 		FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES)
+ 
+-#define SMB1_PROTO_NUMBER		cpu_to_le32(0x424d53ff)
+ #define SMB_COM_NEGOTIATE		0x72
+ #define SMB1_CLIENT_GUID_SIZE		(16)
+ 
 -- 
 2.43.0
 
