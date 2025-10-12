@@ -1,42 +1,42 @@
-Return-Path: <linux-cifs+bounces-6734-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6729-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49396BD05BD
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:33 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F01BD05A6
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 17:24:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 666A8188FD6A
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8841C4E3742
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 15:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A272EBB89;
-	Sun, 12 Oct 2025 15:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4992EC0BA;
+	Sun, 12 Oct 2025 15:24:04 +0000 (UTC)
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BB52EC097;
-	Sun, 12 Oct 2025 15:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C6E2EBDF6;
+	Sun, 12 Oct 2025 15:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760282654; cv=none; b=XQouqljkrztDBXP88jLAKKH7PAE682xAwGXkWivDXzFI+Iisa7k56cKyATwVBrGj4XymXHnPXQbDUHRit6iwtmL3ppJm1WZk5+NNgc3sRqMGlZle60wYS51or+saQg1M7W91qg3cvGrTE9fS1H8ktQ0HU2v4HDK++xrk+sOdK7A=
+	t=1760282643; cv=none; b=H55mYeoGME8YOsYch9j3JKQkiJErO4WeRKSP9o6653OEkxjwfJZYqraEi5uSP9c3A979USWfWA2APcEz1pDAK+ToodOEdzMPubQlGXMdeAfkIAoLQGF3dyueCnwA4djI8E/D3ffWKPLZLKMgm6emKlDHiDhCxbmIYLQY2kv7VrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760282654; c=relaxed/simple;
-	bh=LzJ+/nuwdxTRfBvOPshybE9q6IX8QoFZJsWv+HEV83w=;
+	s=arc-20240116; t=1760282643; c=relaxed/simple;
+	bh=q0HdpeNIIiHEFblFeZm1MfcHh6AlakLgDfW+bJ5Iz4M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y2DU62qOymRVNKNT5vC/RKcS3IPy6Xnhf5CG9Odz/rWlfs87nMBOIFxm6gudQOm8tnQGtEjBUcZj21KCQiq4BKY8OZRXrSs5Sz0zx13AwMA2pPqlmdJGijhxMcif5SuIZxWSS6lSZh7VmrCjte+ujJMm5fEp90pogj0UjQZA4xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.206.16.166
+	 MIME-Version; b=RqTnQOzuXv274IyeM/Jvozl/b8GI5SA3lY49NXRm/7/eN0O3SUVAEdFGA3nP5jwheWpqqEXKlsw/m8xy1bwIoTPTJ4576wdqtKLAIk9SZBbQ7uKeU0MJ1ta9pHDJY0DS4YN/7++U2kaZCRLhR9fql8xq0UxC/iY88zXfMk0iIaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.254.200.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: zesmtpgz3t1760282591ta3bdd2b1
-X-QQ-Originating-IP: SEyL7S5qpA4WwYpthX6mdLh+E1OOH5iTBDqCBvn3g84=
+X-QQ-mid: zesmtpgz3t1760282593t44ca5164
+X-QQ-Originating-IP: i3W1yh1zNKcsUUwbg/jqbhDUZyYYaSdzpScr0fOgEAI=
 Received: from localhost.localdomain ( [116.128.244.171])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 12 Oct 2025 23:23:10 +0800 (CST)
+	id ; Sun, 12 Oct 2025 23:23:12 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1132431418211425726
+X-BIZMAIL-ID: 5813891736067479205
 From: chenxiaosong@chenxiaosong.com
 To: stfrench@microsoft.com,
 	metze@samba.org,
@@ -54,9 +54,9 @@ To: stfrench@microsoft.com,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH RESEND 02/22] smb/server: fix possible refcount leak in smb2_sess_setup()
-Date: Sun, 12 Oct 2025 23:22:27 +0800
-Message-ID: <282F68460576D756+20251012152247.2992573-3-chenxiaosong@chenxiaosong.com>
+Subject: [PATCH RESEND 03/22] smb: move some duplicate definitions to common/cifsglob.h
+Date: Sun, 12 Oct 2025 23:22:28 +0800
+Message-ID: <C50D08AD27198DFC+20251012152247.2992573-4-chenxiaosong@chenxiaosong.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
 References: <20251012152247.2992573-1-chenxiaosong@chenxiaosong.com>
@@ -69,50 +69,181 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: Oa2shA1LYpbMFFFQ6qFROplspGUR1uRyAcjk5s26Qxl0XgK2FN+f2ahh
-	A/tfYWEee3UGCaojoWy3SChZUsnlvT8NA5GiVVPQRV4/FC+MWHNY8ACOMzestdWD6+L1DIT
-	Qs6u+6iSnW4+GqP4hIFjuA3nA18pjhO4mPy/K+lBaMVyz203AQzLRFsoALSZCmAngus1iZ4
-	VNdE3SExV71JV81diUViHvXERrP9hRYxWGJ7nbTmOq/bU9sviJmpWnoudkn+TsObXbJS3a1
-	ayE9iRWBUMswkT747ENT/rpaTT14eoSDOFdNufPtO0ezeWJiwoaxxazpJ09dIXPIEapQBQn
-	EiN4mwucxBWjikArJ7TPqCwK91GJ/xbn72qVDFUUjjpoZ5wQjt5ZD/BwjVXIcyTX6+I0E1N
-	SDBPobHObtfc/aNPOvltTV5XbOsvvz9YpBujrIAPzhJLqI01zRmIhY4pB36nNMmqeebb/d6
-	HBX1S7ALvTKU05HWoxS8niyN7XQbbK9jSo6R73zYrsxSYvkNoCsI7nPn0vMNfcuq4jlySsY
-	VkOGDDQcZ/tlqLGyAwq5zWWFCQVuNujz9SUQ7ExEAErPyvOUsPpYmln6e+Y7fdoqb0ojMpE
-	KSuwvPFx3ZWZglms6Buuow54uclm2JMeUeMxQSOqXA05Z4Vwexg7dBPbYGSm19lSYizjvpq
-	R6AlgWEl4tyF4wakDgo1EFBvGrZEEFrCrQeY7eLjNnr5Z0mYW/sGBNlKuKtyZ/wRjRTbCCD
-	3C8r63AveJguD7wmAn7xQv3Cf8q6ZgbXY/tCNxevXfxxKUt6NAXXLY5Pvhd98QgKC86IWL+
-	ekYGJNWFdbhEnL1Xm5AwYnEbJq99BnEDTXGpPcUCRuvBHYwH4I1WfIxODdDwjABVQzo5Kx4
-	UWYkRoSv6aliRxp0h8pRw/ODr2xX319AYF5aYjqcBZ351zAkeLbGhee/fs1KGoUqCgHeilN
-	y9fF7w890fXTcDSiRGp3qIEm5oGxysOkuF31CZAsSAVqFSxw2QD36g2KUqkKmTHcbl3K0T1
-	igbt0t/NxuiaadDTpqbBSqHmb3QRe2++VB3Kh7LDFz62bWtAhEab88y48543J92J/qXJVjH
-	457pbM5hUdh
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-XMAILINFO: NBkE/PP8DpFYLvU/zjHEBT1RZbjgLQtLm/0oGhCTj6wh859O5PdpSbU2
+	XlEXEb0hZv9BbHZQUdwJA4pfioacHyve9k7QKYP5rWytvZXd/eVlvNxCtYF+2mbUi1HNEjV
+	rUpfKdPKGLOWQaZnliykciQOn4gHL0PInIlH/XW80jydfjmggHJ9hP0qI6/IkP7O1IUk8bX
+	XcuM28ozWQo61rzD9oCh84cNWWzlu/+53TmjZ5FL0ZHb1vfizxXhfnknmBqpUWlT2fmC5t5
+	KUMO1yF2Ff2zjWAUACSPdXrjiML4WpMhyBf74qHi0gvApXBFWAJTxvyaZ5RJVGZUj4DoP51
+	yUv46Hc/uPggwRi/a2zdY1omFo91kfQiuNrcMx5g0VYmVOOEZO+U/MxUolJqRl44ZQOJXZ0
+	FVwZ2mkDslVPMSiz+0DB5SF1Uw2qqj9YukssM2lS/ALUsesvzBlhynJ/ciUlxEYevhmlaCp
+	EpFhlk3VGiaEABUrp5A0/YNBTctvj5j4OaRP+hnC1txn7eBVNZ8cucMmBtMmig1GiPvN25O
+	UwjYdDHwnC2ng0sIwu1KVZE7HEU4SrSECw1wnvjsOEnkNsnFgC5n8S20AESOxOQzHnFdvon
+	Ee1+fTjrYpn8PZ2+eghaBGia4Uu9uqbcmt4/s10ImDMW9CnHUjBKsMOnx05Ia9lO8KnnwS2
+	GyAmccRfdwmjp3RdEME6qYMcjoyHgk9cYHxKVY4e9qioh3bWLQ/xx0YK4X9LuNNFNUp7+pw
+	Cr1VeNi8DtX2ZvwpF2TRdOt5XH66Xe7Vx+FmLnqVfOWmeV1P6TeyhqCgWL6ry7snhWuyG1+
+	bg+Kzqyh5GTCNMFm4cL2kLtaAdK9x55kQHZwN5ux/cCvTbllYp4YMyWi2ZFq4OHePSOf8/H
+	epJtZNqf1d3ZLI+il+/X9ad9dm9Ey0OfANTLTd3R9ghV6X0twGhTxgQYK23jXznfZDEkRTR
+	4KS3LvLY5L2kniTw9EjlUB8xzUx4+cyl/WHItcNg+euSSblrFWkID9ZoEgykk10VNOCdQeY
+	NrbQ3k3rNqWZuN2h0z9zezQ1OpDhn8RcLe4Q1Eynlgne/nyHJgRno7Ifg8xTgW8T1K61MOg
+	rVWvmRwBWzj
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 X-QQ-RECHKSPAM: 0
 
 From: ZhangGuoDong <zhangguodong@kylinos.cn>
 
-Reference count of ksmbd_session will leak when session need reconnect.
-Fix this by adding the missing ksmbd_user_session_put().
+In order to maintain the code more easily, move duplicate definitions to
+new common header file.
 
 Co-developed-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
 ---
- fs/smb/server/smb2pdu.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/smb/client/cifsglob.h   | 19 +------------------
+ fs/smb/common/cifsglob.h   | 30 ++++++++++++++++++++++++++++++
+ fs/smb/server/smb_common.h | 14 +-------------
+ 3 files changed, 32 insertions(+), 31 deletions(-)
+ create mode 100644 fs/smb/common/cifsglob.h
 
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index e81e615f322a..b731d9b09408 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -1806,6 +1806,7 @@ int smb2_sess_setup(struct ksmbd_work *work)
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 8f6f567d7474..c5034cf9ac9e 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -24,6 +24,7 @@
+ #include "cifsacl.h"
+ #include <crypto/internal/hash.h>
+ #include <uapi/linux/cifs/cifs_mount.h>
++#include "../common/cifsglob.h"
+ #include "../common/smb2pdu.h"
+ #include "smb2pdu.h"
+ #include <linux/filelock.h>
+@@ -702,12 +703,6 @@ get_rfc1002_length(void *buf)
+ 	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
+ }
  
- 		if (ksmbd_conn_need_reconnect(conn)) {
- 			rc = -EFAULT;
-+			ksmbd_user_session_put(sess);
- 			sess = NULL;
- 			goto out_err;
- 		}
+-static inline void
+-inc_rfc1001_len(void *buf, int count)
+-{
+-	be32_add_cpu((__be32 *)buf, count);
+-}
+-
+ struct TCP_Server_Info {
+ 	struct list_head tcp_ses_list;
+ 	struct list_head smb_ses_list;
+@@ -1021,8 +1016,6 @@ compare_mid(__u16 mid, const struct smb_hdr *smb)
+ #define CIFS_MAX_RFC1002_WSIZE ((1<<17) - 1 - sizeof(WRITE_REQ) + 4)
+ #define CIFS_MAX_RFC1002_RSIZE ((1<<17) - 1 - sizeof(READ_RSP) + 4)
+ 
+-#define CIFS_DEFAULT_IOSIZE (1024 * 1024)
+-
+ /*
+  * Windows only supports a max of 60kb reads and 65535 byte writes. Default to
+  * those values when posix extensions aren't in force. In actuality here, we
+@@ -2148,30 +2141,20 @@ extern mempool_t cifs_io_request_pool;
+ extern mempool_t cifs_io_subrequest_pool;
+ 
+ /* Operations for different SMB versions */
+-#define SMB1_VERSION_STRING	"1.0"
+-#define SMB20_VERSION_STRING    "2.0"
+ #ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
+ extern struct smb_version_operations smb1_operations;
+ extern struct smb_version_values smb1_values;
+ extern struct smb_version_operations smb20_operations;
+ extern struct smb_version_values smb20_values;
+ #endif /* CIFS_ALLOW_INSECURE_LEGACY */
+-#define SMB21_VERSION_STRING	"2.1"
+ extern struct smb_version_operations smb21_operations;
+ extern struct smb_version_values smb21_values;
+-#define SMBDEFAULT_VERSION_STRING "default"
+ extern struct smb_version_values smbdefault_values;
+-#define SMB3ANY_VERSION_STRING "3"
+ extern struct smb_version_values smb3any_values;
+-#define SMB30_VERSION_STRING	"3.0"
+ extern struct smb_version_operations smb30_operations;
+ extern struct smb_version_values smb30_values;
+-#define SMB302_VERSION_STRING	"3.02"
+-#define ALT_SMB302_VERSION_STRING "3.0.2"
+ /*extern struct smb_version_operations smb302_operations;*/ /* not needed yet */
+ extern struct smb_version_values smb302_values;
+-#define SMB311_VERSION_STRING	"3.1.1"
+-#define ALT_SMB311_VERSION_STRING "3.11"
+ extern struct smb_version_operations smb311_operations;
+ extern struct smb_version_values smb311_values;
+ 
+diff --git a/fs/smb/common/cifsglob.h b/fs/smb/common/cifsglob.h
+new file mode 100644
+index 000000000000..00fd215e3eb5
+--- /dev/null
++++ b/fs/smb/common/cifsglob.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: LGPL-2.1 */
++/*
++ *
++ *   Copyright (C) International Business Machines  Corp., 2002,2008
++ *   Author(s): Steve French (sfrench@us.ibm.com)
++ *              Jeremy Allison (jra@samba.org)
++ *
++ */
++#ifndef _COMMON_CIFS_GLOB_H
++#define _COMMON_CIFS_GLOB_H
++
++static inline void inc_rfc1001_len(void *buf, int count)
++{
++	be32_add_cpu((__be32 *)buf, count);
++}
++
++#define SMB1_VERSION_STRING	"1.0"
++#define SMB20_VERSION_STRING    "2.0"
++#define SMB21_VERSION_STRING	"2.1"
++#define SMBDEFAULT_VERSION_STRING "default"
++#define SMB3ANY_VERSION_STRING "3"
++#define SMB30_VERSION_STRING	"3.0"
++#define SMB302_VERSION_STRING	"3.02"
++#define ALT_SMB302_VERSION_STRING "3.0.2"
++#define SMB311_VERSION_STRING	"3.1.1"
++#define ALT_SMB311_VERSION_STRING "3.11"
++
++#define CIFS_DEFAULT_IOSIZE (1024 * 1024)
++
++#endif	/* _COMMON_CIFS_GLOB_H */
+diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
+index d742ba754348..863716207a0d 100644
+--- a/fs/smb/server/smb_common.h
++++ b/fs/smb/server/smb_common.h
+@@ -10,6 +10,7 @@
+ 
+ #include "glob.h"
+ #include "nterr.h"
++#include "../common/cifsglob.h"
+ #include "../common/smb2pdu.h"
+ #include "smb2pdu.h"
+ 
+@@ -26,16 +27,8 @@
+ #define SMB311_PROT		6
+ #define BAD_PROT		0xFFFF
+ 
+-#define SMB1_VERSION_STRING	"1.0"
+-#define SMB20_VERSION_STRING	"2.0"
+-#define SMB21_VERSION_STRING	"2.1"
+-#define SMB30_VERSION_STRING	"3.0"
+-#define SMB302_VERSION_STRING	"3.02"
+-#define SMB311_VERSION_STRING	"3.1.1"
+-
+ #define SMB_ECHO_INTERVAL	(60 * HZ)
+ 
+-#define CIFS_DEFAULT_IOSIZE	(64 * 1024)
+ #define MAX_CIFS_SMALL_BUFFER_SIZE 448 /* big enough for most */
+ 
+ #define MAX_STREAM_PROT_LEN	0x00FFFFFF
+@@ -464,9 +457,4 @@ static inline unsigned int get_rfc1002_len(void *buf)
+ {
+ 	return be32_to_cpu(*((__be32 *)buf)) & 0xffffff;
+ }
+-
+-static inline void inc_rfc1001_len(void *buf, int count)
+-{
+-	be32_add_cpu((__be32 *)buf, count);
+-}
+ #endif /* __SMB_COMMON_H__ */
 -- 
 2.43.0
 
