@@ -1,65 +1,62 @@
-Return-Path: <linux-cifs+bounces-6773-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6775-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE41DBD0726
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 18:22:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6605ABD0A7E
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 21:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0F812347D34
-	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 16:22:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B7A4189794C
+	for <lists+linux-cifs@lfdr.de>; Sun, 12 Oct 2025 19:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C2D2EFDB4;
-	Sun, 12 Oct 2025 16:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B4E52F1FD1;
+	Sun, 12 Oct 2025 19:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="yM4ZEo3+"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29752EC0BA;
-	Sun, 12 Oct 2025 16:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530C92F1FD5
+	for <linux-cifs@vger.kernel.org>; Sun, 12 Oct 2025 19:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760286122; cv=none; b=C8DWo+t2dXkvvLZ+vB/yBjPvG8PHWNa+4FgeDFCkbmi5tSqRXwQg0vmXAy+Tddge8n2GCBzhbiSoJ6LJFO+JNzD2HfvCkr3cdM//NWsKeOaRa9aQMTttvpQykUwiD4M7Qt7yi5dI/z4ouJd/Wlfhf9eNjrhQxeau/pPy8a2dW1A=
+	t=1760296254; cv=none; b=hmWf0tnt5NEtRol+qchC1StRm5r2fCa2+Zn9r3tsZFTlJ78587MGUbkR/qJ7k8I0n9MhDYsrV0xOHkBxHwBk2rlXSnQ/o7z67I2j+Zyy1fL0vRvcQ7Fk4fP2l7/44YghcZD7sevG1vFbuszC8ijUhmMIAzdNHQdz3d/wavAgask=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760286122; c=relaxed/simple;
-	bh=Xf8YDORNtEKfBSYe5NMLOToggAz3uvjWZVx2WzEpT+Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IqZjF4VA0UZ2VF1bCdacSL/bRRTKdXxUqA5MyuC6pcCkBqamJIuhixd5AwgkFzuFKL5ICOcYFZM01EhiYp/7HNV0/2M5J9sZoPTunr2InDpYzc9BwqKKFF8zn/zfkk9PrbXjrwcFKJu1JIBtZBp2ofI8dEjapCBO0zmYJypIvLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chenxiaosong.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
-X-QQ-mid: esmtpgz15t1760285940tf6a584fb
-X-QQ-Originating-IP: ggSA1ypIriAWwWTqO52sQZkV3I34cugtTii9+Af5Fjo=
-Received: from localhost.localdomain ( [116.128.244.171])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 13 Oct 2025 00:18:59 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6534208490292261738
-From: chenxiaosong@chenxiaosong.com
-To: stfrench@microsoft.com,
-	metze@samba.org,
-	pali@kernel.org,
-	linkinjeon@kernel.org,
-	smfrench@gmail.com,
-	sfrench@samba.org,
-	senozhatsky@chromium.org,
-	tom@talpey.com,
-	pc@manguebit.org,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	bharathsm@microsoft.com,
-	zhangguodong@kylinos.cn
-Cc: linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v2 22/22] smb: move FILE_SYSTEM_POSIX_INFO to common/cifspdu.h
-Date: Mon, 13 Oct 2025 00:17:49 +0800
-Message-ID: <01E4A7CB87485CD7+20251012161749.2994033-23-chenxiaosong@chenxiaosong.com>
+	s=arc-20240116; t=1760296254; c=relaxed/simple;
+	bh=4XHn+72sGuxlRfHfKMt7SA85v8ZeKUWauWieLhMLRhc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cacXbWffrMNN/k7z6WrH3YlUEEt3a0jTEiltiECxPF8UkHy/aF6WW2g8pbteJJZc7c3e7mT5kEX/5gElOmos5Uh8/Xo4+IWp7hCQznx4dxMejA8rEiYbs4uI5lmY29n3cJh0Ow/ggNiOWazgoBqKNx91NkJ/QvsJm6ThdKtbzIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=yM4ZEo3+; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=Message-ID:Date:Cc:To:From;
+	bh=C3xK4o2im5CSEngKJSj5dBitw+XSS8ccMgiHuGRZ1JU=; b=yM4ZEo3+pVYeLy5IHReaJ0P3Xl
+	EWB//7MgQsH7F72DKlAVGQwCqMoT/4FCpLpUNZp4DRSLX+7WV639rpwdPxb6EU70kn+hG/E4CWWvZ
+	AtpR3Z69WqprS3R+t4KZum8lvAViwlNkNgN6LeHzQqbX0N1m3ZEkaThQ0dOy9yP3htebkbcf2w0ed
+	Hj2fL/OIfSquaMlFo+3nm/p0+GvEvVc/63cTPp7uvVYILLjPCoFoSa06HxZupTiAk0QehMWSQLUdj
+	MguilAml+QQr16q0ryjFHnJUg343VShrTAPi4r9un6kjTlLHIs5iMEPtkLNftWdBvZ0+UljdH1vXR
+	omyRrNLW8izEOhy7hdyUpbwj32lJrWbdtTEp0zYmQJUz9OMhJcY9ZYXApgjuwn78cD0YDST67RENg
+	MFQNBR/+qj6CV9Q7NqkyzUOYvgcWWggZ0uaAw5Q+v0ix9HiBbKRqu2sytyAODPyX6tzz4efS8n9jy
+	he6VAdalxiJvmMw/wnOk8q0X;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1v81Sr-008nzT-1L;
+	Sun, 12 Oct 2025 19:10:41 +0000
+From: Stefan Metzmacher <metze@samba.org>
+To: linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Cc: metze@samba.org,
+	Steve French <smfrench@gmail.com>,
+	Tom Talpey <tom@talpey.com>,
+	Long Li <longli@microsoft.com>,
+	Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 00/10] improve smbdirect_mr_io lifetime
+Date: Sun, 12 Oct 2025 21:10:20 +0200
+Message-ID: <cover.1760295528.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
-References: <20251012161749.2994033-1-chenxiaosong@chenxiaosong.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -67,163 +64,54 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:chenxiaosong.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: M4sLgBSwLMz8Pjzg3O6ta1IhTityFUhwzWnEKwdcCbfB2mvo199EsooD
-	OeLrsf2/lIFFZBTV3OHXTBq5vXznLjpg1YZKEo/Xl/11TtJozsLfQkCdXFT10bOrqOWiCAZ
-	oKnyXbry9gUyUpQjyFQvlAoAMwuQlYAG+rvaqxDg8hEf9f9mporurclL8MRff8pPSwfShZi
-	e4eeVv9dVs225D5eklx5SCoPsVOc0ErycrQ3ETFoJ4ooSOsu1BS75ISdzO4CwmwVjF9Q6hD
-	9LhpL+hicT/GJdccxwROn6XjUWheba9bJm06zZUbW3POJB3mVWd1US+mDR3Vn8iU5CkEOdC
-	mOasWg4QTo4eyw3hLxES1485iEVWV7IlGshRYhB/Un1bzJyfWA6PZmiR423YZSDCUEa9pyU
-	iXuWuRvMdekwYAeZRzrI3FlHcbcDl25aqDTLhBtBVEc8zqhP8fTPF1YvjeCJklDSdVoYdMX
-	h4hKIAhQwtvm7sbv9Dj4Sy8gCCu+c3jS2TBrxOSNHEBJey6/BcjR9+KdQLuz4ev2HJiaLVK
-	2WR96fQEALc/YNIJ9aIqEjl6FFE8tHrCd88NjlK4C+wzGhDohnqQqHlpx9Ygc+B7WNqCOO8
-	zVBpnAd24dRbng5HeqORtjEsRriAJEnIKMSBFE3VLdB6vxrp4lj77psoZlVFxHyyWm8gtW9
-	eA8vxOSv2ayhOAYjs25n2Y1zZtdfCL45AYvMODAlKVw4MRZgjGav+eulCs3fvGOT09UqaWC
-	7lYuAPFuUy/Jg3IuTtm/XLVrodTvM2SY12FnjJRyHogL8XTVYLRIofI4bZAjEW5bS2iy/4n
-	Gt1PONa8E0Ern0pdwKevvtHKITJvxbEsRCKWhn/uFFYWJwVnt9Gd8nU3RtmYlISjBFiPGsl
-	XiZFZ9PU0KMGkrQKPTp3yrWCAJ90sZpX22bGmK5/TNhSw3U4o6vjyerZz67vu0qhEuuBR+V
-	8zoK6fI4bi0nMBwUOPFzjA5srGQnYG6+jlaHxtLXwDdNN9gEFv9LEv10DzArEImzRsweoY5
-	4A9P6vT+6/rJS2JMcb2S8vMHve8umqIKN5YC8AONilKNjzWKJe/f0zJhTu4/HHO2WgZ/SC5
-	8ZU/BYM2X52SNOcIMApvf1gzQOoiiJOJA==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-X-QQ-RECHKSPAM: 0
 
-From: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Hi,
 
-Rename "struct filesystem_posix_info" to "FILE_SYSTEM_POSIX_INFO",
-then move duplicate definitions to common header file.
+these patches improve and simplify our handling of
+smbdirect_mr_io structures and their lifetime.
 
-Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
----
- fs/smb/client/cifspdu.h    | 22 ----------------------
- fs/smb/common/cifspdu.h    | 23 +++++++++++++++++++++++
- fs/smb/server/smb2pdu.c    |  4 ++--
- fs/smb/server/smb_common.h | 23 -----------------------
- 4 files changed, 25 insertions(+), 47 deletions(-)
+smbd_register_mr() returns a pointer to struct smbdirect_mr_io
+and smbd_deregister_mr() gives the pointer back.
 
-diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
-index 68e3af176add..ab23a233153a 100644
---- a/fs/smb/client/cifspdu.h
-+++ b/fs/smb/client/cifspdu.h
-@@ -1866,28 +1866,6 @@ typedef struct {
- 
- #define CIFS_POSIX_EXTENSIONS           0x00000010 /* support for new QFSInfo */
- 
--typedef struct {
--	/* For undefined recommended transfer size return -1 in that field */
--	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
--	__le32 BlockSize;
--    /* The next three fields are in terms of the block size.
--	(above). If block size is unknown, 4096 would be a
--	reasonable block size for a server to report.
--	Note that returning the blocks/blocksavail removes need
--	to make a second call (to QFSInfo level 0x103 to get this info.
--	UserBlockAvail is typically less than or equal to BlocksAvail,
--	if no distinction is made return the same value in each */
--	__le64 TotalBlocks;
--	__le64 BlocksAvail;       /* bfree */
--	__le64 UserBlocksAvail;   /* bavail */
--    /* For undefined Node fields or FSID return -1 */
--	__le64 TotalFileNodes;
--	__le64 FreeFileNodes;
--	__le64 FileSysIdentifier;   /* fsid */
--	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
--	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
--} __attribute__((packed)) FILE_SYSTEM_POSIX_INFO;
--
- /* DeviceType Flags */
- #define FILE_DEVICE_CD_ROM              0x00000002
- #define FILE_DEVICE_CD_ROM_FILE_SYSTEM  0x00000003
-diff --git a/fs/smb/common/cifspdu.h b/fs/smb/common/cifspdu.h
-index b4ca0c36cf84..853e03f395be 100644
---- a/fs/smb/common/cifspdu.h
-+++ b/fs/smb/common/cifspdu.h
-@@ -329,6 +329,29 @@ typedef struct {
- 	__le32 BytesPerSector;
- } __attribute__((packed)) FILE_SYSTEM_INFO;	/* size info, level 0x103 */
- 
-+typedef struct {
-+	/* For undefined recommended transfer size return -1 in that field */
-+	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
-+	__le32 BlockSize;
-+	/* The next three fields are in terms of the block size.
-+	 * (above). If block size is unknown, 4096 would be a
-+	 * reasonable block size for a server to report.
-+	 * Note that returning the blocks/blocksavail removes need
-+	 * to make a second call (to QFSInfo level 0x103 to get this info.
-+	 * UserBlockAvail is typically less than or equal to BlocksAvail,
-+	 * if no distinction is made return the same value in each
-+	 */
-+	__le64 TotalBlocks;
-+	__le64 BlocksAvail;       /* bfree */
-+	__le64 UserBlocksAvail;   /* bavail */
-+	/* For undefined Node fields or FSID return -1 */
-+	__le64 TotalFileNodes;
-+	__le64 FreeFileNodes;
-+	__le64 FileSysIdentifier;   /* fsid */
-+	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
-+	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
-+} __attribute__((packed)) FILE_SYSTEM_POSIX_INFO;
-+
- /* See MS-CIFS 2.2.8.2.5 */
- typedef struct {
- 	__le32 DeviceType;
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 065e0daaa91b..d49cd1ad1d70 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -5626,14 +5626,14 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
- 	}
- 	case FS_POSIX_INFORMATION:
- 	{
--		struct filesystem_posix_info *info;
-+		FILE_SYSTEM_POSIX_INFO *info;
- 
- 		if (!work->tcon->posix_extensions) {
- 			pr_err("client doesn't negotiate with SMB3.1.1 POSIX Extensions\n");
- 			path_put(&path);
- 			return -EOPNOTSUPP;
- 		} else {
--			info = (struct filesystem_posix_info *)(rsp->Buffer);
-+			info = (FILE_SYSTEM_POSIX_INFO *)(rsp->Buffer);
- 			info->OptimalTransferSize = cpu_to_le32(stfs.f_bsize);
- 			info->BlockSize = cpu_to_le32(stfs.f_bsize);
- 			info->TotalBlocks = cpu_to_le64(stfs.f_blocks);
-diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index 4f48dbf9c13b..d349b3443219 100644
---- a/fs/smb/server/smb_common.h
-+++ b/fs/smb/server/smb_common.h
-@@ -107,29 +107,6 @@ struct file_id_both_directory_info {
- 	char FileName[];
- } __packed;
- 
--struct filesystem_posix_info {
--	/* For undefined recommended transfer size return -1 in that field */
--	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
--	__le32 BlockSize;
--	/* The next three fields are in terms of the block size.
--	 * (above). If block size is unknown, 4096 would be a
--	 * reasonable block size for a server to report.
--	 * Note that returning the blocks/blocksavail removes need
--	 * to make a second call (to QFSInfo level 0x103 to get this info.
--	 * UserBlockAvail is typically less than or equal to BlocksAvail,
--	 * if no distinction is made return the same value in each
--	 */
--	__le64 TotalBlocks;
--	__le64 BlocksAvail;       /* bfree */
--	__le64 UserBlocksAvail;   /* bavail */
--	/* For undefined Node fields or FSID return -1 */
--	__le64 TotalFileNodes;
--	__le64 FreeFileNodes;
--	__le64 FileSysIdentifier;   /* fsid */
--	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
--	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
--} __packed;
--
- struct smb_version_ops {
- 	u16 (*get_cmd_val)(struct ksmbd_work *swork);
- 	int (*init_rsp_hdr)(struct ksmbd_work *swork);
+But currently the memory itself is managed by the connection
+(struct smbdirect_socket) and smbd_destroy() has a strange
+wait loop in order to wait for smbd_deregister_mr() being
+called. It means code in smbd_destroy() is aware of
+the server mutex in the generic smb client handling above
+the transport layer.
+
+These patches do some cleanups and fixes before changing
+the logic to use a kref and a mutex in order to allow
+smbd_deregister_mr() being called after smbd_destroy()
+as the memory of smbdirect_mr_io will stay in memory
+but will be detached from the connection.
+
+This makes the code independent of cifs_server_[un]lock()
+and will allow us to move more smbdirect code into common
+functions (shared between client and server).
+
+I think these should go into 6.18.
+
+Stefan Metzmacher (10):
+  smb: smbdirect: introduce smbdirect_mr_io.{kref,mutex} and
+    SMBDIRECT_MR_DISABLED
+  smb: client: change smbd_deregister_mr() to return void
+  smb: client: let destroy_mr_list() call list_del(&mr->list)
+  smb: client: let destroy_mr_list() remove locked from the list
+  smb: client: improve logic in allocate_mr_list()
+  smb: client: improve logic in smbd_register_mr()
+  smb: client: improve logic in smbd_deregister_mr()
+  smb: client: call ib_dma_unmap_sg if mr->sgt.nents is not 0
+  smb: client: let destroy_mr_list() call ib_dereg_mr() before
+    ib_dma_unmap_sg()
+  smb: client: let destroy_mr_list() keep smbdirect_mr_io memory if
+    registered
+
+ fs/smb/client/smbdirect.c                  | 312 ++++++++++++++-------
+ fs/smb/client/smbdirect.h                  |   2 +-
+ fs/smb/common/smbdirect/smbdirect_socket.h |  11 +-
+ 3 files changed, 224 insertions(+), 101 deletions(-)
+
 -- 
 2.43.0
 
