@@ -1,264 +1,204 @@
-Return-Path: <linux-cifs+bounces-6811-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6795-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98F02BD3E3A
-	for <lists+linux-cifs@lfdr.de>; Mon, 13 Oct 2025 17:08:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43F3FBD3AA4
+	for <lists+linux-cifs@lfdr.de>; Mon, 13 Oct 2025 16:49:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0413D4F6B0C
-	for <lists+linux-cifs@lfdr.de>; Mon, 13 Oct 2025 14:59:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A0CD189FFE8
+	for <lists+linux-cifs@lfdr.de>; Mon, 13 Oct 2025 14:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E19D2727FE;
-	Mon, 13 Oct 2025 14:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9149E3090C7;
+	Mon, 13 Oct 2025 14:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Zezx/nrb"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VK+1EE4j";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="H+Z+hlMP";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hkN0EgMX";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FHAP454y"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4281EB9FA;
-	Mon, 13 Oct 2025 14:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D48308F25
+	for <linux-cifs@vger.kernel.org>; Mon, 13 Oct 2025 14:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760367064; cv=none; b=pE6x29KL+92nlXJ0Uy6V0o0T+KdJrjU2JNQPRiJ0Vm159/dND8dLo5Tv2XS7s9r98rHfoAbg0wSTx7LafuFEBTla24qcRWoaEo6uZtP/4sr2esvhKPVvk4OXDsMnrT/qwJ1pw2wfwQQg+qhQ+heq5jW6+q03U+K8VtN03bU+o0U=
+	t=1760366686; cv=none; b=nJBi5zJWDsax+T/mLFCBOezvj4HA7HBubs1ZXZb/JAlqot6AZUcUkdhZIHKk2cO4AkAUdclSEPGcyxZuCEx8p4DaC4eIg0p9XZ5V6kV/ZDG+SZkV4GcIumapEhlTfXAZ4lpnEWyfo4B+szOkSUpqzeaQNayrCcI1bzpEgUZNxDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760367064; c=relaxed/simple;
-	bh=V+EA/HAYN4xAQmv1tLAZQoGTMRNG5Dw7RZ7cdv7LCAw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P+op4GlTrgJzHpbOp6EISfNXqqMZm+GBWoj8omjWpWG4dXHroeLTHTddw71RKMiqnb664kEcWYnnt8yNMgOIBLd4OekLmIyv16ddlpzl9DusuqCZwbFWogYsfrYHLwxdm3S8rHFhkxbt8QRNlaJOtmjK0vtsN14U3tcbseXcSLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Zezx/nrb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D696AC4CEE7;
-	Mon, 13 Oct 2025 14:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1760367064;
-	bh=V+EA/HAYN4xAQmv1tLAZQoGTMRNG5Dw7RZ7cdv7LCAw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Zezx/nrbo6xTPhoAliQwjBgbLOyLsLRPTkR1YzSML3d3g/O8ke7rv1gScPCwgbYv4
-	 MsvAvv0YyGb55tzaV3nemzUD2XSt9EELiIHONr1UUXgdQQJ7iGRFk4Xib8uW6U/3Ya
-	 2EAIsuDqoJwIk2C4ZO7Q1MY7Sw3RSrrfPOGIiaNU=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-rdma@vger.kernel.org,
-	Stefan Metzmacher <metze@samba.org>,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 052/196] smb: server: fix IRD/ORD negotiation with the client
-Date: Mon, 13 Oct 2025 16:43:45 +0200
-Message-ID: <20251013144316.467260856@linuxfoundation.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251013144314.549284796@linuxfoundation.org>
-References: <20251013144314.549284796@linuxfoundation.org>
-User-Agent: quilt/0.69
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1760366686; c=relaxed/simple;
+	bh=ywXpP59Lk88yCseXP50OE5LNKsf9iCO/d2MVzhXqhDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pQl8K4q1iBZS3ExgKKFyzhbeTrrOvaIin1Z3DpONFQi4XMTp5INcP7Hw+gE6ju98FeP0X8XYqSnPDsxP/8nOZzE+xyvpRbfQWyk5VlyRSBSLFp+aQfBB/4GmG3MEiR21eNhTsRR1yxZCctHcflCcWvfUYr9aMXIBYir7Dm8KK74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VK+1EE4j; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=H+Z+hlMP; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hkN0EgMX; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FHAP454y; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 9512521905;
+	Mon, 13 Oct 2025 14:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1760366681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K+B3cRhWFJTukv1G4BnYWSSIGt6ZCh6nUUGxVgo8uAQ=;
+	b=VK+1EE4j3M6zBqUyqwsfJPZ7wNYbNuR1eUYpArR9NC5nxT0JEYhfCqG3l/1UbRM8XVeAgD
+	OP0ejKQsBj5T8f9bIQnjWVkcKyFcX8n6r7VgwfemCk5Xer8TbVvXtU1PO6ufXcSm+jf7I7
+	0qcZxo/SElX6uWKsTJCbr/DdMo7uR+0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1760366681;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K+B3cRhWFJTukv1G4BnYWSSIGt6ZCh6nUUGxVgo8uAQ=;
+	b=H+Z+hlMPXqFqLSc2kVG/rLS0qhGuA8ExX3p3hiaPm4lBldtXUsA9IZ5fg0XElV5gpVt8mp
+	TA9WceHuz9oKuUCw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=hkN0EgMX;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=FHAP454y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1760366680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K+B3cRhWFJTukv1G4BnYWSSIGt6ZCh6nUUGxVgo8uAQ=;
+	b=hkN0EgMXB8IgYv43vMMrxEPUrwlVUpg7/bsuVp035BGXrnqO2UTWc9/uGV0Y/B2ihoI0TF
+	UfiYAbs6vrdVLfBdsWUUqMvC/1w863h6ipglsyft76uCD275x9BlmpoHMSXnVNQB7Hb8/j
+	JNqGyyE8fu1nTh7W6JPQvPTs7IfIHT4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1760366680;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K+B3cRhWFJTukv1G4BnYWSSIGt6ZCh6nUUGxVgo8uAQ=;
+	b=FHAP454y4M6+ghCQIv03zw8w029neiqKz5sutpVNxnz92au7q04wTGUqqbMW0bPmU9qH0Q
+	yaMIuKKvyDU9IXAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1852A13874;
+	Mon, 13 Oct 2025 14:44:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jQVKNFcQ7Wh4KQAAD6G6ig
+	(envelope-from <ematsumiya@suse.de>); Mon, 13 Oct 2025 14:44:39 +0000
+Date: Mon, 13 Oct 2025 11:44:37 -0300
+From: Enzo Matsumiya <ematsumiya@suse.de>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-cifs@vger.kernel.org, Steve French <sfrench@samba.org>, 
+	samba-technical@lists.samba.org, linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Paulo Alcantara <pc@manguebit.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, 
+	Bharath SM <bharathsm@microsoft.com>
+Subject: Re: [PATCH 0/8] smb: client: More crypto library conversions
+Message-ID: <ihoaj3ymhuesevdb7k2kg2a2axdkishrrrjr2teigelhkxmt4s@do2n6pkdmaas>
+References: <20251012015738.244315-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20251012015738.244315-1-ebiggers@kernel.org>
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 9512521905
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,samba.org,lists.samba.org,manguebit.org,gmail.com,microsoft.com,talpey.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.01
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+Hi Eric,
 
-------------------
+On 10/11, Eric Biggers wrote:
+>This series converts fs/smb/client/ to access SHA-512, HMAC-SHA256, MD5,
+>and HMAC-MD5 using the library APIs instead of crypto_shash.
+>
+>This simplifies the code significantly.  It also slightly improves
+>performance, as it eliminates unnecessary overhead.
+>
+>Tested with Samba with all SMB versions, with mfsymlinks in the mount
+>options, 'server min protocol = NT1' and 'server signing = required' in
+>smb.conf, and doing a simple file data and symlink verification test.
+>That seems to cover all the modified code paths.
+>
+>However, with SMB 1.0 I get "CIFS: VFS: SMB signature verification
+>returned error = -13", regardless of whether this series is applied or
+>not.  Presumably, testing that case requires some other setting I
+>couldn't find.
+>
+>Regardless, these are straightforward conversions and all the actual
+>crypto is exactly the same as before, as far as I can tell.
 
-From: Stefan Metzmacher <metze@samba.org>
+I think the overall series looks good and do a great cleanup.
 
-[ Upstream commit fad988a2158d743da7971884b93482a73735b25e ]
+Just a minor nit about fips_enabled: since it's now being handled
+explicitly (rather than an error on cifs_alloc_hash() currently), I
+think it makes sense to move the check to mount code path when
+'sectype == NTLMv2' (I don't particularly care about SMB1, but
+something similar can be done for 'smb1 && sign' cases I guess).
 
-Already do real negotiation in smb_direct_handle_connect_request()
-where we see the requested initiator_depth and responder_resources
-from the client.
-
-We should detect legacy iwarp clients using MPA v1
-with the custom IRD/ORD negotiation.
-
-We need to send the custom IRD/ORD in big endian,
-but we need to try to let clients with broken requests
-using little endian (older cifs.ko) to work.
-
-Note the reason why this uses u8 for
-initiator_depth and responder_resources is
-that the rdma layer also uses it.
-
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Steve French <smfrench@gmail.com>
-Cc: Tom Talpey <tom@talpey.com>
-Cc: linux-cifs@vger.kernel.org
-Cc: samba-technical@lists.samba.org
-Cc: linux-rdma@vger.kernel.org
-Fixes: 0626e6641f6b ("cifsd: add server handler for central processing and tranport layers")
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/server/transport_rdma.c | 99 +++++++++++++++++++++++++++++-----
- 1 file changed, 85 insertions(+), 14 deletions(-)
-
-diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index 84b5b2f5df998..af1c41f922bb3 100644
---- a/fs/smb/server/transport_rdma.c
-+++ b/fs/smb/server/transport_rdma.c
-@@ -152,6 +152,10 @@ struct smb_direct_transport {
- 	struct work_struct	disconnect_work;
- 
- 	bool			negotiation_requested;
-+
-+	bool			legacy_iwarp;
-+	u8			initiator_depth;
-+	u8			responder_resources;
- };
- 
- #define KSMBD_TRANS(t) ((struct ksmbd_transport *)&((t)->transport))
-@@ -345,6 +349,9 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
- 	t->cm_id = cm_id;
- 	cm_id->context = t;
- 
-+	t->initiator_depth = SMB_DIRECT_CM_INITIATOR_DEPTH;
-+	t->responder_resources = 1;
-+
- 	t->status = SMB_DIRECT_CS_NEW;
- 	init_waitqueue_head(&t->wait_status);
- 
-@@ -1618,21 +1625,21 @@ static int smb_direct_send_negotiate_response(struct smb_direct_transport *t,
- static int smb_direct_accept_client(struct smb_direct_transport *t)
- {
- 	struct rdma_conn_param conn_param;
--	struct ib_port_immutable port_immutable;
--	u32 ird_ord_hdr[2];
-+	__be32 ird_ord_hdr[2];
- 	int ret;
- 
-+	/*
-+	 * smb_direct_handle_connect_request()
-+	 * already negotiated t->initiator_depth
-+	 * and t->responder_resources
-+	 */
- 	memset(&conn_param, 0, sizeof(conn_param));
--	conn_param.initiator_depth = min_t(u8, t->cm_id->device->attrs.max_qp_rd_atom,
--					   SMB_DIRECT_CM_INITIATOR_DEPTH);
--	conn_param.responder_resources = 0;
--
--	t->cm_id->device->ops.get_port_immutable(t->cm_id->device,
--						 t->cm_id->port_num,
--						 &port_immutable);
--	if (port_immutable.core_cap_flags & RDMA_CORE_PORT_IWARP) {
--		ird_ord_hdr[0] = conn_param.responder_resources;
--		ird_ord_hdr[1] = 1;
-+	conn_param.initiator_depth = t->initiator_depth;
-+	conn_param.responder_resources = t->responder_resources;
-+
-+	if (t->legacy_iwarp) {
-+		ird_ord_hdr[0] = cpu_to_be32(conn_param.responder_resources);
-+		ird_ord_hdr[1] = cpu_to_be32(conn_param.initiator_depth);
- 		conn_param.private_data = ird_ord_hdr;
- 		conn_param.private_data_len = sizeof(ird_ord_hdr);
- 	} else {
-@@ -2018,10 +2025,13 @@ static bool rdma_frwr_is_supported(struct ib_device_attr *attrs)
- 	return true;
- }
- 
--static int smb_direct_handle_connect_request(struct rdma_cm_id *new_cm_id)
-+static int smb_direct_handle_connect_request(struct rdma_cm_id *new_cm_id,
-+					     struct rdma_cm_event *event)
- {
- 	struct smb_direct_transport *t;
- 	struct task_struct *handler;
-+	u8 peer_initiator_depth;
-+	u8 peer_responder_resources;
- 	int ret;
- 
- 	if (!rdma_frwr_is_supported(&new_cm_id->device->attrs)) {
-@@ -2035,6 +2045,67 @@ static int smb_direct_handle_connect_request(struct rdma_cm_id *new_cm_id)
- 	if (!t)
- 		return -ENOMEM;
- 
-+	peer_initiator_depth = event->param.conn.initiator_depth;
-+	peer_responder_resources = event->param.conn.responder_resources;
-+	if (rdma_protocol_iwarp(new_cm_id->device, new_cm_id->port_num) &&
-+	    event->param.conn.private_data_len == 8) {
-+		/*
-+		 * Legacy clients with only iWarp MPA v1 support
-+		 * need a private blob in order to negotiate
-+		 * the IRD/ORD values.
-+		 */
-+		const __be32 *ird_ord_hdr = event->param.conn.private_data;
-+		u32 ird32 = be32_to_cpu(ird_ord_hdr[0]);
-+		u32 ord32 = be32_to_cpu(ird_ord_hdr[1]);
-+
-+		/*
-+		 * cifs.ko sends the legacy IRD/ORD negotiation
-+		 * event if iWarp MPA v2 was used.
-+		 *
-+		 * Here we check that the values match and only
-+		 * mark the client as legacy if they don't match.
-+		 */
-+		if ((u32)event->param.conn.initiator_depth != ird32 ||
-+		    (u32)event->param.conn.responder_resources != ord32) {
-+			/*
-+			 * There are broken clients (old cifs.ko)
-+			 * using little endian and also
-+			 * struct rdma_conn_param only uses u8
-+			 * for initiator_depth and responder_resources,
-+			 * so we truncate the value to U8_MAX.
-+			 *
-+			 * smb_direct_accept_client() will then
-+			 * do the real negotiation in order to
-+			 * select the minimum between client and
-+			 * server.
-+			 */
-+			ird32 = min_t(u32, ird32, U8_MAX);
-+			ord32 = min_t(u32, ord32, U8_MAX);
-+
-+			t->legacy_iwarp = true;
-+			peer_initiator_depth = (u8)ird32;
-+			peer_responder_resources = (u8)ord32;
-+		}
-+	}
-+
-+	/*
-+	 * First set what the we as server are able to support
-+	 */
-+	t->initiator_depth = min_t(u8, t->initiator_depth,
-+				   new_cm_id->device->attrs.max_qp_rd_atom);
-+
-+	/*
-+	 * negotiate the value by using the minimum
-+	 * between client and server if the client provided
-+	 * non 0 values.
-+	 */
-+	if (peer_initiator_depth != 0)
-+		t->initiator_depth = min_t(u8, t->initiator_depth,
-+					   peer_initiator_depth);
-+	if (peer_responder_resources != 0)
-+		t->responder_resources = min_t(u8, t->responder_resources,
-+					       peer_responder_resources);
-+
- 	ret = smb_direct_connect(t);
- 	if (ret)
- 		goto out_err;
-@@ -2059,7 +2130,7 @@ static int smb_direct_listen_handler(struct rdma_cm_id *cm_id,
- {
- 	switch (event->event) {
- 	case RDMA_CM_EVENT_CONNECT_REQUEST: {
--		int ret = smb_direct_handle_connect_request(cm_id);
-+		int ret = smb_direct_handle_connect_request(cm_id, event);
- 
- 		if (ret) {
- 			pr_err("Can't create transport: %d\n", ret);
--- 
-2.51.0
+>Eric Biggers (8):
+>  smb: client: Use SHA-512 library for SMB3.1.1 preauth hash
+>  smb: client: Use HMAC-SHA256 library for key generation
+>  smb: client: Use HMAC-SHA256 library for SMB2 signature calculation
+>  smb: client: Use MD5 library for M-F symlink hashing
+>  smb: client: Use MD5 library for SMB1 signature calculation
+>  smb: client: Use HMAC-MD5 library for NTLMv2
+>  smb: client: Remove obsolete crypto_shash allocations
+>  smb: client: Consolidate cmac(aes) shash allocation
+>
+> fs/smb/client/Kconfig         |   7 +-
+> fs/smb/client/cifsencrypt.c   | 201 +++++++++++++---------------------
+> fs/smb/client/cifsfs.c        |   4 -
+> fs/smb/client/cifsglob.h      |   3 -
+> fs/smb/client/cifsproto.h     |  10 +-
+> fs/smb/client/link.c          |  31 +-----
+> fs/smb/client/sess.c          |   2 +-
+> fs/smb/client/smb2misc.c      |  53 ++-------
+> fs/smb/client/smb2proto.h     |   8 +-
+> fs/smb/client/smb2transport.c | 164 +++++----------------------
+> 10 files changed, 131 insertions(+), 352 deletions(-)
+>
+>
+>base-commit: 67029a49db6c1f21106a1b5fcdd0ea234a6e0711
+>-- 
+>2.51.0
 
 
+Cheers,
 
+Enzo
 
