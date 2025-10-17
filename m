@@ -1,102 +1,177 @@
-Return-Path: <linux-cifs+bounces-6934-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-6937-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 070CDBE952A
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Oct 2025 16:51:04 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7821BE9A60
+	for <lists+linux-cifs@lfdr.de>; Fri, 17 Oct 2025 17:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D62B4E06EE
-	for <lists+linux-cifs@lfdr.de>; Fri, 17 Oct 2025 14:50:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 53BD935D513
+	for <lists+linux-cifs@lfdr.de>; Fri, 17 Oct 2025 15:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC13332C937;
-	Fri, 17 Oct 2025 14:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40D32F12BE;
+	Fri, 17 Oct 2025 15:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SUeToxhg"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uFJ/M/6w"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1972533507B
-	for <linux-cifs@vger.kernel.org>; Fri, 17 Oct 2025 14:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F6C1D5CE0;
+	Fri, 17 Oct 2025 15:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760712449; cv=none; b=ibTzAlblT+cN6duyT1Z4lFkvE31NWV3xJs3oohsNxWNF/NJP7gKlGIP4QN16u43mbY/oVoCC5ML+tG/7LUnBxI4CArEFM1W+k12nsAtLCxRrjht0h0V0yi6xs08tcgxjomPa0WSRtlammiiV9rIAYCfD2w5yr60F/5GdYizyYC4=
+	t=1760714244; cv=none; b=QgqkwiP2A9sFNxVj+TtGFp+B17790rp3SCLAtA80ZUyTpJEIrbXONGr/iBeUYX87e7WqsVI0SXJRiy0K289DAnxfl2U+6ehFq5oakYovUt5SmMEzvjco4FtlSyhtrvgVOVKdborR5kORCY/uj9M9Bm8h5nFE5UYdwUojWqAAn0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760712449; c=relaxed/simple;
-	bh=L+SqctrKZRH5bxnDEQq/Te4HdgzDjNPlGDrY5UDIoIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H9eB6fisPet3how8+MlGU5S77f+m7r781lWn1teOa30dwUa/pzExuvyoC5vxlpZRsoiwWJsEQAN1B8DqoRCy+Ml+uE5Ixw06SgDtDapti6HiuicsDVjjSFvLml2vrKM2MiAMf5DVppOG4FvR+S65BOfqP5DoiiVcF3Ih1gRQl/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SUeToxhg; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <87c0c457-de8f-48b5-81ce-b47481a66e11@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760712438;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SucrcXRDBeepHvtpSolu9QDInT7r4kkfWjyD7KxyHc8=;
-	b=SUeToxhgTIFNPcJa5i3IdWlD90/TmRHLURHRdEuwwtbJdicg6WfRLvSaYqmpFvjcMsSQ32
-	znDwkato1usVb/2Ykm+0UdKvPpBtyk4Yaj/A8LHwnZWy3oUtUhh4+VrTZgatqksYzxzBbb
-	ULCbrDKUIOHhsecBuN4gc/1oqL1xTw8=
-Date: Fri, 17 Oct 2025 22:47:06 +0800
+	s=arc-20240116; t=1760714244; c=relaxed/simple;
+	bh=9wacYYWiBL/E7YaJ1TKlKkcnGqg1RremJa4VaO/vWsU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o9FosUGfvjUdn/nmZyIu7Jm+qBzEgrn8Qf8h1RopBNUAu0yA0+JrwvX+oX+/6TXUGf6X0puS+sx/AH2U9c8SwlZaaFiT1TEhYn1TvUkyOE6iurOE82Ksur/DccvbVgj/Z+XcWia4ScCz1H8+QTRefiREJr+FQePROx55m/jy60w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uFJ/M/6w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8B4C4CEE7;
+	Fri, 17 Oct 2025 15:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760714244;
+	bh=9wacYYWiBL/E7YaJ1TKlKkcnGqg1RremJa4VaO/vWsU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uFJ/M/6wJK0CMxpaELY3nW2JOIFQzgkb0sqrZGwag9UVFsigKOJtymxQPM78bCKW9
+	 nvZk8wryUfs95o79VB7BpSgCiuTt+lE+ueAgklRm04uCjm1q9UQWHhem7ND41v+sm0
+	 UoXck+e+IzZ1qGWyDmaqoNmak2WAXPoLUuSqw/Os=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	Frank Sorenson <sorenson@redhat.com>,
+	David Howells <dhowells@redhat.com>,
+	linux-cifs@vger.kernel.org,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.12 078/277] smb: client: fix missing timestamp updates after utime(2)
+Date: Fri, 17 Oct 2025 16:51:25 +0200
+Message-ID: <20251017145149.985444186@linuxfoundation.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251017145147.138822285@linuxfoundation.org>
+References: <20251017145147.138822285@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/6] smb/server: fix return values of smb2_0_server_cmds
- proc
-To: Namjae Jeon <linkinjeon@kernel.org>
-Cc: sfrench@samba.org, smfrench@gmail.com, linkinjeon@samba.org,
- linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
- ChenXiaoSong <chenxiaosong@kylinos.cn>
-References: <20251017084610.3085644-1-chenxiaosong.chenxiaosong@linux.dev>
- <CAKYAXd_kq9T0bgUeX-dMD-OEu48tMDm5s+gRPPADkfOL+GH7vg@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
-In-Reply-To: <CAKYAXd_kq9T0bgUeX-dMD-OEu48tMDm5s+gRPPADkfOL+GH7vg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Hi Namjae,
+6.12-stable review patch.  If anyone has any objections, please let me know.
 
-v1 has typos, and I've already sent v2:
+------------------
 
-https://lore.kernel.org/all/20251017104613.3094031-1-chenxiaosong.chenxiaosong@linux.dev/
+From: Paulo Alcantara <pc@manguebit.org>
 
-Thanks.
+[ Upstream commit b95cd1bdf5aa9221c98fc9259014b8bb8d1829d7 ]
 
-On 10/17/25 10:02 PM, Namjae Jeon wrote:
-> On Fri, Oct 17, 2025 at 5:47 PM <chenxiaosong.chenxiaosong@linux.dev> wrote:
->>
->> From: ChenXiaoSong <chenxiaosong@kylinos.cn>
->>
->> These functions should return error code when an error occurs,
->> then __process_request() will print the error messages.
->>
->> ChenXiaoSong (6):
->>    smb/server: fix return value of smb2_read()
->>    smb/server: fix return value of smb2_notify()
->>    smb/server: fix return value of smb2_query_dir()
->>    smb/server: fix return value of smb2_ioctl()
->>    smb/server: fix return value of smb2_oplock_break()
->>    smb/server: update some misguided comment of smb2_0_server_cmds proc
-> Applied them to #ksmbd-for-next-next.
-> Thanks!
->>
->>   fs/smb/server/smb2pdu.c | 30 +++++++++++++++++-------------
->>   1 file changed, 17 insertions(+), 13 deletions(-)
->>
->> --
->> 2.43.0
->>
-> 
+Don't reuse open handle when changing timestamps to prevent the server
+from disabling automatic timestamp updates as per MS-FSA 2.1.4.17.
+
+---8<---
+import os
+import time
+
+filename = '/mnt/foo'
+
+def print_stat(prefix):
+    st = os.stat(filename)
+    print(prefix, ': ', time.ctime(st.st_atime), time.ctime(st.st_ctime))
+
+fd = os.open(filename, os.O_CREAT|os.O_TRUNC|os.O_WRONLY, 0o644)
+print_stat('old')
+os.utime(fd, None)
+time.sleep(2)
+os.write(fd, b'foo')
+os.close(fd)
+time.sleep(2)
+print_stat('new')
+---8<---
+
+Before patch:
+
+$ mount.cifs //srv/share /mnt -o ...
+$ python3 run.py
+old :  Fri Oct  3 14:01:21 2025 Fri Oct  3 14:01:21 2025
+new :  Fri Oct  3 14:01:21 2025 Fri Oct  3 14:01:21 2025
+
+After patch:
+
+$ mount.cifs //srv/share /mnt -o ...
+$ python3 run.py
+old :  Fri Oct  3 17:03:34 2025 Fri Oct  3 17:03:34 2025
+new :  Fri Oct  3 17:03:36 2025 Fri Oct  3 17:03:36 2025
+
+Fixes: b6f2a0f89d7e ("cifs: for compound requests, use open handle if possible")
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Cc: Frank Sorenson <sorenson@redhat.com>
+Reviewed-by: David Howells <dhowells@redhat.com>
+Cc: linux-cifs@vger.kernel.org
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/client/smb2inode.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 104a563dc317f..cb049bc70e0cb 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -1220,31 +1220,33 @@ int
+ smb2_set_file_info(struct inode *inode, const char *full_path,
+ 		   FILE_BASIC_INFO *buf, const unsigned int xid)
+ {
+-	struct cifs_open_parms oparms;
++	struct kvec in_iov = { .iov_base = buf, .iov_len = sizeof(*buf), };
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
++	struct cifsFileInfo *cfile = NULL;
++	struct cifs_open_parms oparms;
+ 	struct tcon_link *tlink;
+ 	struct cifs_tcon *tcon;
+-	struct cifsFileInfo *cfile;
+-	struct kvec in_iov = { .iov_base = buf, .iov_len = sizeof(*buf), };
+-	int rc;
+-
+-	if ((buf->CreationTime == 0) && (buf->LastAccessTime == 0) &&
+-	    (buf->LastWriteTime == 0) && (buf->ChangeTime == 0) &&
+-	    (buf->Attributes == 0))
+-		return 0; /* would be a no op, no sense sending this */
++	int rc = 0;
+ 
+ 	tlink = cifs_sb_tlink(cifs_sb);
+ 	if (IS_ERR(tlink))
+ 		return PTR_ERR(tlink);
+ 	tcon = tlink_tcon(tlink);
+ 
+-	cifs_get_writable_path(tcon, full_path, FIND_WR_ANY, &cfile);
++	if ((buf->CreationTime == 0) && (buf->LastAccessTime == 0) &&
++	    (buf->LastWriteTime == 0) && (buf->ChangeTime == 0)) {
++		if (buf->Attributes == 0)
++			goto out; /* would be a no op, no sense sending this */
++		cifs_get_writable_path(tcon, full_path, FIND_WR_ANY, &cfile);
++	}
++
+ 	oparms = CIFS_OPARMS(cifs_sb, tcon, full_path, FILE_WRITE_ATTRIBUTES,
+ 			     FILE_OPEN, 0, ACL_NO_MODE);
+ 	rc = smb2_compound_op(xid, tcon, cifs_sb,
+ 			      full_path, &oparms, &in_iov,
+ 			      &(int){SMB2_OP_SET_INFO}, 1,
+ 			      cfile, NULL, NULL, NULL);
++out:
+ 	cifs_put_tlink(tlink);
+ 	return rc;
+ }
+-- 
+2.51.0
+
+
 
 
