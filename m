@@ -1,61 +1,57 @@
-Return-Path: <linux-cifs+bounces-7089-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7097-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 638D1C10E1A
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 20:23:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA5FC1131E
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 20:41:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6751B582593
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 19:17:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2045854878B
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 19:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2BE53254B1;
-	Mon, 27 Oct 2025 19:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFBC3218B2;
+	Mon, 27 Oct 2025 19:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iBMi4v5n"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BtE4o9+S"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997FE2222AA;
-	Mon, 27 Oct 2025 19:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4579531DD87;
+	Mon, 27 Oct 2025 19:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761592573; cv=none; b=K+Sj2PcOBUw0W4+dAMByuGTTpXkkTVTic/kZBFEIuiDMcYnBjlyr8KCNcg+0tLJK9ACk6Aar1u5p/ZauCcpjHVZR7Fl2YudAEfPsOK0v1IeyeaBOROnEaMZXeeR8SdQlTYxBhpaXgwdv54POMv09CUjER4I+x1ewQOb1xI/IjfY=
+	t=1761593283; cv=none; b=OBS0oieaJVbcF5J2IxNW0fht7K7MyVVogM1Md2X2o6zsoL7ntY5qA5XJ1O1Q0g0qNpaGvpn/4RP/JR6G4jINYEEfVn2ykjfbJKOJl8YV8BYwTef6Feo53BJoOH3TRi3sExew/BqpTmTpnd6RGVKE2fnsJtZVFPIOi+XesJEdH3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761592573; c=relaxed/simple;
-	bh=8w7I5chpfB9usadMEUljhkSFIxzfWOdFs8faqhFiPEk=;
+	s=arc-20240116; t=1761593283; c=relaxed/simple;
+	bh=TXuUnWlzNKxSGoX5ebTMUOkkKI7LH6gbCbbP2Kf/l+o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tYbMsm2lVbR9lWPUMEQ3XI+POmVu+U6i618D/AjSyq0Wcq5dDxV2pHSALsgbyzXOmA+dcb6O7millOotbC3YQFRp84edJhlaaOexPnjuyFHb0bLH3/lHt9hWL6lTb/RHtpRxaj61L6BT1/zLb9pKfsjAmw3rI+d48WPhLcD66Jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iBMi4v5n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BACE4C4CEF1;
-	Mon, 27 Oct 2025 19:16:12 +0000 (UTC)
+	 MIME-Version; b=MhMIg07i9o2CwKWg5iqwtOJ4FqYqK9CXNS6GSQ9FG5X+ceQXjvYgB4MIqeGJmRWdcd0vz/1tC0BLoHzCqzN9MhoW8Leivx5GR6ezWeWv7z/EDVLa/XIBP9vfMFS/8uMa5ldxFkEoyU2BHs035yMEWyKMZh2Tdsh+b2BrY3WdRJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BtE4o9+S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E46C4CEF1;
+	Mon, 27 Oct 2025 19:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761592573;
-	bh=8w7I5chpfB9usadMEUljhkSFIxzfWOdFs8faqhFiPEk=;
+	s=korg; t=1761593282;
+	bh=TXuUnWlzNKxSGoX5ebTMUOkkKI7LH6gbCbbP2Kf/l+o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iBMi4v5nUPk0JurYRBneHu5ljmxSLbq9kopNVZVXyEwYYQ7eyX8mmrIt7JR/bSO8f
-	 AAQ4bZ9WKzXunBG8sumuu4q9gJG+AMRMLr1/FxdSDZ3LR6au6XVYzWCtfnsy9GaM5u
-	 FDN2+kUXdAovzNxy3dquBGm5VatfOqxeiID4YC94=
+	b=BtE4o9+StUojxLAHMsUTfNKT7c8l4nvkXq/FYFnYaL6FqbOu6dPbDNNRK14yk6SKm
+	 bj2mqNMqpj4In9JwXjs5RLXAmkN1JX/jrTQNxAbYwsqynx9R46LblHsw4FVMSOpnzw
+	 izY/Br+m7WkXC8AkEA3iN3ySZyi8yW2uXKZhdrUM=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	David Howells <dhowells@redhat.com>,
 	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	Stefan Metzmacher <metze@samba.org>,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 15/84] smb: server: let smb_direct_flush_send_list() invalidate a remote key first
-Date: Mon, 27 Oct 2025 19:36:04 +0100
-Message-ID: <20251027183439.224015819@linuxfoundation.org>
+	Steve French <stfrench@microsoft.com>
+Subject: [PATCH 6.17 084/184] smb: client: get rid of d_drop() in cifs_do_rename()
+Date: Mon, 27 Oct 2025 19:36:06 +0100
+Message-ID: <20251027183517.158747736@linuxfoundation.org>
 X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251027183438.817309828@linuxfoundation.org>
-References: <20251027183438.817309828@linuxfoundation.org>
+In-Reply-To: <20251027183514.934710872@linuxfoundation.org>
+References: <20251027183514.934710872@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -67,56 +63,44 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.17-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
-From: Stefan Metzmacher <metze@samba.org>
+From: Paulo Alcantara <pc@manguebit.org>
 
-[ Upstream commit 1b53426334c3c942db47e0959a2527a4f815af50 ]
+commit 72ed55b4c335703c203b942972558173e1e5ddee upstream.
 
-If we want to invalidate a remote key we should do that as soon as
-possible, so do it in the first send work request.
+There is no need to force a lookup by unhashing the moved dentry after
+successfully renaming the file on server.  The file metadata will be
+re-fetched from server, if necessary, in the next call to
+->d_revalidate() anyways.
 
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Steve French <smfrench@gmail.com>
-Cc: Tom Talpey <tom@talpey.com>
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Reviewed-by: David Howells <dhowells@redhat.com>
+Cc: stable@vger.kernel.org
 Cc: linux-cifs@vger.kernel.org
-Cc: samba-technical@lists.samba.org
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/smb/server/transport_rdma.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ fs/smb/client/inode.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index 31c1ac256e1be..91e85a1a154fd 100644
---- a/fs/smb/server/transport_rdma.c
-+++ b/fs/smb/server/transport_rdma.c
-@@ -938,12 +938,15 @@ static int smb_direct_flush_send_list(struct smb_direct_transport *t,
- 			       struct smb_direct_sendmsg,
- 			       list);
- 
-+	if (send_ctx->need_invalidate_rkey) {
-+		first->wr.opcode = IB_WR_SEND_WITH_INV;
-+		first->wr.ex.invalidate_rkey = send_ctx->remote_key;
-+		send_ctx->need_invalidate_rkey = false;
-+		send_ctx->remote_key = 0;
-+	}
-+
- 	last->wr.send_flags = IB_SEND_SIGNALED;
- 	last->wr.wr_cqe = &last->cqe;
--	if (is_last && send_ctx->need_invalidate_rkey) {
--		last->wr.opcode = IB_WR_SEND_WITH_INV;
--		last->wr.ex.invalidate_rkey = send_ctx->remote_key;
+--- a/fs/smb/client/inode.c
++++ b/fs/smb/client/inode.c
+@@ -2484,11 +2484,8 @@ cifs_do_rename(const unsigned int xid, s
+ 	}
+ #endif /* CONFIG_CIFS_ALLOW_INSECURE_LEGACY */
+ do_rename_exit:
+-	if (rc == 0) {
++	if (rc == 0)
+ 		d_move(from_dentry, to_dentry);
+-		/* Force a new lookup */
+-		d_drop(from_dentry);
 -	}
- 
- 	ret = smb_direct_post_send(t, &first->wr);
- 	if (!ret) {
--- 
-2.51.0
-
+ 	cifs_put_tlink(tlink);
+ 	return rc;
+ }
 
 
 
