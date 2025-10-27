@@ -1,43 +1,43 @@
-Return-Path: <linux-cifs+bounces-7095-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7088-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 394D0C11168
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 20:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F97C10D87
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 20:22:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 54B79562041
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 19:28:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E36E505841
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 19:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7222632863C;
-	Mon, 27 Oct 2025 19:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D0D304BD3;
+	Mon, 27 Oct 2025 19:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JprYiCnh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bjdxUXsp"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E73932143D;
-	Mon, 27 Oct 2025 19:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABD92DAFC3;
+	Mon, 27 Oct 2025 19:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761593194; cv=none; b=Wibq6UWVtkn22XzyPp7tUhlRDIaU16tFLetDTNSIR+Ft8I3jUWN0ABtiWkt8437oQKNupjP3UTxyWX7HbymRuLninBi62S/yXqxAzCdNpk3+i/P+ooZaLnPFHRnjZO79ZorcoGAVJYZWZjieXywaps0p0t1vbXhD7zIUtMOXM1A=
+	t=1761592403; cv=none; b=obV5LAr7Pn26hPfaqED6cubojjhpBjUu4W8vd8mBRmLeTde9SGDmlHBZYlCnCRai3nq/VDSLdi1BJR22NYQms0Gr7gJEV+05gVuuXr0GkPTyHagGq06PJ4RQJnpYXV3dbrjRwxp1riz832hJNDyHAFhb68bgzhKztncg1rYDOiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761593194; c=relaxed/simple;
-	bh=OKlPKqp1BIEa+XjInYQjJpoUxifXIOS9UESkayeucug=;
+	s=arc-20240116; t=1761592403; c=relaxed/simple;
+	bh=ojv++QjIH3srBTSWoiCAbv3TpdgQBa6uC6+tCx2a8Ko=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oZsBX7nNrleMeNUxXoeAT/f1CcpMGsBXXO59dlfNkkxtfjkvz/q2+hSCczwS+55HJSq5kVSB//Y7FpNmqmVIq0HBl7Kg927VBHHgH6ea8fhM0drDr9n+487d0aZqqSutFcKurWkhrxhA/WGORGtkDIPZ502SSHY51HDZ5ziH3V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JprYiCnh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699B2C4CEF1;
-	Mon, 27 Oct 2025 19:26:32 +0000 (UTC)
+	 MIME-Version; b=ghV8CRLpTasJbBHM05GnSKH7bp05OGnYr392f8NoNhbgfqH6PWedoEPpKcYWxHLyFc2t9BN6YLlp1x3xaB2OdJVgBTCGzKZfjfR03FXDv9UlDLXhWFzKLRAesT7lksNMeYd8iCP2XMyhSRzHaBeIrz0gJdSIkPvpiz9kz0qbmO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bjdxUXsp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92906C4CEF1;
+	Mon, 27 Oct 2025 19:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761593192;
-	bh=OKlPKqp1BIEa+XjInYQjJpoUxifXIOS9UESkayeucug=;
+	s=korg; t=1761592402;
+	bh=ojv++QjIH3srBTSWoiCAbv3TpdgQBa6uC6+tCx2a8Ko=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JprYiCnhPOgJP371M/AQ8EKjaJo9LemvKTAm4tYv3T7ke56TdZ85n0pYVptMWKGUr
-	 elE+GxZqv2McUdW9YHC3g5q+QD21ic6zZK5AuzobQaYJOGEqsZpp/3WfSg8xvl9ahO
-	 siEDULA/+3l37XrlhIpLW2MzDEuMtyVrRogal/e0=
+	b=bjdxUXspa7DonhNhzsVoXco8jbe1lXfqmDJ8LFchi9tBVpVOX7qb1r0+JJ9aQCLQm
+	 R/hbJnM4BtsMmZduhgf0JRginXs//fEMnASzlCx2tCPdqSliIotBwS33n4DjQwHUJX
+	 QRZHAr6qn8o8N/zAK5iSpXa9jhDjZ7X7Q0ch64Cg=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,12 +50,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Stefan Metzmacher <metze@samba.org>,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.17 031/184] smb: server: let smb_direct_flush_send_list() invalidate a remote key first
-Date: Mon, 27 Oct 2025 19:35:13 +0100
-Message-ID: <20251027183515.761319761@linuxfoundation.org>
+Subject: [PATCH 6.1 080/157] smb: server: let smb_direct_flush_send_list() invalidate a remote key first
+Date: Mon, 27 Oct 2025 19:35:41 +0100
+Message-ID: <20251027183503.420851234@linuxfoundation.org>
 X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251027183514.934710872@linuxfoundation.org>
-References: <20251027183514.934710872@linuxfoundation.org>
+In-Reply-To: <20251027183501.227243846@linuxfoundation.org>
+References: <20251027183501.227243846@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.17-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -91,10 +91,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index e1f659d3b4cf5..2363244ff5f75 100644
+index af1c41f922bb3..81da8a5c1e0db 100644
 --- a/fs/smb/server/transport_rdma.c
 +++ b/fs/smb/server/transport_rdma.c
-@@ -939,12 +939,15 @@ static int smb_direct_flush_send_list(struct smb_direct_transport *t,
+@@ -933,12 +933,15 @@ static int smb_direct_flush_send_list(struct smb_direct_transport *t,
  			       struct smb_direct_sendmsg,
  			       list);
  
