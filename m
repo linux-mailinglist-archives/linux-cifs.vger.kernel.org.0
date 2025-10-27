@@ -1,47 +1,47 @@
-Return-Path: <linux-cifs+bounces-7081-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7078-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC72C0C1A8
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 08:24:26 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAA96C0C193
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 08:23:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E0E518A21B8
-	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 07:24:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 438594EF816
+	for <lists+linux-cifs@lfdr.de>; Mon, 27 Oct 2025 07:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FB12DECDF;
-	Mon, 27 Oct 2025 07:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F136E2DE1FA;
+	Mon, 27 Oct 2025 07:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j+NpceZ7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Lc8F/9Oo"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB2F2DCC01
-	for <linux-cifs@vger.kernel.org>; Mon, 27 Oct 2025 07:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CCD2DCBE0
+	for <linux-cifs@vger.kernel.org>; Mon, 27 Oct 2025 07:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761549832; cv=none; b=LQXvYlpKIVB2ZJKLcjRVlwfuX7YJBkIEj+34ROCTPro4jBGuIhaRRAAYY0xb7uKMzHud7bA9v0wzHHStrBvANUoG94bIk9xL/QeH0YCSEQt5EAb7OUcWd0tFzgNwZeo8/9ebwdtdSUrjwyvcQDAC7BMudu2/VWel7RgmGKyuDLE=
+	t=1761549825; cv=none; b=qY9C72o6LDPxU28hGVkHzJIAxGkQQl0gPTI+4RkuCMBjniCMG8mSXpMR5DmcRX2u4qeSBYX3jsrCYkAdKLRXRJGbSQQNNzFtW7n1zxuKMlC7rN2AKa0IGRBQnL2+ihHhlaAL3DbOvU4W0E3ui9fqad0BxY4o8+0MBmaAK3COEFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761549832; c=relaxed/simple;
-	bh=l8BD7QfW2FSxm2c/BaEUHcS47Ymf6ZkM7QdWD8nmSn4=;
+	s=arc-20240116; t=1761549825; c=relaxed/simple;
+	bh=Zf6J3Hs4f2PorXqJZOx/hFVWj6S8Oc8vZdNa5KsWoCg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cfnaos0Jvi45xylbnCciD0cs285dnMqQvj3b+n97xm+d/IR2wdwhtjgCX6NC0Z9+Dmi/BKFsbQYUUfZsrXzjGqnL33eKOCLU79PpimaNIthlN1rE99sHYrH10yf5+jBRr5Q3rNcn4raC1X9ZN87NwH/b6yW7zl6m8YuTcLS1MIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j+NpceZ7; arc=none smtp.client-ip=95.215.58.177
+	 MIME-Version; b=gSR6rJnEREnVPYdxnT3t/Qy+tziQT3ACAslKRfLhQP91wtlVZN1jkaB/5JLqSvUWMDx723owQO4L4vglGVFfeis5wlsXRDAaZkciOXpo020NndI545PeP8uYF1lBFPwk5wrAfwzwG3cr2DXBEQwz8TyiD8YHhL4DVbMXpY5vErA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Lc8F/9Oo; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761549819;
+	t=1761549822;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6Og3g5dzTtBlvUPqj5tYPaMTomYta2UJHYWFWEpJyaA=;
-	b=j+NpceZ7LSMvfeTVgiE1TvQwbEdID+27dVn1jvkU2QvtNOJEnIy/Sjr/g+7QPue6xBwSAX
-	069LmwLgGsn0Sbatnl9JK2pLEY/P9bujwDyYFtQaRGMzT5Z6j+ovgEZAk37x/b3zeMYmCs
-	Y57GNcmz5kE5ATVBxe/HUs9FHNt1uXE=
+	bh=XY3enVx+NvA5c1N34me4+c6U2C2vkgiExeqfsy34gg4=;
+	b=Lc8F/9Ooob/pZbJrTuEuibSyurS41EDeihqkYR0pdMPs4fj/TmNJvXzzxBgw0tcDXvBj7c
+	opG7oq/Fl0I1vUfwAalgTX6iRq6YKVphGKFfxp+866J1IUBjqQDtsoKIQ0OWo+FPoSjP4o
+	BcOxpvpCgkjKA1HSirMfTcefqlVf/5Q=
 From: chenxiaosong.chenxiaosong@linux.dev
 To: sfrench@samba.org,
 	smfrench@gmail.com,
@@ -51,9 +51,9 @@ To: sfrench@samba.org,
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v4 15/24] smb: move FILE_SYSTEM_POSIX_INFO to common/smb1pdu.h
-Date: Mon, 27 Oct 2025 15:21:57 +0800
-Message-ID: <20251027072206.3468578-1-chenxiaosong.chenxiaosong@linux.dev>
+Subject: [PATCH v4 16/24] smb: move create_durable_req_v2 to common/smb2pdu.h
+Date: Mon, 27 Oct 2025 15:21:58 +0800
+Message-ID: <20251027072206.3468578-2-chenxiaosong.chenxiaosong@linux.dev>
 In-Reply-To: <20251027071316.3468472-1-chenxiaosong.chenxiaosong@linux.dev>
 References: <20251027071316.3468472-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
@@ -67,139 +67,160 @@ X-Migadu-Flow: FLOW_OUT
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Rename "struct filesystem_posix_info" to "FILE_SYSTEM_POSIX_INFO",
-then move duplicate definitions to common header file.
+Replace some fields in "struct create_durable_req_v2" with "struct
+durable_context_v2", rename 2 places:
+
+  - durable_context_v2 -> durable_context_v2_req
+  - create_durable_v2 -> create_durable_req_v2
+
+Then move duplicate definitions to common header file.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
- fs/smb/client/cifspdu.h    | 22 ----------------------
- fs/smb/common/smb1pdu.h    | 23 +++++++++++++++++++++++
- fs/smb/server/smb2pdu.c    |  4 ++--
- fs/smb/server/smb_common.h | 23 -----------------------
- 4 files changed, 25 insertions(+), 47 deletions(-)
+ fs/smb/client/smb2pdu.c | 14 +++++++-------
+ fs/smb/client/smb2pdu.h | 12 ------------
+ fs/smb/common/smb2pdu.h | 14 ++++++++++++++
+ fs/smb/server/smb2pdu.c |  8 ++++----
+ fs/smb/server/smb2pdu.h |  9 ---------
+ 5 files changed, 25 insertions(+), 32 deletions(-)
 
-diff --git a/fs/smb/client/cifspdu.h b/fs/smb/client/cifspdu.h
-index d106c6850807..55aaae6dbc86 100644
---- a/fs/smb/client/cifspdu.h
-+++ b/fs/smb/client/cifspdu.h
-@@ -1875,28 +1875,6 @@ typedef struct {
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index b0739a2661bf..c1f67864c84b 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -2424,21 +2424,21 @@ add_lease_context(struct TCP_Server_Info *server,
+ 	return 0;
+ }
  
- #define CIFS_POSIX_EXTENSIONS           0x00000010 /* support for new QFSInfo */
+-static struct create_durable_v2 *
++static struct create_durable_req_v2 *
+ create_durable_v2_buf(struct cifs_open_parms *oparms)
+ {
+ 	struct cifs_fid *pfid = oparms->fid;
+-	struct create_durable_v2 *buf;
++	struct create_durable_req_v2 *buf;
  
--typedef struct {
--	/* For undefined recommended transfer size return -1 in that field */
--	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
--	__le32 BlockSize;
--    /* The next three fields are in terms of the block size.
--	(above). If block size is unknown, 4096 would be a
--	reasonable block size for a server to report.
--	Note that returning the blocks/blocksavail removes need
--	to make a second call (to QFSInfo level 0x103 to get this info.
--	UserBlockAvail is typically less than or equal to BlocksAvail,
--	if no distinction is made return the same value in each */
--	__le64 TotalBlocks;
--	__le64 BlocksAvail;       /* bfree */
--	__le64 UserBlocksAvail;   /* bavail */
--    /* For undefined Node fields or FSID return -1 */
--	__le64 TotalFileNodes;
--	__le64 FreeFileNodes;
--	__le64 FileSysIdentifier;   /* fsid */
--	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
--	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
--} __attribute__((packed)) FILE_SYSTEM_POSIX_INFO;
--
- /* DeviceType Flags */
- #define FILE_DEVICE_CD_ROM              0x00000002
- #define FILE_DEVICE_CD_ROM_FILE_SYSTEM  0x00000003
-diff --git a/fs/smb/common/smb1pdu.h b/fs/smb/common/smb1pdu.h
-index 82331a8f70e8..38b9c091baab 100644
---- a/fs/smb/common/smb1pdu.h
-+++ b/fs/smb/common/smb1pdu.h
-@@ -327,6 +327,29 @@ typedef struct {
- 	__le32 BytesPerSector;
- } __packed FILE_SYSTEM_INFO;	/* size info, level 0x103 */
+-	buf = kzalloc(sizeof(struct create_durable_v2), GFP_KERNEL);
++	buf = kzalloc(sizeof(struct create_durable_req_v2), GFP_KERNEL);
+ 	if (!buf)
+ 		return NULL;
  
-+typedef struct {
-+	/* For undefined recommended transfer size return -1 in that field */
-+	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
-+	__le32 BlockSize;
-+	/* The next three fields are in terms of the block size.
-+	 * (above). If block size is unknown, 4096 would be a
-+	 * reasonable block size for a server to report.
-+	 * Note that returning the blocks/blocksavail removes need
-+	 * to make a second call (to QFSInfo level 0x103 to get this info.
-+	 * UserBlockAvail is typically less than or equal to BlocksAvail,
-+	 * if no distinction is made return the same value in each
-+	 */
-+	__le64 TotalBlocks;
-+	__le64 BlocksAvail;       /* bfree */
-+	__le64 UserBlocksAvail;   /* bavail */
-+	/* For undefined Node fields or FSID return -1 */
-+	__le64 TotalFileNodes;
-+	__le64 FreeFileNodes;
-+	__le64 FileSysIdentifier;   /* fsid */
-+	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
-+	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
-+} __packed FILE_SYSTEM_POSIX_INFO;
-+
- /* See MS-CIFS 2.2.8.2.5 */
- typedef struct {
- 	__le32 DeviceType;
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 47fab72a3588..dc0f0ed4ccb6 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -5633,14 +5633,14 @@ static int smb2_get_info_filesystem(struct ksmbd_work *work,
- 	}
- 	case FS_POSIX_INFORMATION:
- 	{
--		struct filesystem_posix_info *info;
-+		FILE_SYSTEM_POSIX_INFO *info;
+ 	buf->ccontext.DataOffset = cpu_to_le16(offsetof
+-					(struct create_durable_v2, dcontext));
+-	buf->ccontext.DataLength = cpu_to_le32(sizeof(struct durable_context_v2));
++					(struct create_durable_req_v2, dcontext));
++	buf->ccontext.DataLength = cpu_to_le32(sizeof(struct durable_context_v2_req));
+ 	buf->ccontext.NameOffset = cpu_to_le16(offsetof
+-				(struct create_durable_v2, Name));
++				(struct create_durable_req_v2, Name));
+ 	buf->ccontext.NameLength = cpu_to_le16(4);
  
- 		if (!work->tcon->posix_extensions) {
- 			pr_err("client doesn't negotiate with SMB3.1.1 POSIX Extensions\n");
- 			path_put(&path);
- 			return -EOPNOTSUPP;
- 		} else {
--			info = (struct filesystem_posix_info *)(rsp->Buffer);
-+			info = (FILE_SYSTEM_POSIX_INFO *)(rsp->Buffer);
- 			info->OptimalTransferSize = cpu_to_le32(stfs.f_bsize);
- 			info->BlockSize = cpu_to_le32(stfs.f_bsize);
- 			info->TotalBlocks = cpu_to_le64(stfs.f_blocks);
-diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
-index 6141ca8f7e1c..61048568f4c7 100644
---- a/fs/smb/server/smb_common.h
-+++ b/fs/smb/server/smb_common.h
-@@ -108,29 +108,6 @@ struct file_id_both_directory_info {
- 	char FileName[];
- } __packed;
- 
--struct filesystem_posix_info {
--	/* For undefined recommended transfer size return -1 in that field */
--	__le32 OptimalTransferSize;  /* bsize on some os, iosize on other os */
--	__le32 BlockSize;
--	/* The next three fields are in terms of the block size.
--	 * (above). If block size is unknown, 4096 would be a
--	 * reasonable block size for a server to report.
--	 * Note that returning the blocks/blocksavail removes need
--	 * to make a second call (to QFSInfo level 0x103 to get this info.
--	 * UserBlockAvail is typically less than or equal to BlocksAvail,
--	 * if no distinction is made return the same value in each
--	 */
--	__le64 TotalBlocks;
--	__le64 BlocksAvail;       /* bfree */
--	__le64 UserBlocksAvail;   /* bavail */
--	/* For undefined Node fields or FSID return -1 */
--	__le64 TotalFileNodes;
--	__le64 FreeFileNodes;
--	__le64 FileSysIdentifier;   /* fsid */
--	/* NB Namelen comes from FILE_SYSTEM_ATTRIBUTE_INFO call */
--	/* NB flags can come from FILE_SYSTEM_DEVICE_INFO call   */
+ 	/*
+@@ -2508,7 +2508,7 @@ add_durable_v2_context(struct kvec *iov, unsigned int *num_iovec,
+ 	iov[num].iov_base = create_durable_v2_buf(oparms);
+ 	if (iov[num].iov_base == NULL)
+ 		return -ENOMEM;
+-	iov[num].iov_len = sizeof(struct create_durable_v2);
++	iov[num].iov_len = sizeof(struct create_durable_req_v2);
+ 	*num_iovec = num + 1;
+ 	return 0;
+ }
+diff --git a/fs/smb/client/smb2pdu.h b/fs/smb/client/smb2pdu.h
+index 101024f8f725..94d184733f33 100644
+--- a/fs/smb/client/smb2pdu.h
++++ b/fs/smb/client/smb2pdu.h
+@@ -137,18 +137,6 @@ struct share_redirect_error_context_rsp {
+ /* See MS-SMB2 2.2.13.2.11 */
+ /* Flags */
+ #define SMB2_DHANDLE_FLAG_PERSISTENT	0x00000002
+-struct durable_context_v2 {
+-	__le32 Timeout;
+-	__le32 Flags;
+-	__u64 Reserved;
+-	__u8 CreateGuid[16];
 -} __packed;
 -
- struct smb_version_ops {
- 	u16 (*get_cmd_val)(struct ksmbd_work *swork);
- 	int (*init_rsp_hdr)(struct ksmbd_work *swork);
+-struct create_durable_v2 {
+-	struct create_context_hdr ccontext;
+-	__u8   Name[8];
+-	struct durable_context_v2 dcontext;
+-} __packed;
+ 
+ /* See MS-SMB2 2.2.13.2.12 */
+ struct durable_reconnect_context_v2 {
+diff --git a/fs/smb/common/smb2pdu.h b/fs/smb/common/smb2pdu.h
+index f2fbd651ab8f..6a5c8eef357d 100644
+--- a/fs/smb/common/smb2pdu.h
++++ b/fs/smb/common/smb2pdu.h
+@@ -1284,6 +1284,20 @@ struct create_mxac_req {
+ 	__le64 Timestamp;
+ } __packed;
+ 
++/* See MS-SMB2 2.2.13.2.11 */
++struct durable_context_v2_req {
++	__le32 Timeout;
++	__le32 Flags; /* see SMB2_DHANDLE_FLAG_PERSISTENT */
++	__u64 Reserved;
++	__u8 CreateGuid[16];
++} __packed;
++
++struct create_durable_req_v2 {
++	struct create_context_hdr ccontext;
++	__u8   Name[8];
++	struct durable_context_v2_req dcontext;
++} __packed;
++
+ /* See MS-SMB2 2.2.14.2.5 */
+ struct create_mxac_rsp {
+ 	struct create_context_hdr ccontext;
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index dc0f0ed4ccb6..92bd086ca715 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -2816,7 +2816,7 @@ static int parse_durable_handle_context(struct ksmbd_work *work,
+ 			durable_v2_blob =
+ 				(struct create_durable_req_v2 *)context;
+ 			ksmbd_debug(SMB, "Request for durable v2 open\n");
+-			dh_info->fp = ksmbd_lookup_fd_cguid(durable_v2_blob->CreateGuid);
++			dh_info->fp = ksmbd_lookup_fd_cguid(durable_v2_blob->dcontext.CreateGuid);
+ 			if (dh_info->fp) {
+ 				if (!memcmp(conn->ClientGUID, dh_info->fp->client_guid,
+ 					    SMB2_CLIENT_GUID_SIZE)) {
+@@ -2834,11 +2834,11 @@ static int parse_durable_handle_context(struct ksmbd_work *work,
+ 			if ((lc && (lc->req_state & SMB2_LEASE_HANDLE_CACHING_LE)) ||
+ 			    req_op_level == SMB2_OPLOCK_LEVEL_BATCH) {
+ 				dh_info->CreateGuid =
+-					durable_v2_blob->CreateGuid;
++					durable_v2_blob->dcontext.CreateGuid;
+ 				dh_info->persistent =
+-					le32_to_cpu(durable_v2_blob->Flags);
++					le32_to_cpu(durable_v2_blob->dcontext.Flags);
+ 				dh_info->timeout =
+-					le32_to_cpu(durable_v2_blob->Timeout);
++					le32_to_cpu(durable_v2_blob->dcontext.Timeout);
+ 				dh_info->type = dh_idx;
+ 			}
+ 			break;
+diff --git a/fs/smb/server/smb2pdu.h b/fs/smb/server/smb2pdu.h
+index 5163d5241b90..e9df94e4749c 100644
+--- a/fs/smb/server/smb2pdu.h
++++ b/fs/smb/server/smb2pdu.h
+@@ -66,15 +66,6 @@ struct preauth_integrity_info {
+ /* Apple Defined Contexts */
+ #define SMB2_CREATE_AAPL		"AAPL"
+ 
+-struct create_durable_req_v2 {
+-	struct create_context_hdr ccontext;
+-	__u8   Name[8];
+-	__le32 Timeout;
+-	__le32 Flags;
+-	__u8 Reserved[8];
+-	__u8 CreateGuid[16];
+-} __packed;
+-
+ #define DURABLE_HANDLE_MAX_TIMEOUT	300000
+ 
+ struct create_durable_reconn_req {
 -- 
 2.43.0
 
