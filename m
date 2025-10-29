@@ -1,135 +1,118 @@
-Return-Path: <linux-cifs+bounces-7253-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7140-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2FDC1B164
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 15:08:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92612C1AC02
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 14:36:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D4FD467FF8
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 13:45:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B5741AA55A1
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 13:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69DB33B6FD;
-	Wed, 29 Oct 2025 13:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B8D2673AA;
+	Wed, 29 Oct 2025 13:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="Aldxi+2q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNOSdOAy"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301402882C9
-	for <linux-cifs@vger.kernel.org>; Wed, 29 Oct 2025 13:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2388426980B;
+	Wed, 29 Oct 2025 13:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761744915; cv=none; b=BUmSMBecWIBs1FpnBELPruyc8ijfgtubOHqcHC8uSSAxyQZdYNHofeAuk5Ld/iRiDHVVUOB8XVDy/YBKDLZQZTM0Du0zdRv5YiwWYByjGcjsgClWHcrWEmpiIu+6Qswpyugilq+JjivD8mpk3srd0ctj2bLkRsQi90QvJAwbnj0=
+	t=1761744242; cv=none; b=jcSG4fBZnuzVCe8PvQZ86zf6SxWS7YVFx1LmPg4uAgJcOEnxshLmr/MoG7PhW58t/F6IpNGIIJhyCpF4g6tjfku5xuPv6X6Fd32unoT2dGtMOau/RLIDIkKCqUKve5AeRMa9ndbHBAPviJzHPR+Tre3xkgTvB29ueEroRWfWDHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761744915; c=relaxed/simple;
-	bh=Jjk5Kju32pctZC+NWn9fPo80L0dmCpXJgaZWkFa9ECY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rp0UXKaPUPjqZyA6s7AbhzhGm2vo9j92yXjR0S4nOzcBDPm3WsvK4GwE0JPiJBXOzjM8MD+Dc7LR8b71XgWHRfu5ObwJpCmLJDwbHY2buzKiYeoGosOr6K5nDHuWpRhsPiLnbfr1QBCubfrMJtupH7yKhQA/KLHKubdUjnXPX6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=Aldxi+2q; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=EmsEjX8nlpjgRFwyfWoxd86W/jVwuYDI840kd6MqCMg=; b=Aldxi+2qr/vLdL7Q+oyvO1duIo
-	6YYdjGq/zrCkQbmhypjjXhG2vqUPZzwPMkrxy2XmC+jHcVCFBVdnmVvziJxnKaCcLOp6V96Jnokyy
-	oeFkY+jAkPguj9v3Tnw4e2XgbbB/nkha11V+E4f5eE9MOWXdUGOW/LVCdsl4KILgSSYgzFyBljzrG
-	qHoRIZSiEhWnm8cgGMsApDFwneydK/NQn1rPpLLum4UefmI8v3QqL64e3X8AhQ7Jiqaft7QzE+iuF
-	xA8oFiUmpZ7dcWHAermtU/MZwr3Ty6NSUR4zCjy/7p+jmSa9yQSa2c8BtroMiwdP44VnhTnhvOPAW
-	x2NtM3VrSrLAUTdiMIco88kj/aGq0dNfD4v3qGc70C1eUGy9AdOE0dE1AW4cuvRiBaLLlEC6in0bW
-	qnUmNkxxUFKrwWk74VB82+hw1C0uvtqqQ9BAe0duBXieRRVnUH6UQbdmyn5YjEO0/f3dmTxuzI512
-	HlkDxSCi3AFWYcIoxhctfJkW;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1vE6KU-00BdBE-2w;
-	Wed, 29 Oct 2025 13:35:11 +0000
-From: Stefan Metzmacher <metze@samba.org>
-To: linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org
-Cc: metze@samba.org,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>
-Subject: [PATCH v2 127/127] smb: server: make use of smbdirect.ko
-Date: Wed, 29 Oct 2025 14:21:45 +0100
-Message-ID: <ca69115a279fbe0455c1b48d283072520e257d45.1761742839.git.metze@samba.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1761742839.git.metze@samba.org>
-References: <cover.1761742839.git.metze@samba.org>
+	s=arc-20240116; t=1761744242; c=relaxed/simple;
+	bh=tnQ7CAQ/zrazskDouHnus3UXop3oRcNTaKyJpkol4Y4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BmK0kP8LQU4GmWIZDJmzyevRGghMm7y8XwjMTPHmoX/1BtGj5X07LGW9/p0E/J+VjjHCSTZO7l5PuFhUlJgij5VQIopwx9ihQcbMyB8/DoabRbRvCDDksYlMU+cL6dsoNLOCIqMSowEB5hA8Hb5LnpbYjKlwdFYA4cp5ZcJ2R1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNOSdOAy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA982C4CEF7;
+	Wed, 29 Oct 2025 13:23:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761744240;
+	bh=tnQ7CAQ/zrazskDouHnus3UXop3oRcNTaKyJpkol4Y4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mNOSdOAyHbR1VT/fF2/pkmXxetdEzzrKRuVqgkh1vAl0cw2TE7FbX9LXe+xQVy0Wd
+	 GHUxzdoNjbJ8DOnGyUjAHVcDWHzV0x/OQbJOcRGPBj/H6KHrK9wk8lKPRz3oRlA8yZ
+	 1iRW3c8Eg11hR3E1tPmdtpRpZUaIu4Fv1o+wPwlkTgoxO95Wmdr4m6yMNIY/mhk4SG
+	 Y1+B+pJfTPYKuUbD/AWB5VoYivRdvEKKcMYRrnYlFJ0djwF9QuFkIy5mVfS7+uWKjy
+	 EmYOnbWmT1O185HtStSd04ZYpyopo4on0Ta9FEFVGNQ8vvit3zJfVgXinV0wo0cEKZ
+	 5BCqVzBhaNuLQ==
+Date: Wed, 29 Oct 2025 14:23:49 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Chuck Lever <chuck.lever@oracle.com>, 
+	Alexander Aring <alex.aring@gmail.com>, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>, Steve French <sfrench@samba.org>, 
+	Paulo Alcantara <pc@manguebit.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, 
+	Bharath SM <bharathsm@microsoft.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Tyler Hicks <code@tyhicks.com>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>, 
+	Steve French <smfrench@gmail.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Carlos Maiolino <cem@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, netfs@lists.linux.dev, 
+	ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v3 06/13] vfs: make vfs_create break delegations on
+ parent directory
+Message-ID: <20251029-lenken-scham-0cf009d5a7dd@brauner>
+References: <20251021-dir-deleg-ro-v3-0-a08b1cde9f4c@kernel.org>
+ <20251021-dir-deleg-ro-v3-6-a08b1cde9f4c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251021-dir-deleg-ro-v3-6-a08b1cde9f4c@kernel.org>
 
-This means we no longer inline the common smbdirect
-.c files and use the exported functions from the
-module instead.
+On Tue, Oct 21, 2025 at 11:25:41AM -0400, Jeff Layton wrote:
+> In order to add directory delegation support, we need to break
+> delegations on the parent whenever there is going to be a change in the
+> directory.
+> 
+> Add a delegated_inode parameter to vfs_create. Most callers are
+> converted to pass in NULL, but do_mknodat() is changed to wait for a
+> delegation break if there is one.
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Reviewed-by: NeilBrown <neil@brown.name>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/ecryptfs/inode.c      |  2 +-
+>  fs/namei.c               | 26 +++++++++++++++++++-------
+>  fs/nfsd/nfs3proc.c       |  2 +-
+>  fs/nfsd/vfs.c            |  3 +--
+>  fs/open.c                |  2 +-
+>  fs/overlayfs/overlayfs.h |  2 +-
+>  fs/smb/server/vfs.c      |  2 +-
+>  include/linux/fs.h       |  2 +-
+>  8 files changed, 26 insertions(+), 15 deletions(-)
+> 
+> diff --git a/fs/ecryptfs/inode.c b/fs/ecryptfs/inode.c
+> index 88631291b32535f623a3fbe4ea9b6ed48a306ca0..661709b157ce854c3bfdfdb13f7c10435fad9756 100644
+> --- a/fs/ecryptfs/inode.c
+> +++ b/fs/ecryptfs/inode.c
+> @@ -189,7 +189,7 @@ ecryptfs_do_create(struct inode *directory_inode,
+>  	rc = lock_parent(ecryptfs_dentry, &lower_dentry, &lower_dir);
+>  	if (!rc)
+>  		rc = vfs_create(&nop_mnt_idmap, lower_dir,
+> -				lower_dentry, mode, true);
+> +				lower_dentry, mode, true, NULL);
 
-Note the connection specific logging is still
-redirect to ksmbd.ko functions via
-smbdirect_socket_set_logging().
-
-We still don't use real socket layer,
-but we're very close...
-
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Steve French <smfrench@gmail.com>
-Cc: Tom Talpey <tom@talpey.com>
-Cc: linux-cifs@vger.kernel.org
-Cc: samba-technical@lists.samba.org
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
----
- fs/smb/server/Kconfig          |  4 ++--
- fs/smb/server/transport_rdma.c | 10 ----------
- 2 files changed, 2 insertions(+), 12 deletions(-)
-
-diff --git a/fs/smb/server/Kconfig b/fs/smb/server/Kconfig
-index 098cac98d31e..59a059ecabec 100644
---- a/fs/smb/server/Kconfig
-+++ b/fs/smb/server/Kconfig
-@@ -49,8 +49,8 @@ if SMB_SERVER
- 
- config SMB_SERVER_SMBDIRECT
- 	bool "Support for SMB Direct protocol"
--	depends on SMB_SERVER=m && INFINIBAND && INFINIBAND_ADDR_TRANS || SMB_SERVER=y && INFINIBAND=y && INFINIBAND_ADDR_TRANS=y
--	select SG_POOL
-+	depends on SMB_SERVER && INFINIBAND && INFINIBAND_ADDR_TRANS
-+	select SMB_COMMON_SMBDIRECT
- 	default n
- 
- 	help
-diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index e7d54283ae47..c261082ff9c7 100644
---- a/fs/smb/server/transport_rdma.c
-+++ b/fs/smb/server/transport_rdma.c
-@@ -9,8 +9,6 @@
- 
- #define SUBMOD_NAME	"smb_direct"
- 
--#define SMBDIRECT_USE_INLINE_C_FILES 1
--
- #include <linux/kthread.h>
- #include <linux/list.h>
- #include <linux/string_choices.h>
-@@ -627,11 +625,3 @@ static const struct ksmbd_transport_ops ksmbd_smb_direct_transport_ops = {
- 	.rdma_write	= smb_direct_rdma_write,
- 	.free_transport = smb_direct_free_transport,
- };
--
--/*
-- * This is a temporary solution until all code
-- * is moved to smbdirect_all_c_files.c and we
-- * have an smbdirect.ko that exports the required
-- * functions.
-- */
--#include "../common/smbdirect/smbdirect_all_c_files.c"
--- 
-2.43.0
-
+Starts to look like we should epxlore whether a struct create_args (or
+some other name) similar to struct renamedata I did some years ago would
+help make the code a bit more legible in the future.
 
