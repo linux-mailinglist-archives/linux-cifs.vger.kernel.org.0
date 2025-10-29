@@ -1,79 +1,77 @@
-Return-Path: <linux-cifs+bounces-7272-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7259-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7E74C1B6AC
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 15:52:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539FDC1BAC6
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 16:32:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A24A18863AF
-	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 14:47:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63747580DFE
+	for <lists+linux-cifs@lfdr.de>; Wed, 29 Oct 2025 14:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E7A03546F5;
-	Wed, 29 Oct 2025 14:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A86532E6CC2;
+	Wed, 29 Oct 2025 14:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZtayfZf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5BLdSH+"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8099351FC6
-	for <linux-cifs@vger.kernel.org>; Wed, 29 Oct 2025 14:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF59E293C4E
+	for <linux-cifs@vger.kernel.org>; Wed, 29 Oct 2025 14:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761748796; cv=none; b=ss+0obLpLVW/wx/+6Wm5ELUEVYFAyO7XEllGyJdEQdd2W56PxKDZmzzEByk7BTV2axyNRxfuYGp2gGOzExCsQX44NefZp6olQufBKYXlR/kVE0lW6RSUAVhQr8/gd8+qGDVBpn8Y0zj5fT5zQz0VZYUb4DRyfKu9EK4WpQ7Rxwo=
+	t=1761748771; cv=none; b=Ed2H8oI7cRU3zE0kDjUXWZTYqANNjYSx34ISM6WJks0eT8d3Op9EoMNcFtiLWSu2S11WWAemPwwBasUcyDO/4du31p4e+HN2xUdDGU6N/GGiFYw8Kdacqfi9H2z6Nv9VCoTrxBrpbjw3cdk5mfmknQ3l9hjUNaD3DeFu9WeANWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761748796; c=relaxed/simple;
-	bh=GOnQVlnb6xq3ERjXHuluVtr7S8fjYljlZDwbR/GMY3I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KcJ3I/STRZkwrbWrxXSL6psh4DefDJGiVR0XtgGaMEnK+lmumnz9DwPyHLnO8cZ0TZaI+wKZDjsbc/yqQyVGRL+nhJJl+ysceBEzOVScjVbA4SBXHBwD9GoEmr6yN7bN2f6w/LlIDKwjE/q0K+wyEah1Iln9z0Z17MHWmk0ZnDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZtayfZf; arc=none smtp.client-ip=209.85.160.180
+	s=arc-20240116; t=1761748771; c=relaxed/simple;
+	bh=LqOEtBNd+3sIZU2NwmcScJokqwQIRsQEezgk8C1GKaI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kArdHQV8fe/lldutLpLz07tvTMbOplWPnwiWpDbD5WN679PGc1wGGp7HsIiCAoN/T0NgCx60wMb01Fn3tKat/EmbTcP3Y1C3UaKQ0RzfJC5pDHxU78go3Cq/wzj8gtKHpIhDGjAD4Z7PfzCv/Dl8tIU1NLAI85hNnwXEeH+M5sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i5BLdSH+; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4eba124d189so54355661cf.2
-        for <linux-cifs@vger.kernel.org>; Wed, 29 Oct 2025 07:39:52 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8a3eac7ca30so285303385a.2
+        for <linux-cifs@vger.kernel.org>; Wed, 29 Oct 2025 07:39:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761748792; x=1762353592; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZG2pJp9DKwJ0SyNC4zsZ8QY/YyqCSCotiNqrNu22Z7U=;
-        b=hZtayfZfoCbEV5nDg3Lq6UIsSTDdsUFx2OWv0wCI0YFjjeZj72vgR5/gkfIRZ7gx0z
-         kC9OlprD2YjS9WwVsnP3Byg5PXeRE7LuCsDkw6X7Ni3G9d8ftJrpIGpzBvQ8lpjkmGsm
-         WlqE8I4B2xz9W2Tt5XKFX7+lQScOO3QnLaqXQze8R3iEMxwSeUmg1/N8aJYY4bZR21rl
-         TZ2ICKz5mO2QAqaUSHDGxGRqE/o/UrZGdPtiHTTPf6P+FbfVpiSPIEXtAI2uhBa3M5sL
-         Aa4D7hxD3nmc6cn+ByRIuY1toojOOFbXnvFSGXuZOKxSh4a6kSIrXVfVcTfe/2/oCf+O
-         Mj2A==
+        d=gmail.com; s=20230601; t=1761748767; x=1762353567; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oUDKTRwV1C/mbdWjrM4+wVtj/NZPLbIbrW+mgPyESL8=;
+        b=i5BLdSH+mN/IkQbdkTMK/mSbE988bISlrHl0dCgvKiVXmLdbCpubfx9WIkUFtcROaz
+         kycJN6MDPxHVYjXwXgXaeOKG0lQznvzLCpIR3zNrQi/p3b+Edo4V8+efzfWgQR03Q9SL
+         AkBuirNXtkFDh7OHwUeqJ7C2C7zr41s+lIVWOoWkIh0vwa0XR3l/o9+dec8znHtPdqPe
+         akWIZbXGxX+QtIdSy0zYcPVheHNWkGQq7bCpeBAYwccPV7SbCSzHguXq9zuHfnmrInBX
+         M0506auxEDTLyPnmw/bbW5ptnlCqR9aFAMdV5E1kzTWYlQXQAvfgmBoUAlzVDOZBrq3A
+         eSgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761748792; x=1762353592;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZG2pJp9DKwJ0SyNC4zsZ8QY/YyqCSCotiNqrNu22Z7U=;
-        b=SDKUKTa0qc9DSYyucDTPI4YHRByoqLu/QCaCjrg0siEO4fMdtCPP9Mi3AU/56HFaUF
-         hkVzDAYFLiLBFzqpW5SA2bVUCJnrOj7D5z/Ta147dLdms+skWBP75erkkN6Mgkfsir4X
-         OaQHWn9HUrRevfIQIEKPNRZtP+ahq3rIIcGgDKnXbUJJh5ElAV3aJzqgxcicDvE37I3z
-         UyM7FV2K4NzlozwbdX3vpNnF0Yev+OYcmzM4KkpNkM78c73/qBEBYp2jxWFEZ+JYBQki
-         lwacQYZtwXIk8aUqvKKGr4nJnnt6JDgtWNubH18SRRIuHddeyHZsI2TbIDNvR3+7oWWN
-         +6sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWLCVRu7Vh3GYCmizCTS9GgcNT4QPwwZbmvDrdC+zCT51H/ylIf9ivHTOG93MOMQwgawzM6jIuksxyf@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLBdRWlwPRyKmzSR2eOK/E5M07F4uIjEh6iZfbdhd/fzUYkViG
-	+/5Uux4Jsp8faVzCxvYl5FQ9bcsDnF6Uo+tkyipIaCcie20fz+g3MGqF
-X-Gm-Gg: ASbGncsdBnP4dHLp4v1ge/4y3LV9gCBicPz5xjz0CxoP8xoY95vGgagEI0XawIg2VXc
-	tfGQCSiAKup9TO/qf9pounfifJ8YaUjuzlNGU1bbNYY7hljgq4Gz8m8HSPWSfyvVRpc1qp6J+1E
-	wFYiqBIzPw4lp5KNlkdrunkzWqIPNpVMEQwUnSXe4vktlNTV8Um3TVR3Hi7Oq8ksVfQmL+skX8g
-	kUOpPopAwS4/a7xMkoJFT2a2djpUc0fwrmmxobJC93EA05maNUS3revGCVUwjIYbA62UXMKzGwd
-	ML+QeD/eUY3BoxmucyOlI/yI0xKojVY2BMLuxjb3/rE3W3ECTMC3ppzq5/u3wxzPdbE/bbWLcsJ
-	tFaBhpVqWZ7IuGHkHYWb/QusOvB/f7lLsG1p9a1lAcjC5K39i8aPy0f9m602MR2frb3xFTK6KoI
-	oncKXWvSjKsUsLl4NXI5pC3CR+uKBpjKWh/6xVqmNcdtZK6mcWEYE=
-X-Google-Smtp-Source: AGHT+IGSLaTprJSDnJladpVzSk1XpFFk/kTs4da+NZ2FV3fmtnLgPaGwXmOcMmdyScwjSkZGRDH4Bg==
-X-Received: by 2002:ac8:57c2:0:b0:4ec:f9eb:ff8d with SMTP id d75a77b69052e-4ed15c72d26mr39052321cf.79.1761748791468;
-        Wed, 29 Oct 2025 07:39:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761748767; x=1762353567;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oUDKTRwV1C/mbdWjrM4+wVtj/NZPLbIbrW+mgPyESL8=;
+        b=LCHwZfKN5TZ8+Pwqo/nCeLYfe8oMHgi9kdHqKLbkUXs0nC1oFt192oRT8/1vXRDB7l
+         lz1y52xRy+Dbh0rPzWsMyWMF23+hOjXUvjjrNgWuC7Zw7crXqtfazyz3vda71UcXCp0P
+         GgKnA/EJL1luAbbPDKRASJrw//FfHam10wYLBm2X3w/t3jGTuYIQeELmJTWMl+dQrT2O
+         wRKf+b6iUg6E5m60vOIK1O2EEv2TNRJTdU+RRJSiY0RpyCOlv05mDXXoKzFHSsSuci+M
+         bjPjpc7YVXjqWFbDI0NsJZruECs+q3DYjLRf80ih0ZIdRDt8b/KJ1h1NcAlC+uPrPAQm
+         Kjyg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3lt1XnDkomkhPxZ6g8JtN9r+LZMqUnTpR4hmqC3KaNSDFeV2VDPiNr7iAgGm3ZPrgbaW1hXcjFTTx@vger.kernel.org
+X-Gm-Message-State: AOJu0YySrW78e5V2z1TYkqEJRRdk+T4zQZ+YuErc45z6m8LNMa04W1dn
+	vJZtONzqDBPgCx1owtB/vIkKWaa5+qqaSfkOpFP9eZA/UxuUGRucy589
+X-Gm-Gg: ASbGncsRXVki18MpDEhkBi3gg4Tevnvx1G2YpuYdAfks60lFB6ZosVO9Jj1LuIeXsDR
+	Ya9+20+ufj8lhPYkQ72vDoLwZE6sGJPwlzILYB0a95fYGRLsVA7bOKxtAMIGK65eDmAU4ytaEPG
+	+fFImmu2+1W0MqikTONu4TxYYhNcZ48GiDAeQSVCo1f6p+9aolod8hMFb2Q/ACYaUqYjtlxrUl6
+	4T9MWGyBW3roo0v1DD8sLVM1gEQecYCzIKk9tFIYL6X2mdjll1UNiVSm6G9sJ4x8SZEZW3i6wbQ
+	DwroyTNgGDm0FnWpL3eBUvEhoqWaCaUWF1dujvOTfPQnxROXN+SCumNCXORRsYunUU1ORxm4rT7
+	mh8UV9zDTbbhOsYNw+tmapfrsjTXuwLpuKLvz82ALqjaTptaZ4fmr0w0rJ1n3pe91BBqhNsuGX4
+	0Bhkc7gie5qrWCIuab16g9SgRTqythp86xxEUERyr2
+X-Google-Smtp-Source: AGHT+IHufZjddCZQkQnZJS4kDCgNnaSzxKQvbYQMGF+fT18JppsscMlKwFs8Vp2U+NA+A4F3KD7uOQ==
+X-Received: by 2002:a05:6214:21c7:b0:87c:2bd7:ae3d with SMTP id 6a1803df08f44-88009bda797mr46005556d6.36.1761748765926;
+        Wed, 29 Oct 2025 07:39:25 -0700 (PDT)
 Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87fc48a8bc4sm99556176d6.7.2025.10.29.07.39.49
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87fc48a8bc4sm99556176d6.7.2025.10.29.07.39.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 07:39:50 -0700 (PDT)
+        Wed, 29 Oct 2025 07:39:25 -0700 (PDT)
 From: Xin Long <lucien.xin@gmail.com>
 To: network dev <netdev@vger.kernel.org>,
 	quic@lists.linux.dev
@@ -110,906 +108,434 @@ Cc: davem@davemloft.net,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Daniel Stenberg <daniel@haxx.se>,
 	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: [PATCH net-next v4 14/15] quic: add frame encoder and decoder base
-Date: Wed, 29 Oct 2025 10:35:56 -0400
-Message-ID: <56e8d1efe9c7d5db33b0c425bc4c1276a251923d.1761748557.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next v4 00/15] net: introduce QUIC infrastructure and core subcomponents
+Date: Wed, 29 Oct 2025 10:35:42 -0400
+Message-ID: <cover.1761748557.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1761748557.git.lucien.xin@gmail.com>
-References: <cover.1761748557.git.lucien.xin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch introduces 'quic_frame' to represent QUIC frames and
-'quic_frame_ops' to define the associated operations for encoding,
-processing, and acknowledgment.
+Introduction
+============
 
-This abstraction sets the foundation for flexible and modular frame
-handling. While core operations are defined, actual implementation
-will follow in subsequent patches once packet handling and
-inqueue/outqueue infrastructure are in place.
+The QUIC protocol, defined in RFC 9000, is a secure, multiplexed transport
+built on top of UDP. It enables low-latency connection establishment,
+stream-based communication with flow control, and supports connection
+migration across network paths, while ensuring confidentiality, integrity,
+and availability.
 
-The patch introduces hooks for invoking frame-specific logic:
+This implementation introduces QUIC support in Linux Kernel, offering
+several key advantages:
 
-- quic_frame_create(): Invoke the .create operation of the frame.
+- In-Kernel QUIC Support for Subsystems: Enables kernel subsystems
+  such as SMB and NFS to operate over QUIC with minimal changes. Once the
+  handshake is complete via the net/handshake APIs, data exchange proceeds
+  over standard in-kernel transport interfaces.
 
-- quic_frame_process(): Invoke the .process operation of the frame.
+- Standard Socket API Semantics: Implements core socket operations
+  (listen(), accept(), connect(), sendmsg(), recvmsg(), close(),
+  getsockopt(), setsockopt(), getsockname(), and getpeername()),
+  allowing user space to interact with QUIC sockets in a familiar,
+  POSIX-compliant way.
 
-- quic_frame_ack(): Invoke the .ack operation of the frame.
+- ALPN-Based Connection Dispatching: Supports in-kernel ALPN
+  (Application-Layer Protocol Negotiation) routing, allowing demultiplexing
+  of QUIC connections across different user-space processes based
+  on the ALPN identifiers.
 
-To manage frame lifecycles, reference counting is used, supported by
+- Performance Enhancements: Handles all control messages in-kernel
+  to reduce syscall overhead, incorporates zero-copy mechanisms such as
+  sendfile() minimize data movement, and is also structured to support
+  future crypto hardware offloads.
 
-- quic_frame_get(): Increment the reference count of a frame.
+This implementation offers fundamental support for the following RFCs:
 
-- quic_frame_put(): Decrement the reference count of a frame.
+- RFC9000 - QUIC: A UDP-Based Multiplexed and Secure Transport
+- RFC9001 - Using TLS to Secure QUIC
+- RFC9002 - QUIC Loss Detection and Congestion Control
+- RFC9221 - An Unreliable Datagram Extension to QUIC
+- RFC9287 - Greasing the QUIC Bit
+- RFC9368 - Compatible Version Negotiation for QUIC
+- RFC9369 - QUIC Version 2
 
-- quic_frame_alloc(): Allocate a frame and set its data.
+The socket APIs for QUIC follow the RFC draft [1]:
 
-Frames are allocated through quic_frame_alloc(), and a dedicated
-kmem_cache (quic_frame_cachep) is added to optimize memory usage.
+- The Sockets API Extensions for In-kernel QUIC Implementations
 
-For STREAM frames, additional data can be appended using
+Implementation
+==============
 
-- quic_frame_stream_append(): Append more data to a STREAM frame.
+The central design is to implement QUIC within the kernel while delegating
+the handshake to userspace.
 
-Signed-off-by: Tyler Fanelli <tfanelli@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/quic/Makefile   |   2 +-
- net/quic/frame.c    | 558 ++++++++++++++++++++++++++++++++++++++++++++
- net/quic/frame.h    | 195 ++++++++++++++++
- net/quic/protocol.c |   9 +
- net/quic/protocol.h |   1 +
- net/quic/socket.h   |   2 +
- 6 files changed, 766 insertions(+), 1 deletion(-)
+Only the processing and creation of raw TLS Handshake Messages are handled
+in userspace, facilitated by a TLS library like GnuTLS. These messages are
+exchanged between kernel and userspace via sendmsg() and recvmsg(), with
+cryptographic details conveyed through control messages (cmsg).
+
+The entire QUIC protocol, aside from the TLS Handshake Messages processing
+and creation, is managed within the kernel. Rather than using a Upper Layer
+Protocol (ULP) layer, this implementation establishes a socket of type
+IPPROTO_QUIC (similar to IPPROTO_MPTCP), operating over UDP tunnels.
+
+For kernel consumers, they can initiate a handshake request from the kernel
+to userspace using the existing net/handshake netlink. The userspace
+component, such as tlshd service [2], then manages the processing
+of the QUIC handshake request.
+
+- Handshake Architecture:
+
+  ┌──────┐  ┌──────┐
+  │ APP1 │  │ APP2 │ ...
+  └──────┘  └──────┘
+  ┌──────────────────────────────────────────┐
+  │     {quic_client/server_handshake()}     │<─────────────┐
+  └──────────────────────────────────────────┘       ┌─────────────┐
+   {send/recvmsg()}      {set/getsockopt()}          │    tlshd    │
+   [CMSG handshake_info] [SOCKOPT_CRYPTO_SECRET]     └─────────────┘
+                         [SOCKOPT_TRANSPORT_PARAM_EXT]    │   ^
+                │ ^                  │ ^                  │   │
+  Userspace     │ │                  │ │                  │   │
+  ──────────────│─│──────────────────│─│──────────────────│───│───────
+  Kernel        │ │                  │ │                  │   │
+                v │                  v │                  v   │
+  ┌──────────────────┬───────────────────────┐       ┌─────────────┐
+  │ protocol, timer, │ socket (IPPROTO_QUIC) │<──┐   │ handshake   │
+  │                  ├───────────────────────┤   │   │netlink APIs │
+  │ common, family,  │ outqueue  |  inqueue  │   │   └─────────────┘
+  │                  ├───────────────────────┤   │      │       │
+  │ stream, connid,  │         frame         │   │   ┌─────┐ ┌─────┐
+  │                  ├───────────────────────┤   │   │     │ │     │
+  │ path, pnspace,   │         packet        │   │───│ SMB │ │ NFS │...
+  │                  ├───────────────────────┤   │   │     │ │     │
+  │ cong, crypto     │       UDP tunnels     │   │   └─────┘ └─────┘
+  └──────────────────┴───────────────────────┘   └──────┴───────┘
+
+- User Data Architecture:
+
+  ┌──────┐  ┌──────┐
+  │ APP1 │  │ APP2 │ ...
+  └──────┘  └──────┘
+   {send/recvmsg()}   {set/getsockopt()}              {recvmsg()}
+   [CMSG stream_info] [SOCKOPT_KEY_UPDATE]            [EVENT conn update]
+                      [SOCKOPT_CONNECTION_MIGRATION]  [EVENT stream update]
+                      [SOCKOPT_STREAM_OPEN/RESET/STOP]
+                │ ^               │ ^                     ^
+  Userspace     │ │               │ │                     │
+  ──────────────│─│───────────────│─│─────────────────────│───────────
+  Kernel        │ │               │ │                     │
+                v │               v │  ┌──────────────────┘
+  ┌──────────────────┬───────────────────────┐
+  │ protocol, timer, │ socket (IPPROTO_QUIC) │<──┐{kernel_send/recvmsg()}
+  │                  ├───────────────────────┤   │{kernel_set/getsockopt()}
+  │ common, family,  │ outqueue  |  inqueue  │   │{kernel_recvmsg()}
+  │                  ├───────────────────────┤   │
+  │ stream, connid,  │         frame         │   │   ┌─────┐ ┌─────┐
+  │                  ├───────────────────────┤   │   │     │ │     │
+  │ path, pnspace,   │         packet        │   │───│ SMB │ │ NFS │...
+  │                  ├───────────────────────┤   │   │     │ │     │
+  │ cong, crypto     │       UDP tunnels     │   │   └─────┘ └─────┘
+  └──────────────────┴───────────────────────┘   └──────┴───────┘
+
+Interface
+=========
+
+This implementation supports a mapping of QUIC into sockets APIs. Similar
+to TCP and SCTP, a typical Server and Client use the following system call
+sequence to communicate:
+
+    Client                             Server
+  ──────────────────────────────────────────────────────────────────────
+  sockfd = socket(IPPROTO_QUIC)      listenfd = socket(IPPROTO_QUIC)
+  bind(sockfd)                       bind(listenfd)
+                                     listen(listenfd)
+  connect(sockfd)
+  quic_client_handshake(sockfd)
+                                     sockfd = accept(listenfd)
+                                     quic_server_handshake(sockfd, cert)
+
+  sendmsg(sockfd)                    recvmsg(sockfd)
+  close(sockfd)                      close(sockfd)
+                                     close(listenfd)
+
+Please note that quic_client_handshake() and quic_server_handshake()
+functions are currently sourced from libquic [3]. These functions are
+responsible for receiving and processing the raw TLS handshake messages
+until the completion of the handshake process.
+
+For utilization by kernel consumers, it is essential to have tlshd
+service [2] installed and running in userspace. This service receives
+and manages kernel handshake requests for kernel sockets. In the kernel,
+the APIs closely resemble those used in userspace:
+
+    Client                             Server
+  ────────────────────────────────────────────────────────────────────────
+  __sock_create(IPPROTO_QUIC, &sock)  __sock_create(IPPROTO_QUIC, &sock)
+  kernel_bind(sock)                   kernel_bind(sock)
+                                      kernel_listen(sock)
+  kernel_connect(sock)
+  tls_client_hello_x509(args:{sock})
+                                      kernel_accept(sock, &newsock)
+                                      tls_server_hello_x509(args:{newsock})
+
+  kernel_sendmsg(sock)                kernel_recvmsg(newsock)
+  sock_release(sock)                  sock_release(newsock)
+                                      sock_release(sock)
+
+Please be aware that tls_client_hello_x509() and tls_server_hello_x509()
+are APIs from net/handshake/. They are used to dispatch the handshake
+request to the userspace tlshd service and subsequently block until the
+handshake process is completed.
+
+Use Cases
+=========
+
+- Samba
+
+  Stefan Metzmacher has integrated Linux QUIC into Samba for both client
+  and server roles [4].
+
+- tlshd
+
+  The tlshd daemon [2] facilitates Linux QUIC handshake requests from
+  kernel sockets. This is essential for enabling protocols like SMB
+  and NFS over QUIC.
+
+- curl
+
+  Linux QUIC is being integrated into curl [5] for HTTP/3. Example usage:
+
+  # curl --http3-only https://nghttp2.org:4433/
+  # curl --http3-only https://www.google.com/
+  # curl --http3-only https://facebook.com/
+  # curl --http3-only https://outlook.office.com/
+  # curl --http3-only https://cloudflare-quic.com/
+
+- httpd-portable
+
+  Moritz Buhl has deployed an HTTP/3 server over Linux QUIC [6] that is
+  accessible via Firefox and curl:
+
+  https://d.moritzbuhl.de/pub
+
+Test Coverage
+=============
+
+The Coverage (gcov) of Functional and Interop Tests:
+
+https://d.moritzbuhl.de/lcov
+
+- Functional Tests
+
+  The libquic self-tests (make check) pass on all major architectures:
+  x86_64, i386, s390x, aarch64, ppc64le.
+
+- Interop tests
+
+  Interoperability was validated using the QUIC Interop Runner [7] against
+  all major userland QUIC stacks. Results are available at:
+
+  https://d.moritzbuhl.de/
+
+- Fuzzing via Syzkaller
+
+  Syzkaller has been running kernel fuzzing with QUIC for weeks using
+  tests/syzkaller/ in libquic [3]..
+
+- Performance Testing
+
+  Performance was benchmarked using iperf [8] over a 100G NIC with
+  using various MTUs and packet sizes:
+
+  - QUIC vs. kTLS:
+
+    UNIT        size:1024      size:4096      size:16384     size:65536
+    Gbits/sec   QUIC | kTLS    QUIC | kTLS    QUIC | kTLS    QUIC | kTLS
+    ────────────────────────────────────────────────────────────────────
+    mtu:1500    2.27 | 3.26    3.02 | 6.97    3.36 | 9.74    3.48 | 10.8
+    ────────────────────────────────────────────────────────────────────
+    mtu:9000    3.66 | 3.72    5.87 | 8.92    7.03 | 11.2    8.04 | 11.4
+
+  - QUIC(disable_1rtt_encryption) vs. TCP:
+
+    UNIT        size:1024      size:4096      size:16384     size:65536
+    Gbits/sec   QUIC | TCP     QUIC | TCP     QUIC | TCP     QUIC | TCP
+    ────────────────────────────────────────────────────────────────────
+    mtu:1500    3.09 | 4.59    4.46 | 14.2    5.07 | 21.3    5.18 | 23.9
+    ────────────────────────────────────────────────────────────────────
+    mtu:9000    4.60 | 4.65    8.41 | 14.0    11.3 | 28.9    13.5 | 39.2
+
+
+  The performance gap between QUIC and kTLS may be attributed to:
+
+  - The absence of Generic Segmentation Offload (GSO) for QUIC.
+  - An additional data copy on the transmission (TX) path.
+  - Extra encryption required for header protection in QUIC.
+  - A longer header length for the stream data in QUIC.
+
+Patches
+=======
+
+Note: This implementation is organized into five parts and submitted across
+two patchsets for review. This patchset includes Parts 1–2, while Parts 3–5
+will be submitted in a subsequent patchset. For complete series, see [9].
+
+1. Infrastructure (2):
+
+  net: define IPPROTO_QUIC and SOL_QUIC constants
+  net: build socket infrastructure for QUIC protocol
+
+2. Subcomponents (13):
+
+  quic: provide common utilities and data structures
+  quic: provide family ops for address and protocol
+  quic: provide quic.h header files for kernel and userspace
+  quic: add stream management
+  quic: add connection id management
+  quic: add path management
+  quic: add congestion control
+  quic: add packet number space
+  quic: add crypto key derivation and installation
+  quic: add crypto packet encryption and decryption
+  quic: add timer management
+  quic: add frame encoder and decoder base
+  quic: add packet builder and parser base
+
+3. Data Processing (7):
+
+  quic: implement outqueue transmission and flow control
+  quic: implement outqueue sack and retransmission
+  quic: implement inqueue receiving and flow control
+  quic: implement frame creation functions
+  quic: implement frame processing functions
+  quic: implement packet creation functions
+  quic: implement packet processing functions
+
+4. Socket APIs (6):
+
+  quic: support bind/listen/connect/accept/close()
+  quic: support sendmsg() and recvmsg()
+  quic: support socket options related to interaction after handshake
+  quic: support socket options related to settings prior to handshake
+  quic: support socket options related to setup during handshake
+  quic: support socket ioctls and socket dump via procfs
+
+5. Example and Documentation (2):
+
+  quic: create sample test using handshake APIs for kernel consumers
+  Documentation: describe QUIC protocol interface in quic.rst
+
+Notice: The QUIC module is currently labeled as "EXPERIMENTAL".
+
+All contributors are recognized in the respective patches with the tag of
+'Signed-off-by:'. Special thanks to Moritz Buhl and Stefan Metzmacher whose
+practical use cases and insightful feedback, which have been instrumental
+in shaping the design and advancing the development.
+
+References
+==========
+
+[1] https://datatracker.ietf.org/doc/html/draft-lxin-quic-socket-apis
+[2] https://github.com/oracle/ktls-utils
+[3] https://github.com/lxin/quic
+[4] https://gitlab.com/samba-team/samba/-/merge_requests/4019
+[5] https://github.com/moritzbuhl/curl/tree/linux_curl
+[6] https://github.com/moritzbuhl/httpd-portable
+[7] https://github.com/quic-interop/quic-interop-runner
+[8] https://github.com/lxin/iperf
+[9] https://github.com/lxin/net-next/commits/quic/
+
+Changes in v2, v3, v4: See individual patch changelogs for details.
+
+Xin Long (15):
+  net: define IPPROTO_QUIC and SOL_QUIC constants
+  net: build socket infrastructure for QUIC protocol
+  quic: provide common utilities and data structures
+  quic: provide family ops for address and protocol
+  quic: provide quic.h header files for kernel and userspace
+  quic: add stream management
+  quic: add connection id management
+  quic: add path management
+  quic: add congestion control
+  quic: add packet number space
+  quic: add crypto key derivation and installation
+  quic: add crypto packet encryption and decryption
+  quic: add timer management
+  quic: add frame encoder and decoder base
+  quic: add packet builder and parser base
+
+ include/linux/quic.h      |   19 +
+ include/linux/socket.h    |    1 +
+ include/uapi/linux/in.h   |    2 +
+ include/uapi/linux/quic.h |  235 +++++++
+ net/Kconfig               |    1 +
+ net/Makefile              |    1 +
+ net/quic/Kconfig          |   36 ++
+ net/quic/Makefile         |    9 +
+ net/quic/common.c         |  577 +++++++++++++++++
+ net/quic/common.h         |  205 ++++++
+ net/quic/cong.c           |  307 +++++++++
+ net/quic/cong.h           |  120 ++++
+ net/quic/connid.c         |  222 +++++++
+ net/quic/connid.h         |  162 +++++
+ net/quic/crypto.c         | 1233 +++++++++++++++++++++++++++++++++++++
+ net/quic/crypto.h         |   83 +++
+ net/quic/family.c         |  585 ++++++++++++++++++
+ net/quic/family.h         |   41 ++
+ net/quic/frame.c          |  558 +++++++++++++++++
+ net/quic/frame.h          |  195 ++++++
+ net/quic/packet.c         |  956 ++++++++++++++++++++++++++++
+ net/quic/packet.h         |  130 ++++
+ net/quic/path.c           |  534 ++++++++++++++++
+ net/quic/path.h           |  173 ++++++
+ net/quic/pnspace.c        |  224 +++++++
+ net/quic/pnspace.h        |  149 +++++
+ net/quic/protocol.c       |  420 +++++++++++++
+ net/quic/protocol.h       |   62 ++
+ net/quic/socket.c         |  446 ++++++++++++++
+ net/quic/socket.h         |  214 +++++++
+ net/quic/stream.c         |  514 ++++++++++++++++
+ net/quic/stream.h         |  136 ++++
+ net/quic/timer.c          |  196 ++++++
+ net/quic/timer.h          |   47 ++
+ 34 files changed, 8793 insertions(+)
+ create mode 100644 include/linux/quic.h
+ create mode 100644 include/uapi/linux/quic.h
+ create mode 100644 net/quic/Kconfig
+ create mode 100644 net/quic/Makefile
+ create mode 100644 net/quic/common.c
+ create mode 100644 net/quic/common.h
+ create mode 100644 net/quic/cong.c
+ create mode 100644 net/quic/cong.h
+ create mode 100644 net/quic/connid.c
+ create mode 100644 net/quic/connid.h
+ create mode 100644 net/quic/crypto.c
+ create mode 100644 net/quic/crypto.h
+ create mode 100644 net/quic/family.c
+ create mode 100644 net/quic/family.h
  create mode 100644 net/quic/frame.c
  create mode 100644 net/quic/frame.h
+ create mode 100644 net/quic/packet.c
+ create mode 100644 net/quic/packet.h
+ create mode 100644 net/quic/path.c
+ create mode 100644 net/quic/path.h
+ create mode 100644 net/quic/pnspace.c
+ create mode 100644 net/quic/pnspace.h
+ create mode 100644 net/quic/protocol.c
+ create mode 100644 net/quic/protocol.h
+ create mode 100644 net/quic/socket.c
+ create mode 100644 net/quic/socket.h
+ create mode 100644 net/quic/stream.c
+ create mode 100644 net/quic/stream.h
+ create mode 100644 net/quic/timer.c
+ create mode 100644 net/quic/timer.h
 
-diff --git a/net/quic/Makefile b/net/quic/Makefile
-index 2ccf01ad9e22..645ee470c95e 100644
---- a/net/quic/Makefile
-+++ b/net/quic/Makefile
-@@ -6,4 +6,4 @@
- obj-$(CONFIG_IP_QUIC) += quic.o
- 
- quic-y := common.o family.o protocol.o socket.o stream.o connid.o path.o \
--	  cong.o pnspace.o crypto.o timer.o
-+	  cong.o pnspace.o crypto.o timer.o frame.o
-diff --git a/net/quic/frame.c b/net/quic/frame.c
-new file mode 100644
-index 000000000000..d1e99c4f4804
---- /dev/null
-+++ b/net/quic/frame.c
-@@ -0,0 +1,558 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* QUIC kernel implementation
-+ * (C) Copyright Red Hat Corp. 2023
-+ *
-+ * This file is part of the QUIC kernel implementation
-+ *
-+ * Initialization/cleanup for QUIC protocol support.
-+ *
-+ * Written or modified by:
-+ *    Xin Long <lucien.xin@gmail.com>
-+ */
-+
-+#include <net/proto_memory.h>
-+
-+#include "socket.h"
-+
-+/* ACK Frame {
-+ *  Type (i) = 0x02..0x03,
-+ *  Largest Acknowledged (i),
-+ *  ACK Delay (i),
-+ *  ACK Range Count (i),
-+ *  First ACK Range (i),
-+ *  ACK Range (..) ...,
-+ *  [ECN Counts (..)],
-+ * }
-+ */
-+
-+static struct quic_frame *quic_frame_ack_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_ping_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_padding_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_new_token_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+/* STREAM Frame {
-+ *  Type (i) = 0x08..0x0f,
-+ *  Stream ID (i),
-+ *  [Offset (i)],
-+ *  [Length (i)],
-+ *  Stream Data (..),
-+ * }
-+ */
-+
-+static struct quic_frame *quic_frame_stream_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_handshake_done_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_crypto_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_retire_conn_id_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_new_conn_id_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_path_response_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_path_challenge_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_reset_stream_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_stop_sending_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_max_data_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_max_stream_data_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_max_streams_uni_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_max_streams_bidi_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_connection_close_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_data_blocked_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_stream_data_blocked_create(struct sock *sk,
-+								void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_streams_blocked_uni_create(struct sock *sk,
-+								void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_streams_blocked_bidi_create(struct sock *sk,
-+								 void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static int quic_frame_crypto_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_stream_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_ack_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_new_conn_id_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_retire_conn_id_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_new_token_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_handshake_done_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_padding_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_ping_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_path_challenge_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_reset_stream_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_stop_sending_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_max_data_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_max_stream_data_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_max_streams_uni_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_max_streams_bidi_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_connection_close_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_data_blocked_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_stream_data_blocked_process(struct sock *sk, struct quic_frame *frame,
-+						  u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_streams_blocked_uni_process(struct sock *sk, struct quic_frame *frame,
-+						  u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_streams_blocked_bidi_process(struct sock *sk, struct quic_frame *frame,
-+						   u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_path_response_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static struct quic_frame *quic_frame_invalid_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static struct quic_frame *quic_frame_datagram_create(struct sock *sk, void *data, u8 type)
-+{
-+	return NULL;
-+}
-+
-+static int quic_frame_invalid_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_frame_datagram_process(struct sock *sk, struct quic_frame *frame, u8 type)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static void quic_frame_padding_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_ping_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_ack_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_reset_stream_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_stop_sending_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_crypto_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_new_token_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_stream_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_max_data_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_max_stream_data_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_max_streams_bidi_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_max_streams_uni_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_data_blocked_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_stream_data_blocked_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_streams_blocked_bidi_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_streams_blocked_uni_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_new_conn_id_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_retire_conn_id_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_path_challenge_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_path_response_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_connection_close_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_handshake_done_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_invalid_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+static void quic_frame_datagram_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+}
-+
-+#define quic_frame_create_and_process_and_ack(type, eliciting) \
-+	{ \
-+		.frame_create	= quic_frame_##type##_create, \
-+		.frame_process	= quic_frame_##type##_process, \
-+		.frame_ack	= quic_frame_##type##_ack, \
-+		.ack_eliciting	= eliciting \
-+	}
-+
-+static struct quic_frame_ops quic_frame_ops[QUIC_FRAME_MAX + 1] = {
-+	quic_frame_create_and_process_and_ack(padding, 0), /* 0x00 */
-+	quic_frame_create_and_process_and_ack(ping, 1),
-+	quic_frame_create_and_process_and_ack(ack, 0),
-+	quic_frame_create_and_process_and_ack(ack, 0), /* ack_ecn */
-+	quic_frame_create_and_process_and_ack(reset_stream, 1),
-+	quic_frame_create_and_process_and_ack(stop_sending, 1),
-+	quic_frame_create_and_process_and_ack(crypto, 1),
-+	quic_frame_create_and_process_and_ack(new_token, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(stream, 1),
-+	quic_frame_create_and_process_and_ack(max_data, 1), /* 0x10 */
-+	quic_frame_create_and_process_and_ack(max_stream_data, 1),
-+	quic_frame_create_and_process_and_ack(max_streams_bidi, 1),
-+	quic_frame_create_and_process_and_ack(max_streams_uni, 1),
-+	quic_frame_create_and_process_and_ack(data_blocked, 1),
-+	quic_frame_create_and_process_and_ack(stream_data_blocked, 1),
-+	quic_frame_create_and_process_and_ack(streams_blocked_bidi, 1),
-+	quic_frame_create_and_process_and_ack(streams_blocked_uni, 1),
-+	quic_frame_create_and_process_and_ack(new_conn_id, 1),
-+	quic_frame_create_and_process_and_ack(retire_conn_id, 1),
-+	quic_frame_create_and_process_and_ack(path_challenge, 0),
-+	quic_frame_create_and_process_and_ack(path_response, 0),
-+	quic_frame_create_and_process_and_ack(connection_close, 0),
-+	quic_frame_create_and_process_and_ack(connection_close, 0),
-+	quic_frame_create_and_process_and_ack(handshake_done, 1),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0), /* 0x20 */
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(invalid, 0),
-+	quic_frame_create_and_process_and_ack(datagram, 1), /* 0x30 */
-+	quic_frame_create_and_process_and_ack(datagram, 1),
-+};
-+
-+void quic_frame_ack(struct sock *sk, struct quic_frame *frame)
-+{
-+	quic_frame_ops[frame->type].frame_ack(sk, frame);
-+
-+	list_del_init(&frame->list);
-+	frame->transmitted = 0;
-+	quic_frame_put(frame);
-+}
-+
-+int quic_frame_process(struct sock *sk, struct quic_frame *frame)
-+{
-+	u8 type, level = frame->level;
-+	int ret;
-+
-+	while (frame->len > 0) {
-+		type = *frame->data++;
-+		frame->len--;
-+
-+		if (type > QUIC_FRAME_MAX) {
-+			pr_debug("%s: unsupported frame, type: %x, level: %d\n",
-+				 __func__, type, level);
-+			return -EPROTONOSUPPORT;
-+		} else if (quic_frame_level_check(level, type)) {
-+			pr_debug("%s: invalid frame, type: %x, level: %d\n",
-+				 __func__, type, level);
-+			return -EINVAL;
-+		}
-+		ret = quic_frame_ops[type].frame_process(sk, frame, type);
-+		if (ret < 0) {
-+			pr_debug("%s: failed, type: %x, level: %d, err: %d\n",
-+				 __func__, type, level, ret);
-+			return ret;
-+		}
-+		pr_debug("%s: done, type: %x, level: %d\n", __func__, type, level);
-+
-+		frame->data += ret;
-+		frame->len -= ret;
-+	}
-+	return 0;
-+}
-+
-+struct quic_frame *quic_frame_create(struct sock *sk, u8 type, void *data)
-+{
-+	struct quic_frame *frame;
-+
-+	if (type > QUIC_FRAME_MAX)
-+		return NULL;
-+	frame = quic_frame_ops[type].frame_create(sk, data, type);
-+	if (!frame) {
-+		pr_debug("%s: failed, type: %x\n", __func__, type);
-+		return NULL;
-+	}
-+	INIT_LIST_HEAD(&frame->list);
-+	if (!frame->type)
-+		frame->type = type;
-+	frame->ack_eliciting = quic_frame_ops[type].ack_eliciting;
-+	pr_debug("%s: done, type: %x, len: %u\n", __func__, type, frame->len);
-+	return frame;
-+}
-+
-+struct quic_frame *quic_frame_alloc(u32 size, u8 *data, gfp_t gfp)
-+{
-+	struct quic_frame *frame;
-+
-+	frame = kmem_cache_zalloc(quic_frame_cachep, gfp);
-+	if (!frame)
-+		return NULL;
-+	if (data) {
-+		frame->data = data;
-+		goto out;
-+	}
-+	frame->data = kmalloc(size, gfp);
-+	if (!frame->data) {
-+		kmem_cache_free(quic_frame_cachep, frame);
-+		return NULL;
-+	}
-+out:
-+	refcount_set(&frame->refcnt, 1);
-+	frame->offset = -1;
-+	frame->len = (u16)size;
-+	frame->size = frame->len;
-+	return frame;
-+}
-+
-+static void quic_frame_free(struct quic_frame *frame)
-+{
-+	struct quic_frame_frag *frag, *next;
-+
-+	if (!frame->type && frame->skb) { /* RX path frame with skb. */
-+		kfree_skb(frame->skb);
-+		goto out;
-+	}
-+
-+	for (frag = frame->flist; frag; frag = next) {
-+		next = frag->next;
-+		kfree(frag);
-+	}
-+	kfree(frame->data);
-+out:
-+	kmem_cache_free(quic_frame_cachep, frame);
-+}
-+
-+struct quic_frame *quic_frame_get(struct quic_frame *frame)
-+{
-+	refcount_inc(&frame->refcnt);
-+	return frame;
-+}
-+
-+void quic_frame_put(struct quic_frame *frame)
-+{
-+	if (refcount_dec_and_test(&frame->refcnt))
-+		quic_frame_free(frame);
-+}
-+
-+int quic_frame_stream_append(struct sock *sk, struct quic_frame *frame,
-+			     struct quic_msginfo *info, u8 pack)
-+{
-+	return -1;
-+}
-diff --git a/net/quic/frame.h b/net/quic/frame.h
-new file mode 100644
-index 000000000000..7bcdba1e9bdd
---- /dev/null
-+++ b/net/quic/frame.h
-@@ -0,0 +1,195 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/* QUIC kernel implementation
-+ * (C) Copyright Red Hat Corp. 2023
-+ *
-+ * This file is part of the QUIC kernel implementation
-+ *
-+ * Written or modified by:
-+ *    Xin Long <lucien.xin@gmail.com>
-+ */
-+
-+#define QUIC_CLOSE_PHRASE_MAX_LEN	80
-+
-+#define QUIC_TOKEN_MAX_LEN		120
-+
-+#define QUIC_TICKET_MIN_LEN		64
-+#define QUIC_TICKET_MAX_LEN		4096
-+
-+#define QUIC_FRAME_BUF_SMALL		20
-+#define QUIC_FRAME_BUF_LARGE		100
-+
-+enum {
-+	QUIC_FRAME_PADDING = 0x00,
-+	QUIC_FRAME_PING = 0x01,
-+	QUIC_FRAME_ACK = 0x02,
-+	QUIC_FRAME_ACK_ECN = 0x03,
-+	QUIC_FRAME_RESET_STREAM = 0x04,
-+	QUIC_FRAME_STOP_SENDING = 0x05,
-+	QUIC_FRAME_CRYPTO = 0x06,
-+	QUIC_FRAME_NEW_TOKEN = 0x07,
-+	QUIC_FRAME_STREAM = 0x08,
-+	QUIC_FRAME_MAX_DATA = 0x10,
-+	QUIC_FRAME_MAX_STREAM_DATA = 0x11,
-+	QUIC_FRAME_MAX_STREAMS_BIDI = 0x12,
-+	QUIC_FRAME_MAX_STREAMS_UNI = 0x13,
-+	QUIC_FRAME_DATA_BLOCKED = 0x14,
-+	QUIC_FRAME_STREAM_DATA_BLOCKED = 0x15,
-+	QUIC_FRAME_STREAMS_BLOCKED_BIDI = 0x16,
-+	QUIC_FRAME_STREAMS_BLOCKED_UNI = 0x17,
-+	QUIC_FRAME_NEW_CONNECTION_ID = 0x18,
-+	QUIC_FRAME_RETIRE_CONNECTION_ID = 0x19,
-+	QUIC_FRAME_PATH_CHALLENGE = 0x1a,
-+	QUIC_FRAME_PATH_RESPONSE = 0x1b,
-+	QUIC_FRAME_CONNECTION_CLOSE = 0x1c,
-+	QUIC_FRAME_CONNECTION_CLOSE_APP = 0x1d,
-+	QUIC_FRAME_HANDSHAKE_DONE = 0x1e,
-+	QUIC_FRAME_DATAGRAM = 0x30, /* RFC 9221 */
-+	QUIC_FRAME_DATAGRAM_LEN = 0x31,
-+	QUIC_FRAME_MAX = QUIC_FRAME_DATAGRAM_LEN,
-+};
-+
-+enum {
-+	QUIC_TRANSPORT_PARAM_ORIGINAL_DESTINATION_CONNECTION_ID = 0x0000,
-+	QUIC_TRANSPORT_PARAM_MAX_IDLE_TIMEOUT = 0x0001,
-+	QUIC_TRANSPORT_PARAM_STATELESS_RESET_TOKEN = 0x0002,
-+	QUIC_TRANSPORT_PARAM_MAX_UDP_PAYLOAD_SIZE = 0x0003,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_DATA = 0x0004,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_BIDI_LOCAL = 0x0005,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_BIDI_REMOTE = 0x0006,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_UNI = 0x0007,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAMS_BIDI = 0x0008,
-+	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAMS_UNI = 0x0009,
-+	QUIC_TRANSPORT_PARAM_ACK_DELAY_EXPONENT = 0x000a,
-+	QUIC_TRANSPORT_PARAM_MAX_ACK_DELAY = 0x000b,
-+	QUIC_TRANSPORT_PARAM_DISABLE_ACTIVE_MIGRATION = 0x000c,
-+	QUIC_TRANSPORT_PARAM_PREFERRED_ADDRESS = 0x000d,
-+	QUIC_TRANSPORT_PARAM_ACTIVE_CONNECTION_ID_LIMIT = 0x000e,
-+	QUIC_TRANSPORT_PARAM_INITIAL_SOURCE_CONNECTION_ID = 0x000f,
-+	QUIC_TRANSPORT_PARAM_RETRY_SOURCE_CONNECTION_ID = 0x0010,
-+	QUIC_TRANSPORT_PARAM_MAX_DATAGRAM_FRAME_SIZE = 0x0020,
-+	QUIC_TRANSPORT_PARAM_GREASE_QUIC_BIT = 0x2ab2,
-+	QUIC_TRANSPORT_PARAM_VERSION_INFORMATION = 0x11,
-+	QUIC_TRANSPORT_PARAM_DISABLE_1RTT_ENCRYPTION = 0xbaad,
-+};
-+
-+/* Arguments passed to create a STREAM frame */
-+struct quic_msginfo {
-+	struct quic_stream *stream;	/* The QUIC stream associated with this frame */
-+	struct iov_iter *msg;		/* Iterator over message data to send */
-+	u32 flags;			/* Flags controlling stream frame creation */
-+	u8 level;			/* Encryption level for this frame */
-+};
-+
-+/* Arguments passed to create a PING frame */
-+struct quic_probeinfo {
-+	u16 size;	/* Size of the PING packet */
-+	u8 level;	/* Encryption level for this frame */
-+};
-+
-+/* Operations for creating, processing, and acknowledging QUIC frames */
-+struct quic_frame_ops {
-+	struct quic_frame *(*frame_create)(struct sock *sk, void *data, u8 type);
-+	int (*frame_process)(struct sock *sk, struct quic_frame *frame, u8 type);
-+	void (*frame_ack)(struct sock *sk, struct quic_frame *frame);
-+	u8 ack_eliciting;
-+};
-+
-+/* Fragment of data appended to a STREAM frame */
-+struct quic_frame_frag {
-+	struct quic_frame_frag *next;	/* Next fragment in the linked list */
-+	u16 size;			/* Size of this data fragment */
-+	u8 data[];			/* Flexible array member holding fragment data */
-+};
-+
-+struct quic_frame {
-+	union {
-+		struct quic_frame_frag *flist;	/* For TX: linked list of appended data fragments */
-+		struct sk_buff *skb;		/* For RX: skb containing the raw frame data */
-+	};
-+	struct quic_stream *stream;		/* Stream related to this frame, NULL if none */
-+	struct list_head list;			/* Linked list node for queuing frames */
-+	union {
-+		s64 offset;	/* For RX: stream/crypto data offset or read data offset */
-+		s64 number;	/* For TX: first packet number used */
-+	};
-+	u8  *data;		/* Pointer to the actual frame data buffer */
-+
-+	refcount_t refcnt;
-+	u16 errcode;		/* Error code set during frame processing */
-+	u8  level;		/* Packet number space: Initial, Handshake, or App */
-+	u8  type;		/* Frame type identifier */
-+	u16 bytes;		/* Number of user data bytes */
-+	u16 size;		/* Allocated data buffer size */
-+	u16 len;		/* Total frame length including appended fragments */
-+
-+	u8  ack_eliciting:1;	/* Frame requires acknowledgment */
-+	u8  transmitted:1;	/* Frame is in the transmitted queue */
-+	u8  stream_fin:1;	/* Frame includes FIN flag for stream */
-+	u8  nodelay:1;		/* Frame bypasses Nagle's algorithm for sending */
-+	u8  padding:1;		/* Padding is needed after this frame */
-+	u8  dgram:1;		/* Frame represents a datagram message (RX only) */
-+	u8  event:1;		/* Frame represents an event (RX only) */
-+	u8  path:1;		/* Path index used to send this frame */
-+};
-+
-+static inline bool quic_frame_new_conn_id(u8 type)
-+{
-+	return type == QUIC_FRAME_NEW_CONNECTION_ID;
-+}
-+
-+static inline bool quic_frame_dgram(u8 type)
-+{
-+	return type == QUIC_FRAME_DATAGRAM || type == QUIC_FRAME_DATAGRAM_LEN;
-+}
-+
-+static inline bool quic_frame_stream(u8 type)
-+{
-+	return type >= QUIC_FRAME_STREAM && type < QUIC_FRAME_MAX_DATA;
-+}
-+
-+static inline bool quic_frame_sack(u8 type)
-+{
-+	return type == QUIC_FRAME_ACK || type == QUIC_FRAME_ACK_ECN;
-+}
-+
-+static inline bool quic_frame_ping(u8 type)
-+{
-+	return type == QUIC_FRAME_PING;
-+}
-+
-+/* Check if a given frame type is valid for the specified encryption level,
-+ * based on the Frame Types table from rfc9000#section-12.4.
-+ *
-+ * Returns 0 if valid, 1 otherwise.
-+ */
-+static inline int quic_frame_level_check(u8 level, u8 type)
-+{
-+	if (level == QUIC_CRYPTO_APP)
-+		return 0;
-+
-+	if (level == QUIC_CRYPTO_EARLY) {
-+		if (type == QUIC_FRAME_ACK || type == QUIC_FRAME_ACK_ECN ||
-+		    type == QUIC_FRAME_CRYPTO || type == QUIC_FRAME_HANDSHAKE_DONE ||
-+		    type == QUIC_FRAME_NEW_TOKEN || type == QUIC_FRAME_PATH_RESPONSE ||
-+		    type == QUIC_FRAME_RETIRE_CONNECTION_ID)
-+			return 1;
-+		return 0;
-+	}
-+
-+	if (type != QUIC_FRAME_ACK && type != QUIC_FRAME_ACK_ECN &&
-+	    type != QUIC_FRAME_PADDING && type != QUIC_FRAME_PING &&
-+	    type != QUIC_FRAME_CRYPTO && type != QUIC_FRAME_CONNECTION_CLOSE)
-+		return 1;
-+	return 0;
-+}
-+
-+int quic_frame_stream_append(struct sock *sk, struct quic_frame *frame,
-+			     struct quic_msginfo *info, u8 pack);
-+
-+struct quic_frame *quic_frame_alloc(u32 size, u8 *data, gfp_t gfp);
-+struct quic_frame *quic_frame_get(struct quic_frame *frame);
-+void quic_frame_put(struct quic_frame *frame);
-+
-+struct quic_frame *quic_frame_create(struct sock *sk, u8 type, void *data);
-+int quic_frame_process(struct sock *sk, struct quic_frame *frame);
-+void quic_frame_ack(struct sock *sk, struct quic_frame *frame);
-diff --git a/net/quic/protocol.c b/net/quic/protocol.c
-index 7def45b99380..aabbbd9361f1 100644
---- a/net/quic/protocol.c
-+++ b/net/quic/protocol.c
-@@ -20,6 +20,7 @@
- 
- static unsigned int quic_net_id __read_mostly;
- 
-+struct kmem_cache *quic_frame_cachep __read_mostly;
- struct percpu_counter quic_sockets_allocated;
- struct workqueue_struct *quic_wq;
- 
-@@ -341,6 +342,11 @@ static __init int quic_init(void)
- 
- 	quic_crypto_init();
- 
-+	quic_frame_cachep = kmem_cache_create("quic_frame", sizeof(struct quic_frame),
-+					      0, SLAB_HWCACHE_ALIGN, NULL);
-+	if (!quic_frame_cachep)
-+		goto err;
-+
- 	err = percpu_counter_init(&quic_sockets_allocated, 0, GFP_KERNEL);
- 	if (err)
- 		goto err_percpu_counter;
-@@ -378,6 +384,8 @@ static __init int quic_init(void)
- err_hash:
- 	percpu_counter_destroy(&quic_sockets_allocated);
- err_percpu_counter:
-+	kmem_cache_destroy(quic_frame_cachep);
-+err:
- 	return err;
- }
- 
-@@ -392,6 +400,7 @@ static __exit void quic_exit(void)
- 	destroy_workqueue(quic_wq);
- 	quic_hash_tables_destroy();
- 	percpu_counter_destroy(&quic_sockets_allocated);
-+	kmem_cache_destroy(quic_frame_cachep);
- 	pr_info("quic: exit\n");
- }
- 
-diff --git a/net/quic/protocol.h b/net/quic/protocol.h
-index 9f86176205c4..91b28554dccf 100644
---- a/net/quic/protocol.h
-+++ b/net/quic/protocol.h
-@@ -8,6 +8,7 @@
-  *    Xin Long <lucien.xin@gmail.com>
-  */
- 
-+extern struct kmem_cache *quic_frame_cachep __read_mostly;
- extern struct percpu_counter quic_sockets_allocated;
- 
- extern long sysctl_quic_mem[3];
-diff --git a/net/quic/socket.h b/net/quic/socket.h
-index ff94c2296f03..138ea839fb7b 100644
---- a/net/quic/socket.h
-+++ b/net/quic/socket.h
-@@ -20,6 +20,8 @@
- #include "path.h"
- #include "cong.h"
- 
-+#include "frame.h"
-+
- #include "protocol.h"
- #include "timer.h"
- 
 -- 
 2.47.1
 
