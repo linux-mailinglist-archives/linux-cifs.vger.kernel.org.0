@@ -1,519 +1,195 @@
-Return-Path: <linux-cifs+bounces-7409-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7411-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D20C2D941
-	for <lists+linux-cifs@lfdr.de>; Mon, 03 Nov 2025 19:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 45293C2E59A
+	for <lists+linux-cifs@lfdr.de>; Tue, 04 Nov 2025 00:00:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 708704F1979
-	for <lists+linux-cifs@lfdr.de>; Mon,  3 Nov 2025 18:03:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DF0404E242C
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Nov 2025 22:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC0D31B80B;
-	Mon,  3 Nov 2025 18:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A222FABFF;
+	Mon,  3 Nov 2025 22:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFW8bH/P"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BXG30uZT"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5115431B124;
-	Mon,  3 Nov 2025 18:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F916214204
+	for <linux-cifs@vger.kernel.org>; Mon,  3 Nov 2025 22:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762192988; cv=none; b=GMhwt23CEU4Rwuump7hlniNzOcSMwBCBDq7wcrQrOdsgdrQOP23EA1VnR3P3RzrhBiUNTtBDOkwaEayuwOCiTfNOY5f5cU+0tGihy4aB3Ag36/6i9lwyxT7iDC3Cp9QsyXPmXIWOkXd4S7Q1g+5XOzbWYwNB0HLsSSbo/veXujQ=
+	t=1762210677; cv=none; b=gu1AHrpO9AVeYrLP/MnwxiuiGAjiA6yr3JRsFzOCff6oVvMuWT4yzuTREmwT6I5+OQzVrkRC+/TW4TVtl4zWiKrFuC6IeELAVTabaUan0JdY5oO3BVmdqwA4TI9pBQbLsvfq5ad2GksTst+5+MHXDbgafpDWEzaHojsxzukdVFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762192988; c=relaxed/simple;
-	bh=0OHP0AHoK39xwu/P65coxFnjg9lMMui1jAjVJITFB6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nUAnm6qSZO9nU2w8V2Zt2Lp1oItq29kITfQMWrSC5D0jNb4PsAcepFlpujDXcBb6SnKblRrvJPZPexWnlcrAxyrXmtQfwKYcBlZ0sCmLi4aPmngHXWL/0WC/XMol0RrIR1bZirwEhxuBurjCQlgh72PSN7xpQHg0M8mie/yQ4rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFW8bH/P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E38C4CEF8;
-	Mon,  3 Nov 2025 18:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762192987;
-	bh=0OHP0AHoK39xwu/P65coxFnjg9lMMui1jAjVJITFB6g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MFW8bH/Pf8TafURncS/A/Aufv0ns78mR78grNb3uEDOv7ReMGpCmKL6WVvyCyTTsP
-	 fsi3AKJR0hyNP5roYyUH0nj87KI/jObp3AWjD9g83xyqu4Q6FkQ9QchyFhMJgqo4cK
-	 CHwHA+Dg5nMLvrIs8RbHwTmmlXNTJhzRH2RtDhOEg+WepZdSOhfenjh4OC2lLjJvw8
-	 Rhh+HAidW52ek1fZ4b8ZVuRR6IrzarOQ5K4rXjbodUK+avXGWr5Hue/kheKE29YIK6
-	 MfMrAY/QRaxe6B3Zfqt701WVPlTzw6Nt/mkclQz1FvzhzW7zvEU8ZfXOwslB0PDLd1
-	 nz+7gaYPqRTLQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Paulo Alcantara <pc@manguebit.org>,
-	Jay Shin <jaeshin@redhat.com>,
-	David Howells <dhowells@redhat.com>,
+	s=arc-20240116; t=1762210677; c=relaxed/simple;
+	bh=aXKHUZg6WiIxqWjF49OQA+hCEb5+P+5lJuhNpJEt9/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nxb67yqWcqgToaBEHl3dH6N1ScTrxXtWwUWSCeOwSIFHXaQrSQuoZNmlsV7y861VUY9utuQRdSUzul1lo3zrqY39+9K5Nl32jPvak3cKypg7WXY7WW15rHHlLCscx1GR1D2M8fCjP5gOJM/d38ib5fe/4SW5+ITIkUXZvkxEnlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BXG30uZT; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3ee64bc6b90so3873170f8f.0
+        for <linux-cifs@vger.kernel.org>; Mon, 03 Nov 2025 14:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762210674; x=1762815474; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=woaq09gBMKAgzKkT28bSEWfquvq2rcTRJnnMzH9zQEM=;
+        b=BXG30uZTfjA6FIEijtAs7S8y6K94Gm36zjsl/sX3hcf1u7oKHh/Hi33D6BFUegLNSz
+         7UYMRP5Y6/rEKjRkm9WHmx4gGp9RyDSaqeojPdCpsNDdS0uawfwohJp1ZkvfPFYq2wcw
+         goDn9QeWz6Fp98F8CD0TV8SA5c++1Ir3EBeybOoOc+Q534xcsdoP9Tas6CnT/4w+Cv3I
+         RTcRYf21Zl4KhnKA7sxV2wywFOFhaYWRJhbkuHmxQMDuGG7M8ZuMwSh8shHZ3fesoVKB
+         5swbhBtTX0c1UNn4ZPksi/E+mj04Pi5F+vlzn0yY62IFRm4NUrp8qkFCYQ2VhMCkVhyS
+         v8+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762210674; x=1762815474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=woaq09gBMKAgzKkT28bSEWfquvq2rcTRJnnMzH9zQEM=;
+        b=EiOzwZoAs27Gzc+A0HECgikvXQmcaP3EKdtMWYnkPo75ZgWJb0ROrVqBbe+jCI0EV3
+         LY82hC8T5N52C2L200VU0M/In6yjfERYSKHQk5Lgo38mYQNd3ros4bIorWRGXJNT1Tfv
+         ySvjarOVID8nnNguPV0v4u2rAnEx7MFaPz5MfhAcWSs1IEUINUyt9/VadeIvLehumgE5
+         vJUqqOKUeJAyiISvJc/dO/RzZZsMFR5/7gLSqa2CSi0m7wjfYAvJvHMTo/UvHKw3Sk1u
+         M82yZT+OGFxhdmJOIjWAch0Gn8oFjDXHs9IAF59WBiD89Bm/duBfxQrI4pPZcW1uqOvF
+         3Raw==
+X-Forwarded-Encrypted: i=1; AJvYcCXRKPNygC2azSAhu5oN+uDvYwdsj4XqCLEY48vsxtR/PsGDLjqqxQEJweZVTDKURAsp40sVRw/7NxaA@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG5g51jUcPEH+O8SgoxHZk+BwT8Gz5RUB7EDcKp5CACZ8RFASO
+	GGrQ0LptjKrOBnaMrz0ioH852eHWvHMONvTiYUvhoopk69AU7sFqt9wVoUZIQq55Ds4=
+X-Gm-Gg: ASbGncvUhCkEQ79Q/xEscP3OQcvACScsuW7aMmE47Xtj19jpiMmQvPC6tUOncvM8PTF
+	OQJ2uGdJEgNGats5j/vZ8DLL0ts9b8UNzEeeUJOAjaJqsGO9Z7NXxQ2eXe2RGMvtvN0yyxhjNHx
+	crwrFHtxh6DC329fFM/ACD5FnpEbXgpSUNXEcmRwW1tITzt4LbAxug6U4JJFt9rBv7xTjYU+mDK
+	IUaZqiV+00EaYLetFclBK8vOD4RqrEgULJ/8rwIbiIZWsrifqzcE8LBeUg1XLbcXyUJ+MPMAd5L
+	ceiVYJtcsIbYSWWEaCK+SLo1+8ptVMShsg4z/GWvp62jb5Huu56x+6GeWwEj9+GOktTAttxBeO7
+	mqlE4qMekHyDhEFFaLELrEqL4O4VCbStfpR9fJU7pGUsRPpguE+NtU5BWid1HN7edBu3vGzHY+B
+	afGjXS
+X-Google-Smtp-Source: AGHT+IFwFhVXiPd4hy146h4DqON39yrCDlSswV40KFoenniqHV80RvlLPb5vJhYG91hmgzHv7UecmQ==
+X-Received: by 2002:a05:6000:4b14:b0:429:c4bb:fbd1 with SMTP id ffacd0b85a97d-429c4bbfe42mr9301290f8f.18.1762210673595;
+        Mon, 03 Nov 2025 14:57:53 -0800 (PST)
+Received: from precision ([152.234.106.4])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba1f1831141sm251142a12.4.2025.11.03.14.57.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Nov 2025 14:57:53 -0800 (PST)
+From: Henrique Carvalho <henrique.carvalho@suse.com>
+To: sfrench@samba.org
+Cc: pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	ematsumiya@suse.de,
+	jaeshin@redhat.com,
 	linux-cifs@vger.kernel.org,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>,
-	sfrench@samba.org,
-	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.17] smb: client: handle lack of IPC in dfs_cache_refresh()
-Date: Mon,  3 Nov 2025 13:02:23 -0500
-Message-ID: <20251103180246.4097432-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251103180246.4097432-1-sashal@kernel.org>
-References: <20251103180246.4097432-1-sashal@kernel.org>
+	Henrique Carvalho <henrique.carvalho@suse.com>
+Subject: [PATCH v4] smb: client: fix potential UAF in smb2_close_cached_fid()
+Date: Mon,  3 Nov 2025 19:52:55 -0300
+Message-ID: <20251103225255.908859-1-henrique.carvalho@suse.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.7
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Paulo Alcantara <pc@manguebit.org>
+find_or_create_cached_dir() could grab a new reference after kref_put()
+had seen the refcount drop to zero but before cfid_list_lock is acquired
+in smb2_close_cached_fid(), leading to use-after-free.
 
-[ Upstream commit fac56c4651ae95f3f2b468c2cf1884cf0e6d18c1 ]
+Switch to kref_put_lock() so cfid_release() is called with
+cfid_list_lock held, closing that gap.
 
-In very rare cases, DFS mounts could end up with SMB sessions without
-any IPC connections.  These mounts are only possible when having
-unexpired cached DFS referrals, hence not requiring any IPC
-connections during the mount process.
-
-Try to establish those missing IPC connections when refreshing DFS
-referrals.  If the server is still rejecting it, then simply ignore
-and leave expired cached DFS referral for any potential DFS failovers.
-
+Fixes: ebe98f1447bb ("cifs: enable caching of directories for which a lease is held")
+Cc: stable@vger.kernel.org
 Reported-by: Jay Shin <jaeshin@redhat.com>
-Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: linux-cifs@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Signed-off-by: Henrique Carvalho <henrique.carvalho@suse.com>
 ---
-
-LLM Generated explanations, may be completely bogus:
-
-## BACKPORT RECOMMENDATION: **YES**
-
-### ANALYSIS SUMMARY
-
-I used extensive semantic code analysis tools to examine this commit in
-the kernel repository. Here's my comprehensive analysis:
-
+V3 -> V4: rebase, added Reviewed-by and Reported-by, add
+lockdep_assert_held in smb2_close_cached_fid, change commit subject (was
+"smb: client: fix race in smb2_close_cached_fid()") to clearly state the
+bug class (UAF)
+V2 -> V3: rebase, remove unneeded comments, modify commit subject
+V1 -> V2: kept the original function names and added __releases annotation
+to silence sparse warning
 ---
+ fs/smb/client/cached_dir.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-## 1. BUG NATURE AND SEVERITY
-
-**Bug Type**: NULL Pointer Dereference (Kernel Crash)
-
-**Root Cause**: The function `is_ses_good()` at
-fs/smb/client/dfs_cache.c:1123 contained this code:
-```c
-struct cifs_tcon *tcon = ses->tcon_ipc;  // Can be NULL!
-...
-ret = !cifs_chan_needs_reconnect(ses, server) &&
-      ses->ses_status == SES_GOOD &&
-      !tcon->need_reconnect;  // ← NULL DEREFERENCE HERE
-```
-
-When `ses->tcon_ipc` is NULL (which can happen in rare cases with
-unexpired cached DFS referrals), accessing `tcon->need_reconnect` causes
-a kernel crash.
-
----
-
-## 2. SEMANTIC ANALYSIS TOOLS USED
-
-**Tool: mcp__semcode__find_function**
-- Located all 4 modified functions: `cifs_setup_ipc`, `is_ses_good`,
-  `refresh_ses_referral`, `refresh_tcon_referral`
-- Confirmed function signatures and implementations
-
-**Tool: mcp__semcode__find_callers**
-- `is_ses_good()` has 2 callers:
-  - `refresh_ses_referral()`
-  - `refresh_tcon_referral()`
-- `refresh_ses_referral()` has 1 caller: `dfs_cache_refresh()`
-- `refresh_tcon_referral()` has 2 callers: `dfs_cache_remount_fs()` and
-  `dfs_cache_refresh()`
-- `dfs_cache_remount_fs()` has 1 caller: `smb3_reconfigure()`
-
-**Tool: mcp__semcode__find_calls**
-- `cifs_setup_ipc()` calls 10 functions, all standard kernel utilities
-- No new or unusual dependencies introduced
-
-**Tool: mcp__semcode__find_type**
-- Examined `struct cifs_ses` and `struct cifs_tcon`
-- Confirmed `tcon_ipc` field exists and is stable
-- No recent structural changes that would prevent backporting
-
-**Tool: Grep + Git analysis**
-- Traced work queue scheduling to confirm automatic triggering
-- Verified the commit is already being backported (commit 5dbecacbbe4e3)
-
----
-
-## 3. IMPACT SCOPE ANALYSIS
-
-### User-Space Reachability: **YES - CRITICAL**
-
-**Path 1 - Remount (Direct User Trigger)**:
-```
-mount syscall with remount
-  → smb3_reconfigure() [fs_context_operations callback]
-    → dfs_cache_remount_fs()
-      → refresh_tcon_referral()
-        → is_ses_good() [NULL DEREFERENCE]
-```
-
-**Path 2 - Periodic Refresh (Automatic)**:
-```
-Delayed work queue (periodic, every TTL seconds)
-  → dfs_cache_refresh() [work callback]
-    → refresh_ses_referral()
-      → is_ses_good() [NULL DEREFERENCE]
-```
-
-Both paths can trigger the bug:
-- **Remount path**: User-initiated via mount(2) syscall
-- **Periodic path**: Automatically triggered on all DFS mounts
-
-### Affected Subsystem
-- SMB/CIFS client, specifically DFS (Distributed File System) support
-- Commonly used in enterprise environments with Windows file servers
-- Critical for failover and load balancing scenarios
-
----
-
-## 4. SCOPE AND COMPLEXITY ANALYSIS
-
-**Files Changed**: 3
-- fs/smb/client/cifsproto.h (header - added export)
-- fs/smb/client/connect.c (refactored cifs_setup_ipc)
-- fs/smb/client/dfs_cache.c (fixed is_ses_good, updated callers)
-
-**Code Changes**:
-- 66 insertions, 29 deletions (net +37 lines)
-- Relatively small and contained
-
-**Key Changes**:
-1. **cifs_setup_ipc()**: Changed from `static int` to exported `struct
-   cifs_tcon *`
-   - Returns tcon pointer or ERR_PTR instead of error code
-   - Signature simplified: takes `bool seal` instead of full context
-   - Uses `ses->local_nls` instead of `ctx->local_nls`
-
-2. **is_ses_good()**: Added tcon parameter and NULL handling
-   - Checks if `ses->tcon_ipc` exists before dereferencing
-   - Attempts to establish missing IPC connection if NULL
-   - Proper locking and cleanup for race conditions
-
-3. **Callers updated**: `refresh_ses_referral()` and
-   `refresh_tcon_referral()` now pass tcon parameter
-
----
-
-## 5. SIDE EFFECTS AND ARCHITECTURAL IMPACT
-
-**Side Effects**: **NONE**
-- Only adds defensive NULL checking
-- Gracefully handles missing IPC by attempting to create it
-- If IPC creation fails, simply skips refresh (safe degradation)
-
-**Architectural Changes**: **NONE**
-- No data structure modifications
-- No API breaking changes (only internal SMB client code)
-- Refactoring of `cifs_setup_ipc` maintains semantics
-
-**Regression Risk**: **MINIMAL**
-- Fix is defensive in nature
-- Adds retry logic that didn't exist before
-- No changes to success path, only error handling
-
----
-
-## 6. BACKPORT INDICATORS
-
-✅ **Already being backported**: Commit 5dbecacbbe4e3 shows this is in
-the stable tree process
-✅ **Reported by Red Hat**: Jay Shin (jaeshin@redhat.com) - indicates
-real-world impact
-✅ **Author from Red Hat**: Paulo Alcantara (Red Hat) - enterprise-
-focused
-✅ **No CVE assigned**: But this is a kernel crash bug affecting
-production
-✅ **Targeted notification**: Cc'd David Howells and linux-cifs mailing
-list
-
----
-
-## 7. STABLE TREE COMPLIANCE
-
-| Criterion | Status | Details |
-|-----------|--------|---------|
-| Fixes important bug | ✅ YES | Kernel crash via NULL dereference |
-| New features | ✅ NO | Pure bug fix |
-| Architectural changes | ✅ NO | No structural modifications |
-| Regression risk | ✅ LOW | Defensive code, safe degradation |
-| Subsystem confined | ✅ YES | Only SMB client DFS code |
-| User-space reachable | ✅ YES | Via remount syscall + automatic work
-queue |
-| Real-world impact | ✅ YES | DFS used in enterprise Windows
-environments |
-
----
-
-## 8. DEPENDENCIES ANALYSIS
-
-**Required Prerequisites**: NONE identified
-- Uses existing kernel APIs only
-- No dependency on recent refactoring
-- Data structures (`cifs_ses`, `cifs_tcon`) are stable
-
-**Potential Conflicts**: MINIMAL
-- Three-way merge might be needed if nearby code changed
-- Function signature change to `cifs_setup_ipc` is well-contained
-- Only one call site in `cifs_get_smb_ses()` needs updating
-
----
-
-## CONCLUSION
-
-This commit **MUST be backported** to stable trees. It fixes a real
-kernel crash bug that:
-
-1. **Can be triggered from user space** (via remount syscall)
-2. **Can be triggered automatically** (via periodic DFS cache refresh)
-3. **Affects production environments** (DFS is widely used in
-   enterprise)
-4. **Has minimal regression risk** (small, defensive fix)
-5. **Is already in the backport pipeline** (stable@ process active)
-
-The fix is small (net +37 lines), well-contained to the SMB DFS
-subsystem, introduces no architectural changes, and follows all stable
-kernel tree rules. The crash can occur in "very rare cases" but when it
-does, it brings down the kernel - making this a critical reliability fix
-for systems using SMB/CIFS with DFS.
-
- fs/smb/client/cifsproto.h |  2 ++
- fs/smb/client/connect.c   | 38 ++++++++++++---------------
- fs/smb/client/dfs_cache.c | 55 +++++++++++++++++++++++++++++++++------
- 3 files changed, 66 insertions(+), 29 deletions(-)
-
-diff --git a/fs/smb/client/cifsproto.h b/fs/smb/client/cifsproto.h
-index e8fba98690ce3..8c00ff52a12a6 100644
---- a/fs/smb/client/cifsproto.h
-+++ b/fs/smb/client/cifsproto.h
-@@ -615,6 +615,8 @@ extern int E_md4hash(const unsigned char *passwd, unsigned char *p16,
- extern struct TCP_Server_Info *
- cifs_find_tcp_session(struct smb3_fs_context *ctx);
+diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
+index b8ac7b7faf61..018055fd2cdb 100644
+--- a/fs/smb/client/cached_dir.c
++++ b/fs/smb/client/cached_dir.c
+@@ -388,11 +388,11 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 			 * lease. Release one here, and the second below.
+ 			 */
+ 			cfid->has_lease = false;
+-			kref_put(&cfid->refcount, smb2_close_cached_fid);
++			close_cached_dir(cfid);
+ 		}
+ 		spin_unlock(&cfids->cfid_list_lock);
  
-+struct cifs_tcon *cifs_setup_ipc(struct cifs_ses *ses, bool seal);
-+
- void __cifs_put_smb_ses(struct cifs_ses *ses);
+-		kref_put(&cfid->refcount, smb2_close_cached_fid);
++		close_cached_dir(cfid);
+ 	} else {
+ 		*ret_cfid = cfid;
+ 		atomic_inc(&tcon->num_remote_opens);
+@@ -438,12 +438,14 @@ int open_cached_dir_by_dentry(struct cifs_tcon *tcon,
  
- extern struct cifs_ses *
-diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
-index dd12f3eb61dcb..d65ab7e4b1c26 100644
---- a/fs/smb/client/connect.c
-+++ b/fs/smb/client/connect.c
-@@ -2015,39 +2015,31 @@ static int match_session(struct cifs_ses *ses,
- /**
-  * cifs_setup_ipc - helper to setup the IPC tcon for the session
-  * @ses: smb session to issue the request on
-- * @ctx: the superblock configuration context to use for building the
-- *       new tree connection for the IPC (interprocess communication RPC)
-+ * @seal: if encryption is requested
-  *
-  * A new IPC connection is made and stored in the session
-  * tcon_ipc. The IPC tcon has the same lifetime as the session.
-  */
--static int
--cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
-+struct cifs_tcon *cifs_setup_ipc(struct cifs_ses *ses, bool seal)
+ static void
+ smb2_close_cached_fid(struct kref *ref)
++__releases(&cfid->cfids->cfid_list_lock)
  {
- 	int rc = 0, xid;
- 	struct cifs_tcon *tcon;
- 	char unc[SERVER_NAME_LENGTH + sizeof("//x/IPC$")] = {0};
--	bool seal = false;
- 	struct TCP_Server_Info *server = ses->server;
+ 	struct cached_fid *cfid = container_of(ref, struct cached_fid,
+ 					       refcount);
+ 	int rc;
  
- 	/*
- 	 * If the mount request that resulted in the creation of the
- 	 * session requires encryption, force IPC to be encrypted too.
- 	 */
--	if (ctx->seal) {
--		if (server->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION)
--			seal = true;
--		else {
--			cifs_server_dbg(VFS,
--				 "IPC: server doesn't support encryption\n");
--			return -EOPNOTSUPP;
--		}
-+	if (seal && !(server->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION)) {
-+		cifs_server_dbg(VFS, "IPC: server doesn't support encryption\n");
-+		return ERR_PTR(-EOPNOTSUPP);
+-	spin_lock(&cfid->cfids->cfid_list_lock);
++	lockdep_assert_held(&cfid->cfids->cfid_list_lock);
++
+ 	if (cfid->on_list) {
+ 		list_del(&cfid->entry);
+ 		cfid->on_list = false;
+@@ -478,7 +480,7 @@ void drop_cached_dir_by_name(const unsigned int xid, struct cifs_tcon *tcon,
+ 	spin_lock(&cfid->cfids->cfid_list_lock);
+ 	if (cfid->has_lease) {
+ 		cfid->has_lease = false;
+-		kref_put(&cfid->refcount, smb2_close_cached_fid);
++		close_cached_dir(cfid);
  	}
+ 	spin_unlock(&cfid->cfids->cfid_list_lock);
+ 	close_cached_dir(cfid);
+@@ -487,7 +489,7 @@ void drop_cached_dir_by_name(const unsigned int xid, struct cifs_tcon *tcon,
  
- 	/* no need to setup directory caching on IPC share, so pass in false */
- 	tcon = tcon_info_alloc(false, netfs_trace_tcon_ref_new_ipc);
- 	if (tcon == NULL)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	spin_lock(&server->srv_lock);
- 	scnprintf(unc, sizeof(unc), "\\\\%s\\IPC$", server->hostname);
-@@ -2057,13 +2049,13 @@ cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
- 	tcon->ses = ses;
- 	tcon->ipc = true;
- 	tcon->seal = seal;
--	rc = server->ops->tree_connect(xid, ses, unc, tcon, ctx->local_nls);
-+	rc = server->ops->tree_connect(xid, ses, unc, tcon, ses->local_nls);
- 	free_xid(xid);
- 
- 	if (rc) {
--		cifs_server_dbg(VFS, "failed to connect to IPC (rc=%d)\n", rc);
-+		cifs_server_dbg(VFS | ONCE, "failed to connect to IPC (rc=%d)\n", rc);
- 		tconInfoFree(tcon, netfs_trace_tcon_ref_free_ipc_fail);
--		goto out;
-+		return ERR_PTR(rc);
- 	}
- 
- 	cifs_dbg(FYI, "IPC tcon rc=%d ipc tid=0x%x\n", rc, tcon->tid);
-@@ -2071,9 +2063,7 @@ cifs_setup_ipc(struct cifs_ses *ses, struct smb3_fs_context *ctx)
- 	spin_lock(&tcon->tc_lock);
- 	tcon->status = TID_GOOD;
- 	spin_unlock(&tcon->tc_lock);
--	ses->tcon_ipc = tcon;
--out:
--	return rc;
-+	return tcon;
+ void close_cached_dir(struct cached_fid *cfid)
+ {
+-	kref_put(&cfid->refcount, smb2_close_cached_fid);
++	kref_put_lock(&cfid->refcount, smb2_close_cached_fid, &cfid->cfids->cfid_list_lock);
  }
  
- static struct cifs_ses *
-@@ -2347,6 +2337,7 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- {
- 	struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&server->dstaddr;
- 	struct sockaddr_in *addr = (struct sockaddr_in *)&server->dstaddr;
-+	struct cifs_tcon *ipc;
- 	struct cifs_ses *ses;
- 	unsigned int xid;
- 	int retries = 0;
-@@ -2525,7 +2516,12 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
- 	list_add(&ses->smb_ses_list, &server->smb_ses_list);
- 	spin_unlock(&cifs_tcp_ses_lock);
+ /*
+@@ -596,7 +598,7 @@ cached_dir_offload_close(struct work_struct *work)
  
--	cifs_setup_ipc(ses, ctx);
-+	ipc = cifs_setup_ipc(ses, ctx->seal);
-+	spin_lock(&cifs_tcp_ses_lock);
-+	spin_lock(&ses->ses_lock);
-+	ses->tcon_ipc = !IS_ERR(ipc) ? ipc : NULL;
-+	spin_unlock(&ses->ses_lock);
-+	spin_unlock(&cifs_tcp_ses_lock);
+ 	WARN_ON(cfid->on_list);
  
- 	free_xid(xid);
- 
-diff --git a/fs/smb/client/dfs_cache.c b/fs/smb/client/dfs_cache.c
-index 4dada26d56b5f..f2ad0ccd08a77 100644
---- a/fs/smb/client/dfs_cache.c
-+++ b/fs/smb/client/dfs_cache.c
-@@ -1120,24 +1120,63 @@ static bool target_share_equal(struct cifs_tcon *tcon, const char *s1)
- 	return match;
+-	kref_put(&cfid->refcount, smb2_close_cached_fid);
++	close_cached_dir(cfid);
+ 	cifs_put_tcon(tcon, netfs_trace_tcon_ref_put_cached_close);
  }
  
--static bool is_ses_good(struct cifs_ses *ses)
-+static bool is_ses_good(struct cifs_tcon *tcon, struct cifs_ses *ses)
- {
- 	struct TCP_Server_Info *server = ses->server;
--	struct cifs_tcon *tcon = ses->tcon_ipc;
-+	struct cifs_tcon *ipc = NULL;
- 	bool ret;
- 
-+	spin_lock(&cifs_tcp_ses_lock);
- 	spin_lock(&ses->ses_lock);
- 	spin_lock(&ses->chan_lock);
-+
- 	ret = !cifs_chan_needs_reconnect(ses, server) &&
--		ses->ses_status == SES_GOOD &&
--		!tcon->need_reconnect;
-+		ses->ses_status == SES_GOOD;
-+
- 	spin_unlock(&ses->chan_lock);
-+
-+	if (!ret)
-+		goto out;
-+
-+	if (likely(ses->tcon_ipc)) {
-+		if (ses->tcon_ipc->need_reconnect) {
-+			ret = false;
-+			goto out;
-+		}
-+	} else {
-+		spin_unlock(&ses->ses_lock);
-+		spin_unlock(&cifs_tcp_ses_lock);
-+
-+		ipc = cifs_setup_ipc(ses, tcon->seal);
-+
-+		spin_lock(&cifs_tcp_ses_lock);
-+		spin_lock(&ses->ses_lock);
-+		if (!IS_ERR(ipc)) {
-+			if (!ses->tcon_ipc) {
-+				ses->tcon_ipc = ipc;
-+				ipc = NULL;
-+			}
-+		} else {
-+			ret = false;
-+			ipc = NULL;
-+		}
-+	}
-+
-+out:
- 	spin_unlock(&ses->ses_lock);
-+	spin_unlock(&cifs_tcp_ses_lock);
-+	if (ipc && server->ops->tree_disconnect) {
-+		unsigned int xid = get_xid();
-+
-+		(void)server->ops->tree_disconnect(xid, ipc);
-+		_free_xid(xid);
-+	}
-+	tconInfoFree(ipc, netfs_trace_tcon_ref_free_ipc);
- 	return ret;
- }
- 
- /* Refresh dfs referral of @ses */
--static void refresh_ses_referral(struct cifs_ses *ses)
-+static void refresh_ses_referral(struct cifs_tcon *tcon, struct cifs_ses *ses)
- {
- 	struct cache_entry *ce;
- 	unsigned int xid;
-@@ -1153,7 +1192,7 @@ static void refresh_ses_referral(struct cifs_ses *ses)
+@@ -762,7 +764,7 @@ static void cfids_laundromat_worker(struct work_struct *work)
+ 			 * Drop the ref-count from above, either the lease-ref (if there
+ 			 * was one) or the extra one acquired.
+ 			 */
+-			kref_put(&cfid->refcount, smb2_close_cached_fid);
++			close_cached_dir(cfid);
  	}
- 
- 	ses = CIFS_DFS_ROOT_SES(ses);
--	if (!is_ses_good(ses)) {
-+	if (!is_ses_good(tcon, ses)) {
- 		cifs_dbg(FYI, "%s: skip cache refresh due to disconnected ipc\n",
- 			 __func__);
- 		goto out;
-@@ -1241,7 +1280,7 @@ static void refresh_tcon_referral(struct cifs_tcon *tcon, bool force_refresh)
- 	up_read(&htable_rw_lock);
- 
- 	ses = CIFS_DFS_ROOT_SES(ses);
--	if (!is_ses_good(ses)) {
-+	if (!is_ses_good(tcon, ses)) {
- 		cifs_dbg(FYI, "%s: skip cache refresh due to disconnected ipc\n",
- 			 __func__);
- 		goto out;
-@@ -1309,7 +1348,7 @@ void dfs_cache_refresh(struct work_struct *work)
- 	tcon = container_of(work, struct cifs_tcon, dfs_cache_work.work);
- 
- 	list_for_each_entry(ses, &tcon->dfs_ses_list, dlist)
--		refresh_ses_referral(ses);
-+		refresh_ses_referral(tcon, ses);
- 	refresh_tcon_referral(tcon, false);
- 
- 	queue_delayed_work(dfscache_wq, &tcon->dfs_cache_work,
+ 	queue_delayed_work(cfid_put_wq, &cfids->laundromat_work,
+ 			   dir_cache_timeout * HZ);
 -- 
-2.51.0
+2.50.1
 
 
