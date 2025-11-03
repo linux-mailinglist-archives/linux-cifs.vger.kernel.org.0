@@ -1,83 +1,183 @@
-Return-Path: <linux-cifs+bounces-7408-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7410-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB2FC2D009
-	for <lists+linux-cifs@lfdr.de>; Mon, 03 Nov 2025 17:10:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F59C2D905
+	for <lists+linux-cifs@lfdr.de>; Mon, 03 Nov 2025 19:03:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BB5FF349372
-	for <lists+linux-cifs@lfdr.de>; Mon,  3 Nov 2025 16:10:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D190F3A87AF
+	for <lists+linux-cifs@lfdr.de>; Mon,  3 Nov 2025 18:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4237315793;
-	Mon,  3 Nov 2025 16:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB8E31B801;
+	Mon,  3 Nov 2025 18:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PwRXhMqU"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DA8314B7F;
-	Mon,  3 Nov 2025 16:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511F031B130;
+	Mon,  3 Nov 2025 18:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762186222; cv=none; b=dtdGY32zxoKqVJa0uRdbNewXMo+/gdwE5AXOeJAtVVvjJrAQcPvogD1F6SXmQuV42dBZO+/cXikmry5NMfHz4xvXFgg+qx+eu9yB8PZepFBz7PTPw5j680/NQrOZalOVkXCPOqtnbvb1qFihyDrl8pKdfiE5Ly6wtysL6xBKC0E=
+	t=1762192988; cv=none; b=PuNDgkiyoLADpbz+axey8/7GikUUH9GgiHTbAyj43yJgMUydIpR7NPqqGYTIlTPokSFYkDj5x2E3mpi1RwWbxaDt4q6vb5mf0ZtTd75F4d0/AUCYx45aw3xyMIzJ82enTQvPgiWP3iszHKD4l6RTy5nBZhzPjlnrjn2OTbK4b2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762186222; c=relaxed/simple;
-	bh=PIZ4DoMJooALmRRVauNj4A/92u4T3LrS3MaC+zSCVos=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=INO79ymRvzStf0ENJqFJxQ/iA8rPSv0RbWoPB1sb+xcpYdmjhNYNGVPnsXf7FVXJJsunTh4CqgQ0hh6xLYVXJrvatmnXsSHz+ue3dHvRLB/AqN2LiUCcwQpo2VFQrVqTMMTl5wlfzxy/7dTVHZ7e2vfg3x8WL9Byrbux4loZiV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id ACF47139E08;
-	Mon,  3 Nov 2025 16:10:17 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id D4E0A20026;
-	Mon,  3 Nov 2025 16:10:14 +0000 (UTC)
-Date: Mon, 3 Nov 2025 11:10:18 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-aio@kvack.org, linux-unionfs@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-nfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- cgroups@vger.kernel.org, netdev@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/12] trace: use override credential guard
-Message-ID: <20251103111018.1a063e6f@gandalf.local.home>
-In-Reply-To: <20251103-work-creds-guards-prepare_creds-v1-12-b447b82f2c9b@kernel.org>
-References: <20251103-work-creds-guards-prepare_creds-v1-0-b447b82f2c9b@kernel.org>
-	<20251103-work-creds-guards-prepare_creds-v1-12-b447b82f2c9b@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1762192988; c=relaxed/simple;
+	bh=XZg6tEDLa16EMaR5NtjP4niGslvahlCrI31g+m9bbfM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=er9OBpWnDdYx2e472QTAcZRl5NnMl4LUM2LiL5bpubipTn/y1L1Wcf9wdJOektXMfmspykgF85mI6MPANF3FBtppYIFhwsURI+6S6GN35NiChc1PoeEm8AGgfzS7OfNXn03g0db607BkK5cE58TW0ki21N9ksBWPvBuqCZ2NBzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PwRXhMqU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F9EC116D0;
+	Mon,  3 Nov 2025 18:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762192985;
+	bh=XZg6tEDLa16EMaR5NtjP4niGslvahlCrI31g+m9bbfM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=PwRXhMqUrveCPLxX23Tqn0XFYZBQP/bFlWVIrvCYZoDW1vUnDgk9ig4QWYtQjMf5W
+	 HL/j/GtVipBeK3opVX8sflhDAN7mthu+4iZdhncBesO9aBF1F9lmgUvw1wObvDpVCO
+	 BpL39onooH6nXba/ddDpVYNlp4BvSafN/UBzO1c7v9cWSckYIiqPttI9/3GC3KAw9t
+	 LjMP1kuttGc/lhsnbNLe45GS3/8+n6s5c4rU0VLE9C2QH2SmNT4f9E4V1X4g8rLPyh
+	 yYmgb4wARVVX7DYdWaFnE9RB3hbgHJRlv/QxkI51ttGnzw3Q9gQiFiRa4yX/1se5O3
+	 fd1vAoxfF4uTA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Steve French <stfrench@microsoft.com>,
+	Thomas Spear <speeddymon@gmail.com>,
+	Sasha Levin <sashal@kernel.org>,
+	sfrench@samba.org,
+	linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 6.17-6.1] cifs: fix typo in enable_gcm_256 module parameter
+Date: Mon,  3 Nov 2025 13:02:22 -0500
+Message-ID: <20251103180246.4097432-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251103180246.4097432-1-sashal@kernel.org>
+References: <20251103180246.4097432-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: D4E0A20026
-X-Stat-Signature: 9i8cwffmtnwb5s6qrjb8xtgzkiwywx5n
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19W/8xN94pNILmfZfTWKaYA/3XQ1AXwuhQ=
-X-HE-Tag: 1762186214-326372
-X-HE-Meta: U2FsdGVkX187oVSDRmUrDkx/y/qOH8UZf0p4/Uberk79CvGGM3PB+bS4hFQMtMBRnStKU7tlXn/ljHIltb999OspMxf1AbgAdGJ4HELAt2d5MaZ3fPZKklFy28lWO7r0IfW2NHvpDWpAzd6euKudbGYI+fHpMHhDMkXFuPEqjUv0+MRdLzcQFruKvrL4Gl9DwYesxzucXQGzI2pHTBcEz6bFpl9Bi1TKKSPcL3Nt+jnhVL/ZY4VjnpDa6O+uTo/zuM+YOrGhZidshqQRODml/FXmO4hQP0LvRRP2OeH65EderoO+6Iw5sJs9vuJe8U2RHjqtb5RfJ+b+TBT13gA7yEo+MTIUsNTsghvG0w3kvqWdz/+jfR9m7Faf4VcYB3h/KdOAB3mXHBvjf7jof/ORBw==
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.7
+Content-Transfer-Encoding: 8bit
 
-On Mon, 03 Nov 2025 15:57:38 +0100
-Christian Brauner <brauner@kernel.org> wrote:
+From: Steve French <stfrench@microsoft.com>
 
-> Use override credential guards for scoped credential override with
-> automatic restoration on scope exit.
-> 
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->  kernel/trace/trace_events_user.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+[ Upstream commit f765fdfcd8b5bce92c6aa1a517ff549529ddf590 ]
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fix typo in description of enable_gcm_256 module parameter
 
--- Steve
+Suggested-by: Thomas Spear <speeddymon@gmail.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+Based on my comprehensive analysis using semantic code analysis tools
+and git history examination, here is my determination:
+
+## **Backport Status: YES**
+
+### Analysis Summary
+
+**1. Semantic Code Analysis Findings:**
+
+Using `mcp__semcode__grep_functions` and `mcp__semcode__find_function`,
+I identified that `enable_gcm_256` is used in the `build_encrypt_ctxt`
+function (fs/smb/client/smb2pdu.c:643), which controls SMB encryption
+cipher negotiation. Using `mcp__semcode__find_callers`, I found this
+function is called by `assemble_neg_contexts`, which is part of the SMB2
+protocol negotiation path.
+
+**2. Historical Context (Critical Finding):**
+
+Through git history analysis, I discovered this is actually the **second
+fix** for this documentation bug:
+
+- **April 2021** (commit fee742b50289): Changed `enable_gcm_256` default
+  from `false` to `true`, but **forgot to update documentation** (left
+  as "Default: n/N/0")
+
+- **June 2024** (commit 8bf0287528da1): **Partial fix** - changed
+  documentation from "n/N/0" to "y/Y/0"
+  - This commit was **explicitly tagged with `Cc:
+    stable@vger.kernel.org`**
+  - Included `Fixes: fee742b50289` tag
+  - **Was successfully backported to multiple stable trees**
+
+- **October 2025** (commit f765fdfcd8b5b - the commit being analyzed):
+  **Completes the fix** - changes "y/Y/0" to "y/Y/1"
+  - Fixes the remaining typo left by the partial June 2024 fix
+  - Already appears to be in backporting pipeline (commit 66b5c330b9223)
+
+**3. Why This Should Be Backported:**
+
+1. **Precedent**: The June 2024 partial fix was deemed important enough
+   for stable backporting by maintainers, even though it was "just
+   documentation"
+
+2. **Incomplete Fix in Stable Trees**: Stable trees that received the
+   June 2024 backport currently have **contradictory documentation**
+   stating "Default: y/Y/0" where "y/Y" suggests true but "0" suggests
+   false
+
+3. **Security Context**: This affects user understanding of encryption
+   settings for CIFS/SMB mounts. The variable controls whether 256-bit
+   GCM encryption is offered during protocol negotiation
+   (fs/smb/client/smb2pdu.c:643-648)
+
+4. **User Impact**: Users running `modinfo cifs` on stable kernels with
+   the partial fix see confusing/incorrect information about security-
+   related defaults
+
+5. **Zero Risk**: Single character change in a MODULE_PARM_DESC string -
+   cannot cause regressions
+
+6. **Completes Backported Work**: This is a continuation of fix
+   8bf0287528da1 that was already backported to stable
+
+**4. Code Impact Analysis:**
+
+- **Files Changed**: 1 (fs/smb/client/cifsfs.c)
+- **Lines Changed**: 1 (documentation string only)
+- **Functional Changes**: None (pure documentation)
+- **Actual Code Default**: `bool enable_gcm_256 = true;` (line 68) -
+  unchanged since April 2021
+
+### Recommendation
+
+**YES - This commit should be backported** because it completes a
+documentation fix that was already deemed worthy of stable backporting.
+Stable trees currently have misleading documentation ("y/Y/0") that
+contradicts itself, and this trivial, zero-risk change corrects user-
+visible information about security-related module parameters. The
+precedent for backporting documentation fixes for this specific
+parameter was already established in June 2024.
+
+ fs/smb/client/cifsfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
+index e1848276bab41..984545cfe30b7 100644
+--- a/fs/smb/client/cifsfs.c
++++ b/fs/smb/client/cifsfs.c
+@@ -133,7 +133,7 @@ module_param(enable_oplocks, bool, 0644);
+ MODULE_PARM_DESC(enable_oplocks, "Enable or disable oplocks. Default: y/Y/1");
+ 
+ module_param(enable_gcm_256, bool, 0644);
+-MODULE_PARM_DESC(enable_gcm_256, "Enable requesting strongest (256 bit) GCM encryption. Default: y/Y/0");
++MODULE_PARM_DESC(enable_gcm_256, "Enable requesting strongest (256 bit) GCM encryption. Default: y/Y/1");
+ 
+ module_param(require_gcm_256, bool, 0644);
+ MODULE_PARM_DESC(require_gcm_256, "Require strongest (256 bit) GCM encryption. Default: n/N/0");
+-- 
+2.51.0
+
 
