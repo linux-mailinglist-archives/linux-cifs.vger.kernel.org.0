@@ -1,62 +1,61 @@
-Return-Path: <linux-cifs+bounces-7933-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7926-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC803C868CE
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:18:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B376C868B6
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:18:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9189A3A9477
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 18:18:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDDAA3A9F00
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 18:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF89832938F;
-	Tue, 25 Nov 2025 18:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323A932C33D;
+	Tue, 25 Nov 2025 18:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="c3BgVc4f"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="XJ7fJsqG"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B2327510E
-	for <linux-cifs@vger.kernel.org>; Tue, 25 Nov 2025 18:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B5E27510E
+	for <linux-cifs@vger.kernel.org>; Tue, 25 Nov 2025 18:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764094733; cv=none; b=Xbr0y3pEcPhY/Oi8Cils+iDjhPkdbXE8RikNhqnUB/lvRIROoPkWXL3SjqDm+2hFZ5FnzCBF5Vm6fMn5dNi0itltcnweDPKe46x+8lopmzV1vgSdgmhWYlySclFfbOu2lKeFwXenGj7oJ5iHPRS5kwNN43ZZNO4KdmFssHCLXxE=
+	t=1764094716; cv=none; b=Vx071in9rrb9ZuEIdnAIP0NjCEgI1E0YauEMpabg0i1Jd5q05WgxziqwmEXlvogjU54VczSan9ZzGUwqtVrZYszGdL24zOGtJriiPwquKBJGGtbGEB917l8o9kBdKdZ4TsIlB2FJlVnkO06V8NOBOmW0mPpLQw7sUU9SXNG2VC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764094733; c=relaxed/simple;
-	bh=LImuI3SoSmZ+TWOnZXp8F+l4qsUt43Yub4ey6bhMhZ8=;
+	s=arc-20240116; t=1764094716; c=relaxed/simple;
+	bh=Gz71rZbrC9Wyaoq5OiPP094JhiMbN4Sp2DoKPPMlmaA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wc696kC0aHoZvIz3etTnsxIyeGa19kyaAOKic0G0X8/KSynp5KVtJ5PUxkaBS444AypzR4hi+Nddf+0Bfon+BEf+M0znHEtbvbS/mNUWIVaA235Y+q7ZlT+voG5Zjw5KcrAMO112Qk+gOBoWVArpleZS9ZcvnMxT/l4vFR3j688=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=c3BgVc4f; arc=none smtp.client-ip=144.76.82.148
+	 MIME-Version; b=mjfP8YVmGUYdZFNW8K++41Vy2llwrAI/gETmMcNou/IpbFwK5B2GndqZEtli2BSQlYfsObpfTwQo+wZVBqa2WhezwBEmF8gfBDBtBRjaKhXiSZ/z/6kTBp2XzgawUO2GkwOxH4LRZByjbzBuIQ2xt968rRW3MtHg34HW1zeU0I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=XJ7fJsqG; arc=none smtp.client-ip=144.76.82.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
 	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=NvZExtzgyh791gvhqc5ygnP14QEe5smsq+iq93yu1No=; b=c3BgVc4fLKAAd52uHcpafKArkq
-	mVRbk2BfndEWAnq1t9Xkwg7nT7Nntg14+bX5ti6VYp8Iy9rXLU+4ylrXpGJiTETrHNQaLJ3l1/dQw
-	gC/iwab7EoPBNIEpALqHVz2hVHXMyi3kEXjOKLeZ4pnVn2TAMavGJzoCQpXflV8VraiF+bysmUWB+
-	yuxIBO6WTmckcH34dxuxSqWgP3KDqmm8SYCtZOoKwbMyvhRFyEtCcib9OCOwwgblVFyYGfdET2MYy
-	n/dZpLGtjjyqtvFp0VgBjADWUs/trHMhruwfYDnaBWrwrUs6SPpohP9FrK68jYPqM1wvfaGYZQRoa
-	xzDrqHULwWXoknRIaNKbL1isJV1NUZjslDECdwzy6Yyu3tgI4nVQVvwhuAovGG5NKvmSje87oa7cn
-	yqLD9oNspKfwEb1ODoKdyhmEfWCzzfzE48qrS/XxfENTGHtdcba00dIhAIP5hmDMDryO9ek1JdlBV
-	x7903YWkvPuGgp7g8W/VQ1Zi;
+	bh=41L0fkzGjZtw7n+AyUud5AU25hqjHZxA/9myhEm3YKw=; b=XJ7fJsqG49KQdiJXKbpYSnxbS7
+	06mjmqEIhfY2DhACHSAGwQBUQ9E5+XHqvhXKHr0wGTQqZf9kjcNdIR2V4gFArw37IOKps8TEelHG+
+	38d+ZGZq84E5bRTCGJ6MDNFr5Znhc3ED4sy4atNQ1haKPfq4eMBUJWO/295xX2WtThqxIUpR2Bpo5
+	57v1zxhwvWXWqc0/FHeZhbb9nNm7Txq/I08k7TilhL4qKzLs6HV4/BeqyrlFip1ehHjfHUr48LUj2
+	x3mvX+yqz+qLIfxJVN3j+1eIA+4s/XvvAWVcZxWqHpjv2lpS9Lu15Fm2Z+YHXUtnT7LkT72jMX8uM
+	xLxUEARqjcXjqLH0Ib9ylMOmlWuandQK05hDlG0PrKDTckPFaQxzdtNKuL9X/TezZiZeWv3DMaQan
+	AkOBS7QOFQaGkWvQI9a8QcsX9ien0RDIAfacw8GjBTDnfeLHGzmZh/aVo+pNaUNDOOmX9GQLvCAoo
+	N4laIb4Jhu0vC7ixmIVKCnwo;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
 	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
 	(Exim)
-	id 1vNxUq-00FeFk-2L;
-	Tue, 25 Nov 2025 18:10:36 +0000
+	id 1vNxUw-00FeGH-2e;
+	Tue, 25 Nov 2025 18:10:43 +0000
 From: Stefan Metzmacher <metze@samba.org>
 To: linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
 Cc: metze@samba.org,
 	Namjae Jeon <linkinjeon@kernel.org>,
 	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>,
-	Steve French <stfrench@microsoft.com>
-Subject: [PATCH v4 099/145] smb: server: make use of smbdirect_socket_wake_up_all()
-Date: Tue, 25 Nov 2025 18:55:45 +0100
-Message-ID: <117694f6f28878cc8e48d3043edcca8812fa20e9.1764091285.git.metze@samba.org>
+	Tom Talpey <tom@talpey.com>
+Subject: [PATCH v4 100/145] smb: server: let smb_direct_create_pools() initialize complex_work as disabled
+Date: Tue, 25 Nov 2025 18:55:46 +0100
+Message-ID: <1a1977dd7651c7e9e1cc31b054d74c64421a7d8a.1764091285.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1764091285.git.metze@samba.org>
 References: <cover.1764091285.git.metze@samba.org>
@@ -68,10 +67,10 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is a superset of smb_direct_disconnect_wake_up_all() and
-calling wake_up_all(&sc->mr_io.ready.wait_queue); and
-wake_up_all(&sc->mr_io.cleanup.wait_queue); in addition
-should not matter as it's not used on the server anyway.
+smbdirect_recv_io.complex_work won't be used in server until
+the end of the move to common functions, but common cleanup
+code will call disable_work[_sync]() before that, so we
+better initialize it now.
 
 Cc: Namjae Jeon <linkinjeon@kernel.org>
 Cc: Steve French <smfrench@gmail.com>
@@ -79,63 +78,23 @@ Cc: Tom Talpey <tom@talpey.com>
 Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/smb/server/transport_rdma.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ fs/smb/server/transport_rdma.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index 52cc756aa088..d61c95eca0ee 100644
+index d61c95eca0ee..84da674bef85 100644
 --- a/fs/smb/server/transport_rdma.c
 +++ b/fs/smb/server/transport_rdma.c
-@@ -285,20 +285,6 @@ static struct smbdirect_recv_io *get_first_reassembly(struct smbdirect_socket *s
- 		return NULL;
- }
+@@ -2107,6 +2107,8 @@ static int smb_direct_create_pools(struct smbdirect_socket *sc)
+ 			goto err;
+ 		recvmsg->socket = sc;
+ 		recvmsg->sge.length = 0;
++		INIT_WORK(&recvmsg->complex_work, __smbdirect_socket_disabled_work);
++		disable_work_sync(&recvmsg->complex_work);
+ 		list_add(&recvmsg->list, &sc->recv_io.free.list);
+ 	}
  
--static void smb_direct_disconnect_wake_up_all(struct smbdirect_socket *sc)
--{
--	/*
--	 * Wake up all waiters in all wait queues
--	 * in order to notice the broken connection.
--	 */
--	wake_up_all(&sc->status_wait);
--	wake_up_all(&sc->send_io.lcredits.wait_queue);
--	wake_up_all(&sc->send_io.credits.wait_queue);
--	wake_up_all(&sc->send_io.pending.zero_wait_queue);
--	wake_up_all(&sc->recv_io.reassembly.wait_queue);
--	wake_up_all(&sc->rw_io.credits.wait_queue);
--}
--
- static void smb_direct_disconnect_rdma_work(struct work_struct *work)
- {
- 	struct smbdirect_socket *sc =
-@@ -354,7 +340,7 @@ static void smb_direct_disconnect_rdma_work(struct work_struct *work)
- 	 * Wake up all waiters in all wait queues
- 	 * in order to notice the broken connection.
- 	 */
--	smb_direct_disconnect_wake_up_all(sc);
-+	smbdirect_socket_wake_up_all(sc);
- }
- 
- static void
-@@ -419,7 +405,7 @@ smb_direct_disconnect_rdma_connection(struct smbdirect_socket *sc)
- 	 * Wake up all waiters in all wait queues
- 	 * in order to notice the broken connection.
- 	 */
--	smb_direct_disconnect_wake_up_all(sc);
-+	smbdirect_socket_wake_up_all(sc);
- 
- 	queue_work(sc->workqueue, &sc->disconnect_work);
- }
-@@ -545,7 +531,7 @@ static void free_transport(struct smb_direct_transport *t)
- 	 * Most likely this was already called via
- 	 * smb_direct_disconnect_rdma_work(), but call it again...
- 	 */
--	smb_direct_disconnect_wake_up_all(sc);
-+	smbdirect_socket_wake_up_all(sc);
- 
- 	disable_work_sync(&sc->recv_io.posted.refill_work);
- 	disable_delayed_work_sync(&sc->idle.timer_work);
 -- 
 2.43.0
 
