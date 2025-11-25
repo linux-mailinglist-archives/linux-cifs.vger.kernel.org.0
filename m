@@ -1,64 +1,62 @@
-Return-Path: <linux-cifs+bounces-7923-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7925-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1240C868AD
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:18:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB0DEC868B1
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:18:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3CA6334A20C
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A9403A8A73
 	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 18:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0ED7329E5E;
-	Tue, 25 Nov 2025 18:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AE932C301;
+	Tue, 25 Nov 2025 18:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="qTdvazbd"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="C8GeLNTz"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E368ADF49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BC627FD7C
 	for <linux-cifs@vger.kernel.org>; Tue, 25 Nov 2025 18:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764094715; cv=none; b=Av6h6nDXaih0gdCqlgSoB1of7JZlVwoWeYx5qPn+RNEEvp6ECa4WNcoXDzonZ+URXlKQEdzhcN2dcHRhPFzAUngY+j4zk9nsnlGwrsNkdHTwItu5DextF+W0UznFA9OGx6qRqzAiitoRoQK0ZDwHUS/vnwTPVbqZOqiuXDaI8ug=
+	t=1764094716; cv=none; b=rdnz+jLyngRN/afXVYpola0xHvIkCRHAF3aNYg1X+YBTC6BeB9F5GEIQ7HWsr3T740isKGtbg4v/mgqkMm40JfPZnkAv4PjgnJno/ww1wH1WoKsCHApeFjB1XDAkZanFWyq6jVSxRAPzdKAPh8YiMpco0NWkz4AqJ+ML7uPcX0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764094715; c=relaxed/simple;
-	bh=6flBTiJlZJah9fMTMs7Y3/eGVfqMQgFtw6iSJGXo3/M=;
+	s=arc-20240116; t=1764094716; c=relaxed/simple;
+	bh=2GEKmvKOy97K9/eO3bVTFjK554BnYh8ksyr7527SRhQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q1bsS3PYLrHzb0zkLo80aTcx2olZYI0S+1FOIR/rz7cKlVCRuTHPJKxfXelndQv0z2/pJxASd3vUCRO70fkYiULGJwizJ9sRcZ6i/6MEWdOX1DaMzk76W5CHcpXeZhg40gsXHDxFvsDbN2w1HVuPJObma4DABXhuTjerTf8oBhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=qTdvazbd; arc=none smtp.client-ip=144.76.82.148
+	 MIME-Version; b=ZKymlVlSRRqBQsTSsBDUbM6ANFsxPm1SspLKoiEMtS6qJn1MJATKl4UFQbTrwglh0G4ZYr/3ZKD8BZKRUNcxo4p1yqwHmHumMJOV5cZSHPuwIb8FQ3RfzsphX9qDg2yDDwggxS4zj2pIjqyhY1dIvcX2vSXtzccxLCF63E7u4Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=C8GeLNTz; arc=none smtp.client-ip=144.76.82.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
 	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=SozUG8RVCw91a4tDTcgWghO0msxJrN1STXZDFr8G8RM=; b=qTdvazbdqqOIvXnfVSbuf7QdI2
-	TipWrlkeRZgXNDj9vRLGc2U8rcDxVLWJqODd9tybXbzWbgt3B0P5K3aR6nZ/SmByDkQ9hxreojssP
-	Z8BoeDiAziXjE12P9PThi+PEU8uiJ38yi+TH+KDLoL/VGKyT+d2aRCSpIhoq2JnjbKnE4nzziniv+
-	uH3T/jO6plj9WKs9Kz1YSeNnYomSVTM+3DtTU2vichhMtjV67VZsAGGy38D/LnvZngnlo8QB7FSkA
-	g6S3CW+a3q5+1viiLEmgps+JbRk1+ZYFtl2UFlS/y/HfbAR4whW2ajcux6Kgm07a4v+26HDKSlf8B
-	QyWAy8M4e59A8fOj19cKRlDzr8Iu3ke/LOpItKOSdbSGj/502D1qzHkdYPTpldsVL6Q4aCSgFseUE
-	dYCv4Rpvr60Xp1GL/waRlrg06HKTIBBDXy0uYZlKKK3OWuiLUvVLTQHDbE86A3TxjIu7fiozrLAwm
-	sKtDoNx3rjMcej/myOLEY6j/;
+	bh=BBlgRAmIgpvsORmw7/6n6m0OSdIW8edI3Jt9yySA3ts=; b=C8GeLNTzSuzr6GDJdRasGpW6MT
+	tTpeZPmJqB4iMD/Tf6QuzA5mnjqWR4TGAXoX0Ie7Iw88bBrsbnJEbaopLFgO495ybGyH+RaGvUGd+
+	D/sZ3vUeDz/TYVXDTzQa3VLnEPqqcSP5GA+IZ41WGkrX+1xCeVQMsBFUwT2XzcWEPGPFjpaH2gNaX
+	2mT5wydb+4tUeXxpLDKbQHbR56pirEmYHSh/4RoFcF/WpL7MP+U9LDYOnymqbn5RnTVrCYEDA/2i3
+	oMk581DlA05Mg0sDfzWEioYvKc1kWFLzC5i0SwIlwMuoqg1cxq0uNJPoOx+DKMTyVlpTEX3dZezvk
+	SBbLLc1DIfVMX/BFzlkYdM20r5+Z9o+JL9LzyK3dOuQOhRAJ1TU6JrfrobFoUqAMD+GHHK9EzADwX
+	JYncX/CFLG05fWL+6fLAoV6noERs1TwWXd2KnUBU8gqhnS5CXWHjOBhs3o9NL8HMGqDeAqMkdIEwF
+	2VDDZ0ghW4/wln1WDIo1D0gw;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
 	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
 	(Exim)
-	id 1vNxUW-00FeCl-2R;
-	Tue, 25 Nov 2025 18:10:17 +0000
+	id 1vNxUe-00FeEt-0B;
+	Tue, 25 Nov 2025 18:10:24 +0000
 From: Stefan Metzmacher <metze@samba.org>
 To: linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
 Cc: metze@samba.org,
+	Namjae Jeon <linkinjeon@kernel.org>,
 	Steve French <smfrench@gmail.com>,
 	Tom Talpey <tom@talpey.com>,
-	Long Li <longli@microsoft.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	David Howells <dhowells@redhat.com>,
 	Steve French <stfrench@microsoft.com>
-Subject: [PATCH v4 096/145] smb: client: make use of smbdirect.ko
-Date: Tue, 25 Nov 2025 18:55:42 +0100
-Message-ID: <f6916a46690649d0d6e1f03762d6cba8ce13986d.1764091285.git.metze@samba.org>
+Subject: [PATCH v4 097/145] smb: server: make use of smbdirect_socket_prepare_create()
+Date: Tue, 25 Nov 2025 18:55:43 +0100
+Message-ID: <56a65a77045d989742acba2e8ff80ff8438894c3.1764091285.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1764091285.git.metze@samba.org>
 References: <cover.1764091285.git.metze@samba.org>
@@ -70,70 +68,68 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This means we no longer inline the common smbdirect
-.c files and use the exported functions from the
-module instead.
+This prepares the use of functions from smbdirect_connection.c.
 
-Note the connection specific logging is still
-redirect to cifs.ko functions via
-smbdirect_socket_set_logging().
-
-We still don't use real socket layer,
-but we're very close...
-
+Cc: Namjae Jeon <linkinjeon@kernel.org>
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
-Cc: Long Li <longli@microsoft.com>
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: David Howells <dhowells@redhat.com>
 Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/smb/client/Kconfig     |  3 ++-
- fs/smb/client/smbdirect.c | 10 ----------
- 2 files changed, 2 insertions(+), 11 deletions(-)
+ fs/smb/server/transport_rdma.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/fs/smb/client/Kconfig b/fs/smb/client/Kconfig
-index 17bd368574e9..72f47669da0c 100644
---- a/fs/smb/client/Kconfig
-+++ b/fs/smb/client/Kconfig
-@@ -181,7 +181,8 @@ if CIFS
+diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
+index d656dbf9f7ae..343e2bd7ee2a 100644
+--- a/fs/smb/server/transport_rdma.c
++++ b/fs/smb/server/transport_rdma.c
+@@ -404,20 +404,14 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
+ {
+ 	struct smb_direct_transport *t;
+ 	struct smbdirect_socket *sc;
++	struct smbdirect_socket_parameters init_params = {};
+ 	struct smbdirect_socket_parameters *sp;
+ 	struct ksmbd_conn *conn;
  
- config CIFS_SMB_DIRECT
- 	bool "SMB Direct support"
--	depends on CIFS=m && INFINIBAND && INFINIBAND_ADDR_TRANS || CIFS=y && INFINIBAND=y && INFINIBAND_ADDR_TRANS=y
-+	depends on CIFS && INFINIBAND && INFINIBAND_ADDR_TRANS
-+	select SMB_COMMON_SMBDIRECT
- 	help
- 	  Enables SMB Direct support for SMB 3.0, 3.02 and 3.1.1.
- 	  SMB Direct allows transferring SMB packets over RDMA. If unsure,
-diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index 91ed47ff8f2b..0c3a4b6aa03f 100644
---- a/fs/smb/client/smbdirect.c
-+++ b/fs/smb/client/smbdirect.c
-@@ -5,8 +5,6 @@
-  *   Author(s): Long Li <longli@microsoft.com>
-  */
+-	t = kzalloc(sizeof(*t), KSMBD_DEFAULT_GFP);
+-	if (!t)
+-		return NULL;
+-	sc = &t->socket;
+-	smbdirect_socket_init(sc);
+-	sp = &sc->parameters;
+-
+-	sc->workqueue = smb_direct_wq;
+-
+-	INIT_WORK(&sc->disconnect_work, smb_direct_disconnect_rdma_work);
+-
++	/*
++	 * Create the initial parameters
++	 */
++	sp = &init_params;
+ 	sp->negotiate_timeout_msec = SMB_DIRECT_NEGOTIATE_TIMEOUT * 1000;
+ 	sp->initiator_depth = SMB_DIRECT_CM_INITIATOR_DEPTH;
+ 	sp->responder_resources = 1;
+@@ -430,6 +424,18 @@ static struct smb_direct_transport *alloc_transport(struct rdma_cm_id *cm_id)
+ 	sp->keepalive_interval_msec = SMB_DIRECT_KEEPALIVE_SEND_INTERVAL * 1000;
+ 	sp->keepalive_timeout_msec = SMB_DIRECT_KEEPALIVE_RECV_TIMEOUT * 1000;
  
--#define SMBDIRECT_USE_INLINE_C_FILES 1
--
- #include <linux/errname.h>
- #include "smbdirect.h"
- #include "cifs_debug.h"
-@@ -527,11 +525,3 @@ void smbd_debug_proc_show(struct TCP_Server_Info *server, struct seq_file *m)
- 						    server->rdma_readwrite_threshold,
- 						    m);
- }
--
--/*
-- * This is a temporary solution until all code
-- * is moved to smbdirect_all_c_files.c and we
-- * have an smbdirect.ko that exports the required
-- * functions.
-- */
--#include "../common/smbdirect/smbdirect_all_c_files.c"
++	t = kzalloc(sizeof(*t), KSMBD_DEFAULT_GFP);
++	if (!t)
++		return NULL;
++	sc = &t->socket;
++	smbdirect_socket_prepare_create(sc, sp, smb_direct_wq);
++	/*
++	 * from here we operate on the copy.
++	 */
++	sp = &sc->parameters;
++
++	INIT_WORK(&sc->disconnect_work, smb_direct_disconnect_rdma_work);
++
+ 	sc->rdma.cm_id = cm_id;
+ 	cm_id->context = sc;
+ 
 -- 
 2.43.0
 
