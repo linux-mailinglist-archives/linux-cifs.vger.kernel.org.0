@@ -1,51 +1,51 @@
-Return-Path: <linux-cifs+bounces-7965-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-7963-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A15DC86A3F
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:33:02 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BF96C86A36
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 19:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CF3FC351044
-	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 18:33:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3819D350B24
+	for <lists+linux-cifs@lfdr.de>; Tue, 25 Nov 2025 18:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E483321AA;
-	Tue, 25 Nov 2025 18:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E331331A7C;
+	Tue, 25 Nov 2025 18:32:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="HLIUcsoY"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="NKQfFWVg"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD7A331A63
-	for <linux-cifs@vger.kernel.org>; Tue, 25 Nov 2025 18:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CFE3314DD
+	for <linux-cifs@vger.kernel.org>; Tue, 25 Nov 2025 18:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764095576; cv=none; b=eHSjBZ7lpKw6l366pDdMt8PQOTb+F/hPpYH+Lm46t4MFBt9SlvH6GrqUMcgT+8EKIF7b1Q3nP8VDqcTJRh2aet4nAmz88VbZ4IN1po+yR27PIrj3t6TpkgdBvV/gIxHjE4kll9K+f1suROxmIrIVgmRnR6XUQcW2kwD5CkJhun4=
+	t=1764095575; cv=none; b=aRG6mIOfAMedF6PefzLVEC/9b2RqTEGFfcy1kMMUvVbEcpY4MN0RePGQLJ0EzrDkvuaKjB/k/7vgBBtiC+zfjXzSOdF0ZVFcLitJLdERpAdzAZDGim2SRHIBm+MY3RXmTauJbHINAvZwcX/Q/IW+0y20HzjIfpYxQchU2t6PWV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764095576; c=relaxed/simple;
-	bh=6PScrn48J1JIJeC0dpZY4l9i7qrauPcvVmXtNm+F7ow=;
+	s=arc-20240116; t=1764095575; c=relaxed/simple;
+	bh=koiTwUmChf1DmaLc6NPfM6JMZMJwv/4mBYXovjS4EX0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ITrwsEfras4tDgYarT2wK+EuHDhfq7LYrAaTcrQVU6V9WjmZ2+n2j2yrk2NkNyHxM1joCw4hxaC9D2gyUo/36zNVci4SVtRJPu9aFgIJ1BM89NHJ6dLpu4iEn4opl+5CE1EloXCpWrCohloDNA9xlQAujwq1OzMpEsyPEauQ1Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=HLIUcsoY; arc=none smtp.client-ip=144.76.82.148
+	 MIME-Version; b=RLntDogKeQS7L14VxXiJM6xMSLrVhvFCnHqqIzFDs0hBej47f5IFkSDSSkRjQpaw15P1gsTbY+QaXxZtrk/0jJDCNt1DQ4gMrclQPnWjmQWF/iVTxF0yDtPj+/F+BgkNbHQ8XCZUp05EVyP1eJV4II2O9Wadpx0yilVU78JI32o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=NKQfFWVg; arc=none smtp.client-ip=144.76.82.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
 	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=W+IAS/M++2SUukq5MCo9uXhik4htSU8p4LSIQJET+ZA=; b=HLIUcsoYkUPbnYVT+WRMllN8MU
-	w5+j++7h/px2nyHMYZWjjAeku4go6SXmdi/HH7ZFwBi+9y/3QlKU+6H7dI92A+ZKRxIeFFiUK7i0R
-	3q9eCrGVaPvClEbOSP53SMjUYWb2Ze9IG+7482Cm6Lik7zHS26AXCMW8WYZQ/82dBDUifKjGdmKDd
-	4Od92xIc9GB5/RygCrde9+dZyIKO4PkzeiRmwtpWs2Qc8psGU3gltRCoc1gxYElv6TZmL53lfJBu8
-	aQ7MGsr6HVXT4dkAc3fH6WgFIknws9LGD20UTquiMDGBcCL0JmdaVyVRcNQ2vUkBeNOQT8T4clrCN
-	YMTQXfrvbm48FSkBkwAVR8pJQsPvf/YH1eE5hRGtN0PSCH5ZlKRy/3H4WjFYVKAOCcqgbM4bv69o7
-	wITJfeZFRZl+cCUBRlBRPy3vzQUGHyZQ9YEx5/6kBuUXjqFDiuOGPEB4Zo32s0jQd5GMcUltGXPKu
-	jJhf9xZSXHnX6fVRH+E5GCYI;
+	bh=6ZBdmK/hb72nWzfTX+xpVwDxdtCuyybkMHjYK9w6vSg=; b=NKQfFWVg2e26+fuyxgPQOSVPF/
+	EXlf72BFVDDBmJbpjrSfb/Fwiy9Xlo9l8kBOFZMuY2sQA17ghs/lsoRj8lPaU/pd0djQ+22t2kD47
+	GTIPQcTpargtnfbGCxkRoHxT0ECTqYkLT7M4MoG5j1V5VlKTRhbAlNC1FQgPZTl+VyTpTAyPBLJ97
+	0qN55RiDCSCHDX2uy7b2MCGr3UccINWgFfDunuLtZ6Ea/ti8DCUM2Oa45QW6e800ayeOwxIIG+OvN
+	uehxyyTUEPQapUsCv7Q126zZfqAQyFVGiblvvsE3yYdyvAwQzUkJ6XOU6l7FlG0t0Py6sHJzue+Ix
+	12VUy1k+BizZR8i+JDcA6Lr3U5h+x7pE6xfkNXF63xG1JPQlVkgaRisLmaOoflGVteZdFl5A5bbKe
+	JNP9bRah3zoHmawUm9KSJlmdZO8aLIwYwZ56EUueMTlOcIh3vBlDGDpdWEBoxj/SaMkVJmn1J6ABY
+	/3rKDzJmQs5eV6dKpZfoPPMw;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
 	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
 	(Exim)
-	id 1vNxmn-00Fftf-2J;
-	Tue, 25 Nov 2025 18:29:10 +0000
+	id 1vNxmu-00Ffwd-0y;
+	Tue, 25 Nov 2025 18:29:16 +0000
 From: Stefan Metzmacher <metze@samba.org>
 To: linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
@@ -54,9 +54,9 @@ Cc: metze@samba.org,
 	Tom Talpey <tom@talpey.com>,
 	Long Li <longli@microsoft.com>,
 	Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH v4 137/145] smb: smbdirect: introduce global workqueues
-Date: Tue, 25 Nov 2025 18:56:23 +0100
-Message-ID: <0f0acfb64b66899ca68dc98fd3a2f4eb1fc91253.1764091285.git.metze@samba.org>
+Subject: [PATCH v4 138/145] smb: client: no longer use smbdirect_socket_set_custom_workqueue()
+Date: Tue, 25 Nov 2025 18:56:24 +0100
+Message-ID: <cabe70c090b544443f56512146270fa58dcc5578.1764091285.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1764091285.git.metze@samba.org>
 References: <cover.1764091285.git.metze@samba.org>
@@ -68,8 +68,8 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These will be used in future and callers should no
-longer use smbdirect_socket_set_custom_workqueue().
+smbdirect.ko has global workqueues now, so we should use these
+default once.
 
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
@@ -79,159 +79,77 @@ Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/smb/common/smbdirect/smbdirect_internal.h |  9 +++
- fs/smb/common/smbdirect/smbdirect_main.c     | 76 +++++++++++++++++++-
- fs/smb/common/smbdirect/smbdirect_socket.h   |  9 ++-
- 3 files changed, 90 insertions(+), 4 deletions(-)
+ fs/smb/client/smbdirect.c | 12 ------------
+ fs/smb/client/smbdirect.h |  1 -
+ 2 files changed, 13 deletions(-)
 
-diff --git a/fs/smb/common/smbdirect/smbdirect_internal.h b/fs/smb/common/smbdirect/smbdirect_internal.h
-index eecc8f6b197b..4cb5c8f07e8c 100644
---- a/fs/smb/common/smbdirect/smbdirect_internal.h
-+++ b/fs/smb/common/smbdirect/smbdirect_internal.h
-@@ -19,6 +19,15 @@
+diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
+index 0c3a4b6aa03f..4b9ae71c323b 100644
+--- a/fs/smb/client/smbdirect.c
++++ b/fs/smb/client/smbdirect.c
+@@ -196,7 +196,6 @@ void smbd_destroy(struct TCP_Server_Info *server)
  
- struct smbdirect_module_state {
- 	struct mutex mutex;
-+
-+	struct {
-+		struct workqueue_struct *accept;
-+		struct workqueue_struct *connect;
-+		struct workqueue_struct *idle;
-+		struct workqueue_struct *refill;
-+		struct workqueue_struct *immediate;
-+		struct workqueue_struct *cleanup;
-+	} workqueues;
+ 	smbdirect_socket_release(info->socket);
+ 
+-	destroy_workqueue(info->workqueue);
+ 	kfree(info);
+ 	server->smbd_conn = NULL;
+ }
+@@ -245,7 +244,6 @@ static struct smbd_connection *_smbd_get_connection(
+ 	struct smbdirect_socket_parameters init_params = {};
+ 	struct smbdirect_socket_parameters *sp;
+ 	__be16 *sport;
+-	char wq_name[80];
+ 	int ret;
+ 
+ 	/*
+@@ -270,10 +268,6 @@ static struct smbd_connection *_smbd_get_connection(
+ 	info = kzalloc(sizeof(struct smbd_connection), GFP_KERNEL);
+ 	if (!info)
+ 		return NULL;
+-	scnprintf(wq_name, ARRAY_SIZE(wq_name), "smbd_%p", info);
+-	info->workqueue = create_workqueue(wq_name);
+-	if (!info->workqueue)
+-		goto create_wq_failed;
+ 	ret = smbdirect_socket_create_kern(net, &sc);
+ 	if (ret)
+ 		goto socket_init_failed;
+@@ -284,9 +278,6 @@ static struct smbd_connection *_smbd_get_connection(
+ 	ret = smbdirect_socket_set_kernel_settings(sc, IB_POLL_SOFTIRQ, GFP_KERNEL);
+ 	if (ret)
+ 		goto set_settings_failed;
+-	ret = smbdirect_socket_set_custom_workqueue(sc, info->workqueue);
+-	if (ret)
+-		goto set_workqueue_failed;
+ 
+ 	if (dstaddr->sa_family == AF_INET6)
+ 		sport = &((struct sockaddr_in6 *)dstaddr)->sin6_port;
+@@ -306,13 +297,10 @@ static struct smbd_connection *_smbd_get_connection(
+ 	return info;
+ 
+ connect_failed:
+-set_workqueue_failed:
+ set_settings_failed:
+ set_params_failed:
+ 	smbdirect_socket_release(sc);
+ socket_init_failed:
+-	destroy_workqueue(info->workqueue);
+-create_wq_failed:
+ 	kfree(info);
+ 	return NULL;
+ }
+diff --git a/fs/smb/client/smbdirect.h b/fs/smb/client/smbdirect.h
+index bd03ae72e9c8..0017d5b2de44 100644
+--- a/fs/smb/client/smbdirect.h
++++ b/fs/smb/client/smbdirect.h
+@@ -25,7 +25,6 @@ extern int smbd_receive_credit_max;
+ 
+ struct smbd_connection {
+ 	struct smbdirect_socket *socket;
+-	struct workqueue_struct *workqueue;
  };
  
- extern struct smbdirect_module_state smbdirect_globals;
-diff --git a/fs/smb/common/smbdirect/smbdirect_main.c b/fs/smb/common/smbdirect/smbdirect_main.c
-index c61ae8d7f4f0..12436e73b51e 100644
---- a/fs/smb/common/smbdirect/smbdirect_main.c
-+++ b/fs/smb/common/smbdirect/smbdirect_main.c
-@@ -12,14 +12,81 @@ struct smbdirect_module_state smbdirect_globals = {
- 
- static __init int smbdirect_module_init(void)
- {
-+	int ret = -ENOMEM;
-+
- 	pr_notice("subsystem loading...\n");
- 	mutex_lock(&smbdirect_globals.mutex);
- 
--	/* TODO... */
-+	smbdirect_globals.workqueues.accept = alloc_workqueue("smbdirect-accept",
-+							      WQ_SYSFS |
-+							      WQ_PERCPU |
-+							      WQ_POWER_EFFICIENT,
-+							      0);
-+	if (smbdirect_globals.workqueues.accept == NULL)
-+		goto alloc_accept_wq_failed;
-+
-+	smbdirect_globals.workqueues.connect = alloc_workqueue("smbdirect-connect",
-+							       WQ_SYSFS |
-+							       WQ_PERCPU |
-+							       WQ_POWER_EFFICIENT,
-+							       0);
-+	if (smbdirect_globals.workqueues.connect == NULL)
-+		goto alloc_connect_wq_failed;
-+
-+	smbdirect_globals.workqueues.idle = alloc_workqueue("smbdirect-idle",
-+							    WQ_SYSFS |
-+							    WQ_PERCPU |
-+							    WQ_POWER_EFFICIENT,
-+							    0);
-+	if (smbdirect_globals.workqueues.idle == NULL)
-+		goto alloc_idle_wq_failed;
-+
-+	smbdirect_globals.workqueues.refill = alloc_workqueue("smbdirect-refill",
-+							      WQ_HIGHPRI |
-+							      WQ_SYSFS |
-+							      WQ_PERCPU |
-+							      WQ_POWER_EFFICIENT,
-+							      0);
-+	if (smbdirect_globals.workqueues.refill == NULL)
-+		goto alloc_refill_wq_failed;
-+
-+	smbdirect_globals.workqueues.immediate = alloc_workqueue("smbdirect-immediate",
-+								 WQ_HIGHPRI |
-+								 WQ_SYSFS |
-+								 WQ_PERCPU |
-+								 WQ_POWER_EFFICIENT,
-+								 0);
-+	if (smbdirect_globals.workqueues.immediate == NULL)
-+		goto alloc_immediate_wq_failed;
-+
-+	smbdirect_globals.workqueues.cleanup = alloc_workqueue("smbdirect-cleanup",
-+							       WQ_MEM_RECLAIM |
-+							       WQ_HIGHPRI |
-+							       WQ_SYSFS |
-+							       WQ_PERCPU |
-+							       WQ_POWER_EFFICIENT,
-+							       0);
-+	if (smbdirect_globals.workqueues.cleanup == NULL)
-+		goto alloc_cleanup_wq_failed;
- 
- 	mutex_unlock(&smbdirect_globals.mutex);
- 	pr_notice("subsystem loaded\n");
- 	return 0;
-+
-+alloc_cleanup_wq_failed:
-+	destroy_workqueue(smbdirect_globals.workqueues.immediate);
-+alloc_immediate_wq_failed:
-+	destroy_workqueue(smbdirect_globals.workqueues.refill);
-+alloc_refill_wq_failed:
-+	destroy_workqueue(smbdirect_globals.workqueues.idle);
-+alloc_idle_wq_failed:
-+	destroy_workqueue(smbdirect_globals.workqueues.connect);
-+alloc_connect_wq_failed:
-+	destroy_workqueue(smbdirect_globals.workqueues.accept);
-+alloc_accept_wq_failed:
-+	mutex_unlock(&smbdirect_globals.mutex);
-+	pr_crit("failed to loaded: %d (%s)\n", ret, errname(ret));
-+	return ret;
- }
- 
- static __exit void smbdirect_module_exit(void)
-@@ -27,7 +94,12 @@ static __exit void smbdirect_module_exit(void)
- 	pr_notice("subsystem unloading...\n");
- 	mutex_lock(&smbdirect_globals.mutex);
- 
--	/* TODO... */
-+	destroy_workqueue(smbdirect_globals.workqueues.accept);
-+	destroy_workqueue(smbdirect_globals.workqueues.connect);
-+	destroy_workqueue(smbdirect_globals.workqueues.idle);
-+	destroy_workqueue(smbdirect_globals.workqueues.refill);
-+	destroy_workqueue(smbdirect_globals.workqueues.immediate);
-+	destroy_workqueue(smbdirect_globals.workqueues.cleanup);
- 
- 	mutex_unlock(&smbdirect_globals.mutex);
- 	pr_notice("subsystem unloaded\n");
-diff --git a/fs/smb/common/smbdirect/smbdirect_socket.h b/fs/smb/common/smbdirect/smbdirect_socket.h
-index b3769be07df0..beb318463a68 100644
---- a/fs/smb/common/smbdirect/smbdirect_socket.h
-+++ b/fs/smb/common/smbdirect/smbdirect_socket.h
-@@ -108,8 +108,6 @@ struct smbdirect_socket {
- 	/*
- 	 * This points to the workqueues to
- 	 * be used for this socket.
--	 * It can be per socket (on the client)
--	 * or point to a global workqueue (on the server)
- 	 */
- 	struct {
- 		struct workqueue_struct *accept;
-@@ -520,6 +518,13 @@ static __always_inline void smbdirect_socket_init(struct smbdirect_socket *sc)
- 
- 	init_waitqueue_head(&sc->status_wait);
- 
-+	sc->workqueues.accept = smbdirect_globals.workqueues.accept;
-+	sc->workqueues.connect = smbdirect_globals.workqueues.connect;
-+	sc->workqueues.idle = smbdirect_globals.workqueues.idle;
-+	sc->workqueues.refill = smbdirect_globals.workqueues.refill;
-+	sc->workqueues.immediate = smbdirect_globals.workqueues.immediate;
-+	sc->workqueues.cleanup = smbdirect_globals.workqueues.cleanup;
-+
- 	INIT_WORK(&sc->disconnect_work, __smbdirect_socket_disabled_work);
- 	disable_work_sync(&sc->disconnect_work);
- 
+ /* Create a SMBDirect session */
 -- 
 2.43.0
 
