@@ -1,41 +1,41 @@
-Return-Path: <linux-cifs+bounces-8106-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8107-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E44CA0E2F
-	for <lists+linux-cifs@lfdr.de>; Wed, 03 Dec 2025 19:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D52DCA0C7F
+	for <lists+linux-cifs@lfdr.de>; Wed, 03 Dec 2025 19:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D15D63276D6B
-	for <lists+linux-cifs@lfdr.de>; Wed,  3 Dec 2025 17:16:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DDF88325973C
+	for <lists+linux-cifs@lfdr.de>; Wed,  3 Dec 2025 17:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E795D3AA1A7;
-	Wed,  3 Dec 2025 16:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09913AA193;
+	Wed,  3 Dec 2025 16:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2Q9h8dB1"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pvmf3lAN"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D183AA19C;
-	Wed,  3 Dec 2025 16:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38703A1D14;
+	Wed,  3 Dec 2025 16:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764780743; cv=none; b=A26EE8xbX4q1byy0zEOVIymgsl61ZHLIBJo9Jf64bILkXAL/W5OllrJKuwrk4aLci0WohhwadEIq/2RYyHvwjtASvEdIuX3ECy+Vmiov3GTOAKASuE+igaLRxwKBf6Ka1LgTPc8b6YibGru86mYRCnrh7RFtwZj+AGxBtuyqhVQ=
+	t=1764781109; cv=none; b=PY1vJYuZjS82/5qpScINJsRdxedCkDrUxZi+GMkLNAnx5biJrlHmd0AIvjxKDb2CTGf4F2ZU1RYK+aK3btjtE2sma+g1FYHwNS4q8tcXbzGd9d1nM+PrqeuyP3cBqKqzcQf7N87iFCArpMuuWVpdu0i1aS8ucxRh3TwH8asAEpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764780743; c=relaxed/simple;
-	bh=eE1MgjL8I7/jKcxsoo40q750u1/7Jb1FexJjnZOtHO4=;
+	s=arc-20240116; t=1764781109; c=relaxed/simple;
+	bh=mIxKv1CYT7oySN2uIJ2wmeG9vV+lve9zLA2xymm3+rk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mKvkYz1TAIED75RWJzdWLtjZCoeVTjzurXLG6Ypn+4Z3T3VCzL6F47ty1fpyQ5t8mH42fS6ulAhalum9Yi83BKM9UDn6cKpjH5gkPgbLVipKwEbuiPlYO27ORwzBIk9mIj/zMzrwlJvgjHI7NYXwGrgH8WLg4NljRVy4sWZ8sY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2Q9h8dB1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63E1C4CEF5;
-	Wed,  3 Dec 2025 16:52:22 +0000 (UTC)
+	 MIME-Version; b=gximJYUbPyLqh+g2zVf+LCVMpkHGdrdzzJprD1x9mWH3IjYdYl7SDIeAKdEFTr3ZjeKR3UYC4243oZCVLdY8o/R3HfJsN1pjwKYYfn79XuOXnYHAki6ZpoBGFhdoMHq3jkfb8TaFVDeXfIHjAV/VMI7ngAoY1fQHoy1+Qpug0Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pvmf3lAN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD02C4CEF5;
+	Wed,  3 Dec 2025 16:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1764780743;
-	bh=eE1MgjL8I7/jKcxsoo40q750u1/7Jb1FexJjnZOtHO4=;
+	s=korg; t=1764781109;
+	bh=mIxKv1CYT7oySN2uIJ2wmeG9vV+lve9zLA2xymm3+rk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=2Q9h8dB1k3eyGnbAyTCI5Qn5+Mo7fmA2T8RJM9uzR8A3Ew+OFpHr+jtngY1TuFo4W
-	 BJaa2ciraH7JgUOtlRLFE7onNw6RzPc57ZDxPVQQHZJck9TiG0E7lY7EW+gfRW3/hb
-	 Utd+JMIXB/3h+nx/xmkcCDha3YBnBC+guedK1Cho=
+	b=pvmf3lAN5WWIg2ECPhE7DvfIMEuzySvyuUgJGSoOrGjlleguPiK1gg8CckKyuZ8Ld
+	 IKtOQQlDicArFufhuiGsePJ2JV+zLxIf30+Wz9jiEMomBhTe7Po/DOvlDyFj5mtcOc
+	 Ogy4gZeM5ErWyI6rFMG7m1tFww1anhBPBlNQcKI0=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,12 +45,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jay Shin <jaeshin@redhat.com>,
 	linux-cifs@vger.kernel.org,
 	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.12 077/132] smb: client: fix memory leak in cifs_construct_tcon()
-Date: Wed,  3 Dec 2025 16:29:16 +0100
-Message-ID: <20251203152346.146051848@linuxfoundation.org>
+Subject: [PATCH 6.6 50/93] smb: client: fix memory leak in cifs_construct_tcon()
+Date: Wed,  3 Dec 2025 16:29:43 +0100
+Message-ID: <20251203152338.371156577@linuxfoundation.org>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251203152343.285859633@linuxfoundation.org>
-References: <20251203152343.285859633@linuxfoundation.org>
+In-Reply-To: <20251203152336.494201426@linuxfoundation.org>
+References: <20251203152336.494201426@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -118,7 +118,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/smb/client/connect.c
 +++ b/fs/smb/client/connect.c
-@@ -4227,6 +4227,7 @@ cifs_construct_tcon(struct cifs_sb_info
+@@ -4224,6 +4224,7 @@ cifs_construct_tcon(struct cifs_sb_info
  
  out:
  	kfree(ctx->username);
