@@ -1,77 +1,102 @@
-Return-Path: <linux-cifs+bounces-8118-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8122-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2B0CA259A
-	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 05:50:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA5FCA2601
+	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 06:01:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CB6E13022882
-	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 04:50:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 209C030BD1F7
+	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 04:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3F22586E8;
-	Thu,  4 Dec 2025 04:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6A82FE06D;
+	Thu,  4 Dec 2025 04:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/P/50IA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/7cQ/n8"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF831C5D77;
-	Thu,  4 Dec 2025 04:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B92D2DC773
+	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 04:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764823838; cv=none; b=oAZMT5Vp6MP9bKTdmRoxvUX8CGmpXZ45i/8N8Q6GuHmZ+hTdE5PtZesrNa1bTcJ6UnW+u3L1Ip0VArTyFcXkJsw9B5LtXwWfGAaCW3BNSB9ozN0QzPaz2RaKejBSc/SdeWR13MpPTpq8SPreoBwPuYxvfrvnTBGdQ4SwyJXtlxI=
+	t=1764824394; cv=none; b=Ki4hStge7U/T8ZclaJ3VDRoAJfF9+RH3pU+tzu/x/zNOc5jGnTKDgRCYCWVoqKLTucF6YYdgU8IdyGuJc5pln1JdoRM6AEsKve+A63ykUwWAIMxBy3NnY6IKoiezL57mKSl9cWAcZEwbv1F9TNU1sTCNDy0bViB90eH1uBIvf1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764823838; c=relaxed/simple;
-	bh=X8KSCurJv7dSi2EYFD1LLgDTa6u2Hrt3B/eBLVAefWM=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=lwpDAYl9hOwJJUVPPvL+dbL0Q1Ytp2cCNdMQWpVlns9HOMvd0blpGZwYXWRzgU+JTd6WEb+yEYhFBsCXp5HKIkjO7IovtlQz4Djm3Ijl7iwHDjmutPqWYNE+5e64LBC7KCS5XTqIG8oFA7uNi+1o7oE1TF7OysotbI1FO/+hY4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/P/50IA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367CBC113D0;
-	Thu,  4 Dec 2025 04:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764823838;
-	bh=X8KSCurJv7dSi2EYFD1LLgDTa6u2Hrt3B/eBLVAefWM=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=A/P/50IANgUuqBl0LM69zdB2GzP8aOdhcfryOp+GKJIK/f1jWthGFj1GVKqmWPSOg
-	 nrcHEyZxZuh7SdufX4VZcmrXohuC2o2K6QFeDp0p5xIzypE32/5TNpLkAN2uMCrP4C
-	 ZoLVj4heJd4MR4DKsOvosEPqP38BeBi4coCyxl/7GRpsO/oRrifetgX1HYJYPULb3E
-	 jvKOmUGkGsvmWEN9QA1O4MPVruX5Caik3hizHq5crFaaX0my2lmfHy5PeLhnN3EkPH
-	 d+q67CntwKhGihF/5rlcUwolrjFA2nNPrD87GQsOiCNl/Dc+MsnDgA6AzluskaDh+F
-	 EKyY2guQ5H+aA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F3B633AA9A8A;
-	Thu,  4 Dec 2025 04:47:37 +0000 (UTC)
-Subject: Re: [GIT PULL] smb client and server fixes
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mtHWXNvtYB0mTUci0qa-b0dmOjUMr7sARERV9SyFpTAVA@mail.gmail.com>
-References: <CAH2r5mtHWXNvtYB0mTUci0qa-b0dmOjUMr7sARERV9SyFpTAVA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mtHWXNvtYB0mTUci0qa-b0dmOjUMr7sARERV9SyFpTAVA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/v6.19-rc-smb-fixes
-X-PR-Tracked-Commit-Id: e1469f56089fc00bc94706a07c5cd63fa3e8625b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 869737543b39a145809c41a7253c6ee777e22729
-Message-Id: <176482365657.238370.18009456389242673547.pr-tracker-bot@kernel.org>
-Date: Thu, 04 Dec 2025 04:47:36 +0000
-To: Steve French <smfrench@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>, Namjae Jeon <linkinjeon@kernel.org>
+	s=arc-20240116; t=1764824394; c=relaxed/simple;
+	bh=eGlL4hhad/P7GhBW7jMb8FxqINXXDjelgXLbpA4Oz2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ASEQUqMUU6NOJ6nhdNtPizu0zucZ49mhHrgdMpbIMI9M8RGDO/ut3MIOfkDkFT+AatQJbR0Lj3julING/Q8NKbfFDUAJe+IJExwAWro62DJda/eVctUlzAI68NxhoXsVVFgDcn/i5N7/E8dUlE0UNcRTXP98QIpverXH66gNXks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/7cQ/n8; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764824381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=f89bclOKoWsmdxvcdH10YkgnB1JmuzLKIEn/nm8RMUc=;
+	b=P/7cQ/n8t2hmongEuCfP78hZYaxaoGeh8Ne3zBuvCLqDyNkLzDhu8iEvPOfK7lY25VBh08
+	QsVSa6dgmjPXjWymWKu/t2/LuVqFFWN/dH5ZH9HNEqYRd4HKFRb7l63zZaYGCTZm16Xt0D
+	lsw7nY+5Tknz5GlX4MnKOvvNiYRgEaE=
+From: chenxiaosong.chenxiaosong@linux.dev
+To: sfrench@samba.org,
+	smfrench@gmail.com,
+	linkinjeon@kernel.org,
+	linkinjeon@samba.org
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chenxiaosong@chenxiaosong.com,
+	ChenXiaoSong <chenxiaosong@kylinos.cn>
+Subject: [PATCH 00/10] smb: improve search speed of SMB2 maperror
+Date: Thu,  4 Dec 2025 12:58:08 +0800
+Message-ID: <20251204045818.2590727-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The pull request you sent on Mon, 1 Dec 2025 19:06:25 -0600:
+From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-> git://git.samba.org/ksmbd.git tags/v6.19-rc-smb-fixes
+Before applying this patchset, when searching for the last element of
+smb2_error_map_table array and calling smb2_print_status(),
+3480 comparisons are needed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/869737543b39a145809c41a7253c6ee777e22729
+After applying this patchset, only 10 comparisons are required.
 
-Thank you!
+ChenXiaoSong (10):
+  smb/client: reduce loop count in map_smb2_to_linux_error() by half
+  smb/client: remove unused elements from smb2_error_map_table array
+  smb: add two elements to smb2_error_map_table array
+  smb/client: sort smb2_error_map_table array
+  smb/client: use bsearch() to find target status code
+  smb/client: introduce smb2_get_err_map()
+  smb/client: introduce smb2maperror KUnit tests
+  smb/server: rename include guard in smb_common.h
+  smb: create common/common.h and common/common.c
+  smb: move client/smb2maperror.c to common/
+
+ fs/smb/Kconfig                           |  13 ++
+ fs/smb/client/Makefile                   |   2 +-
+ fs/smb/client/smb2misc.c                 |  44 ++++++
+ fs/smb/client/smbencrypt.c               |   2 +-
+ fs/smb/common/Makefile                   |   3 +-
+ fs/smb/common/cifs_md4.c                 |   5 +-
+ fs/smb/common/common.c                   |  30 ++++
+ fs/smb/common/{md4.h => common.h}        |  27 +++-
+ fs/smb/{client => common}/smb2maperror.c | 173 ++++++++++++++---------
+ fs/smb/common/smb2status.h               |   5 +-
+ fs/smb/server/smb2pdu.c                  |   2 +-
+ fs/smb/server/smb_common.h               |   6 +-
+ 12 files changed, 227 insertions(+), 85 deletions(-)
+ create mode 100644 fs/smb/common/common.c
+ rename fs/smb/common/{md4.h => common.h} (60%)
+ rename fs/smb/{client => common}/smb2maperror.c (97%)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
