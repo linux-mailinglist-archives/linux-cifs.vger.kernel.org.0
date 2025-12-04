@@ -1,63 +1,56 @@
-Return-Path: <linux-cifs+bounces-8136-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8138-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB38BCA4613
-	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 16:59:23 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43FA9CA4D90
+	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 19:06:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2850430C4EE8
-	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 15:54:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BD05C305B289
+	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 18:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C234A2D839B;
-	Thu,  4 Dec 2025 15:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CB2194C96;
+	Thu,  4 Dec 2025 18:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="es263pxC"
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="cx/F7eRA"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5ACA2DCC05
-	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 15:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9918536C5A0
+	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 18:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764863655; cv=none; b=oLeb5CV7E1VGN1tnm/R3cXeyIbdTr70YtlHKrKQ7V5PkrcpyhTjbpT5oxuPKjmBzRyWx6jh/gjNrBm58if89Yb8sURDfyg6JUf6yNSD0RUqxtkDfkOcbMli1P9NPCRB3OFKrOt7jWcmCGO25G5J/FhLxk1DFpY4f4hTsk9cgzh0=
+	t=1764871596; cv=none; b=YgTleBGTc2EdzwvX0YkdDsZIa1D9xsPzuf7Tor7qKKrWobpMfy2LfKzzdDmMAbPOE1sJaewt9pqbz28n/A2iXkrQLpi4wvBo0ngdx8H/Pp4cRb5h1u9+ZR5LK5NUxRsiVRlVD5lNO4cIqO7oSlmN/u4PCEc/ErzWUNa+XV4gJko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764863655; c=relaxed/simple;
-	bh=Ya40AQjTfcEQKO4mu/cLJffgP6jIokmMIVNoINe7u7A=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=atwvPz/rul3MAXGO3UI32hemQFfLbWFVEQAAYDLWJEUD095hp3R9kSnheLE3Ri7XsKeQ1vZCvTRwZJDzH+pNrjfYRlID/yDMgBxxUWvU6ONKB6S0KeeQfpkhFnMCAM8TvdpKmDMMtDoltWq+KrGzzQyPPcWg2xY05OHucAt014Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=es263pxC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764863652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/PXfCAogLoX2fF4ZN7adqUSt41Dc0XRpCjxePCSDDFs=;
-	b=es263pxCqgKXsBkIPBmPs1ZdAN9qNUnQn6jGU6Yp8PwGopHB4PHjhYMlJQxl0YgMtcnolX
-	GhHGfCEldPzZgxlzmFvjEfPC+AGbkiLivlZwq9/hSWqfc+yAbPftOxicwSAoIBTFVrXuMo
-	grFQ+wbIGydfF8bSc5/yfOhAmUbFRio=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-678-9N6aZn-yOmmSjcBGr-_UxA-1; Thu,
- 04 Dec 2025 10:54:11 -0500
-X-MC-Unique: 9N6aZn-yOmmSjcBGr-_UxA-1
-X-Mimecast-MFC-AGG-ID: 9N6aZn-yOmmSjcBGr-_UxA_1764863650
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF8F619560B3
-	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 15:54:10 +0000 (UTC)
-Received: from plambri-thinkpadp16vgen1.rmtgb.csb (unknown [10.45.226.41])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C4CE919560BB
-	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 15:54:09 +0000 (UTC)
-From: Pierguido Lambri <plambri@redhat.com>
-To: Linux CIFS Mailing list <linux-cifs@vger.kernel.org>
-Subject: [PATCH 1/1] cifs.upcall: add option to enable debug logs
-Date: Thu,  4 Dec 2025 15:54:07 +0000
-Message-ID: <20251204155407.625640-1-plambri@redhat.com>
+	s=arc-20240116; t=1764871596; c=relaxed/simple;
+	bh=oGGsZ0VBKAMKbSnky2yeeEFMDeaaL9dNDgOC0OThVZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=noDL6QkdncmD5LrFZGalZJ2eMLaYbSWptd5bi7xIyphcJGUYTPKiUlkm+FHl8QjrThFcCQgu7ZrsutYJCsVSFAMUavQa+9Hi7O/kXTnwVpI7nuFjDh405SA7zj7LfkhOx0bSjBK4zSy5COwZxYaee73BU2L0jRSjd7evr/7QGuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=cx/F7eRA; arc=none smtp.client-ip=143.255.12.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=manguebit.org; s=dkim; h=Content-Transfer-Encoding:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:Sender:Content-Type:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=mf1soghjnKrBnk+Bcbsoqz37jKyxwDBSYzxvQff/Fq0=; b=cx/F7eRAfwfItxEsW4iJxsK8db
+	cBI8kINtFICeyVHZTQZ3gIn6INvl4FBsDQQ03CXmOTAWEmiUmfZwdiYd84S4s/lLEw7U3we+a4uwR
+	yGAsx5v7kB/9XRjYfmTfEbSc+iiFOjZvB4OeCqHxz8hlli7FOsxpF4CGb7VAUEJ8hhPzrtAKt14Wo
+	zixBJR24M1UncnQio4rDAk894TvBL4zvEycCSvQGzZNonfhyktKz1s+j40N7lupDd5YYW5ndaDt2c
+	i5Uilg1yFfRqsEjNsIxtOM2nxatVHT2gSY8ZtLHDUbT/ZNbVHQvh7ieTXi2K0D5lftDwBnRzwj6G8
+	B+kG7zrw==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.99)
+	id 1vRDik-00000000Dfg-0ZsS;
+	Thu, 04 Dec 2025 15:06:26 -0300
+From: Paulo Alcantara <pc@manguebit.org>
+To: smfrench@gmail.com
+Cc: "Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	David Howells <dhowells@redhat.com>,
+	Pierguido Lambri <plambri@redhat.com>,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH 1/3] smb: client: relax session and tcon reconnect attempts
+Date: Thu,  4 Dec 2025 15:06:23 -0300
+Message-ID: <20251204180626.244415-1-pc@manguebit.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -65,72 +58,118 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-cifs.upcall uses two levels of logs, DEBUG and ERR.
-However, when using systemd, these logs will always be recorded.
-When the system does a lot of upcalls, the journal could be filled
-with debug logs, which may not be useful at that time.
-Added then a new option '-d' to enable debug logs only when needed.
-This will set a logmask up to LOG_DEBUG instead of the default
-of LOG_ERR, thus reducing the amount of logs when no debug is needed.
+When the client re-establishes connection to the server, it will queue
+a worker thread that will attempt to reconnect sessions and tcons on
+every two seconds, which is kinda overkill as it is a very common
+scenario when having expired passwords or KRB5 TGT tickets, or deleted
+shares.
 
-Signed-off-by: Pierguido Lambri <plambri@redhat.com>
-Reviewed-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Use an exponential backoff strategy to handle session/tcon reconnect
+attempts in the worker thread to prevent the client from overloading
+the system when it is very unlikely to re-establish any session/tcon
+soon while client is idle.
+
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Reviewed-by: David Howells <dhowells@redhat.com>
+Cc: Pierguido Lambri <plambri@redhat.com>
+Cc: linux-cifs@vger.kernel.org
 ---
- cifs.upcall.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ fs/smb/client/cifsglob.h | 21 +++++++++++++++++++++
+ fs/smb/client/connect.c  |  4 ++--
+ fs/smb/client/smb2pdu.c  |  6 +++---
+ 3 files changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/cifs.upcall.c b/cifs.upcall.c
-index 69e27a3..b32fcf1 100644
---- a/cifs.upcall.c
-+++ b/cifs.upcall.c
-@@ -25,6 +25,7 @@
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- */
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index f9c1f553ffd0..3eca5bfb7030 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -745,6 +745,7 @@ struct TCP_Server_Info {
+ 	struct session_key session_key;
+ 	unsigned long lstrp; /* when we got last response from this server */
+ 	unsigned long neg_start; /* when negotiate started (jiffies) */
++	unsigned long reconn_delay; /* when resched session and tcon reconnect */
+ 	struct cifs_secmech secmech; /* crypto sec mech functs, descriptors */
+ #define	CIFS_NEGFLAVOR_UNENCAP	1	/* wct == 17, but no ext_sec */
+ #define	CIFS_NEGFLAVOR_EXTENDED	2	/* wct == 17, ext_sec bit set */
+@@ -2292,4 +2293,24 @@ struct cifs_calc_sig_ctx {
+ 	struct shash_desc *shash;
+ };
  
-+#include <sys/syslog.h>
- #ifdef HAVE_CONFIG_H
- #include "config.h"
- #endif /* HAVE_CONFIG_H */
-@@ -1356,7 +1357,7 @@ lowercase_string(char *c)
++#define CIFS_RECONN_DELAY_SECS	30
++#define CIFS_MAX_RECONN_DELAY	(4 * CIFS_RECONN_DELAY_SECS)
++
++static inline void cifs_queue_server_reconn(struct TCP_Server_Info *server)
++{
++	if (!delayed_work_pending(&server->reconnect)) {
++		WRITE_ONCE(server->reconn_delay, 0);
++		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
++	}
++}
++
++static inline void cifs_requeue_server_reconn(struct TCP_Server_Info *server)
++{
++	unsigned long delay = READ_ONCE(server->reconn_delay);
++
++	delay = umin(delay + CIFS_RECONN_DELAY_SECS, CIFS_MAX_RECONN_DELAY);
++	WRITE_ONCE(server->reconn_delay, delay);
++	queue_delayed_work(cifsiod_wq, &server->reconnect, delay * HZ);
++}
++
+ #endif	/* _CIFS_GLOB_H */
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index b306ee97a20a..3838dd14d4da 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -425,7 +425,7 @@ static int __cifs_reconnect(struct TCP_Server_Info *server,
+ 			spin_unlock(&server->srv_lock);
+ 			cifs_swn_reset_server_dstaddr(server);
+ 			cifs_server_unlock(server);
+-			mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
++			cifs_queue_server_reconn(server);
+ 		}
+ 	} while (server->tcpStatus == CifsNeedReconnect);
  
- static void usage(void)
- {
--	fprintf(stderr, "Usage: %s [ -K /path/to/keytab] [-k /path/to/krb5.conf] [-E] [-t] [-v] [-l] [-e nsecs] key_serial\n", prog);
-+	fprintf(stderr, "Usage: %s [ -K /path/to/keytab] [-k /path/to/krb5.conf] [-d] [-E] [-t] [-v] [-l] [-e nsecs] key_serial\n", prog);
- }
+@@ -564,7 +564,7 @@ static int reconnect_dfs_server(struct TCP_Server_Info *server)
+ 		spin_unlock(&server->srv_lock);
+ 		cifs_swn_reset_server_dstaddr(server);
+ 		cifs_server_unlock(server);
+-		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
++		cifs_queue_server_reconn(server);
+ 	} while (server->tcpStatus == CifsNeedReconnect);
  
- static const struct option long_options[] = {
-@@ -1379,6 +1380,7 @@ int main(const int argc, char *const argv[])
- 	size_t datalen;
- 	long rc = 1;
- 	int c;
-+	int mask;
- 	bool try_dns = false, legacy_uid = false , env_probe = true;
- 	char *buf;
- 	char hostbuf[NI_MAXHOST], *host;
-@@ -1395,12 +1397,19 @@ int main(const int argc, char *const argv[])
- 	hostbuf[0] = '\0';
+ 	dfs_cache_noreq_update_tgthint(ref_path, target_hint);
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index e26d29d75f9f..0d2940808be6 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -493,7 +493,7 @@ smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon,
+ 	spin_unlock(&ses->ses_lock);
  
- 	openlog(prog, 0, LOG_DAEMON);
-+	mask = LOG_UPTO(LOG_ERR);
-+	setlogmask(mask);
+ 	if (smb2_command != SMB2_INTERNAL_CMD)
+-		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
++		cifs_queue_server_reconn(server);
  
--	while ((c = getopt_long(argc, argv, "cEk:K:ltve:", long_options, NULL)) != -1) {
-+	while ((c = getopt_long(argc, argv, "cdEk:K:ltve:", long_options, NULL)) != -1) {
- 		switch (c) {
- 		case 'c':
- 			/* legacy option -- skip it */
- 			break;
-+		case 'd':
-+			/* enable debug logs */
-+			mask = LOG_UPTO(LOG_DEBUG);
-+			setlogmask(mask);
-+			break;
- 		case 'E':
- 			/* skip probing initiating process env */
- 			env_probe = false;
+ 	atomic_inc(&tconInfoReconnectCount);
+ out:
+@@ -4312,7 +4312,7 @@ void smb2_reconnect_server(struct work_struct *work)
+ done:
+ 	cifs_dbg(FYI, "Reconnecting tcons and channels finished\n");
+ 	if (resched)
+-		queue_delayed_work(cifsiod_wq, &server->reconnect, 2 * HZ);
++		cifs_requeue_server_reconn(server);
+ 	mutex_unlock(&pserver->reconnect_mutex);
+ 
+ 	/* now we can safely release srv struct */
+@@ -4336,7 +4336,7 @@ SMB2_echo(struct TCP_Server_Info *server)
+ 	    server->ops->need_neg(server)) {
+ 		spin_unlock(&server->srv_lock);
+ 		/* No need to send echo on newly established connections */
+-		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
++		cifs_queue_server_reconn(server);
+ 		return rc;
+ 	}
+ 	spin_unlock(&server->srv_lock);
 -- 
 2.52.0
 
