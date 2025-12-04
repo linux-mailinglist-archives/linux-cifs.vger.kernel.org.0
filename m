@@ -1,45 +1,45 @@
-Return-Path: <linux-cifs+bounces-8121-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8123-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1934CA25EC
-	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 06:01:09 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68338CA25D3
+	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 06:00:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9204030AC664
-	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 04:59:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9EFEE300E3F9
+	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 04:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9D5272801;
-	Thu,  4 Dec 2025 04:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D6583009F5;
+	Thu,  4 Dec 2025 04:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H74RaZP/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q1RhsfUj"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E34F2FBE14
-	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 04:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6522586E8
+	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 04:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764824392; cv=none; b=PvTQBOC3rnTw8d76PfWN9n6b510N/WI3ZQtPUClKGasCYorrdZORcdnr309VsIJTj4PDgY/QyCmXltLkAfgR+qLn2YT0cXE3W/+F/MweBvysnj4zYeFizdvoFiIwJUCe/gpU7HnwuNFS3jTGdU6x4eA0ygsiWtoeMMiZrZN6Sms=
+	t=1764824395; cv=none; b=KRBZ4yHj6Lo/PImRbijpsSqWxxyBbqmQtvF9JbKJY6J5E5/nngkV5tlexyxx4O3E5oAQHrnoqdY8RyD2htDYUIX8xeMSJhFd07NkPQA3xUcHMW7Hnng+rzVAvYJFhTG3fri38aRlNsF4KMueJwpAS9Gij8vsqQqbHdjAoBrVpKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764824392; c=relaxed/simple;
-	bh=wHQHPGOBL67LojJYdHJntJqg3PyDMhkYPnnAIameZCs=;
+	s=arc-20240116; t=1764824395; c=relaxed/simple;
+	bh=IBYCJ0URnZmHAFg6rVEL8/OhHpGcyVNVskFuPS8njGA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p3v2hTF66Cd6mqNQqFKGt5FNnz+iyikbQ1Az86oOS6228pSxJikUMb89PjnN+Uc5MlxP5wlRm18XW/ddRLsC2ahmLi32BZ7nnIlmOwE+L+IaBZRQQh11/JRDEaqFCzMzCoDj1jZdl8NP+jxT7bUjx+LP4m/JCjmhrfRzZHawUY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H74RaZP/; arc=none smtp.client-ip=95.215.58.183
+	 MIME-Version; b=DqH4+yagKPtCVYgIpH0+8wICyP1qjcUFN7Ny0s+OYzSo6cO7LXbmWtTvIqPZ139Fcpt+HldHYlduCPUvM+jZv70Do61u9OBh1lSXKjSUkhe9hWviKxQFRq5L8MM5MbDi/GUj0EIrVz0O8d62cS7nT779Vi5yUsco+clmBdKnbno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q1RhsfUj; arc=none smtp.client-ip=95.215.58.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764824388;
+	t=1764824391;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=spW3FIUdbUtBzBiQQzKvx4iZUCmDJ5m4MvmIKanhjUw=;
-	b=H74RaZP/lLXfRt1P0F0FIlEfUiHIFXRDGa+c2NIQTowszxo7Zn+y5tP6eqszofzTFdXIJR
-	IQK0MG+PFcU9c+2WKrJZCuJovFm7Ed5X5278NMR02UpPWCSRs8559epPEoKWnSMmgUNCCa
-	hFWyjkP+eY7MAIGfOj1YrVDby4vS/Ik=
+	bh=dwt91f0JwYANteB0KGN5KnaqVqKN9Td/UOVyuvc+nkw=;
+	b=Q1RhsfUjnszoMkw5Z56ZiTv6rKSw2p+I+BvEFjEPKyAAnyYNvDM7d/HPiSJbtyGqFORyOg
+	cg0rkRMFfv+ut95vt8zo8TK1z2xHYypwavurEqW/sFDzfDD41TVSvGCS3juppN8khBZg6F
+	YdYxgRbyNlhv6GZggj17juQbvbDg/iE=
 From: chenxiaosong.chenxiaosong@linux.dev
 To: sfrench@samba.org,
 	smfrench@gmail.com,
@@ -49,9 +49,9 @@ Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	chenxiaosong@chenxiaosong.com,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH 03/10] smb: add two elements to smb2_error_map_table array
-Date: Thu,  4 Dec 2025 12:58:11 +0800
-Message-ID: <20251204045818.2590727-4-chenxiaosong.chenxiaosong@linux.dev>
+Subject: [PATCH 04/10] smb/client: sort smb2_error_map_table array
+Date: Thu,  4 Dec 2025 12:58:12 +0800
+Message-ID: <20251204045818.2590727-5-chenxiaosong.chenxiaosong@linux.dev>
 In-Reply-To: <20251204045818.2590727-1-chenxiaosong.chenxiaosong@linux.dev>
 References: <20251204045818.2590727-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
@@ -65,72 +65,105 @@ X-Migadu-Flow: FLOW_OUT
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Both status codes are mapped to -EIO.
+Sort the array in ascending order, and then we can use binary search
+algorithm to quickly find the target status code.
 
-STATUS_NO_PREAUTH_INTEGRITY_HASH_OVERLAP -> STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP,
-to keep it consistent with the documentation.
+Since the smb2_init_maperror() is called only once when the module is
+loaded, the array is sorted just once.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
- fs/smb/client/smb2maperror.c | 3 +++
- fs/smb/common/smb2status.h   | 5 +++--
- fs/smb/server/smb2pdu.c      | 2 +-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ fs/smb/client/cifsfs.c       |  2 ++
+ fs/smb/client/smb2maperror.c | 25 ++++++++++++++++++++++++-
+ fs/smb/client/smb2proto.h    |  1 +
+ 3 files changed, 27 insertions(+), 1 deletion(-)
 
+diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
+index 6eccb9ed9daa..77d14b3dd650 100644
+--- a/fs/smb/client/cifsfs.c
++++ b/fs/smb/client/cifsfs.c
+@@ -49,6 +49,7 @@
+ #endif
+ #include "fs_context.h"
+ #include "cached_dir.h"
++#include "smb2proto.h"
+ 
+ /*
+  * DOS dates from 1980/1/1 through 2107/12/31
+@@ -1908,6 +1909,7 @@ static int __init
+ init_cifs(void)
+ {
+ 	int rc = 0;
++	smb2_init_maperror();
+ 	cifs_proc_init();
+ 	INIT_LIST_HEAD(&cifs_tcp_ses_list);
+ /*
 diff --git a/fs/smb/client/smb2maperror.c b/fs/smb/client/smb2maperror.c
-index 118e32cc8edc..a77467d2d81c 100644
+index a77467d2d81c..1bd4196386dd 100644
 --- a/fs/smb/client/smb2maperror.c
 +++ b/fs/smb/client/smb2maperror.c
-@@ -734,6 +734,7 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
- 	{STATUS_FS_DRIVER_REQUIRED, -EOPNOTSUPP, "STATUS_FS_DRIVER_REQUIRED"},
- 	{STATUS_IMAGE_ALREADY_LOADED_AS_DLL, -EIO,
- 	"STATUS_IMAGE_ALREADY_LOADED_AS_DLL"},
-+	{STATUS_INVALID_LOCK_RANGE, -EIO, "STATUS_INVALID_LOCK_RANGE"},
- 	{STATUS_NETWORK_OPEN_RESTRICTION, -EIO,
- 	"STATUS_NETWORK_OPEN_RESTRICTION"},
- 	{STATUS_NO_USER_SESSION_KEY, -EIO, "STATUS_NO_USER_SESSION_KEY"},
-@@ -2413,6 +2414,8 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
- 	{STATUS_IPSEC_INTEGRITY_CHECK_FAILED, -EIO,
- 	"STATUS_IPSEC_INTEGRITY_CHECK_FAILED"},
- 	{STATUS_IPSEC_CLEAR_TEXT_DROP, -EIO, "STATUS_IPSEC_CLEAR_TEXT_DROP"},
-+	{STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP, -EIO,
-+	"STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP"},
+@@ -8,6 +8,7 @@
+  *
+  */
+ #include <linux/errno.h>
++#include <linux/sort.h>
+ #include "cifsglob.h"
+ #include "cifs_debug.h"
+ #include "smb2pdu.h"
+@@ -22,7 +23,7 @@ struct status_to_posix_error {
+ 	char *status_string;
  };
  
+-static const struct status_to_posix_error smb2_error_map_table[] = {
++static struct status_to_posix_error smb2_error_map_table[] = {
+ 	{STATUS_WAIT_1, -EIO, "STATUS_WAIT_1"},
+ 	{STATUS_WAIT_2, -EIO, "STATUS_WAIT_2"},
+ 	{STATUS_WAIT_3, -EIO, "STATUS_WAIT_3"},
+@@ -2418,6 +2419,20 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
+ 	"STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP"},
+ };
+ 
++static unsigned int err_map_num = sizeof(smb2_error_map_table) /
++				     sizeof(struct status_to_posix_error);
++
++static int cmp_smb2_status(const void *_a, const void *_b)
++{
++	const struct status_to_posix_error *a = _a, *b = _b;
++
++	if (a->smb2_status < b->smb2_status)
++		return -1;
++	if (a->smb2_status > b->smb2_status)
++		return 1;
++	return 0;
++}
++
  int
-diff --git a/fs/smb/common/smb2status.h b/fs/smb/common/smb2status.h
-index 14b4a5f04564..7d6b8ed304fc 100644
---- a/fs/smb/common/smb2status.h
-+++ b/fs/smb/common/smb2status.h
-@@ -631,6 +631,7 @@ struct ntstatus {
- #define STATUS_DOMAIN_TRUST_INCONSISTENT cpu_to_le32(0xC000019B)
- #define STATUS_FS_DRIVER_REQUIRED cpu_to_le32(0xC000019C)
- #define STATUS_IMAGE_ALREADY_LOADED_AS_DLL cpu_to_le32(0xC000019D)
-+#define STATUS_INVALID_LOCK_RANGE cpu_to_le32(0xC00001A1)
- #define STATUS_NETWORK_OPEN_RESTRICTION cpu_to_le32(0xC0000201)
- #define STATUS_NO_USER_SESSION_KEY cpu_to_le32(0xC0000202)
- #define STATUS_USER_SESSION_DELETED cpu_to_le32(0xC0000203)
-@@ -1773,5 +1774,5 @@ struct ntstatus {
- #define STATUS_IPSEC_INVALID_PACKET cpu_to_le32(0xC0360005)
- #define STATUS_IPSEC_INTEGRITY_CHECK_FAILED cpu_to_le32(0xC0360006)
- #define STATUS_IPSEC_CLEAR_TEXT_DROP cpu_to_le32(0xC0360007)
--#define STATUS_NO_PREAUTH_INTEGRITY_HASH_OVERLAP cpu_to_le32(0xC05D0000)
--#define STATUS_INVALID_LOCK_RANGE cpu_to_le32(0xC00001a1)
-+/* See MS-SMB2 3.3.5.4 */
-+#define STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP cpu_to_le32(0xC05D0000)
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 60839850025d..d70b4d32e8bc 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -896,7 +896,7 @@ static __le32 decode_preauth_ctxt(struct ksmbd_conn *conn,
- 		return STATUS_INVALID_PARAMETER;
- 
- 	if (pneg_ctxt->HashAlgorithms != SMB2_PREAUTH_INTEGRITY_SHA512)
--		return STATUS_NO_PREAUTH_INTEGRITY_HASH_OVERLAP;
-+		return STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP;
- 
- 	conn->preauth_info->Preauth_HashId = SMB2_PREAUTH_INTEGRITY_SHA512;
- 	return STATUS_SUCCESS;
+ map_smb2_to_linux_error(char *buf, bool log_err)
+ {
+@@ -2461,3 +2476,11 @@ map_smb2_to_linux_error(char *buf, bool log_err)
+ 			   le32_to_cpu(smb2err), rc);
+ 	return rc;
+ }
++
++void smb2_init_maperror(void)
++{
++	/* Sort in ascending order */
++	sort(smb2_error_map_table, err_map_num,
++	     sizeof(struct status_to_posix_error),
++	     cmp_smb2_status, NULL);
++}
+diff --git a/fs/smb/client/smb2proto.h b/fs/smb/client/smb2proto.h
+index 5241daaae543..c988f6b37a1b 100644
+--- a/fs/smb/client/smb2proto.h
++++ b/fs/smb/client/smb2proto.h
+@@ -21,6 +21,7 @@ struct smb_rqst;
+  *****************************************************************
+  */
+ extern int map_smb2_to_linux_error(char *buf, bool log_err);
++extern void smb2_init_maperror(void);
+ extern int smb2_check_message(char *buf, unsigned int length,
+ 			      struct TCP_Server_Info *server);
+ extern unsigned int smb2_calc_size(void *buf);
 -- 
 2.43.0
 
