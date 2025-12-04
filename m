@@ -1,136 +1,107 @@
-Return-Path: <linux-cifs+bounces-8131-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8133-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C595CA26FE
-	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 06:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F032CA27B8
+	for <lists+linux-cifs@lfdr.de>; Thu, 04 Dec 2025 07:15:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5CF29301F3BB
-	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 05:55:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A1D3B302168F
+	for <lists+linux-cifs@lfdr.de>; Thu,  4 Dec 2025 06:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216CF1FBC92;
-	Thu,  4 Dec 2025 05:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6513043C9;
+	Thu,  4 Dec 2025 06:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aquEDYyz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fL04aeQT"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE1F20298C
-	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 05:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6113093D2
+	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 06:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764827736; cv=none; b=RCVogJ5ZcIZDJlzeWTGgnCY8M5O59m+NgaEko8kHVdshxRNQ6d+re64Ukv7nBa98MUkRFz4BwLrYvAM77CP42PPGqXAQ+u3ksrOXeZi5/RJIwejQFd/cDQU1aNAai4Pdb9w1RxlrHG/lEFUd1uNFeUnlqcMYFf/80llR4J1n340=
+	t=1764828914; cv=none; b=XBlbB9Mfjs9X9yB9I06ocl+njK5jMBuK5c1F5adEpD+rOOIyrMmoZq3Fp7WZH9UkA7D60iggQWc9/e8VhBWsyO289Baz8ziEaRrXGsMy6vVonMNtPWnSbWJyVDCGp10Z3igL4rIOD+uQD03gv5wWjbjMD1si4zhbudzElXda6Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764827736; c=relaxed/simple;
-	bh=mSZAhwPHq/EhXIgMg3b73MHzlLNR5i/FUvIkg8zCdbY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=M5wm7sJ44dvU+T7szwbCuLg9/uH27E09iSLwIAkYuYi5a0hRHz/thdvAAZu69UTRO/6oQCm/xK4+XW73r8DTLginunNjD5lekunLxbsFCy9Zvr+Dz8MehPbRclxP1aMbazL8YJcq+DHLO5LULj2CZ9xr53IWpJD72uKyUW3jEuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aquEDYyz; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-882390f7952so5255586d6.3
-        for <linux-cifs@vger.kernel.org>; Wed, 03 Dec 2025 21:55:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764827733; x=1765432533; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vWSnMjMUo2BVbtZ66uGmlUBpFRXfYW4PAcFCjqqTd5Y=;
-        b=aquEDYyzWbW4ZAGYOL1e5TKWe/EBl62FCdF0yEL9rd+XjMKyjqCSo0CnnTqPjLhY80
-         JqAruSlFv8F939wTmCGdmaOe8PPPUk/7EILKLLA6yx+7S+LM1/v5XT167dJfQ4piLvyL
-         +xY8R83dtzzWVd8EZRemyZKwbvqOytdkBwxksgNUp4ERuzbY6jRU5x/u9zHxAtNjKGxc
-         CLpCDk11iQvn9fmwOf5xCdm8Kyd/OPKwBdr6dTUewpcuR9K4JwwcOZUbcqp7QWTdkf3l
-         QIDmB9SShXpRXiG9bzPajOFcg87a6J6bLeugnQ2P+mPXD04eopMG/tiXDRcN4ahteoqq
-         h2Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764827733; x=1765432533;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vWSnMjMUo2BVbtZ66uGmlUBpFRXfYW4PAcFCjqqTd5Y=;
-        b=bIybfgFY0pQENQI/r3Pf0Qm1CRexHqIaSqwo8uS8oiTUhD7kPUQYnRL5IK/zPje3rU
-         JNhdlwj8h9H3jGFo1WwiOO+8f6449ptPjf65lI+Wi8rZyhGSQYgui4fMAVOMJ9oFQsCK
-         UAgXLjdkako918S6u6uWhbn7JzpNPNAvd4Apx1h17RwDQuyBbCIW0PVlEl+IUPGVgirC
-         bvJM5NdQWKkmKLnZhA1dJzIga5D1diJpxB0OSo8zfshjAaNjTwd4osvR3vpVr62OecTA
-         fz4+q1OY/SqQ2/w5rdCXQFXBwb0y3J5ihTuZC0btsQ/kXGQGT+YntlPRmcynn2j7TnvU
-         dvzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmYro9HI3H4AJk0ivaHWumZeCBaJ+jOQEIXm7NX2pdiWLk5EnJqLjHfWoW+ahl7QDp6/zVP6zDMdQ3@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrzOPkcRrilKLwUu8Ies5jCp7/BbpFCAjYW3Ii0+rcULsZadGn
-	oLwcagjRauKiuOiytquJcPnvx/FSq+F7dGXpPWpExbhO7hSKkrjBGP2aJa4sHXHDYPXBTtDnEla
-	fDldagrPA1H5cERuWisvylW02HPw2OD4=
-X-Gm-Gg: ASbGncv3sD3doZDR5NighRnsri5Vr8Fw3pMIhDjevOQgvAsY/fMlC3NSj43itByX1io
-	dc52NmbSmxv3Cw0yRORiEUDY0wej+b8i7akAvzGxlrLc5lbt1c+SYz5Z4yFo+McLv8Jlw2AzfnZ
-	igp6QMNRp51qv+nuTcD57V2FUeQwq4jC0b8f1XBOqTF4zpOtWw6T9a7hwusWUvKB17gi/rJp1zF
-	VCQdQbIVN/XPl24YXg6hiwkQDalFQaRbHwLRrrRLgBNDvr7XxeC8dZijXGk52TYyzAX1POEMqjC
-	RY9fsfo3RdgMcNSTDa245hcdqu0mXkyLkhx5Hcq/C6emQZA3mg71VEEYExV24OY67yZiZI2FcyD
-	Fdni0ih0DF4aarlFY5iV1ECgNKY2Z10eHvj1yzGXBeh/5M4IJXCHZfLgbXnS8AzIz2JebgDhb3s
-	0kRVQYGOJ0tQ==
-X-Google-Smtp-Source: AGHT+IFNY7QVhu9WsokzE7laoVb4TZBsiUhTnW5+Y4YZfnoG0Ll+HG0WhYUp874NWtGsRCwwgVNYuvGpKpwLFO8a3SQ=
-X-Received: by 2002:a05:6214:194f:b0:882:3781:e29c with SMTP id
- 6a1803df08f44-8881953a31dmr76537406d6.38.1764827733294; Wed, 03 Dec 2025
- 21:55:33 -0800 (PST)
+	s=arc-20240116; t=1764828914; c=relaxed/simple;
+	bh=2iJ9aAEUqPfyb9xNgOSo2GwKBxBeJAG7JTACF98eF0w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ASshwi0b368iVeD3mjkhKhgwiZr+5B78awA1zSLRthBne8GpO2jlC0UnzMLWo9yD5h9XU4jUY7CXcVac1qFVhWXS2SluuEkhmqBTOGOUHMdQIcAij6uOSyBliovNIncjI81r6dhyB5oB+jU65mhrELx9wbGWyMeYtzDnvAschgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fL04aeQT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA97C16AAE
+	for <linux-cifs@vger.kernel.org>; Thu,  4 Dec 2025 06:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764828914;
+	bh=2iJ9aAEUqPfyb9xNgOSo2GwKBxBeJAG7JTACF98eF0w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fL04aeQT9WGOHnljjdn0PEeeH6msSeG80wKJdWRXR1UE4EaJJWxebqTa356+w5mRt
+	 1jYID9ITGxcCuh/OEuCQ3Uc50GSYhRBUjn+P4tborgxI0+vGB51PlJcwfhSgyF6s50
+	 wd1omWjtUk9rwGw7FjqWRSO/hFLSUTf9YNZe36mE9LYrITsDTVzvuNi/4GwDrqJ90g
+	 83j+pqG3tXuvHoSFsX4UOPVWc5esenB5XgY8RNrr4l6wADpECXHu4PJZNSWfWiJrws
+	 CY3n7k1FHAuUCr512zA+WVqER8xJK8ktkmsJtg8yirCgqFQdbhwKfsaDBSpu2HylK0
+	 wf1EfMHavmJ/A==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-640aa1445c3so739972a12.1
+        for <linux-cifs@vger.kernel.org>; Wed, 03 Dec 2025 22:15:13 -0800 (PST)
+X-Gm-Message-State: AOJu0YwKM7RqYPGR4al9kcNverSPsuGyKDbVI6eZTYn1D1hHV/J4R7q2
+	vocBXHP+etZQyLWV5kYZ8gpmlNPizmH/1BbyJhEruKMJWTsmSjce/+lQwfiinaZP/9DErZvBZfF
+	gZbsTgfX1rW1DAPCmTFt9Y0sdI/RTRLQ=
+X-Google-Smtp-Source: AGHT+IFxtDGpV6cSoBjid7NXl2nNNlvUO22CPgShgaWv2gAPA+BSMjTzEAceAhHyjGEcY2KykD0gNZz0BELIzyBWCSE=
+X-Received: by 2002:a05:6402:51c8:b0:640:b06f:87c5 with SMTP id
+ 4fb4d7f45d1cf-6479c3ed957mr4197603a12.1.1764828912627; Wed, 03 Dec 2025
+ 22:15:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Steve French <smfrench@gmail.com>
-Date: Wed, 3 Dec 2025 23:55:22 -0600
-X-Gm-Features: AWmQ_bnAwSqZ0YChGtVU0xxlLeRRxz1gujSOBA4TjPG9rTCad9kJWNydMtYsaEg
-Message-ID: <CAH2r5mvbfUt=1t9r2TDN8zmiO032x4NV+2Vb08YPiFzx5ObgSw@mail.gmail.com>
-Subject: updated ksmbd-for-next
-To: Namjae Jeon <linkinjeon@kernel.org>, "Stefan (metze) Metzmacher" <metze@samba.org>
-Cc: Tom Talpey <tom@talpey.com>, CIFS <linux-cifs@vger.kernel.org>, 
-	samba-technical <samba-technical@lists.samba.org>
+References: <cover.1764709225.git.metze@samba.org>
+In-Reply-To: <cover.1764709225.git.metze@samba.org>
+From: Namjae Jeon <linkinjeon@kernel.org>
+Date: Thu, 4 Dec 2025 15:15:00 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8Bj0u+eSXBi1Y1GDZyXC_umupM7BK_i++61YtoGtkuAA@mail.gmail.com>
+X-Gm-Features: AWmQ_bm0HucYiko1C4C4j8Wn5MpQTju3luFj6zaAqhwTiWK2Ni49drh40mPUyYs
+Message-ID: <CAKYAXd8Bj0u+eSXBi1Y1GDZyXC_umupM7BK_i++61YtoGtkuAA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] smb:smbdirect/server: introduce smb_direct_negotiate_recv_work
+To: Stefan Metzmacher <metze@samba.org>
+Cc: linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
+	Steve French <smfrench@gmail.com>, Tom Talpey <tom@talpey.com>, Long Li <longli@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Have updated the branches so cifs-2.6.git for-next has the 17 pending
-client patches, let me know if client patches missing or if problems
-with any of these (there are seven more error mapping fixes from
-ChenXiaoSong that I would like to include once reviewed) and if
-additional Reviewed-by or Tested-by or Acked-by should be added for
-any of these:
-
-/cifs-2.6$ git log --oneline -18
-ba521f56912f (HEAD -> for-next, origin/for-next) smb: add two elements
-to smb2_error_map_table array
-905d8999d67d smb/client: remove unused elements from smb2_error_map_table array
-26866d690bd1 smb/client: reduce loop count in map_smb2_to_linux_error() by half
-3ff9bc2be897 cifs: Fix handling of a beyond-EOF DIO/unbuffered read over SMB2
-8f869faed209 cifs: Remove dead function prototypes
-d1d9fad9591c cifs: Do some preparation prior to organising the
-function declarations
-d53ec5423b0e cifs: Add a tracepoint to log EIO errors
-0b0c42440bd8 cifs: Don't need state locking in smb2_get_mid_entry()
-48114e9c5a3a cifs: Remove the server pointer from smb_message
-b6a11f9a6030 cifs: Fix specification of function pointers
-61726ae16c86 cifs: Replace SendReceiveBlockingLock() with
-SendReceive() plus flags
-d3f782f4e4da cifs: Clean up some places where an extra kvec[] was
-required for rfc1002
-ff83eef764a2 cifs: Make smb1's SendReceive() wrap cifs_send_recv()
-e35b4fcf9409 cifs: Remove the RFC1002 header from smb_hdr
-dfca45e69875 cifs: Fix handling of a beyond-EOF DIO/unbuffered read over SMB1
-8eca12a25669 cifs: client: allow changing multichannel mount options on remount
-1ef15fbe6771 cifs: client: enforce consistent handling of multichannel
-and max_channels
-869737543b39 Merge tag 'v6.19-rc-smb-fixes' of git://git.samba.org/ksmbd
-smfrench@smfrench-ThinkPad-P16s-Gen-2:~/cifs-2.6$
-
-and ksmbd-for-next has the three pending smbdirect and server ones,
-let me know if additional ksmbd or smbdirect ones to add to
-ksmbd-for-next:
-
-/smb3-kernel$ git log --oneline -4
-7526439c8f01 (HEAD -> ksmbd-for-next, origin/ksmbd-for-next) smb:
-server: defer the initial recv completion logic to
-smb_direct_negotiate_recv_work()
-b640cf3f23d4 smb: server: initialize recv_io->cqe.done = recv_done just once
-d40508dddee7 smb: smbdirect: introduce smbdirect_socket.connect.{lock,work}
-869737543b39 Merge tag 'v6.19-rc-smb-fixes' of git://git.samba.org/ksmbd
-
-
--- 
-Thanks,
-
-Steve
+On Wed, Dec 3, 2025 at 6:15=E2=80=AFAM Stefan Metzmacher <metze@samba.org> =
+wrote:
+>
+> Hi,
+>
+> here's a patchset that implements a better solution
+> to the problem that the initial recv completion might
+> arrive before the RDMA_CM_EVENT_ESTABLISHED event.
+>
+> The last patch is not intended to be applied, but
+> it helps to see the event flow it generated,
+> see the commit message.
+>
+> This is based on the 4 smbirect patches within
+> v6.19-rc-smb-fixes:
+>
+> dc10cf1368af8cb816dcaa2502ba7d44fff20612
+> smb: client: relax WARN_ON_ONCE(SMBDIRECT_SOCKET_*) checks in recv_done()=
+ and smbd_conn_upcall()
+> 425c32750b48956a6e156b6a4609d281ee471359
+> smb: server: relax WARN_ON_ONCE(SMBDIRECT_SOCKET_*) checks in recv_done()=
+ and smb_direct_cm_handler()
+> 1adb2dab9727c5beaaf253f67bf4fc2c54ae70e7
+> smb: smbdirect: introduce SMBDIRECT_CHECK_STATUS_{WARN,DISCONNECT}()
+> 1f3fd108c5c5a9885c6c276a2489c49b60a6b90d
+> smb: smbdirect: introduce SMBDIRECT_DEBUG_ERR_PTR() helper
+>
+> I've tested them on top of v6.18 (without the other patches
+> in v6.19-rc-smb-fixes).
+>
+> Sadly there are still problems with Mellanox setups
+> as well as irdma (in iwarp mode). I'm trying to
+> prepare patches to debug this next.
+I have tested with Mellanox NICs.
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Thanks!
 
