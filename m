@@ -1,125 +1,118 @@
-Return-Path: <linux-cifs+bounces-8166-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8170-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 073E6CA7B86
-	for <lists+linux-cifs@lfdr.de>; Fri, 05 Dec 2025 14:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D4EBCA7C35
+	for <lists+linux-cifs@lfdr.de>; Fri, 05 Dec 2025 14:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A602A31C0D4B
-	for <lists+linux-cifs@lfdr.de>; Fri,  5 Dec 2025 13:10:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AD9133091CFC
+	for <lists+linux-cifs@lfdr.de>; Fri,  5 Dec 2025 13:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C02F33031C;
-	Fri,  5 Dec 2025 13:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBE0336ED5;
+	Fri,  5 Dec 2025 13:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6blm17K"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dOBEbjHD"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B12F3148DB;
-	Fri,  5 Dec 2025 13:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93CD335572
+	for <linux-cifs@vger.kernel.org>; Fri,  5 Dec 2025 13:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764940194; cv=none; b=QsfBP2oXtSZEnVdCG0YMIpiA3UAgB2+TZVbuksQwGnAbKC/9HrrrEtGLJ3PemECNC0LrNYiqWHNbC4SDj23TYuN6jojTtXJXBtBIV59SJ+uk1QuCvi0gkkwjiq0lA1Ce2Mi68jUPPKL8kjiC7hf7bxE6dtlgkiujMgTOx/eDmBI=
+	t=1764941221; cv=none; b=egaSSz73j3KmZQqDt3sSBGLmqKwL/kz2+03n7lzO8upRsMOxGY97aNpSQ3uCjhwIHYg4U/dFAp+FpUQaBir7VNckZZFZqh9TOnfG0aLUEHUQCgO0PU5K/ahsD2P0R34kyfBKJ/oOCVKcshZkf+iWrrz9XP+5eE/JUbobAEWcpcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764940194; c=relaxed/simple;
-	bh=9RNU4p5uFmDusX++mA9qmxru388NNiGnDSKeKxa8cHs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D9NCZ3LdpuqatC6fKbTGAwg9KmBcquD3z7708KBbL8DGMn+3Hxjdso51MeoxM03HysNXHu3XNCaE7969SRSl28s6g90YG7z70kOaUqdZiplvFxDxvc6+vMTfCSjGQfDKizlJEoLLW3CwXkpfret2Mpc35mp7RBQPAY9MxmDBTjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6blm17K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E58C4CEF1;
-	Fri,  5 Dec 2025 13:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764940192;
-	bh=9RNU4p5uFmDusX++mA9qmxru388NNiGnDSKeKxa8cHs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M6blm17KY/7Fq4E/y+hGFEVsLYFddZCYcUxIBMzoPfppxfvFklHuno+W5dLVHbLyU
-	 w2jwooxrs+UVERpIVLszZHqL8Ehl2H1cjiNIE3120zTvz03YpYRpaTeqOkLaINb/nb
-	 zuErmpPjOVfOjq2IQ2/soZP8Vdopaynk4/ICCE3cnwdaEHJy6HejOOPNUOMxSc74Yw
-	 ZPD0ECuy7uAqjgJeho3o8qTmC7FN+47xrgd02l8E2C+BxMzHiQf/qgbHuZFjALtAYT
-	 pnfnQsV5rOHOvHXwVprjTt2IuqljVra8/M62hXIPRouHbjdqZataGSgGdRwLlo5TtA
-	 cbn/WwSlmrBMg==
-Date: Fri, 5 Dec 2025 14:09:41 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Miklos Szeredi <miklos@szeredi.hu>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Amir Goldstein <amir73il@gmail.com>, 
-	NeilBrown <neil@brown.name>, Val Packett <val@packett.cool>, Jan Kara <jack@suse.cz>, 
-	linux-fsdevel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>, Chris Mason <clm@fb.com>, 
-	David Sterba <dsterba@suse.com>, David Howells <dhowells@redhat.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Tyler Hicks <code@tyhicks.com>, 
-	Chuck Lever <chuck.lever@oracle.com>, Olga Kornievskaia <okorniev@redhat.com>, 
-	Dai Ngo <Dai.Ngo@oracle.com>, Namjae Jeon <linkinjeon@kernel.org>, 
-	Steve French <smfrench@gmail.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Carlos Maiolino <cem@kernel.org>, John Johansen <john.johansen@canonical.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mateusz Guzik <mjguzik@gmail.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	"Darrick J. Wong" <djwong@kernel.org>, linux-kernel@vger.kernel.org, netfs@lists.linux.dev, 
-	ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-xfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org
-Subject: Re: [PATCH] fuse: fix conversion of fuse_reverse_inval_entry() to
- start_removing()
-Message-ID: <20251205-unmoralisch-jahrtausend-cca02ad0e4fa@brauner>
-References: <20251113002050.676694-1-neilb@ownmail.net>
- <20251113002050.676694-7-neilb@ownmail.net>
- <6713ea38-b583-4c86-b74a-bea55652851d@packett.cool>
- <176454037897.634289.3566631742434963788@noble.neil.brown.name>
- <CAOQ4uxjihcBxJzckbJis8hGcWO61QKhiqeGH+hDkTUkDhu23Ww@mail.gmail.com>
- <20251201083324.GA3538@ZenIV>
- <CAJfpegs+o01jgY76WsGnk9j41LS5V0JQSk--d6xsJJp4VjTh8Q@mail.gmail.com>
+	s=arc-20240116; t=1764941221; c=relaxed/simple;
+	bh=c47xT7wbjW3QvK5SkcxYdMTitg/gBjxXczfzlkbp5eo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Np2ORPf8cdl3zrwdDj90+9jfxJA+Cam02xXpD9CvzORVU848Q9Q7xJsp0/h0IL6X/24lCeEZhxLFdpy3BdNv3SJFO+F7OTmgnX4/qFcLNIg+T4/dNQfTI2R5/7+uCPb1VUldaLrGpe0KTGAKrAHc1QuI6UXYLafuL1JndhQqHZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dOBEbjHD; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764941204;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4OO8ZLxc62rFL3goUJ523STAz0a99bywbUG+QQbGHo4=;
+	b=dOBEbjHDPk2940jWzyfrsFpdTRhqSl1s2P711yrMOvdAfLuKGuwLaK80Ck38B8YjB2wk9t
+	WElv0ubCCulgpoinI1UU0i4LI8xb426rI9uiBu8fn5cm5xUJl35AYzJajBb4CDo3PcxXq2
+	PLfcYXbKz0ZZaw26Qo+Ke1ge6eE/SqU=
+From: chenxiaosong.chenxiaosong@linux.dev
+To: sfrench@samba.org,
+	smfrench@gmail.com,
+	linkinjeon@kernel.org,
+	linkinjeon@samba.org
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	liuzhengyuan@kylinos.cn,
+	huhai@kylinos.cn,
+	liuyun01@kylinos.cn,
+	ChenXiaoSong <chenxiaosong@kylinos.cn>
+Subject: [PATCH v3 0/9] smb: improve search speed of SMB2 maperror
+Date: Fri,  5 Dec 2025 21:25:26 +0800
+Message-ID: <20251205132536.2703110-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJfpegs+o01jgY76WsGnk9j41LS5V0JQSk--d6xsJJp4VjTh8Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Dec 01, 2025 at 03:03:08PM +0100, Miklos Szeredi wrote:
-> On Mon, 1 Dec 2025 at 09:33, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > On Mon, Dec 01, 2025 at 09:22:54AM +0100, Amir Goldstein wrote:
-> >
-> > > I don't think there is a point in optimizing parallel dir operations
-> > > with FUSE server cache invalidation, but maybe I am missing
-> > > something.
-> >
-> > The interesting part is the expected semantics of operation;
-> > d_invalidate() side definitely doesn't need any of that cruft,
-> > but I would really like to understand what that function
-> > is supposed to do.
-> >
-> > Miklos, could you post a brain dump on that?
-> 
-> This function is supposed to invalidate a dentry due to remote changes
-> (FUSE_NOTIFY_INVAL_ENTRY).  Originally it was supplied a parent ID and
-> a name and called d_invalidate() on the looked up dentry.
-> 
-> Then it grew a variant (FUSE_NOTIFY_DELETE) that was also supplied a
-> child ID, which was matched against the looked up inode.  This was
-> commit 451d0f599934 ("FUSE: Notifying the kernel of deletion."),
-> Apparently this worked around the fact that at that time
-> d_invalidate() returned -EBUSY if the target was still in use and
-> didn't unhash the dentry in that case.
-> 
-> That was later changed by commit bafc9b754f75 ("vfs: More precise
-> tests in d_invalidate") to unconditionally unhash the target, which
-> effectively made FUSE_NOTIFY_INVAL_ENTRY and FUSE_NOTIFY_DELETE
-> equivalent and the code in question unnecessary.
-> 
-> For the future, we could also introduce FUSE_NOTIFY_MOVE, that would
-> differentiate between a delete and a move, while
-> FUSE_NOTIFY_INVAL_ENTRY would continue to be the common (deleted or
-> moved) notification.
-> 
-> Attaching untested patch to remove this cruft.
+From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Should we revert the fuse specific bits of c9ba789dad15 ("VFS: introduce
-start_creating_noperm() and start_removing_noperm()") and then apply
-your changes afterwards?
+Before applying this patchset, when searching for the last element of
+smb2_error_map_table array and calling smb2_print_status(),
+3486 comparisons are needed.
+
+After applying this patchset, only 10 comparisons are required.
+
+v1: https://lore.kernel.org/linux-cifs/20251204045818.2590727-1-chenxiaosong.chenxiaosong@linux.dev/
+The three patches from v1 have already been applied to the for-next branch of cifs-2.6.git.
+Please replace the following patches:
+
+  - [v1 01/10] smb/client: reduce loop count in map_smb2_to_linux_error() by half: https://git.samba.org/sfrench/?p=sfrench/cifs-2.6.git;a=commitdiff;h=26866d690bd180e1860548c43e70fdefe50638ff
+    - Replace it with this version(v3) patch #0001: update commit message: array has 1743 elements
+
+  - [v1 02/10] smb/client: remove unused elements from smb2_error_map_table array: https://git.samba.org/sfrench/?p=sfrench/cifs-2.6.git;a=commitdiff;h=905d8999d67dcbe4ce12ef87996e4440e068196d
+    - It is the same as patch #0002 in this version(v3).
+
+  - [v1 03/10] smb: add two elements to smb2_error_map_table array: https://git.samba.org/sfrench/?p=sfrench/cifs-2.6.git;a=commitdiff;h=ba521f56912f6ff5121e54c17c855298f947c9ea
+    - Replace it with this version(v3) patch #0003 #0004.
+
+v2: https://lore.kernel.org/all/20251205042958.2658496-1-chenxiaosong.chenxiaosong@linux.dev/
+v2->v3:
+  - Patch #0007: move struct status_to_posix_error to smb2glob.h,
+                 change smb2_get_err_map to be a global function,
+                 delete unused forward declaration `struct statfs` in smb2proto.h.
+  - Patch #0008: create new smb2maperror_test.c, refer to the implementation in fs/ext4/mballoc-test.c.
+
+ChenXiaoSong (9):
+  smb/client: reduce loop count in map_smb2_to_linux_error() by half
+  smb/client: remove unused elements from smb2_error_map_table array
+  smb: rename to STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP
+  smb/client: add two elements to smb2_error_map_table array
+  smb/client: sort smb2_error_map_table array
+  smb/client: use bsearch() to find target status code
+  smb/client: introduce smb2_get_err_map()
+  smb/client: introduce smb2maperror KUnit tests
+  smb/server: rename include guard in smb_common.h
+
+ fs/smb/Kconfig                    | 17 ++++++
+ fs/smb/client/cifsfs.c            |  2 +
+ fs/smb/client/smb2glob.h          |  6 ++
+ fs/smb/client/smb2maperror.c      | 91 ++++++++++++++++++-------------
+ fs/smb/client/smb2maperror_test.c | 86 +++++++++++++++++++++++++++++
+ fs/smb/client/smb2proto.h         |  4 +-
+ fs/smb/common/smb2status.h        |  5 +-
+ fs/smb/server/smb2pdu.c           |  2 +-
+ fs/smb/server/smb_common.h        |  6 +-
+ 9 files changed, 174 insertions(+), 45 deletions(-)
+ create mode 100644 fs/smb/client/smb2maperror_test.c
+
+-- 
+2.43.0
+
 
