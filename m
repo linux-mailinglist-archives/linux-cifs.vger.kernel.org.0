@@ -1,45 +1,45 @@
-Return-Path: <linux-cifs+bounces-8169-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8171-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07E9ACA7C32
-	for <lists+linux-cifs@lfdr.de>; Fri, 05 Dec 2025 14:30:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028F2CA7C17
+	for <lists+linux-cifs@lfdr.de>; Fri, 05 Dec 2025 14:27:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4FA81300EE70
-	for <lists+linux-cifs@lfdr.de>; Fri,  5 Dec 2025 13:27:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 20D9A3037826
+	for <lists+linux-cifs@lfdr.de>; Fri,  5 Dec 2025 13:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC163358CE;
-	Fri,  5 Dec 2025 13:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513123358BE;
+	Fri,  5 Dec 2025 13:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DV79via9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JoeO4fEk"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E26335568
-	for <linux-cifs@vger.kernel.org>; Fri,  5 Dec 2025 13:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04389335BCD
+	for <linux-cifs@vger.kernel.org>; Fri,  5 Dec 2025 13:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764941220; cv=none; b=gvnQobqSd3AWGtUROEYvUloRxCmFMJhojoQ5am9QRt96+EK4oNl3LuAbi4SbGpCFMxHV0Pd0TkGxe0xUBDLJTOMi3RVjf0NtpA3TvRy0WK3FPWM5yBi8/OgH1brIuPiudQp6oECcWi0VlLvOuB6xp/ta31Z07VZslxNl+p906pg=
+	t=1764941226; cv=none; b=QjkGoUPWMfOC4A9juZUZRuz4F8Wz7uS0r2Uq5O/4ZIpn+K1f9JOS4Ip4Q18oKD6POEziXduKVIZhOOJaWAIqE8a8Ov5NV3yuDOly4om3xQXN/aPqrgKYeAYiY5k2a1a9aCX9A+i9L+2LZKqHoFl2gOT0FJbjdFlEzzJfHor+BwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764941220; c=relaxed/simple;
-	bh=4JJp2NWhr5BTXdht9jh/3UFu2aqUDb0sNi6TkyC1740=;
+	s=arc-20240116; t=1764941226; c=relaxed/simple;
+	bh=6HJEMr5X59OEb8//cubWzNJerCMISoQtM0zHJvgTDYc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ypkc+/picI/Z5rxw7W7b4Tb5hKmGS4Z7By0EjSjYeaAVKOFHOZMAWB2u2u77dmxk31EUN6d/qjnybCp6y+5gSf2cthwYqLj/GI/wGBEgPijA/xgbYfCLGSJJQOCbAjLmahaZBvyzlXXDVmMnZQ1ZNdgc880BP6rhqoX8kZQ68Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DV79via9; arc=none smtp.client-ip=91.218.175.185
+	 MIME-Version; b=hoV81W5vQfQ0qkNxeL1a0vCx1ctG9vRR1Gx5ttAPWboLS1t7pXYwiaSOGapmhD9oKsIub5oROIYtQl57Do/hliOZhbU7LbwAS/P3JyBe/937gEcWCqqja6L4v/mtq+V+UtmaFZ4qCE/dc+V8r4FMR9Js8xwx5SQHhBMrq+ArksQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JoeO4fEk; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764941214;
+	t=1764941217;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OpT0hLrQO7wTfJ3bQS8ehrjwnJyCu8VpuzDETsNFyMs=;
-	b=DV79via9Z6inUruOyS/n9JDPT63kb92qrcL5zt/4g5ZF2mj37JSMZhjEdgzOVdnkYNlMnC
-	M7OLCMJAtjWmCKRNl7fxxsa2uuLb8uWHvaDc+UQ26o9KXA4748tUoLMx+uWxRRUk4njMRU
-	khRRdD1FGTc9YreYu3UPx02+JaSmkzQ=
+	bh=k+idk5A+mq8aU5amT3grfojWt2+XsKPXn7rdBgtsvkw=;
+	b=JoeO4fEkhvntgIX7vHSYstdxd6Dl5Rh6rkMx0IutXxMuzIs/lMjLoJu8dBuU1mP6MRHMk+
+	YWi/od19VCXCIQGrPPqf2VoITu6gA5iRJhdUc1cCFbTur5zCgnSdG6U9yTIE8boO8UUWGW
+	dGJAX7TMsBtNVVM4gAjEmvLdf12W/uA=
 From: chenxiaosong.chenxiaosong@linux.dev
 To: sfrench@samba.org,
 	smfrench@gmail.com,
@@ -51,9 +51,9 @@ Cc: linux-cifs@vger.kernel.org,
 	huhai@kylinos.cn,
 	liuyun01@kylinos.cn,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v3 3/9] smb: rename to STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP
-Date: Fri,  5 Dec 2025 21:25:29 +0800
-Message-ID: <20251205132536.2703110-4-chenxiaosong.chenxiaosong@linux.dev>
+Subject: [PATCH v3 4/9] smb/client: add two elements to smb2_error_map_table array
+Date: Fri,  5 Dec 2025 21:25:30 +0800
+Message-ID: <20251205132536.2703110-5-chenxiaosong.chenxiaosong@linux.dev>
 In-Reply-To: <20251205132536.2703110-1-chenxiaosong.chenxiaosong@linux.dev>
 References: <20251205132536.2703110-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
@@ -67,49 +67,37 @@ X-Migadu-Flow: FLOW_OUT
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-See MS-SMB2 3.3.5.4. To keep the name consistent with the documentation.
+Both status codes are mapped to -EIO.
 
-Additionally, move STATUS_INVALID_LOCK_RANGE to correct position in order.
+Now all status codes from common/smb2status.h are included in the
+smb2_error_map_table array(except for the first two zero definitions).
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
- fs/smb/common/smb2status.h | 5 +++--
- fs/smb/server/smb2pdu.c    | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ fs/smb/client/smb2maperror.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/smb/common/smb2status.h b/fs/smb/common/smb2status.h
-index 14b4a5f04564..7d6b8ed304fc 100644
---- a/fs/smb/common/smb2status.h
-+++ b/fs/smb/common/smb2status.h
-@@ -631,6 +631,7 @@ struct ntstatus {
- #define STATUS_DOMAIN_TRUST_INCONSISTENT cpu_to_le32(0xC000019B)
- #define STATUS_FS_DRIVER_REQUIRED cpu_to_le32(0xC000019C)
- #define STATUS_IMAGE_ALREADY_LOADED_AS_DLL cpu_to_le32(0xC000019D)
-+#define STATUS_INVALID_LOCK_RANGE cpu_to_le32(0xC00001A1)
- #define STATUS_NETWORK_OPEN_RESTRICTION cpu_to_le32(0xC0000201)
- #define STATUS_NO_USER_SESSION_KEY cpu_to_le32(0xC0000202)
- #define STATUS_USER_SESSION_DELETED cpu_to_le32(0xC0000203)
-@@ -1773,5 +1774,5 @@ struct ntstatus {
- #define STATUS_IPSEC_INVALID_PACKET cpu_to_le32(0xC0360005)
- #define STATUS_IPSEC_INTEGRITY_CHECK_FAILED cpu_to_le32(0xC0360006)
- #define STATUS_IPSEC_CLEAR_TEXT_DROP cpu_to_le32(0xC0360007)
--#define STATUS_NO_PREAUTH_INTEGRITY_HASH_OVERLAP cpu_to_le32(0xC05D0000)
--#define STATUS_INVALID_LOCK_RANGE cpu_to_le32(0xC00001a1)
-+/* See MS-SMB2 3.3.5.4 */
-+#define STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP cpu_to_le32(0xC05D0000)
-diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index a4f6de350df8..b1323f1b100e 100644
---- a/fs/smb/server/smb2pdu.c
-+++ b/fs/smb/server/smb2pdu.c
-@@ -896,7 +896,7 @@ static __le32 decode_preauth_ctxt(struct ksmbd_conn *conn,
- 		return STATUS_INVALID_PARAMETER;
+diff --git a/fs/smb/client/smb2maperror.c b/fs/smb/client/smb2maperror.c
+index 118e32cc8edc..a77467d2d81c 100644
+--- a/fs/smb/client/smb2maperror.c
++++ b/fs/smb/client/smb2maperror.c
+@@ -734,6 +734,7 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
+ 	{STATUS_FS_DRIVER_REQUIRED, -EOPNOTSUPP, "STATUS_FS_DRIVER_REQUIRED"},
+ 	{STATUS_IMAGE_ALREADY_LOADED_AS_DLL, -EIO,
+ 	"STATUS_IMAGE_ALREADY_LOADED_AS_DLL"},
++	{STATUS_INVALID_LOCK_RANGE, -EIO, "STATUS_INVALID_LOCK_RANGE"},
+ 	{STATUS_NETWORK_OPEN_RESTRICTION, -EIO,
+ 	"STATUS_NETWORK_OPEN_RESTRICTION"},
+ 	{STATUS_NO_USER_SESSION_KEY, -EIO, "STATUS_NO_USER_SESSION_KEY"},
+@@ -2413,6 +2414,8 @@ static const struct status_to_posix_error smb2_error_map_table[] = {
+ 	{STATUS_IPSEC_INTEGRITY_CHECK_FAILED, -EIO,
+ 	"STATUS_IPSEC_INTEGRITY_CHECK_FAILED"},
+ 	{STATUS_IPSEC_CLEAR_TEXT_DROP, -EIO, "STATUS_IPSEC_CLEAR_TEXT_DROP"},
++	{STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP, -EIO,
++	"STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP"},
+ };
  
- 	if (pneg_ctxt->HashAlgorithms != SMB2_PREAUTH_INTEGRITY_SHA512)
--		return STATUS_NO_PREAUTH_INTEGRITY_HASH_OVERLAP;
-+		return STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP;
- 
- 	conn->preauth_info->Preauth_HashId = SMB2_PREAUTH_INTEGRITY_SHA512;
- 	return STATUS_SUCCESS;
+ int
 -- 
 2.43.0
 
