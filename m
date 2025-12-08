@@ -1,61 +1,59 @@
-Return-Path: <linux-cifs+bounces-8223-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8226-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 571D8CAC49D
-	for <lists+linux-cifs@lfdr.de>; Mon, 08 Dec 2025 08:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD71CADBF8
+	for <lists+linux-cifs@lfdr.de>; Mon, 08 Dec 2025 17:27:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 107BC304F131
-	for <lists+linux-cifs@lfdr.de>; Mon,  8 Dec 2025 07:12:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5730230054B1
+	for <lists+linux-cifs@lfdr.de>; Mon,  8 Dec 2025 16:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F87731195B;
-	Mon,  8 Dec 2025 06:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D825C233134;
+	Mon,  8 Dec 2025 16:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="laKcQEst"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="IMQgl7hK"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5AC3112BC
-	for <linux-cifs@vger.kernel.org>; Mon,  8 Dec 2025 06:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A2522D785
+	for <linux-cifs@vger.kernel.org>; Mon,  8 Dec 2025 16:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765175044; cv=none; b=K4Jpp9Ywl42EfCZs0ByYv8N8bARH4+0PuV3vigxuPizHOxT3Af+IIqgCueVOHXIoOAKz4Y2G1DGxSNJWMhAlesaHC7+w1/NvqyeQSSzitoI1J1Hdzt7w8gpOYOWKoFtSxf1XOFF373hlOV+tmFb0KHR0PT1frGqUhcNhSmOh2dc=
+	t=1765211124; cv=none; b=Ol/XpeTTt6MvC3iCRRy/VNRIXbOmv3XBXGehOpy7UwoGNn0bGD0qQjhhstJm3q/df9CVa2a5G+5wVC654sPOWHkOxygwqRQic2h8UXUrNXfsfJTKbG3nxevGCOg3x2jCX7CBJ3qIiHekj1U8ZDeIh+y5HG3N78WZTmvKH0MYkQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765175044; c=relaxed/simple;
-	bh=lNfalccXq2mZa6T379vmj1fWDRFnL44cgaeZY+hpIjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FQTNIi+MBgEOB6/AHkplDoJitGMim2u7TnWSEd45k7tIBYUIcsz3QOgK/Rh+DxZMarVhpoQ4fWkRqlGKmOiON1Usrzvjho+gTIs+TwHVlcNR57XCYYZgokV5pqJlM8/uBgY3DOFuSPbLHkqw/0/p7cyHUGaYgwT4k+lKxe9ZnqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=laKcQEst; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765175040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6vHqVxcBfcpccrXZOm1g4GOCESBEdv6OnJh0S45kJKs=;
-	b=laKcQEstT7AIU8+JnmuvLAoDWpZws9CMcXO1G6XR4vbH2mLS/lqeiyvioGFUAw6zt7SRme
-	zMNtgb3fCrL/KWZjWwZbPLo3JXD9A3L3Qjl/ahpoRS6D4+l/aK91BlaPqSOvgzZkxciX8H
-	NA+Orovb4MZ3ETWAY4UM7gIQvv180p0=
-From: chenxiaosong.chenxiaosong@linux.dev
-To: sfrench@samba.org,
-	smfrench@gmail.com,
-	linkinjeon@kernel.org,
-	linkinjeon@samba.org
-Cc: linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	liuzhengyuan@kylinos.cn,
-	huhai@kylinos.cn,
-	liuyun01@kylinos.cn,
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH 30/30] smb/client: introduce KUnit test to check search result of mapping_table_ERRSRV array
-Date: Mon,  8 Dec 2025 14:21:00 +0800
-Message-ID: <20251208062100.3268777-31-chenxiaosong.chenxiaosong@linux.dev>
-In-Reply-To: <20251208062100.3268777-1-chenxiaosong.chenxiaosong@linux.dev>
-References: <20251208062100.3268777-1-chenxiaosong.chenxiaosong@linux.dev>
+	s=arc-20240116; t=1765211124; c=relaxed/simple;
+	bh=xlTEHXzooNNDeBGXIesmCNyNHRun9mTjr4WRgeJFFxo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jmdrELrIYCSMz9CYmrDIShhEj6FL0tKiKbM/8CU7Zfs8oZ8d2c9fkBAv/wViNCGvJZIMnEd1o0byEDXP0riH63FhH4ZyzQzeZyP09XobuagwK7IcdBPbGocqO+0C8uaxBzaSHZtn6IWxvdzWiLqaUCTg1GyBP5KUcg1ecD+AQLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=IMQgl7hK; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=Message-ID:Date:Cc:To:From;
+	bh=CiKrVI85vD3bbzXcBhDbKFazTe0ABFjTGTTal9tlVOY=; b=IMQgl7hKwD6HCTpMYBDwu+KKlQ
+	jchSddw9z5IgIpRHGKOHcRkqD3NymoZfuZs3u+CAzVCKDiZLUxlk+6RECScEhK+7D55qp8opVGoIp
+	MlvlZq2khacm4An+PjHWgW/DScwTmi7KfFiUuLUlURjcRfNDqoaEJ2IyPhU+JwPIEWtyw5nfSsh7a
+	68frh69d7NkPvzY0MYGmnvDmT7U2ntwF6JNgut7ey5ogF4MrEnyc5JyWkjSPY2Mt/yKxLb+mKvGwf
+	4b9CgF9qcYzPx7+xXmzSDibOy0YgnMuvhmWGBp1P8KbzQ28Dzs5gGwtZt1QEl8B4lD3cm0sUWjRYq
+	rPty2b970THA2alk3ej3HE6W5xSxdk9U1HY0ZHws5x/y191kJi+vz6e4myCOe9cnQ7qKy14EP5YFU
+	OZsxdM5UUMWLECvZ8WDyIm07bwXe55JvYa396R36NHPcAigqnm1FCHJzub+B7oy5zr3p+N+xoEccX
+	6m14GW2zRMSWHnJPy5+Bi/6b;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1vSdUL-00HPnf-26;
+	Mon, 08 Dec 2025 15:49:25 +0000
+From: Stefan Metzmacher <metze@samba.org>
+To: linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Cc: metze@samba.org,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <smfrench@gmail.com>,
+	Tom Talpey <tom@talpey.com>
+Subject: [PATCH] smb: server: reset smb_direct_port = SMB_DIRECT_PORT_INFINIBAND on init
+Date: Mon,  8 Dec 2025 16:49:19 +0100
+Message-ID: <20251208154919.934760-1-metze@samba.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -63,41 +61,36 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: ChenXiaoSong <chenxiaosong@kylinos.cn>
+This allows testing with different devices (iwrap vs. non-iwarp) without
+'rmmod ksmbd && modprobe ksmbd', but instead
+'ksmbd.control -s && ksmbd.mountd' is enough.
 
-The KUnit test are executed when cifs.ko is loaded.
+In the long run we want to listen on iwarp and non-iwarp at the same time,
+but requires more changes, most likely also in the rdma layer.
 
-The mapping_table_ERRSRV_check_search() checks whether all elements can be
-correctly found in the array.
-
-Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Steve French <smfrench@gmail.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: samba-technical@lists.samba.org
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/smb/client/netmisc_test.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/smb/server/transport_rdma.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/smb/client/netmisc_test.c b/fs/smb/client/netmisc_test.c
-index 4a82edd58dcc..fa8e98b46e88 100644
---- a/fs/smb/client/netmisc_test.c
-+++ b/fs/smb/client/netmisc_test.c
-@@ -83,6 +83,8 @@ DEFINE_CHECK_SEARCH_FUNC(ntstatus_to_dos, ntstatus, ntstatus_to_dos_map, ntstatu
- DEFINE_CHECK_SEARCH_FUNC(nt_err_code_struct, nt_errcode, nt_errs, nt_err_num);
- /* mapping_table_ERRDOS_check_search */
- DEFINE_CHECK_SEARCH_FUNC(smb_to_posix_error, smb_err, mapping_table_ERRDOS, errdos_num);
-+/* mapping_table_ERRSRV_check_search */
-+DEFINE_CHECK_SEARCH_FUNC(smb_to_posix_error, smb_err, mapping_table_ERRSRV, errsrv_num);
+diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
+index f585359684d4..05f008ea51cd 100644
+--- a/fs/smb/server/transport_rdma.c
++++ b/fs/smb/server/transport_rdma.c
+@@ -2708,6 +2708,7 @@ int ksmbd_rdma_init(void)
+ {
+ 	int ret;
  
- /*
-  * Before running these test cases, the smb_init_maperror()
-@@ -98,6 +100,7 @@ static struct kunit_case maperror_test_cases[] = {
- 	KUNIT_CASE(ntstatus_to_dos_map_check_search),
- 	KUNIT_CASE(nt_errs_check_search),
- 	KUNIT_CASE(mapping_table_ERRDOS_check_search),
-+	KUNIT_CASE(mapping_table_ERRSRV_check_search),
- 	{}
- };
++	smb_direct_port = SMB_DIRECT_PORT_INFINIBAND;
+ 	smb_direct_listener.cm_id = NULL;
  
+ 	ret = ib_register_client(&smb_direct_ib_client);
 -- 
 2.43.0
 
