@@ -1,44 +1,44 @@
-Return-Path: <linux-cifs+bounces-8229-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8231-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D546CAE7AA
-	for <lists+linux-cifs@lfdr.de>; Tue, 09 Dec 2025 01:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36AD5CAE894
+	for <lists+linux-cifs@lfdr.de>; Tue, 09 Dec 2025 01:32:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6642C3099D1F
-	for <lists+linux-cifs@lfdr.de>; Tue,  9 Dec 2025 00:16:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 751B83101FA0
+	for <lists+linux-cifs@lfdr.de>; Tue,  9 Dec 2025 00:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643FE2153FB;
-	Tue,  9 Dec 2025 00:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3782B2C11FD;
+	Tue,  9 Dec 2025 00:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMgOoV2T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qbn7OhdT"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F6E1FF5E3;
-	Tue,  9 Dec 2025 00:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3BE2C0F62;
+	Tue,  9 Dec 2025 00:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765239407; cv=none; b=NMTHUK+4WSfyKoFAbEqzAnAquLOxXqCZJAb1eBJxzJ8GGYzUJVvckaS7vxOawuMvtJFRkkhfGxxlnWHY2lbAOgLI3nm3wL9L9FSywplSsv2po+oCz73ccYQ2zdUBvX38gFtkSVRxqolFCwTWgKdtTcZL/C9hTDgzmH7xOZ+ahno=
+	t=1765239479; cv=none; b=E8RB/8B8et8MWqdtH7h/ju80cAnS6NW9wCo4ss/klMjD/3V3/NM2kHxadRJzvcT8OgANLzPzOxLGDegihgcgbJ07NiJKZ1Q85v4UWgG0z+9+UsFMij66kQi9pwClqZrkQnPejAx074mKDhc9ikmOIyrX/gsYLt98TqxdES2Su1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765239407; c=relaxed/simple;
-	bh=Ea0sBalcDvFTyrYPkBNo4mKzsS73wAnYysjCCH3DnOk=;
+	s=arc-20240116; t=1765239479; c=relaxed/simple;
+	bh=D21DNG/AwzkTcS5+b923mUwVoD/kjUs4AYJ1WUyQV+M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s+4RAwifAVw+Ms7SkpUTpRWUl8pmmoiU1W+1VjTeWDt1vQkhP6aBeiuq2mgSMfJiWUzslnmGyYXm1F9G58rJ9iJyRAMJYCNl91oqOAhzBIEkzmyvEvA0C+wtqoLtfD8KcXCAhdPrOqDmKS6lc4k8MD2wmolpRKglSRtCdfQXPvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMgOoV2T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F3E2C113D0;
-	Tue,  9 Dec 2025 00:16:45 +0000 (UTC)
+	 MIME-Version:Content-Type; b=LAZ+VLjVXySpraKl9VkpVjapw5p5uGVxz7mHQsquHyzYRHgRfg5WGpMrFawsco4nGLbiTsBtxYWdSCj+YYkrar3OSo0gIGKkiLTfzWwNcJpPPqj4bum8/Q5QhCGHP5iYaxBScISJxFF1G3t4EHOaTNm53m7YFtijBzTDKRBL6iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qbn7OhdT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B3AC113D0;
+	Tue,  9 Dec 2025 00:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765239407;
-	bh=Ea0sBalcDvFTyrYPkBNo4mKzsS73wAnYysjCCH3DnOk=;
+	s=k20201202; t=1765239478;
+	bh=D21DNG/AwzkTcS5+b923mUwVoD/kjUs4AYJ1WUyQV+M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YMgOoV2TeminFcnJ3we8wP734DQiZ+kX0iP7xD9ZqZWsa8eAhrssHveMQu50NEiUn
-	 e298POD76qtvQk75qmCDpw03T0FZfTl4kUmCYpRrsGGF3iBnPufnbs/lvJniEqhyD5
-	 PgJfMwkk/i0bFEXgeTvZl6wYpo1fNE3nsdlgWPhOP7j7qqDU3RxenrqqMoTu+ERYS6
-	 Hc6gmASxDDTUz5f1wOgBJHFHDq/qYKftldTMGASfT3h+ovricdq8Eq9ziuF9stY5IE
-	 lQJf5U1PEMgfd5FtJW2/FJ3u6UO73ZBiHL2HPOlqmk9wuRr7ZjfAcVulsXZIu2FqZl
-	 yyYoqpuR0ltWQ==
+	b=qbn7OhdTd/0kS2I0flCoMf4TW93bhTsFYIKmNb4Tpa0HPPHyiaPKS2dy4Z1wvmpum
+	 DUgjHoyycuRGsoYmhzTpH90peiY97492QFTyCoJCkW/1pyUdGKyXU2jQ3dmJyI+3Od
+	 uppsQdao0WTU19K67dvTxQVNXDd2c17jaJMEwekZF+8MP2EARSI1/6AkFz9XoRat8B
+	 zc1WgCnNyQRmhn0FjomRaWrKkWe7JcEV8PIwuP1ChC4W9LQWJrytWhFY8RQMbGJstR
+	 xvtDsyx2UaErR9wXDSlDmsIg0Wj3DQbLFJG64iLRbDNfcKU5Uy9ySMhMWTekWcNtrn
+	 l16h6RpG+uy5A==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -48,9 +48,9 @@ Cc: ChenXiaoSong <chenxiaosong@kylinos.cn>,
 	Sasha Levin <sashal@kernel.org>,
 	smfrench@gmail.com,
 	linux-cifs@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-6.1] smb/server: fix return value of smb2_ioctl()
-Date: Mon,  8 Dec 2025 19:14:59 -0500
-Message-ID: <20251209001610.611575-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.18-6.1] smb/server: fix return value of smb2_query_dir()
+Date: Mon,  8 Dec 2025 19:15:26 -0500
+Message-ID: <20251209001610.611575-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251209001610.611575-1-sashal@kernel.org>
 References: <20251209001610.611575-1-sashal@kernel.org>
@@ -68,9 +68,9 @@ Content-Transfer-Encoding: 8bit
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-[ Upstream commit 269df046c1e15ab34fa26fd90db9381f022a0963 ]
+[ Upstream commit dafe22bc676d4fcb1ccb193c8cc3dda57942509d ]
 
-__process_request() will not print error messages if smb2_ioctl()
+__process_request() will not print error messages if smb2_query_dir()
 always returns 0.
 
 Fix this by returning the correct value at the end of function.
@@ -83,122 +83,136 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 LLM Generated explanations, may be completely bogus:
 
-## ANALYSIS SUMMARY
+## Analysis of smb/server: fix return value of smb2_query_dir()
 
-### 1. Problem Being Fixed
+### 1. COMMIT MESSAGE ANALYSIS
 
-The `smb2_ioctl()` function in ksmbd (the in-kernel SMB server) **always
-returns 0** even when errors occur. Looking at the caller
-`__process_request()` in `fs/smb/server/server.c:148-151`:
+The commit message clearly states:
+- `__process_request()` will not print error messages if
+  `smb2_query_dir()` always returns 0
+- The fix returns the correct error value `rc` instead of 0
+
+**Notable absences:**
+- No `Cc: stable@vger.kernel.org` tag
+- No `Fixes:` tag identifying when the bug was introduced
+
+**Positive signals:**
+- Acked by Namjae Jeon (ksmbd maintainer)
+- Signed off by Steve French (SMB maintainer)
+
+### 2. CODE CHANGE ANALYSIS
+
+The change is a single-line fix in the error handling path:
 
 ```c
-ret = cmds->proc(work);  // calls smb2_ioctl
-
-if (ret < 0)
-    ksmbd_debug(CONN, "Failed to process %u [%d]\n", command, ret);
+- return 0;
++       return rc;
 ```
 
-Since `smb2_ioctl()` returns 0 on error paths, the debug message is
-never printed and errors are silently swallowed.
+**Technical mechanism of the bug:**
+Looking at the context, this is in an error handling block where:
+1. `rc` contains an error code (-EINVAL, -EACCES, -ENOENT, -EBADF,
+   -ENOMEM, -EFAULT, or -EIO)
+2. The appropriate SMB status is set in `rsp->hdr.Status`
+3. Error response is prepared with `smb2_set_err_rsp(work)`
+4. Cleanup is done with `ksmbd_fd_put()` and `ksmbd_revert_fsids()`
+5. **BUG**: The function returns 0 (success) instead of `rc` (the actual
+   error)
 
-### 2. Technical Analysis of the Fix
+**Root cause:** The caller `__process_request()` uses the return value
+to determine if an error occurred. Returning 0 masks all errors,
+preventing proper error logging and handling.
 
-The fix makes three changes:
+### 3. CLASSIFICATION
 
-1. **Line 8167**: Adds `ret = -EOPNOTSUPP` when `req->Flags !=
-   SMB2_0_IOCTL_IS_FSCTL` (was previously not setting ret)
+This is a **bug fix** - incorrect error return value handling. The
+function was silently discarding error information that callers need.
 
-2. **Line 8187-8189**: For DFS referrals, adds `ret = -EOPNOTSUPP` and
-   uses new `out2` label to skip the ret-to-status translation (since
-   DFS needs specific STATUS_FS_DRIVER_REQUIRED)
+### 4. SCOPE AND RISK ASSESSMENT
 
-3. **Line 8479**: Changes `return 0;` to `return ret;`
+| Factor | Assessment |
+|--------|------------|
+| Lines changed | 1 |
+| Files touched | 1 |
+| Complexity | Trivial |
+| Subsystem | ksmbd (kernel SMB server) |
+| Risk level | **Very Low** |
 
-The function's documentation says: "Return: 0 on success, otherwise
-error" - this fix makes the code match that contract.
+The fix is surgical and obviously correct - the `rc` variable already
+contains the appropriate error code, it just wasn't being returned.
 
-### 3. Stable Kernel Criteria Assessment
+### 5. USER IMPACT
 
-| Criterion | Assessment |
-|-----------|------------|
-| Obviously correct | ✅ YES - Function was documented to return errors
-but didn't |
-| Fixes real bug | ✅ YES - Error reporting/debugging was broken |
-| Small and contained | ✅ YES - ~10 lines changed in one function |
-| No new features | ✅ YES - Only corrects error return behavior |
-| Tested | ✅ YES - Acked by ksmbd maintainer (Namjae Jeon) |
+- **Affected users:** ksmbd server users
+- **Severity:** Medium - error conditions in directory queries are not
+  properly reported
+- **Consequences of the bug:**
+  - Error messages not printed when they should be
+  - Callers may not handle error conditions properly
+  - Debugging ksmbd issues becomes harder
 
-### 4. Risk Assessment
+### 6. STABILITY INDICATORS
 
-**LOW RISK:**
-- The fix only affects the return value in error paths
-- Does not change the SMB protocol behavior or response status codes
-- The `out2` label is a minor structural change to preserve DFS-specific
-  status
-- ksmbd is self-contained; this won't affect other subsystems
-- Error logging/visibility improvement with zero functional risk
+- Acked by ksmbd maintainer
+- Signed off by SMB maintainer
+- Simple, self-contained change
 
-### 5. Concerns
+### 7. DEPENDENCY CHECK
 
-- **No explicit stable tags** (no `Cc: stable@vger.kernel.org`)
-- **No Fixes: tag** indicating when the bug was introduced
-- The bug has likely existed since ksmbd was added (v5.15), so affects
-  all stable branches with ksmbd
+- No dependencies on other commits
+- ksmbd has been in the kernel since 5.15
+- The fix applies to existing code paths
 
-### 6. User Impact
+### STABLE KERNEL CRITERIA EVALUATION
 
-Users of ksmbd who encounter errors during IOCTL handling:
-- **Before**: Silent failures, no debug messages, harder to diagnose
-  issues
-- **After**: Proper error returns enabling logging and debugging
+| Criterion | Met? | Notes |
+|-----------|------|-------|
+| Obviously correct | ✅ | Trivially correct - return error code instead
+of 0 |
+| Fixes real bug | ✅ | Error propagation was broken |
+| Small and contained | ✅ | Single line change |
+| No new features | ✅ | Pure bug fix |
+| Tested | ⚠️ | No Tested-by tag, but very low risk |
 
-### Conclusion
+### RISK VS BENEFIT
 
-This is a straightforward bug fix that corrects an obviously broken
-return value. The fix is small, surgical, and low-risk. It improves
-error visibility for ksmbd users and makes the code match its documented
-behavior. The maintainer Ack from Namjae Jeon adds confidence. Despite
-lacking explicit stable tags, it clearly meets all stable kernel
-criteria.
+**Benefits:**
+- Fixes broken error propagation in ksmbd directory queries
+- Enables proper error logging for debugging
+- Very low risk due to trivial nature of fix
+
+**Risks:**
+- Minimal - the change is from "always return 0" to "return actual error
+  code"
+- Behavior change only affects error paths
+
+### CONCLUSION
+
+This is a straightforward, obviously correct bug fix. The function was
+incorrectly returning 0 (success) in all error cases, causing error
+information to be lost. The fix is a single line change that returns the
+actual error code that was already being computed.
+
+While the commit lacks explicit stable tags, it meets all stable
+criteria: obviously correct, fixes a real bug affecting error handling,
+trivially small scope, and no new features. The risk is minimal and the
+fix improves error handling in ksmbd.
 
 **YES**
 
- fs/smb/server/smb2pdu.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ fs/smb/server/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-index 8975b6f2f5800..447e76da44409 100644
+index f901ae18e68ad..8975b6f2f5800 100644
 --- a/fs/smb/server/smb2pdu.c
 +++ b/fs/smb/server/smb2pdu.c
-@@ -8164,7 +8164,7 @@ int smb2_ioctl(struct ksmbd_work *work)
- 		id = req->VolatileFileId;
- 
- 	if (req->Flags != cpu_to_le32(SMB2_0_IOCTL_IS_FSCTL)) {
--		rsp->hdr.Status = STATUS_NOT_SUPPORTED;
-+		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
- 
-@@ -8184,8 +8184,9 @@ int smb2_ioctl(struct ksmbd_work *work)
- 	case FSCTL_DFS_GET_REFERRALS:
- 	case FSCTL_DFS_GET_REFERRALS_EX:
- 		/* Not support DFS yet */
-+		ret = -EOPNOTSUPP;
- 		rsp->hdr.Status = STATUS_FS_DRIVER_REQUIRED;
--		goto out;
-+		goto out2;
- 	case FSCTL_CREATE_OR_GET_OBJECT_ID:
- 	{
- 		struct file_object_buf_type1_ioctl_rsp *obj_buf;
-@@ -8475,8 +8476,10 @@ int smb2_ioctl(struct ksmbd_work *work)
- 		rsp->hdr.Status = STATUS_BUFFER_TOO_SMALL;
- 	else if (ret < 0 || rsp->hdr.Status == 0)
- 		rsp->hdr.Status = STATUS_INVALID_PARAMETER;
-+
-+out2:
+@@ -4560,7 +4560,7 @@ int smb2_query_dir(struct ksmbd_work *work)
  	smb2_set_err_rsp(work);
+ 	ksmbd_fd_put(work, dir_fp);
+ 	ksmbd_revert_fsids(work);
 -	return 0;
-+	return ret;
++	return rc;
  }
  
  /**
