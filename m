@@ -1,60 +1,60 @@
-Return-Path: <linux-cifs+bounces-8282-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8284-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57BEDCB5DDC
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 13:32:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B404CB5D8E
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 13:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9EBBD3084A10
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 12:26:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2E1A33018307
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 12:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38EAC3101B0;
-	Thu, 11 Dec 2025 12:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789DC30FF2A;
+	Thu, 11 Dec 2025 12:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IRGnrzW9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fwTjA+sl"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB94E30F55F
-	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 12:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F31330FC31
+	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 12:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765455531; cv=none; b=G0ZwCyRNDSVXubbI709kQYd8zqHh7hcVdkwVt455bV2vjz+xPItUTkqNwEln17oN4xXDCdeNpgKsMq284BRD3O+MgPR2tmLN8r7Yhlw+NNfArc0T+SG446EoqT/6LQaqtg10P1n7EX3ppS81mnYEP1J8K/X5/9zzNanFRWep4tw=
+	t=1765455534; cv=none; b=RAupOU8BY9rQXjAtK4aGyAj4LtmQSRzN2Wwjyyazn2bbgR2i8Q/4X6JjEV6nVco+dBa6KlnksGwbYbdyIAChaMTANp+/72/xhbu/9yfF4SQB7jxB1cLOqTgdWtqxP2nWnKrl6BF+ScRzWiddfbx+OR3o3s8ez8B3C3+wvKDZijA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765455531; c=relaxed/simple;
-	bh=RwYUerJ4hJmzwuH1LlZyqEcdJj9Pt2Fovq5QE2M9JM8=;
+	s=arc-20240116; t=1765455534; c=relaxed/simple;
+	bh=+Wo+l71IAU0AqaO6ZoV2OG/pvIDGGYqR2GhGhU27Y68=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JuIHJnWrlHuqH2sFKXoYcN62eEL55yUXyhY30nEDE44TCT3yKeTNgYfAXUP4g1Lgvs9wz1Runvedq1aKn1kplseZrqD9WXFku9vCPeAGO+oZbvSxvCJI/TM5JnUA3DCo0DBrDi2uOGAnDmm1Qnn602aeuf2hYi4T/Eu2HEAJkrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IRGnrzW9; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=jfhTkF2eISqG5D8oYyNDZMQGF64+NZvlyOYonksACmLj0Xc+AsV9KaNSTjMpTFwv5Oi7tTy3EQ0OADivKT1ZRE6+KqQP11Le3TDG78OSMa4V/efAvnzVWifCUQTRY9CCaECwlwigG53zbsk9ttY7LY2+nnV1t6RXa1dTBHs6wYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fwTjA+sl; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765455520;
+	s=mimecast20190719; t=1765455524;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vfVyyD1PexB1d/N6d8HS6nBZO+yvtrhFLe6ajtg+Ako=;
-	b=IRGnrzW9nWkLroeR7WAK35oCH6pTAvZhBrWrbusOJuKc0RBwLkCNs4/1SHq25sZ/c5eXL5
-	g7rHROW9WU4myJwJ9+gd4T+X4AONwThg26tdbq5f+O3VTYcebMSvDaUAU+syCpqS43Mmk6
-	b+AB2rDLinaXIMHlEvmJZlyFr/r7y3E=
+	bh=U+sZRfUhZLYVTFCknqCPjwaISkbiMEC9lHaFs7CeHiY=;
+	b=fwTjA+sloccFX6sTKin+LDWjwJEhvUE1x6zZ7/68s7z6hTMIISiwxe6ch12qn3lBAG9vKG
+	GBL3ynGeUDFjgyrMFf/U+HqmN4xYFaQNFHE92HzSit/UVfpUQQ3BJSJwtLiHYypFmR2Ib8
+	B4goAocOT3tU5KH8rXH4kkHMS3ib5W4=
 Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-qWgjAMYnNKi2LJjyakcflg-1; Thu,
- 11 Dec 2025 07:18:36 -0500
-X-MC-Unique: qWgjAMYnNKi2LJjyakcflg-1
-X-Mimecast-MFC-AGG-ID: qWgjAMYnNKi2LJjyakcflg_1765455515
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-392-kz4gVK2sNH-hU3h-RKxHCQ-1; Thu,
+ 11 Dec 2025 07:18:39 -0500
+X-MC-Unique: kz4gVK2sNH-hU3h-RKxHCQ-1
+X-Mimecast-MFC-AGG-ID: kz4gVK2sNH-hU3h-RKxHCQ_1765455518
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A8B57195FCDC;
-	Thu, 11 Dec 2025 12:18:35 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 968F119560A5;
+	Thu, 11 Dec 2025 12:18:38 +0000 (UTC)
 Received: from warthog.procyon.org.com (unknown [10.42.28.14])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E0E24180035F;
-	Thu, 11 Dec 2025 12:18:33 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D93F0180049F;
+	Thu, 11 Dec 2025 12:18:36 +0000 (UTC)
 From: David Howells <dhowells@redhat.com>
 To: Steve French <sfrench@samba.org>
 Cc: David Howells <dhowells@redhat.com>,
@@ -63,9 +63,9 @@ Cc: David Howells <dhowells@redhat.com>,
 	linux-cifs@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 13/18] cifs: Scripted clean up fs/smb/client/compress.h
-Date: Thu, 11 Dec 2025 12:17:07 +0000
-Message-ID: <20251211121715.759074-15-dhowells@redhat.com>
+Subject: [PATCH 14/18] cifs: Scripted clean up fs/smb/client/cifs_swn.h
+Date: Thu, 11 Dec 2025 12:17:08 +0000
+Message-ID: <20251211121715.759074-16-dhowells@redhat.com>
 In-Reply-To: <20251211121715.759074-2-dhowells@redhat.com>
 References: <20251211121715.759074-2-dhowells@redhat.com>
 Precedence: bulk
@@ -75,7 +75,7 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
 Remove externs, correct argument names and reformat declarations.
 
@@ -87,22 +87,33 @@ cc: linux-cifs@vger.kernel.org
 cc: linux-fsdevel@vger.kernel.org
 cc: linux-kernel@vger.kernel.org
 ---
- fs/smb/client/compress.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/smb/client/cifs_swn.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/fs/smb/client/compress.h b/fs/smb/client/compress.h
-index 63aea32fbe92..2679baca129b 100644
---- a/fs/smb/client/compress.h
-+++ b/fs/smb/client/compress.h
-@@ -30,7 +30,8 @@
- typedef int (*compress_send_fn)(struct TCP_Server_Info *, int, struct smb_rqst *);
+diff --git a/fs/smb/client/cifs_swn.h b/fs/smb/client/cifs_swn.h
+index 8a9d2a5c9077..955d07b69450 100644
+--- a/fs/smb/client/cifs_swn.h
++++ b/fs/smb/client/cifs_swn.h
+@@ -14,15 +14,15 @@ struct sk_buff;
+ struct genl_info;
  
+ #ifdef CONFIG_CIFS_SWN_UPCALL
+-extern int cifs_swn_register(struct cifs_tcon *tcon);
++int cifs_swn_register(struct cifs_tcon *tcon);
  
--int smb_compress(struct TCP_Server_Info *server, struct smb_rqst *rq, compress_send_fn send_fn);
-+int smb_compress(struct TCP_Server_Info *server, struct smb_rqst *rq,
-+		 compress_send_fn send_fn);
- bool should_compress(const struct cifs_tcon *tcon, const struct smb_rqst *rq);
+-extern int cifs_swn_unregister(struct cifs_tcon *tcon);
++int cifs_swn_unregister(struct cifs_tcon *tcon);
  
- /*
+-extern int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info);
++int cifs_swn_notify(struct sk_buff *skb, struct genl_info *info);
+ 
+-extern void cifs_swn_dump(struct seq_file *m);
++void cifs_swn_dump(struct seq_file *m);
+ 
+-extern void cifs_swn_check(void);
++void cifs_swn_check(void);
+ 
+ static inline bool cifs_swn_set_server_dstaddr(struct TCP_Server_Info *server)
+ {
 
 
