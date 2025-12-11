@@ -1,73 +1,54 @@
-Return-Path: <linux-cifs+bounces-8287-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8292-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1BE9CB5D32
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 13:26:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F667CB6391
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 15:40:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 613653053FC7
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 12:20:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6C64F30155DB
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 14:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0279831194C;
-	Thu, 11 Dec 2025 12:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C364E289E06;
+	Thu, 11 Dec 2025 14:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MjqrlhrQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WrR3tZbG"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D562FDC22
-	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 12:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55CF287265
+	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 14:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765455538; cv=none; b=all7KIzLQ83pnrr4ase0C4GmVgyIf9zHmkhVlQ3ElOYX3B7oiHjER1Yeu/v9RwInXw6sw+KRjueTEaG3MIgpYQjgXrjBlkfyBMPBQPqGfwlEkZLRsX1Rm7M8fC7zrv7jXDFfAoxEuHuasO4ttgcbunQN1bZL3rDvI7AklUYDeiI=
+	t=1765463636; cv=none; b=N/QtTcJRKztCNLWZYfrz8LzrSEFzS/l+Du8XImDK2rgOw8s+4MubFf9rO3Tx4NkUIBVsJC0k0OFKLaPoy9vNOM5L+21C8vtS/J6VuepvH/9KMpvLKSxa00kuAnodZEHNrLHYTtnSppoXI9sPnW6eaOSkD/mwoHo35uY+thoBYLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765455538; c=relaxed/simple;
-	bh=LDVxs4HVzGamgRyO4hgKW44vmux4lO4xwEKPQYnOq00=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A4JMnPJdbTGBROwK86n3JNG/+kdEhu7hqn5GOp78wc9XKxNoNMKBXWAgIpyU6N0eQwtiKnKoCeKd4+TXRLHpMRdc03Ekal0+6mUmFm61CIDq1O3mgndEGhg1PKJQLv5rNDwtz+e0Ylro77NFTgfgXH9Gy1yc4Clw9tpcTqitSKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MjqrlhrQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765455535;
+	s=arc-20240116; t=1765463636; c=relaxed/simple;
+	bh=yGPmt/+YvWB9coDTSHyTT85HV6q9q/qX4Zxqrv27aRY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mFWzukZWlC6MIrx6z/vD17/monknUDmXdsYv3nklnWpwy69wdpDSh3u1+T38PioTmXD3i0vmrZgSnT4httj707g4Q9AbYKolimZKsnqTV1P6A1Gc8kZf+do5+clyriiT44HhousDJ+MOlXbnuHweI6edP+bRoeVV1a0vlK+hV9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WrR3tZbG; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765463622;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sYb0W3+K58jDqolNtPQz939MnKma4O1rdy9kUT/7xKE=;
-	b=MjqrlhrQLVsG5IkxPhHHbZCRbyB/VKIZ2dnyZ0Z+gRNEY/BqlT3P4cn6uQW9dFWG1AQOwR
-	hT+EGYclGGnhqhIKhhAUC3wq/Zlp22fERXxWr1HJJncOxt6WVySP1elpr9u34RKTOkab0l
-	kuXSFPGAgrvmv+1ZwqOBF0R5RbmanTA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-170-CBpNi5YHN9ytx28_kxrkzw-1; Thu,
- 11 Dec 2025 07:18:52 -0500
-X-MC-Unique: CBpNi5YHN9ytx28_kxrkzw-1
-X-Mimecast-MFC-AGG-ID: CBpNi5YHN9ytx28_kxrkzw_1765455530
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C74E818001E2;
-	Thu, 11 Dec 2025 12:18:50 +0000 (UTC)
-Received: from warthog.procyon.org.com (unknown [10.42.28.14])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0E164180049F;
-	Thu, 11 Dec 2025 12:18:48 +0000 (UTC)
-From: David Howells <dhowells@redhat.com>
-To: Steve French <sfrench@samba.org>
-Cc: David Howells <dhowells@redhat.com>,
-	Paulo Alcantara <pc@manguebit.org>,
-	Enzo Matsumiya <ematsumiya@suse.de>,
-	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 18/18] cifs: Scripted clean up fs/smb/client/ntlmssp.h
-Date: Thu, 11 Dec 2025 12:17:12 +0000
-Message-ID: <20251211121715.759074-20-dhowells@redhat.com>
-In-Reply-To: <20251211121715.759074-2-dhowells@redhat.com>
-References: <20251211121715.759074-2-dhowells@redhat.com>
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xY0GXibXh1F7Uc91EciVPJnmpG/K7n1fef3r9YJZeiM=;
+	b=WrR3tZbGQcr0fNTKP7YqLwY79MjJ7WH8nfXXzNk2D/qcLgKBULhvtWl+3kYP4eUmgc+5mX
+	qugRLCP7c3Hj/4XbHHk4n4e/gJFjASP9aYL3DZ97ngGzQDTld78rFqZtmZ/ocmmoQAUhl9
+	86f404rLM2k4TabEWOxW35wdMCHSL4o=
+From: chenxiaosong.chenxiaosong@linux.dev
+To: sfrench@samba.org,
+	smfrench@gmail.com,
+	linkinjeon@kernel.org,
+	linkinjeon@samba.org
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ChenXiaoSong <chenxiaosong@kylinos.cn>
+Subject: [PATCH v2 0/7] smb: move duplicate definitions into common header file, part 2
+Date: Thu, 11 Dec 2025 22:32:21 +0800
+Message-ID: <20251211143228.172470-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -75,49 +56,67 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Migadu-Flow: FLOW_OUT
 
-Remove externs, correct argument names and reformat declarations.
+From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Paulo Alcantara <pc@manguebit.org>
-cc: Enzo Matsumiya <ematsumiya@suse.de>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
----
- fs/smb/client/ntlmssp.h | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+For more detailed information about the patches to be reviewed, please see the link:
+https://chenxiaosong.com/en/smb-patch.html
 
-diff --git a/fs/smb/client/ntlmssp.h b/fs/smb/client/ntlmssp.h
-index a11fddc321f6..be0365f08396 100644
---- a/fs/smb/client/ntlmssp.h
-+++ b/fs/smb/client/ntlmssp.h
-@@ -142,16 +142,17 @@ typedef struct _AUTHENTICATE_MESSAGE {
-  * Size of the session key (crypto key encrypted with the password
-  */
- 
--int decode_ntlmssp_challenge(char *bcc_ptr, int blob_len, struct cifs_ses *ses);
-+int decode_ntlmssp_challenge(char *bcc_ptr, int blob_len,
-+			     struct cifs_ses *ses);
- int build_ntlmssp_negotiate_blob(unsigned char **pbuffer, u16 *buflen,
- 				 struct cifs_ses *ses,
- 				 struct TCP_Server_Info *server,
- 				 const struct nls_table *nls_cp);
- int build_ntlmssp_smb3_negotiate_blob(unsigned char **pbuffer, u16 *buflen,
--				 struct cifs_ses *ses,
--				 struct TCP_Server_Info *server,
--				 const struct nls_table *nls_cp);
-+				      struct cifs_ses *ses,
-+				      struct TCP_Server_Info *server,
-+				      const struct nls_table *nls_cp);
- int build_ntlmssp_auth_blob(unsigned char **pbuffer, u16 *buflen,
--			struct cifs_ses *ses,
--			struct TCP_Server_Info *server,
--			const struct nls_table *nls_cp);
-+			    struct cifs_ses *ses,
-+			    struct TCP_Server_Info *server,
-+			    const struct nls_table *nls_cp);
+This is a continuous effort to move duplicated definitions in both client
+and server into common header files, which makes the code easier to maintain.
+
+The previous work is here:
+part 1: https://lore.kernel.org/linux-cifs/20251117112838.473051-1-chenxiaosong.chenxiaosong@linux.dev/
+
+v1: https://lore.kernel.org/all/20251209011020.3270989-1-chenxiaosong.chenxiaosong@linux.dev/
+The following patches from v1 have already been merged into cifs-2.6.git for-next and ksmbd.git ksmbd-for-next:
+  - smb/server: add comment to FileSystemName of FileFsAttributeInformation
+  - smb/client: remove DeviceType Flags and Device Characteristics definitions
+  - smb: move file_notify_information to common/fscc.h
+  - smb: move SMB2 Notify Action Flags into common/smb2pdu.h
+  - smb: move notify completion filter flags into common/smb2pdu.h
+  - smb: add documentation references for smb2 change notify definitions
+
+The following patches from this version(v2) have already been merged into cifs-2.6.git for-next:
+  - smb: move some SMB1 definitions into common/smb1pdu.h
+  - smb: move File Attributes definitions into common/fscc.h
+  - smb: update struct duplicate_extents_to_file_ex
+
+v1->v2:
+  - Patch #0001: update FILE_ATTRIBUTE_MASK value
+  - Patch #0002: `__u64 StructureSize` -> `__le64 StructureSize`
+  - Patch #0003: conflicts have been resolved
+
+ChenXiaoSong (2):
+  smb: move File Attributes definitions into common/fscc.h
+  smb: update struct duplicate_extents_to_file_ex
+
+ZhangGuoDong (5):
+  smb: move some SMB1 definitions into common/smb1pdu.h
+  smb: move smb3_fs_vol_info into common/fscc.h
+  smb: move some definitions from common/smb2pdu.h into common/fscc.h
+  smb: introduce struct create_posix_ctxt_rsp
+  smb: introduce struct file_posix_info
+
+ fs/smb/client/cifspdu.h    |   2 +-
+ fs/smb/client/inode.c      |  22 +-
+ fs/smb/client/readdir.c    |  28 +--
+ fs/smb/client/reparse.h    |   4 +-
+ fs/smb/client/smb2pdu.c    |   9 +-
+ fs/smb/client/smb2pdu.h    |  21 +-
+ fs/smb/common/fscc.h       | 415 ++++++++++++++++++++++++++++++++++-
+ fs/smb/common/smb1pdu.h    |  56 +++++
+ fs/smb/common/smb2pdu.h    | 432 ++-----------------------------------
+ fs/smb/common/smbglob.h    |   2 -
+ fs/smb/server/oplock.c     |   8 +-
+ fs/smb/server/smb2pdu.c    |  84 ++++----
+ fs/smb/server/smb2pdu.h    |  27 +--
+ fs/smb/server/smb_common.h |   9 +-
+ 14 files changed, 572 insertions(+), 547 deletions(-)
+ create mode 100644 fs/smb/common/smb1pdu.h
+
+-- 
+2.43.0
 
 
