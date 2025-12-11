@@ -1,43 +1,45 @@
-Return-Path: <linux-cifs+bounces-8292-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8288-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F667CB6391
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 15:40:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A303CB637C
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 15:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6C64F30155DB
-	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 14:34:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9AD53051EAE
+	for <lists+linux-cifs@lfdr.de>; Thu, 11 Dec 2025 14:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C364E289E06;
-	Thu, 11 Dec 2025 14:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A231279DCE;
+	Thu, 11 Dec 2025 14:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WrR3tZbG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A/ohpxx4"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55CF287265
-	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 14:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B1A2327A3
+	for <linux-cifs@vger.kernel.org>; Thu, 11 Dec 2025 14:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765463636; cv=none; b=N/QtTcJRKztCNLWZYfrz8LzrSEFzS/l+Du8XImDK2rgOw8s+4MubFf9rO3Tx4NkUIBVsJC0k0OFKLaPoy9vNOM5L+21C8vtS/J6VuepvH/9KMpvLKSxa00kuAnodZEHNrLHYTtnSppoXI9sPnW6eaOSkD/mwoHo35uY+thoBYLw=
+	t=1765463629; cv=none; b=YAH0R6tqNvr97b1RFq0gRSzIRldv8Ahw/uEaY1xxh6syfGB5T55GAb55eBbybbr1FvaTB2ZIp7u+YCTPKLwINaupqMffjnz/viHWb8VaVAO/KueNmCB2qP2BVuOo/ldriUfsbkRDfMMt+GIAlFhoHhm55qvr+sDcLFgjpMKnHbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765463636; c=relaxed/simple;
-	bh=yGPmt/+YvWB9coDTSHyTT85HV6q9q/qX4Zxqrv27aRY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mFWzukZWlC6MIrx6z/vD17/monknUDmXdsYv3nklnWpwy69wdpDSh3u1+T38PioTmXD3i0vmrZgSnT4httj707g4Q9AbYKolimZKsnqTV1P6A1Gc8kZf+do5+clyriiT44HhousDJ+MOlXbnuHweI6edP+bRoeVV1a0vlK+hV9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WrR3tZbG; arc=none smtp.client-ip=91.218.175.178
+	s=arc-20240116; t=1765463629; c=relaxed/simple;
+	bh=V1dQNpvB8QULXgKO1a90mjb19MSMVIDA9UVK+sU17i0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NBjDIChsYICCEw57b6UPYFP67LBUvijbwb2RWBZAsydMT7QocVr5DwqyTcIhozrpld7pgCJKl7Nvq7JjcIlv57c1OpcZ7+D2/Z42fkZS/ADCEPsHKpTIR1CrCNxjRM/7j58edNH2hkrPPVkINLVSnKf6gaSCERq0NTf8iPrw+Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A/ohpxx4; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765463622;
+	t=1765463624;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xY0GXibXh1F7Uc91EciVPJnmpG/K7n1fef3r9YJZeiM=;
-	b=WrR3tZbGQcr0fNTKP7YqLwY79MjJ7WH8nfXXzNk2D/qcLgKBULhvtWl+3kYP4eUmgc+5mX
-	qugRLCP7c3Hj/4XbHHk4n4e/gJFjASP9aYL3DZ97ngGzQDTld78rFqZtmZ/ocmmoQAUhl9
-	86f404rLM2k4TabEWOxW35wdMCHSL4o=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3jRLKjrZkWjztC29/ONl+he+kaGJLo7VeXksJ1WZvJA=;
+	b=A/ohpxx4Bwf8k3bRXSjnxYRw/jWiZDo294s7+HQDSsC83w5CK6Y7A1+hHYo4UhhFZKGHuh
+	hPEquXKLv+MmkAu1NUUwzg+FBOmoH1M8Pz7+IjvbuvcvbY7vFcMgg2Cqy7K5jDbbSb3a0I
+	ASdSPPPs3LPmR3eN357c+fNfgu1Jb4A=
 From: chenxiaosong.chenxiaosong@linux.dev
 To: sfrench@samba.org,
 	smfrench@gmail.com,
@@ -45,10 +47,13 @@ To: sfrench@samba.org,
 	linkinjeon@samba.org
 Cc: linux-cifs@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH v2 0/7] smb: move duplicate definitions into common header file, part 2
-Date: Thu, 11 Dec 2025 22:32:21 +0800
-Message-ID: <20251211143228.172470-1-chenxiaosong.chenxiaosong@linux.dev>
+	ChenXiaoSong <chenxiaosong@kylinos.cn>,
+	Steve French <stfrench@microsoft.com>
+Subject: [PATCH v2 1/7] smb: move File Attributes definitions into common/fscc.h
+Date: Thu, 11 Dec 2025 22:32:22 +0800
+Message-ID: <20251211143228.172470-2-chenxiaosong.chenxiaosong@linux.dev>
+In-Reply-To: <20251211143228.172470-1-chenxiaosong.chenxiaosong@linux.dev>
+References: <20251211143228.172470-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -60,62 +65,123 @@ X-Migadu-Flow: FLOW_OUT
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-For more detailed information about the patches to be reviewed, please see the link:
-https://chenxiaosong.com/en/smb-patch.html
+These definitions are specified in MS-FSCC 2.6, so move them into fscc.h.
 
-This is a continuous effort to move duplicated definitions in both client
-and server into common header files, which makes the code easier to maintain.
+Modify the following places:
 
-The previous work is here:
-part 1: https://lore.kernel.org/linux-cifs/20251117112838.473051-1-chenxiaosong.chenxiaosong@linux.dev/
+  - FILE_ATTRIBUTE__MASK -> FILE_ATTRIBUTE_MASK
+  - Update FILE_ATTRIBUTE_MASK value
+  - cpu_to_le32(constant) -> cpu_to_le32(MACRO DEFINITION)
 
-v1: https://lore.kernel.org/all/20251209011020.3270989-1-chenxiaosong.chenxiaosong@linux.dev/
-The following patches from v1 have already been merged into cifs-2.6.git for-next and ksmbd.git ksmbd-for-next:
-  - smb/server: add comment to FileSystemName of FileFsAttributeInformation
-  - smb/client: remove DeviceType Flags and Device Characteristics definitions
-  - smb: move file_notify_information to common/fscc.h
-  - smb: move SMB2 Notify Action Flags into common/smb2pdu.h
-  - smb: move notify completion filter flags into common/smb2pdu.h
-  - smb: add documentation references for smb2 change notify definitions
+Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+---
+ fs/smb/common/fscc.h    | 45 +++++++++++++++++++++++++++++++++++++++++
+ fs/smb/common/smb2pdu.h | 35 --------------------------------
+ 2 files changed, 45 insertions(+), 35 deletions(-)
 
-The following patches from this version(v2) have already been merged into cifs-2.6.git for-next:
-  - smb: move some SMB1 definitions into common/smb1pdu.h
-  - smb: move File Attributes definitions into common/fscc.h
-  - smb: update struct duplicate_extents_to_file_ex
-
-v1->v2:
-  - Patch #0001: update FILE_ATTRIBUTE_MASK value
-  - Patch #0002: `__u64 StructureSize` -> `__le64 StructureSize`
-  - Patch #0003: conflicts have been resolved
-
-ChenXiaoSong (2):
-  smb: move File Attributes definitions into common/fscc.h
-  smb: update struct duplicate_extents_to_file_ex
-
-ZhangGuoDong (5):
-  smb: move some SMB1 definitions into common/smb1pdu.h
-  smb: move smb3_fs_vol_info into common/fscc.h
-  smb: move some definitions from common/smb2pdu.h into common/fscc.h
-  smb: introduce struct create_posix_ctxt_rsp
-  smb: introduce struct file_posix_info
-
- fs/smb/client/cifspdu.h    |   2 +-
- fs/smb/client/inode.c      |  22 +-
- fs/smb/client/readdir.c    |  28 +--
- fs/smb/client/reparse.h    |   4 +-
- fs/smb/client/smb2pdu.c    |   9 +-
- fs/smb/client/smb2pdu.h    |  21 +-
- fs/smb/common/fscc.h       | 415 ++++++++++++++++++++++++++++++++++-
- fs/smb/common/smb1pdu.h    |  56 +++++
- fs/smb/common/smb2pdu.h    | 432 ++-----------------------------------
- fs/smb/common/smbglob.h    |   2 -
- fs/smb/server/oplock.c     |   8 +-
- fs/smb/server/smb2pdu.c    |  84 ++++----
- fs/smb/server/smb2pdu.h    |  27 +--
- fs/smb/server/smb_common.h |   9 +-
- 14 files changed, 572 insertions(+), 547 deletions(-)
- create mode 100644 fs/smb/common/smb1pdu.h
-
+diff --git a/fs/smb/common/fscc.h b/fs/smb/common/fscc.h
+index b8e7bb5ddfdd..0123f34db1e8 100644
+--- a/fs/smb/common/fscc.h
++++ b/fs/smb/common/fscc.h
+@@ -144,6 +144,51 @@ typedef struct {
+ 	__le32 DeviceCharacteristics;
+ } __packed FILE_SYSTEM_DEVICE_INFO; /* device info level 0x104 */
+ 
++/*
++ * File Attributes
++ * See MS-FSCC 2.6
++ */
++#define FILE_ATTRIBUTE_READONLY			0x00000001
++#define FILE_ATTRIBUTE_HIDDEN			0x00000002
++#define FILE_ATTRIBUTE_SYSTEM			0x00000004
++#define FILE_ATTRIBUTE_DIRECTORY		0x00000010
++#define FILE_ATTRIBUTE_ARCHIVE			0x00000020
++#define FILE_ATTRIBUTE_NORMAL			0x00000080
++#define FILE_ATTRIBUTE_TEMPORARY		0x00000100
++#define FILE_ATTRIBUTE_SPARSE_FILE		0x00000200
++#define FILE_ATTRIBUTE_REPARSE_POINT		0x00000400
++#define FILE_ATTRIBUTE_COMPRESSED		0x00000800
++#define FILE_ATTRIBUTE_OFFLINE			0x00001000
++#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED	0x00002000
++#define FILE_ATTRIBUTE_ENCRYPTED		0x00004000
++#define FILE_ATTRIBUTE_INTEGRITY_STREAM		0x00008000
++#define FILE_ATTRIBUTE_NO_SCRUB_DATA		0x00020000
++#define FILE_ATTRIBUTE_MASK (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN | \
++		FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY | \
++		FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_NORMAL | \
++		FILE_ATTRIBUTE_TEMPORARY | FILE_ATTRIBUTE_SPARSE_FILE | \
++		FILE_ATTRIBUTE_REPARSE_POINT | FILE_ATTRIBUTE_COMPRESSED | \
++		FILE_ATTRIBUTE_OFFLINE | FILE_ATTRIBUTE_NOT_CONTENT_INDEXED | \
++		FILE_ATTRIBUTE_ENCRYPTED | FILE_ATTRIBUTE_INTEGRITY_STREAM | \
++		FILE_ATTRIBUTE_NO_SCRUB_DATA)
++
++#define FILE_ATTRIBUTE_READONLY_LE		cpu_to_le32(FILE_ATTRIBUTE_READONLY)
++#define FILE_ATTRIBUTE_HIDDEN_LE		cpu_to_le32(FILE_ATTRIBUTE_HIDDEN)
++#define FILE_ATTRIBUTE_SYSTEM_LE		cpu_to_le32(FILE_ATTRIBUTE_SYSTEM)
++#define FILE_ATTRIBUTE_DIRECTORY_LE		cpu_to_le32(FILE_ATTRIBUTE_DIRECTORY)
++#define FILE_ATTRIBUTE_ARCHIVE_LE		cpu_to_le32(FILE_ATTRIBUTE_ARCHIVE)
++#define FILE_ATTRIBUTE_NORMAL_LE		cpu_to_le32(FILE_ATTRIBUTE_NORMAL)
++#define FILE_ATTRIBUTE_TEMPORARY_LE		cpu_to_le32(FILE_ATTRIBUTE_TEMPORARY)
++#define FILE_ATTRIBUTE_SPARSE_FILE_LE		cpu_to_le32(FILE_ATTRIBUTE_SPARSE_FILE)
++#define FILE_ATTRIBUTE_REPARSE_POINT_LE		cpu_to_le32(FILE_ATTRIBUTE_REPARSE_POINT)
++#define FILE_ATTRIBUTE_COMPRESSED_LE		cpu_to_le32(FILE_ATTRIBUTE_COMPRESSED)
++#define FILE_ATTRIBUTE_OFFLINE_LE		cpu_to_le32(FILE_ATTRIBUTE_OFFLINE)
++#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED_LE	cpu_to_le32(FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
++#define FILE_ATTRIBUTE_ENCRYPTED_LE		cpu_to_le32(FILE_ATTRIBUTE_ENCRYPTED)
++#define FILE_ATTRIBUTE_INTEGRITY_STREAM_LE	cpu_to_le32(FILE_ATTRIBUTE_INTEGRITY_STREAM)
++#define FILE_ATTRIBUTE_NO_SCRUB_DATA_LE		cpu_to_le32(FILE_ATTRIBUTE_NO_SCRUB_DATA)
++#define FILE_ATTRIBUTE_MASK_LE			cpu_to_le32(FILE_ATTRIBUTE_MASK)
++
+ /*
+  * Response contains array of the following structures
+  * See MS-FSCC 2.7.1
+diff --git a/fs/smb/common/smb2pdu.h b/fs/smb/common/smb2pdu.h
+index 950aadade401..5372a820118e 100644
+--- a/fs/smb/common/smb2pdu.h
++++ b/fs/smb/common/smb2pdu.h
+@@ -1072,41 +1072,6 @@ struct smb2_server_client_notification {
+ #define IL_IMPERSONATION	cpu_to_le32(0x00000002)
+ #define IL_DELEGATE		cpu_to_le32(0x00000003)
+ 
+-/* File Attributes */
+-#define FILE_ATTRIBUTE_READONLY			0x00000001
+-#define FILE_ATTRIBUTE_HIDDEN			0x00000002
+-#define FILE_ATTRIBUTE_SYSTEM			0x00000004
+-#define FILE_ATTRIBUTE_DIRECTORY		0x00000010
+-#define FILE_ATTRIBUTE_ARCHIVE			0x00000020
+-#define FILE_ATTRIBUTE_NORMAL			0x00000080
+-#define FILE_ATTRIBUTE_TEMPORARY		0x00000100
+-#define FILE_ATTRIBUTE_SPARSE_FILE		0x00000200
+-#define FILE_ATTRIBUTE_REPARSE_POINT		0x00000400
+-#define FILE_ATTRIBUTE_COMPRESSED		0x00000800
+-#define FILE_ATTRIBUTE_OFFLINE			0x00001000
+-#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED	0x00002000
+-#define FILE_ATTRIBUTE_ENCRYPTED		0x00004000
+-#define FILE_ATTRIBUTE_INTEGRITY_STREAM		0x00008000
+-#define FILE_ATTRIBUTE_NO_SCRUB_DATA		0x00020000
+-#define FILE_ATTRIBUTE__MASK			0x00007FB7
+-
+-#define FILE_ATTRIBUTE_READONLY_LE              cpu_to_le32(0x00000001)
+-#define FILE_ATTRIBUTE_HIDDEN_LE		cpu_to_le32(0x00000002)
+-#define FILE_ATTRIBUTE_SYSTEM_LE		cpu_to_le32(0x00000004)
+-#define FILE_ATTRIBUTE_DIRECTORY_LE		cpu_to_le32(0x00000010)
+-#define FILE_ATTRIBUTE_ARCHIVE_LE		cpu_to_le32(0x00000020)
+-#define FILE_ATTRIBUTE_NORMAL_LE		cpu_to_le32(0x00000080)
+-#define FILE_ATTRIBUTE_TEMPORARY_LE		cpu_to_le32(0x00000100)
+-#define FILE_ATTRIBUTE_SPARSE_FILE_LE		cpu_to_le32(0x00000200)
+-#define FILE_ATTRIBUTE_REPARSE_POINT_LE		cpu_to_le32(0x00000400)
+-#define FILE_ATTRIBUTE_COMPRESSED_LE		cpu_to_le32(0x00000800)
+-#define FILE_ATTRIBUTE_OFFLINE_LE		cpu_to_le32(0x00001000)
+-#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED_LE	cpu_to_le32(0x00002000)
+-#define FILE_ATTRIBUTE_ENCRYPTED_LE		cpu_to_le32(0x00004000)
+-#define FILE_ATTRIBUTE_INTEGRITY_STREAM_LE	cpu_to_le32(0x00008000)
+-#define FILE_ATTRIBUTE_NO_SCRUB_DATA_LE		cpu_to_le32(0x00020000)
+-#define FILE_ATTRIBUTE_MASK_LE			cpu_to_le32(0x00007FB7)
+-
+ /* Desired Access Flags */
+ #define FILE_READ_DATA_LE		cpu_to_le32(0x00000001)
+ #define FILE_LIST_DIRECTORY_LE		cpu_to_le32(0x00000001)
 -- 
 2.43.0
 
