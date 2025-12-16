@@ -1,77 +1,132 @@
-Return-Path: <linux-cifs+bounces-8329-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8333-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E44CC17C8
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Dec 2025 09:11:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 434C7CC2CFB
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Dec 2025 13:36:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8ED7B30778D1
-	for <lists+linux-cifs@lfdr.de>; Tue, 16 Dec 2025 08:07:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 093E7300C752
+	for <lists+linux-cifs@lfdr.de>; Tue, 16 Dec 2025 12:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9ACA34AAFC;
-	Tue, 16 Dec 2025 08:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C938634165B;
+	Tue, 16 Dec 2025 12:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwIohlt7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BwjRHzBS"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818C134AAF9;
-	Tue, 16 Dec 2025 08:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAB6396579;
+	Tue, 16 Dec 2025 12:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765872435; cv=none; b=XOY4gAWnofHXH1RRBSxerpxTEgLdf0S460zvjRE5ucO+uWt9315216J8ocFYIsg5LxsC74T/yT0KUo3d/CozTsLFM8rrYQwJ9A6yeZlIXA5JJXyb8EJPpV67pm65t/qDokGMC9N50GLhxOPxlI0CwP76kkc1cavCzx1vsBqMNqM=
+	t=1765888325; cv=none; b=CWRpf9r59C9XTUIB85xwy9M5V39sI0sTfwWusaRM24B6ugC9U1WA59tnvp3WC+39FU0cfl8ScCmTi8bdcFi9xzJOlPjuGETu0Ylqc6l6UM2DRO1Z0cBcE12UpAVAYxv77pWhwQXkUuLJVOHGI830AYuY0Vr6SPJpaxNUy3nCIe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765872435; c=relaxed/simple;
-	bh=XJT1c9dqQBKD51DsUZRIv0656jhKt+6qbTEm5ztoPqQ=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PUqK5f9q+feIIlv38n33XJEWIDBILrPmdm08QevELxX8PsvwR2Vyfoty/BsvE/jVkI56ouIn3bjStPVs1Od6aM5eZ6mlIszXHt4fM/MMw4qtWPck476EMnIVNa0HkW8B1qCw99RfvsZ+RxFdtIfKQP3OaO/leVsFnhDuvdoZkMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwIohlt7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C354C16AAE;
-	Tue, 16 Dec 2025 08:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765872435;
-	bh=XJT1c9dqQBKD51DsUZRIv0656jhKt+6qbTEm5ztoPqQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=KwIohlt7sjVoATV8Zd1ulQNz/XRVt99h1vexuXQFO6h/6U9HgL0q1XwrFoalGT8pH
-	 PmDJjdJX2n761MWMsV09UXZpfmkOYaBq6dhNL38hbKklWmZ7n/3x+LEnRL//CFo9Pe
-	 lR2bTzIa/w3rjXLkKHLhhlhFA5wfprGCMPlVjfWPglIQ+RCM9cc9vEATf4nkrcknK/
-	 USpqQyewk2Q0M0HJJ0CME5b7YlhlW9U9Dxf2SQ+vtTIchWxKp6aaT6tIDh6FLQdMGN
-	 nhBfoB7Vfqc20STRMf39X9VkY4bN2RqMSoo/drzpWVrzBZM8oKPyVBQw1YfSLI0uMm
-	 oEAnKO3IyCRQQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BAAE380CECA;
-	Tue, 16 Dec 2025 08:04:07 +0000 (UTC)
-Subject: Re: [GIT PULL[ ksmbd server fixes
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5msK2mYp39bX0=R+phV--knmAcLCXTdqYSWfuEfb=59dxA@mail.gmail.com>
-References: <CAH2r5msK2mYp39bX0=R+phV--knmAcLCXTdqYSWfuEfb=59dxA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5msK2mYp39bX0=R+phV--knmAcLCXTdqYSWfuEfb=59dxA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/v6.19-rc1-ksmbd-server-fixes
-X-PR-Tracked-Commit-Id: 95d7a890e4b03e198836d49d699408fd1867cb55
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 53ec4a79ff4b36d9711cfe030eeebc36afbc51dd
-Message-Id: <176587224587.917451.16004614562498577580.pr-tracker-bot@kernel.org>
-Date: Tue, 16 Dec 2025 08:04:05 +0000
-To: Steve French <smfrench@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Namjae Jeon <linkinjeon@kernel.org>, CIFS <linux-cifs@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, "Stefan (metze) Metzmacher" <metze@samba.org>
+	s=arc-20240116; t=1765888325; c=relaxed/simple;
+	bh=F0E8z3YJS7za89WtMyi2ZHrRlSWo61zD/M21UzUw104=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HePL37YdaRRVRiCGaQ3cAwqG88/1p96YVYvYyMM03KeZqgBINmTtrHpDa8IxkyFvneeSWrFM4rIFyd9CxOrjruc+v37Jjqx2al2g8DWzmY5IjXomwDHUx9A4NtJgRnQ3AgCnJrdyFpOWt9AUn1x9dFBuDrugRN3G5ZECzkj2rCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BwjRHzBS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CDAC4CEF1;
+	Tue, 16 Dec 2025 12:32:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1765888325;
+	bh=F0E8z3YJS7za89WtMyi2ZHrRlSWo61zD/M21UzUw104=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BwjRHzBSrjwfPm7KOrzdRSxhBpsdJ7D2vgisduC/0lCwzA4XhCGhw1nl8seDQsrkY
+	 BlhgLhr2DgeMV5W//f+pdIQKHF1qFnybPkec1uYcAxK7vEXxJ7eB5g3iHxy5kd3hNl
+	 CE7ZJS3ubtkOOxjHhOYsY5ch1MOY+71sAOUHlXxQ=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Steve French <smfrench@gmail.com>,
+	Tom Talpey <tom@talpey.com>,
+	Long Li <longli@microsoft.com>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Paulo Alcantara <pc@manguebit.org>,
+	linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	Stefan Metzmacher <metze@samba.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.18 501/614] smb: smbdirect: introduce SMBDIRECT_DEBUG_ERR_PTR() helper
+Date: Tue, 16 Dec 2025 12:14:28 +0100
+Message-ID: <20251216111419.521874013@linuxfoundation.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251216111401.280873349@linuxfoundation.org>
+References: <20251216111401.280873349@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Mon, 15 Dec 2025 23:06:36 -0600:
+6.18-stable review patch.  If anyone has any objections, please let me know.
 
-> git://git.samba.org/ksmbd.git tags/v6.19-rc1-ksmbd-server-fixes
+------------------
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/53ec4a79ff4b36d9711cfe030eeebc36afbc51dd
+From: Stefan Metzmacher <metze@samba.org>
 
-Thank you!
+[ Upstream commit 1f3fd108c5c5a9885c6c276a2489c49b60a6b90d ]
 
+This can be used like this:
+
+  int err = somefunc();
+  pr_warn("err=%1pe\n", SMBDIRECT_DEBUG_ERR_PTR(err));
+
+This will be used in the following fixes in order
+to be prepared to identify real world problems
+more easily.
+
+Cc: Steve French <smfrench@gmail.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: Long Li <longli@microsoft.com>
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Paulo Alcantara <pc@manguebit.org>
+Cc: linux-cifs@vger.kernel.org
+Cc: samba-technical@lists.samba.org
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Stable-dep-of: 425c32750b48 ("smb: server: relax WARN_ON_ONCE(SMBDIRECT_SOCKET_*) checks in recv_done() and smb_direct_cm_handler()")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/common/smbdirect/smbdirect_socket.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/fs/smb/common/smbdirect/smbdirect_socket.h b/fs/smb/common/smbdirect/smbdirect_socket.h
+index ee5a90d691c89..611986827a5e2 100644
+--- a/fs/smb/common/smbdirect/smbdirect_socket.h
++++ b/fs/smb/common/smbdirect/smbdirect_socket.h
+@@ -74,6 +74,19 @@ const char *smbdirect_socket_status_string(enum smbdirect_socket_status status)
+ 	return "<unknown>";
+ }
+ 
++/*
++ * This can be used with %1pe to print errors as strings or '0'
++ * And it avoids warnings like: warn: passing zero to 'ERR_PTR'
++ * from smatch -p=kernel --pedantic
++ */
++static __always_inline
++const void * __must_check SMBDIRECT_DEBUG_ERR_PTR(long error)
++{
++	if (error == 0)
++		return NULL;
++	return ERR_PTR(error);
++}
++
+ enum smbdirect_keepalive_status {
+ 	SMBDIRECT_KEEPALIVE_NONE,
+ 	SMBDIRECT_KEEPALIVE_PENDING,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.51.0
+
+
+
 
