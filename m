@@ -1,60 +1,60 @@
-Return-Path: <linux-cifs+bounces-8416-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8417-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99275CD769D
-	for <lists+linux-cifs@lfdr.de>; Tue, 23 Dec 2025 00:03:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1532BCD7567
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Dec 2025 23:43:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 627AF30310D6
-	for <lists+linux-cifs@lfdr.de>; Mon, 22 Dec 2025 23:02:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 39A5E305222B
+	for <lists+linux-cifs@lfdr.de>; Mon, 22 Dec 2025 22:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0C434A3A7;
-	Mon, 22 Dec 2025 22:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5565034A77F;
+	Mon, 22 Dec 2025 22:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f9GTpGxJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DgcLAlC0"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D088346E75
-	for <linux-cifs@vger.kernel.org>; Mon, 22 Dec 2025 22:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BF0349B0D
+	for <linux-cifs@vger.kernel.org>; Mon, 22 Dec 2025 22:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766442672; cv=none; b=i5Se7EmKOgZHokqw2I2AWU64ZwOHOQjJxE3aWparmxoWA33O8UKtyzVDucIkoKsyw3VsbjpZHvhy2OlYryV1JC+Z13Yu/rluArnI4VMopyQeTXE36cnHn00OWnwcxVIooj+dy8xc7Vpu8gXdxXPIGdCJrDcH5mp1QgCEi8xMLcM=
+	t=1766442675; cv=none; b=m2C1a3FjotXKSH4mx4ok+NFLPIJHtoFSYt8uzPMDFGA2AMUnGX/mdaoVnj1MC/vcmi9adl9kKpfx+5GG4fWcXIrBWRTuvEu9IhEMfi2ovRxyfo8uDTA5LBpMUXXMjfAc6Fc5DXEAMszinn4Lae+H9UO2I+bzNZoUHhMCDoY/Zcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766442672; c=relaxed/simple;
-	bh=l9zo0EXonEq03TFI/f6JGfF7B1OyrUbKh6aUqoUh/vQ=;
+	s=arc-20240116; t=1766442675; c=relaxed/simple;
+	bh=LDVxs4HVzGamgRyO4hgKW44vmux4lO4xwEKPQYnOq00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pa89bP1nZciVYGc1eoos9Mt8Suc83e9T0Vuv5DdPA5l5LPJe+Nik4J1IPhxuVB2yXLcR1G1t3Q8sOxM0zO+7V5jdsgOkyDSx4iiqviq5lAAhpqq1Q0qVad6V5qGyI2izwcNXidQLCZcUUFMaEayCkEgwAkVRZvWyZ30JOQrxPAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=fail smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f9GTpGxJ; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=DQ2E8RzmdIjpIkGm6DceptkNS5m9VXS/21aa9C5eKzqZPkvwKJQ55NrS8fTq0SIv7IJUeruc6d1Gk32JRET6xzOPKnfLeYiFPIF/r3SWb9pIOikr8w0qVCcP1m5pLHW3L8YWDroPYIYMsVZouZlcU9uy5fM1Mla7DFyxK6A1v2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=fail smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DgcLAlC0; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766442669;
+	s=mimecast20190719; t=1766442671;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AJBBsTnUoSekD8Jtjh4VEvFM2BerBPLv40YPx1hJJCY=;
-	b=f9GTpGxJAoGhc86cTtjRTGyuiPC+sFSvrgYO3UrofMhNO4UGRdtBXfD2J6GBVlfgfG3Wxl
-	vvkwJD0OiQuOdtuQLo35yngMUpPR05RkW7A2grwZ0/ABHaKPAnBKK1yTXAJvmkzkdf92jP
-	Y6okwuCi/i0AZMf7EAOczFThIm7SJiU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=sYb0W3+K58jDqolNtPQz939MnKma4O1rdy9kUT/7xKE=;
+	b=DgcLAlC0eNX5DC0qkDAVQB2zQ/ImELe5cPPIa8eLdPm9OANOkVUucRYxiwM+6vnExXdpX1
+	1aUkAG9I972eQeA1BgRAzVbyA1c1ubNO2DhJwxxEEItWBHHEeDWCVGnnS7Qlr478m9BpeN
+	+Bwdqnx2G/MDA6c5fRkddvsK5ItBHUg=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-75-Rzh3mCFFPAGEh4Ne7PYyRg-1; Mon,
- 22 Dec 2025 17:31:05 -0500
-X-MC-Unique: Rzh3mCFFPAGEh4Ne7PYyRg-1
-X-Mimecast-MFC-AGG-ID: Rzh3mCFFPAGEh4Ne7PYyRg_1766442664
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-371-stUx3xVNN5iTuSu6IOwyLQ-1; Mon,
+ 22 Dec 2025 17:31:08 -0500
+X-MC-Unique: stUx3xVNN5iTuSu6IOwyLQ-1
+X-Mimecast-MFC-AGG-ID: stUx3xVNN5iTuSu6IOwyLQ_1766442667
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A94A8195609F;
-	Mon, 22 Dec 2025 22:31:04 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 80396180060D;
+	Mon, 22 Dec 2025 22:31:07 +0000 (UTC)
 Received: from warthog.procyon.org.uk.com (unknown [10.42.28.4])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EC00F30001A2;
-	Mon, 22 Dec 2025 22:31:02 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C59FD19560AB;
+	Mon, 22 Dec 2025 22:31:05 +0000 (UTC)
 From: David Howells <dhowells@redhat.com>
 To: Steve French <sfrench@samba.org>
 Cc: David Howells <dhowells@redhat.com>,
@@ -63,9 +63,9 @@ Cc: David Howells <dhowells@redhat.com>,
 	linux-cifs@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 17/37] cifs: Scripted clean up fs/smb/client/reparse.h
-Date: Mon, 22 Dec 2025 22:29:42 +0000
-Message-ID: <20251222223006.1075635-18-dhowells@redhat.com>
+Subject: [PATCH 18/37] cifs: Scripted clean up fs/smb/client/ntlmssp.h
+Date: Mon, 22 Dec 2025 22:29:43 +0000
+Message-ID: <20251222223006.1075635-19-dhowells@redhat.com>
 In-Reply-To: <20251222223006.1075635-1-dhowells@redhat.com>
 References: <20251222223006.1075635-1-dhowells@redhat.com>
 Precedence: bulk
@@ -75,7 +75,7 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 Remove externs, correct argument names and reformat declarations.
 
@@ -87,31 +87,37 @@ cc: linux-cifs@vger.kernel.org
 cc: linux-fsdevel@vger.kernel.org
 cc: linux-kernel@vger.kernel.org
 ---
- fs/smb/client/reparse.h | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ fs/smb/client/ntlmssp.h | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/fs/smb/client/reparse.h b/fs/smb/client/reparse.h
-index 19caab2fd11e..cfbb7dd28958 100644
---- a/fs/smb/client/reparse.h
-+++ b/fs/smb/client/reparse.h
-@@ -130,11 +130,12 @@ bool cifs_reparse_point_to_fattr(struct cifs_sb_info *cifs_sb,
- 				 struct cifs_fattr *fattr,
- 				 struct cifs_open_info_data *data);
- int create_reparse_symlink(const unsigned int xid, struct inode *inode,
--				struct dentry *dentry, struct cifs_tcon *tcon,
--				const char *full_path, const char *symname);
--int mknod_reparse(unsigned int xid, struct inode *inode,
--		       struct dentry *dentry, struct cifs_tcon *tcon,
--		       const char *full_path, umode_t mode, dev_t dev);
--struct reparse_data_buffer *smb2_get_reparse_point_buffer(const struct kvec *rsp_iov, u32 *len);
-+			   struct dentry *dentry, struct cifs_tcon *tcon,
-+			   const char *full_path, const char *symname);
-+int mknod_reparse(unsigned int xid, struct inode *inode, struct dentry *dentry,
-+		  struct cifs_tcon *tcon, const char *full_path, umode_t mode,
-+		  dev_t dev);
-+struct reparse_data_buffer *smb2_get_reparse_point_buffer(const struct kvec *rsp_iov,
-+							  u32 *plen);
+diff --git a/fs/smb/client/ntlmssp.h b/fs/smb/client/ntlmssp.h
+index a11fddc321f6..be0365f08396 100644
+--- a/fs/smb/client/ntlmssp.h
++++ b/fs/smb/client/ntlmssp.h
+@@ -142,16 +142,17 @@ typedef struct _AUTHENTICATE_MESSAGE {
+  * Size of the session key (crypto key encrypted with the password
+  */
  
- #endif /* _CIFS_REPARSE_H */
+-int decode_ntlmssp_challenge(char *bcc_ptr, int blob_len, struct cifs_ses *ses);
++int decode_ntlmssp_challenge(char *bcc_ptr, int blob_len,
++			     struct cifs_ses *ses);
+ int build_ntlmssp_negotiate_blob(unsigned char **pbuffer, u16 *buflen,
+ 				 struct cifs_ses *ses,
+ 				 struct TCP_Server_Info *server,
+ 				 const struct nls_table *nls_cp);
+ int build_ntlmssp_smb3_negotiate_blob(unsigned char **pbuffer, u16 *buflen,
+-				 struct cifs_ses *ses,
+-				 struct TCP_Server_Info *server,
+-				 const struct nls_table *nls_cp);
++				      struct cifs_ses *ses,
++				      struct TCP_Server_Info *server,
++				      const struct nls_table *nls_cp);
+ int build_ntlmssp_auth_blob(unsigned char **pbuffer, u16 *buflen,
+-			struct cifs_ses *ses,
+-			struct TCP_Server_Info *server,
+-			const struct nls_table *nls_cp);
++			    struct cifs_ses *ses,
++			    struct TCP_Server_Info *server,
++			    const struct nls_table *nls_cp);
 
 
