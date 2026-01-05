@@ -1,648 +1,180 @@
-Return-Path: <linux-cifs+bounces-8541-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8554-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36DCCCF4AFC
-	for <lists+linux-cifs@lfdr.de>; Mon, 05 Jan 2026 17:30:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3414CF4BDD
+	for <lists+linux-cifs@lfdr.de>; Mon, 05 Jan 2026 17:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DCC403007927
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Jan 2026 16:30:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3D6D930C62DE
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 Jan 2026 16:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7817A33A9E5;
-	Mon,  5 Jan 2026 14:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF8B334889C;
+	Mon,  5 Jan 2026 16:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbjccNQV"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QypB5P8l";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4dq0llcP";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QypB5P8l";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4dq0llcP"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E7E339B32
-	for <linux-cifs@vger.kernel.org>; Mon,  5 Jan 2026 14:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D068B3491C4
+	for <linux-cifs@vger.kernel.org>; Mon,  5 Jan 2026 16:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767622112; cv=none; b=oRgu0u1MYB/LseWumqGuA6oKsAm69mIEJIJxzzd6DECX8HwFoElLS0X8u5DB2GpU0bjvVU1iPJCdWEXHndLIr3TJayoGgdbPjUAh4jLTNwTnUJMcUTe0P2En2ZSTs2xM4zsw3bM8CmCyOnbCtfquXfDRQ802Pi5oBLjlepiSiKY=
+	t=1767629879; cv=none; b=U46UH7q5/kLlskAoP0YhPYG67j2mTNkEa6XVmHYkn5a/P4JKoJS51n0nfYoRQ5QfISWuRzmwrZk4fILO0HG3webhO/O4gUxZ81FxxgbQ3UwqR+qkUBNeSdX3/6tRYGKLHGV1cjd9H2y6d7t5ygBSH3Cng8XL1k3SRlu2yohunSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767622112; c=relaxed/simple;
-	bh=LtWygUYpq/K0AB8w923/DVNLmQxTI7T8sryMQYZR1q0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AbM3ZyeYNd2wQLlFap97eV8fkY4XsVRgmrzwExQKVGkenL7ojGnvibgEyVMtMDQIgk/jrRLFAZexnqwsnrOJULw55uvBR2im8ijksKiQXHSN/GSBelNFlQgGAFWHPsHGAfVTXEMachGsvK1aWpK0Cz9/cJoRRWEB4FshJvWEe1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbjccNQV; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4f1b147eaa9so112258971cf.3
-        for <linux-cifs@vger.kernel.org>; Mon, 05 Jan 2026 06:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767622106; x=1768226906; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ykUp58mZtshTqhjw72nNa3oPqkUwNfnxCM1mDkorMzM=;
-        b=bbjccNQV64xx+hPqo9k7JVMpJQNL4j9Angs+oCHyMnZNyFQLiWLphXjy6QOrTwqMwC
-         gmMtAP+GZ8WLAV/1Iq1nGpmFAZ5rdX4LscR0Naska0MFVNH1liana99OfowUK4uZIFIG
-         8HXMJ+7AeSd1efL+5FqS50LAGXDJAawFW6jg5WlLPsfVG+qCrYrq1q2YHHXK1SzO3QkO
-         7NUFHrDa5ECTtJg6JNpaxAgQA4tYMCA8VJQV5LZqo1Gd2ZtHgW4ogrJQOeyN+XqTeHFZ
-         4IrL57R2xceXRZddVzUSKHrPx5QStYuli6zSZD6lr5AgyheYJaD/QdQY0t+r4YF6dw8n
-         Tm+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767622106; x=1768226906;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ykUp58mZtshTqhjw72nNa3oPqkUwNfnxCM1mDkorMzM=;
-        b=UobFecuBIKd4GHyKq1t0EfZsfbvqxhhgpKICoKnph1okg7iZkow9W1vop7HHz2YUuI
-         Fb0Vu0oth9b5cgtiGTnH5EsyCZ8aizJe0tEW6szN8XkmzhGOHGvrv4rbCdp8p2gZXpD3
-         6zIx6ZH+yeZhYcNbPnS36nNUUdGjZYLBG6FHfQ0M9TqP4MDwMd87abJNY/oJQbdq3HvR
-         h5Yi5PxrQi0AhxirglE48E8bylM2wgaWZeL2zl0NB/W3jaSWPteFxIlCcnd7zZZnQktv
-         MrHoMJ7Ah9fxNz2Id55e+K4bjtsHE0OICZevbQAkfG6ykNtsQotUhJUsUr+uabJRiTUe
-         lYYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbO84s7n6Il36Syzf/XnRaUikBXjEa7Wk7v0uhmcL5JoPCrO85oeAC4HzvpvMzQ+DqvdCqW2upfrIh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7wOU11oj8gVdtw+vlVM0QbZmssfwoHLFnBYJr50VpL73t7b8K
-	7Cu12uG5b/FtMM0DLsngTy34KoI4L/4mSZozSB15RH7clDR45bMb0UZZ
-X-Gm-Gg: AY/fxX5BFnVfALng5oPh6HKX2r+MbbBJETnjv2vaIzu/5aZyunFYYA3D4RBvzmdfHma
-	14rR31iEy9Yhv9WX3tcyRixUJvcEQjWsLChO4B5CCvHBzBULMqhWeZODi6DotS1+EiJvD0A05d8
-	u/i+C/VFl5VuZHGpqrNwV2ZBerlwGEFW/pGhI41Cv2waywSRAXCniS+iQoqFc8OJrGoFkFZHYvY
-	0XdK3hsXimjfpu0dRvy41LNSKY2NOXaZHOCxKAAwzzzO2/TduSBXt/Rh8asWScEXkLYRkasV5Ui
-	2TNNIcRkSIy88RArBi1kNS3RBZE2+DELbhGfkr5BuOYsMP9CgMNUX/BxZDZ+id21cCX3IwpawRY
-	SRmnp5pSGoCktxUY5vAQrBJ3dNc1Lo6CODsJUlHfZwHegOeYj6pd9C2uc2cWVXrC9vAz3M64FGn
-	GGvC7lOSsuvDWfq6KfJUiPRHO2glVHs76jo2I6Lsp3DOpWXPg6FN6xEYOajKB/nw==
-X-Google-Smtp-Source: AGHT+IGcK0YDjqIpesyJ1L4fdYrkrOiwmc8orHzAQaYs0tiPLgztPa5qvaVnfQghtwszsulZCub9kA==
-X-Received: by 2002:a05:622a:4a11:b0:4ee:1676:faa6 with SMTP id d75a77b69052e-4f4abd1af51mr730516941cf.20.1767622105508;
-        Mon, 05 Jan 2026 06:08:25 -0800 (PST)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac64a47esm368957221cf.24.2026.01.05.06.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 06:08:24 -0800 (PST)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	quic@lists.linux.dev
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Metzmacher <metze@samba.org>,
-	Moritz Buhl <mbuhl@openbsd.org>,
-	Tyler Fanelli <tfanelli@redhat.com>,
-	Pengtao He <hepengtao@xiaomi.com>,
-	Thomas Dreibholz <dreibh@simula.no>,
-	linux-cifs@vger.kernel.org,
-	Steve French <smfrench@gmail.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Tom Talpey <tom@talpey.com>,
-	kernel-tls-handshake@lists.linux.dev,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Steve Dickson <steved@redhat.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Alexander Aring <aahringo@redhat.com>,
-	David Howells <dhowells@redhat.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	John Ericson <mail@johnericson.me>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	"D . Wythe" <alibuda@linux.alibaba.com>,
-	Jason Baron <jbaron@akamai.com>,
-	illiliti <illiliti@protonmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Daniel Stenberg <daniel@haxx.se>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: [PATCH net-next v6 10/16] quic: add packet number space
-Date: Mon,  5 Jan 2026 09:04:36 -0500
-Message-ID: <8e4df1d91cbb96fe15da799f3f36341f292d7c12.1767621882.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1767621882.git.lucien.xin@gmail.com>
-References: <cover.1767621882.git.lucien.xin@gmail.com>
+	s=arc-20240116; t=1767629879; c=relaxed/simple;
+	bh=U5JNXzUelt2oG0k9H/UBmnR6vsa+uU0PmVwCu88IDgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p5GoceMixr0N8rSnL4w7mi4asWaBAZ8zTC5dcjRJ+jBNbdcxSEisgz6Nyp/qBF1gwJl8VQRB9PqPyWTzmoSpZVnzTqu6RxewF+PeQJ8pex44+ASi82kNr9wkSGxKpqxKi0srePcMavPv84ql3iNJvo1bfZsbh4o+GAZjda9yeyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QypB5P8l; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4dq0llcP; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QypB5P8l; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4dq0llcP; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2AB3F5BDB2;
+	Mon,  5 Jan 2026 16:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767629876; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1DFvpD5WZqumQjvq1dY5e6M7m22Rg2kOe+aJWOauueI=;
+	b=QypB5P8lC9ySNMO/aFcfMrp5FtgSNBMU41gE6ylcGLUvLr+yC2KQZmI3MVlS7JtFCMEug2
+	1w5I0/hej5J0RF39b71dWUF1guZ9rrQbtPoFRuEQ/Hm5aUv5gmWzms6zBurKME7qCNTBQN
+	GPxHeM1OlYe2wx9IQhFPMNm0MxiNf8c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767629876;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1DFvpD5WZqumQjvq1dY5e6M7m22Rg2kOe+aJWOauueI=;
+	b=4dq0llcPZ9X/rG0A876zUi75iCbx1NxTHqZD21FYu6ZMJmGR2DhQUaaia+eKNgO52k5MH5
+	kLTxocHqXLfZyUCw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767629876; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1DFvpD5WZqumQjvq1dY5e6M7m22Rg2kOe+aJWOauueI=;
+	b=QypB5P8lC9ySNMO/aFcfMrp5FtgSNBMU41gE6ylcGLUvLr+yC2KQZmI3MVlS7JtFCMEug2
+	1w5I0/hej5J0RF39b71dWUF1guZ9rrQbtPoFRuEQ/Hm5aUv5gmWzms6zBurKME7qCNTBQN
+	GPxHeM1OlYe2wx9IQhFPMNm0MxiNf8c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767629876;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1DFvpD5WZqumQjvq1dY5e6M7m22Rg2kOe+aJWOauueI=;
+	b=4dq0llcPZ9X/rG0A876zUi75iCbx1NxTHqZD21FYu6ZMJmGR2DhQUaaia+eKNgO52k5MH5
+	kLTxocHqXLfZyUCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ACD9A3EA63;
+	Mon,  5 Jan 2026 16:17:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VqwLHTPkW2ngHQAAD6G6ig
+	(envelope-from <ematsumiya@suse.de>); Mon, 05 Jan 2026 16:17:55 +0000
+Date: Mon, 5 Jan 2026 13:17:49 -0300
+From: Enzo Matsumiya <ematsumiya@suse.de>
+To: Aaditya Kansal <aadityakansal390@gmail.com>
+Cc: sfrench@samba.org, linux-cifs@vger.kernel.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com
+Subject: Re: [PATCH] smb: client: terminate session upon signature
+ verification failure
+Message-ID: <s4kmfu25glkgu44wl46e3q3bjvyhlbcvnlaiuqkuey4qlg4d5o@s7ispothcved>
+References: <20251226201939.36293-1-aadityakansal390@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20251226201939.36293-1-aadityakansal390@gmail.com>
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[samba.org,vger.kernel.org,manguebit.org,gmail.com];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo]
 
-This patch introduces 'quic_pnspace', which manages per packet number
-space members.
+On 12/27, Aaditya Kansal wrote:
+>Currently, when the SMB signature verification fails, the error is
+>logged without any action to terminate the session.
+>
+>Call cifs_reconnect() to terminate the session if the signature
+>verification fails.
+>
+>Signed-off-by: Aaditya Kansal <aadityakansal390@gmail.com>
 
-It maintains the next packet number to assign, tracks the total length of
-frames currently in flight, and records the time when the next packet may
-be considered lost. It also keeps track of the largest acknowledged packet
-number, the time it was acknowledged, and when the most recent ack
-eliciting packet was sent. These fields are useful for loss detection,
-RTT estimation, and congestion control.
+Thanks, I think this was long overdue.
 
-To support ACK frame generation, quic_pnspace includes a packet number
-acknowledgment map (pn_ack_map) that tracks received packet numbers.
-Supporting functions are provided to validate and mark received packet
-numbers and compute the number of gap blocks needed during ACK frame
-construction.
+>---
+> fs/smb/client/cifstransport.c | 7 +++++--
+> 1 file changed, 5 insertions(+), 2 deletions(-)
+>
+>diff --git a/fs/smb/client/cifstransport.c b/fs/smb/client/cifstransport.c
+>index 28d1cee90625..89818bb983ec 100644
+>--- a/fs/smb/client/cifstransport.c
+>+++ b/fs/smb/client/cifstransport.c
+>@@ -169,12 +169,15 @@ cifs_check_receive(struct mid_q_entry *mid, struct TCP_Server_Info *server,
+>
+> 		iov[0].iov_base = mid->resp_buf;
+> 		iov[0].iov_len = len;
+>-		/* FIXME: add code to kill session */
+>+
+> 		rc = cifs_verify_signature(&rqst, server,
+> 					   mid->sequence_number);
+>-		if (rc)
+>+		if (rc) {
+> 			cifs_server_dbg(VFS, "SMB signature verification returned error = %d\n",
+> 				 rc);
+>+			cifs_reconnect(server, true);
 
-- quic_pnspace_check(): Validates a received packet number.
+I'd like to hear opinions on having reconnect happen only if signing
+is required by server, otherwise only log the error (current behaviour).
 
-- quic_pnspace_mark(): Marks a received packet number in the ACK map.
+>+			return rc;
+>+		}
+> 	}
+>
+> 	/* BB special case reconnect tid and uid here? */
+>-- 
 
-- quic_pnspace_num_gabs(): Returns the gap ACK blocks for constructing
-  ACK frames.
+Nonetheless,
 
-Note QUIC uses separate packet number spaces for each encryption level
-(APP, INITIAL, HANDSHAKE, EARLY) except EARLY and all generations of
-APP keys use the same packet number space, as describe in
-rfc9002#section-4.1.
+Acked-by: Enzo Matsumiya <ematsumiya@suse.de>
 
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
----
-v5:
-  - Change timestamp variables from u32 to u64 and use quic_ktime_get_us()
-    to set max_pn_acked_time, as jiffies_to_usecs() is not accurate enough.
-  - Reorder some members in quic_pnspace to reduce 32-bit holes (noted
-    by Paolo).
-v6:
-  - Note for AI reviews: it's safe to do cast (u16)(pn - space->base_pn)
-    in quic_pnspace_mark(), as the pn < base_pn + QUIC_PN_MAP_SIZE (4096)
-    validation is always done in quic_pnspace_check(), which will always
-    be called before quic_pnspace_mark() in a later patchset.
-  - Note for AI reviews: failures in quic_pnspace_init() do not result in a
-    pn_map leak in quic_init_sock(), because quic_destroy_sock() is always
-    called to free it in err path, either via inet/6_create() or through
-    quic_accept() in a later patchset.
----
- net/quic/Makefile  |   2 +-
- net/quic/pnspace.c | 225 +++++++++++++++++++++++++++++++++++++++++++++
- net/quic/pnspace.h | 150 ++++++++++++++++++++++++++++++
- net/quic/socket.c  |  12 +++
- net/quic/socket.h  |   7 ++
- 5 files changed, 395 insertions(+), 1 deletion(-)
- create mode 100644 net/quic/pnspace.c
- create mode 100644 net/quic/pnspace.h
 
-diff --git a/net/quic/Makefile b/net/quic/Makefile
-index 4d4a42c6d565..9d8e18297911 100644
---- a/net/quic/Makefile
-+++ b/net/quic/Makefile
-@@ -6,4 +6,4 @@
- obj-$(CONFIG_IP_QUIC) += quic.o
- 
- quic-y := common.o family.o protocol.o socket.o stream.o connid.o path.o \
--	  cong.o
-+	  cong.o pnspace.o
-diff --git a/net/quic/pnspace.c b/net/quic/pnspace.c
-new file mode 100644
-index 000000000000..06ed774cc7c0
---- /dev/null
-+++ b/net/quic/pnspace.c
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* QUIC kernel implementation
-+ * (C) Copyright Red Hat Corp. 2023
-+ *
-+ * This file is part of the QUIC kernel implementation
-+ *
-+ * Initialization/cleanup for QUIC protocol support.
-+ *
-+ * Written or modified by:
-+ *    Xin Long <lucien.xin@gmail.com>
-+ */
-+
-+#include <linux/slab.h>
-+
-+#include "common.h"
-+#include "pnspace.h"
-+
-+int quic_pnspace_init(struct quic_pnspace *space)
-+{
-+	if (!space->pn_map) {
-+		space->pn_map = kzalloc(BITS_TO_BYTES(QUIC_PN_MAP_INITIAL), GFP_KERNEL);
-+		if (!space->pn_map)
-+			return -ENOMEM;
-+		space->pn_map_len = QUIC_PN_MAP_INITIAL;
-+	} else {
-+		bitmap_zero(space->pn_map, space->pn_map_len);
-+	}
-+
-+	space->max_time_limit = QUIC_PNSPACE_TIME_LIMIT;
-+	space->next_pn = QUIC_PNSPACE_NEXT_PN;
-+	space->base_pn = -1;
-+	return 0;
-+}
-+
-+void quic_pnspace_free(struct quic_pnspace *space)
-+{
-+	space->pn_map_len = 0;
-+	kfree(space->pn_map);
-+}
-+
-+/* Expand the bitmap tracking received packet numbers.  Ensures the pn_map bitmap can
-+ * cover at least @size packet numbers.  Allocates a larger bitmap, copies existing
-+ * data, and updates metadata.
-+ *
-+ * Returns: 1 if the bitmap was successfully grown, 0 on failure or if the requested
-+ * size exceeds QUIC_PN_MAP_SIZE.
-+ */
-+static int quic_pnspace_grow(struct quic_pnspace *space, u16 size)
-+{
-+	u16 len, inc, offset;
-+	unsigned long *new;
-+
-+	if (size > QUIC_PN_MAP_SIZE)
-+		return 0;
-+
-+	inc = ALIGN((size - space->pn_map_len), BITS_PER_LONG) + QUIC_PN_MAP_INCREMENT;
-+	len = (u16)min(space->pn_map_len + inc, QUIC_PN_MAP_SIZE);
-+
-+	new = kzalloc(BITS_TO_BYTES(len), GFP_ATOMIC);
-+	if (!new)
-+		return 0;
-+
-+	offset = (u16)(space->max_pn_seen + 1 - space->base_pn);
-+	bitmap_copy(new, space->pn_map, offset);
-+	kfree(space->pn_map);
-+	space->pn_map = new;
-+	space->pn_map_len = len;
-+
-+	return 1;
-+}
-+
-+/* Check if a packet number has been received.
-+ *
-+ * Returns: 0 if the packet number has not been received.  1 if it has already
-+ * been received.  -1 if the packet number is too old or too far in the future
-+ * to track.
-+ */
-+int quic_pnspace_check(struct quic_pnspace *space, s64 pn)
-+{
-+	if (space->base_pn == -1) /* No any packet number received yet. */
-+		return 0;
-+
-+	if (pn < space->min_pn_seen || pn >= space->base_pn + QUIC_PN_MAP_SIZE)
-+		return -1;
-+
-+	if (pn < space->base_pn || (pn - space->base_pn < space->pn_map_len &&
-+				    test_bit(pn - space->base_pn, space->pn_map)))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+/* Advance base_pn past contiguous received packet numbers.  Finds the next gap
-+ * (unreceived packet) beyond @pn, shifts the bitmap, and updates base_pn
-+ * accordingly.
-+ */
-+static void quic_pnspace_move(struct quic_pnspace *space, s64 pn)
-+{
-+	u16 offset;
-+
-+	offset = (u16)(pn + 1 - space->base_pn);
-+	offset = (u16)find_next_zero_bit(space->pn_map, space->pn_map_len, offset);
-+	space->base_pn += offset;
-+	bitmap_shift_right(space->pn_map, space->pn_map, offset, space->pn_map_len);
-+}
-+
-+/* Mark a packet number as received. Updates the packet number map to record
-+ * reception of @pn.  Advances base_pn if possible, and updates max/min/last seen
-+ * fields as needed.
-+ *
-+ * Returns: 0 on success or if the packet was already marked.  -ENOMEM if bitmap
-+ * allocation failed during growth.
-+ */
-+int quic_pnspace_mark(struct quic_pnspace *space, s64 pn)
-+{
-+	s64 last_max_pn_seen;
-+	u16 gap;
-+
-+	if (space->base_pn == -1) {
-+		/* Initialize base_pn based on the peer's first packet number since peer's
-+		 * packet numbers may start at a non-zero value.
-+		 */
-+		quic_pnspace_set_base_pn(space, pn + 1);
-+		return 0;
-+	}
-+
-+	/* Ignore packets with number less than current base (already processed). */
-+	if (pn < space->base_pn)
-+		return 0;
-+
-+	/* If gap is beyond current map length, try to grow the bitmap to accommodate. */
-+	gap = (u16)(pn - space->base_pn);
-+	if (gap >= space->pn_map_len && !quic_pnspace_grow(space, gap + 1))
-+		return -ENOMEM;
-+
-+	if (space->max_pn_seen < pn) {
-+		space->max_pn_seen = pn;
-+		space->max_pn_time = space->time;
-+	}
-+
-+	if (space->base_pn == pn) { /* If packet is exactly at base_pn (next expected packet). */
-+		if (quic_pnspace_has_gap(space)) /* Advance base_pn to next unacked packet. */
-+			quic_pnspace_move(space, pn);
-+		else /* Fast path: increment base_pn if no gaps. */
-+			space->base_pn++;
-+	} else { /* Mark this packet as received in the bitmap. */
-+		set_bit(gap, space->pn_map);
-+	}
-+
-+	/* Only update min and last_max_pn_seen if this packet is the current max_pn. */
-+	if (space->max_pn_seen != pn)
-+		return 0;
-+
-+	/* Check if enough time has elapsed or enough packets have been received to
-+	 * update tracking.
-+	 */
-+	last_max_pn_seen = min_t(s64, space->last_max_pn_seen, space->base_pn);
-+	if (space->max_pn_time < space->last_max_pn_time + space->max_time_limit &&
-+	    space->max_pn_seen <= last_max_pn_seen + QUIC_PN_MAP_LIMIT)
-+		return 0;
-+
-+	/* Advance base_pn if last_max_pn_seen is ahead of current base_pn. This is
-+	 * needed because QUIC doesn't retransmit packets; retransmitted frames are
-+	 * carried in new packets, so we move forward.
-+	 */
-+	if (space->last_max_pn_seen + 1 > space->base_pn)
-+		quic_pnspace_move(space, space->last_max_pn_seen);
-+
-+	space->min_pn_seen = space->last_max_pn_seen;
-+	space->last_max_pn_seen = space->max_pn_seen;
-+	space->last_max_pn_time = space->max_pn_time;
-+	return 0;
-+}
-+
-+/* Find the next gap in received packet numbers. Scans pn_map for a gap starting from
-+ * *@iter. A gap is a contiguous block of unreceived packets between received ones.
-+ *
-+ * Returns: 1 if a gap was found, 0 if no more gaps exist or are relevant.
-+ */
-+static int quic_pnspace_next_gap_ack(const struct quic_pnspace *space,
-+				     s64 *iter, u16 *start, u16 *end)
-+{
-+	u16 start_ = 0, end_ = 0, offset = (u16)(*iter - space->base_pn);
-+
-+	start_ = (u16)find_next_zero_bit(space->pn_map, space->pn_map_len, offset);
-+	if (space->max_pn_seen <= space->base_pn + start_)
-+		return 0;
-+
-+	end_ = (u16)find_next_bit(space->pn_map, space->pn_map_len, start_);
-+	if (space->max_pn_seen <= space->base_pn + end_ - 1)
-+		return 0;
-+
-+	*start = start_ + 1;
-+	*end = end_;
-+	*iter = space->base_pn + *end;
-+	return 1;
-+}
-+
-+/* Generate gap acknowledgment blocks (GABs).  GABs describe ranges of unacknowledged
-+ * packets between received ones, and are used in ACK frames.
-+ *
-+ * Returns: Number of generated GABs (up to QUIC_PN_MAP_MAX_GABS).
-+ */
-+u16 quic_pnspace_num_gabs(struct quic_pnspace *space, struct quic_gap_ack_block *gabs)
-+{
-+	u16 start, end, ngaps = 0;
-+	s64 iter;
-+
-+	if (!quic_pnspace_has_gap(space))
-+		return 0;
-+
-+	iter = space->base_pn;
-+	/* Loop through all gaps until the end of the window or max allowed gaps. */
-+	while (quic_pnspace_next_gap_ack(space, &iter, &start, &end)) {
-+		gabs[ngaps].start = start;
-+		if (ngaps == QUIC_PN_MAP_MAX_GABS - 1) {
-+			gabs[ngaps].end = (u16)(space->max_pn_seen - space->base_pn);
-+			ngaps++;
-+			break;
-+		}
-+		gabs[ngaps].end = end;
-+		ngaps++;
-+	}
-+	return ngaps;
-+}
-diff --git a/net/quic/pnspace.h b/net/quic/pnspace.h
-new file mode 100644
-index 000000000000..aa18fd320bdf
---- /dev/null
-+++ b/net/quic/pnspace.h
-@@ -0,0 +1,150 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/* QUIC kernel implementation
-+ * (C) Copyright Red Hat Corp. 2023
-+ *
-+ * This file is part of the QUIC kernel implementation
-+ *
-+ * Written or modified by:
-+ *    Xin Long <lucien.xin@gmail.com>
-+ */
-+
-+#define QUIC_PN_MAP_MAX_GABS	32
-+
-+#define QUIC_PN_MAP_INITIAL	64
-+#define QUIC_PN_MAP_INCREMENT	QUIC_PN_MAP_INITIAL
-+#define QUIC_PN_MAP_SIZE	4096
-+#define QUIC_PN_MAP_LIMIT	(QUIC_PN_MAP_SIZE * 3 / 4)
-+
-+#define QUIC_PNSPACE_MAX	(QUIC_CRYPTO_MAX - 1)
-+#define QUIC_PNSPACE_NEXT_PN	0
-+#define QUIC_PNSPACE_TIME_LIMIT	(333000 * 3)
-+
-+enum {
-+	QUIC_ECN_ECT1,
-+	QUIC_ECN_ECT0,
-+	QUIC_ECN_CE,
-+	QUIC_ECN_MAX
-+};
-+
-+enum {
-+	QUIC_ECN_LOCAL,		/* ECN bits from incoming IP headers */
-+	QUIC_ECN_PEER,		/* ECN bits reported by peer in ACK frames */
-+	QUIC_ECN_DIR_MAX
-+};
-+
-+/* Represents a gap (range of missing packets) in the ACK map.  The values are offsets from
-+ * base_pn, with both 'start' and 'end' being +1.
-+ */
-+struct quic_gap_ack_block {
-+	u16 start;
-+	u16 end;
-+};
-+
-+/* Packet Number Map (pn_map) Layout:
-+ *
-+ *     min_pn_seen -->++-----------------------+---------------------+---
-+ *         base_pn -----^   last_max_pn_seen --^       max_pn_seen --^
-+ *
-+ * Map Advancement Logic:
-+ *   - min_pn_seen = last_max_pn_seen;
-+ *   - base_pn = first zero bit after last_max_pn_seen;
-+ *   - last_max_pn_seen = max_pn_seen;
-+ *   - last_max_pn_time = current time;
-+ *
-+ * Conditions to Advance pn_map:
-+ *   - (max_pn_time - last_max_pn_time) >= max_time_limit, or
-+ *   - (max_pn_seen - last_max_pn_seen) > QUIC_PN_MAP_LIMIT
-+ *
-+ * Gap Search Range:
-+ *   - From (base_pn - 1) to max_pn_seen
-+ */
-+struct quic_pnspace {
-+	/* ECN counters indexed by direction (TX/RX) and ECN codepoint (ECT1, ECT0, CE) */
-+	u64 ecn_count[QUIC_ECN_DIR_MAX][QUIC_ECN_MAX];
-+	unsigned long *pn_map;	/* Bit map tracking received packet numbers for ACK generation */
-+	u16 pn_map_len;		/* Length of the packet number bit map (in bits) */
-+	u8  need_sack:1;	/* Flag indicating a SACK frame should be sent for this space */
-+	u8  sack_path:1;	/* Path used for sending the SACK frame */
-+
-+	s64 last_max_pn_seen;	/* Highest packet number seen before pn_map advanced */
-+	u64 last_max_pn_time;	/* Timestamp when last_max_pn_seen was received */
-+	s64 min_pn_seen;	/* Smallest packet number received in this space */
-+	s64 max_pn_seen;	/* Largest packet number received in this space */
-+	u64 max_pn_time;	/* Timestamp when max_pn_seen was received */
-+	s64 base_pn;		/* Packet number corresponding to the start of the pn_map */
-+	u64 time;		/* Cached current timestamp, or latest socket accept timestamp */
-+
-+	s64 max_pn_acked_seen;	/* Largest packet number acknowledged by the peer */
-+	u64 max_pn_acked_time;	/* Timestamp when max_pn_acked_seen was acknowledged */
-+	u64 last_sent_time;	/* Timestamp when the last ack-eliciting packet was sent */
-+	u64 loss_time;		/* Timestamp after which the next packet can be declared lost */
-+	s64 next_pn;		/* Next packet number to send in this space */
-+
-+	u32 max_time_limit;	/* Time threshold to trigger pn_map advancement on packet receipt */
-+	u32 inflight;		/* Bytes of all ack-eliciting frames in flight in this space */
-+};
-+
-+static inline void quic_pnspace_set_max_pn_acked_seen(struct quic_pnspace *space,
-+						      s64 max_pn_acked_seen)
-+{
-+	if (space->max_pn_acked_seen >= max_pn_acked_seen)
-+		return;
-+	space->max_pn_acked_seen = max_pn_acked_seen;
-+	space->max_pn_acked_time = quic_ktime_get_us();
-+}
-+
-+static inline void quic_pnspace_set_base_pn(struct quic_pnspace *space, s64 pn)
-+{
-+	space->base_pn = pn;
-+	space->max_pn_seen = space->base_pn - 1;
-+	space->last_max_pn_seen = space->max_pn_seen;
-+	space->min_pn_seen = space->max_pn_seen;
-+
-+	space->max_pn_time = space->time;
-+	space->last_max_pn_time = space->max_pn_time;
-+}
-+
-+static inline bool quic_pnspace_has_gap(const struct quic_pnspace *space)
-+{
-+	return space->base_pn != space->max_pn_seen + 1;
-+}
-+
-+static inline void quic_pnspace_inc_ecn_count(struct quic_pnspace *space, u8 ecn)
-+{
-+	if (!ecn)
-+		return;
-+	space->ecn_count[QUIC_ECN_LOCAL][ecn - 1]++;
-+}
-+
-+/* Check if any ECN-marked packets were received. */
-+static inline bool quic_pnspace_has_ecn_count(struct quic_pnspace *space)
-+{
-+	return space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_ECT0] ||
-+	       space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_ECT1] ||
-+	       space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_CE];
-+}
-+
-+/* Updates the stored ECN counters based on values received in the peer's ACK
-+ * frame. Each counter is updated only if the new value is higher.
-+ *
-+ * Returns: 1 if CE count was increased (congestion indicated), 0 otherwise.
-+ */
-+static inline int quic_pnspace_set_ecn_count(struct quic_pnspace *space, u64 *ecn_count)
-+{
-+	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT0] < ecn_count[QUIC_ECN_ECT0])
-+		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT0] = ecn_count[QUIC_ECN_ECT0];
-+	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT1] < ecn_count[QUIC_ECN_ECT1])
-+		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT1] = ecn_count[QUIC_ECN_ECT1];
-+	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_CE] < ecn_count[QUIC_ECN_CE]) {
-+		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_CE] = ecn_count[QUIC_ECN_CE];
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+u16 quic_pnspace_num_gabs(struct quic_pnspace *space, struct quic_gap_ack_block *gabs);
-+int quic_pnspace_check(struct quic_pnspace *space, s64 pn);
-+int quic_pnspace_mark(struct quic_pnspace *space, s64 pn);
-+
-+void quic_pnspace_free(struct quic_pnspace *space);
-+int quic_pnspace_init(struct quic_pnspace *space);
-diff --git a/net/quic/socket.c b/net/quic/socket.c
-index 46f1df978604..b6c7a6fd9810 100644
---- a/net/quic/socket.c
-+++ b/net/quic/socket.c
-@@ -37,6 +37,8 @@ static void quic_write_space(struct sock *sk)
- 
- static int quic_init_sock(struct sock *sk)
- {
-+	u8 i;
-+
- 	sk->sk_destruct = inet_sock_destruct;
- 	sk->sk_write_space = quic_write_space;
- 	sock_set_flag(sk, SOCK_USE_WRITE_QUEUE);
-@@ -48,6 +50,11 @@ static int quic_init_sock(struct sock *sk)
- 	if (quic_stream_init(quic_streams(sk)))
- 		return -ENOMEM;
- 
-+	for (i = 0; i < QUIC_PNSPACE_MAX; i++) {
-+		if (quic_pnspace_init(quic_pnspace(sk, i)))
-+			return -ENOMEM;
-+	}
-+
- 	WRITE_ONCE(sk->sk_sndbuf, READ_ONCE(sysctl_quic_wmem[1]));
- 	WRITE_ONCE(sk->sk_rcvbuf, READ_ONCE(sysctl_quic_rmem[1]));
- 
-@@ -59,6 +66,11 @@ static int quic_init_sock(struct sock *sk)
- 
- static void quic_destroy_sock(struct sock *sk)
- {
-+	u8 i;
-+
-+	for (i = 0; i < QUIC_PNSPACE_MAX; i++)
-+		quic_pnspace_free(quic_pnspace(sk, i));
-+
- 	quic_path_unbind(sk, quic_paths(sk), 0);
- 	quic_path_unbind(sk, quic_paths(sk), 1);
- 
-diff --git a/net/quic/socket.h b/net/quic/socket.h
-index c5684cf7378d..d8a264a1eddc 100644
---- a/net/quic/socket.h
-+++ b/net/quic/socket.h
-@@ -12,6 +12,7 @@
- #include <linux/quic.h>
- 
- #include "common.h"
-+#include "pnspace.h"
- #include "family.h"
- #include "stream.h"
- #include "connid.h"
-@@ -44,6 +45,7 @@ struct quic_sock {
- 	struct quic_conn_id_set		dest;
- 	struct quic_path_group		paths;
- 	struct quic_cong		cong;
-+	struct quic_pnspace		space[QUIC_PNSPACE_MAX];
- };
- 
- struct quic6_sock {
-@@ -111,6 +113,11 @@ static inline struct quic_cong *quic_cong(const struct sock *sk)
- 	return &quic_sk(sk)->cong;
- }
- 
-+static inline struct quic_pnspace *quic_pnspace(const struct sock *sk, u8 level)
-+{
-+	return &quic_sk(sk)->space[level % QUIC_CRYPTO_EARLY];
-+}
-+
- static inline bool quic_is_establishing(struct sock *sk)
- {
- 	return sk->sk_state == QUIC_SS_ESTABLISHING;
--- 
-2.47.1
-
+Cheers,
 
