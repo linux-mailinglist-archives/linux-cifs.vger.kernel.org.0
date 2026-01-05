@@ -1,77 +1,77 @@
-Return-Path: <linux-cifs+bounces-8548-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8541-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id F25ACCF4833
-	for <lists+linux-cifs@lfdr.de>; Mon, 05 Jan 2026 16:51:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36DCCCF4AFC
+	for <lists+linux-cifs@lfdr.de>; Mon, 05 Jan 2026 17:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 61DE0300927D
-	for <lists+linux-cifs@lfdr.de>; Mon,  5 Jan 2026 15:51:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DCC403007927
+	for <lists+linux-cifs@lfdr.de>; Mon,  5 Jan 2026 16:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5359C283FFB;
-	Mon,  5 Jan 2026 15:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7817A33A9E5;
+	Mon,  5 Jan 2026 14:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gre1SSxR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbjccNQV"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDD332903
-	for <linux-cifs@vger.kernel.org>; Mon,  5 Jan 2026 15:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E7E339B32
+	for <linux-cifs@vger.kernel.org>; Mon,  5 Jan 2026 14:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767627786; cv=none; b=k85hSblvPWV0jQ13bSpQqI4xDO9f/0IeDr8IL/CVx4OhDBOLexvbKBRjpMVERB/LH42BuVqCKZUbA3nlvVFVhUvZk1WD1QRV/Z4VV9lc5nVeyu+Fe5EKMlj4mdSb22eeZIfe133Ih/u7RSw2VsRaMGI3ilRhOotwrNLmITeCa4g=
+	t=1767622112; cv=none; b=oRgu0u1MYB/LseWumqGuA6oKsAm69mIEJIJxzzd6DECX8HwFoElLS0X8u5DB2GpU0bjvVU1iPJCdWEXHndLIr3TJayoGgdbPjUAh4jLTNwTnUJMcUTe0P2En2ZSTs2xM4zsw3bM8CmCyOnbCtfquXfDRQ802Pi5oBLjlepiSiKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767627786; c=relaxed/simple;
-	bh=7xcqqElC4aldhyYoV2RHfM4uAAEtAFk7bmI3cf9fx7Y=;
+	s=arc-20240116; t=1767622112; c=relaxed/simple;
+	bh=LtWygUYpq/K0AB8w923/DVNLmQxTI7T8sryMQYZR1q0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kLCPzsjW/2tSlpkqtirN4ww+m/PWcQ5FUy3Tx+MKoUYWObrE7HJEYpFkzrZn6pG0vaKBn/pDaIAI4KBrB/IY4ZXS8d/+2yFhOIMn3jwQ3QAUFfQumrnJUhcPMZhaHM0JatGWVaGvyIGPW27LZig1WApoWg9EFER7phBnCT65oFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gre1SSxR; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=AbM3ZyeYNd2wQLlFap97eV8fkY4XsVRgmrzwExQKVGkenL7ojGnvibgEyVMtMDQIgk/jrRLFAZexnqwsnrOJULw55uvBR2im8ijksKiQXHSN/GSBelNFlQgGAFWHPsHGAfVTXEMachGsvK1aWpK0Cz9/cJoRRWEB4FshJvWEe1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbjccNQV; arc=none smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7bb710d1d1dso103577b3a.1
-        for <linux-cifs@vger.kernel.org>; Mon, 05 Jan 2026 07:43:00 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4f1b147eaa9so112258971cf.3
+        for <linux-cifs@vger.kernel.org>; Mon, 05 Jan 2026 06:08:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767627779; x=1768232579; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767622106; x=1768226906; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DNZlH+eV/BTS5+PzfsHYALEYv5QcdTH8O27P/hU7rOw=;
-        b=Gre1SSxR7KTeN3l7zpX4MNYb6QAGCWdxeVF6HwKluU16MfHMiL54iTGkjdFaDi3FRU
-         aOLj9F+CRx0cwP5nwSYNjVMZ8ARULN8RlUxs4be9fZJtqxIk7BVPUi3sb4kRa9OzJ9ne
-         RX/5Dr5IeTLhQR8743EP06Gbx84sQzbyu/6Cd0cf1Eej2Z3GBjoj0UMS0iXtsGCvOSn0
-         yE2zY+PbF+jfZMRHxbO0alPgAnLEO1/VNT+zV3W4b8NJPmuFBekD3YN1Jp58fgATALsk
-         qX/k4tVIVqdC0JsOB+AN3n5HHjyjzaljQ/8DSX5ESWNwo0jL9OHQt/f8reKl2XGXxAVB
-         wtbQ==
+        bh=ykUp58mZtshTqhjw72nNa3oPqkUwNfnxCM1mDkorMzM=;
+        b=bbjccNQV64xx+hPqo9k7JVMpJQNL4j9Angs+oCHyMnZNyFQLiWLphXjy6QOrTwqMwC
+         gmMtAP+GZ8WLAV/1Iq1nGpmFAZ5rdX4LscR0Naska0MFVNH1liana99OfowUK4uZIFIG
+         8HXMJ+7AeSd1efL+5FqS50LAGXDJAawFW6jg5WlLPsfVG+qCrYrq1q2YHHXK1SzO3QkO
+         7NUFHrDa5ECTtJg6JNpaxAgQA4tYMCA8VJQV5LZqo1Gd2ZtHgW4ogrJQOeyN+XqTeHFZ
+         4IrL57R2xceXRZddVzUSKHrPx5QStYuli6zSZD6lr5AgyheYJaD/QdQY0t+r4YF6dw8n
+         Tm+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767627779; x=1768232579;
+        d=1e100.net; s=20230601; t=1767622106; x=1768226906;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DNZlH+eV/BTS5+PzfsHYALEYv5QcdTH8O27P/hU7rOw=;
-        b=bvrswO1U7SrVozUKFJmfpeGRoGH175NkDVNLM5pvrRj+0OJZ5C4MDkuL1cOrgdtKyJ
-         eqlVVaBSNx/EVTLxPGB0gU1rygXO8664Z2suoDLBm3xaxSWDGoY8ax0LgZLzS0WKZHgH
-         G9Nl2JYmQ79n2J80dZlUrzu38B2DvheFB7kGxhN0fhT9sHCE0IqVS4m/iOBSMYeUAUe4
-         HL98clHyWtcgsxxd4/yADQTIZIPm+pUjGpaGY5L2YFh8VZCOmAHZknEdqS5Em4dKJhPO
-         MD/C6veVUh76dNnmdC1RHr2YXUkfyjYvMorCowaQ4fw/Ob5pHWciPYuAavDwPMtineoa
-         o8Og==
-X-Forwarded-Encrypted: i=1; AJvYcCUrV7f1uVutJRN+3pUMvwVXUCr4tV0vADZsvLVKA0bW3Ih40L+O+QZvFgoQ5IpFe574GYhibtyHKmE6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8VsaHOjWc/qSa2D0G8TDDlm5z6RuBURTtWM1o6v7NMBVCBHbh
-	tZZZ+n8R0RWEqfo9sKYLG4jED1Cb9nPUnKHODwhhOen3mzWLxNOtqWp84k6u2EMy
-X-Gm-Gg: AY/fxX5ExtDIcQrfMLjfoSWAnEHtL1KOjlDX5d8oMv6eYyJmqQFo4p5TLOM/MUo3Cik
-	ipDqBL7yVLnSwLgm5ePpCox1gSsi/jxQ+HRK1QVEcL6ab7b9v3mVoYhGqbO4usKWdxaWi4qm99v
-	Y7uS8y7OTFx+T1u4vFQdYkFYTDi5PVH+lbhWtKmrmMDD0Oi8TNoK6Qm96hTcNj6zycH4Zng/LUb
-	FCUEvtrlCSi5EFxDGHuF/5VsjZ06jXToqn/sQpQwdsIPR6xqGj2Qc9y2y8q/vNXFFfxxOX9s3Wq
-	1cAN+TZd4vqQ9fgQooLXXvqJer2NvjQX19zqlMIbpgS8JITnF14dLh/6KeGSFYtA2q86dIhx0pN
-	GqCryTghoWZ/Kj60g76xJ+eHmhIp+8X/Q026yVXbQQB0baoOOp1NRb5Smj3OpE+Qd68CilpQe+Z
-	j6N48r4mn04qxuw6TvB/GkeI4fBqLM/04Zo3H3k9tZp2wpGSlCjtc=
-X-Google-Smtp-Source: AGHT+IFCjLllEie+ZFsyIEhuz4ZuYyRQMJoNrJKMXVSKbyEBh8IWncQ9AxABEB8gKjwq/ljX3ZQupg==
-X-Received: by 2002:a05:622a:1b29:b0:4ed:8264:91ba with SMTP id d75a77b69052e-4f4abd86bcamr638365481cf.58.1767622100903;
-        Mon, 05 Jan 2026 06:08:20 -0800 (PST)
+        bh=ykUp58mZtshTqhjw72nNa3oPqkUwNfnxCM1mDkorMzM=;
+        b=UobFecuBIKd4GHyKq1t0EfZsfbvqxhhgpKICoKnph1okg7iZkow9W1vop7HHz2YUuI
+         Fb0Vu0oth9b5cgtiGTnH5EsyCZ8aizJe0tEW6szN8XkmzhGOHGvrv4rbCdp8p2gZXpD3
+         6zIx6ZH+yeZhYcNbPnS36nNUUdGjZYLBG6FHfQ0M9TqP4MDwMd87abJNY/oJQbdq3HvR
+         h5Yi5PxrQi0AhxirglE48E8bylM2wgaWZeL2zl0NB/W3jaSWPteFxIlCcnd7zZZnQktv
+         MrHoMJ7Ah9fxNz2Id55e+K4bjtsHE0OICZevbQAkfG6ykNtsQotUhJUsUr+uabJRiTUe
+         lYYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbO84s7n6Il36Syzf/XnRaUikBXjEa7Wk7v0uhmcL5JoPCrO85oeAC4HzvpvMzQ+DqvdCqW2upfrIh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7wOU11oj8gVdtw+vlVM0QbZmssfwoHLFnBYJr50VpL73t7b8K
+	7Cu12uG5b/FtMM0DLsngTy34KoI4L/4mSZozSB15RH7clDR45bMb0UZZ
+X-Gm-Gg: AY/fxX5BFnVfALng5oPh6HKX2r+MbbBJETnjv2vaIzu/5aZyunFYYA3D4RBvzmdfHma
+	14rR31iEy9Yhv9WX3tcyRixUJvcEQjWsLChO4B5CCvHBzBULMqhWeZODi6DotS1+EiJvD0A05d8
+	u/i+C/VFl5VuZHGpqrNwV2ZBerlwGEFW/pGhI41Cv2waywSRAXCniS+iQoqFc8OJrGoFkFZHYvY
+	0XdK3hsXimjfpu0dRvy41LNSKY2NOXaZHOCxKAAwzzzO2/TduSBXt/Rh8asWScEXkLYRkasV5Ui
+	2TNNIcRkSIy88RArBi1kNS3RBZE2+DELbhGfkr5BuOYsMP9CgMNUX/BxZDZ+id21cCX3IwpawRY
+	SRmnp5pSGoCktxUY5vAQrBJ3dNc1Lo6CODsJUlHfZwHegOeYj6pd9C2uc2cWVXrC9vAz3M64FGn
+	GGvC7lOSsuvDWfq6KfJUiPRHO2glVHs76jo2I6Lsp3DOpWXPg6FN6xEYOajKB/nw==
+X-Google-Smtp-Source: AGHT+IGcK0YDjqIpesyJ1L4fdYrkrOiwmc8orHzAQaYs0tiPLgztPa5qvaVnfQghtwszsulZCub9kA==
+X-Received: by 2002:a05:622a:4a11:b0:4ee:1676:faa6 with SMTP id d75a77b69052e-4f4abd1af51mr730516941cf.20.1767622105508;
+        Mon, 05 Jan 2026 06:08:25 -0800 (PST)
 Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac64a47esm368957221cf.24.2026.01.05.06.08.19
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac64a47esm368957221cf.24.2026.01.05.06.08.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 06:08:19 -0800 (PST)
+        Mon, 05 Jan 2026 06:08:24 -0800 (PST)
 From: Xin Long <lucien.xin@gmail.com>
 To: network dev <netdev@vger.kernel.org>,
 	quic@lists.linux.dev
@@ -107,9 +107,9 @@ Cc: davem@davemloft.net,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Daniel Stenberg <daniel@haxx.se>,
 	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: [PATCH net-next v6 07/16] quic: add connection id management
-Date: Mon,  5 Jan 2026 09:04:33 -0500
-Message-ID: <79bf90a6e105c6e6ac692de21a90ec621af47cc5.1767621882.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next v6 10/16] quic: add packet number space
+Date: Mon,  5 Jan 2026 09:04:36 -0500
+Message-ID: <8e4df1d91cbb96fe15da799f3f36341f292d7c12.1767621882.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1767621882.git.lucien.xin@gmail.com>
 References: <cover.1767621882.git.lucien.xin@gmail.com>
@@ -121,72 +121,77 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch introduces 'struct quic_conn_id_set' for managing Connection
-IDs (CIDs), which are represented by 'struct quic_source_conn_id'
-and 'struct quic_dest_conn_id'.
+This patch introduces 'quic_pnspace', which manages per packet number
+space members.
 
-It provides helpers to add and remove CIDs from the set, and handles
-insertion of source CIDs into the global connection ID hash table
-when necessary.
+It maintains the next packet number to assign, tracks the total length of
+frames currently in flight, and records the time when the next packet may
+be considered lost. It also keeps track of the largest acknowledged packet
+number, the time it was acknowledged, and when the most recent ack
+eliciting packet was sent. These fields are useful for loss detection,
+RTT estimation, and congestion control.
 
-- quic_conn_id_add(): Add a new Connection ID to the set, and inserts
-  it to conn_id hash table if it is a source conn_id.
+To support ACK frame generation, quic_pnspace includes a packet number
+acknowledgment map (pn_ack_map) that tracks received packet numbers.
+Supporting functions are provided to validate and mark received packet
+numbers and compute the number of gap blocks needed during ACK frame
+construction.
 
-- quic_conn_id_remove(): Remove connection IDs the set with sequence
-  numbers less than or equal to a number.
+- quic_pnspace_check(): Validates a received packet number.
 
-It also adds utilities to look up CIDs by value or sequence number,
-search the global hash table for incoming packets, and check for
-stateless reset tokens among destination CIDs. These functions are
-essential for RX path connection lookup and stateless reset processing.
+- quic_pnspace_mark(): Marks a received packet number in the ACK map.
 
-- quic_conn_id_find(): Find a Connection ID in the set by seq number.
+- quic_pnspace_num_gabs(): Returns the gap ACK blocks for constructing
+  ACK frames.
 
-- quic_conn_id_lookup(): Lookup a Connection ID from global hash table
-  using the ID value, typically used for socket lookup on the RX path.
-
-- quic_conn_id_token_exists(): Check if a stateless reset token exists
-  in any dest Connection ID (used during stateless reset processing).
-
-Note source/dest conn_id set is per socket, the operations on it are
-always pretected by the sock lock.
+Note QUIC uses separate packet number spaces for each encryption level
+(APP, INITIAL, HANDSHAKE, EARLY) except EARLY and all generations of
+APP keys use the same packet number space, as describe in
+rfc9002#section-4.1.
 
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 ---
-v3:
-  - Clarify in changelog that conn_id set is always protected by sock lock
-    (suggested by Paolo).
-  - Adjust global source conn_id hashtable operations for the new hashtable
-    type.
-v4:
-  - Replace struct hlist_node with hlist_nulls_node for the node in
-    struct quic_source_conn_id to support lockless lookup.
+v5:
+  - Change timestamp variables from u32 to u64 and use quic_ktime_get_us()
+    to set max_pn_acked_time, as jiffies_to_usecs() is not accurate enough.
+  - Reorder some members in quic_pnspace to reduce 32-bit holes (noted
+    by Paolo).
+v6:
+  - Note for AI reviews: it's safe to do cast (u16)(pn - space->base_pn)
+    in quic_pnspace_mark(), as the pn < base_pn + QUIC_PN_MAP_SIZE (4096)
+    validation is always done in quic_pnspace_check(), which will always
+    be called before quic_pnspace_mark() in a later patchset.
+  - Note for AI reviews: failures in quic_pnspace_init() do not result in a
+    pn_map leak in quic_init_sock(), because quic_destroy_sock() is always
+    called to free it in err path, either via inet/6_create() or through
+    quic_accept() in a later patchset.
 ---
- net/quic/Makefile |   2 +-
- net/quic/connid.c | 222 ++++++++++++++++++++++++++++++++++++++++++++++
- net/quic/connid.h | 162 +++++++++++++++++++++++++++++++++
- net/quic/socket.c |   6 ++
- net/quic/socket.h |  13 +++
- 5 files changed, 404 insertions(+), 1 deletion(-)
- create mode 100644 net/quic/connid.c
- create mode 100644 net/quic/connid.h
+ net/quic/Makefile  |   2 +-
+ net/quic/pnspace.c | 225 +++++++++++++++++++++++++++++++++++++++++++++
+ net/quic/pnspace.h | 150 ++++++++++++++++++++++++++++++
+ net/quic/socket.c  |  12 +++
+ net/quic/socket.h  |   7 ++
+ 5 files changed, 395 insertions(+), 1 deletion(-)
+ create mode 100644 net/quic/pnspace.c
+ create mode 100644 net/quic/pnspace.h
 
 diff --git a/net/quic/Makefile b/net/quic/Makefile
-index 094e9da5d739..eee7501588d3 100644
+index 4d4a42c6d565..9d8e18297911 100644
 --- a/net/quic/Makefile
 +++ b/net/quic/Makefile
-@@ -5,4 +5,4 @@
- 
+@@ -6,4 +6,4 @@
  obj-$(CONFIG_IP_QUIC) += quic.o
  
--quic-y := common.o family.o protocol.o socket.o stream.o
-+quic-y := common.o family.o protocol.o socket.o stream.o connid.o
-diff --git a/net/quic/connid.c b/net/quic/connid.c
+ quic-y := common.o family.o protocol.o socket.o stream.o connid.o path.o \
+-	  cong.o
++	  cong.o pnspace.o
+diff --git a/net/quic/pnspace.c b/net/quic/pnspace.c
 new file mode 100644
-index 000000000000..9a6eb8eedcc6
+index 000000000000..06ed774cc7c0
 --- /dev/null
-+++ b/net/quic/connid.c
-@@ -0,0 +1,222 @@
++++ b/net/quic/pnspace.c
+@@ -0,0 +1,225 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/* QUIC kernel implementation
 + * (C) Copyright Red Hat Corp. 2023
@@ -199,222 +204,225 @@ index 000000000000..9a6eb8eedcc6
 + *    Xin Long <lucien.xin@gmail.com>
 + */
 +
-+#include <linux/quic.h>
-+#include <net/sock.h>
++#include <linux/slab.h>
 +
 +#include "common.h"
-+#include "connid.h"
++#include "pnspace.h"
 +
-+/* Lookup a source connection ID (scid) in the global source connection ID hash table. */
-+struct quic_conn_id *quic_conn_id_lookup(struct net *net, u8 *scid, u32 len)
++int quic_pnspace_init(struct quic_pnspace *space)
 +{
-+	struct quic_shash_head *head = quic_source_conn_id_head(net, scid, len);
-+	struct quic_source_conn_id *s_conn_id;
-+	struct quic_conn_id *conn_id = NULL;
-+	struct hlist_nulls_node *node;
-+
-+	hlist_nulls_for_each_entry_rcu(s_conn_id, node, &head->head, node) {
-+		if (net == sock_net(s_conn_id->sk) && s_conn_id->common.id.len == len &&
-+		    !memcmp(scid, &s_conn_id->common.id.data, s_conn_id->common.id.len)) {
-+			if (likely(refcount_inc_not_zero(&s_conn_id->sk->sk_refcnt)))
-+				conn_id = &s_conn_id->common.id;
-+			break;
-+		}
-+	}
-+	return conn_id;
-+}
-+
-+/* Check if a given stateless reset token exists in any connection ID in the connection ID set. */
-+bool quic_conn_id_token_exists(struct quic_conn_id_set *id_set, u8 *token)
-+{
-+	struct quic_common_conn_id *common;
-+	struct quic_dest_conn_id *dcid;
-+
-+	dcid = (struct quic_dest_conn_id *)id_set->active;
-+	if (!memcmp(dcid->token, token, QUIC_CONN_ID_TOKEN_LEN)) /* Fast path. */
-+		return true;
-+
-+	list_for_each_entry(common, &id_set->head, list) {
-+		dcid = (struct quic_dest_conn_id *)common;
-+		if (common == id_set->active)
-+			continue;
-+		if (!memcmp(dcid->token, token, QUIC_CONN_ID_TOKEN_LEN))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+static void quic_source_conn_id_free_rcu(struct rcu_head *head)
-+{
-+	struct quic_source_conn_id *s_conn_id;
-+
-+	s_conn_id = container_of(head, struct quic_source_conn_id, rcu);
-+	kfree(s_conn_id);
-+}
-+
-+static void quic_source_conn_id_free(struct quic_source_conn_id *s_conn_id)
-+{
-+	u8 *data = s_conn_id->common.id.data;
-+	u32 len = s_conn_id->common.id.len;
-+	struct quic_shash_head *head;
-+
-+	if (!hlist_nulls_unhashed(&s_conn_id->node)) {
-+		head = quic_source_conn_id_head(sock_net(s_conn_id->sk), data, len);
-+		spin_lock_bh(&head->lock);
-+		hlist_nulls_del_init_rcu(&s_conn_id->node);
-+		spin_unlock_bh(&head->lock);
-+	}
-+
-+	/* Freeing is deferred via RCU to avoid use-after-free during concurrent lookups. */
-+	call_rcu(&s_conn_id->rcu, quic_source_conn_id_free_rcu);
-+}
-+
-+static void quic_conn_id_del(struct quic_common_conn_id *common)
-+{
-+	list_del(&common->list);
-+	if (!common->hashed) {
-+		kfree(common);
-+		return;
-+	}
-+	quic_source_conn_id_free((struct quic_source_conn_id *)common);
-+}
-+
-+/* Add a connection ID with sequence number and associated private data to the connection ID set. */
-+int quic_conn_id_add(struct quic_conn_id_set *id_set,
-+		     struct quic_conn_id *conn_id, u32 number, void *data)
-+{
-+	struct quic_source_conn_id *s_conn_id;
-+	struct quic_dest_conn_id *d_conn_id;
-+	struct quic_common_conn_id *common;
-+	struct quic_shash_head *head;
-+	struct list_head *list;
-+
-+	/* Locate insertion point to keep list ordered by number. */
-+	list = &id_set->head;
-+	list_for_each_entry(common, list, list) {
-+		if (number == common->number)
-+			return 0; /* Ignore if it already exists on the list. */
-+		if (number < common->number) {
-+			list = &common->list;
-+			break;
-+		}
-+	}
-+
-+	if (conn_id->len > QUIC_CONN_ID_MAX_LEN)
-+		return -EINVAL;
-+	common = kzalloc(id_set->entry_size, GFP_ATOMIC);
-+	if (!common)
-+		return -ENOMEM;
-+	common->id = *conn_id;
-+	common->number = number;
-+	if (id_set->entry_size == sizeof(struct quic_dest_conn_id)) {
-+		/* For destination connection IDs, copy the stateless reset token if available. */
-+		if (data) {
-+			d_conn_id = (struct quic_dest_conn_id *)common;
-+			memcpy(d_conn_id->token, data, QUIC_CONN_ID_TOKEN_LEN);
-+		}
++	if (!space->pn_map) {
++		space->pn_map = kzalloc(BITS_TO_BYTES(QUIC_PN_MAP_INITIAL), GFP_KERNEL);
++		if (!space->pn_map)
++			return -ENOMEM;
++		space->pn_map_len = QUIC_PN_MAP_INITIAL;
 +	} else {
-+		/* For source connection IDs, mark as hashed and insert into the global source
-+		 * connection ID hashtable.
-+		 */
-+		common->hashed = 1;
-+		s_conn_id = (struct quic_source_conn_id *)common;
-+		s_conn_id->sk = data;
-+
-+		head = quic_source_conn_id_head(sock_net(s_conn_id->sk), common->id.data,
-+						common->id.len);
-+		spin_lock_bh(&head->lock);
-+		hlist_nulls_add_head_rcu(&s_conn_id->node, &head->head);
-+		spin_unlock_bh(&head->lock);
++		bitmap_zero(space->pn_map, space->pn_map_len);
 +	}
-+	list_add_tail(&common->list, list);
 +
-+	if (number == quic_conn_id_last_number(id_set) + 1) {
-+		if (!id_set->active)
-+			id_set->active = common;
-+		id_set->count++;
-+
-+		/* Increment count for consecutive following IDs. */
-+		list_for_each_entry_continue(common, &id_set->head, list) {
-+			if (common->number != ++number)
-+				break;
-+			id_set->count++;
-+		}
-+	}
++	space->max_time_limit = QUIC_PNSPACE_TIME_LIMIT;
++	space->next_pn = QUIC_PNSPACE_NEXT_PN;
++	space->base_pn = -1;
 +	return 0;
 +}
 +
-+/* Remove connection IDs from the set with sequence numbers less than or equal to a number. */
-+void quic_conn_id_remove(struct quic_conn_id_set *id_set, u32 number)
++void quic_pnspace_free(struct quic_pnspace *space)
 +{
-+	struct quic_common_conn_id *common, *tmp;
-+	struct list_head *list;
++	space->pn_map_len = 0;
++	kfree(space->pn_map);
++}
 +
-+	list = &id_set->head;
-+	list_for_each_entry_safe(common, tmp, list, list) {
-+		if (common->number <= number) {
-+			if (id_set->active == common)
-+				id_set->active = tmp;
-+			quic_conn_id_del(common);
-+			id_set->count--;
-+		}
++/* Expand the bitmap tracking received packet numbers.  Ensures the pn_map bitmap can
++ * cover at least @size packet numbers.  Allocates a larger bitmap, copies existing
++ * data, and updates metadata.
++ *
++ * Returns: 1 if the bitmap was successfully grown, 0 on failure or if the requested
++ * size exceeds QUIC_PN_MAP_SIZE.
++ */
++static int quic_pnspace_grow(struct quic_pnspace *space, u16 size)
++{
++	u16 len, inc, offset;
++	unsigned long *new;
++
++	if (size > QUIC_PN_MAP_SIZE)
++		return 0;
++
++	inc = ALIGN((size - space->pn_map_len), BITS_PER_LONG) + QUIC_PN_MAP_INCREMENT;
++	len = (u16)min(space->pn_map_len + inc, QUIC_PN_MAP_SIZE);
++
++	new = kzalloc(BITS_TO_BYTES(len), GFP_ATOMIC);
++	if (!new)
++		return 0;
++
++	offset = (u16)(space->max_pn_seen + 1 - space->base_pn);
++	bitmap_copy(new, space->pn_map, offset);
++	kfree(space->pn_map);
++	space->pn_map = new;
++	space->pn_map_len = len;
++
++	return 1;
++}
++
++/* Check if a packet number has been received.
++ *
++ * Returns: 0 if the packet number has not been received.  1 if it has already
++ * been received.  -1 if the packet number is too old or too far in the future
++ * to track.
++ */
++int quic_pnspace_check(struct quic_pnspace *space, s64 pn)
++{
++	if (space->base_pn == -1) /* No any packet number received yet. */
++		return 0;
++
++	if (pn < space->min_pn_seen || pn >= space->base_pn + QUIC_PN_MAP_SIZE)
++		return -1;
++
++	if (pn < space->base_pn || (pn - space->base_pn < space->pn_map_len &&
++				    test_bit(pn - space->base_pn, space->pn_map)))
++		return 1;
++
++	return 0;
++}
++
++/* Advance base_pn past contiguous received packet numbers.  Finds the next gap
++ * (unreceived packet) beyond @pn, shifts the bitmap, and updates base_pn
++ * accordingly.
++ */
++static void quic_pnspace_move(struct quic_pnspace *space, s64 pn)
++{
++	u16 offset;
++
++	offset = (u16)(pn + 1 - space->base_pn);
++	offset = (u16)find_next_zero_bit(space->pn_map, space->pn_map_len, offset);
++	space->base_pn += offset;
++	bitmap_shift_right(space->pn_map, space->pn_map, offset, space->pn_map_len);
++}
++
++/* Mark a packet number as received. Updates the packet number map to record
++ * reception of @pn.  Advances base_pn if possible, and updates max/min/last seen
++ * fields as needed.
++ *
++ * Returns: 0 on success or if the packet was already marked.  -ENOMEM if bitmap
++ * allocation failed during growth.
++ */
++int quic_pnspace_mark(struct quic_pnspace *space, s64 pn)
++{
++	s64 last_max_pn_seen;
++	u16 gap;
++
++	if (space->base_pn == -1) {
++		/* Initialize base_pn based on the peer's first packet number since peer's
++		 * packet numbers may start at a non-zero value.
++		 */
++		quic_pnspace_set_base_pn(space, pn + 1);
++		return 0;
 +	}
++
++	/* Ignore packets with number less than current base (already processed). */
++	if (pn < space->base_pn)
++		return 0;
++
++	/* If gap is beyond current map length, try to grow the bitmap to accommodate. */
++	gap = (u16)(pn - space->base_pn);
++	if (gap >= space->pn_map_len && !quic_pnspace_grow(space, gap + 1))
++		return -ENOMEM;
++
++	if (space->max_pn_seen < pn) {
++		space->max_pn_seen = pn;
++		space->max_pn_time = space->time;
++	}
++
++	if (space->base_pn == pn) { /* If packet is exactly at base_pn (next expected packet). */
++		if (quic_pnspace_has_gap(space)) /* Advance base_pn to next unacked packet. */
++			quic_pnspace_move(space, pn);
++		else /* Fast path: increment base_pn if no gaps. */
++			space->base_pn++;
++	} else { /* Mark this packet as received in the bitmap. */
++		set_bit(gap, space->pn_map);
++	}
++
++	/* Only update min and last_max_pn_seen if this packet is the current max_pn. */
++	if (space->max_pn_seen != pn)
++		return 0;
++
++	/* Check if enough time has elapsed or enough packets have been received to
++	 * update tracking.
++	 */
++	last_max_pn_seen = min_t(s64, space->last_max_pn_seen, space->base_pn);
++	if (space->max_pn_time < space->last_max_pn_time + space->max_time_limit &&
++	    space->max_pn_seen <= last_max_pn_seen + QUIC_PN_MAP_LIMIT)
++		return 0;
++
++	/* Advance base_pn if last_max_pn_seen is ahead of current base_pn. This is
++	 * needed because QUIC doesn't retransmit packets; retransmitted frames are
++	 * carried in new packets, so we move forward.
++	 */
++	if (space->last_max_pn_seen + 1 > space->base_pn)
++		quic_pnspace_move(space, space->last_max_pn_seen);
++
++	space->min_pn_seen = space->last_max_pn_seen;
++	space->last_max_pn_seen = space->max_pn_seen;
++	space->last_max_pn_time = space->max_pn_time;
++	return 0;
 +}
 +
-+struct quic_conn_id *quic_conn_id_find(struct quic_conn_id_set *id_set, u32 number)
++/* Find the next gap in received packet numbers. Scans pn_map for a gap starting from
++ * *@iter. A gap is a contiguous block of unreceived packets between received ones.
++ *
++ * Returns: 1 if a gap was found, 0 if no more gaps exist or are relevant.
++ */
++static int quic_pnspace_next_gap_ack(const struct quic_pnspace *space,
++				     s64 *iter, u16 *start, u16 *end)
 +{
-+	struct quic_common_conn_id *common;
++	u16 start_ = 0, end_ = 0, offset = (u16)(*iter - space->base_pn);
 +
-+	list_for_each_entry(common, &id_set->head, list)
-+		if (common->number == number)
-+			return &common->id;
-+	return NULL;
++	start_ = (u16)find_next_zero_bit(space->pn_map, space->pn_map_len, offset);
++	if (space->max_pn_seen <= space->base_pn + start_)
++		return 0;
++
++	end_ = (u16)find_next_bit(space->pn_map, space->pn_map_len, start_);
++	if (space->max_pn_seen <= space->base_pn + end_ - 1)
++		return 0;
++
++	*start = start_ + 1;
++	*end = end_;
++	*iter = space->base_pn + *end;
++	return 1;
 +}
 +
-+void quic_conn_id_update_active(struct quic_conn_id_set *id_set, u32 number)
++/* Generate gap acknowledgment blocks (GABs).  GABs describe ranges of unacknowledged
++ * packets between received ones, and are used in ACK frames.
++ *
++ * Returns: Number of generated GABs (up to QUIC_PN_MAP_MAX_GABS).
++ */
++u16 quic_pnspace_num_gabs(struct quic_pnspace *space, struct quic_gap_ack_block *gabs)
 +{
-+	struct quic_conn_id *conn_id;
++	u16 start, end, ngaps = 0;
++	s64 iter;
 +
-+	if (number == id_set->active->number)
-+		return;
-+	conn_id = quic_conn_id_find(id_set, number);
-+	if (!conn_id)
-+		return;
-+	quic_conn_id_set_active(id_set, conn_id);
++	if (!quic_pnspace_has_gap(space))
++		return 0;
++
++	iter = space->base_pn;
++	/* Loop through all gaps until the end of the window or max allowed gaps. */
++	while (quic_pnspace_next_gap_ack(space, &iter, &start, &end)) {
++		gabs[ngaps].start = start;
++		if (ngaps == QUIC_PN_MAP_MAX_GABS - 1) {
++			gabs[ngaps].end = (u16)(space->max_pn_seen - space->base_pn);
++			ngaps++;
++			break;
++		}
++		gabs[ngaps].end = end;
++		ngaps++;
++	}
++	return ngaps;
 +}
-+
-+void quic_conn_id_set_init(struct quic_conn_id_set *id_set, bool source)
-+{
-+	id_set->entry_size = source ? sizeof(struct quic_source_conn_id) :
-+				      sizeof(struct quic_dest_conn_id);
-+	INIT_LIST_HEAD(&id_set->head);
-+}
-+
-+void quic_conn_id_set_free(struct quic_conn_id_set *id_set)
-+{
-+	struct quic_common_conn_id *common, *tmp;
-+
-+	list_for_each_entry_safe(common, tmp, &id_set->head, list)
-+		quic_conn_id_del(common);
-+	id_set->count = 0;
-+	id_set->active = NULL;
-+}
-+
-+void quic_conn_id_get_param(struct quic_conn_id_set *id_set, struct quic_transport_param *p)
-+{
-+	p->active_connection_id_limit = id_set->max_count;
-+}
-+
-+void quic_conn_id_set_param(struct quic_conn_id_set *id_set, struct quic_transport_param *p)
-+{
-+	id_set->max_count = p->active_connection_id_limit;
-+}
-diff --git a/net/quic/connid.h b/net/quic/connid.h
+diff --git a/net/quic/pnspace.h b/net/quic/pnspace.h
 new file mode 100644
-index 000000000000..bd9b76b85037
+index 000000000000..aa18fd320bdf
 --- /dev/null
-+++ b/net/quic/connid.h
-@@ -0,0 +1,162 @@
++++ b/net/quic/pnspace.h
+@@ -0,0 +1,150 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/* QUIC kernel implementation
 + * (C) Copyright Red Hat Corp. 2023
@@ -425,220 +433,215 @@ index 000000000000..bd9b76b85037
 + *    Xin Long <lucien.xin@gmail.com>
 + */
 +
-+#define QUIC_CONN_ID_LIMIT	8
-+#define QUIC_CONN_ID_DEF	7
-+#define QUIC_CONN_ID_LEAST	2
++#define QUIC_PN_MAP_MAX_GABS	32
 +
-+#define QUIC_CONN_ID_TOKEN_LEN	16
++#define QUIC_PN_MAP_INITIAL	64
++#define QUIC_PN_MAP_INCREMENT	QUIC_PN_MAP_INITIAL
++#define QUIC_PN_MAP_SIZE	4096
++#define QUIC_PN_MAP_LIMIT	(QUIC_PN_MAP_SIZE * 3 / 4)
 +
-+/* Common fields shared by both source and destination Connection IDs */
-+struct quic_common_conn_id {
-+	struct quic_conn_id id;	/* The actual Connection ID value and its length */
-+	struct list_head list;	/* Linked list node for conn_id list management */
-+	u32 number;		/* Sequence number assigned to this Connection ID */
-+	u8 hashed;		/* Non-zero if this ID is stored in source_conn_id hashtable */
++#define QUIC_PNSPACE_MAX	(QUIC_CRYPTO_MAX - 1)
++#define QUIC_PNSPACE_NEXT_PN	0
++#define QUIC_PNSPACE_TIME_LIMIT	(333000 * 3)
++
++enum {
++	QUIC_ECN_ECT1,
++	QUIC_ECN_ECT0,
++	QUIC_ECN_CE,
++	QUIC_ECN_MAX
 +};
 +
-+struct quic_source_conn_id {
-+	struct quic_common_conn_id common;
-+	struct hlist_nulls_node node;	/* Hash table node for fast lookup by Connection ID */
-+	struct rcu_head rcu;		/* RCU header for deferred destruction */
-+	struct sock *sk;		/* Pointer to sk associated with this Connection ID */
++enum {
++	QUIC_ECN_LOCAL,		/* ECN bits from incoming IP headers */
++	QUIC_ECN_PEER,		/* ECN bits reported by peer in ACK frames */
++	QUIC_ECN_DIR_MAX
 +};
 +
-+struct quic_dest_conn_id {
-+	struct quic_common_conn_id common;
-+	u8 token[QUIC_CONN_ID_TOKEN_LEN];	/* Stateless reset token in rfc9000#section-10.3 */
-+};
-+
-+struct quic_conn_id_set {
-+	/* Connection ID in use on the current path */
-+	struct quic_common_conn_id *active;
-+	/* Connection ID to use for a new path (e.g., after migration) */
-+	struct quic_common_conn_id *alt;
-+	struct list_head head;	/* Head of the linked list of available connection IDs */
-+	u8 entry_size;		/* Size of each connection ID entry (in bytes) in the list */
-+	u8 max_count;		/* active_connection_id_limit in rfc9000#section-18.2 */
-+	u8 count;		/* Current number of connection IDs in the list */
-+};
-+
-+static inline u32 quic_conn_id_first_number(struct quic_conn_id_set *id_set)
-+{
-+	struct quic_common_conn_id *common;
-+
-+	common = list_first_entry(&id_set->head, struct quic_common_conn_id, list);
-+	return common->number;
-+}
-+
-+static inline u32 quic_conn_id_last_number(struct quic_conn_id_set *id_set)
-+{
-+	return quic_conn_id_first_number(id_set) + id_set->count - 1;
-+}
-+
-+static inline void quic_conn_id_generate(struct quic_conn_id *conn_id)
-+{
-+	get_random_bytes(conn_id->data, QUIC_CONN_ID_DEF_LEN);
-+	conn_id->len = QUIC_CONN_ID_DEF_LEN;
-+}
-+
-+/* Select an alternate destination Connection ID for a new path (e.g., after migration). */
-+static inline bool quic_conn_id_select_alt(struct quic_conn_id_set *id_set, bool active)
-+{
-+	if (id_set->alt)
-+		return true;
-+	/* NAT rebinding: peer keeps using the current source conn_id.
-+	 * In this case, continue using the same dest conn_id for the new path.
-+	 */
-+	if (active) {
-+		id_set->alt = id_set->active;
-+		return true;
-+	}
-+	/* Treat the prev conn_ids as used.
-+	 * Try selecting the next conn_id in the list, unless at the end.
-+	 */
-+	if (id_set->active->number != quic_conn_id_last_number(id_set)) {
-+		id_set->alt = list_next_entry(id_set->active, list);
-+		return true;
-+	}
-+	/* If there's only one conn_id in the list, reuse the active one. */
-+	if (id_set->active->number == quic_conn_id_first_number(id_set)) {
-+		id_set->alt = id_set->active;
-+		return true;
-+	}
-+	/* No alternate conn_id could be selected.  Caller should send a
-+	 * QUIC_FRAME_RETIRE_CONNECTION_ID frame to request new connection IDs from the peer.
-+	 */
-+	return false;
-+}
-+
-+static inline void quic_conn_id_set_alt(struct quic_conn_id_set *id_set, struct quic_conn_id *alt)
-+{
-+	id_set->alt = (struct quic_common_conn_id *)alt;
-+}
-+
-+/* Swap the active and alternate destination Connection IDs after path migration completes,
-+ * since the path has already been switched accordingly.
++/* Represents a gap (range of missing packets) in the ACK map.  The values are offsets from
++ * base_pn, with both 'start' and 'end' being +1.
 + */
-+static inline void quic_conn_id_swap_active(struct quic_conn_id_set *id_set)
-+{
-+	void *active = id_set->active;
++struct quic_gap_ack_block {
++	u16 start;
++	u16 end;
++};
 +
-+	id_set->active = id_set->alt;
-+	id_set->alt = active;
++/* Packet Number Map (pn_map) Layout:
++ *
++ *     min_pn_seen -->++-----------------------+---------------------+---
++ *         base_pn -----^   last_max_pn_seen --^       max_pn_seen --^
++ *
++ * Map Advancement Logic:
++ *   - min_pn_seen = last_max_pn_seen;
++ *   - base_pn = first zero bit after last_max_pn_seen;
++ *   - last_max_pn_seen = max_pn_seen;
++ *   - last_max_pn_time = current time;
++ *
++ * Conditions to Advance pn_map:
++ *   - (max_pn_time - last_max_pn_time) >= max_time_limit, or
++ *   - (max_pn_seen - last_max_pn_seen) > QUIC_PN_MAP_LIMIT
++ *
++ * Gap Search Range:
++ *   - From (base_pn - 1) to max_pn_seen
++ */
++struct quic_pnspace {
++	/* ECN counters indexed by direction (TX/RX) and ECN codepoint (ECT1, ECT0, CE) */
++	u64 ecn_count[QUIC_ECN_DIR_MAX][QUIC_ECN_MAX];
++	unsigned long *pn_map;	/* Bit map tracking received packet numbers for ACK generation */
++	u16 pn_map_len;		/* Length of the packet number bit map (in bits) */
++	u8  need_sack:1;	/* Flag indicating a SACK frame should be sent for this space */
++	u8  sack_path:1;	/* Path used for sending the SACK frame */
++
++	s64 last_max_pn_seen;	/* Highest packet number seen before pn_map advanced */
++	u64 last_max_pn_time;	/* Timestamp when last_max_pn_seen was received */
++	s64 min_pn_seen;	/* Smallest packet number received in this space */
++	s64 max_pn_seen;	/* Largest packet number received in this space */
++	u64 max_pn_time;	/* Timestamp when max_pn_seen was received */
++	s64 base_pn;		/* Packet number corresponding to the start of the pn_map */
++	u64 time;		/* Cached current timestamp, or latest socket accept timestamp */
++
++	s64 max_pn_acked_seen;	/* Largest packet number acknowledged by the peer */
++	u64 max_pn_acked_time;	/* Timestamp when max_pn_acked_seen was acknowledged */
++	u64 last_sent_time;	/* Timestamp when the last ack-eliciting packet was sent */
++	u64 loss_time;		/* Timestamp after which the next packet can be declared lost */
++	s64 next_pn;		/* Next packet number to send in this space */
++
++	u32 max_time_limit;	/* Time threshold to trigger pn_map advancement on packet receipt */
++	u32 inflight;		/* Bytes of all ack-eliciting frames in flight in this space */
++};
++
++static inline void quic_pnspace_set_max_pn_acked_seen(struct quic_pnspace *space,
++						      s64 max_pn_acked_seen)
++{
++	if (space->max_pn_acked_seen >= max_pn_acked_seen)
++		return;
++	space->max_pn_acked_seen = max_pn_acked_seen;
++	space->max_pn_acked_time = quic_ktime_get_us();
 +}
 +
-+/* Choose which destination Connection ID to use for a new path migration if alt is true. */
-+static inline struct quic_conn_id *quic_conn_id_choose(struct quic_conn_id_set *id_set, u8 alt)
++static inline void quic_pnspace_set_base_pn(struct quic_pnspace *space, s64 pn)
 +{
-+	return (alt && id_set->alt) ? &id_set->alt->id : &id_set->active->id;
++	space->base_pn = pn;
++	space->max_pn_seen = space->base_pn - 1;
++	space->last_max_pn_seen = space->max_pn_seen;
++	space->min_pn_seen = space->max_pn_seen;
++
++	space->max_pn_time = space->time;
++	space->last_max_pn_time = space->max_pn_time;
 +}
 +
-+static inline struct quic_conn_id *quic_conn_id_active(struct quic_conn_id_set *id_set)
++static inline bool quic_pnspace_has_gap(const struct quic_pnspace *space)
 +{
-+	return &id_set->active->id;
++	return space->base_pn != space->max_pn_seen + 1;
 +}
 +
-+static inline void quic_conn_id_set_active(struct quic_conn_id_set *id_set,
-+					   struct quic_conn_id *active)
++static inline void quic_pnspace_inc_ecn_count(struct quic_pnspace *space, u8 ecn)
 +{
-+	id_set->active = (struct quic_common_conn_id *)active;
++	if (!ecn)
++		return;
++	space->ecn_count[QUIC_ECN_LOCAL][ecn - 1]++;
 +}
 +
-+static inline u32 quic_conn_id_number(struct quic_conn_id *conn_id)
++/* Check if any ECN-marked packets were received. */
++static inline bool quic_pnspace_has_ecn_count(struct quic_pnspace *space)
 +{
-+	return ((struct quic_common_conn_id *)conn_id)->number;
++	return space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_ECT0] ||
++	       space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_ECT1] ||
++	       space->ecn_count[QUIC_ECN_LOCAL][QUIC_ECN_CE];
 +}
 +
-+static inline struct sock *quic_conn_id_sk(struct quic_conn_id *conn_id)
++/* Updates the stored ECN counters based on values received in the peer's ACK
++ * frame. Each counter is updated only if the new value is higher.
++ *
++ * Returns: 1 if CE count was increased (congestion indicated), 0 otherwise.
++ */
++static inline int quic_pnspace_set_ecn_count(struct quic_pnspace *space, u64 *ecn_count)
 +{
-+	return ((struct quic_source_conn_id *)conn_id)->sk;
++	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT0] < ecn_count[QUIC_ECN_ECT0])
++		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT0] = ecn_count[QUIC_ECN_ECT0];
++	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT1] < ecn_count[QUIC_ECN_ECT1])
++		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_ECT1] = ecn_count[QUIC_ECN_ECT1];
++	if (space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_CE] < ecn_count[QUIC_ECN_CE]) {
++		space->ecn_count[QUIC_ECN_PEER][QUIC_ECN_CE] = ecn_count[QUIC_ECN_CE];
++		return 1;
++	}
++	return 0;
 +}
 +
-+static inline void quic_conn_id_set_token(struct quic_conn_id *conn_id, u8 *token)
-+{
-+	memcpy(((struct quic_dest_conn_id *)conn_id)->token, token, QUIC_CONN_ID_TOKEN_LEN);
-+}
++u16 quic_pnspace_num_gabs(struct quic_pnspace *space, struct quic_gap_ack_block *gabs);
++int quic_pnspace_check(struct quic_pnspace *space, s64 pn);
++int quic_pnspace_mark(struct quic_pnspace *space, s64 pn);
 +
-+static inline int quic_conn_id_cmp(struct quic_conn_id *a, struct quic_conn_id *b)
-+{
-+	return a->len != b->len || memcmp(a->data, b->data, a->len);
-+}
-+
-+int quic_conn_id_add(struct quic_conn_id_set *id_set, struct quic_conn_id *conn_id,
-+		     u32 number, void *data);
-+bool quic_conn_id_token_exists(struct quic_conn_id_set *id_set, u8 *token);
-+void quic_conn_id_remove(struct quic_conn_id_set *id_set, u32 number);
-+
-+struct quic_conn_id *quic_conn_id_find(struct quic_conn_id_set *id_set, u32 number);
-+struct quic_conn_id *quic_conn_id_lookup(struct net *net, u8 *scid, u32 len);
-+void quic_conn_id_update_active(struct quic_conn_id_set *id_set, u32 number);
-+
-+void quic_conn_id_get_param(struct quic_conn_id_set *id_set, struct quic_transport_param *p);
-+void quic_conn_id_set_param(struct quic_conn_id_set *id_set, struct quic_transport_param *p);
-+void quic_conn_id_set_init(struct quic_conn_id_set *id_set, bool source);
-+void quic_conn_id_set_free(struct quic_conn_id_set *id_set);
++void quic_pnspace_free(struct quic_pnspace *space);
++int quic_pnspace_init(struct quic_pnspace *space);
 diff --git a/net/quic/socket.c b/net/quic/socket.c
-index 2930745c47fc..0eeee530ca0f 100644
+index 46f1df978604..b6c7a6fd9810 100644
 --- a/net/quic/socket.c
 +++ b/net/quic/socket.c
-@@ -41,6 +41,9 @@ static int quic_init_sock(struct sock *sk)
+@@ -37,6 +37,8 @@ static void quic_write_space(struct sock *sk)
+ 
+ static int quic_init_sock(struct sock *sk)
+ {
++	u8 i;
++
+ 	sk->sk_destruct = inet_sock_destruct;
  	sk->sk_write_space = quic_write_space;
  	sock_set_flag(sk, SOCK_USE_WRITE_QUEUE);
- 
-+	quic_conn_id_set_init(quic_source(sk), 1);
-+	quic_conn_id_set_init(quic_dest(sk), 0);
-+
+@@ -48,6 +50,11 @@ static int quic_init_sock(struct sock *sk)
  	if (quic_stream_init(quic_streams(sk)))
  		return -ENOMEM;
  
-@@ -55,6 +58,9 @@ static int quic_init_sock(struct sock *sk)
++	for (i = 0; i < QUIC_PNSPACE_MAX; i++) {
++		if (quic_pnspace_init(quic_pnspace(sk, i)))
++			return -ENOMEM;
++	}
++
+ 	WRITE_ONCE(sk->sk_sndbuf, READ_ONCE(sysctl_quic_wmem[1]));
+ 	WRITE_ONCE(sk->sk_rcvbuf, READ_ONCE(sysctl_quic_rmem[1]));
+ 
+@@ -59,6 +66,11 @@ static int quic_init_sock(struct sock *sk)
  
  static void quic_destroy_sock(struct sock *sk)
  {
-+	quic_conn_id_set_free(quic_source(sk));
-+	quic_conn_id_set_free(quic_dest(sk));
++	u8 i;
 +
- 	quic_stream_free(quic_streams(sk));
++	for (i = 0; i < QUIC_PNSPACE_MAX; i++)
++		quic_pnspace_free(quic_pnspace(sk, i));
++
+ 	quic_path_unbind(sk, quic_paths(sk), 0);
+ 	quic_path_unbind(sk, quic_paths(sk), 1);
  
- 	quic_data_free(quic_ticket(sk));
 diff --git a/net/quic/socket.h b/net/quic/socket.h
-index 0dfd3f8f3115..34363dd3345a 100644
+index c5684cf7378d..d8a264a1eddc 100644
 --- a/net/quic/socket.h
 +++ b/net/quic/socket.h
-@@ -14,6 +14,7 @@
+@@ -12,6 +12,7 @@
+ #include <linux/quic.h>
+ 
  #include "common.h"
++#include "pnspace.h"
  #include "family.h"
  #include "stream.h"
-+#include "connid.h"
- 
- #include "protocol.h"
- 
-@@ -37,6 +38,8 @@ struct quic_sock {
- 	struct quic_data		alpn;
- 
- 	struct quic_stream_table	streams;
-+	struct quic_conn_id_set		source;
-+	struct quic_conn_id_set		dest;
+ #include "connid.h"
+@@ -44,6 +45,7 @@ struct quic_sock {
+ 	struct quic_conn_id_set		dest;
+ 	struct quic_path_group		paths;
+ 	struct quic_cong		cong;
++	struct quic_pnspace		space[QUIC_PNSPACE_MAX];
  };
  
  struct quic6_sock {
-@@ -79,6 +82,16 @@ static inline struct quic_stream_table *quic_streams(const struct sock *sk)
- 	return &quic_sk(sk)->streams;
+@@ -111,6 +113,11 @@ static inline struct quic_cong *quic_cong(const struct sock *sk)
+ 	return &quic_sk(sk)->cong;
  }
  
-+static inline struct quic_conn_id_set *quic_source(const struct sock *sk)
++static inline struct quic_pnspace *quic_pnspace(const struct sock *sk, u8 level)
 +{
-+	return &quic_sk(sk)->source;
++	return &quic_sk(sk)->space[level % QUIC_CRYPTO_EARLY];
 +}
 +
-+static inline struct quic_conn_id_set *quic_dest(const struct sock *sk)
-+{
-+	return &quic_sk(sk)->dest;
-+}
-+
- static inline bool quic_is_serv(const struct sock *sk)
+ static inline bool quic_is_establishing(struct sock *sk)
  {
- 	return !!sk->sk_max_ack_backlog;
+ 	return sk->sk_state == QUIC_SS_ESTABLISHING;
 -- 
 2.47.1
 
