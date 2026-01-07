@@ -1,118 +1,191 @@
-Return-Path: <linux-cifs+bounces-8573-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8576-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED1ACFF26A
-	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 18:40:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA645CFF756
+	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 19:31:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5623F3065287
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 16:27:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 188E533BFDE8
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 18:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E51933BBA0;
-	Wed,  7 Jan 2026 14:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CBA3A89D5;
+	Wed,  7 Jan 2026 15:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYpAl51z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vLMsLSMf"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50F0330337;
-	Wed,  7 Jan 2026 14:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0E83A1A2C;
+	Wed,  7 Jan 2026 15:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795649; cv=none; b=lDrAvATduEH2Dmo5BqYxe6FlZIg++2QkzJkyWkq8UODfB2xxtKU0cMe7BY7GO3lJh5SGmuavCvQpUnef7Uh8ZBV4Ub23eb6ooQswWsH+2RAzTEQSmiJYjZDW2PRCeCcQSLKg8QZLH/olTEfnsUkqyRe3MwokKwbuL9nT9WCfZuY=
+	t=1767801212; cv=none; b=MZbuUoEjdKdY25aLHQn+ZfHIbOXm8WjIkvZLALtbsvKhgooeu2exMwMfXrEk71d56jVJtEyDttlDkgEAQtuP0EsA2uS4ANdVIjp3NSpc3y4k6ZbhJvP+yhUbucmwTl+/dsgghF12dMxa/R5U6DV5gNy5sE3Arm5FTaverQV/6WQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795649; c=relaxed/simple;
-	bh=swYePiPcFodsDh/67E0j7LPYSSE9pk5yCYXqd+3XH2Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tIOvyb6T9JkIWnK2R9YPqo8Pg2TiYxzVUn3yrJ2voEPeI4DRk8xlsFVifZhwDAZeduACyFjyB4lmzl2mLG5o0xTGL084Y1niZ0dHSNX13Ls4oPj+GQkZdCM3Wjlizfb8Jyk+EKtdbdiSnZlzOp2rFYLmh9i71fpIQGSa9hgByMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYpAl51z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BB6C4CEF7;
-	Wed,  7 Jan 2026 14:20:45 +0000 (UTC)
+	s=arc-20240116; t=1767801212; c=relaxed/simple;
+	bh=7lFgq7zHXS0MDWQPU7zaspeLRHzzrG6BnP2YKILo3AE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EuzKfV0TOILOO6ZC0QZXq/DQel3gqR6rVJp2rl24oUBiP0TZ2xCTMQpQHfP0TdJZlhq5C1LiOGkg/6w2/GKzjmpXHjFFQZCzdWIbPmcMp7Bqe/Ja667ySlN3V4INC/xigCXZPx/LHEFSGInaEXQpU35UAxl6H60oyRNfkDlxhnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vLMsLSMf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7006C4CEF1;
+	Wed,  7 Jan 2026 15:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767795648;
-	bh=swYePiPcFodsDh/67E0j7LPYSSE9pk5yCYXqd+3XH2Y=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AYpAl51zYcKM5SOyIjkH+SRS+s1SgwbK+zEYQJ3vsaYluDtz4qEDKpTsvxJhEXyYG
-	 UTSnn8T72uZwqIsFSSzWJpg7dyR9Ud+wjulGfX/BNnsSyQN5VqxkjvEzhOPn3xBvdS
-	 LCMFm8wgeJZkQ0wLlBejx6ZpSrSAlxbbusu4Shito0wZh5nQNt/BK383ps9t+ivcoy
-	 L8kbTGLPioQrGce25s9TlBD5CG9ZzO6VdZc7ulMRWtDD+/YBXOwhshvwLOZ28qOt0H
-	 BruLv4TMRys0iitPAaeXQMTLHu+22xZ12Cobm2cGS5HYrIfGgDLaMRR01oocXXlv2H
-	 gwgtatvghwDAg==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Wed, 07 Jan 2026 09:20:14 -0500
-Subject: [PATCH 6/6] vboxsf: don't allow delegations to be set on
- directories
+	s=k20201202; t=1767801211;
+	bh=7lFgq7zHXS0MDWQPU7zaspeLRHzzrG6BnP2YKILo3AE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vLMsLSMfwYcRBqpEoQEte73cNd4+bQSyo4Ym90e4+R44vc8ncFJawJvao+qzcQ7DQ
+	 VgD2VVQAC/ZX1raSeXADLMttJjwElIY89kePhRbgXJubDuNgcq23n+mwk5BiwR9WwW
+	 uBi576iWFj/Er5nUNHHOJ89NvbOJqN77lZ2PrK88FUQo5o2g/S0zGYKmOcBg44pj2H
+	 jvGuHSV9BOH/NvVwOpzDZIEX6zYyhH4vpbxpeZZedWvV3RtE0S7ZGVg45mCTYdMhmL
+	 puTAh5rKbnZHrOqmQ5DCWwGO4jxll1FciGRPRgdrsPmKSXEpMP4DjFoSMf+BrHGidd
+	 gFCHVISjGMn7g==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: ZhangGuoDong <zhangguodong@kylinos.cn>,
+	ChenXiaoSong <chenxiaosong@kylinos.cn>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>,
+	smfrench@gmail.com,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-5.15] smb/server: call ksmbd_session_rpc_close() on error path in create_smb2_pipe()
+Date: Wed,  7 Jan 2026 10:53:03 -0500
+Message-ID: <20260107155329.4063936-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-setlease-6-19-v1-6-85f034abcc57@kernel.org>
-References: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
-In-Reply-To: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
-To: Christian Brauner <brauner@kernel.org>, 
- Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
- Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
- Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, 
- Bharath SM <bharathsm@microsoft.com>, Trond Myklebust <trondmy@kernel.org>, 
- Anna Schumaker <anna@kernel.org>, Eric Van Hensbergen <ericvh@kernel.org>, 
- Latchesar Ionkov <lucho@ionkov.net>, 
- Dominique Martinet <asmadeus@codewreck.org>, 
- Christian Schoenebeck <linux_oss@crudebyte.com>, 
- Andreas Gruenbacher <agruenba@redhat.com>, Xiubo Li <xiubli@redhat.com>, 
- Ilya Dryomov <idryomov@gmail.com>, Hans de Goede <hansg@kernel.org>, 
- NeilBrown <neil@brown.name>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-cifs@vger.kernel.org, 
- samba-technical@lists.samba.org, linux-kernel@vger.kernel.org, 
- linux-nfs@vger.kernel.org, v9fs@lists.linux.dev, gfs2@lists.linux.dev, 
- ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=759; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=swYePiPcFodsDh/67E0j7LPYSSE9pk5yCYXqd+3XH2Y=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpXmut4DdA0I/BS+hpNDcLM7DVrBk7ZZAAPZ+Zf
- eiWHvcBVXqJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaV5rrQAKCRAADmhBGVaC
- FQvRD/sHAd32Qf+FYYgxkOBSMrFu4x01VAu/CLJP7DaLx3Xn+Dv7QzwmKIVmYCMtXyFOxudfC8d
- 0/BRqz6PP8PrWIBv5t3/l82lbaOo2STYUwHroFqZyapkFfE3L91jt84YXiW59+896fVi+QUgKwK
- 25palCrATUG2xnKiUZZplJU9lXM62SDdqGM5DTVVvdEY0lwIi9fnv5eLDWr1NXBqFhJoxX4oh57
- m6wxwDen/kPliwyNVHTNAT7djbqx4ldSz3C+CUaFplPlbh3L6KChKePwFXIo+4VC2UUv5Sdt1FP
- XBg16+mvp1o4LBlXH/CBTXcQz6/9KV0KouDjeMx2TXaqyawt+0Y5jYrH54EaZxIaEJGCn+EjbtO
- UajPiRYeCzAbSdZrtPa5ZRlFAl9Xq7Q/8hyB9+kHKcxF1xRt0uD32QQd0Vw/vx73njrWMml//qB
- ysVrjW5ZuhjRPbMmrqv/MNoPVZlRtCshC8RRTAD/adxKsAEIN4x2dQX0Ffcb8r4MVxzF1XcZeeu
- wW7pqzU7lgPfsaapcTDth0br9AAubLK1XZkgzhivEL0lxl+lzHEkyIcpOuqns+SO8FtTVyJpUoY
- IHKx4DSCl2GAL2qiCalTXVkr7WyaOgB5itY2mwVEBaKxnHyV/MvdPFoVxkqxeAWKLL+HKSJVNYS
- hxfwPgeRb504faQ==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-With the advent of directory leases, it's necessary to set the
-->setlease() handler in directory file_operations to properly deny them.
+From: ZhangGuoDong <zhangguodong@kylinos.cn>
 
-Fixes: e6d28ebc17eb ("filelock: push the S_ISREG check down to ->setlease handlers")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+[ Upstream commit 7c28f8eef5ac5312794d8a52918076dcd787e53b ]
+
+When ksmbd_iov_pin_rsp() fails, we should call ksmbd_session_rpc_close().
+
+Signed-off-by: ZhangGuoDong <zhangguodong@kylinos.cn>
+Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/vboxsf/dir.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/fs/vboxsf/dir.c b/fs/vboxsf/dir.c
-index 42bedc4ec7af7709c564a7174805d185ce86f854..230d7589d15cc98f6bc7e930ba40ca5f7dbf7e18 100644
---- a/fs/vboxsf/dir.c
-+++ b/fs/vboxsf/dir.c
-@@ -186,6 +186,7 @@ const struct file_operations vboxsf_dir_fops = {
- 	.release = vboxsf_dir_release,
- 	.read = generic_read_dir,
- 	.llseek = generic_file_llseek,
-+	.setlease = simple_nosetlease,
- };
+LLM Generated explanations, may be completely bogus:
+
+### 3. CLASSIFICATION
+
+**Bug Type:** Resource leak
+- This is clearly a **bug fix**, not a feature addition
+- When `ksmbd_iov_pin_rsp()` fails after `ksmbd_session_rpc_open()`
+  succeeds, the RPC session is never closed
+- Resources leaked include:
+  - The `ksmbd_session_rpc` structure memory
+  - The IPC ID allocated via `ksmbd_ipc_id_alloc()`
+  - Entry remains in the session's `rpc_handle_list` xarray
+
+### 4. SCOPE AND RISK ASSESSMENT
+
+**Size:** Very small - 4 lines of actual code change
+- Line 1: `int id;` → `int id = -1;` (initialization to enable cleanup
+  check)
+- Lines 2-3: Added `if (id >= 0) ksmbd_session_rpc_close(work->sess,
+  id);` in error path
+
+**Risk:** Very low
+- Only affects the error path when `ksmbd_iov_pin_rsp()` fails
+- Standard cleanup pattern already used elsewhere in the codebase
+- Cannot affect normal (successful) operation
+
+**Subsystem:** ksmbd (kernel SMB server)
+- Mature component, been in mainline since Linux 5.15
+- Has an active maintainer (Namjae Jeon)
+
+### 5. USER IMPACT
+
+- **Who is affected:** Users running ksmbd as their SMB server
+- **Trigger condition:** Any time `ksmbd_iov_pin_rsp()` fails after
+  opening an RPC pipe
+- **Severity:** Medium - resource leaks accumulate over time, can lead
+  to system degradation or resource exhaustion under sustained error
+  conditions
+- **Real-world likelihood:** Moderate - `ksmbd_iov_pin_rsp()` can fail
+  with -ENOMEM under memory pressure
+
+### 6. STABILITY INDICATORS
+
+- **Acked-by:** Namjae Jeon (ksmbd maintainer)
+- **Signed-off-by:** Steve French (SMB/CIFS maintainer)
+- The fix follows the existing pattern in the codebase (similar cleanup
+  is done for `name` in the same error path)
+
+### 7. DEPENDENCY CHECK
+
+- No dependencies on other commits
+- Uses `ksmbd_session_rpc_close()` which exists in all kernel versions
+  with ksmbd (5.15+)
+- The affected code (`create_smb2_pipe()` and `ksmbd_iov_pin_rsp()`)
+  exists in stable trees
+
+---
+
+## Conclusion
+
+This commit fixes a clear resource leak in the ksmbd SMB server. When
+the final step of creating an SMB pipe (`ksmbd_iov_pin_rsp()`) fails,
+the previously opened RPC session was never cleaned up, causing memory
+and ID leaks.
+
+**Why it should be backported:**
+1. **Fixes a real bug** - Resource leaks are a well-known category of
+   bugs that accumulate over time
+2. **Obviously correct** - Standard error path cleanup pattern, mirrors
+   how `name` is freed in the same path
+3. **Small and surgical** - Only 4 lines changed, localized to one
+   function
+4. **Low risk** - Only affects error path, cannot break normal operation
+5. **Maintainer acknowledgment** - Acked by ksmbd maintainer
+6. **Affects stable trees** - ksmbd has been in-kernel since 5.15,
+   stable users can hit this bug
+
+**Concerns:** None significant. The fix is trivial and follows
+established patterns.
+
+**YES**
+
+ fs/smb/server/smb2pdu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index 6a94cda0927d..e052dcb9a14c 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -2291,7 +2291,7 @@ static noinline int create_smb2_pipe(struct ksmbd_work *work)
+ {
+ 	struct smb2_create_rsp *rsp;
+ 	struct smb2_create_req *req;
+-	int id;
++	int id = -1;
+ 	int err;
+ 	char *name;
  
- /*
-
+@@ -2348,6 +2348,9 @@ static noinline int create_smb2_pipe(struct ksmbd_work *work)
+ 		break;
+ 	}
+ 
++	if (id >= 0)
++		ksmbd_session_rpc_close(work->sess, id);
++
+ 	if (!IS_ERR(name))
+ 		kfree(name);
+ 
 -- 
-2.52.0
+2.51.0
 
 
