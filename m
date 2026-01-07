@@ -1,136 +1,97 @@
-Return-Path: <linux-cifs+bounces-8568-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8574-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178F4CFE79C
-	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 16:07:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2347DCFEB21
+	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 16:52:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3272B30FC2D6
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 15:00:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 769DA30F2708
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 15:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B8D331A4B;
-	Wed,  7 Jan 2026 14:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5865434CFCC;
+	Wed,  7 Jan 2026 15:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJRc65Eh"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ALmo4XpI"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B5231A56D;
-	Wed,  7 Jan 2026 14:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4530234B1A1;
+	Wed,  7 Jan 2026 15:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795635; cv=none; b=XzmFrpfqRlBCYk0ebf9GaI0A98ufgTZtlgqcJZwMgh/8wb+AigHwzhZNhzmypXPIYxhhieLFoJYbvFUQMvsD9ZmGhgyMPAkINDS8GrmAWc++7fBzuVFL8GqU/9XhRu93e9hsVcjJvk3Rad45NTb+IiUET7563YLJERbVM+iOEcs=
+	t=1767799975; cv=none; b=uqUQ8yqTvl4y65ZVWfHh70Jg2xyph/GhU3gliakScPgJzSs5ouGBr5Z44KlEJnBGm/QEIJH9Pv8AixaQ8O5H93Fu1vh//HL7AfmSnw1YJ8qZa22JW1p8Byoko7AlOK6TEWHgfPbwaA0X6IHDKw9WVu3b5l8AtwEkpnPn63dJ4To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795635; c=relaxed/simple;
-	bh=tkUtMumKw36UQhHrH7n1l5r+Vth05W6Tk5DQRZclMos=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=h1u5fgXQistrKqRJy06xNWrE5sPqXJl4dsDoUVJQi7XwTET4auN46wEV8Tlp71bI4CBZCW/hsZZkS8klIczv3noNGonZ55pDHNzMqJ0rI3VuN/xldUXL2sqPqv1/9ryeY23H+DRuOMveGNikxJec5l1wMkqvYHaUU9Atfr37x/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJRc65Eh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83829C19421;
-	Wed,  7 Jan 2026 14:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767795635;
-	bh=tkUtMumKw36UQhHrH7n1l5r+Vth05W6Tk5DQRZclMos=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=gJRc65EhM+CoGdgtUcCCHQUHquGON7WfOakpDPhwU7kZoT6NgRkQLTzebiOgNPsih
-	 Z3XFJQFUJCyOg9EB7GnFXh9keS0S5W5slW/P0fC4lrOtPk86MjEXUPhsXB8CATttmX
-	 GURU0FARiG2XeRc28/+2CU8MsaGtz1J5c63hPGKUG41JCTD2fB3PrMUFUadwsC4hnk
-	 lia/iyFdJXYYxfkCtORWwxPCP0bmYZauJkF6rztYEvHJAQlZTRBCdDCC3fX5v5ke0F
-	 E9Hq3Dw0dyahHxZZJk/J5ZPnWSNJeWpt7hOsy5Ckx6IyY08RsTsdpYnNq4LrkHeqln
-	 Rce8v60llcPJQ==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Wed, 07 Jan 2026 09:20:09 -0500
-Subject: [PATCH 1/6] nfs: properly disallow delegation requests on
- directories
+	s=arc-20240116; t=1767799975; c=relaxed/simple;
+	bh=nFy0yEzoFh+UjaHPlCVQ48OdYSjCsq9qSNLmXcj1Vd4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IsVx5L9MYD42RzLS2t03QtmhXAxMxZAum6xHCBmYX7orHqktze8D73MPhpV8MT9clcDOg8gTvMRrB+X3cu7hrJIqc4o1nFA+pLL7KZbshU4vmtJGAl8W/UXVrrM7l+vHdDOoFTI+pHm9Cs+6rr75Xevwfr+aPAHP+7S/jTx0SX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ALmo4XpI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=WLCNgvyKZoXQQuDrcbanc8yb4Q1uRHJ/yANy7e6VaJk=; b=ALmo4XpInvUDXmNDzFfYS3DA1T
+	UT8t4JKHDCrC20DJK7A7ZFgQ+htYB7V3v1IbOFzYjGrUFsk2hUMZ/rQOQbD+UJq8LF95kQMVRLOfQ
+	KYkvj16k833hhUglawi0vzOH5zmaLOJuYaYWZHncpSWg9mpeoCQlhfVCjrEIvuQvbpAHF5hAmMKhN
+	Fa1W7hNojDl8s5giyFl4DROryf36opwZCv97r7hosXwzDHkwDxZ6bhH7bXR2r3mU5lq2cO9FVt3MD
+	xHMHglD1hksFbATlegUfImo9P6vFewRpvdNpHwokf8bOokgPns4l9nmPqw6vxz4y7CddZCdwd3d4L
+	omDEzK9w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vdVWU-0000000FB4y-1TwP;
+	Wed, 07 Jan 2026 15:32:34 +0000
+Date: Wed, 7 Jan 2026 07:32:34 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.org>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+	Hans de Goede <hansg@kernel.org>, NeilBrown <neil@brown.name>,
+	Christoph Hellwig <hch@infradead.org>, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org, v9fs@lists.linux.dev,
+	gfs2@lists.linux.dev, ceph-devel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 0/6] vfs: properly deny directory leases on filesystems
+ with special lease handling
+Message-ID: <aV58kmCAicqTpFhK@infradead.org>
+References: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-setlease-6-19-v1-1-85f034abcc57@kernel.org>
-References: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
-To: Christian Brauner <brauner@kernel.org>, 
- Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
- Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
- Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, 
- Bharath SM <bharathsm@microsoft.com>, Trond Myklebust <trondmy@kernel.org>, 
- Anna Schumaker <anna@kernel.org>, Eric Van Hensbergen <ericvh@kernel.org>, 
- Latchesar Ionkov <lucho@ionkov.net>, 
- Dominique Martinet <asmadeus@codewreck.org>, 
- Christian Schoenebeck <linux_oss@crudebyte.com>, 
- Andreas Gruenbacher <agruenba@redhat.com>, Xiubo Li <xiubli@redhat.com>, 
- Ilya Dryomov <idryomov@gmail.com>, Hans de Goede <hansg@kernel.org>, 
- NeilBrown <neil@brown.name>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-cifs@vger.kernel.org, 
- samba-technical@lists.samba.org, linux-kernel@vger.kernel.org, 
- linux-nfs@vger.kernel.org, v9fs@lists.linux.dev, gfs2@lists.linux.dev, 
- ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1561; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=tkUtMumKw36UQhHrH7n1l5r+Vth05W6Tk5DQRZclMos=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpXmurGkP7toxFY3jKAO4v32OcZyFMTRKEDvXQd
- JpSxp4vRDWJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaV5rqwAKCRAADmhBGVaC
- FTJSEACmkBB7G9y/f0LVHuGDnP+jDnSPBvak4kEVurnaE4ki+rPuNqZGlb1a+7g8Af8qaX8ACA7
- sqgMNm5XxSfVFllZlRnfavXfkL6BoLncqs/nuMOBdwElX5nDGgDAIg8A7npclylIY/WhLN+cRMH
- 7wqNux4Id5LrlkRSG/EyakGtWyYh3U9kjyS7YhMY/6fQ0FohvSl0jNexT3tJ7hLRa/SEKaGK/TR
- jmrSPP54QdLwrdYNl5UMc0X3ovBaL1rerOLecg0e+NgsHzcht7KitusEW27w6zNNeqn8Nwk2ZjD
- 0rz8AXXPouQiJYD/6uZaVsNU2Dsp5uOab7Bej/STcGp0+kd5+0cZoeGG000asDvqCam/rzMVBWk
- RLtIAOA5uTm8FrMbnXmpL2nbms3rr3fKuM+k4KyylXlePhkn9USlvvL6vZxJncFIF+yTGth7kZR
- eeBqe4ME9WtvuGu483hUgIJ2Ec0uFhI2brGjxZ7AtNvckuh2KNaWplOk9wCQmcs8pPHYgH644q6
- 9r9q5Vnn3j4mEqrgQ6yIUz1+VX/JC54vtU+T/xkUbWKjbLfXhRsYjqHwLJzCTQ3bbLIBtHNg45j
- BMqUWzcsgr+gw7a6bxSVsPSTsU1bJRbeKCAiBjPQA+4w0euocCsWD1xkrvUz6sV1SyVb0q5C2jZ
- ppEXuUmMIS4hNHQ==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Checking for S_ISREG() in nfs4_setlease() is incorrect, since that op is
-never called for directories. The right way to deny lease requests on
-directories is to set the ->setlease() operation to simple_nosetlease()
-in the directory file_operations.
+On Wed, Jan 07, 2026 at 09:20:08AM -0500, Jeff Layton wrote:
+> Long term, I think it would be best to change leases/delegations to be
+> an opt-in thing, such that leases are always denied by default if the
+> method isn't set.
 
-Fixes: e6d28ebc17eb ("filelock: push the S_ISREG check down to ->setlease handlers")
-Reported-by: Christoph Hellwig <hch@infradead.org>
-Closes: https://lore.kernel.org/linux-fsdevel/aV316LhsVSl0n9-E@infradead.org/
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nfs/dir.c      | 1 +
- fs/nfs/nfs4file.c | 2 --
- 2 files changed, 1 insertion(+), 2 deletions(-)
+Agreed.
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index 23a78a742b619dea8b76ddf28f4f59a1c8a015e2..71df279febf797880ded19e45528c3df4cea2dde 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -66,6 +66,7 @@ const struct file_operations nfs_dir_operations = {
- 	.open		= nfs_opendir,
- 	.release	= nfs_closedir,
- 	.fsync		= nfs_fsync_dir,
-+	.setlease	= simple_nosetlease,
- };
- 
- const struct address_space_operations nfs_dir_aops = {
-diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index 7317f26892c5782a39660cae87ec1afea24e36c0..7f43e890d3564a000dab9365048a3e17dc96395c 100644
---- a/fs/nfs/nfs4file.c
-+++ b/fs/nfs/nfs4file.c
-@@ -431,8 +431,6 @@ void nfs42_ssc_unregister_ops(void)
- static int nfs4_setlease(struct file *file, int arg, struct file_lease **lease,
- 			 void **priv)
- {
--	if (!S_ISREG(file_inode(file)->i_mode))
--		return -EINVAL;
- 	return nfs4_proc_setlease(file, arg, lease, priv);
- }
- 
+> That's a larger patchset though as we'd need to audit
+> all of the file_operations that currently have ->setlease() as NULL.
 
--- 
-2.52.0
+Initially you can just wire them up everywhere.  But I guess that would
+be overkill. 
 
 
