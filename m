@@ -1,48 +1,47 @@
-Return-Path: <linux-cifs+bounces-8569-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8571-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D2CACFE5F2
-	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 15:46:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29302CFE616
+	for <lists+linux-cifs@lfdr.de>; Wed, 07 Jan 2026 15:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 579243029C1B
-	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 14:45:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 930E43015AD3
+	for <lists+linux-cifs@lfdr.de>; Wed,  7 Jan 2026 14:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB84335BA7;
-	Wed,  7 Jan 2026 14:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0C6339705;
+	Wed,  7 Jan 2026 14:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cA+jkYKy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hW1hwBJ6"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122F431B81C;
-	Wed,  7 Jan 2026 14:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7639F33893D;
+	Wed,  7 Jan 2026 14:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795638; cv=none; b=FSL3RwrFtnC2SFHGc52Y4DrWvmYPXXaBpC8IuN2jskFSlMPnnYeL8OiL/seuuhRt2x7eQ6LVhPOkGu7bioR4JjiUmKEZsZyd2nMAg/WdjpXYehip5XKCWiNculmpvolBsy2+36jU1n7HZyqoflxespLQIZhsWm25a7h/c0Kb8k8=
+	t=1767795643; cv=none; b=D6NtyiJOVK6wWVAJO9zdGZbqX8sbaBiMknNWAFF0Hval2e33aWApJFokXpobSLhZ0A0mBFpJMgI70sOV4jm1AR7redKWVI7SnE260tyM+X8PoZ0nZQOODeJYnm54k7iiYrXz4SulsFD2/hBZOmo0b6QM4j2CljZ166ZIIz8h/0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795638; c=relaxed/simple;
-	bh=pS9yyXCuYMf7+KI6SO4u/vUJdTQQPT4ls4okttVSWaE=;
+	s=arc-20240116; t=1767795643; c=relaxed/simple;
+	bh=WOObDB36kX8/qufFSII94oHmtu/aTYmL2lv+jov+ZmA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QaFu1UG/J9tFNiVNDcTd1plssb0b21I/2M3erSMHGWXviFjzEUTpisP5StuvAqcahhrLBnmlIvvcECchdG2PqwoGNO1WdjhdF2nPA1rReD5sUYZnxVmTNHmdm+0XkfcD6PUgxNzMjGa767edwdXwXj7odCV+fHtlpruqX2C36jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cA+jkYKy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E71C4CEF1;
-	Wed,  7 Jan 2026 14:20:35 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=VniDj6Nctzy2wUzf6JpVpBzCcr6QnemOF3Qkv6A/zesGj3B1jDV4Hy2oOEoHMdjqQLx5ulaz78Ru+CPn+cUGdZRDNOjDVfidFYRdM69KgYkrFWWpiHPKsNWrvbClLZeMVMg2XpJ2NgdmR1RBf78CZnYmdp3qzNgojGiMCRgdCPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hW1hwBJ6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B210C19425;
+	Wed,  7 Jan 2026 14:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767795637;
-	bh=pS9yyXCuYMf7+KI6SO4u/vUJdTQQPT4ls4okttVSWaE=;
+	s=k20201202; t=1767795643;
+	bh=WOObDB36kX8/qufFSII94oHmtu/aTYmL2lv+jov+ZmA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=cA+jkYKyIk9GTNT/RIbyJ9+oKweiiJOPVQCV7mks0aWjroSOLgyr8NLfelO+dq/eT
-	 tGcBFxnITdlA3YUwDbY02hxwKrWVId2eHezILAMkPjIrQ7TQDYEyhGgR3LYdRG7KBj
-	 my+DRpKBaHOOqBrZSB9du2hQPSCpR3iuL+pnPeS5KmJFKSAFfnMvlstBnNCyr0/uol
-	 RaLURmzRTHfr/7jKY0wRcFvR6Zlw0/AQV+IfhkzSJph2a6+2424ezAWL+djjqJRu0V
-	 Nkc/d4zOjIgbTfqQtGXE7hAEctSbGVMbuu5+P1ZG7HPzP6zqMoyZDLUT8OEDZ4lfZt
-	 3zCQr7PD6PLww==
+	b=hW1hwBJ6L2Sc82JMpAHppzOF/u4ORRMdsFEbffGaAz3eHHfJ/pKGliS1vbuNkRbzA
+	 CDG0x276T1iZUPAx/ygrRIZH4Z4ongqtKKs5I30tX9ZBoKHaU0UN60IWpPiQFwH1Yx
+	 YnD4xds5h9wih4LxizeNZQX0+udKbN5sQ+kL24T4cOnATEi2u/MPILScUOU7iM5uq3
+	 Ag6oqPji7MyCVy5Iy3bcch7Vg8AMNjtN3LkANWa2Qvch1j9kRAj7VaqPIzPZMM2FlI
+	 78QF41BB4zQMokBB9HkvcZv4dZAiGaXJH3maeYsyWZ1PZxBpRnKrJv8RdbfjTDuRyF
+	 fbLNJ2HT02c2A==
 From: Jeff Layton <jlayton@kernel.org>
-Date: Wed, 07 Jan 2026 09:20:10 -0500
-Subject: [PATCH 2/6] smb/client: properly disallow delegations on
- directories
+Date: Wed, 07 Jan 2026 09:20:12 -0500
+Subject: [PATCH 4/6] gfs2: don't allow delegations to be set on directories
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -51,7 +50,7 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-setlease-6-19-v1-2-85f034abcc57@kernel.org>
+Message-Id: <20260107-setlease-6-19-v1-4-85f034abcc57@kernel.org>
 References: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
 In-Reply-To: <20260107-setlease-6-19-v1-0-85f034abcc57@kernel.org>
 To: Christian Brauner <brauner@kernel.org>, 
@@ -73,56 +72,46 @@ Cc: Christoph Hellwig <hch@infradead.org>, linux-cifs@vger.kernel.org,
  ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
  Jeff Layton <jlayton@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1365; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=pS9yyXCuYMf7+KI6SO4u/vUJdTQQPT4ls4okttVSWaE=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpXmusiT+Zo4rGBFj36gZGzZezqsdQ5jMDN7570
- +X3LnovMQ6JAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaV5rrAAKCRAADmhBGVaC
- FQyMD/9Yn2ldQZofv33ljyPfw1HKZHxfV9g/4IXvDS0coXZV6btn300rZiiHijlDiQL22qszkfB
- /O5PtQ1peH2IuYCsNFIVCGWPjk6v1RJQ5Laeekscv207sRvr5nppbivyGjDLQ26gBSxZ08hmyMR
- Nl6WavAO7n/mTPxDgtfZNRjQur9yv2xVTZsN/nnO3ZCH7hL9kakZEpaXpgXLr7y00ToeMt6EU9l
- Sdo2kgGbG/83S7eNy8Lr+F8aYFgbPE72ftaxhTcOMfWt9tGgtefRlXQORqlppSRKBKb1T0l8wmJ
- 0dWUV6cweW4Cg1/ITOkHrp79vgFzL1km9I1yH092pUxCz5gzTkpy4Zl3rkzUnlLziVOfXrpuqrd
- w/OPxT8+Dw+ALUDRs7NvJdESsYzb6njiUWrO93vRdPNf9FNXxThSdRQFbqCidSfhKUyvStDYFQi
- lcgBKOXwxRmHVzOBjQ/axpCrQy5KVBprSIuXFBzXqkIzd5siyyiJT+0wQwfSACU537xUx43faEK
- lDnmDlcpCWS8WgyESuaIKTIOd2Y7oZc7qT2kSV/NtUb5f2Tuc2DzqggxrSdFWsd97LL4Aus78WE
- bIyQGskKVTfRSBzNzO1nbaXG6wVlTBLAa3WUVnRuaK2XtH3poGnHCEf33B9r8ujY2TOo0asLeub
- OnlAv+OtROjS4Nw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=826; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=WOObDB36kX8/qufFSII94oHmtu/aTYmL2lv+jov+ZmA=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpXmusNiNlSlsI6aV6lp0Xi1SIcHsWJueGpuTVl
+ eQ6zJd8vWmJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaV5rrAAKCRAADmhBGVaC
+ FahPEACuMe99DApaXMxkgM0GK98+vE+ljpvVbIEq2apnJZzzAfT0hyf/6gvBJNqqPgdcwGOIL1N
+ Ialp+dOG1L5LZ4z/T8xu2lCmwQ5ZFZwiqyomq1SJ61zt2xGJiYKufOA6M/fn1EPifLmJM28gijH
+ 6U3tRVcffCpJDF0GGCvwkO1sVnIQzZDweIyiyXOv3bMIzYTidH7JgRtLOk9novnILuULmVNUmtl
+ xu49xC/PrkkR9B2wto7SK2OWt4OPpTgJmpn002UwSOejzpH9MfAam6VxMQR1Jk56TID7BJZA4nJ
+ EKEblKGq11SauGkJQB5Fm9inIwMzdw2Pmvj+0/z/VJhQQpjxY3UZTmNfF4ELGsHcEz9325r8ZSk
+ nEUKDTf4v7IeupzNaRUmDsHgJi+mKJsc+w/PG7cR5P6NKXyG6VCmt+U4IeWPbJqzZRVBa43k8xu
+ kVfYM2xu1j2OaO8ggJtf/u/50S72NZ4RW/RyFvFCxG0NMZ41hRm2BfcPeZXmL82aMXY4EyCxs9f
+ J9GOEHg9Xia1+QtaJM8khb0pHiQKzSEDPiKm5F8UIZre9gbramIUQ3euPrvJugtOCf2lF4cWkSG
+ MS+xHOVEAkdxuUKGpeKArHhvvJnOTHcqF0MdPMdJ4D/jaTHUsz6JO1SGGr4fxk84qJlU1KxCiFL
+ /515RZqlOwF+x1w==
 X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
  fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-The check for S_ISREG() in cifs_setlease() is incorrect since that
-operation doesn't get called for directories. The correct way to prevent
-delegations on directories is to set the ->setlease() method in directory
-file_operations to simple_nosetlease().
+With the advent of directory leases, it's necessary to set the
+->setlease() handler in directory file_operations to properly deny them.
+
+In the "nolock" case however, there is no need to deny them.
 
 Fixes: e6d28ebc17eb ("filelock: push the S_ISREG check down to ->setlease handlers")
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/smb/client/cifsfs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/gfs2/file.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/smb/client/cifsfs.c b/fs/smb/client/cifsfs.c
-index d9664634144d3ebba5cdd659f651d6e6e8f975fa..a3dc7cb1ab541d35c2e43eefb7a2d2d23ad88bb3 100644
---- a/fs/smb/client/cifsfs.c
-+++ b/fs/smb/client/cifsfs.c
-@@ -1149,9 +1149,6 @@ cifs_setlease(struct file *file, int arg, struct file_lease **lease, void **priv
- 	struct inode *inode = file_inode(file);
- 	struct cifsFileInfo *cfile = file->private_data;
- 
--	if (!S_ISREG(inode->i_mode))
--		return -EINVAL;
--
- 	/* Check if file is oplocked if this is request for new lease */
- 	if (arg == F_UNLCK ||
- 	    ((arg == F_RDLCK) && CIFS_CACHE_READ(CIFS_I(inode))) ||
-@@ -1712,6 +1709,7 @@ const struct file_operations cifs_dir_ops = {
- 	.remap_file_range = cifs_remap_file_range,
- 	.llseek = generic_file_llseek,
- 	.fsync = cifs_dir_fsync,
-+	.setlease = simple_nosetlease,
+diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
+index b2d23c98c996553ee14f1969638e709a3d7ede1c..86376f0dbf3a553375b0064c9a1eff3bfa9651f5 100644
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -1608,6 +1608,7 @@ const struct file_operations gfs2_dir_fops = {
+ 	.lock		= gfs2_lock,
+ 	.flock		= gfs2_flock,
+ 	.llseek		= default_llseek,
++	.setlease	= simple_nosetlease,
+ 	.fop_flags	= FOP_ASYNC_LOCK,
  };
  
- static void
 
 -- 
 2.52.0
