@@ -1,1097 +1,807 @@
-Return-Path: <linux-cifs+bounces-8745-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8747-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F97FD2549E
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 16:23:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35887D25E2F
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 17:53:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C2FF9306E462
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 15:17:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B43BB3056762
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 16:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A9F3AE6F3;
-	Thu, 15 Jan 2026 15:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619E83A35BE;
+	Thu, 15 Jan 2026 16:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbRc7dCE"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OTNicD5S";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Rq3sSbsn";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OTNicD5S";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Rq3sSbsn"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683923ACEED
-	for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 15:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AF23624C4
+	for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 16:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768490275; cv=none; b=MaIGBdOzMuY4UhCb1UjTQUJ7bMg2kLjjw3ydFzyrH/Qvk2M+PeMP2XDF0UWvZ9qBHB7UDWzZ88Qb/RUC5P9bP17JREBk9FnOBDWcDGUB/mbBhuqLs3p5kgQKr+tTiMZs3iwo3F4BuJWhSQ0LCbTMQDFgghAGMfuZ8HCl9iRzSYc=
+	t=1768495994; cv=none; b=A7qeN8R5YTDVf66Sx1enIBintpJPMd9GPvqgPaUu/R6l9cQcX9S5sJd2/hP4mwslvqtOiEh70LmRqohCnWkLAz1dne7R8e9+wGY158xJqrpt+J1RvugnVC8V1Jx0DheuCPVtpI461E0BU3ehB+kYieWh/CC7vqH2xq3PAYrCBQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768490275; c=relaxed/simple;
-	bh=jTFTH3131Fis5CbAJus4SHJ/kgT66A+0cWwhxzvlRtk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KVwXnRYkFB5QTK72Jk6KHHFhMvvZBaGqHn9o2QxTYnuJtS0ONCTyaUzivg3yYla1sqRBqJ7ZIt8MdxU/Zbk9ja2G1NCMCeGx2igJZYzrp8hoGVqBv7PmEDRV+NlDaZXSMGbqNkOhnSVDBkSEPFGR6VqSbDZwM11989pnv52dXGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbRc7dCE; arc=none smtp.client-ip=209.85.222.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-93f5910b06cso608101241.0
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 07:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768490265; x=1769095065; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YXRwEaN8uO6WU5lesb4+H7jPtdObtqw7yOYU6DNlFBc=;
-        b=kbRc7dCEZ0txJuQsqZIBWAG2WKNK82M6VZDRJnuj7iTYdWeapgkzjivhQ2Xu/lggDI
-         +Rna5VonYAuYExK4TtZovBKMY6hrirSGZOaIK9JHMY2u+ATAf4o4t2kls27QOTTHGbHu
-         l566MtR+p5ElvvjMN/H52qAnRewqzOiJCwAfDB8NrOWll9jWViSv9tA9dfPq0m6TklUj
-         CKaGILgh8E44cCmUiSIBJUsZYsCuhT20PSCLMmlHr1MqgxqIZiIaP5lfU+FT/StbiSwN
-         UnyMvPoRTyJoeLBvrdF+9WP2+JJTJyPxBDqCed6WFutLqDvKX2nwSqPRhqT3X5dl31/s
-         g/XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768490265; x=1769095065;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YXRwEaN8uO6WU5lesb4+H7jPtdObtqw7yOYU6DNlFBc=;
-        b=PbMcekcuzSg2BAtq427lcGvJZkS1tmTFQHIdeyh/kXy8dRm8KxIVtl/mg+f6+qEYCb
-         UjhqwATG4seF8IOVafjy+v8YH0jrBMtRSmSxGvjo8oAPrkZ0IkPm3oEs+danWYmzayaN
-         xHOPC9rqXfqoXabGY3rdq9surMtXboaknPTqydkISeSY3W3GAiZ+pAyodGaLCRHLnRD4
-         /1vzx4TSa4+G5bld4UfjW+Ue+zOwxHyLl8ZyMSaQCrhPEN3EgsH4CaHaHxkbF303fivi
-         9PoXDJKQ6rbPZWxLv/0n6jn4WCHRTqywwKVor6LVSGhy3Irso8qgYNZPb5TeVVh6GybB
-         KojQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjmMGdVV04tk8zAnGN8/ugJMrlZp2pbY2FYodrqxeuYY4Odsvbme2zkWf7C7K3vWm+5w6saQflkfBl@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjWSCG0m6A/uUxPVGk9gxIi62uDttWaYmztURLMNLVUElntCM0
-	mbIywbwlbQN6HyEvgpmd9WKjhq+uAd9VTiKqj2+bdZ7m8QxjeBgVNfCP
-X-Gm-Gg: AY/fxX7F+KZVMijJyWfonuqIMDh6QW3MaYz+JF6daKl1oFNrFSlwteBNeLLb7xtA7ZQ
-	ZZgjL1qoZS/SSADfAvh4jd/SfDRwZBK9hoGs9wF0ovyZ1juwn0sQ7v5O9mMe3uCR/HOAzgxYSqx
-	vkL/TnnBjrvS4tV3KwzrZCPwEW/c+4Pdg592PPH/Ja/CodYWrtb6omph9BVpyD8MgD2aNWzqzsn
-	Fwo+SkcezqfkP8++OO3KtchHreOr0JPthL3qE8Yt4c9fCfD8Del4LuPRZO7W/k4uipVZR7HFtqe
-	PtD2rzl+xD/BDY7PT6BOoAdtZifgbHI1iTINtdyRY44H7Wj4c+vEE95n9yR/Kk94rSHrJS1feTo
-	JdZfpYJrTH8gBYCnQW0Osz5ngdHCMmq40GihtazC0mAzJLfqZE7z+pp8Yh0rgcGbj0aOo71mAKn
-	EFig1QpoiCRkMYQmPZ8ow9hvpHmCqLVRrKW/UeG3PfBc60B5mVVDE=
-X-Received: by 2002:a05:6102:b09:b0:5ef:afd9:da31 with SMTP id ada2fe7eead31-5f1923fb3abmr1625783137.4.1768490264669;
-        Thu, 15 Jan 2026 07:17:44 -0800 (PST)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770cc6edsm201030056d6.4.2026.01.15.07.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 07:17:44 -0800 (PST)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	quic@lists.linux.dev
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Metzmacher <metze@samba.org>,
-	Moritz Buhl <mbuhl@openbsd.org>,
-	Tyler Fanelli <tfanelli@redhat.com>,
-	Pengtao He <hepengtao@xiaomi.com>,
-	Thomas Dreibholz <dreibh@simula.no>,
-	linux-cifs@vger.kernel.org,
-	Steve French <smfrench@gmail.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Tom Talpey <tom@talpey.com>,
-	kernel-tls-handshake@lists.linux.dev,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Steve Dickson <steved@redhat.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Alexander Aring <aahringo@redhat.com>,
-	David Howells <dhowells@redhat.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	John Ericson <mail@johnericson.me>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	"D . Wythe" <alibuda@linux.alibaba.com>,
-	Jason Baron <jbaron@akamai.com>,
-	illiliti <illiliti@protonmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Daniel Stenberg <daniel@haxx.se>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: [PATCH net-next v7 16/16] quic: add packet parser base
-Date: Thu, 15 Jan 2026 10:11:16 -0500
-Message-ID: <89a67cd3c41feb4e0129bcdcdf0bfe178528c735.1768489876.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1768489876.git.lucien.xin@gmail.com>
-References: <cover.1768489876.git.lucien.xin@gmail.com>
+	s=arc-20240116; t=1768495994; c=relaxed/simple;
+	bh=DlUpTgBVOZ7hdfU5MaDQtdbs1Q+/fhjP1nMdDgPBHyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EP+WYnqBHmECqn6whZohSRUoj8gy5kh7bx8eQ5e1BkhrNVV0RxPH7mHJtmI85YlOl0LK3avR4Ata/+f0MuzxgsHcu11K0DpsWoh8FjKM9brfGBQuPgjmswCvqjJnvo2BMyaKXj2prrXIBLehyuLoD63vNAY6BMoIew7cCKRdgH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OTNicD5S; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Rq3sSbsn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OTNicD5S; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Rq3sSbsn; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 37FA733747;
+	Thu, 15 Jan 2026 16:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768495990; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EUp7vJBm5RwTWETMhegI0NKFZOuxIWgQjM+/1VZyAiY=;
+	b=OTNicD5S+DnlFt+w5IcceK3Vn14l/uA40FtWy5tIg8sWyD11mfpxPgq2WL6N0mHDvd1qkR
+	LR30OsKREqTv+luTdQW4EA2X510iFBHGrdARcqijSaQIrTb4iSOaTpO0Ju7q2zItXKxvgt
+	NFQ4+262AFNwApEIgBL3x5Pz7HE+xfA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768495990;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EUp7vJBm5RwTWETMhegI0NKFZOuxIWgQjM+/1VZyAiY=;
+	b=Rq3sSbsn83NZPdMF10wiY3L7b1jz87k2ealxcBy+5DKXgHhR/f3iKFE3qE3b5R70peyeHg
+	wE3ki/ZMwNgvcXDw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=OTNicD5S;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Rq3sSbsn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768495990; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EUp7vJBm5RwTWETMhegI0NKFZOuxIWgQjM+/1VZyAiY=;
+	b=OTNicD5S+DnlFt+w5IcceK3Vn14l/uA40FtWy5tIg8sWyD11mfpxPgq2WL6N0mHDvd1qkR
+	LR30OsKREqTv+luTdQW4EA2X510iFBHGrdARcqijSaQIrTb4iSOaTpO0Ju7q2zItXKxvgt
+	NFQ4+262AFNwApEIgBL3x5Pz7HE+xfA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768495990;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EUp7vJBm5RwTWETMhegI0NKFZOuxIWgQjM+/1VZyAiY=;
+	b=Rq3sSbsn83NZPdMF10wiY3L7b1jz87k2ealxcBy+5DKXgHhR/f3iKFE3qE3b5R70peyeHg
+	wE3ki/ZMwNgvcXDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 54FC43EA63;
+	Thu, 15 Jan 2026 16:53:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id PAr6BnUbaWnicAAAD6G6ig
+	(envelope-from <ematsumiya@suse.de>); Thu, 15 Jan 2026 16:53:09 +0000
+Date: Thu, 15 Jan 2026 13:53:06 -0300
+From: Enzo Matsumiya <ematsumiya@suse.de>
+To: David Howells <dhowells@redhat.com>
+Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
+	linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	henrique.carvalho@suse.com
+Subject: Re: [PATCH 00/37] cifs: Scripted header file cleanup and SMB1 split
+Message-ID: <sijmvmcozfmtp3rkamjbgr6xk7ola2wlxc2wvs4t4lcanjsaza@w4bcxcxkmyfc>
+References: <20251222223006.1075635-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20251222223006.1075635-1-dhowells@redhat.com>
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Rspamd-Queue-Id: 37FA733747
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-This patch usess 'quic_packet' to handle packing of QUIC packets on the
-receive (RX) path.
+On 12/22, David Howells wrote:
+>Hi Steve,
+>
+>Could you consider taking these patches?  There are two parts to the set.
+>
+>The first part cleans up the formatting of declarations in the header file.
+>They remove the externs, (re)name the arguments in the declarations to
+>match those in the C file and format them to wrap at 79 chars (this is
+>configurable - search for 79 in the script), aligning all the first
+>argument on each line with the char after the opening bracket.
+>
+>I've attached the script below so that you can also run it yourself.  It
+>does all the git manipulation to generate one commit per header file
+>changed.  Run as:
+>
+>	./cifs.pl fs/smb/client/*.[ch]
+>
+>in the kernel source root dir.
+>
+>The script can be rerun later to readjust any added changes.
+>
+>Paulo has given his R-b for this subset (labelled cifs: Scripted clean up).
+>
+>The second part splits the SMB1 parts of cifs protocol layer out into their
+>own files.  cifstransport.c is renamed to smb1transport.c also for
+>consistency, though cifssmb.c is left unrenamed (I could rename that to
+>smb1pdu.c).  This is pretty much all moving stuff around and few actual
+>code changes.  There is one bugfix, though, to cifs_dump_mids().
+>
+>I've left the splitting of the SMB1 parts of the cifs filesystem layer for
+>a future set of patches as that's would involve removing embedded parts of
+>functions and is easier to get wrong.
+>
+>The patches can be found here also:
+>
+>	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-cleanup
+>
+>Thanks,
+>David
 
-It introduces mechanisms to parse the ALPN from client Initial packets
-to determine the correct listener socket. Received packets are then
-routed and processed accordingly. Similar to the TX path, handling for
-application and handshake packets is not yet implemented.
+Acked-by: Enzo Matsumiya <ematsumiya@suse.de>
 
-- quic_packet_parse_alpn()`: Parse the ALPN from a client Initial packet,
-  then locate the appropriate listener using the ALPN.
 
-- quic_packet_rcv(): Locate the appropriate socket to handle the packet
-  via quic_packet_process().
+Cheers,
 
-- quic_packet_process()`: Process the received packet.
+Enzo
 
-In addition to packet flow, this patch adds support for ICMP-based MTU
-updates by locating the relevant socket and updating the stored PMTU
-accordingly.
-
-- quic_packet_rcv_err_pmtu(): Find the socket and update the PMTU via
-  quic_packet_mss_update().
-
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
-v5:
-  - In quic_packet_rcv_err(), remove the unnecessary quic_is_listen()
-    check and move quic_get_mtu_info() out of sock lock (suggested
-    by Paolo).
-  - Replace cancel_work_sync() to disable_work_sync() (suggested by
-    Paolo).
-v6:
-  - Fix the loop using skb_dequeue() in quic_packet_backlog_work(), and
-    kfree_skb() when sk is not found (reported by AI Reviews).
-  - Remove skb_pull() from quic_packet_rcv(), since it is now handled
-    in quic_path_rcv().
-  - Note for AI reviews: add if (dst) check in quic_packet_rcv_err_pmtu(),
-    although quic_packet_route() >= 0 already guarantees it is not NULL.
-  - Note for AI reviews: it is safe to do *plen -= QUIC_HLEN in
-    quic_packet_get_version_and_connid(), since quic_packet_get_sock()
-    already checks if (skb->len < QUIC_HLEN).
-  - Note for AI reviews: cb->length - cb->number_len - QUIC_TAG_LEN
-    cannot underflow, because quic_crypto_header_decrypt() already checks
-    if (cb->length < QUIC_PN_MAX_LEN + QUIC_SAMPLE_LEN).
-  - Note for AI reviews: the cast (u16)length in quic_packet_parse_alpn()
-    is safe, as there is a prior check if (length > (u16)len); len is
-    skb->len, which cannot exceed U16_MAX.
-  - Note for AI reviews: it's correct to do if (flags &
-    QUIC_F_MTU_REDUCED_DEFERRED) in quic_release_cb(), since
-    QUIC_MTU_REDUCED_DEFERRED is the bit used with test_and_set_bit().
-  - Note for AI reviews: move skb_cb->backlog = 1 before adding skb to
-    backlog, although it's safe to write skb_cb after adding to backlog
-    with sk_lock.slock, as skb dequeue from backlog requires sk_lock.slock.
-v7:
-  - Pass udp sk to quic_packet_rcv(), quic_packet_rcv_err() and
-    quic_sock_lookup().
-  - Move the call to skb_linearize() and skb_set_owner_sk_safe() to
-    .quic_path_rcv()/quic_packet_rcv().
----
- net/quic/packet.c   | 644 ++++++++++++++++++++++++++++++++++++++++++++
- net/quic/packet.h   |   9 +
- net/quic/protocol.c |   6 +
- net/quic/protocol.h |   4 +
- net/quic/socket.c   | 134 +++++++++
- net/quic/socket.h   |   5 +
- 6 files changed, 802 insertions(+)
-
-diff --git a/net/quic/packet.c b/net/quic/packet.c
-index 348e760aa197..415eda603355 100644
---- a/net/quic/packet.c
-+++ b/net/quic/packet.c
-@@ -14,6 +14,650 @@
- 
- #define QUIC_HLEN		1
- 
-+#define QUIC_LONG_HLEN(dcid, scid) \
-+	(QUIC_HLEN + QUIC_VERSION_LEN + 1 + (dcid)->len + 1 + (scid)->len)
-+
-+#define QUIC_VERSION_NUM	2
-+
-+/* Supported QUIC versions and their compatible versions. Used for Compatible Version
-+ * Negotiation in rfc9368#section-2.3.
-+ */
-+static u32 quic_versions[QUIC_VERSION_NUM][4] = {
-+	/* Version,	Compatible Versions */
-+	{ QUIC_VERSION_V1,	QUIC_VERSION_V2,	QUIC_VERSION_V1,	0 },
-+	{ QUIC_VERSION_V2,	QUIC_VERSION_V2,	QUIC_VERSION_V1,	0 },
-+};
-+
-+/* Get the compatible version list for a given QUIC version. */
-+u32 *quic_packet_compatible_versions(u32 version)
-+{
-+	u8 i;
-+
-+	for (i = 0; i < QUIC_VERSION_NUM; i++)
-+		if (version == quic_versions[i][0])
-+			return quic_versions[i];
-+	return NULL;
-+}
-+
-+/* Convert version-specific type to internal standard packet type. */
-+static u8 quic_packet_version_get_type(u32 version, u8 type)
-+{
-+	if (version == QUIC_VERSION_V1)
-+		return type;
-+
-+	switch (type) {
-+	case QUIC_PACKET_INITIAL_V2:
-+		return QUIC_PACKET_INITIAL;
-+	case QUIC_PACKET_0RTT_V2:
-+		return QUIC_PACKET_0RTT;
-+	case QUIC_PACKET_HANDSHAKE_V2:
-+		return QUIC_PACKET_HANDSHAKE;
-+	case QUIC_PACKET_RETRY_V2:
-+		return QUIC_PACKET_RETRY;
-+	default:
-+		return -1;
-+	}
-+	return -1;
-+}
-+
-+/* Parse QUIC version and connection IDs (DCID and SCID) from a Long header packet buffer. */
-+static int quic_packet_get_version_and_connid(struct quic_conn_id *dcid, struct quic_conn_id *scid,
-+					      u32 *version, u8 **pp, u32 *plen)
-+{
-+	u64 len, v;
-+
-+	*pp += QUIC_HLEN;
-+	*plen -= QUIC_HLEN;
-+
-+	if (!quic_get_int(pp, plen, &v, QUIC_VERSION_LEN))
-+		return -EINVAL;
-+	*version = v;
-+
-+	if (!quic_get_int(pp, plen, &len, 1) ||
-+	    len > *plen || len > QUIC_CONN_ID_MAX_LEN)
-+		return -EINVAL;
-+	quic_conn_id_update(dcid, *pp, len);
-+	*plen -= len;
-+	*pp += len;
-+
-+	if (!quic_get_int(pp, plen, &len, 1) ||
-+	    len > *plen || len > QUIC_CONN_ID_MAX_LEN)
-+		return -EINVAL;
-+	quic_conn_id_update(scid, *pp, len);
-+	*plen -= len;
-+	*pp += len;
-+	return 0;
-+}
-+
-+/* Change the QUIC version for the connection.
-+ *
-+ * Frees existing initial crypto keys and installs new initial keys compatible with the new
-+ * version.
-+ */
-+static int quic_packet_version_change(struct sock *sk, struct quic_conn_id *dcid, u32 version)
-+{
-+	struct quic_crypto *crypto = quic_crypto(sk, QUIC_CRYPTO_INITIAL);
-+
-+	if (quic_crypto_initial_keys_install(crypto, dcid, version, quic_is_serv(sk)))
-+		return -1;
-+
-+	quic_packet(sk)->version = version;
-+	return 0;
-+}
-+
-+/* Select the best compatible QUIC version from offered list.
-+ *
-+ * Considers the local preferred version, currently chosen version, and versions offered by
-+ * the peer. Selects the best compatible version based on client/server role and updates the
-+ * connection version accordingly.
-+ */
-+int quic_packet_select_version(struct sock *sk, u32 *versions, u8 count)
-+{
-+	struct quic_packet *packet = quic_packet(sk);
-+	struct quic_config *c = quic_config(sk);
-+	u8 i, pref_found = 0, ch_found = 0;
-+	u32 preferred, chosen, best = 0;
-+
-+	preferred = c->version ?: QUIC_VERSION_V1;
-+	chosen = packet->version;
-+
-+	for (i = 0; i < count; i++) {
-+		if (!quic_packet_compatible_versions(versions[i]))
-+			continue;
-+		if (preferred == versions[i])
-+			pref_found = 1;
-+		if (chosen == versions[i])
-+			ch_found = 1;
-+		if (best < versions[i]) /* Track highest offered version. */
-+			best = versions[i];
-+	}
-+
-+	if (!pref_found && !ch_found && !best)
-+		return -1;
-+
-+	if (quic_is_serv(sk)) { /* Server prefers preferred version if offered, else chosen. */
-+		if (pref_found)
-+			best = preferred;
-+		else if (ch_found)
-+			best = chosen;
-+	} else { /* Client prefers chosen version, else preferred. */
-+		if (ch_found)
-+			best = chosen;
-+		else if (pref_found)
-+			best = preferred;
-+	}
-+
-+	if (packet->version == best)
-+		return 0;
-+
-+	/* Change to selected best version. */
-+	return quic_packet_version_change(sk, &quic_paths(sk)->orig_dcid, best);
-+}
-+
-+/* Extracts a QUIC token from a buffer in the Client Initial packet. */
-+static int quic_packet_get_token(struct quic_data *token, u8 **pp, u32 *plen)
-+{
-+	u64 len;
-+
-+	if (!quic_get_var(pp, plen, &len) || len > *plen)
-+		return -EINVAL;
-+	quic_data(token, *pp, len);
-+	*plen -= len;
-+	*pp += len;
-+	return 0;
-+}
-+
-+/* Process PMTU reduction event on a QUIC socket. */
-+void quic_packet_rcv_err_pmtu(struct sock *sk)
-+{
-+	struct quic_path_group *paths = quic_paths(sk);
-+	struct quic_packet *packet = quic_packet(sk);
-+	struct quic_config *c = quic_config(sk);
-+	u32 pathmtu, info, taglen;
-+	struct dst_entry *dst;
-+	bool reset_timer;
-+
-+	if (!ip_sk_accept_pmtu(sk))
-+		return;
-+
-+	info = clamp(paths->mtu_info, QUIC_PATH_MIN_PMTU, QUIC_PATH_MAX_PMTU);
-+	/* If PLPMTUD is not enabled, update MSS using the route and ICMP info. */
-+	if (!c->plpmtud_probe_interval) {
-+		if (quic_packet_route(sk) < 0)
-+			return;
-+
-+		dst = __sk_dst_get(sk);
-+		if (dst)
-+			dst->ops->update_pmtu(dst, sk, NULL, info, true);
-+		quic_packet_mss_update(sk, info - packet->hlen);
-+		return;
-+	}
-+	/* PLPMTUD is enabled: adjust to smaller PMTU, subtract headers and AEAD tag.  Also
-+	 * notify the QUIC path layer for possible state changes and probing.
-+	 */
-+	taglen = quic_packet_taglen(packet);
-+	info = info - packet->hlen - taglen;
-+	pathmtu = quic_path_pl_toobig(paths, info, &reset_timer);
-+	if (reset_timer)
-+		quic_timer_reset(sk, QUIC_TIMER_PMTU, c->plpmtud_probe_interval);
-+	if (pathmtu)
-+		quic_packet_mss_update(sk, pathmtu + taglen);
-+}
-+
-+/* Handle ICMP Toobig packet and update QUIC socket path MTU. */
-+static int quic_packet_rcv_err(struct sock *sk, struct sk_buff *skb)
-+{
-+	union quic_addr daddr, saddr;
-+	u32 info;
-+
-+	/* All we can do is lookup the matching QUIC socket by addresses. */
-+	quic_get_msg_addrs(skb, &saddr, &daddr);
-+	sk = quic_sock_lookup(skb, &daddr, &saddr, sk, NULL);
-+	if (!sk)
-+		return -ENOENT;
-+
-+	if (quic_get_mtu_info(skb, &info)) {
-+		sock_put(sk);
-+		return 0;
-+	}
-+
-+	/* Success: update socket path MTU info. */
-+	bh_lock_sock(sk);
-+	quic_paths(sk)->mtu_info = info;
-+	if (sock_owned_by_user(sk)) {
-+		/* Socket is in use by userspace context.  Defer MTU processing to later via
-+		 * tasklet.  Ensure the socket is not dropped before deferral.
-+		 */
-+		if (!test_and_set_bit(QUIC_MTU_REDUCED_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
-+	}
-+	/* Otherwise, process the MTU reduction now. */
-+	quic_packet_rcv_err_pmtu(sk);
-+out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
-+	return 1;
-+}
-+
-+#define QUIC_PACKET_BACKLOG_MAX		4096
-+
-+/* Queue a packet for later processing when sleeping is allowed. */
-+static int quic_packet_backlog_schedule(struct net *net, struct sk_buff *skb)
-+{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct quic_net *qn = quic_net(net);
-+
-+	if (cb->backlog)
-+		return 0;
-+
-+	if (skb_queue_len_lockless(&qn->backlog_list) >= QUIC_PACKET_BACKLOG_MAX) {
-+		QUIC_INC_STATS(net, QUIC_MIB_PKT_RCVDROP);
-+		kfree_skb(skb);
-+		return -1;
-+	}
-+
-+	cb->backlog = 1;
-+	skb_queue_tail(&qn->backlog_list, skb);
-+	queue_work(quic_wq, &qn->work);
-+	return 1;
-+}
-+
-+#define TLS_MT_CLIENT_HELLO	1
-+#define TLS_EXT_alpn		16
-+
-+/*  TLS Client Hello Msg:
-+ *
-+ *    uint16 ProtocolVersion;
-+ *    opaque Random[32];
-+ *    uint8 CipherSuite[2];
-+ *
-+ *    struct {
-+ *        ExtensionType extension_type;
-+ *        opaque extension_data<0..2^16-1>;
-+ *    } Extension;
-+ *
-+ *    struct {
-+ *        ProtocolVersion legacy_version = 0x0303;
-+ *        Random rand;
-+ *        opaque legacy_session_id<0..32>;
-+ *        CipherSuite cipher_suites<2..2^16-2>;
-+ *        opaque legacy_compression_methods<1..2^8-1>;
-+ *        Extension extensions<8..2^16-1>;
-+ *    } ClientHello;
-+ */
-+
-+#define TLS_CH_RANDOM_LEN	32
-+#define TLS_CH_VERSION_LEN	2
-+
-+/* Extract ALPN data from a TLS ClientHello message.
-+ *
-+ * Parses the TLS ClientHello handshake message to find the ALPN (Application Layer Protocol
-+ * Negotiation) TLS extension. It validates the TLS ClientHello structure, including version,
-+ * random, session ID, cipher suites, compression methods, and extensions. Once the ALPN
-+ * extension is found, the ALPN protocols list is extracted and stored in @alpn.
-+ *
-+ * Return: 0 on success or no ALPN found, a negative error code on failed parsing.
-+ */
-+static int quic_packet_get_alpn(struct quic_data *alpn, u8 *p, u32 len)
-+{
-+	int err = -EINVAL, found = 0;
-+	u64 length, type;
-+
-+	/* Verify handshake message type (ClientHello) and its length. */
-+	if (!quic_get_int(&p, &len, &type, 1) || type != TLS_MT_CLIENT_HELLO)
-+		return err;
-+	if (!quic_get_int(&p, &len, &length, 3) ||
-+	    length < TLS_CH_RANDOM_LEN + TLS_CH_VERSION_LEN)
-+		return err;
-+	if (len > (u32)length) /* Limit len to handshake message length if larger. */
-+		len = length;
-+	/* Skip legacy_version (2 bytes) + random (32 bytes). */
-+	p += TLS_CH_RANDOM_LEN + TLS_CH_VERSION_LEN;
-+	len -= TLS_CH_RANDOM_LEN + TLS_CH_VERSION_LEN;
-+	/* legacy_session_id_len must be zero (QUIC requirement). */
-+	if (!quic_get_int(&p, &len, &length, 1) || length)
-+		return err;
-+
-+	/* Skip cipher_suites (2 bytes length + variable data). */
-+	if (!quic_get_int(&p, &len, &length, 2) || length > (u64)len)
-+		return err;
-+	len -= length;
-+	p += length;
-+
-+	/* Skip legacy_compression_methods (1 byte length + variable data). */
-+	if (!quic_get_int(&p, &len, &length, 1) || length > (u64)len)
-+		return err;
-+	len -= length;
-+	p += length;
-+
-+	if (!quic_get_int(&p, &len, &length, 2)) /* Read TLS extensions length (2 bytes). */
-+		return err;
-+	if (len > (u32)length) /* Limit len to extensions length if larger. */
-+		len = length;
-+	while (len > 4) { /* Iterate over extensions to find ALPN (type TLS_EXT_alpn). */
-+		if (!quic_get_int(&p, &len, &type, 2))
-+			break;
-+		if (!quic_get_int(&p, &len, &length, 2))
-+			break;
-+		if (len < (u32)length) /* Incomplete TLS extensions. */
-+			return 0;
-+		if (type == TLS_EXT_alpn) { /* Found ALPN extension. */
-+			len = length;
-+			found = 1;
-+			break;
-+		}
-+		/* Skip non-ALPN extensions. */
-+		p += length;
-+		len -= length;
-+	}
-+	if (!found) { /* no ALPN extension found: set alpn->len = 0 and alpn->data = p. */
-+		quic_data(alpn, p, 0);
-+		return 0;
-+	}
-+
-+	/* Parse ALPN protocols list length (2 bytes). */
-+	if (!quic_get_int(&p, &len, &length, 2) || length > (u64)len)
-+		return err;
-+	quic_data(alpn, p, length); /* Store ALPN protocols list in alpn->data. */
-+	len = length;
-+	while (len) { /* Validate ALPN protocols list format. */
-+		if (!quic_get_int(&p, &len, &length, 1) || length > (u64)len) {
-+			/* Malformed ALPN entry: set alpn->len = 0 and alpn->data = NULL. */
-+			quic_data(alpn, NULL, 0);
-+			return err;
-+		}
-+		len -= length;
-+		p += length;
-+	}
-+	pr_debug("%s: alpn_len: %d\n", __func__, alpn->len);
-+	return 0;
-+}
-+
-+/* Parse ALPN from a QUIC Initial packet.
-+ *
-+ * This function processes a QUIC Initial packet to extract the ALPN from the TLS ClientHello
-+ * message inside the QUIC CRYPTO frame. It verifies packet type, version compatibility,
-+ * decrypts the packet payload, and locates the CRYPTO frame to parse the TLS ClientHello.
-+ * Finally, it calls quic_packet_get_alpn() to extract the ALPN extension data.
-+ *
-+ * Return: 0 on success or no ALPN found, a negative error code on failed parsing.
-+ */
-+static int quic_packet_parse_alpn(struct sk_buff *skb, struct quic_data *alpn)
-+{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct net *net = sock_net(skb->sk);
-+	u8 *p = skb->data, *data, type;
-+	struct quic_conn_id dcid, scid;
-+	u32 len = skb->len, version;
-+	struct quic_crypto *crypto;
-+	struct quic_data token;
-+	u64 offset, length;
-+	int err = -EINVAL;
-+
-+	if (!sysctl_quic_alpn_demux)
-+		return 0;
-+	if (quic_packet_get_version_and_connid(&dcid, &scid, &version, &p, &len))
-+		return err;
-+	if (!quic_packet_compatible_versions(version))
-+		return 0;
-+	/* Only parse Initial packets. */
-+	type = quic_packet_version_get_type(version, quic_hshdr(skb)->type);
-+	if (type != QUIC_PACKET_INITIAL)
-+		return 0;
-+	if (quic_packet_get_token(&token, &p, &len))
-+		return err;
-+	if (!quic_get_var(&p, &len, &length) || length > (u64)len)
-+		return err;
-+	if (!cb->backlog) { /* skb_get() needed as caller will free skb on this path. */
-+		quic_packet_backlog_schedule(net, skb_get(skb));
-+		return err;
-+	}
-+	cb->length = (u16)length;
-+	/* Copy skb data for restoring in case of decrypt failure. */
-+	data = kmemdup(skb->data, skb->len, GFP_ATOMIC);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	/* Install initial keys for packet decryption to crypto. */
-+	crypto = &quic_net(net)->crypto;
-+	err = quic_crypto_initial_keys_install(crypto, &dcid, version, 1);
-+	if (err)
-+		goto out;
-+	cb->number_offset = (u16)(p - skb->data);
-+	err = quic_crypto_decrypt(crypto, skb);
-+	if (err) {
-+		QUIC_INC_STATS(net, QUIC_MIB_PKT_DECDROP);
-+		/* Restore original data on decrypt failure. */
-+		memcpy(skb->data, data, skb->len);
-+		goto out;
-+	}
-+
-+	QUIC_INC_STATS(net, QUIC_MIB_PKT_DECFASTPATHS);
-+	cb->resume = 1; /* Mark this packet as already decrypted. */
-+
-+	/* Find the QUIC CRYPTO frame. */
-+	p += cb->number_len;
-+	len = cb->length - cb->number_len - QUIC_TAG_LEN;
-+	for (; len && !(*p); p++, len--) /* Skip the padding frame. */
-+		;
-+	if (!len-- || *p++ != QUIC_FRAME_CRYPTO)
-+		goto out;
-+	if (!quic_get_var(&p, &len, &offset) || offset)
-+		goto out;
-+	if (!quic_get_var(&p, &len, &length) || length > (u64)len)
-+		goto out;
-+
-+	/* Parse the TLS CLIENT_HELLO message. */
-+	err = quic_packet_get_alpn(alpn, p, length);
-+
-+out:
-+	kfree(data);
-+	return err;
-+}
-+
-+/* Extract the Destination Connection ID (DCID) from a QUIC Long header packet. */
-+int quic_packet_get_dcid(struct quic_conn_id *dcid, struct sk_buff *skb)
-+{
-+	u32 plen = skb->len;
-+	u8 *p = skb->data;
-+	u64 len;
-+
-+	if (plen < QUIC_HLEN + QUIC_VERSION_LEN)
-+		return -EINVAL;
-+	plen -= (QUIC_HLEN + QUIC_VERSION_LEN);
-+	p += (QUIC_HLEN + QUIC_VERSION_LEN);
-+
-+	if (!quic_get_int(&p, &plen, &len, 1) ||
-+	    len > plen || len > QUIC_CONN_ID_MAX_LEN)
-+		return -EINVAL;
-+	quic_conn_id_update(dcid, p, len);
-+	return 0;
-+}
-+
-+/* Lookup listening socket for Client Initial packet (in process context). */
-+static struct sock *quic_packet_get_listen_sock(struct sk_buff *skb)
-+{
-+	union quic_addr daddr, saddr;
-+	struct quic_data alpns = {};
-+	struct sock *sk;
-+
-+	quic_get_msg_addrs(skb, &daddr, &saddr);
-+
-+	if (quic_packet_parse_alpn(skb, &alpns))
-+		return NULL;
-+
-+	local_bh_disable();
-+	sk = quic_listen_sock_lookup(skb, &daddr, &saddr, &alpns);
-+	local_bh_enable();
-+
-+	return sk;
-+}
-+
-+/* Determine the QUIC socket associated with an incoming packet. */
-+static struct sock *quic_packet_get_sock(struct sk_buff *skb)
-+{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct net *net = sock_net(skb->sk);
-+	struct quic_conn_id dcid, *conn_id;
-+	union quic_addr daddr, saddr;
-+	struct quic_data alpns = {};
-+	struct sock *sk = NULL;
-+
-+	if (skb->len < QUIC_HLEN)
-+		return NULL;
-+
-+	if (!quic_hdr(skb)->form) { /* Short header path. */
-+		if (skb->len < QUIC_HLEN + QUIC_CONN_ID_DEF_LEN)
-+			return NULL;
-+		/* Fast path: look up QUIC connection by fixed-length DCID
-+		 * (Currently, only source CIDs of size QUIC_CONN_ID_DEF_LEN are used).
-+		 */
-+		conn_id = quic_conn_id_lookup(net, skb->data + QUIC_HLEN,
-+					      QUIC_CONN_ID_DEF_LEN);
-+		if (conn_id) {
-+			cb->seqno = quic_conn_id_number(conn_id);
-+			return quic_conn_id_sk(conn_id); /* Return associated socket. */
-+		}
-+
-+		/* Fallback: listener socket lookup
-+		 * (May be used to send a stateless reset from a listen socket).
-+		 */
-+		quic_get_msg_addrs(skb, &daddr, &saddr);
-+		sk = quic_listen_sock_lookup(skb, &daddr, &saddr, &alpns);
-+		if (sk)
-+			return sk;
-+		/* Final fallback: address-based connection lookup
-+		 * (May be used to receive a stateless reset).
-+		 */
-+		return quic_sock_lookup(skb, &daddr, &saddr, skb->sk, NULL);
-+	}
-+
-+	/* Long header path. */
-+	if (quic_packet_get_dcid(&dcid, skb))
-+		return NULL;
-+	/* Fast path: look up QUIC connection by parsed DCID. */
-+	conn_id = quic_conn_id_lookup(net, dcid.data, dcid.len);
-+	if (conn_id) {
-+		cb->seqno = quic_conn_id_number(conn_id);
-+		return quic_conn_id_sk(conn_id); /* Return associated socket. */
-+	}
-+
-+	/* Fallback: address + DCID lookup
-+	 * (May be used for 0-RTT or a follow-up Client Initial packet).
-+	 */
-+	quic_get_msg_addrs(skb, &daddr, &saddr);
-+	sk = quic_sock_lookup(skb, &daddr, &saddr, skb->sk, &dcid);
-+	if (sk)
-+		return sk;
-+	/* Final fallback: listener socket lookup
-+	 * (Used for receiving the first Client Initial packet).
-+	 */
-+	if (quic_packet_parse_alpn(skb, &alpns))
-+		return NULL;
-+	return quic_listen_sock_lookup(skb, &daddr, &saddr, &alpns);
-+}
-+
-+/* Entry point for processing received QUIC packets. */
-+int quic_packet_rcv(struct sock *sk, struct sk_buff *skb, u8 err)
-+{
-+	struct net *net = sock_net(sk);
-+
-+	if (unlikely(err))
-+		return quic_packet_rcv_err(sk, skb);
-+
-+	/* Save the UDP socket to skb->sk for later QUIC socket lookup. */
-+	if (skb_linearize(skb) || !skb_set_owner_sk_safe(skb, sk)) {
-+		QUIC_INC_STATS(net, QUIC_MIB_PKT_RCVDROP);
-+		goto err;
-+	}
-+
-+	/* Look up socket from socket or connection IDs hash tables. */
-+	sk = quic_packet_get_sock(skb);
-+	if (!sk)
-+		goto err;
-+
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		/* Socket is busy (owned by user context): queue to backlog. */
-+		QUIC_SKB_CB(skb)->backlog = 1;
-+		if (sk_add_backlog(sk, skb, READ_ONCE(sk->sk_rcvbuf))) {
-+			QUIC_INC_STATS(net, QUIC_MIB_PKT_RCVDROP);
-+			bh_unlock_sock(sk);
-+			sock_put(sk);
-+			goto err;
-+		}
-+		QUIC_INC_STATS(net, QUIC_MIB_PKT_RCVBACKLOGS);
-+	} else {
-+		/* Socket not busy: process immediately. */
-+		QUIC_INC_STATS(net, QUIC_MIB_PKT_RCVFASTPATHS);
-+		sk->sk_backlog_rcv(sk, skb); /* quic_packet_process(). */
-+	}
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
-+	return 0;
-+
-+err:
-+	kfree_skb(skb);
-+	return -EINVAL;
-+}
-+
-+static int quic_packet_listen_process(struct sock *sk, struct sk_buff *skb)
-+{
-+	kfree_skb(skb);
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_packet_handshake_process(struct sock *sk, struct sk_buff *skb)
-+{
-+	kfree_skb(skb);
-+	return -EOPNOTSUPP;
-+}
-+
-+static int quic_packet_app_process(struct sock *sk, struct sk_buff *skb)
-+{
-+	kfree_skb(skb);
-+	return -EOPNOTSUPP;
-+}
-+
-+int quic_packet_process(struct sock *sk, struct sk_buff *skb)
-+{
-+	if (quic_is_closed(sk)) {
-+		kfree_skb(skb);
-+		return 0;
-+	}
-+
-+	if (quic_is_listen(sk))
-+		return quic_packet_listen_process(sk, skb);
-+
-+	if (quic_hdr(skb)->form)
-+		return quic_packet_handshake_process(sk, skb);
-+
-+	return quic_packet_app_process(sk, skb);
-+}
-+
-+/* Work function to process packets in the backlog queue. */
-+void quic_packet_backlog_work(struct work_struct *work)
-+{
-+	struct quic_net *qn = container_of(work, struct quic_net, work);
-+	struct sk_buff_head *head = &qn->backlog_list;
-+	struct sk_buff *skb;
-+	struct sock *sk;
-+
-+	while ((skb = skb_dequeue(head)) != NULL) {
-+		sk = quic_packet_get_listen_sock(skb);
-+		if (!sk) {
-+			kfree_skb(skb);
-+			continue;
-+		}
-+
-+		lock_sock(sk);
-+		quic_packet_process(sk, skb);
-+		release_sock(sk);
-+		sock_put(sk);
-+	}
-+}
-+
- /* Make these fixed for easy coding. */
- #define QUIC_PACKET_NUMBER_LEN	QUIC_PN_MAX_LEN
- #define QUIC_PACKET_LENGTH_LEN	4
-diff --git a/net/quic/packet.h b/net/quic/packet.h
-index 85efeba6199b..f40b8a3bb377 100644
---- a/net/quic/packet.h
-+++ b/net/quic/packet.h
-@@ -110,6 +110,7 @@ static inline void quic_packet_reset(struct quic_packet *packet)
- }
- 
- int quic_packet_tail(struct sock *sk, struct quic_frame *frame);
-+int quic_packet_process(struct sock *sk, struct sk_buff *skb);
- int quic_packet_config(struct sock *sk, u8 level, u8 path);
- 
- int quic_packet_xmit(struct sock *sk, struct sk_buff *skb);
-@@ -119,3 +120,11 @@ int quic_packet_route(struct sock *sk);
- void quic_packet_mss_update(struct sock *sk, u32 mss);
- void quic_packet_flush(struct sock *sk);
- void quic_packet_init(struct sock *sk);
-+
-+int quic_packet_get_dcid(struct quic_conn_id *dcid, struct sk_buff *skb);
-+int quic_packet_select_version(struct sock *sk, u32 *versions, u8 count);
-+u32 *quic_packet_compatible_versions(u32 version);
-+
-+int quic_packet_rcv(struct sock *sk, struct sk_buff *skb, u8 err);
-+void quic_packet_backlog_work(struct work_struct *work);
-+void quic_packet_rcv_err_pmtu(struct sock *sk);
-diff --git a/net/quic/protocol.c b/net/quic/protocol.c
-index 0aa8944e984c..4daa596e9ff1 100644
---- a/net/quic/protocol.c
-+++ b/net/quic/protocol.c
-@@ -274,6 +274,9 @@ static int __net_init quic_net_init(struct net *net)
- 		return err;
- 	}
- 
-+	INIT_WORK(&qn->work, quic_packet_backlog_work);
-+	skb_queue_head_init(&qn->backlog_list);
-+
- #if IS_ENABLED(CONFIG_PROC_FS)
- 	err = quic_net_proc_init(net);
- 	if (err) {
-@@ -292,6 +295,8 @@ static void __net_exit quic_net_exit(struct net *net)
- #if IS_ENABLED(CONFIG_PROC_FS)
- 	quic_net_proc_exit(net);
- #endif
-+	skb_queue_purge(&qn->backlog_list);
-+	disable_work_sync(&qn->work);
- 	quic_crypto_free(&qn->crypto);
- 	free_percpu(qn->stat);
- 	qn->stat = NULL;
-@@ -341,6 +346,7 @@ static __init int quic_init(void)
- 	sysctl_quic_wmem[1] = 16 * 1024;
- 	sysctl_quic_wmem[2] = max(64 * 1024, max_share);
- 
-+	quic_path_init(quic_packet_rcv);
- 	quic_crypto_init();
- 
- 	quic_frame_cachep = kmem_cache_create("quic_frame", sizeof(struct quic_frame),
-diff --git a/net/quic/protocol.h b/net/quic/protocol.h
-index 9a798a1c57c4..3722e3604da8 100644
---- a/net/quic/protocol.h
-+++ b/net/quic/protocol.h
-@@ -50,6 +50,10 @@ struct quic_net {
- 	struct proc_dir_entry *proc_net;	/* procfs entry for dumping QUIC socket stats */
- #endif
- 	struct quic_crypto crypto;	/* Context for decrypting Initial packets for ALPN */
-+
-+	/* Queue of packets deferred for processing in process context */
-+	struct sk_buff_head backlog_list;
-+	struct work_struct work;	/* Work scheduled to drain and process backlog_list */
- };
- 
- struct quic_net *quic_net(struct net *net);
-diff --git a/net/quic/socket.c b/net/quic/socket.c
-index f73d25cd16e9..8232e677d96b 100644
---- a/net/quic/socket.c
-+++ b/net/quic/socket.c
-@@ -24,6 +24,134 @@ static void quic_enter_memory_pressure(struct sock *sk)
- 	WRITE_ONCE(quic_memory_pressure, 1);
- }
- 
-+/* Lookup a connected QUIC socket based on address and dest connection ID.
-+ *
-+ * This function searches the established (non-listening) QUIC socket table for a socket that
-+ * matches the source and dest addresses and, optionally, the dest connection ID (DCID). The
-+ * value returned by quic_path_orig_dcid() might be the original dest connection ID from the
-+ * ClientHello or the Source Connection ID from a Retry packet before.
-+ *
-+ * The DCID is provided from a handshake packet when searching by source connection ID fails,
-+ * such as when the peer has not yet received server's response and updated the DCID.
-+ *
-+ * Return: A pointer to the matching connected socket, or NULL if no match is found.
-+ */
-+struct sock *quic_sock_lookup(struct sk_buff *skb, union quic_addr *sa, union quic_addr *da,
-+			      struct sock *usk, struct quic_conn_id *dcid)
-+{
-+	struct net *net = sock_net(usk);
-+	struct quic_path_group *paths;
-+	struct hlist_nulls_node *node;
-+	struct quic_shash_head *head;
-+	struct sock *sk = NULL, *tmp;
-+	unsigned int hash;
-+
-+	hash = quic_sock_hash(net, sa, da);
-+	head = quic_sock_head(hash);
-+
-+	rcu_read_lock();
-+begin:
-+	sk_nulls_for_each_rcu(tmp, node, &head->head) {
-+		if (net != sock_net(tmp))
-+			continue;
-+		paths = quic_paths(tmp);
-+		if (quic_cmp_sk_addr(tmp, quic_path_saddr(paths, 0), sa) &&
-+		    quic_cmp_sk_addr(tmp, quic_path_daddr(paths, 0), da) &&
-+		    quic_path_usock(paths, 0) == usk &&
-+		    (!dcid || !quic_conn_id_cmp(quic_path_orig_dcid(paths), dcid))) {
-+			sk = tmp;
-+			break;
-+		}
-+	}
-+	/* If the nulls value we got at the end of the iteration is different from the expected
-+	 * one, we must restart the lookup as the list was modified concurrently.
-+	 */
-+	if (!sk && get_nulls_value(node) != hash)
-+		goto begin;
-+
-+	if (sk && unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-+		sk = NULL;
-+	rcu_read_unlock();
-+	return sk;
-+}
-+
-+/* Find the listening QUIC socket for an incoming packet.
-+ *
-+ * This function searches the QUIC socket table for a listening socket that matches the dest
-+ * address and port, and the ALPN(s) if presented in the ClientHello.  If multiple listening
-+ * sockets are bound to the same address, port, and ALPN(s) (e.g., via SO_REUSEPORT), this
-+ * function selects a socket from the reuseport group.
-+ *
-+ * Return: A pointer to the matching listening socket, or NULL if no match is found.
-+ */
-+struct sock *quic_listen_sock_lookup(struct sk_buff *skb, union quic_addr *sa, union quic_addr *da,
-+				     struct quic_data *alpns)
-+{
-+	struct net *net = sock_net(skb->sk);
-+	struct hlist_nulls_node *node;
-+	struct sock *sk = NULL, *tmp;
-+	struct quic_shash_head *head;
-+	struct quic_data alpn;
-+	union quic_addr *a;
-+	u32 hash, len;
-+	u64 length;
-+	u8 *p;
-+
-+	hash = quic_listen_sock_hash(net, ntohs(sa->v4.sin_port));
-+	head = quic_listen_sock_head(hash);
-+
-+	rcu_read_lock();
-+begin:
-+	if (!alpns->len) { /* No ALPN entries present or failed to parse the ALPNs. */
-+		sk_nulls_for_each_rcu(tmp, node, &head->head) {
-+			/* If alpns->data != NULL, TLS parsing succeeded but no ALPN was found.
-+			 * In this case, only match sockets that have no ALPN set.
-+			 */
-+			a = quic_path_saddr(quic_paths(tmp), 0);
-+			if (net == sock_net(tmp) && quic_cmp_sk_addr(tmp, a, sa) &&
-+			    quic_path_usock(quic_paths(tmp), 0) == skb->sk &&
-+			    (!alpns->data || !quic_alpn(tmp)->len)) {
-+				sk = tmp;
-+				if (!quic_is_any_addr(a)) /* Prefer specific address match. */
-+					break;
-+			}
-+		}
-+		goto out;
-+	}
-+
-+	/* ALPN present: loop through each ALPN entry. */
-+	for (p = alpns->data, len = alpns->len; len; len -= length, p += length) {
-+		quic_get_int(&p, &len, &length, 1);
-+		quic_data(&alpn, p, length);
-+		sk_nulls_for_each_rcu(tmp, node, &head->head) {
-+			a = quic_path_saddr(quic_paths(tmp), 0);
-+			if (net == sock_net(tmp) && quic_cmp_sk_addr(tmp, a, sa) &&
-+			    quic_path_usock(quic_paths(tmp), 0) == skb->sk &&
-+			    quic_data_has(quic_alpn(tmp), &alpn)) {
-+				sk = tmp;
-+				if (!quic_is_any_addr(a))
-+					break;
-+			}
-+		}
-+		if (sk)
-+			break;
-+	}
-+out:
-+	/* If the nulls value we got at the end of the iteration is different from the expected
-+	 * one, we must restart the lookup as the list was modified concurrently.
-+	 */
-+	if (!sk && get_nulls_value(node) != hash)
-+		goto begin;
-+
-+	if (sk && sk->sk_reuseport)
-+		sk = reuseport_select_sock(sk, quic_addr_hash(net, da), skb, 1);
-+
-+	if (sk && unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-+		sk = NULL;
-+	rcu_read_unlock();
-+	return sk;
-+}
-+
- static void quic_write_space(struct sock *sk)
- {
- 	struct socket_wq *wq;
-@@ -208,6 +336,10 @@ static void quic_release_cb(struct sock *sk)
- 		nflags = flags & ~QUIC_DEFERRED_ALL;
- 	} while (!try_cmpxchg(&sk->sk_tsq_flags, &flags, nflags));
- 
-+	if (flags & QUIC_F_MTU_REDUCED_DEFERRED) {
-+		quic_packet_rcv_err_pmtu(sk);
-+		__sock_put(sk);
-+	}
- 	if (flags & QUIC_F_LOSS_DEFERRED) {
- 		quic_timer_loss_handler(sk);
- 		__sock_put(sk);
-@@ -257,6 +389,7 @@ struct proto quic_prot = {
- 	.accept		=  quic_accept,
- 	.hash		=  quic_hash,
- 	.unhash		=  quic_unhash,
-+	.backlog_rcv	=  quic_packet_process,
- 	.release_cb	=  quic_release_cb,
- 	.no_autobind	=  true,
- 	.obj_size	=  sizeof(struct quic_sock),
-@@ -287,6 +420,7 @@ struct proto quicv6_prot = {
- 	.accept		=  quic_accept,
- 	.hash		=  quic_hash,
- 	.unhash		=  quic_unhash,
-+	.backlog_rcv	=  quic_packet_process,
- 	.release_cb	=  quic_release_cb,
- 	.no_autobind	=  true,
- 	.obj_size	= sizeof(struct quic6_sock),
-diff --git a/net/quic/socket.h b/net/quic/socket.h
-index a463b80a76fc..f0b959c1c676 100644
---- a/net/quic/socket.h
-+++ b/net/quic/socket.h
-@@ -207,3 +207,8 @@ static inline void quic_set_state(struct sock *sk, int state)
- 	inet_sk_set_state(sk, state);
- 	sk->sk_state_change(sk);
- }
-+
-+struct sock *quic_listen_sock_lookup(struct sk_buff *skb, union quic_addr *sa, union quic_addr *da,
-+				     struct quic_data *alpns);
-+struct sock *quic_sock_lookup(struct sk_buff *skb, union quic_addr *sa, union quic_addr *da,
-+			      struct sock *usk, struct quic_conn_id *dcid);
--- 
-2.47.1
-
+>---
+>	#!/usr/bin/perl -w
+>	use strict;
+>	unless (@ARGV) {
+>	    die "Usage: $0 <c_file1> [<c_file2> ...]\n";
+>	}
+>
+>	# Data tracking
+>	my %funcs = ();		# Func name => { func prototype }
+>	my %headers = ();	# Header filename => { header content }
+>	my %c_files = ();	# C filename => { ordered func list, header pref }
+>	my %cmarkers = ();	# C filename marker => { header filename it's in }
+>
+>	# Parse state
+>	my $pathname = "-";
+>	my $lineno = 0;
+>
+>	sub error(@) {
+>	    print STDERR $pathname, ":", $lineno, ": ", @_, "\n";
+>	    exit(1);
+>	}
+>
+>	sub pad($) {
+>	    # Reindent the function arguments to line the arguments up with the char
+>	    # after the opening bracket on the func argument list
+>	    my ($lines) = @_;
+>	    return $lines if ($#{$lines} <= 0);
+>	    my $has_empty = 0;
+>	    for (my $i = 0; $i <= $#{$lines}; $i++) {
+>		$lines->[$i] =~ s/^[ \t]+//;
+>		$has_empty = 1 if ($lines->[$i] eq "");
+>	    }
+>
+>	    if ($has_empty) {
+>		my @clean = grep /.+/, @{$lines};
+>		$lines = \@clean;
+>	    }
+>
+>	    my $indlen = index($lines->[0], "(");
+>	    return $lines if ($indlen < 0);
+>	    my $indent = "";
+>	    $indlen++;
+>	    $indent .= "\t" x ($indlen / 8);
+>	    $indent .= " " x ($indlen % 8);
+>
+>	    my @padded = ();
+>	    my $acc = "";
+>	    my $len = -$indlen;
+>	    for (my $i = 0; $i <= $#{$lines}; $i++) {
+>		my $argument = $lines->[$i];
+>		my $arglen = length($argument);
+>		my $last = ($i == $#{$lines} ? 1 : 0);
+>
+>		if ($i == 0 ||
+>		    $i == 1) {
+>		    $acc .= $argument;
+>		    $acc .= ";" if ($last);
+>		    $len += $arglen + $last;
+>		    next;
+>		}
+>		if (!$acc) {
+>		    $acc = $indent . $argument;
+>		    $acc .= ";" if ($last);
+>		    $len += $arglen + $last;
+>		    next;
+>		}
+>		if ($indlen + $len + 1 + $arglen + $last > 79) {
+>		    push @padded, $acc;
+>		    $acc = $indent . $argument;
+>		    $acc .= ";" if ($last);
+>		    $len = $arglen + $last;
+>		    next;
+>		}
+>
+>		$acc .= " " . $argument;
+>		$acc .= ";" if ($last);
+>		$len += 1 + $arglen + $last;
+>	    }
+>	    push @padded, $acc if ($acc);
+>	    return \@padded;
+>	}
+>
+>	sub earliest(@) {
+>	    my $ret = -1;
+>	    foreach (@_) {
+>		$ret = $_ if ($ret < 0 || ($_ >= 0 && $_ < $ret));
+>	    }
+>	    return $ret;
+>	}
+>
+>	foreach my $file (@ARGV) {
+>	    # Open the file for reading.
+>	    next if $file =~ /trace[.]h$/;
+>	    next if $file =~ /smbdirect[.][ch]$/;
+>	    open my $fh, "<$file"
+>		or die "Could not open file '$file'";
+>	    $pathname = $file;
+>	    $lineno = 0;
+>
+>	    my $filename;
+>	    my @file_content = ();
+>	    my @copy = ();
+>
+>	    my $state = 0;
+>	    my $qual = "";
+>	    my $type = "";
+>	    my $funcname = "";
+>	    my @funcdef = ();
+>	    my $bracket = 0;
+>	    my $comment = 0;
+>	    my $smb1 = 0;
+>	    my $header = 0;
+>	    my $inline = 0;
+>	    my $file_marker = "";
+>	    my $config = "";
+>	    my $c_file = 0;
+>
+>	    $filename = $pathname;
+>	    $filename =~ s!.*/!!;
+>
+>	    if ($file =~ m!.h$!) {
+>		my %new_h_file = (
+>		    path    => $pathname,
+>		    fname   => $filename,
+>		    content => [],
+>		    );
+>		$header = \%new_h_file;
+>		$headers{$filename} = \%new_h_file;
+>	    } elsif ($file =~ m!.c$!) {
+>		my %new_c_file = (
+>		    path  => $pathname,
+>		    fname => $filename,
+>		    funcs => [],
+>		    );
+>		$c_file = \%new_c_file;
+>		$c_files{$filename} = \%new_c_file;
+>	    } else {
+>		warn("Ignoring unexpected file $file\n");
+>		next;
+>	    }
+>
+>	    $smb1 = 1 if ($file =~ m!/smb1ops.c|/cifssmb.c|/cifstransport.c!);
+>
+>	    foreach my $line (<$fh>) {
+>		$lineno++;
+>		chomp($line);
+>		push @copy, $line;
+>		if (!$line) {
+>		    # Blank line
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# Handle continuation or end of block comment.  Look for C file
+>		# prototype insertion point markers.
+>		if ($comment) {
+>		    if ($line =~ m![*]/!) {
+>			if ($comment == 2 && $file_marker) {
+>			    $cmarkers{$file_marker} = $file_marker;
+>			    push @copy, "#C_MARKER " . $filename;
+>			    $file_marker = 0;
+>			}
+>			$comment = 0;
+>		    } else {
+>			$comment++;
+>			if ($comment == 2 && $line =~ m! [*] ([a-z][a-z_0-9]*[.][c])$!) {
+>			    $file_marker = $1;
+>			    print("Found file marker ", $file_marker, " in ", $filename, "\n");
+>			}
+>		    }
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# Check cpp directives, particularly looking for SMB1 bits
+>		if ($line =~ /^[#]/) {
+>		    if ($header) {
+>			if ($line =~ /ifdef.*(CONFIG_[A-Z0-9_])/) {
+>			    error("multiconfig") if $config;
+>			    $config = $1;
+>			    $smb1++ if ($config eq "CONFIG_CIFS_ALLOW_INSECURE_LEGACY");
+>			} elsif ($line =~ /endif/) {
+>			    $smb1-- if ($config eq "CONFIG_CIFS_ALLOW_INSECURE_LEGACY");
+>			    $config = "";
+>			}
+>		    }
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# Exclude interference in finding func names and return types
+>		if ($line =~ /^[{]/ ||
+>		    $line =~ /##/ ||
+>		    $line =~ /^[_a-z0-9A-Z]+:$/ || # goto label
+>		    $line =~ /^do [{]/ ||
+>		    $line =~ m!^//!) {
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# Start of a block comment
+>		if ($line =~ m!^/[*]!) {
+>		    $comment = 1 unless ($line =~ m![*]/!);
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# End of a braced section, such as a function implementation
+>		if ($line =~ /^[}]/) {
+>			$type = "";
+>			$qual = "";
+>			$funcname = "";
+>			@funcdef = ();
+>			push @file_content, @copy;
+>			@copy = ();
+>			next;
+>		}
+>
+>		if ($line =~ /^typedef/) {
+>		    $type = "";
+>		    $qual = "";
+>		    $funcname = "";
+>		    @funcdef = ();
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		    next;
+>		}
+>
+>		# Extract function qualifiers.  There may be multiple of these in more
+>		# or less any order.  Some of them cause the func to be skipped (e.g. inline).
+>
+>		if ($line =~ /^(static|extern|inline|noinline|noinline_for_stack|__always_inline)\W/ ||
+>		    $line =~ /^(static|extern|inline|noinline|noinline_for_stack|__always_inline)$/) {
+>		    error("Unexpected qualifier '$1'") if ($state != 0);
+>		    while ($line =~ /^(static|extern|inline|noinline|noinline_for_stack|__always_inline)\W/ ||
+>			   $line =~ /^(static|extern|inline|noinline|noinline_for_stack|__always_inline)$/) {
+>			$qual .= " " if ($qual);
+>			$qual .= $1;
+>			$inline = 1 if ($1 eq "inline");
+>			$inline = 1 if ($1 eq "__always_inline");
+>			$line = substr($line, length($1));
+>			$line =~ s/^\s+//;
+>		    }
+>		}
+>
+>		if ($state == 0) {
+>		    # Extract what we assume to be the return type
+>		    if ($line =~ /^\s/) {
+>			push @file_content, @copy;
+>			@copy = ();
+>			next;
+>		    }
+>		    while ($line =~ /^(unsigned|signed|bool|char|short|int|long|void|const|volatile|(struct|union|enum)\s+[_a-zA-Z][_a-zA-Z0-9]*|[*]|__init|__exit|__le16|__le32|__le64|__be16|__be32|__be64)/) {
+>			$type .= " " if $type;
+>			$type .= $1;
+>			$line = substr($line, length($1));
+>			$line =~ s/^\s+//;
+>		    }
+>		    if ($line =~ /^struct [{]/) {
+>			# Ignore structure definitions
+>			$type = "";
+>			$qual = "";
+>			$funcname = "";
+>			@funcdef = ();
+>			push @file_content, @copy;
+>			@copy = ();
+>			next;
+>		    }
+>		    if (index($line, "=") >= 0) {
+>			# Ignore assignments
+>			$type = "";
+>			$qual = "";
+>			$funcname = "";
+>			@funcdef = "";
+>			push @file_content, @copy;
+>			@copy = ();
+>			next;
+>		    }
+>
+>		    # Try and extract a function's type and name
+>		    while ($line =~ /(^[_a-zA-Z][_a-zA-Z0-9]*)/) {
+>			my $name = $1;
+>			$line = substr($line, length($name));
+>			next if ($line =~ /^[{]/);
+>			$line =~ s/^\s+//;
+>
+>			my $ch = substr($line, 0, 1);
+>			last if ($ch eq "[" || $ch eq ";"); # Global variables
+>
+>			if ($ch eq "(") {
+>			    # Found the function name
+>			    $state = 1;
+>			    $line = substr($line, 1);
+>			    $funcname = $name;
+>			    my $tmp = $qual . $type . " " . $funcname . "(";
+>			    $tmp =~ s/[*] /*/;
+>			    push @funcdef, $tmp;
+>			    $bracket = 1;
+>			    last;
+>			}
+>
+>			if ($type) {
+>			    last if (index($line, ";") >= 0 && index($line, "(") == -1);
+>			    error("Unexpected name '$name' after '$type'");
+>			}
+>
+>			$type .= " " if $type;
+>			$type .= $name;
+>			if ($line =~ /^(\s*[*]+)/) {
+>			    my $ptr = $1;
+>			    $type .= $ptr;
+>			    $line = substr($line, length($ptr));
+>			}
+>		    }
+>		}
+>
+>		# Try and extract a function's argument list
+>		my $from = 0;
+>		if ($state == 1) {
+>		    while (1) {
+>			my $o = index($line, "(", $from);
+>			my $c = index($line, ")", $from);
+>			my $m = index($line, ",", $from);
+>
+>			my $b = earliest($o, $c, $m);
+>			if ($b < 0) {
+>			    push @funcdef, $line
+>				unless ($line eq "");
+>			    last;
+>			}
+>			my $ch = substr($line, $b, 1);
+>
+>			# Push the arguments separately on to the list
+>			if ($ch eq ",") {
+>			    push @funcdef, substr($line, 0, $b + 1);
+>			    $line = substr($line, $b + 1);
+>			    $from = 0;
+>			} elsif ($ch eq "(") {
+>			    # Handle brackets in the argument list (e.g. function
+>			    # pointers)
+>			    $bracket++;
+>			    $from = $b + 1;
+>			} elsif ($ch eq ")") {
+>			    $bracket--;
+>			    if ($bracket == 0) {
+>				push @funcdef, substr($line, 0, $b + 1);
+>				$line = substr($line, $b + 1);
+>				$state = 2;
+>				last;
+>			    }
+>			    $from = $b + 1;
+>			}
+>		    }
+>		}
+>
+>		if ($state == 2) {
+>		    $inline = 1 if ($qual =~ /inline/);
+>		    #print("QUAL $qual $type $funcname $inline ", $#funcdef, "\n");
+>		    if (!$header &&
+>			$qual !~ /static/ &&
+>			$funcname ne "__acquires" &&
+>			$funcname ne "__releases" &&
+>			$funcname ne "module_init" &&
+>			$funcname ne "module_exit" &&
+>			$funcname ne "module_param" &&
+>			$funcname ne "module_param_call" &&
+>			$funcname ne "PROC_FILE_DEFINE" &&
+>			$funcname !~ /MODULE_/ &&
+>			$funcname !~ /DEFINE_/) {
+>
+>			# Okay, we appear to have a function implementation
+>			my $func;
+>
+>			if (exists($funcs{$funcname})) {
+>			    $func = $funcs{$funcname};
+>			    $func->{body} = pad(\@funcdef);
+>			} else {
+>			    my %new_func = (
+>				name => $funcname,
+>				cond => "",
+>				);
+>			    $func = \%new_func;
+>			    $funcs{$funcname} = $func;
+>			    $func->{body} = pad(\@funcdef);
+>			}
+>			$func->{body} = pad(\@funcdef);
+>
+>			if ($funcname eq "cifs_inval_name_dfs_link_error") {
+>			    $func->{cond} = "#ifdef CONFIG_CIFS_DFS_UPCALL";
+>			} elsif ($funcname eq "cifs_listxattr") {
+>			    $func->{cond} = "#ifdef CONFIG_CIFS_XATTR";
+>			}
+>
+>			push @{$c_file->{funcs}}, $func;
+>		    } elsif (!$header || $inline) {
+>			# Ignore inline function implementations and other weirdies
+>			push @file_content, @copy;
+>		    } elsif ($header && !$inline) {
+>			push @file_content, "#FUNCPROTO " . $funcname;
+>
+>			my $func;
+>
+>			if (exists($funcs{$funcname})) {
+>			    $func = $funcs{$funcname};
+>			    $func->{lineno} = $lineno;
+>			    $func->{pathname} = $pathname;
+>			} else {
+>			    my %new_func = (
+>				name => $funcname,
+>				cond => "",
+>				lineno => $lineno,
+>				pathname => $pathname,
+>				);
+>			    $func = \%new_func;
+>			    $funcs{$funcname} = $func;
+>			}
+>		    }
+>
+>		    @funcdef = ();
+>		    $type = "";
+>		    $qual = "";
+>		    $funcname = "";
+>		    $inline = 0;
+>		    $state = 0;
+>		    @copy = ();
+>		}
+>		if ($line =~ /;/) {
+>		    $type = "";
+>		    $qual = "";
+>		    $funcname = "";
+>		    @funcdef = ();
+>		    $state = 0;
+>		    push @file_content, @copy;
+>		    @copy = ();
+>		}
+>	    }
+>	    close($fh);
+>
+>	    if ($header) {
+>		$header->{content} = \@file_content;
+>	    }
+>	}
+>
+>	sub write_header($)
+>	{
+>	    my ($header) = @_;
+>	    my $path = $header->{path};
+>
+>	    my @output = ();
+>
+>	    foreach my $line (@{$header->{content}}) {
+>		if ($line =~ "^[#]C_MARKER (.*)") {
+>		    next;
+>		} elsif ($line =~ "^[#]FUNCPROTO ([_a-zA-Z0-9]+)") {
+>		    my $funcname = $1;
+>		    my $func = $funcs{$funcname};
+>		    if (!$func->{body}) {
+>			print($func->{pathname}, ":", $func->{lineno}, ": '", $funcname,
+>			      "' dead prototype\n");
+>			next;
+>		    }
+>		    #push @output, $line;
+>		    push @output, @{$func->{body}};
+>		} else {
+>		    push @output, $line;
+>		}
+>	    }
+>
+>	    open my $fh, ">$path"
+>		or die "Could not open file '$path' for writing";
+>	    foreach my $f (@output) {
+>		print($fh $f, "\n") or die $path;
+>	    }
+>	    close($fh) or die $path;
+>
+>	    print("Git $path\n");
+>	    if (system("git diff -s --exit-code $path") == 0) {
+>		print("- no changes, skipping\n");
+>		return;
+>	    }
+>
+>	    if (system("git add $path") != 0) {
+>		die("'git add $path' failed\n");
+>	    }
+>
+>	    open $fh, ">.commit_message"
+>		or die "Could not open file '.commit_message' for writing";
+>	    print($fh
+>		  qq/
+>	cifs: Scripted clean up $path
+>
+>	Remove externs, correct argument names and reformat declarations.
+>
+>	Signed-off-by: David Howells <dhowells\@redhat.com>
+>	cc: Steve French <sfrench\@samba.org>
+>	cc: Paulo Alcantara <pc\@manguebit.org>
+>	cc: Enzo Matsumiya <ematsumiya\@suse.de>
+>	cc: linux-cifs\@vger.kernel.org
+>	cc: linux-fsdevel\@vger.kernel.org
+>	cc: linux-kernel\@vger.kernel.org
+>	/);
+>	    close($fh) or die ".commit_message";
+>
+>	    if (system("git commit -F .commit_message") != 0) {
+>		die("'git commit $path' failed\n");
+>	    }
+>	}
+>
+>	foreach my $h (keys(%headers)) {
+>	    write_header($headers{$h});
+>	}
+>
+>David Howells (37):
+>  cifs: Scripted clean up fs/smb/client/cached_dir.h
+>  cifs: Scripted clean up fs/smb/client/dfs.h
+>  cifs: Scripted clean up fs/smb/client/cifsproto.h
+>  cifs: Scripted clean up fs/smb/client/cifs_unicode.h
+>  cifs: Scripted clean up fs/smb/client/netlink.h
+>  cifs: Scripted clean up fs/smb/client/cifsfs.h
+>  cifs: Scripted clean up fs/smb/client/dfs_cache.h
+>  cifs: Scripted clean up fs/smb/client/dns_resolve.h
+>  cifs: Scripted clean up fs/smb/client/cifsglob.h
+>  cifs: Scripted clean up fs/smb/client/fscache.h
+>  cifs: Scripted clean up fs/smb/client/fs_context.h
+>  cifs: Scripted clean up fs/smb/client/cifs_spnego.h
+>  cifs: Scripted clean up fs/smb/client/compress.h
+>  cifs: Scripted clean up fs/smb/client/cifs_swn.h
+>  cifs: Scripted clean up fs/smb/client/cifs_debug.h
+>  cifs: Scripted clean up fs/smb/client/smb2proto.h
+>  cifs: Scripted clean up fs/smb/client/reparse.h
+>  cifs: Scripted clean up fs/smb/client/ntlmssp.h
+>  cifs: SMB1 split: Rename cifstransport.c
+>  cifs: SMB1 split: Create smb1proto.h for SMB1 declarations
+>  cifs: SMB1 split: Separate out SMB1 decls into smb1proto.h
+>  cifs: SMB1 split: Move some SMB1 receive bits to smb1transport.c
+>  cifs: SMB1 split: Move some SMB1 received PDU checking bits to
+>    smb1transport.c
+>  cifs: SMB1 split: Add some #includes
+>  cifs: SMB1 split: Split SMB1 protocol defs into smb1pdu.h
+>  cifs: SMB1 split: Adjust #includes
+>  cifs: SMB1 split: Move BCC access functions
+>  cifs: SMB1 split: Don't return smb_hdr from cifs_{,small_}buf_get()
+>  cifs: Fix cifs_dump_mids() to call ->dump_detail
+>  cifs: SMB1 split: Move inline funcs
+>  cifs: SMB1 split: cifs_debug.c
+>  cifs: SMB1 split: misc.c
+>  cifs: SMB1 split: netmisc.c
+>  cifs: SMB1 split: cifsencrypt.c
+>  cifs: SMB1 split: sess.c
+>  cifs: SMB1 split: connect.c
+>  cifs: SMB1 split: Make BCC accessors conditional
+>
+> fs/smb/client/Makefile        |   10 +-
+> fs/smb/client/cached_dir.h    |   30 +-
+> fs/smb/client/cifs_debug.c    |   18 +-
+> fs/smb/client/cifs_debug.h    |    1 -
+> fs/smb/client/cifs_spnego.h   |    4 +-
+> fs/smb/client/cifs_swn.h      |   10 +-
+> fs/smb/client/cifs_unicode.c  |    1 -
+> fs/smb/client/cifs_unicode.h  |   17 +-
+> fs/smb/client/cifsacl.c       |    1 -
+> fs/smb/client/cifsencrypt.c   |  124 --
+> fs/smb/client/cifsfs.c        |    1 -
+> fs/smb/client/cifsfs.h        |  114 +-
+> fs/smb/client/cifsglob.h      |   29 +-
+> fs/smb/client/cifspdu.h       | 2377 +--------------------------------
+> fs/smb/client/cifsproto.h     |  780 ++++-------
+> fs/smb/client/cifssmb.c       |  147 +-
+> fs/smb/client/cifstransport.c |  263 ----
+> fs/smb/client/compress.h      |    3 +-
+> fs/smb/client/connect.c       |  252 ----
+> fs/smb/client/dfs.h           |    3 +-
+> fs/smb/client/dfs_cache.h     |   19 +-
+> fs/smb/client/dir.c           |    1 -
+> fs/smb/client/dns_resolve.h   |    4 +-
+> fs/smb/client/file.c          |    1 -
+> fs/smb/client/fs_context.c    |    1 -
+> fs/smb/client/fs_context.h    |   16 +-
+> fs/smb/client/fscache.h       |   17 +-
+> fs/smb/client/inode.c         |    1 -
+> fs/smb/client/ioctl.c         |    1 -
+> fs/smb/client/link.c          |    1 -
+> fs/smb/client/misc.c          |  302 +----
+> fs/smb/client/netlink.h       |    4 +-
+> fs/smb/client/netmisc.c       |  824 +-----------
+> fs/smb/client/ntlmssp.h       |   15 +-
+> fs/smb/client/readdir.c       |    1 -
+> fs/smb/client/reparse.h       |   14 +-
+> fs/smb/client/sess.c          |  982 --------------
+> fs/smb/client/smb1debug.c     |   25 +
+> fs/smb/client/smb1encrypt.c   |  139 ++
+> fs/smb/client/smb1maperror.c  |  825 ++++++++++++
+> fs/smb/client/smb1misc.c      |  189 +++
+> fs/smb/client/smb1ops.c       |  279 ++--
+> fs/smb/client/smb1pdu.h       | 2354 ++++++++++++++++++++++++++++++++
+> fs/smb/client/smb1proto.h     |  336 +++++
+> fs/smb/client/smb1session.c   |  995 ++++++++++++++
+> fs/smb/client/smb1transport.c |  561 ++++++++
+> fs/smb/client/smb2file.c      |    2 +-
+> fs/smb/client/smb2inode.c     |    2 +-
+> fs/smb/client/smb2pdu.c       |    2 +-
+> fs/smb/client/smb2proto.h     |  468 +++----
+> fs/smb/client/smbencrypt.c    |    1 -
+> fs/smb/client/transport.c     |    1 -
+> fs/smb/client/xattr.c         |    1 -
+> fs/smb/common/smb2pdu.h       |    3 +
+> 54 files changed, 6310 insertions(+), 6262 deletions(-)
+> delete mode 100644 fs/smb/client/cifstransport.c
+> create mode 100644 fs/smb/client/smb1debug.c
+> create mode 100644 fs/smb/client/smb1encrypt.c
+> create mode 100644 fs/smb/client/smb1maperror.c
+> create mode 100644 fs/smb/client/smb1misc.c
+> create mode 100644 fs/smb/client/smb1pdu.h
+> create mode 100644 fs/smb/client/smb1proto.h
+> create mode 100644 fs/smb/client/smb1session.c
+> create mode 100644 fs/smb/client/smb1transport.c
+>
 
