@@ -1,76 +1,76 @@
-Return-Path: <linux-cifs+bounces-8742-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8744-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3026BD2543D
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 16:21:10 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41696D25416
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 16:20:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E11B73055E09
-	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 15:17:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C5CBE301F9C0
+	for <lists+linux-cifs@lfdr.de>; Thu, 15 Jan 2026 15:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661B43AEF28;
-	Thu, 15 Jan 2026 15:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80FA83AEF3D;
+	Thu, 15 Jan 2026 15:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4PTMSQH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="br37n+x2"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DA9313529
-	for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 15:17:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18903ACF04
+	for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 15:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768490228; cv=none; b=kWxm8OflH4B5ZR6VhyXuKLqb15xCFJvT7kOHErvpSYmP7AgPhxoRkq8UKKyJ6f+u6Unf10CKDmG7wL0UxP4lyOzm2LWQuB7agwUXAnXWqwWmq79Er1rshazQj43MEPwoJSx71xx+5dGxByQ2htSeF3fxNK/m1IfmJQXRGJZ03fU=
+	t=1768490267; cv=none; b=PmNdqaFf6Uvuzd3OV2o/dxJrpZ/OfgLom74MNwl9GtzlK6yDqs4/waiWmOF3hwBIw79zTr7KFCyl6GGI37c7IwkR6u4ICSHCMRZBseNabMeDoQsTc4I71W1JX+GMUISNejh+JmwQK8Y4Rtrou9jKlb7VwTNojvLDOtydwGLwqUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768490228; c=relaxed/simple;
-	bh=9qUWacfD09KgHI4uHvyDH3fJyUC3b8Lia1tfXOHyB60=;
+	s=arc-20240116; t=1768490267; c=relaxed/simple;
+	bh=h3DkktIWb6VFfJiVhwu+VzaXxD6U2SOd2VfHqA1e/N0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xro+/ns4UZiv6zyZ8UbiX/2vgHC9TKQR4nF8rlkIVVlmpe7pit+tBr/sD3omwxcgzXKCrbay0ineu8gMbHClj+CTq20xckxXF5p6lX0UCCv4FtCqkCGk7POVO2bl/J9sDs+gzKGpTgY3Nr6OHcBmupHDGcXRDk9Lb6FLocV3clU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4PTMSQH; arc=none smtp.client-ip=209.85.221.181
+	 MIME-Version; b=S2Gbdoex2gEdoEWbRDQZL3b5LhqBD/6jt/RCPfXT3da52JuvYr3/eCjo1ueSac+FzDjpc8E9tt/Gu3iI17gi09ldBiKF+AcY8DKeZ5k4/il2/54UW+gR2w7nhM8kMEWBWpOnXJ0AsQJPuaDyBuvLCUw+P0Q7N5VaZA4k1zJRdbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=br37n+x2; arc=none smtp.client-ip=209.85.217.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-56365984503so745357e0c.0
-        for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 07:17:02 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5ee99dec212so369940137.0
+        for <linux-cifs@vger.kernel.org>; Thu, 15 Jan 2026 07:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768490218; x=1769095018; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768490241; x=1769095041; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GYunKGHzuTELe0KxGrMziSmaOFUrGJRhxe6MHqPo/j4=;
-        b=G4PTMSQHGWqzyvsB62sLdgms0SDbQmioGB8zOKMvL2BJWjHgQMiJjuL+qlcVEntSTd
-         8ZZ4R6ZgXCAL8oo+z4Ve4pcxbXIku3KHbc19DorIWuMFBabd/YiQtnfaeTAUG4tmap0k
-         Or8XbQU/tw1QNY3YMesqupHONX7AhIE3fi3mHfsCMEd0fq+QLIP4RwPmS/TuYmQWVkdb
-         WR5EVD3wcwsAEchW+t8NLMPTTpgHggd+U2J1Vlw6XPuXf7EKfEnrSfkPMBN5UZJ//4oE
-         uNMz9HSahXQMgFuyBYdoUQh9rbs5kLC1v0BAL10ZxmmYTL+uTkvjo1dxGTFl1zOk/njk
-         +W7g==
+        bh=siypHj4grJJLYsJh0B5D/NA8fLZz88pE7BeAmaFuI0Y=;
+        b=br37n+x2h8Zwua+Boj0o87z+eqoUCGzwPkBw4Tx7ubHL4UG2OdoMB6zyFz/fzZjwnC
+         lGNxcP7boUnkI90BDceKvEbIwum2oqIrnwvlaJmF6QIWpres/zRM+aDEPlok6K5rljVL
+         ElBgXAxm+zCZjlPrRbf/T+bvcEn6rw9UK6wBnil28pKENOChNofM9Y4OGqZLQ+BTWHlL
+         RldrOZj3FgHFHm+kQKGIRzoaLgNPk5CAYQIV8y/EdbUcXbILrQSSmAj31yNU9JaNd4ng
+         p7EWXPryAFGd4VxHsVRF/ySjTrQdAEgIrPpwfTowZZrJkVDyAwdkW3TGX5BsOh9orMA0
+         DkTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768490218; x=1769095018;
+        d=1e100.net; s=20230601; t=1768490241; x=1769095041;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GYunKGHzuTELe0KxGrMziSmaOFUrGJRhxe6MHqPo/j4=;
-        b=bcyCEX3CIv2oPa64IeJSq+d5Fj7mtohnzr5tuZt6mnir/yRidtJklDUJkT+x4uiIEm
-         o8MEtStSpbEilI07eBFpBTyJWsf1Oor5XwfAkNLgEb6IwA7D1ln41R69T95hmJ+euis/
-         GBH7iWLndYoM3OhZNfSMABhLKyuBhznbYYKiwB3dz9gMU050Pk3V8ji20MoiE7xKMx1n
-         Hf3HOhJuFH1Badi7fxROdeMIrX/9kDrfnlVJVQG0vqd2r65b2mv7jWjoTHgWhQHwv+VY
-         wZqlvwPO8w+hA7VUwm87Zc5hlzhtsppR/VWYNj7bUGBvgeSR+l96ZljGVDOv2sKoAHPI
-         PF2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVy6ZmbWefZL2DYtxNEV/z8CffcK0z4iJJoPHUKTu1RnsleZntMSrSBjDwT6WdMqu8jo6uOssxXAsWg@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzhtv1MpsjNSra9UuBdz0HgxuJQe/K5J+cY5ed9jtdbpnt6oO28
-	menbAIy0/q4+x0cdvslScE/fsjYKz3zT9265cyVgEkiuUCj5cboTvJGI
-X-Gm-Gg: AY/fxX7TmjyxUFRy28cGrUghhv8sNIH1xigZFsxdCw0LNeZcu0vkkT/jHw4n/iQSG3x
-	GcficLfOqYJxaSl34FMbQr+Ybj4inwOq+mfhDZw62y7r/EDu+GnA7eFvGV1+v7TLnxXm/eb+E/m
-	VVUnVqyfNVNM4+bTGsp3NrsQ06m/T0TsBhcH+QGUytHDLFoNSfRcGF41V7SIcbVnKHbVoMytOA2
-	4C2eESiht9f1moKEP1p+tGBa8teA6AvrsewRkDEoEDQQmtmM2nypKW7Abv8BISIbJSh7zfzZy3m
-	Vkp+RWGYY+aLnc5p+ZyPiplFEtQfngAoZRSvqJ2Qf3HkYs7MRVvrQxj9/5KSRvd8ryHDE0Af8CV
-	XkM8KZtwFyzRa8dcTEOqIz8d4tD5SC5t/gnWmcTznSg+mbFmRhbyev8j9VbRPZAeKH8aR0/l0rA
-	sC5NIVDToBRQYt68WYXKeSzYEoSRJzBB7O6rwondQnrcaVfqssoss=
-X-Received: by 2002:a05:6122:c86:b0:55b:14ec:6fb9 with SMTP id 71dfb90a1353d-563b5c7d391mr72716e0c.14.1768490215960;
-        Thu, 15 Jan 2026 07:16:55 -0800 (PST)
+        bh=siypHj4grJJLYsJh0B5D/NA8fLZz88pE7BeAmaFuI0Y=;
+        b=plBRfOIB0FxLAT13wP5D9XGWEWt0tjfbibmBPnwomvIhzzDgrv/47hTxRWOyJruOcr
+         A9vB7kRNqnyxOhGwSZQhHDYKNTD+Kdt9qNPnKIQrpMwwyIrgBd2Ao7LoFVoJZKJGvahs
+         GUqTdkYY+C1diq7Wu/Efdj26AwaTZYN1eFJr+T9s4ZqR3uv6/xRgu0dUlHRjGKrtkRSA
+         Vk8zHhwpEHaKYL/nyuHdGS2pkMhJWqSIj0+KNr8nXHVV8jYPYK7owbLVT7pu2k+Gr7my
+         dVGxBrNmEp1LkzmPPczvrGMPCxHREZs1rjWvirjP4pEi3ZZvGNh1fT9a8iW/MqPdLhA4
+         mhPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWX/JtMgRRVw5MlzPp16f2GtKJpcVQh9t6cr3WCh3Lv0/j970ZxTHkMLrIdiQs2BWc8ej5x+CFDHl+H@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6oMsn+UlU6+5t4fxkcEZ1o6BGZHfX6O4P3mMLPdXAW0YHfnTn
+	OiPGujhTkwqqauxIN7U1QbRLu0z9EgZ/WC/q/nQdB/SEDslNh1c+VK5M
+X-Gm-Gg: AY/fxX7xbaJNsf7EL4S88zz039LdAxaoVQZyH12eBQXZ1Ba2+bcE7JoRO9a/kk59ope
+	jrm67hwtxaqhZI75ueDN7MBxdAvR2znD3DN7gYmFYZ+uuw9NXJB0PsEc3VfXtNrRPRngSNQLoF0
+	MgrgDZf/+dwWpXwdLcar+alsWvNBxq8TTG/5Yh8jIJwWC9AvZnGSB7765zDwJKcJn0P0QyUiP8d
+	LqkKv1U6qRWpE4Ckh0NNRMeyxMUU/3vhMU6wd52WRDoQfC7qgCW7RfWuNiqob1lWva+b++goeiD
+	DnfOsEkKBKFHg44f0iJ5ryhqLhtqknyC9g00PMWyVdTzNEX7sab6NskfhuiTSjaZy5ELWCJVZS1
+	bxYUx2K3/k4mQx8daG682GR1x4mXQqOfWgAXTErrKl853fQiKnD4La23REdAx4+7RR2hqR6n4hU
+	D/1nviVjTllMvWEL65tCBRM1TfINBfDTmh0ezq7/+QZSSVpz73rIk=
+X-Received: by 2002:a05:6102:3907:b0:5df:b3ed:2c8b with SMTP id ada2fe7eead31-5f17f67219cmr2564740137.38.1768490240768;
+        Thu, 15 Jan 2026 07:17:20 -0800 (PST)
 Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770cc6edsm201030056d6.4.2026.01.15.07.16.44
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770cc6edsm201030056d6.4.2026.01.15.07.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 07:16:55 -0800 (PST)
+        Thu, 15 Jan 2026 07:17:20 -0800 (PST)
 From: Xin Long <lucien.xin@gmail.com>
 To: network dev <netdev@vger.kernel.org>,
 	quic@lists.linux.dev
@@ -106,9 +106,9 @@ Cc: davem@davemloft.net,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Daniel Stenberg <daniel@haxx.se>,
 	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: [PATCH net-next v7 12/16] quic: add crypto packet encryption and decryption
-Date: Thu, 15 Jan 2026 10:11:12 -0500
-Message-ID: <2cf41cc1a6c52aa2cafb8b4ddef2f82d179cf931.1768489876.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next v7 14/16] quic: add frame encoder and decoder base
+Date: Thu, 15 Jan 2026 10:11:14 -0500
+Message-ID: <7080f16af3b385f0fd7aaf39f0c5d181a29ed347.1768489876.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1768489876.git.lucien.xin@gmail.com>
 References: <cover.1768489876.git.lucien.xin@gmail.com>
@@ -120,780 +120,900 @@ List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds core support for packet-level encryption and decryption
-using AEAD, including both payload protection and QUIC header protection.
-It introduces helpers to encrypt packets before transmission and to
-remove header protection and decrypt payloads upon reception, in line
-with QUIC's cryptographic requirements.
+This patch introduces 'quic_frame' to represent QUIC frames and
+'quic_frame_ops' to define the associated operations for encoding,
+processing, and acknowledgment.
 
-- quic_crypto_encrypt(): Perform header protection and payload
-  encryption (TX).
+This abstraction sets the foundation for flexible and modular frame
+handling. While core operations are defined, actual implementation
+will follow in subsequent patches once packet handling and
+inqueue/outqueue infrastructure are in place.
 
-- quic_crypto_decrypt(): Perform header protection removal and
-  payload decryption (RX).
+The patch introduces hooks for invoking frame-specific logic:
 
-The patch also includes support for Retry token handling. It provides
-helpers to compute the Retry integrity tag, generate tokens for address
-validation, and verify tokens received from clients during the
-handshake phase.
+- quic_frame_create(): Invoke the .create operation of the frame.
 
-- quic_crypto_get_retry_tag(): Compute tag for Retry packets.
+- quic_frame_process(): Invoke the .process operation of the frame.
 
-- quic_crypto_generate_token(): Generate retry token.
+- quic_frame_ack(): Invoke the .ack operation of the frame.
 
-- quic_crypto_verify_token(): Verify retry token.
+To manage frame lifecycles, reference counting is used, supported by
 
-These additions establish the cryptographic primitives necessary for
-secure QUIC packet exchange and address validation.
+- quic_frame_get(): Increment the reference count of a frame.
 
+- quic_frame_put(): Decrement the reference count of a frame.
+
+- quic_frame_alloc(): Allocate a frame and set its data.
+
+Frames are allocated through quic_frame_alloc(), and a dedicated
+kmem_cache (quic_frame_cachep) is added to optimize memory usage.
+
+For STREAM frames, additional data can be appended using
+
+- quic_frame_stream_append(): Append more data to a STREAM frame.
+
+Signed-off-by: Tyler Fanelli <tfanelli@redhat.com>
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
 ---
-v3:
-  - quic_crypto_decrypt(): return -EKEYREVOKED to defer key updates to
-    the workqueue when the packet is not marked backlog, since
-    quic_crypto_key_update()/crypto_aead_setkey() must run in process
-    context.
-  - Only perform header decryption if !cb->number_len to avoid double
-    decryption when a key-update packet (with flipped key_phase)
-    re-enters quic_crypto_decrypt() from the workqueue.
-v4:
-  - skb_dst_force() is already called in in quic_udp_rcv() on recv path,
-    so remove its call from quic_crypto_payload_decrypt(), which may be
-    called without RCU protection.
-  - Remove the incorrect (void *) cast to quic_crypto_done.
 v5:
-  - Use skb_cb->crypto_ctx for async crypto context freeing, which is
-    safer than using skb_shinfo(skb)->destructor_arg.
-  - skb_cb->number_max is removed and number is reused as the largest
-    previously seen and update quic_crypto_get_header() accordingly.
-  - Change timestamp variables from u32 to u64 and use quic_ktime_get_us()
-    for current timestamps, as jiffies_to_usecs() is not accurate enough.
-v6:
-  - Rename quic_crypto_get_header() to quic_crypto_get_number(), move
-    key_phase parsing out of it, check cb->length when parsing packet
-    number, and update all callers.
-  - Use hdr->pnl + 1 instead of (*p & QUIC_PN_LEN_BITS_MASK) + 1 to get
-    packet number length, and remove the unnecessary the len variable
-    and QUIC_PN_LEN_BITS_MASK macro from quic_crypto_header_decrypt().
+- Use !frame->type to detect RX in quic_frame_free(), and frame->skb
+  shares a union with frame->flist used only on TX. Add a comment for
+  this in quic_frame_free().
 ---
- net/quic/crypto.c | 662 ++++++++++++++++++++++++++++++++++++++++++++++
- net/quic/crypto.h |  10 +
- 2 files changed, 672 insertions(+)
+ net/quic/Makefile   |   2 +-
+ net/quic/frame.c    | 561 ++++++++++++++++++++++++++++++++++++++++++++
+ net/quic/frame.h    | 195 +++++++++++++++
+ net/quic/protocol.c |   9 +
+ net/quic/protocol.h |   1 +
+ net/quic/socket.h   |   2 +
+ 6 files changed, 769 insertions(+), 1 deletion(-)
+ create mode 100644 net/quic/frame.c
+ create mode 100644 net/quic/frame.h
 
-diff --git a/net/quic/crypto.c b/net/quic/crypto.c
-index 1623aaa5aafb..11d6e7a6161d 100644
---- a/net/quic/crypto.c
-+++ b/net/quic/crypto.c
-@@ -207,6 +207,333 @@ static int quic_crypto_rx_keys_derive_and_install(struct quic_crypto *crypto)
- 	return err;
- }
+diff --git a/net/quic/Makefile b/net/quic/Makefile
+index 2ccf01ad9e22..645ee470c95e 100644
+--- a/net/quic/Makefile
++++ b/net/quic/Makefile
+@@ -6,4 +6,4 @@
+ obj-$(CONFIG_IP_QUIC) += quic.o
  
-+static void *quic_crypto_skcipher_mem_alloc(struct crypto_skcipher *tfm, u32 mask_size,
-+					    u8 **iv, struct skcipher_request **req)
+ quic-y := common.o family.o protocol.o socket.o stream.o connid.o path.o \
+-	  cong.o pnspace.o crypto.o timer.o
++	  cong.o pnspace.o crypto.o timer.o frame.o
+diff --git a/net/quic/frame.c b/net/quic/frame.c
+new file mode 100644
+index 000000000000..794950c7ff57
+--- /dev/null
++++ b/net/quic/frame.c
+@@ -0,0 +1,561 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* QUIC kernel implementation
++ * (C) Copyright Red Hat Corp. 2023
++ *
++ * This file is part of the QUIC kernel implementation
++ *
++ * Initialization/cleanup for QUIC protocol support.
++ *
++ * Written or modified by:
++ *    Xin Long <lucien.xin@gmail.com>
++ */
++
++#include <net/proto_memory.h>
++
++#include "socket.h"
++
++/* ACK Frame {
++ *  Type (i) = 0x02..0x03,
++ *  Largest Acknowledged (i),
++ *  ACK Delay (i),
++ *  ACK Range Count (i),
++ *  First ACK Range (i),
++ *  ACK Range (..) ...,
++ *  [ECN Counts (..)],
++ * }
++ */
++
++static struct quic_frame *quic_frame_ack_create(struct sock *sk, void *data, u8 type)
 +{
-+	unsigned int iv_size, req_size;
-+	unsigned int len;
-+	u8 *mem;
-+
-+	iv_size = crypto_skcipher_ivsize(tfm);
-+	req_size = sizeof(**req) + crypto_skcipher_reqsize(tfm);
-+
-+	len = mask_size;
-+	len += iv_size;
-+	len += crypto_skcipher_alignmask(tfm) & ~(crypto_tfm_ctx_alignment() - 1);
-+	len = ALIGN(len, crypto_tfm_ctx_alignment());
-+	len += req_size;
-+
-+	mem = kzalloc(len, GFP_ATOMIC);
-+	if (!mem)
-+		return NULL;
-+
-+	*iv = (u8 *)PTR_ALIGN(mem + mask_size, crypto_skcipher_alignmask(tfm) + 1);
-+	*req = (struct skcipher_request *)PTR_ALIGN(*iv + iv_size,
-+			crypto_tfm_ctx_alignment());
-+
-+	return (void *)mem;
++	return NULL;
 +}
 +
-+#define QUIC_SAMPLE_LEN		16
-+
-+#define QUIC_HEADER_FORM_BIT	0x80
-+#define QUIC_LONG_HEADER_MASK	0x0f
-+#define QUIC_SHORT_HEADER_MASK	0x1f
-+
-+/* Header Protection. */
-+static int quic_crypto_header_encrypt(struct crypto_skcipher *tfm, struct sk_buff *skb, bool chacha)
++static struct quic_frame *quic_frame_ping_create(struct sock *sk, void *data, u8 type)
 +{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct skcipher_request *req;
-+	struct scatterlist sg;
-+	u8 *mask, *iv, *p;
-+	int err, i;
-+
-+	mask = quic_crypto_skcipher_mem_alloc(tfm, QUIC_SAMPLE_LEN, &iv, &req);
-+	if (!mask)
-+		return -ENOMEM;
-+
-+	/* rfc9001#section-5.4.2: Header Protection Sample:
-+	 *
-+	 *   # pn_offset is the start of the Packet Number field.
-+	 *   sample_offset = pn_offset + 4
-+	 *
-+	 *   sample = packet[sample_offset..sample_offset+sample_length]
-+	 *
-+	 * rfc9001#section-5.4.3: AES-Based Header Protection:
-+	 *
-+	 *   header_protection(hp_key, sample):
-+	 *     mask = AES-ECB(hp_key, sample)
-+	 *
-+	 * rfc9001#section-5.4.4: ChaCha20-Based Header Protection:
-+	 *
-+	 *   header_protection(hp_key, sample):
-+	 *     counter = sample[0..3]
-+	 *     nonce = sample[4..15]
-+	 *     mask = ChaCha20(hp_key, counter, nonce, {0,0,0,0,0})
-+	 */
-+	memcpy((chacha ? iv : mask), skb->data + cb->number_offset + QUIC_PN_MAX_LEN,
-+	       QUIC_SAMPLE_LEN);
-+	sg_init_one(&sg, mask, QUIC_SAMPLE_LEN);
-+	skcipher_request_set_tfm(req, tfm);
-+	skcipher_request_set_crypt(req, &sg, &sg, QUIC_SAMPLE_LEN, iv);
-+	err = crypto_skcipher_encrypt(req);
-+	if (err)
-+		goto err;
-+
-+	/* rfc9001#section-5.4.1:
-+	 *
-+	 * mask = header_protection(hp_key, sample)
-+	 *
-+	 * pn_length = (packet[0] & 0x03) + 1
-+	 * if (packet[0] & 0x80) == 0x80:
-+	 *    # Long header: 4 bits masked
-+	 *    packet[0] ^= mask[0] & 0x0f
-+	 * else:
-+	 *    # Short header: 5 bits masked
-+	 *    packet[0] ^= mask[0] & 0x1f
-+	 *
-+	 * # pn_offset is the start of the Packet Number field.
-+	 * packet[pn_offset:pn_offset+pn_length] ^= mask[1:1+pn_length]
-+	 */
-+	p = skb->data;
-+	*p = (u8)(*p ^ (mask[0] & (((*p & QUIC_HEADER_FORM_BIT) == QUIC_HEADER_FORM_BIT) ?
-+				   QUIC_LONG_HEADER_MASK : QUIC_SHORT_HEADER_MASK)));
-+	p = skb->data + cb->number_offset;
-+	for (i = 1; i <= cb->number_len; i++)
-+		*p++ ^= mask[i];
-+err:
-+	kfree_sensitive(mask);
-+	return err;
++	return NULL;
 +}
 +
-+/* Extracts and reconstructs the packet number from an incoming QUIC packet. */
-+static int quic_crypto_get_number(struct sk_buff *skb)
++static struct quic_frame *quic_frame_padding_create(struct sock *sk, void *data, u8 type)
 +{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	s64 number_max = cb->number;
-+	u32 len = cb->length;
-+	u8 *p;
++	return NULL;
++}
 +
-+	/* rfc9000#section-17.1:
-+	 *
-+	 * Once header protection is removed, the packet number is decoded by finding the packet
-+	 * number value that is closest to the next expected packet. The next expected packet is
-+	 * the highest received packet number plus one.
-+	 */
-+	p = (u8 *)quic_hdr(skb) + cb->number_offset;
-+	if (!quic_get_int(&p, &len, &cb->number, cb->number_len))
-+		return -EINVAL;
-+	cb->number = quic_get_num(number_max, cb->number, cb->number_len);
++static struct quic_frame *quic_frame_new_token_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++/* STREAM Frame {
++ *  Type (i) = 0x08..0x0f,
++ *  Stream ID (i),
++ *  [Offset (i)],
++ *  [Length (i)],
++ *  Stream Data (..),
++ * }
++ */
++
++static struct quic_frame *quic_frame_stream_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_handshake_done_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_crypto_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_retire_conn_id_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_new_conn_id_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_path_response_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_path_challenge_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_reset_stream_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_stop_sending_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_max_data_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_max_stream_data_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_max_streams_uni_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_max_streams_bidi_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_connection_close_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_data_blocked_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_stream_data_blocked_create(struct sock *sk,
++								void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_streams_blocked_uni_create(struct sock *sk,
++								void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_streams_blocked_bidi_create(struct sock *sk,
++								 void *data, u8 type)
++{
++	return NULL;
++}
++
++static int quic_frame_crypto_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_stream_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_ack_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_new_conn_id_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_retire_conn_id_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_new_token_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_handshake_done_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_padding_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_ping_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_path_challenge_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_reset_stream_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_stop_sending_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_max_data_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_max_stream_data_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_max_streams_uni_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_max_streams_bidi_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_connection_close_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_data_blocked_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_stream_data_blocked_process(struct sock *sk, struct quic_frame *frame,
++						  u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_streams_blocked_uni_process(struct sock *sk, struct quic_frame *frame,
++						  u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_streams_blocked_bidi_process(struct sock *sk, struct quic_frame *frame,
++						   u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_path_response_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static struct quic_frame *quic_frame_invalid_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static struct quic_frame *quic_frame_datagram_create(struct sock *sk, void *data, u8 type)
++{
++	return NULL;
++}
++
++static int quic_frame_invalid_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static int quic_frame_datagram_process(struct sock *sk, struct quic_frame *frame, u8 type)
++{
++	return -EOPNOTSUPP;
++}
++
++static void quic_frame_padding_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_ping_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_ack_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_reset_stream_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_stop_sending_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_crypto_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_new_token_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_stream_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_max_data_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_max_stream_data_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_max_streams_bidi_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_max_streams_uni_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_data_blocked_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_stream_data_blocked_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_streams_blocked_bidi_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_streams_blocked_uni_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_new_conn_id_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_retire_conn_id_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_path_challenge_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_path_response_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_connection_close_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_handshake_done_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_invalid_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++static void quic_frame_datagram_ack(struct sock *sk, struct quic_frame *frame)
++{
++}
++
++#define quic_frame_create_and_process_and_ack(type, eliciting) \
++	{ \
++		.frame_create	= quic_frame_##type##_create, \
++		.frame_process	= quic_frame_##type##_process, \
++		.frame_ack	= quic_frame_##type##_ack, \
++		.ack_eliciting	= eliciting \
++	}
++
++static struct quic_frame_ops quic_frame_ops[QUIC_FRAME_MAX + 1] = {
++	quic_frame_create_and_process_and_ack(padding, 0), /* 0x00 */
++	quic_frame_create_and_process_and_ack(ping, 1),
++	quic_frame_create_and_process_and_ack(ack, 0),
++	quic_frame_create_and_process_and_ack(ack, 0), /* ack_ecn */
++	quic_frame_create_and_process_and_ack(reset_stream, 1),
++	quic_frame_create_and_process_and_ack(stop_sending, 1),
++	quic_frame_create_and_process_and_ack(crypto, 1),
++	quic_frame_create_and_process_and_ack(new_token, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(stream, 1),
++	quic_frame_create_and_process_and_ack(max_data, 1), /* 0x10 */
++	quic_frame_create_and_process_and_ack(max_stream_data, 1),
++	quic_frame_create_and_process_and_ack(max_streams_bidi, 1),
++	quic_frame_create_and_process_and_ack(max_streams_uni, 1),
++	quic_frame_create_and_process_and_ack(data_blocked, 1),
++	quic_frame_create_and_process_and_ack(stream_data_blocked, 1),
++	quic_frame_create_and_process_and_ack(streams_blocked_bidi, 1),
++	quic_frame_create_and_process_and_ack(streams_blocked_uni, 1),
++	quic_frame_create_and_process_and_ack(new_conn_id, 1),
++	quic_frame_create_and_process_and_ack(retire_conn_id, 1),
++	quic_frame_create_and_process_and_ack(path_challenge, 0),
++	quic_frame_create_and_process_and_ack(path_response, 0),
++	quic_frame_create_and_process_and_ack(connection_close, 0),
++	quic_frame_create_and_process_and_ack(connection_close, 0),
++	quic_frame_create_and_process_and_ack(handshake_done, 1),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0), /* 0x20 */
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(invalid, 0),
++	quic_frame_create_and_process_and_ack(datagram, 1), /* 0x30 */
++	quic_frame_create_and_process_and_ack(datagram, 1),
++};
++
++void quic_frame_ack(struct sock *sk, struct quic_frame *frame)
++{
++	quic_frame_ops[frame->type].frame_ack(sk, frame);
++
++	list_del_init(&frame->list);
++	frame->transmitted = 0;
++	quic_frame_put(frame);
++}
++
++int quic_frame_process(struct sock *sk, struct quic_frame *frame)
++{
++	u8 type, level = frame->level;
++	int ret;
++
++	while (frame->len > 0) {
++		type = *frame->data++;
++		frame->len--;
++
++		if (type > QUIC_FRAME_MAX) {
++			pr_debug("%s: unsupported frame, type: %x, level: %d\n",
++				 __func__, type, level);
++			return -EPROTONOSUPPORT;
++		} else if (quic_frame_level_check(level, type)) {
++			pr_debug("%s: invalid frame, type: %x, level: %d\n",
++				 __func__, type, level);
++			return -EINVAL;
++		}
++		ret = quic_frame_ops[type].frame_process(sk, frame, type);
++		if (ret < 0) {
++			pr_debug("%s: failed, type: %x, level: %d, err: %d\n",
++				 __func__, type, level, ret);
++			return ret;
++		}
++		pr_debug("%s: done, type: %x, level: %d\n", __func__, type, level);
++
++		frame->data += ret;
++		frame->len -= ret;
++	}
 +	return 0;
 +}
 +
-+static int quic_crypto_header_decrypt(struct crypto_skcipher *tfm, struct sk_buff *skb, bool chacha)
++struct quic_frame *quic_frame_create(struct sock *sk, u8 type, void *data)
 +{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct quichdr *hdr = quic_hdr(skb);
-+	struct skcipher_request *req;
-+	struct scatterlist sg;
-+	u8 *mask, *iv, *p;
-+	int err, i;
++	struct quic_frame *frame;
 +
-+	mask = quic_crypto_skcipher_mem_alloc(tfm, QUIC_SAMPLE_LEN, &iv, &req);
-+	if (!mask)
-+		return -ENOMEM;
-+
-+	if (cb->length < QUIC_PN_MAX_LEN + QUIC_SAMPLE_LEN) {
-+		err = -EINVAL;
-+		goto err;
-+	}
-+
-+	/* Similar logic to quic_crypto_header_encrypt(). */
-+	p = (u8 *)hdr + cb->number_offset;
-+	memcpy((chacha ? iv : mask), p + QUIC_PN_MAX_LEN, QUIC_SAMPLE_LEN);
-+	sg_init_one(&sg, mask, QUIC_SAMPLE_LEN);
-+	skcipher_request_set_tfm(req, tfm);
-+	skcipher_request_set_crypt(req, &sg, &sg, QUIC_SAMPLE_LEN, iv);
-+	err = crypto_skcipher_encrypt(req);
-+	if (err)
-+		goto err;
-+
-+	p = (u8 *)hdr;
-+	*p = (u8)(*p ^ (mask[0] & (((*p & QUIC_HEADER_FORM_BIT) == QUIC_HEADER_FORM_BIT) ?
-+				   QUIC_LONG_HEADER_MASK : QUIC_SHORT_HEADER_MASK)));
-+	cb->number_len = hdr->pnl + 1;
-+	cb->key_phase = hdr->key;
-+	p += cb->number_offset;
-+	for (i = 0; i < cb->number_len; ++i)
-+		*(p + i) = *((u8 *)hdr + cb->number_offset + i) ^ mask[i + 1];
-+	err = quic_crypto_get_number(skb);
-+
-+err:
-+	kfree_sensitive(mask);
-+	return err;
-+}
-+
-+static void *quic_crypto_aead_mem_alloc(struct crypto_aead *tfm, u32 ctx_size,
-+					u8 **iv, struct aead_request **req,
-+					struct scatterlist **sg, u32 nsg)
-+{
-+	unsigned int iv_size, req_size;
-+	unsigned int len;
-+	u8 *mem;
-+
-+	iv_size = crypto_aead_ivsize(tfm);
-+	req_size = sizeof(**req) + crypto_aead_reqsize(tfm);
-+
-+	len = ctx_size;
-+	len += iv_size;
-+	len += crypto_aead_alignmask(tfm) & ~(crypto_tfm_ctx_alignment() - 1);
-+	len = ALIGN(len, crypto_tfm_ctx_alignment());
-+	len += req_size;
-+	len = ALIGN(len, __alignof__(struct scatterlist));
-+	len += nsg * sizeof(**sg);
-+
-+	mem = kzalloc(len, GFP_ATOMIC);
-+	if (!mem)
++	if (type > QUIC_FRAME_MAX)
 +		return NULL;
-+
-+	*iv = (u8 *)PTR_ALIGN(mem + ctx_size, crypto_aead_alignmask(tfm) + 1);
-+	*req = (struct aead_request *)PTR_ALIGN(*iv + iv_size,
-+			crypto_tfm_ctx_alignment());
-+	*sg = (struct scatterlist *)PTR_ALIGN((u8 *)*req + req_size,
-+			__alignof__(struct scatterlist));
-+
-+	return (void *)mem;
-+}
-+
-+static void quic_crypto_done(void *data, int err)
-+{
-+	struct sk_buff *skb = data;
-+
-+	kfree_sensitive(QUIC_SKB_CB(skb)->crypto_ctx);
-+	QUIC_SKB_CB(skb)->crypto_done(skb, err);
-+}
-+
-+/* AEAD Usage. */
-+static int quic_crypto_payload_encrypt(struct crypto_aead *tfm, struct sk_buff *skb,
-+				       u8 *tx_iv, bool ccm)
-+{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	struct quichdr *hdr = quic_hdr(skb);
-+	u8 *iv, i, nonce[QUIC_IV_LEN];
-+	struct aead_request *req;
-+	struct sk_buff *trailer;
-+	struct scatterlist *sg;
-+	u32 nsg, hlen, len;
-+	void *ctx;
-+	__be64 n;
-+	int err;
-+
-+	len = skb->len;
-+	err = skb_cow_data(skb, QUIC_TAG_LEN, &trailer);
-+	if (err < 0)
-+		return err;
-+	nsg = (u32)err;
-+	pskb_put(skb, trailer, QUIC_TAG_LEN);
-+	hdr->key = cb->key_phase;
-+
-+	ctx = quic_crypto_aead_mem_alloc(tfm, 0, &iv, &req, &sg, nsg);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	sg_init_table(sg, nsg);
-+	err = skb_to_sgvec(skb, sg, 0, (int)skb->len);
-+	if (err < 0)
-+		goto err;
-+
-+	/* rfc9001#section-5.3:
-+	 *
-+	 * The associated data, A, for the AEAD is the contents of the QUIC header,
-+	 * starting from the first byte of either the short or long header, up to and
-+	 * including the unprotected packet number.
-+	 *
-+	 * The nonce, N, is formed by combining the packet protection IV with the packet
-+	 * number.  The 62 bits of the reconstructed QUIC packet number in network byte
-+	 * order are left-padded with zeros to the size of the IV. The exclusive OR of the
-+	 * padded packet number and the IV forms the AEAD nonce.
-+	 */
-+	hlen = cb->number_offset + cb->number_len;
-+	memcpy(nonce, tx_iv, QUIC_IV_LEN);
-+	n = cpu_to_be64(cb->number);
-+	for (i = 0; i < sizeof(n); i++)
-+		nonce[QUIC_IV_LEN - sizeof(n) + i] ^= ((u8 *)&n)[i];
-+
-+	/* For CCM based ciphers, first byte of IV is a constant. */
-+	iv[0] = TLS_AES_CCM_IV_B0_BYTE;
-+	memcpy(&iv[ccm], nonce, QUIC_IV_LEN);
-+	aead_request_set_tfm(req, tfm);
-+	aead_request_set_ad(req, hlen);
-+	aead_request_set_crypt(req, sg, sg, len - hlen, iv);
-+	aead_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, quic_crypto_done, skb);
-+
-+	cb->crypto_ctx = ctx; /* Set crypto_ctx for async free in quic_crypto_done(). */
-+	err = crypto_aead_encrypt(req);
-+	if (err == -EINPROGRESS) {
-+		memzero_explicit(nonce, sizeof(nonce));
-+		return err;
++	frame = quic_frame_ops[type].frame_create(sk, data, type);
++	if (!frame) {
++		pr_debug("%s: failed, type: %x\n", __func__, type);
++		return NULL;
 +	}
-+
-+err:
-+	kfree_sensitive(ctx);
-+	memzero_explicit(nonce, sizeof(nonce));
-+	return err;
++	INIT_LIST_HEAD(&frame->list);
++	if (!frame->type)
++		frame->type = type;
++	frame->ack_eliciting = quic_frame_ops[type].ack_eliciting;
++	pr_debug("%s: done, type: %x, len: %u\n", __func__, type, frame->len);
++	return frame;
 +}
 +
-+static int quic_crypto_payload_decrypt(struct crypto_aead *tfm, struct sk_buff *skb,
-+				       u8 *rx_iv, bool ccm)
++struct quic_frame *quic_frame_alloc(u32 size, u8 *data, gfp_t gfp)
 +{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	u8 *iv, i, nonce[QUIC_IV_LEN];
-+	struct aead_request *req;
-+	struct sk_buff *trailer;
-+	int nsg, hlen, len, err;
-+	struct scatterlist *sg;
-+	void *ctx;
-+	__be64 n;
++	struct quic_frame *frame;
 +
-+	len = cb->length + cb->number_offset;
-+	hlen = cb->number_offset + cb->number_len;
-+	if (len - hlen < QUIC_TAG_LEN)
-+		return -EINVAL;
-+	nsg = skb_cow_data(skb, 0, &trailer);
-+	if (nsg < 0)
-+		return nsg;
-+	ctx = quic_crypto_aead_mem_alloc(tfm, 0, &iv, &req, &sg, nsg);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	sg_init_table(sg, nsg);
-+	err = skb_to_sgvec(skb, sg, 0, len);
-+	if (err < 0)
-+		goto err;
-+
-+	/* Similar logic to quic_crypto_payload_encrypt(). */
-+	memcpy(nonce, rx_iv, QUIC_IV_LEN);
-+	n = cpu_to_be64(cb->number);
-+	for (i = 0; i < sizeof(n); i++)
-+		nonce[QUIC_IV_LEN - sizeof(n) + i] ^= ((u8 *)&n)[i];
-+
-+	iv[0] = TLS_AES_CCM_IV_B0_BYTE;
-+	memcpy(&iv[ccm], nonce, QUIC_IV_LEN);
-+	aead_request_set_tfm(req, tfm);
-+	aead_request_set_ad(req, hlen);
-+	aead_request_set_crypt(req, sg, sg, len - hlen, iv);
-+	aead_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, quic_crypto_done, skb);
-+
-+	cb->crypto_ctx = ctx;
-+	err = crypto_aead_decrypt(req);
-+	if (err == -EINPROGRESS) {
-+		memzero_explicit(nonce, sizeof(nonce));
-+		return err;
-+	}
-+err:
-+	kfree_sensitive(ctx);
-+	memzero_explicit(nonce, sizeof(nonce));
-+	return err;
-+}
-+
- #define QUIC_CIPHER_MIN TLS_CIPHER_AES_GCM_128
- #define QUIC_CIPHER_MAX TLS_CIPHER_CHACHA20_POLY1305
- 
-@@ -231,6 +558,137 @@ static struct quic_cipher ciphers[QUIC_CIPHER_MAX + 1 - QUIC_CIPHER_MIN] = {
- 		    "rfc7539(chacha20,poly1305)", "chacha20", "hmac(sha256)"),
- };
- 
-+static bool quic_crypto_is_cipher_ccm(struct quic_crypto *crypto)
-+{
-+	return crypto->cipher_type == TLS_CIPHER_AES_CCM_128;
-+}
-+
-+static bool quic_crypto_is_cipher_chacha(struct quic_crypto *crypto)
-+{
-+	return crypto->cipher_type == TLS_CIPHER_CHACHA20_POLY1305;
-+}
-+
-+/* Encrypts a QUIC packet before transmission.  This function performs AEAD encryption of
-+ * the packet payload and applies header protection. It handles key phase tracking and key
-+ * update timing..
-+ *
-+ * Return: 0 on success, or a negative error code.
-+ */
-+int quic_crypto_encrypt(struct quic_crypto *crypto, struct sk_buff *skb)
-+{
-+	u8 *iv, cha, ccm, phase = crypto->key_phase;
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	int err;
-+
-+	cb->key_phase = phase;
-+	iv = crypto->tx_iv[phase];
-+	/* Packet payload is already encrypted (e.g., resumed from async), proceed to header
-+	 * protection only.
-+	 */
-+	if (cb->resume)
-+		goto out;
-+
-+	/* If a key update is pending and this is the first packet using the new key, save the
-+	 * current time. Later used to clear old keys after some time has passed (see
-+	 * quic_crypto_decrypt()).
-+	 */
-+	if (crypto->key_pending && !crypto->key_update_send_time)
-+		crypto->key_update_send_time = quic_ktime_get_us();
-+
-+	ccm = quic_crypto_is_cipher_ccm(crypto);
-+	err = quic_crypto_payload_encrypt(crypto->tx_tfm[phase], skb, iv, ccm);
-+	if (err)
-+		return err;
-+out:
-+	cha = quic_crypto_is_cipher_chacha(crypto);
-+	return quic_crypto_header_encrypt(crypto->tx_hp_tfm, skb, cha);
-+}
-+
-+/* Decrypts a QUIC packet after reception.  This function removes header protection,
-+ * decrypts the payload, and processes any key updates if the key phase bit changes.
-+ *
-+ * Return: 0 on success, or a negative error code.
-+ */
-+int quic_crypto_decrypt(struct quic_crypto *crypto, struct sk_buff *skb)
-+{
-+	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
-+	u8 *iv, cha, ccm, phase;
-+	int err = 0;
-+	u64 time;
-+
-+	/* Payload was decrypted asynchronously.  Proceed with parsing packet number and key
-+	 * phase.
-+	 */
-+	if (cb->resume) {
-+		err = quic_crypto_get_number(skb);
-+		if (err)
-+			return err;
++	frame = kmem_cache_zalloc(quic_frame_cachep, gfp);
++	if (!frame)
++		return NULL;
++	if (data) {
++		frame->data = data;
 +		goto out;
 +	}
-+	if (!cb->number_len) { /* Packet header not yet decrypted. */
-+		cha = quic_crypto_is_cipher_chacha(crypto);
-+		err = quic_crypto_header_decrypt(crypto->rx_hp_tfm, skb, cha);
-+		if (err) {
-+			pr_debug("%s: hd decrypt err %d\n", __func__, err);
-+			return err;
-+		}
++	frame->data = kmalloc(size, gfp);
++	if (!frame->data) {
++		kmem_cache_free(quic_frame_cachep, frame);
++		return NULL;
 +	}
-+
-+	/* rfc9001#section-6:
-+	 *
-+	 * The Key Phase bit allows a recipient to detect a change in keying material without
-+	 * needing to receive the first packet that triggered the change. An endpoint that
-+	 * notices a changed Key Phase bit updates keys and decrypts the packet that contains
-+	 * the changed value.
-+	 */
-+	if (cb->key_phase != crypto->key_phase && !crypto->key_pending) {
-+		if (!crypto->send_ready) /* Not ready for key update. */
-+			return -EINVAL;
-+		if (!cb->backlog) /* Key update must be done in process context. */
-+			return -EKEYREVOKED;
-+		err = quic_crypto_key_update(crypto); /* Perform a key update. */
-+		if (err) {
-+			cb->errcode = QUIC_TRANSPORT_ERROR_KEY_UPDATE;
-+			return err;
-+		}
-+		cb->key_update = 1; /* Mark packet as triggering key update. */
-+	}
-+
-+	phase = cb->key_phase;
-+	iv = crypto->rx_iv[phase];
-+	ccm = quic_crypto_is_cipher_ccm(crypto);
-+	err = quic_crypto_payload_decrypt(crypto->rx_tfm[phase], skb, iv, ccm);
-+	if (err) {
-+		if (err == -EINPROGRESS)
-+			return err;
-+		/* When using the old keys can not decrypt the packets, the peer might
-+		 * start another key_update. Thus, clear the last key_pending so that
-+		 * next packets will trigger the new key-update.
-+		 */
-+		if (crypto->key_pending && cb->key_phase != crypto->key_phase) {
-+			crypto->key_pending = 0;
-+			crypto->key_update_time = 0;
-+		}
-+		return err;
-+	}
-+
 +out:
-+	/* rfc9001#section-6.1:
-+	 *
-+	 * An endpoint MUST retain old keys until it has successfully unprotected a
-+	 * packet sent using the new keys. An endpoint SHOULD retain old keys for
-+	 * some time after unprotecting a packet sent using the new keys.
-+	 */
-+	if (crypto->key_pending && cb->key_phase == crypto->key_phase) {
-+		time = crypto->key_update_send_time;
-+		if (time && quic_ktime_get_us() - time >= crypto->key_update_time) {
-+			crypto->key_pending = 0;
-+			crypto->key_update_time = 0;
-+		}
-+	}
-+	return err;
++	refcount_set(&frame->refcnt, 1);
++	frame->offset = -1;
++	frame->len = (u16)size;
++	frame->size = frame->len;
++	return frame;
 +}
 +
- int quic_crypto_set_cipher(struct quic_crypto *crypto, u32 type, u8 flag)
- {
- 	struct quic_cipher *cipher;
-@@ -516,6 +974,210 @@ int quic_crypto_initial_keys_install(struct quic_crypto *crypto, struct quic_con
++static void quic_frame_free(struct quic_frame *frame)
++{
++	struct quic_frame_frag *frag, *next;
++
++	/* Handle RX stream/crypto/dgram frames. Use !frame->type to detect RX,
++	 * since frame->skb shares a union with frame->flist, used only on TX.
++	 */
++	if (!frame->type && frame->skb) {
++		kfree_skb(frame->skb);
++		goto out;
++	}
++
++	for (frag = frame->flist; frag; frag = next) {
++		next = frag->next;
++		kfree(frag);
++	}
++	kfree(frame->data);
++out:
++	kmem_cache_free(quic_frame_cachep, frame);
++}
++
++struct quic_frame *quic_frame_get(struct quic_frame *frame)
++{
++	refcount_inc(&frame->refcnt);
++	return frame;
++}
++
++void quic_frame_put(struct quic_frame *frame)
++{
++	if (refcount_dec_and_test(&frame->refcnt))
++		quic_frame_free(frame);
++}
++
++int quic_frame_stream_append(struct sock *sk, struct quic_frame *frame,
++			     struct quic_msginfo *info, u8 pack)
++{
++	return -1;
++}
+diff --git a/net/quic/frame.h b/net/quic/frame.h
+new file mode 100644
+index 000000000000..7bcdba1e9bdd
+--- /dev/null
++++ b/net/quic/frame.h
+@@ -0,0 +1,195 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* QUIC kernel implementation
++ * (C) Copyright Red Hat Corp. 2023
++ *
++ * This file is part of the QUIC kernel implementation
++ *
++ * Written or modified by:
++ *    Xin Long <lucien.xin@gmail.com>
++ */
++
++#define QUIC_CLOSE_PHRASE_MAX_LEN	80
++
++#define QUIC_TOKEN_MAX_LEN		120
++
++#define QUIC_TICKET_MIN_LEN		64
++#define QUIC_TICKET_MAX_LEN		4096
++
++#define QUIC_FRAME_BUF_SMALL		20
++#define QUIC_FRAME_BUF_LARGE		100
++
++enum {
++	QUIC_FRAME_PADDING = 0x00,
++	QUIC_FRAME_PING = 0x01,
++	QUIC_FRAME_ACK = 0x02,
++	QUIC_FRAME_ACK_ECN = 0x03,
++	QUIC_FRAME_RESET_STREAM = 0x04,
++	QUIC_FRAME_STOP_SENDING = 0x05,
++	QUIC_FRAME_CRYPTO = 0x06,
++	QUIC_FRAME_NEW_TOKEN = 0x07,
++	QUIC_FRAME_STREAM = 0x08,
++	QUIC_FRAME_MAX_DATA = 0x10,
++	QUIC_FRAME_MAX_STREAM_DATA = 0x11,
++	QUIC_FRAME_MAX_STREAMS_BIDI = 0x12,
++	QUIC_FRAME_MAX_STREAMS_UNI = 0x13,
++	QUIC_FRAME_DATA_BLOCKED = 0x14,
++	QUIC_FRAME_STREAM_DATA_BLOCKED = 0x15,
++	QUIC_FRAME_STREAMS_BLOCKED_BIDI = 0x16,
++	QUIC_FRAME_STREAMS_BLOCKED_UNI = 0x17,
++	QUIC_FRAME_NEW_CONNECTION_ID = 0x18,
++	QUIC_FRAME_RETIRE_CONNECTION_ID = 0x19,
++	QUIC_FRAME_PATH_CHALLENGE = 0x1a,
++	QUIC_FRAME_PATH_RESPONSE = 0x1b,
++	QUIC_FRAME_CONNECTION_CLOSE = 0x1c,
++	QUIC_FRAME_CONNECTION_CLOSE_APP = 0x1d,
++	QUIC_FRAME_HANDSHAKE_DONE = 0x1e,
++	QUIC_FRAME_DATAGRAM = 0x30, /* RFC 9221 */
++	QUIC_FRAME_DATAGRAM_LEN = 0x31,
++	QUIC_FRAME_MAX = QUIC_FRAME_DATAGRAM_LEN,
++};
++
++enum {
++	QUIC_TRANSPORT_PARAM_ORIGINAL_DESTINATION_CONNECTION_ID = 0x0000,
++	QUIC_TRANSPORT_PARAM_MAX_IDLE_TIMEOUT = 0x0001,
++	QUIC_TRANSPORT_PARAM_STATELESS_RESET_TOKEN = 0x0002,
++	QUIC_TRANSPORT_PARAM_MAX_UDP_PAYLOAD_SIZE = 0x0003,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_DATA = 0x0004,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_BIDI_LOCAL = 0x0005,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_BIDI_REMOTE = 0x0006,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAM_DATA_UNI = 0x0007,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAMS_BIDI = 0x0008,
++	QUIC_TRANSPORT_PARAM_INITIAL_MAX_STREAMS_UNI = 0x0009,
++	QUIC_TRANSPORT_PARAM_ACK_DELAY_EXPONENT = 0x000a,
++	QUIC_TRANSPORT_PARAM_MAX_ACK_DELAY = 0x000b,
++	QUIC_TRANSPORT_PARAM_DISABLE_ACTIVE_MIGRATION = 0x000c,
++	QUIC_TRANSPORT_PARAM_PREFERRED_ADDRESS = 0x000d,
++	QUIC_TRANSPORT_PARAM_ACTIVE_CONNECTION_ID_LIMIT = 0x000e,
++	QUIC_TRANSPORT_PARAM_INITIAL_SOURCE_CONNECTION_ID = 0x000f,
++	QUIC_TRANSPORT_PARAM_RETRY_SOURCE_CONNECTION_ID = 0x0010,
++	QUIC_TRANSPORT_PARAM_MAX_DATAGRAM_FRAME_SIZE = 0x0020,
++	QUIC_TRANSPORT_PARAM_GREASE_QUIC_BIT = 0x2ab2,
++	QUIC_TRANSPORT_PARAM_VERSION_INFORMATION = 0x11,
++	QUIC_TRANSPORT_PARAM_DISABLE_1RTT_ENCRYPTION = 0xbaad,
++};
++
++/* Arguments passed to create a STREAM frame */
++struct quic_msginfo {
++	struct quic_stream *stream;	/* The QUIC stream associated with this frame */
++	struct iov_iter *msg;		/* Iterator over message data to send */
++	u32 flags;			/* Flags controlling stream frame creation */
++	u8 level;			/* Encryption level for this frame */
++};
++
++/* Arguments passed to create a PING frame */
++struct quic_probeinfo {
++	u16 size;	/* Size of the PING packet */
++	u8 level;	/* Encryption level for this frame */
++};
++
++/* Operations for creating, processing, and acknowledging QUIC frames */
++struct quic_frame_ops {
++	struct quic_frame *(*frame_create)(struct sock *sk, void *data, u8 type);
++	int (*frame_process)(struct sock *sk, struct quic_frame *frame, u8 type);
++	void (*frame_ack)(struct sock *sk, struct quic_frame *frame);
++	u8 ack_eliciting;
++};
++
++/* Fragment of data appended to a STREAM frame */
++struct quic_frame_frag {
++	struct quic_frame_frag *next;	/* Next fragment in the linked list */
++	u16 size;			/* Size of this data fragment */
++	u8 data[];			/* Flexible array member holding fragment data */
++};
++
++struct quic_frame {
++	union {
++		struct quic_frame_frag *flist;	/* For TX: linked list of appended data fragments */
++		struct sk_buff *skb;		/* For RX: skb containing the raw frame data */
++	};
++	struct quic_stream *stream;		/* Stream related to this frame, NULL if none */
++	struct list_head list;			/* Linked list node for queuing frames */
++	union {
++		s64 offset;	/* For RX: stream/crypto data offset or read data offset */
++		s64 number;	/* For TX: first packet number used */
++	};
++	u8  *data;		/* Pointer to the actual frame data buffer */
++
++	refcount_t refcnt;
++	u16 errcode;		/* Error code set during frame processing */
++	u8  level;		/* Packet number space: Initial, Handshake, or App */
++	u8  type;		/* Frame type identifier */
++	u16 bytes;		/* Number of user data bytes */
++	u16 size;		/* Allocated data buffer size */
++	u16 len;		/* Total frame length including appended fragments */
++
++	u8  ack_eliciting:1;	/* Frame requires acknowledgment */
++	u8  transmitted:1;	/* Frame is in the transmitted queue */
++	u8  stream_fin:1;	/* Frame includes FIN flag for stream */
++	u8  nodelay:1;		/* Frame bypasses Nagle's algorithm for sending */
++	u8  padding:1;		/* Padding is needed after this frame */
++	u8  dgram:1;		/* Frame represents a datagram message (RX only) */
++	u8  event:1;		/* Frame represents an event (RX only) */
++	u8  path:1;		/* Path index used to send this frame */
++};
++
++static inline bool quic_frame_new_conn_id(u8 type)
++{
++	return type == QUIC_FRAME_NEW_CONNECTION_ID;
++}
++
++static inline bool quic_frame_dgram(u8 type)
++{
++	return type == QUIC_FRAME_DATAGRAM || type == QUIC_FRAME_DATAGRAM_LEN;
++}
++
++static inline bool quic_frame_stream(u8 type)
++{
++	return type >= QUIC_FRAME_STREAM && type < QUIC_FRAME_MAX_DATA;
++}
++
++static inline bool quic_frame_sack(u8 type)
++{
++	return type == QUIC_FRAME_ACK || type == QUIC_FRAME_ACK_ECN;
++}
++
++static inline bool quic_frame_ping(u8 type)
++{
++	return type == QUIC_FRAME_PING;
++}
++
++/* Check if a given frame type is valid for the specified encryption level,
++ * based on the Frame Types table from rfc9000#section-12.4.
++ *
++ * Returns 0 if valid, 1 otherwise.
++ */
++static inline int quic_frame_level_check(u8 level, u8 type)
++{
++	if (level == QUIC_CRYPTO_APP)
++		return 0;
++
++	if (level == QUIC_CRYPTO_EARLY) {
++		if (type == QUIC_FRAME_ACK || type == QUIC_FRAME_ACK_ECN ||
++		    type == QUIC_FRAME_CRYPTO || type == QUIC_FRAME_HANDSHAKE_DONE ||
++		    type == QUIC_FRAME_NEW_TOKEN || type == QUIC_FRAME_PATH_RESPONSE ||
++		    type == QUIC_FRAME_RETIRE_CONNECTION_ID)
++			return 1;
++		return 0;
++	}
++
++	if (type != QUIC_FRAME_ACK && type != QUIC_FRAME_ACK_ECN &&
++	    type != QUIC_FRAME_PADDING && type != QUIC_FRAME_PING &&
++	    type != QUIC_FRAME_CRYPTO && type != QUIC_FRAME_CONNECTION_CLOSE)
++		return 1;
++	return 0;
++}
++
++int quic_frame_stream_append(struct sock *sk, struct quic_frame *frame,
++			     struct quic_msginfo *info, u8 pack);
++
++struct quic_frame *quic_frame_alloc(u32 size, u8 *data, gfp_t gfp);
++struct quic_frame *quic_frame_get(struct quic_frame *frame);
++void quic_frame_put(struct quic_frame *frame);
++
++struct quic_frame *quic_frame_create(struct sock *sk, u8 type, void *data);
++int quic_frame_process(struct sock *sk, struct quic_frame *frame);
++void quic_frame_ack(struct sock *sk, struct quic_frame *frame);
+diff --git a/net/quic/protocol.c b/net/quic/protocol.c
+index 8c357eaa1c9b..0aa8944e984c 100644
+--- a/net/quic/protocol.c
++++ b/net/quic/protocol.c
+@@ -20,6 +20,7 @@
+ 
+ static unsigned int quic_net_id __read_mostly;
+ 
++struct kmem_cache *quic_frame_cachep __read_mostly;
+ struct percpu_counter quic_sockets_allocated;
+ struct workqueue_struct *quic_wq;
+ 
+@@ -342,6 +343,11 @@ static __init int quic_init(void)
+ 
+ 	quic_crypto_init();
+ 
++	quic_frame_cachep = kmem_cache_create("quic_frame", sizeof(struct quic_frame),
++					      0, SLAB_HWCACHE_ALIGN, NULL);
++	if (!quic_frame_cachep)
++		goto err;
++
+ 	err = percpu_counter_init(&quic_sockets_allocated, 0, GFP_KERNEL);
+ 	if (err)
+ 		goto err_percpu_counter;
+@@ -379,6 +385,8 @@ static __init int quic_init(void)
+ err_hash:
+ 	percpu_counter_destroy(&quic_sockets_allocated);
+ err_percpu_counter:
++	kmem_cache_destroy(quic_frame_cachep);
++err:
  	return err;
  }
  
-+#define QUIC_RETRY_KEY_V1 "\xbe\x0c\x69\x0b\x9f\x66\x57\x5a\x1d\x76\x6b\x54\xe3\x68\xc8\x4e"
-+#define QUIC_RETRY_KEY_V2 "\x8f\xb4\xb0\x1b\x56\xac\x48\xe2\x60\xfb\xcb\xce\xad\x7c\xcc\x92"
-+
-+#define QUIC_RETRY_NONCE_V1 "\x46\x15\x99\xd3\x5d\x63\x2b\xf2\x23\x98\x25\xbb"
-+#define QUIC_RETRY_NONCE_V2 "\xd8\x69\x69\xbc\x2d\x7c\x6d\x99\x90\xef\xb0\x4a"
-+
-+/* Retry Packet Integrity. */
-+int quic_crypto_get_retry_tag(struct quic_crypto *crypto, struct sk_buff *skb,
-+			      struct quic_conn_id *odcid, u32 version, u8 *tag)
-+{
-+	struct crypto_aead *tfm = crypto->tag_tfm;
-+	u8 *pseudo_retry, *p, *iv, *key;
-+	struct aead_request *req;
-+	struct scatterlist *sg;
-+	u32 plen;
-+	int err;
-+
-+	/* rfc9001#section-5.8:
-+	 *
-+	 * The Retry Integrity Tag is a 128-bit field that is computed as the output of
-+	 * AEAD_AES_128_GCM used with the following inputs:
-+	 *
-+	 * - The secret key, K, is 128 bits equal to 0xbe0c690b9f66575a1d766b54e368c84e.
-+	 * - The nonce, N, is 96 bits equal to 0x461599d35d632bf2239825bb.
-+	 * - The plaintext, P, is empty.
-+	 * - The associated data, A, is the contents of the Retry Pseudo-Packet,
-+	 *
-+	 * The Retry Pseudo-Packet is not sent over the wire. It is computed by taking the
-+	 * transmitted Retry packet, removing the Retry Integrity Tag, and prepending the
-+	 * two following fields: ODCID Length + Original Destination Connection ID (ODCID).
-+	 */
-+	err = crypto_aead_setauthsize(tfm, QUIC_TAG_LEN);
-+	if (err)
-+		return err;
-+	key = QUIC_RETRY_KEY_V1;
-+	if (version == QUIC_VERSION_V2)
-+		key = QUIC_RETRY_KEY_V2;
-+	err = crypto_aead_setkey(tfm, key, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
-+	if (err)
-+		return err;
-+
-+	plen = 1 + odcid->len + skb->len - QUIC_TAG_LEN;
-+	pseudo_retry = quic_crypto_aead_mem_alloc(tfm, plen + QUIC_TAG_LEN, &iv, &req, &sg, 1);
-+	if (!pseudo_retry)
-+		return -ENOMEM;
-+
-+	p = pseudo_retry;
-+	p = quic_put_int(p, odcid->len, 1);
-+	p = quic_put_data(p, odcid->data, odcid->len);
-+	p = quic_put_data(p, skb->data, skb->len - QUIC_TAG_LEN);
-+	sg_init_one(sg, pseudo_retry, plen + QUIC_TAG_LEN);
-+
-+	memcpy(iv, QUIC_RETRY_NONCE_V1, QUIC_IV_LEN);
-+	if (version == QUIC_VERSION_V2)
-+		memcpy(iv, QUIC_RETRY_NONCE_V2, QUIC_IV_LEN);
-+	aead_request_set_tfm(req, tfm);
-+	aead_request_set_ad(req, plen);
-+	aead_request_set_crypt(req, sg, sg, 0, iv);
-+	err = crypto_aead_encrypt(req);
-+	if (!err)
-+		memcpy(tag, p, QUIC_TAG_LEN);
-+	kfree_sensitive(pseudo_retry);
-+	return err;
-+}
-+
-+/* Generate a token for Retry or address validation.
-+ *
-+ * Builds a token with the format: [client address][timestamp][original DCID][auth tag]
-+ *
-+ * Encrypts the token (excluding the first flag byte) using AES-GCM with a key and IV
-+ * derived via HKDF. The original DCID is stored to be recovered later from a Client
-+ * Initial packet.  Ensures the token is bound to the client address and time, preventing
-+ * reuse or tampering.
-+ *
-+ * Returns 0 on success or a negative error code on failure.
-+ */
-+int quic_crypto_generate_token(struct quic_crypto *crypto, void *addr, u32 addrlen,
-+			       struct quic_conn_id *conn_id, u8 *token, u32 *tlen)
-+{
-+	u8 key[TLS_CIPHER_AES_GCM_128_KEY_SIZE], iv[QUIC_IV_LEN];
-+	struct crypto_aead *tfm = crypto->tag_tfm;
-+	u8 *retry_token = NULL, *tx_iv, *p;
-+	struct quic_data srt = {}, k, i;
-+	u64 ts = quic_ktime_get_us();
-+	struct aead_request *req;
-+	struct scatterlist *sg;
-+	int err, len;
-+
-+	quic_data(&srt, quic_random_data, QUIC_RANDOM_DATA_LEN);
-+	quic_data(&k, key, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
-+	quic_data(&i, iv, QUIC_IV_LEN);
-+	err = quic_crypto_keys_derive(crypto->secret_tfm, &srt, &k, &i, NULL, QUIC_VERSION_V1);
-+	if (err)
-+		goto out;
-+	err = crypto_aead_setauthsize(tfm, QUIC_TAG_LEN);
-+	if (err)
-+		goto out;
-+	err = crypto_aead_setkey(tfm, key, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
-+	if (err)
-+		goto out;
-+	token++;
-+	len = addrlen + sizeof(ts) + conn_id->len + QUIC_TAG_LEN;
-+	retry_token = quic_crypto_aead_mem_alloc(tfm, len, &tx_iv, &req, &sg, 1);
-+	if (!retry_token) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	p = retry_token;
-+	p = quic_put_data(p, addr, addrlen);
-+	p = quic_put_int(p, ts, sizeof(ts));
-+	quic_put_data(p, conn_id->data, conn_id->len);
-+	sg_init_one(sg, retry_token, len);
-+	aead_request_set_tfm(req, tfm);
-+	aead_request_set_ad(req, addrlen);
-+	aead_request_set_crypt(req, sg, sg, len - addrlen - QUIC_TAG_LEN, iv);
-+	err = crypto_aead_encrypt(req);
-+	if (err)
-+		goto out;
-+	memcpy(token, retry_token, len);
-+	*tlen = len + 1;
-+out:
-+	kfree_sensitive(retry_token);
-+	memzero_explicit(key, sizeof(key));
-+	memzero_explicit(iv, sizeof(iv));
-+	return err;
-+}
-+
-+/* Validate a Retry or address validation token.
-+ *
-+ * Decrypts the token using derived key and IV. Checks that the decrypted address matches
-+ * the provided address, validates the embedded timestamp against current time with a
-+ * version-specific timeout. If applicable, it extracts and returns the original
-+ * destination connection ID (ODCID) for Retry packets.
-+ *
-+ * Returns 0 if the token is valid, -EINVAL if invalid, or another negative error code.
-+ */
-+int quic_crypto_verify_token(struct quic_crypto *crypto, void *addr, u32 addrlen,
-+			     struct quic_conn_id *conn_id, u8 *token, u32 len)
-+{
-+	u64 t, ts = quic_ktime_get_us(), timeout = QUIC_TOKEN_TIMEOUT_RETRY;
-+	u8 key[TLS_CIPHER_AES_GCM_128_KEY_SIZE], iv[QUIC_IV_LEN];
-+	u8 *retry_token = NULL, *rx_iv, *p, flag = *token;
-+	struct crypto_aead *tfm = crypto->tag_tfm;
-+	struct quic_data srt = {}, k, i;
-+	struct aead_request *req;
-+	struct scatterlist *sg;
-+	int err;
-+
-+	if (len < sizeof(flag) + addrlen + sizeof(ts) + QUIC_TAG_LEN)
-+		return -EINVAL;
-+	quic_data(&srt, quic_random_data, QUIC_RANDOM_DATA_LEN);
-+	quic_data(&k, key, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
-+	quic_data(&i, iv, QUIC_IV_LEN);
-+	err = quic_crypto_keys_derive(crypto->secret_tfm, &srt, &k, &i, NULL, QUIC_VERSION_V1);
-+	if (err)
-+		goto out;
-+	err = crypto_aead_setauthsize(tfm, QUIC_TAG_LEN);
-+	if (err)
-+		goto out;
-+	err = crypto_aead_setkey(tfm, key, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
-+	if (err)
-+		goto out;
-+	len--;
-+	token++;
-+	retry_token = quic_crypto_aead_mem_alloc(tfm, len, &rx_iv, &req, &sg, 1);
-+	if (!retry_token) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	memcpy(retry_token, token, len);
-+	sg_init_one(sg, retry_token, len);
-+	aead_request_set_tfm(req, tfm);
-+	aead_request_set_ad(req, addrlen);
-+	aead_request_set_crypt(req, sg, sg, len - addrlen, iv);
-+	err = crypto_aead_decrypt(req);
-+	if (err)
-+		goto out;
-+
-+	err = -EINVAL;
-+	p = retry_token;
-+	if (memcmp(p, addr, addrlen))
-+		goto out;
-+	p += addrlen;
-+	len -= addrlen;
-+	if (flag == QUIC_TOKEN_FLAG_REGULAR)
-+		timeout = QUIC_TOKEN_TIMEOUT_REGULAR;
-+	if (!quic_get_int(&p, &len, &t, sizeof(ts)) || t + timeout < ts)
-+		goto out;
-+	len -= QUIC_TAG_LEN;
-+	if (len > QUIC_CONN_ID_MAX_LEN)
-+		goto out;
-+
-+	if (flag == QUIC_TOKEN_FLAG_RETRY)
-+		quic_conn_id_update(conn_id, p, len);
-+	err = 0;
-+out:
-+	kfree_sensitive(retry_token);
-+	memzero_explicit(key, sizeof(key));
-+	memzero_explicit(iv, sizeof(iv));
-+	return err;
-+}
-+
- /* Generate a derived key using HKDF-Extract and HKDF-Expand with a given label. */
- static int quic_crypto_generate_key(struct quic_crypto *crypto, void *data, u32 len,
- 				    char *label, u8 *token, u32 key_len)
-diff --git a/net/quic/crypto.h b/net/quic/crypto.h
-index fc562035271c..51891ae9852e 100644
---- a/net/quic/crypto.h
-+++ b/net/quic/crypto.h
-@@ -62,6 +62,9 @@ int quic_crypto_get_secret(struct quic_crypto *crypto, struct quic_crypto_secret
- int quic_crypto_set_cipher(struct quic_crypto *crypto, u32 type, u8 flag);
- int quic_crypto_key_update(struct quic_crypto *crypto);
+@@ -393,6 +401,7 @@ static __exit void quic_exit(void)
+ 	destroy_workqueue(quic_wq);
+ 	quic_hash_tables_destroy();
+ 	percpu_counter_destroy(&quic_sockets_allocated);
++	kmem_cache_destroy(quic_frame_cachep);
+ 	pr_info("quic: exit\n");
+ }
  
-+int quic_crypto_encrypt(struct quic_crypto *crypto, struct sk_buff *skb);
-+int quic_crypto_decrypt(struct quic_crypto *crypto, struct sk_buff *skb);
-+
- int quic_crypto_initial_keys_install(struct quic_crypto *crypto, struct quic_conn_id *conn_id,
- 				     u32 version, bool is_serv);
- int quic_crypto_generate_session_ticket_key(struct quic_crypto *crypto, void *data,
-@@ -69,5 +72,12 @@ int quic_crypto_generate_session_ticket_key(struct quic_crypto *crypto, void *da
- int quic_crypto_generate_stateless_reset_token(struct quic_crypto *crypto, void *data,
- 					       u32 len, u8 *key, u32 key_len);
+diff --git a/net/quic/protocol.h b/net/quic/protocol.h
+index 6a31ccd4699e..9a798a1c57c4 100644
+--- a/net/quic/protocol.h
++++ b/net/quic/protocol.h
+@@ -8,6 +8,7 @@
+  *    Xin Long <lucien.xin@gmail.com>
+  */
  
-+int quic_crypto_generate_token(struct quic_crypto *crypto, void *addr, u32 addrlen,
-+			       struct quic_conn_id *conn_id, u8 *token, u32 *tlen);
-+int quic_crypto_get_retry_tag(struct quic_crypto *crypto, struct sk_buff *skb,
-+			      struct quic_conn_id *odcid, u32 version, u8 *tag);
-+int quic_crypto_verify_token(struct quic_crypto *crypto, void *addr, u32 addrlen,
-+			     struct quic_conn_id *conn_id, u8 *token, u32 len);
++extern struct kmem_cache *quic_frame_cachep __read_mostly;
+ extern struct percpu_counter quic_sockets_allocated;
+ 
+ extern long sysctl_quic_mem[3];
+diff --git a/net/quic/socket.h b/net/quic/socket.h
+index 5e9b21430f42..eeb510e0a09b 100644
+--- a/net/quic/socket.h
++++ b/net/quic/socket.h
+@@ -20,6 +20,8 @@
+ #include "path.h"
+ #include "cong.h"
+ 
++#include "frame.h"
 +
- void quic_crypto_free(struct quic_crypto *crypto);
- void quic_crypto_init(void);
+ #include "protocol.h"
+ #include "timer.h"
+ 
 -- 
 2.47.1
 
