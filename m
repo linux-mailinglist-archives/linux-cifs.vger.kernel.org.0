@@ -1,239 +1,234 @@
-Return-Path: <linux-cifs+bounces-8899-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8903-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C68D7D3B1D0
-	for <lists+linux-cifs@lfdr.de>; Mon, 19 Jan 2026 17:44:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E05BD3B32B
+	for <lists+linux-cifs@lfdr.de>; Mon, 19 Jan 2026 18:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 983AB307F457
-	for <lists+linux-cifs@lfdr.de>; Mon, 19 Jan 2026 16:43:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EF3C531107FF
+	for <lists+linux-cifs@lfdr.de>; Mon, 19 Jan 2026 16:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39D53C1971;
-	Mon, 19 Jan 2026 16:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4E02E9748;
+	Mon, 19 Jan 2026 16:44:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2eWuvDH"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T6GdVkkS"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6691C3C1967;
-	Mon, 19 Jan 2026 16:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B0638BF8D
+	for <linux-cifs@vger.kernel.org>; Mon, 19 Jan 2026 16:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768840263; cv=none; b=t/wJw3DUzP7MY9CpPmknPgBIw27N1lGdUfvpiVEI3uI0q8WwAkEdNGHPoWhYx6F4v4PDURRhUmUJgmIgk/HiqnFtvkEwJvPoFpjVle0LrYYyuRwJOMHbjO005N9kYL74iUDv5QRxhtMAE4Ji8af5af0ApNnPwhctth4de/rWRSw=
+	t=1768841053; cv=none; b=B5SAoXArBUfxs7eJ7d3FA0uh1BaagM2Mpkz+i5RyjIHe69bgWJ0vG1mxfmf/98vmlVlWMM2dFftK4eb69K+1hCBMRl4kxcqCt9cQx1j1qZqOnPt4fvXa/6+0zfu1EEwQLSyR87edncgxjR/NbzfC8Mn+MSxPxFyxLAsRg5rRDzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768840263; c=relaxed/simple;
-	bh=YvhqTu858V2nHA/DvphvNPgy0WWoXV1XH8O4vHs3r6s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hQDsF9EttYuVcqT8VGo0T23Te8h7hyhWB+ID+1nhNfs2cCMleb14r4dNEPKVwNvSnWZN9hcufxapm2zr7hAgWCVrZ40sHUfu8oRRUrohOictb+wPc0VThHUP99HdU7h/3oqlm8fI9qN13xnlRFKg5P2FVE2SPS83/UW8tAraens=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2eWuvDH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CBEC2BC86;
-	Mon, 19 Jan 2026 16:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768840263;
-	bh=YvhqTu858V2nHA/DvphvNPgy0WWoXV1XH8O4vHs3r6s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=h2eWuvDHO+FHNVWC0HtfYiwQLGD+wYaxR9D3B3Ed9tIu0JUYT/Du8NCPJr2Kni+6j
-	 FzBHjGuc/OLKKlytLlDDSMvG6K/lZ+1yYDEkp/N9zqPCokk75ZABfwL6avEwi42vps
-	 0f/64rbZnR08cTk3Jklqr4LP4IF+Xj2tBebaD1y0phkAa+Asd/Q4cqS9Zfs0k0IMkF
-	 Wcd+HNSs1kfJ+gcQ5lC7WEcMywntkKV3L2fJFu0mtjX/DfTm1UQD/RZLxzC0HuvTay
-	 SahYNV1qOWaAxchZUrdKt84Zn3hO16NvxYRmiTOmxr3zcnvDdJtPkIgDlJWEZ0vCK2
-	 XLTl9TlK3VJ0g==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Mon, 19 Jan 2026 11:26:48 -0500
-Subject: [PATCH v2 31/31] nfsd: convert dprintks in check_export() to
- tracepoints
+	s=arc-20240116; t=1768841053; c=relaxed/simple;
+	bh=svT1/kO9Fm5LsQQ+8iGaf2OpTuO3oOkak0aa4SyIkHo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AoimbagxPz4zDIebnQQy7TFN+7eTm1UNtqbea67UnXQHSaVFSLVxO+PBApZundcL2UcbLcEFMVnNeXHsJojuEV9vyiNmbkBtIk1uddhcOG1+Wf+et9jsge8/Ya5q6Fv2Cht2ZXymBq2XG2NJc0xsuM1zyF4tshVRQSElxX2v51A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T6GdVkkS; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4801c1ad878so33473535e9.1
+        for <linux-cifs@vger.kernel.org>; Mon, 19 Jan 2026 08:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1768841031; x=1769445831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgLzccUWq4iGBHcGxE8g+OXGVNhTfRDHPShYoi/owx8=;
+        b=T6GdVkkSTFKjLYKA+FDler/x0SM5G4h2OXRRHftKizuu67DfzxW/+FoILEHwDAb/Mx
+         j3xOdAeUma/+8jaH6hEUfUewiPlAhbb0kTpephokBXhmSKmJD1vg7ah1+sxq0Kck7N4U
+         iOqbh/zxXux4Z7ujW8wzTMuMb+/xQONXrCviuGz2v3pH+N2+r7XN8z7VSjb6d0Od94ru
+         Brxuw34uxrS45XGXZ8pGnU8qPZB6HwcfY2pZtGHJpo15Jgrw42RSkyOVAmzTHec3kGW7
+         PU8W47o2gC327TgcVO+HCSqqapTVcqMaaVBEuac4zqMveWrP9cgykmf75+8LZ9tLlitr
+         5e1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768841031; x=1769445831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MgLzccUWq4iGBHcGxE8g+OXGVNhTfRDHPShYoi/owx8=;
+        b=EJVU208z7zusJTZru066gs13HvpCONnPFhINy3Vo2ucqVlYBNxu4JmMxvrxF25TFbT
+         Kkot23gpG7IU39iMBARqmdfPiA5VdD9plTJB/bSfw7SSZ3AEQsbLExn1VevT9smvkytF
+         Ej7imdu+M7IOj91wkWDtfo723BYEaLANig5WfVDoHPZZUP0W3hkgw0DD+en2DvA2RCy6
+         oKvA3x5UAlarfPKCph/VdxsH/LWZyE7L/+VdYuVp6qR74kFYlo/d5OpglqPmWdlAyOKT
+         8/jYFUoT6v60jghyLJvVJLZoryGjhyLsngYJ/PMFfK1a5UdLtQCVrMxd0lhViepwnDE3
+         E4Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCXnFQEldMwuUjldUzd32npW9uyaFvR7VZz/fJq1Iz6BQVZm5EuBl7uShlap8rUbCKs1giJGuxMFvK6W@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY9baKA67hCAZheacNC3Ug4Gc/YoV4ptpIlppcFl5eSv/TFgmD
+	Vvthi6Os/a1A9tgPa6zXehQD5f1eeVXCjY0aJsjf28xmuESK0CCJPGrWeF8kR5Rm/cQ=
+X-Gm-Gg: AY/fxX6NuwTi+NSVETk/nC2xxkYnHOFz3RLiAEFPAnKHoxpLsTFIj/SRkRjcRdsbHSl
+	3N8fiRY8DZV1G/GFfTOBqu4KAveuGUJyY1QwJOVrjMsPykCl4r/dSgUERHv/FroJZgdG2oaEN95
+	pc8K/Q01LyCQpe8gOvP4+OxfSR1nTm12ZuKCuxp6yWPNM2pV8e+WUtgpLhdUTT/LwvFtOqfohUM
+	YFxDQeq+JhUNXZSTZSmFI79ZKqkfyHenQFiLJ8nXf4rJF9ib9nMj883pl59E5r2IBHpE4OiKCKB
+	rx2H7SIjP7JbM4BBUwGi/ektGqhH1ItbPjyxRe9dzxCXJJ5cwPyKf5d9ug8eETpuyVUC3U0GyfY
+	Ctld1OR1FLGFLSvl7T/bjraSmo0g2yWnN/4JYsTkpOxtxhoFbv0zOdvWCuO9GQtix78HOr7sadL
+	w+mHGpJDGo87sRAlC0
+X-Received: by 2002:a05:600c:4f54:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-4801e34821cmr129307645e9.28.1768841030730;
+        Mon, 19 Jan 2026 08:43:50 -0800 (PST)
+Received: from precision ([177.115.55.201])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6bd8e7cd9sm12539518eec.16.2026.01.19.08.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jan 2026 08:43:50 -0800 (PST)
+From: Henrique Carvalho <henrique.carvalho@suse.com>
+To: sfrench@samba.org
+Cc: pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	ematsumiya@suse.de,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH v3 1/2] smb: client: introduce multichannel async work during mount
+Date: Mon, 19 Jan 2026 13:42:12 -0300
+Message-ID: <20260119164213.539322-1-henrique.carvalho@suse.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260119-exportfs-nfsd-v2-31-d93368f903bd@kernel.org>
-References: <20260119-exportfs-nfsd-v2-0-d93368f903bd@kernel.org>
-In-Reply-To: <20260119-exportfs-nfsd-v2-0-d93368f903bd@kernel.org>
-To: Christian Brauner <brauner@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
- Tom Talpey <tom@talpey.com>, Amir Goldstein <amir73il@gmail.com>, 
- Hugh Dickins <hughd@google.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Theodore Ts'o <tytso@mit.edu>, 
- Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
- Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
- Yue Hu <zbestahu@gmail.com>, Jeffle Xu <jefflexu@linux.alibaba.com>, 
- Sandeep Dhavale <dhavale@google.com>, Hongbo Li <lihongbo22@huawei.com>, 
- Chunhai Guo <guochunhai@vivo.com>, Carlos Maiolino <cem@kernel.org>, 
- Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, 
- Viacheslav Dubeyko <slava@dubeyko.com>, Chris Mason <clm@fb.com>, 
- David Sterba <dsterba@suse.com>, Luis de Bethencourt <luisbg@kernel.org>, 
- Salah Triki <salah.triki@gmail.com>, 
- Phillip Lougher <phillip@squashfs.org.uk>, Steve French <sfrench@samba.org>, 
- Paulo Alcantara <pc@manguebit.org>, 
- Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
- Shyam Prasad N <sprasad@microsoft.com>, 
- Bharath SM <bharathsm@microsoft.com>, Miklos Szeredi <miklos@szeredi.hu>, 
- Mike Marshall <hubcap@omnibond.com>, 
- Martin Brandenburg <martin@omnibond.com>, Mark Fasheh <mark@fasheh.com>, 
- Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
- Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, 
- Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
- Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
- Dave Kleikamp <shaggy@kernel.org>, David Woodhouse <dwmw2@infradead.org>, 
- Richard Weinberger <richard@nod.at>, Jan Kara <jack@suse.cz>, 
- Andreas Gruenbacher <agruenba@redhat.com>, 
- OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
- Jaegeuk Kim <jaegeuk@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: David Laight <david.laight.linux@gmail.com>, 
- Dave Chinner <david@fromorbit.com>, Christoph Hellwig <hch@infradead.org>, 
- linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
- linux-ext4@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
- linux-xfs@vger.kernel.org, ceph-devel@vger.kernel.org, 
- linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
- samba-technical@lists.samba.org, linux-unionfs@vger.kernel.org, 
- devel@lists.orangefs.org, ocfs2-devel@lists.linux.dev, 
- ntfs3@lists.linux.dev, linux-nilfs@vger.kernel.org, 
- jfs-discussion@lists.sourceforge.net, linux-mtd@lists.infradead.org, 
- gfs2@lists.linux.dev, linux-f2fs-devel@lists.sourceforge.net, 
- linux-doc@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4169; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=YvhqTu858V2nHA/DvphvNPgy0WWoXV1XH8O4vHs3r6s=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpbltg7KaYG+cOnqGQwFogykRFEv2vvWPelc3rm
- NkydLb2mGCJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaW5bYAAKCRAADmhBGVaC
- FWqbEACWyEMei5YgEgZwLPtZYTWHb8tmOW7eGn745dbexN721w1XJin+y0uFuiiEqpYtbB01+nV
- 8eGJXblAwZWOM56qXzH8kIp9IF0Do5UMXMJTyUb79WR1Vxz5+svm6rH4ORCbDMoohslm0Ey+odn
- Zx62FtcwzZ/STJY531c69lQu2bhr3cC/ykvj+MnpDF1L6iyuPTl056aSkCGs+2TRjxpwsRGp0tV
- 7FV1mQVZyW+b344OwsU12+VtzNEUh3CAPnxW20OYd9f0s9HFEpZK4Y9Ep/WsEqP0165/LeBaVXZ
- Tihw250Wgn1dTNDwYC3840yoGmtFEjRpYdrQxlR1fxUi+1e02u+G+A2z8VPXC2UMtR7HTpWR3kq
- 0gpbEU4+t6RXYZ2KSP1Qp1R60LWabc62qCpOU1l2LsxieR9zzMNQzgrLEkvEzam75nzR1SYp0M1
- MAZjAICvnrvk2txw2ibnrnHJErb9vl+kLuB3btLLAaMmNVQQO9QZiA3QpDitFCH5aU6ZVYP8fdD
- r/l2xb9t2bkCY+uL5zGtY5a9B+sKZHy6JRgOd3o/SiUBbmV6dnxq4JqqdXpdxKAPH7RgwPtK224
- H9hNJK7Mkv5H+8Si6seHr0qbAPwccoRdGVCztXQ1fdG5MLjNTJb3M6cVTt5Wicf6NlgjQa664oA
- Z9sNNAkM0OHYjQA==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+Content-Transfer-Encoding: 8bit
 
-Get rid of the dprintk messages in check_export(). Instead add new
-tracepoints that show the terminal inode and the flags.
+Mounts can experience large delays when servers advertise interfaces
+that are unreachable from the client.
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+To fix this, decouple channel addition from the synchronous mount path
+by introducing struct mchan_mount and running channel setup as
+background work.
+
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Henrique Carvalho <henrique.carvalho@suse.com>
 ---
- fs/nfsd/export.c | 11 ++++++-----
- fs/nfsd/trace.h  | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+), 5 deletions(-)
+V2 -> V3: restored comments present in smb3_update_ses_channels() and
+added Shyam's RB
+V1 -> V2: remove vestigial fields from mchan_mount and replaced
+get_smb_session function for smb_ses_inc_refcount
 
-diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-index bc703cf58bfa210c7c57d49f22f15bc10d7cfc91..3cc336b953b38573966c43000f31cd341380837b 100644
---- a/fs/nfsd/export.c
-+++ b/fs/nfsd/export.c
-@@ -435,31 +435,32 @@ static int check_export(const struct path *path, int *flags, unsigned char *uuid
- 	if (!(inode->i_sb->s_type->fs_flags & FS_REQUIRES_DEV) &&
- 	    !(*flags & NFSEXP_FSID) &&
- 	    uuid == NULL) {
--		dprintk("exp_export: export of non-dev fs without fsid\n");
-+		trace_nfsd_check_export_need_fsid(inode, *flags);
- 		return -EINVAL;
- 	}
+ fs/smb/client/cifsglob.h |  5 ++++
+ fs/smb/client/connect.c  | 61 ++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 63 insertions(+), 3 deletions(-)
+
+diff --git a/fs/smb/client/cifsglob.h b/fs/smb/client/cifsglob.h
+index 3eca5bfb7030..ebb106e927c4 100644
+--- a/fs/smb/client/cifsglob.h
++++ b/fs/smb/client/cifsglob.h
+@@ -1796,6 +1796,11 @@ struct cifs_mount_ctx {
+ 	struct cifs_tcon *tcon;
+ };
  
- 	if (!exportfs_can_decode_fh(inode->i_sb->s_export_op)) {
--		dprintk("exp_export: export of invalid fs type.\n");
-+		trace_nfsd_check_export_invalid_fstype(inode, *flags);
- 		return -EINVAL;
- 	}
++struct mchan_mount {
++	struct work_struct work;
++	struct cifs_ses *ses;
++};
++
+ static inline void __free_dfs_info_param(struct dfs_info3_param *param)
+ {
+ 	kfree(param->path_name);
+diff --git a/fs/smb/client/connect.c b/fs/smb/client/connect.c
+index ce620503e9f7..1b984669de29 100644
+--- a/fs/smb/client/connect.c
++++ b/fs/smb/client/connect.c
+@@ -64,6 +64,10 @@ static int generic_ip_connect(struct TCP_Server_Info *server);
+ static void tlink_rb_insert(struct rb_root *root, struct tcon_link *new_tlink);
+ static void cifs_prune_tlinks(struct work_struct *work);
  
- 	if (!(inode->i_sb->s_export_op->flags & EXPORT_OP_STABLE_HANDLES)) {
--		dprintk("%s: fs does not provide stable filehandles!\n", __func__);
-+		trace_nfsd_check_export_no_stable_fh(inode, *flags);
- 		return -EINVAL;
- 	}
- 
- 	if (is_idmapped_mnt(path->mnt)) {
- 		dprintk("exp_export: export of idmapped mounts not yet supported.\n");
-+		trace_nfsd_check_export_idmapped(inode, *flags);
- 		return -EINVAL;
- 	}
- 
- 	if (inode->i_sb->s_export_op->flags & EXPORT_OP_NOSUBTREECHK &&
- 	    !(*flags & NFSEXP_NOSUBTREECHECK)) {
--		dprintk("%s: %s does not support subtree checking!\n",
--			__func__, inode->i_sb->s_type->name);
-+		trace_nfsd_check_export_subtree(inode, *flags);
- 		return -EINVAL;
- 	}
-+	trace_nfsd_check_export_success(inode, *flags);
- 	return 0;
++static struct mchan_mount *mchan_mount_alloc(struct cifs_ses *ses);
++static void mchan_mount_free(struct mchan_mount *mchan_mount);
++static void mchan_mount_work_fn(struct work_struct *work);
++
+ /*
+  * Resolve hostname and set ip addr in tcp ses. Useful for hostnames that may
+  * get their ip addresses changed at some point.
+@@ -3899,15 +3903,64 @@ int cifs_is_path_remote(struct cifs_mount_ctx *mnt_ctx)
+ 	return rc;
  }
  
-diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
-index 5ae2a611e57f4b4e51a4d9eb6e0fccb66ad8d288..e3f5fe1181b605b34cb70d53f32739c3ef9b82f6 100644
---- a/fs/nfsd/trace.h
-+++ b/fs/nfsd/trace.h
-@@ -339,6 +339,58 @@ DEFINE_EVENT_CONDITION(nfsd_fh_err_class, nfsd_##name,	\
- DEFINE_NFSD_FH_ERR_EVENT(set_fh_dentry_badexport);
- DEFINE_NFSD_FH_ERR_EVENT(set_fh_dentry_badhandle);
++static struct mchan_mount *
++mchan_mount_alloc(struct cifs_ses *ses)
++{
++	struct mchan_mount *mchan_mount;
++
++	mchan_mount = kzalloc(sizeof(*mchan_mount), GFP_KERNEL);
++	if (!mchan_mount)
++		return ERR_PTR(-ENOMEM);
++
++	INIT_WORK(&mchan_mount->work, mchan_mount_work_fn);
++
++	spin_lock(&cifs_tcp_ses_lock);
++	cifs_smb_ses_inc_refcount(ses);
++	spin_unlock(&cifs_tcp_ses_lock);
++	mchan_mount->ses = ses;
++
++	return mchan_mount;
++}
++
++static void
++mchan_mount_free(struct mchan_mount *mchan_mount)
++{
++	cifs_put_smb_ses(mchan_mount->ses);
++	kfree(mchan_mount);
++}
++
++static void
++mchan_mount_work_fn(struct work_struct *work)
++{
++	struct mchan_mount *mchan_mount = container_of(work, struct mchan_mount, work);
++
++	smb3_update_ses_channels(mchan_mount->ses,
++				 mchan_mount->ses->server,
++				 false /* from_reconnect */,
++				 false /* disable_mchan */);
++
++	mchan_mount_free(mchan_mount);
++}
++
+ #ifdef CONFIG_CIFS_DFS_UPCALL
+ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx)
+ {
+ 	struct cifs_mount_ctx mnt_ctx = { .cifs_sb = cifs_sb, .fs_ctx = ctx, };
++	struct mchan_mount *mchan_mount = NULL;
+ 	int rc;
  
-+#define show_export_flags(val)						\
-+	__print_flags(val, "|",						\
-+		{ NFSEXP_READONLY,		"READONLY" },		\
-+		{ NFSEXP_INSECURE_PORT,		"INSECURE" },		\
-+		{ NFSEXP_ROOTSQUASH,		"ROOTSQUASH" },		\
-+		{ NFSEXP_ALLSQUASH,		"ALLSQUASH" },		\
-+		{ NFSEXP_ASYNC,			"ASYNC" },		\
-+		{ NFSEXP_GATHERED_WRITES,	"GATHERED_WRITES" },	\
-+		{ NFSEXP_NOREADDIRPLUS,		"NOREADDIRPLUS" },	\
-+		{ NFSEXP_SECURITY_LABEL,	"SECURITY_LABEL" },	\
-+		{ NFSEXP_NOHIDE,		"NOHIDE" },		\
-+		{ NFSEXP_NOSUBTREECHECK,	"NOSUBTREECHECK" },	\
-+		{ NFSEXP_NOAUTHNLM,		"NOAUTHNLM" },		\
-+		{ NFSEXP_MSNFS,			"MSNFS" },		\
-+		{ NFSEXP_FSID,			"FSID" },		\
-+		{ NFSEXP_CROSSMOUNT,		"CROSSMOUNT" },		\
-+		{ NFSEXP_NOACL,			"NOACL" },		\
-+		{ NFSEXP_V4ROOT,		"V4ROOT" },		\
-+		{ NFSEXP_PNFS,			"PNFS" })
+ 	rc = dfs_mount_share(&mnt_ctx);
+ 	if (rc)
+ 		goto error;
 +
-+DECLARE_EVENT_CLASS(nfsd_check_export_class,
-+	TP_PROTO(const struct inode *inode,
-+		 int flags),
-+	TP_ARGS(inode, flags),
-+	TP_STRUCT__entry(
-+		__field(dev_t, dev)
-+		__field(ino_t, ino)
-+		__field(int, flags)
-+	),
-+	TP_fast_assign(
-+		__entry->dev = inode->i_sb->s_dev;
-+		__entry->ino = inode->i_ino;
-+		__entry->flags = flags;
-+	),
-+	TP_printk("dev=%u:%u:%lu flags=%s",
-+		  MAJOR(__entry->dev), MINOR(__entry->dev),
-+		  __entry->ino, show_export_flags(__entry->flags))
-+)
++	if (ctx->multichannel) {
++		mchan_mount = mchan_mount_alloc(mnt_ctx.ses);
++		if (IS_ERR(mchan_mount)) {
++			rc = PTR_ERR(mchan_mount);
++			goto error;
++		}
++	}
 +
-+#define DEFINE_NFSD_CHECK_EXPORT_EVENT(name)			\
-+DEFINE_EVENT(nfsd_check_export_class, nfsd_check_export_##name,	\
-+	TP_PROTO(const struct inode *inode,			\
-+		 int flags),					\
-+	TP_ARGS(inode, flags))
+ 	if (!ctx->dfs_conn)
+ 		goto out;
+ 
+@@ -3926,17 +3979,19 @@ int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx)
+ 	ctx->prepath = NULL;
+ 
+ out:
+-	smb3_update_ses_channels(mnt_ctx.ses, mnt_ctx.server,
+-				  false /* from_reconnect */,
+-				  false /* disable_mchan */);
+ 	rc = mount_setup_tlink(cifs_sb, mnt_ctx.ses, mnt_ctx.tcon);
+ 	if (rc)
+ 		goto error;
+ 
++	if (ctx->multichannel)
++		queue_work(cifsiod_wq, &mchan_mount->work);
 +
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(need_fsid);
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(invalid_fstype);
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(no_stable_fh);
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(idmapped);
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(subtree);
-+DEFINE_NFSD_CHECK_EXPORT_EVENT(success);
-+
- TRACE_EVENT(nfsd_exp_find_key,
- 	TP_PROTO(const struct svc_expkey *key,
- 		 int status),
-
+ 	free_xid(mnt_ctx.xid);
+ 	return rc;
+ 
+ error:
++	if (ctx->multichannel && !IS_ERR_OR_NULL(mchan_mount))
++		mchan_mount_free(mchan_mount);
+ 	cifs_mount_put_conns(&mnt_ctx);
+ 	return rc;
+ }
 -- 
-2.52.0
+2.50.1
 
 
