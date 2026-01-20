@@ -1,265 +1,183 @@
-Return-Path: <linux-cifs+bounces-8964-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8971-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aPbVFo1tcGkVXwAAu9opvQ
-	(envelope-from <linux-cifs+bounces-8964-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 07:09:17 +0100
+	id 0PcrB2L0b2m+UQAAu9opvQ
+	(envelope-from <linux-cifs+bounces-8971-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 22:32:18 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA5551E51
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 07:09:16 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D728B4C4E5
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 22:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E31579A9320
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 15:14:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1836E88340F
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 20:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F374611D9;
-	Tue, 20 Jan 2026 14:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37733A962E;
+	Tue, 20 Jan 2026 20:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrT3A/XG"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BcMpE5Au"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2853445BD68
-	for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 14:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768921112; cv=pass; b=KuD5P2Qh6hJbHJadRmz3dwj5LopUZEv3jwDqfpUpI3KrG8+Zw1D98lw6mGskWQXvu7pz8PNP3zLDS+7roL+J+xc5LKPL9W/fljXQKXjd8Kx7iHoZ6VV1rgKqE8BkxHkReBS/CYp4PRjEEU0q1kAkHqvYDbivRzJ6SD2t7yA1bYM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768921112; c=relaxed/simple;
-	bh=AV9hAIQr5RzI8gRTr0Om3D11rvB2xShikwoc1m16OHI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jWBReB89mXXxYxIC5l18qRgaA12q3evSw/5oQYwmSpkPysiO99uYRaP91NIenxH6EC18PLbpfpoA/WCkRCrMEyWVuHzdr5ndNyyCiextePE+SEkoP30/a4Roumu9QZHgv/pmmDqXcI3G4ZSh/hsT5U5sbo3tMYZgI9nTnaV1mXE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrT3A/XG; arc=pass smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81f4e136481so2566645b3a.3
-        for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 06:58:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768921110; cv=none;
-        d=google.com; s=arc-20240605;
-        b=C37Nj9XqqaMbtwJ/dvptel2JLUmqwCtQw5oolg+jG5suWRodiKOF9daz2Lu1kCTRYo
-         uK+oBpHyCDjAG0wTgEI8v4W5VByxWqXfQUh+oEyGkYdwtQnR+K8pAzrvk1Dsd29fgHMC
-         iIVVFA+8HrjM2WRvDFvuXOFO/qWCgIJ3EYUjl5U1BWUbJvH70ZbTiKl1fUAq5ImT2VoY
-         Y0Q11ltVt2E2DbUjDDy14dKdfooKLXebemQGJvnUEw31mmDrZ/eeeTX3inT+p8ZMvjSI
-         zzApbPPb+br1YdFue6o5JfnwLRhK5qQUfFUs053tXJr57liiegR1doDlTiZaGczw+I5j
-         J6dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EUfRwMQV3KapT7k/eehULUSMHqVaGxUA4eRrbnoBX9U=;
-        fh=lgDaE31ze+7oScZrvl+iOGYm3nGhFCxvSW+65lJZQco=;
-        b=k2TFirxB+XlXG5Rv5FVlDEAQJls5SGts2AX0zNt4JgjBq/mbwAVNrNCqnyLAAtEouR
-         n2zWiM+4cUAai8r1dcLFFpShEniEFd/klxot2b5PNC8XcpzGDUKBnpyEbFQR4VZogC/4
-         +/2pQk298gVhcGZO7cB8D1K+zJjDewlsfC/i5gD97hu/K6kMqfzfWqGVOyhg2oHTg4y+
-         Pn6uoiSC3ryluggNry5aAzRCsAV3I8P8CWxuliulpUsOxwSctKDsOJXoAwS3w3DBaJu1
-         /v/jw72mEDyTphYj5ljR9tKHBBEV+APDhHC/6+K+kKTP8YbtRccNsPpm6FLNF5ifkB9I
-         0p9g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595B31D6DA9
+	for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 20:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768940317; cv=none; b=dK9XV9iSAAaD0GY1wpCWbXsWhQjbzjIhPlmYiW53VY9xyzuDA/XRTC9tZeopQPrxHI6FUMW+WahG17omuhyH5vTHY/g3mkEG/CAf/eoP6LTQF2PMwC323KPyYbGm89nOBmXVvCsc8bfiIfEpln4E+YNhSpMLIkxz5Y1cjL8BgQg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768940317; c=relaxed/simple;
+	bh=yBxT+m83nb9w1YbD2+jmfMP2icuuejMufFTl4ndUXYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eG4TIrsKY7Jo7RL13lRnKcl/pVnXBUIPvSHxdcLfL8Ok7ynq+5bR6uTWy/R+QOan3kpCbAB2bcvMvVdsxyF2FQ33NH60NnLEJK4ryGZiWIiFZKNuBHs1IuaxK2ecEZeI/2itfvGHtW52VtHdWWOlPX2a4be5GTE1DMNdKfsZYBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BcMpE5Au; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so53396605e9.1
+        for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 12:18:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768921110; x=1769525910; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EUfRwMQV3KapT7k/eehULUSMHqVaGxUA4eRrbnoBX9U=;
-        b=VrT3A/XGeXGv/3EgNntOVwTUsGMRpoH6LR4CIPrz2kzgzQ9RkSGlwoi03OUqReXrWN
-         /LnaVEUR8wStMnwYf6r2euogFv+e8OOaESrNnfb8SYV+tJh3NI4vcm0GrNjUBHliP48Y
-         e1eniaPCJOOnbYCNWCtFIxRCajPUthpQxwj5PNqKbCJFzc3/ahONyuZLLuPfwjQioy1k
-         Atfe0DVCpxvthof+93Ymty4ZdeLJ8hy5jV7+mXIyDvJP14o+vUHJ6ixUSavix3/5fnwW
-         45BVqZfW+njhnvUS7eF4x34L5EBQifb4zsmWlCiAelWzLCyrTsmkG3SDRf2n0b4UCeK2
-         j6vA==
+        d=suse.com; s=google; t=1768940313; x=1769545113; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oIbsA0Loih7BP/Jtm/8EUYOGygDGkj0hk4PtQDvPBdA=;
+        b=BcMpE5Aug9MMk3r5aV+CWD/jJoVQm+zOUCHeEJeEg5oUyiwBIjoKjs4wqoxE4SL7nC
+         F0bZDzdi6kaHY58yHSX8OVLjllwzBSYLXANi+f2vQciUOI0y7NhX8Bg1niUGR7XaSK0l
+         oKoxwyE+0J01JiWhQtygNjwQLlx57SHzMvBAcJVFoTtySTYq3SkneV1pgcHBnyKGkjhZ
+         w6brO6EKiZoGdMK5C4jHGlV466+0C7DDNe4/F0RFqJRmipVefwLdP8KvKowyrhX6N1s9
+         Cx4Wulf1lGNr0ighnl63BhttZ2AHnBn2RYT17si/aUvc8FZotZxLFE7uexlYLllCKEoB
+         TUIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768921110; x=1769525910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EUfRwMQV3KapT7k/eehULUSMHqVaGxUA4eRrbnoBX9U=;
-        b=ReU28o+y5WsCZVlqRpQ1fAJE9/wloNlZ1eXO1YYcbrIkrOv5+bcVgvMcHJd0vULWu1
-         bIfwyZDjnXaarO5qB4xAkanLDE01tGsDnstjDm+ZSKSCcAq3920/KWhcYWnT0zpf/Xwb
-         TTZIkhSVDS8BTBtl39qeh7et0sdyji7GFv03u9rJacVdfpjWc2j7sUGHEt4rqn2GEUAR
-         pI0j1qqzwNDOJzTeuVpA+BSIg7qdf7WXbaCdV4EYnvRpVP5MgioBP7ZDCrWVRa14gvx/
-         XRbyzMax7d8DpNRzF/1jzyi+ZzsDOGVQyjUW34Qj2TIn4J5ZQ02ppmngNpMH/jDpQ6j6
-         d/jA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgsdN5qGL0yPEnJ7N3MW2yOYkaWCFk9SS+JOdxb988jPzPk/UyHfV5QLnGq1vMWmquRjywxrdMFDfo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU6By46IB2QlexivNbj5ddVfylj8gVzGPNkhvJB7Cw2jBWjwu0
-	4OZHpqdubYTc7+Bd6n5ZfVsFjSx4skW1eZKGked7l/vPk0g6mflpawmKR/a/NK7meSh8t8o3xW6
-	UDQ/4m1TAuiBOZKrjs771nOuDxUzrUhM=
-X-Gm-Gg: AY/fxX4HWmaKjvIV2XdwpSh4znE8fiNa+DW3xFIAJ4mD2buGmu8bHXIqNRguU0p8cxT
-	f4+Uw28QHUl9IUjicQxeVPrtXuWwVQQnvPVEtnuD/7VbXM1LmYXZOABCt6B7TV4mgq94q68bKnE
-	DYS5Gz+h/NIeReYdjOqBt/LzQmdMcyiRsnVNvbUXQn+3RuKkIKp7qMfzA66eue1hRSjw+BEM+wV
-	jBBieuy1QSTv0nhjvawHTVGn3mXL3+bxwBX+JCl1PL/cef5yQ8gNh0PsfehWk4Kg6sS29Md0/Ug
-	WwRx2iivyVqsfgGtAKxLIM7BAw/rpgs6Igx4I04=
-X-Received: by 2002:a05:6a21:692:b0:38d:f0f3:b940 with SMTP id
- adf61e73a8af0-38e00d47b68mr13733048637.57.1768921110331; Tue, 20 Jan 2026
- 06:58:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768940313; x=1769545113;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oIbsA0Loih7BP/Jtm/8EUYOGygDGkj0hk4PtQDvPBdA=;
+        b=TGXxEUqTYatzvLLQVCH0NC9fZ0EctV5p6b/v0J/E5pFag3GVnkXf/LlQDU/DBPFpo8
+         wRHgaybmnSc0c/OikHy5dpEdkpW1Y4m1hCv3BC/New9T/LCucKv1G7VQVjkgS4WgPqk8
+         5iSkXYyZ1rodivpeTkyCf7i5MDlaHTboSGdsaGDSVUDL6RVUmsXxWIHk0KhLediELNnB
+         yq5O3aFzOQaRONEl8UxUacZBzGWhNntf1Q49E6KROa0rzN7TVrgLkMaQG9y06ykHMYZB
+         F/qx9PLSFIJ0aUMe1wDOyuX+lHVpabA/7mJDqtwbsTWZMoQr0FRPuHlCH/tPmqQquon6
+         rMKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGQg0b9fOPF9N2UW/aQrvJibSdPgptRRlgD+4lUjEEgjAfSOXhTkAeoWrz5Z19PViP8DIeA9qb85aL@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVBvAy0+jDrVR70SRjW5UhL9M5i8Ja2tEBtRPiwD6hA/qcyYdO
+	KWaKf7vMlZRbpmzpc4p5vDBJi6lj2XcfkOXMlHAhEWvnxDS6rx79vI8Rvddw5t8UrHIPl2nvPNm
+	Gj07r
+X-Gm-Gg: AY/fxX5anDXLMbHjVdkdgKeAdC0L137dockADhKFVk/UBJzmdqIctRIhh/ArO7svQI8
+	YpKM3yOfQqEr11vT1Y8DOmVkJ2ryOF7fXVNbZinsp+MAznm3dy+lyPD+6xZYduQsVQIJEVkXxPg
+	0RMKKO3wuT5rZXQscdabuB7uGUdpfaj6YzuOGNjYP2fV+HkXTbQFWsRQt8g/T1UhyovSXbc0HNF
+	NiKxV7ih3i7AKa/l8QWZ8KI1lHDUueqwnZ3njBbVZkLOfHGmDhNy/PT4cdXNKtXlOUo4iuGNCIe
+	sZMjzcuA0M1J1Tc2Jclhy/dk8Z5Rt9E58VSWY1TxCjsia05nXxkLGP6r6vI37vvyvTEwIsqhsUW
+	xyuDLuKuC64CX2M1M3B6tW/feaZy5yH/ljhNBlsAXQTmUlwqTT3gc7ULGxQ22OMwjfL8PpVk9zt
+	321mYmzG9Ur2C7HUYq
+X-Received: by 2002:a05:600c:8705:b0:47d:5e02:14e5 with SMTP id 5b1f17b1804b1-4801e2f057emr171947805e9.5.1768940313380;
+        Tue, 20 Jan 2026 12:18:33 -0800 (PST)
+Received: from precision ([177.115.49.199])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7093325e4sm2041281eec.28.2026.01.20.12.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 12:18:32 -0800 (PST)
+From: Henrique Carvalho <henrique.carvalho@suse.com>
+To: sfrench@samba.org
+Cc: pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	ematsumiya@suse.de,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH] smb: client: fix cifs_pick_channel when channels are equally loaded
+Date: Tue, 20 Jan 2026 17:18:22 -0300
+Message-ID: <20260120201822.2218308-1-henrique.carvalho@suse.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1768489876.git.lucien.xin@gmail.com> <e3f770ef8d9aba101e1f5dc2f2f72bb0d2a30b94.1768489876.git.lucien.xin@gmail.com>
- <6c6d5644-3354-46ba-bbc9-e76789648abf@redhat.com>
-In-Reply-To: <6c6d5644-3354-46ba-bbc9-e76789648abf@redhat.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Tue, 20 Jan 2026 09:58:18 -0500
-X-Gm-Features: AZwV_Qg7dfPxOkDkqOzOQW_7YKwWAViU6i2Li95CyFWjfHPIuFun67eybDn2Dd4
-Message-ID: <CADvbK_dh-O9NuNE4XL2ic2WUy9ysWc1NzbsJ99kv0ZciAw7ttQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 06/16] quic: add stream management
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: network dev <netdev@vger.kernel.org>, quic@lists.linux.dev, davem@davemloft.net, 
-	kuba@kernel.org, Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Metzmacher <metze@samba.org>, Moritz Buhl <mbuhl@openbsd.org>, Tyler Fanelli <tfanelli@redhat.com>, 
-	Pengtao He <hepengtao@xiaomi.com>, Thomas Dreibholz <dreibh@simula.no>, linux-cifs@vger.kernel.org, 
-	Steve French <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>, 
-	Paulo Alcantara <pc@manguebit.com>, Tom Talpey <tom@talpey.com>, kernel-tls-handshake@lists.linux.dev, 
-	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, 
-	Steve Dickson <steved@redhat.com>, Hannes Reinecke <hare@suse.de>, Alexander Aring <aahringo@redhat.com>, 
-	David Howells <dhowells@redhat.com>, Matthieu Baerts <matttbe@kernel.org>, 
-	John Ericson <mail@johnericson.me>, Cong Wang <xiyou.wangcong@gmail.com>, 
-	"D . Wythe" <alibuda@linux.alibaba.com>, Jason Baron <jbaron@akamai.com>, 
-	illiliti <illiliti@protonmail.com>, Sabrina Dubroca <sd@queasysnail.net>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Daniel Stenberg <daniel@haxx.se>, 
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8964-lists,linux-cifs=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[34];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,davemloft.net,kernel.org,google.com,samba.org,openbsd.org,redhat.com,xiaomi.com,simula.no,gmail.com,manguebit.com,talpey.com,oracle.com,suse.de,johnericson.me,linux.alibaba.com,akamai.com,protonmail.com,queasysnail.net,haxx.se,broadcom.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
+	DMARC_POLICY_ALLOW(0.00)[suse.com,quarantine];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[manguebit.org,gmail.com,microsoft.com,talpey.com,suse.de,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	TAGGED_FROM(0.00)[bounces-8971-lists,linux-cifs=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[henrique.carvalho@suse.com,linux-cifs@vger.kernel.org];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-cifs@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: DFA5551E51
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: D728B4C4E5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Jan 20, 2026 at 7:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On 1/15/26 4:11 PM, Xin Long wrote:
-> > +struct quic_stream {
-> > +     struct hlist_node node;
-> > +     s64 id;                         /* Stream ID as defined in RFC 90=
-00 Section 2.1 */
-> > +     struct {
-> > +             /* Sending-side stream level flow control */
-> > +             u64 last_max_bytes;     /* Maximum send offset advertised=
- by peer at last update */
-> > +             u64 max_bytes;          /* Current maximum offset we are =
-allowed to send to */
-> > +             u64 bytes;              /* Bytes already sent to peer */
-> > +
-> > +             u32 errcode;            /* Application error code to send=
- in RESET_STREAM */
-> > +             u32 frags;              /* Number of sent STREAM frames n=
-ot yet acknowledged */
-> > +             u8 state;               /* Send stream state, per rfc9000=
-#section-3.1 */
-> > +
-> > +             u8 data_blocked:1;      /* True if flow control blocks se=
-nding more data */
-> > +             u8 done:1;              /* True if application indicated =
-end of stream (FIN sent) */
->
-> Minor nit: AFAICS with the current struct layout the bitfield above does
-> not save any space, compared to plain u8 and will lead to worse code.
->
-Makes sense, will change to plain u8.
+cifs_pick_channel uses (start % chan_count) when channels are equally
+loaded, but that can return a channel that failed the eligibility
+checks.
 
-Thanks.
-> > +     } send;
-> > +     struct {
-> > +             /* Receiving-side stream level flow control */
-> > +             u64 max_bytes;          /* Maximum offset peer is allowed=
- to send to */
-> > +             u64 window;             /* Remaining receive window befor=
-e advertise a new limit */
-> > +             u64 bytes;              /* Bytes consumed by application =
-from the stream */
-> > +
-> > +             u64 highest;            /* Highest received offset */
-> > +             u64 offset;             /* Offset up to which data is in =
-buffer or consumed */
-> > +             u64 finalsz;            /* Final size of the stream if FI=
-N received */
-> > +
-> > +             u32 frags;              /* Number of received STREAM fram=
-es pending reassembly */
-> > +             u8 state;               /* Receive stream state, per rfc9=
-000#section-3.2 */
-> > +
-> > +             u8 stop_sent:1;         /* True if STOP_SENDING has been =
-sent */
-> > +             u8 done:1;              /* True if FIN received and final=
- size validated */
->
-> ... same here...
->
-> > +     } recv;
-> > +};
-> > +
-> > +struct quic_stream_limits {
-> > +     /* Stream limit parameters defined in rfc9000#section-18.2 */
-> > +     u64 max_stream_data_bidi_remote;        /* initial_max_stream_dat=
-a_bidi_remote */
-> > +     u64 max_stream_data_bidi_local;         /* initial_max_stream_dat=
-a_bidi_local */
-> > +     u64 max_stream_data_uni;                /* initial_max_stream_dat=
-a_uni */
-> > +     u64 max_streams_bidi;                   /* initial_max_streams_bi=
-di */
-> > +     u64 max_streams_uni;                    /* initial_max_streams_un=
-i */
-> > +
-> > +     s64 next_bidi_stream_id;        /* Next bidi stream ID to open or=
- accept */
-> > +     s64 next_uni_stream_id;         /* Next uni stream ID to open or =
-accept */
-> > +     s64 max_bidi_stream_id;         /* Highest allowed bidi stream ID=
- */
-> > +     s64 max_uni_stream_id;          /* Highest allowed uni stream ID =
-*/
-> > +     s64 active_stream_id;           /* Most recently opened stream ID=
- */
-> > +
-> > +     u8 bidi_blocked:1;      /* STREAMS_BLOCKED_BIDI sent, awaiting AC=
-K */
-> > +     u8 uni_blocked:1;       /* STREAMS_BLOCKED_UNI sent, awaiting ACK=
- */
-> > +     u8 bidi_pending:1;      /* MAX_STREAMS_BIDI needs to be sent */
-> > +     u8 uni_pending:1;       /* MAX_STREAMS_UNI needs to be sent */
->
-> ... and here.
->
-> Other than that LGTM. With the bitfield replaced with plain u8 feel free
-> to add my
->
-> Acked-by: Paolo Abeni <pabeni@redhat.com>
->
+Drop the fallback and return the scan-selected channel instead. If none
+is eligible, keep the existing behavior of using the primary channel.
+
+Signed-off-by: Henrique Carvalho <henrique.carvalho@suse.com>
+---
+ fs/smb/client/transport.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+index 75697f6d2566..26987f261850 100644
+--- a/fs/smb/client/transport.c
++++ b/fs/smb/client/transport.c
+@@ -807,11 +807,16 @@ cifs_cancelled_callback(struct TCP_Server_Info *server, struct mid_q_entry *mid)
+ }
+ 
+ /*
+- * Return a channel (master if none) of @ses that can be used to send
+- * regular requests.
++ * cifs_pick_channel - pick an eligible channel for network operations
+  *
+- * If we are currently binding a new channel (negprot/sess.setup),
+- * return the new incomplete channel.
++ * @ses: session reference
++ *
++ * Select an eligible channel (not terminating and not marked as needing
++ * reconnect), preferring the least loaded one. If no eligible channel is
++ * found, fall back to the primary channel (index 0).
++ *
++ * Return: TCP_Server_Info pointer for the chosen channel, or NULL if @ses is
++ * NULL.
+  */
+ struct TCP_Server_Info *cifs_pick_channel(struct cifs_ses *ses)
+ {
+@@ -850,10 +855,6 @@ struct TCP_Server_Info *cifs_pick_channel(struct cifs_ses *ses)
+ 			max_in_flight = server->in_flight;
+ 	}
+ 
+-	/* if all channels are equally loaded, fall back to round-robin */
+-	if (min_in_flight == max_in_flight)
+-		index = (uint)start % ses->chan_count;
+-
+ 	server = ses->chans[index].server;
+ 	spin_unlock(&ses->chan_lock);
+ 
+-- 
+2.50.1
+
 
