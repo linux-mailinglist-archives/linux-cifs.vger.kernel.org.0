@@ -1,228 +1,266 @@
-Return-Path: <linux-cifs+bounces-8929-lists+linux-cifs=lfdr.de@vger.kernel.org>
-X-Original-To: lists+linux-cifs@lfdr.de
+Return-Path: <linux-cifs+bounces-8946-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ED89D3C5D5
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 11:44:47 +0100 (CET)
+Received: from mail.lfdr.de
+	by lfdr with LMTP
+	id GFhrOFCwb2nMKgAAu9opvQ
+	(envelope-from <linux-cifs+bounces-8946-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 17:41:52 +0100
+X-Original-To: lists+linux-cifs@lfdr.de
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 840E347CDE
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 17:41:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 71AAE48A982
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 10:32:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3B0C97250D1
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 14:28:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2763F074B;
-	Tue, 20 Jan 2026 10:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3290F43E4B9;
+	Tue, 20 Jan 2026 14:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYn1JLyP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2+4dh8w"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660FB352F83;
-	Tue, 20 Jan 2026 10:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04B043E4B7;
+	Tue, 20 Jan 2026 14:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768905132; cv=none; b=b21o9T7Q6E7ilkNgRkW84XGiHpghrOLsoP0Bt5cQ7eaUK5vmsjptzRUAngKmuvbVZQ6ZbF3Zcb8EI50cR6TvL0df+dx6xNa5Au3njjDXFJhkPCqDdRwK6IooipX3kVNQQcs6dPPnlBk7gw8o6rLdsa3CrKQ3M6TjMAPDYltcxmQ=
+	t=1768919086; cv=none; b=qnZvrHMymjGnouHwmju5Fg4x+PtO8BWD1sStX/qHqy2Dp/Yx+AtQS84+jfW6UUCcMIxSWD8NW5YRe8eMRrpk2AAGOZFwH7+U5u2LJSpdKDd0PM71JmkvWsuHKohvf44IV3FTEwQot56/Z7b8cl+0tYFysZj2XqEb/BHZieTGV8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768905132; c=relaxed/simple;
-	bh=TXpuEn3+iHgMswY7v2yl+yBnFlWexn06CYVhrLra0ps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FtztLC2A0smEbl/jxytEbYo45GduG2cMZZrvAPlEHfGiuDaqRhSshpw5A4O/m7B8ARfhhporZ5A5mZhozmfiv/dplPDIBkOGNJeIvz2ZXE+x/S87rdysYczzln1xON6LusN6X44DFS/1flCSiu9fjeLeNaWoDGZCFX+gkq99Ma0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYn1JLyP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A27C16AAE;
-	Tue, 20 Jan 2026 10:31:56 +0000 (UTC)
+	s=arc-20240116; t=1768919086; c=relaxed/simple;
+	bh=ntUVauUq1CEu65BJSXqCVXw6d4vwbeub1u3OOcICDe4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Oh9i/jxe30y5m7Zvq2QFHHZhiKjBM2QA1QfFXlLrsgKu3xci9giu8diCfQHr1MR7Bh8WuYKqog0INcELAvOit5uQET5INv7Kj3cC6xLvgT6EdPf72sMMBpVfzzDV5gqn7mgs9epRxmRucguSSSpnM2yTqaTfcwsmxKRDzO6vCYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2+4dh8w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D139C16AAE;
+	Tue, 20 Jan 2026 14:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768905132;
-	bh=TXpuEn3+iHgMswY7v2yl+yBnFlWexn06CYVhrLra0ps=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYn1JLyPJPiGC80xsPWNxbtykfUUs946DA7esf6l3JMX38rt0GRoNF1cRYsres/wk
-	 PEJViML67kDs58KnQ01Y/RlO5bKq7d0ZXMcSQ/mkeXLjjLZV/fDEUuF8X1z67vGwDl
-	 S4BDLlAOBnwFrMcS0CNaziW6IFGszNB0/JTGCLvnEXaABq+5D8szxy7iodrNzItOUv
-	 lpWjW+neeYAI9cglsT/f5525FKsTcWuHVc8VwgMC9LA2j5BhSVKDtyEXhQPSbOCGl2
-	 KQoI5KR3jG9uCQrTTBeQZHZsxSZCqULdPd8KRVm4QkItj+8BOixBLgQenBp1VoSz3y
-	 OcHgGkgocKzkA==
-Date: Tue, 20 Jan 2026 11:31:54 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: NeilBrown <neil@brown.name>
-Cc: Christoph Hellwig <hch@infradead.org>, 
-	Jeff Layton <jlayton@kernel.org>, Amir Goldstein <amir73il@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Chuck Lever <chuck.lever@oracle.com>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Theodore Ts'o <tytso@mit.edu>, 
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, Gao Xiang <xiang@kernel.org>, 
-	Chao Yu <chao@kernel.org>, Yue Hu <zbestahu@gmail.com>, 
-	Jeffle Xu <jefflexu@linux.alibaba.com>, Sandeep Dhavale <dhavale@google.com>, 
-	Hongbo Li <lihongbo22@huawei.com>, Chunhai Guo <guochunhai@vivo.com>, 
-	Carlos Maiolino <cem@kernel.org>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Viacheslav Dubeyko <slava@dubeyko.com>, Chris Mason <clm@fb.com>, 
-	David Sterba <dsterba@suse.com>, Luis de Bethencourt <luisbg@kernel.org>, 
-	Salah Triki <salah.triki@gmail.com>, Phillip Lougher <phillip@squashfs.org.uk>, 
-	Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam Prasad N <sprasad@microsoft.com>, 
-	Bharath SM <bharathsm@microsoft.com>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
-	Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
-	Joseph Qi <joseph.qi@linux.alibaba.com>, Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, 
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>, Trond Myklebust <trondmy@kernel.org>, 
-	Anna Schumaker <anna@kernel.org>, Dave Kleikamp <shaggy@kernel.org>, 
-	David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>, Jan Kara <jack@suse.cz>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-ext4@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-xfs@vger.kernel.org, ceph-devel@vger.kernel.org, 
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
-	devel@lists.orangefs.org, ocfs2-devel@lists.linux.dev, ntfs3@lists.linux.dev, 
-	linux-nilfs@vger.kernel.org, jfs-discussion@lists.sourceforge.net, 
-	linux-mtd@lists.infradead.org, gfs2@lists.linux.dev, linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH 00/29] fs: require filesystems to explicitly opt-in to
- nfsd export support
-Message-ID: <20260120-hacken-revision-88209121ac2c@brauner>
-References: <20260115-exportfs-nfsd-v1-0-8e80160e3c0c@kernel.org>
- <CAOQ4uxjOJMwv_hRVTn3tJHDLMQHbeaCGsdLupiZYcwm7M2rm3g@mail.gmail.com>
- <9c99197dde2eafa55a1b55dce2f0d4d02c77340a.camel@kernel.org>
- <176877859306.16766.15009835437490907207@noble.neil.brown.name>
- <aW3SAKIr_QsnEE5Q@infradead.org>
- <176880736225.16766.4203157325432990313@noble.neil.brown.name>
- <20260119-kanufahren-meerjungfrau-775048806544@brauner>
- <176885553525.16766.291581709413217562@noble.neil.brown.name>
- <20260120-entmilitarisieren-wanken-afd04b910897@brauner>
- <176890211061.16766.16354247063052030403@noble.neil.brown.name>
+	s=k20201202; t=1768919085;
+	bh=ntUVauUq1CEu65BJSXqCVXw6d4vwbeub1u3OOcICDe4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=e2+4dh8worVobrZ6btUOFFOM/nZoPt5/ZF33qWp6qB6QRBWdT6apKl66yJZgSG2bd
+	 n7t8q25N8Eodw6yGtGGz+sORSAqdkbl9Y5rD9BQl384j0K8ftrhhDSEVA76b99aQAB
+	 uVt8taPJStt0X7WvrgcLp/6zn8ji5CORswwsiFjcOPXoyQeq6ZbMy8IkzGi9yUx67Q
+	 TLGu0YsSOcorqrkoCpPfgSGfW+cbg5cqO3SdwXjL49f1Xg2ygXg2rDZ9B+SOg1iOGM
+	 xVI/zjvh4sO63A5HFBJqJBLEUTlhlseSoHPk+pMh7RgnuvWq4jgAIyzd9d7REYmhIa
+	 O1Su22JSEKmhg==
+From: Chuck Lever <cel@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>
+Cc: <linux-fsdevel@vger.kernel.org>,
+	linux-ext4@vger.kernel.org,
+	linux-xfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	<linux-nfs@vger.kernel.org>,
+	linux-f2fs-devel@lists.sourceforge.net,
+	hirofumi@mail.parknet.co.jp,
+	linkinjeon@kernel.org,
+	sj1557.seo@samsung.com,
+	yuezhang.mo@sony.com,
+	almaz.alexandrovich@paragon-software.com,
+	slava@dubeyko.com,
+	glaubitz@physik.fu-berlin.de,
+	frank.li@vivo.com,
+	tytso@mit.edu,
+	adilger.kernel@dilger.ca,
+	cem@kernel.org,
+	sfrench@samba.org,
+	pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	jaegeuk@kernel.org,
+	chao@kernel.org,
+	hansg@kernel.org,
+	senozhatsky@chromium.org,
+	Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH v6 01/16] fs: Add case sensitivity flags to file_kattr
+Date: Tue, 20 Jan 2026 09:24:24 -0500
+Message-ID: <20260120142439.1821554-2-cel@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260120142439.1821554-1-cel@kernel.org>
+References: <20260120142439.1821554-1-cel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <176890211061.16766.16354247063052030403@noble.neil.brown.name>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.46 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8946-lists,linux-cifs=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.sourceforge.net,mail.parknet.co.jp,kernel.org,samsung.com,sony.com,paragon-software.com,dubeyko.com,physik.fu-berlin.de,vivo.com,mit.edu,dilger.ca,samba.org,manguebit.org,gmail.com,microsoft.com,chromium.org,oracle.com];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cel@kernel.org,linux-cifs@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-cifs];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,oracle.com:email]
+X-Rspamd-Queue-Id: 840E347CDE
+X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-On Tue, Jan 20, 2026 at 08:41:50PM +1100, NeilBrown wrote:
-> On Tue, 20 Jan 2026, Christian Brauner wrote:
-> > On Tue, Jan 20, 2026 at 07:45:35AM +1100, NeilBrown wrote:
-> > > On Mon, 19 Jan 2026, Christian Brauner wrote:
-> > > > On Mon, Jan 19, 2026 at 06:22:42PM +1100, NeilBrown wrote:
-> > > > > On Mon, 19 Jan 2026, Christoph Hellwig wrote:
-> > > > > > On Mon, Jan 19, 2026 at 10:23:13AM +1100, NeilBrown wrote:
-> > > > > > > > This was Chuck's suggested name. His point was that STABLE means that
-> > > > > > > > the FH's don't change during the lifetime of the file.
-> > > > > > > > 
-> > > > > > > > I don't much care about the flag name, so if everyone likes PERSISTENT
-> > > > > > > > better I'll roll with that.
-> > > > > > > 
-> > > > > > > I don't like PERSISTENT.
-> > > > > > > I'd rather call a spade a spade.
-> > > > > > > 
-> > > > > > >   EXPORT_OP_SUPPORTS_NFS_EXPORT
-> > > > > > > or
-> > > > > > >   EXPORT_OP_NOT_NFS_COMPATIBLE
-> > > > > > > 
-> > > > > > > The issue here is NFS export and indirection doesn't bring any benefits.
-> > > > > > 
-> > > > > > No, it absolutely is not.  And the whole concept of calling something
-> > > > > > after the initial or main use is a recipe for a mess.
-> > > > > 
-> > > > > We are calling it for it's only use.  If there was ever another use, we
-> > > > > could change the name if that made sense.  It is not a public name, it
-> > > > > is easy to change.
-> > > > > 
-> > > > > > 
-> > > > > > Pick a name that conveys what the flag is about, and document those
-> > > > > > semantics well.  This flag is about the fact that for a given file,
-> > > > > > as long as that file exists in the file system the handle is stable.
-> > > > > > Both stable and persistent are suitable for that, nfs is everything
-> > > > > > but.
-> > > > > 
-> > > > > My understanding is that kernfs would not get the flag.
-> > > > > kernfs filehandles do not change as long as the file exist.
-> > > > > But this is not sufficient for the files to be usefully exported.
-> > > > > 
-> > > > > I suspect kernfs does re-use filehandles relatively soon after the
-> > > > > file/object has been destroyed.  Maybe that is the real problem here:
-> > > > > filehandle reuse, not filehandle stability.
-> > > > > 
-> > > > > Jeff: could you please give details (and preserve them in future cover
-> > > > > letters) of which filesystems are known to have problems and what
-> > > > > exactly those problems are?
-> > > > > 
-> > > > > > 
-> > > > > > Remember nfs also support volatile file handles, and other applications
-> > > > > > might rely on this (I know of quite a few user space applications that
-> > > > > > do, but they are kinda hardwired to xfs anyway).
-> > > > > 
-> > > > > The NFS protocol supports volatile file handles.  knfsd does not.
-> > > > > So maybe
-> > > > >   EXPORT_OP_NOT_NFSD_COMPATIBLE
-> > > > > might be better.  or EXPORT_OP_NOT_LINUX_NFSD_COMPATIBLE.
-> > > > > (I prefer opt-out rather than opt-in because nfsd export was the
-> > > > > original purpose of export_operations, but it isn't something
-> > > > > I would fight for)
-> > > > 
-> > > > I prefer one of the variants you proposed here but I don't particularly
-> > > > care. It's not a hill worth dying on. So if Christoph insists on the
-> > > > other name then I say let's just go with it.
-> > > > 
-> > > 
-> > > This sounds like you are recommending that we give in to bullying.
-> > > I would rather the decision be made based on the facts of the case, not
-> > > the opinions that are stated most bluntly.
-> > > 
-> > > I actually think that what Christoph wants is actually quite different
-> > > from what Jeff wants, and maybe two flags are needed.  But I don't yet
-> > > have a clear understanding of what Christoph wants, so I cannot be sure.
-> > 
-> > I've tried to indirectly ask whether you would be willing to compromise
-> > here or whether you want to insist on your alternative name. Apparently
-> > that didn't come through.
-> 
-> This would be the "not a hill worthy dying on" part of your statement.
-> I think I see that implication now.
-> But no, I don't think compromise is relevant.  I think the problem
-> statement as originally given by Jeff is misleading, and people have
-> been misled to an incorrect name.
-> 
-> > 
-> > I'm unclear what your goal is in suggesting that I recommend "we" give
-> > into bullying. All it achieved was to further derail this thread.
-> > 
-> 
-> The "We" is the same as the "us" in "let's just go with it".
-> 
-> 
-> > I also think it's not very helpful at v6 of the discussion to start
-> > figuring out what the actual key rift between Jeff's and Christoph's
-> > position is. If you've figured it out and gotten an agreement and this
-> > is already in, send a follow-up series.
-> 
-> v6?  v2 was posted today.  But maybe you are referring the some other
-> precursors.
-> 
-> The introductory statement in v2 is
-> 
->    This patchset adds a flag that indicates whether the filesystem supports
->    stable filehandles (i.e. that they don't change over the life of the
->    file). It then makes any filesystem that doesn't set that flag
->    ineligible for nfsd export.
-> 
-> Nobody else questioned the validity of that.  I do.
-> No evidence was given that there are *any* filesystems that don't
-> support stable filehandles.  The only filesystem mentioned is cgroups
-> and it DOES provide stable filehandles.
+From: Chuck Lever <chuck.lever@oracle.com>
 
-Oh yes we did. And this is a merry-go-round.
+Enable upper layers such as NFSD to retrieve case sensitivity
+information from file systems by adding FS_XFLAG_CASEFOLD and
+FS_XFLAG_CASENONPRESERVING flags.
 
-It is very much fine for a filesystems to support file handles without
-wanting to support exporting via NFS. That is especially true for
-in-kernel pseudo filesystems.
+Filesystems report case-insensitive or case-nonpreserving behavior
+by setting these flags directly in fa->fsx_xflags. The default
+(flags unset) indicates POSIX semantics: case-sensitive and
+case-preserving. These flags are read-only; userspace cannot set
+them via ioctl.
 
-As I've said before multiple times I want a way to allow filesystems
-such as pidfs and nsfs to use file handles without supporting export.
-Whatever that fscking flag is called at this point I fundamentally don't
-care. And we are reliving the same arguments over and over.
+Relocate struct file_kattr initialization from fileattr_fill_xflags()
+and fileattr_fill_flags() to vfs_fileattr_get() and the ioctl/syscall
+call sites. This allows filesystem ->fileattr_get() callbacks to set
+flags directly in fa->fsx_xflags before invoking the fill functions,
+which previously would have zeroed those values. Callers that bypass
+vfs_fileattr_get() must now zero-initialize the struct themselves.
 
-I will _hard NAK_ anything that starts mandating that export of
-filesystems must be allowed simply because their file handles fit export
-criteria. I do not care whether pidfs or nsfs file handles fit the bill.
-They will not be exported.
+Case sensitivity information is exported to userspace via the
+fa_xflags field in the FS_IOC_FSGETXATTR ioctl and file_getattr()
+system call.
+
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+---
+ fs/file_attr.c           | 14 ++++++--------
+ fs/xfs/xfs_ioctl.c       |  2 +-
+ include/linux/fileattr.h |  3 ++-
+ include/uapi/linux/fs.h  |  2 ++
+ 4 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/fs/file_attr.c b/fs/file_attr.c
+index 13cdb31a3e94..2700200c5b9c 100644
+--- a/fs/file_attr.c
++++ b/fs/file_attr.c
+@@ -15,12 +15,10 @@
+  * @fa:		fileattr pointer
+  * @xflags:	FS_XFLAG_* flags
+  *
+- * Set ->fsx_xflags, ->fsx_valid and ->flags (translated xflags).  All
+- * other fields are zeroed.
++ * Set ->fsx_xflags, ->fsx_valid and ->flags (translated xflags).
+  */
+ void fileattr_fill_xflags(struct file_kattr *fa, u32 xflags)
+ {
+-	memset(fa, 0, sizeof(*fa));
+ 	fa->fsx_valid = true;
+ 	fa->fsx_xflags = xflags;
+ 	if (fa->fsx_xflags & FS_XFLAG_IMMUTABLE)
+@@ -46,11 +44,9 @@ EXPORT_SYMBOL(fileattr_fill_xflags);
+  * @flags:	FS_*_FL flags
+  *
+  * Set ->flags, ->flags_valid and ->fsx_xflags (translated flags).
+- * All other fields are zeroed.
+  */
+ void fileattr_fill_flags(struct file_kattr *fa, u32 flags)
+ {
+-	memset(fa, 0, sizeof(*fa));
+ 	fa->flags_valid = true;
+ 	fa->flags = flags;
+ 	if (fa->flags & FS_SYNC_FL)
+@@ -84,6 +80,8 @@ int vfs_fileattr_get(struct dentry *dentry, struct file_kattr *fa)
+ 	struct inode *inode = d_inode(dentry);
+ 	int error;
+ 
++	memset(fa, 0, sizeof(*fa));
++
+ 	if (!inode->i_op->fileattr_get)
+ 		return -ENOIOCTLCMD;
+ 
+@@ -323,7 +321,7 @@ int ioctl_setflags(struct file *file, unsigned int __user *argp)
+ {
+ 	struct mnt_idmap *idmap = file_mnt_idmap(file);
+ 	struct dentry *dentry = file->f_path.dentry;
+-	struct file_kattr fa;
++	struct file_kattr fa = {};
+ 	unsigned int flags;
+ 	int err;
+ 
+@@ -355,7 +353,7 @@ int ioctl_fssetxattr(struct file *file, void __user *argp)
+ {
+ 	struct mnt_idmap *idmap = file_mnt_idmap(file);
+ 	struct dentry *dentry = file->f_path.dentry;
+-	struct file_kattr fa;
++	struct file_kattr fa = {};
+ 	int err;
+ 
+ 	err = copy_fsxattr_from_user(&fa, argp);
+@@ -434,7 +432,7 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
+ 	struct filename *name __free(putname) = NULL;
+ 	unsigned int lookup_flags = 0;
+ 	struct file_attr fattr;
+-	struct file_kattr fa;
++	struct file_kattr fa = {};
+ 	int error;
+ 
+ 	BUILD_BUG_ON(sizeof(struct file_attr) < FILE_ATTR_SIZE_VER0);
+diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
+index 59eaad774371..f0417c4d1fca 100644
+--- a/fs/xfs/xfs_ioctl.c
++++ b/fs/xfs/xfs_ioctl.c
+@@ -496,7 +496,7 @@ xfs_ioc_fsgetxattra(
+ 	xfs_inode_t		*ip,
+ 	void			__user *arg)
+ {
+-	struct file_kattr	fa;
++	struct file_kattr	fa = {};
+ 
+ 	xfs_ilock(ip, XFS_ILOCK_SHARED);
+ 	xfs_fill_fsxattr(ip, XFS_ATTR_FORK, &fa);
+diff --git a/include/linux/fileattr.h b/include/linux/fileattr.h
+index f89dcfad3f8f..709de829659f 100644
+--- a/include/linux/fileattr.h
++++ b/include/linux/fileattr.h
+@@ -16,7 +16,8 @@
+ 
+ /* Read-only inode flags */
+ #define FS_XFLAG_RDONLY_MASK \
+-	(FS_XFLAG_PREALLOC | FS_XFLAG_HASATTR)
++	(FS_XFLAG_PREALLOC | FS_XFLAG_HASATTR | \
++	 FS_XFLAG_CASEFOLD | FS_XFLAG_CASENONPRESERVING)
+ 
+ /* Flags to indicate valid value of fsx_ fields */
+ #define FS_XFLAG_VALUES_MASK \
+diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+index 66ca526cf786..919148beaa8c 100644
+--- a/include/uapi/linux/fs.h
++++ b/include/uapi/linux/fs.h
+@@ -253,6 +253,8 @@ struct file_attr {
+ #define FS_XFLAG_FILESTREAM	0x00004000	/* use filestream allocator */
+ #define FS_XFLAG_DAX		0x00008000	/* use DAX for IO */
+ #define FS_XFLAG_COWEXTSIZE	0x00010000	/* CoW extent size allocator hint */
++#define FS_XFLAG_CASEFOLD	0x00020000	/* case-insensitive lookups */
++#define FS_XFLAG_CASENONPRESERVING 0x00040000	/* case not preserved */
+ #define FS_XFLAG_HASATTR	0x80000000	/* no DIFLAG for this	*/
+ 
+ /* the read-only stuff doesn't really belong here, but any other place is
+-- 
+2.52.0
+
 
