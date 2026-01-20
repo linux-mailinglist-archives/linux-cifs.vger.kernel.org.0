@@ -1,77 +1,77 @@
-Return-Path: <linux-cifs+bounces-8916-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-8918-lists+linux-cifs=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-cifs@lfdr.de
 Delivered-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24950D3BF22
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 07:25:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C47A7D3BF1F
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 07:25:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 253594F289F
-	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 06:23:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 13C47363D2E
+	for <lists+linux-cifs@lfdr.de>; Tue, 20 Jan 2026 06:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E4936C59F;
-	Tue, 20 Jan 2026 06:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCC836C0AC;
+	Tue, 20 Jan 2026 06:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxegLSMx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DbhPTLP7"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE691155389
-	for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 06:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C9D36C0BE
+	for <linux-cifs@vger.kernel.org>; Tue, 20 Jan 2026 06:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768890131; cv=none; b=o0Ddg5kruygnRgMI7BSwWZ1zxpX8TMASzhp9RYeM9mtXjLWbjkGWIRLLxgSdqaqOBl7GjNUU1t2etqYqop2LCNeikX4dUzhJLg0AR74lsk+ppjdzQK1oxFPsKTOSl+m+Z4cwh0aE21EnPHTKniMImUkdlhATuIthg40fpAoiEIs=
+	t=1768890132; cv=none; b=hmHFO6+f+udqD/+qN/ebvyBwYHuXe+LNCamCS5CIE2XZQGtIxq8YhaRjoRhxy2r961dDBgvmBVuTrNkiKP8nA4rsHqsqesDMYJJ2yUnb1KZaLpavAOBoP3BkHDMScoHo3iEETlfPWpD2RXe7YzDuixZMHlxwGbnH1TvTGHvdiKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768890131; c=relaxed/simple;
-	bh=EQIDBdej8gAOAgnYltWx3u0qXhBCCE6o3HHvVWpTwuI=;
+	s=arc-20240116; t=1768890132; c=relaxed/simple;
+	bh=uCJdiBR7lhjwUup1LB58KW/Nxbais9kELs1jm57Vloc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F2teYzjIuUluV6Cc6AN7coTOSAfNEcQ3qXnbxvRO75lLIoRb+20rYuBqViC0II7JGOx3XpsCkJ90LP/8tFKGH+HnGDrf+n6zsWc+1JhDk2t8liFxZS+iz1jlnvwA2h/+RYhJs9vCNtBJshYrevKx5XtTmdZwOnOR0P7SvAIyZhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxegLSMx; arc=none smtp.client-ip=209.85.214.181
+	 MIME-Version; b=OQI9bM6IXpYxRif+PG9sxMmGWggj09G8kE4PGCM0LPaRpqKKPfQcDVxaJGWflnM1dHpVSMPxxWEgBpDLNc/OzSueAiF1xseHlnCR7g4Uaq0caa6kLpJ9IpCBZz7D/7xnDaABJaNvpoz7m+3r2I1UHhGTajOXVGGdjxG0yMEMkJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DbhPTLP7; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a07f8dd9cdso31278625ad.1
-        for <linux-cifs@vger.kernel.org>; Mon, 19 Jan 2026 22:22:09 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a102494058so29245585ad.0
+        for <linux-cifs@vger.kernel.org>; Mon, 19 Jan 2026 22:22:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768890129; x=1769494929; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768890130; x=1769494930; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QE670D9mNJ1A3NOHdJRodKpp+UQmT7FeQl+lVas6lQk=;
-        b=lxegLSMxuqj587OKZdozzsWSgzNP7AIy+l3BiB1voajeAD9P8mYWm63pmk5AwRlb3a
-         Z/U48xDcztv3FGN88Mb17aTcaa6u9arpGFaEvaftmT7kbDyaQ5oQpJzk1z/QNMII3d//
-         qSix1n1htsJ1tPML1Xqx88JxHXEciOx5OJzyLqki8McPQfBLJYQoRz5fRl7W5Br+1WkB
-         kNBCVgN7dI3GtFA2P+09psGJ6gMMhIFfwbPHPf0jRBNLF87PELWrGeh4YclAIzpqFEx+
-         fQkbk1mqDp7o6TQGKqlCshGXVQA5U3DrgTohKgJSi9WzcveEmjh7UrjAsLo9BI5lmjmu
-         nX2g==
+        bh=w3Vsmi04miLszLRw8JJr0A3HfiaUwl+316yVAFSDyMc=;
+        b=DbhPTLP7HzPA42IDgHtKvmnabUyhuzHloosC6c/YDEXIqnDrewvB+GJ7Q+AHr0Y1Qx
+         dgw65MYDkojdfHx2OUylA0LzhI0ftQLMjjOWNy8ls4ofQ8P6LNQIlfTEJMV+W508SDxO
+         uGK9BeaV+1N7T/Lk3KvA0xeTZ29dAaPFwC37ElyZyXrZyVuVWfO2Rq5vfdBENYbNjWxm
+         muYOv6QGiCc51qSbd+uNbJcGb/vTmYy36dx6nsLhAj8/LMo5X5qcMRf2R50bHNLYJR5h
+         wAse//qtPJXVFNwt88nzuFc1c+3dmS+lb1+7aUvd5N4FD/S+EtNWCmapTxP3YGsfMsGq
+         6VEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768890129; x=1769494929;
+        d=1e100.net; s=20230601; t=1768890130; x=1769494930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QE670D9mNJ1A3NOHdJRodKpp+UQmT7FeQl+lVas6lQk=;
-        b=Z90NE9NmMSnrhMbDizEZCB7aIhiUUuIH6+zmHdz+6Migr3wt07D7oxl0chFQg6dHRB
-         7zE0bVlTIhlXxwlvpgSe/hPKB7mZvoOlBp8/I2sp4O2s+GvIJEimt/vDS/DZQawHjhUQ
-         X1C5tcc0M//JHWlyibKFgRORNKMt0sjev+kMZVohsZ6rPI4sQ6lmG8Dg/avJh3EJ/8Il
-         DKlfzxBXek7Pxq+y3P1ig9IudOEZ+HvZnVH0EGvqxVpv1KQQMmlLrQUV6+0VrxdHBH6h
-         sejoRuRao5x36XOGpzlBKGSRF305a3TNfirGe7d65iwTRUBZgWWwghU3NqNDye1yQ4jo
-         8XGg==
-X-Gm-Message-State: AOJu0Yx0JVxVVGGrpxXoujYEdO9yn3exz0DHBgfO5ZpwzyJ7GJdTAoKv
-	r5v1sqavDfztvSQFQpRwv9YyavNMLUsUFW6TH27rNL9ILtNUFkONZZt9S7NkNQ==
-X-Gm-Gg: AZuq6aIRWQ0DmDg5BQnZ4/cNAe3QuZeU7AzM6IJ8T9H/F85qgHsAyd6cHknl66h/oKj
-	7u5io2s4QA/kLvF6pP6wyhKaunK4RNac9oR9NHHfSQseXgPk4ORGp0omzpbTUsPMOnwGP17gcHs
-	/aXzBytqgkAAwuHB4xk4BahWnuBA4oKk+CxUxxY+ys7ZOwT8Zo7EE3zuaCtvHVU5gI40zVz/zst
-	TeyTbwhJl7yz4W56xmoODuo8ydP8NDkWBC/Zug1So+cZn4arvH1XwLiFJkK3sz1UPooleufoQfq
-	Q9ZO+nluJjoJi0S+Ngt+u3FucL/zUWnKKECdn51ftD4xYwL1FvbCNQyDK2/atmmpijVzLmVvuL4
-	gduQpfZtL4nVXHeW1HZa9rJSIF4CxZ6+JtgxngHhV4/Cvfh839DicOmBg4cO8IXoJ0EtKNRS/tc
-	dcgcAifwr84qG9XTbgcJiMr5BKA87zrC6uQnidN1vX
-X-Received: by 2002:a17:903:13ce:b0:297:c048:fb60 with SMTP id d9443c01a7336-2a76a389391mr9107705ad.25.1768890128714;
-        Mon, 19 Jan 2026 22:22:08 -0800 (PST)
+        bh=w3Vsmi04miLszLRw8JJr0A3HfiaUwl+316yVAFSDyMc=;
+        b=wCYl6ZQSy9I3ECiH0nWJQkWTS2sPlAjKtVqVrxqoYw+aiPK9qouvkBvIX7njlACdyA
+         4Q8+xF+qttmsQbLqmAMaGmH5k8X0dgExiiuNG0Epi/vK1fep2rNLYVEOywnosUXCujqJ
+         hKRUygYV8BAOOGDbRmdE3+UFQzwF5a2hrRDL7wglSLfHDR64zEuG5IRBpyG3Zp3YdNGn
+         npJ+9ZL2e7AkGLThAHHmn7riXWc08CZBzwu3JobBDTyipczfbCx5JkK5j/p0BFGgJ+rY
+         w3qr+Wv43K6xBTym7/opsQTEs10EDzWuXH9xGXKKrLXvExPXmT2/h2UWax7TUeq54P50
+         hcLw==
+X-Gm-Message-State: AOJu0Yx5TPq5R8btuqWfd7jpC6PBcblrIaB+QBxF6ADOljT6VfkCLkgb
+	tM+CYPG1649+n0pN7SKkSgJbVIk75/EOaMPBQ/HS7iujIurkg3s0cxGFgg5daw==
+X-Gm-Gg: AZuq6aI74sfVzLM0iHusSCJ/vEY/JjBJn1DujOojtstFTkcrLWi/aFmRwqUDV3fvhzf
+	OoPA2Ry8NGdgoiSNwkrQKDmK3M/uMhYWb2A5orzMcnK7FgAGb7p8MYd7kA/kz19cFLl25dOc6s+
+	qZr7R0i/HBIxVLWi9LIx+XIfJi6k8Di0wKDs+Ar00ZkZF3pGxYbbdmvx6uNhSyEp8kTlATrR3Za
+	krfGu96DcimZIfDAyDMRgp3se/cU9cG1htPupwx95usaJJK1+uTMVwRF/sbI+s/prrVwYpb9o8x
+	XI//KiP+trjO96TFufjtvgJH0tpYTejKl1/ohqiAfuICxzeqrUpLcOI9R4FNPJfynn0bJHv/w2+
+	Sh6DhyWg/Q2Piz8fdffue+h3OEIvs7caHXipII+Pb2Gz3Vbo8YyGPAPs1TjJoV9mOmrT0taXgJZ
+	I4m8K38R0izoPs7ZlKaLfzT9RvUqQJUzrBJpqJ6BSw
+X-Received: by 2002:a17:902:db09:b0:299:bda7:ae45 with SMTP id d9443c01a7336-2a700a4ab2fmr148395945ad.25.1768890129664;
+        Mon, 19 Jan 2026 22:22:09 -0800 (PST)
 Received: from sprasad-dev1.corp.microsoft.com ([167.220.110.152])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7193dd523sm112497855ad.62.2026.01.19.22.22.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7193dd523sm112497855ad.62.2026.01.19.22.22.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jan 2026 22:22:08 -0800 (PST)
+        Mon, 19 Jan 2026 22:22:09 -0800 (PST)
 From: nspmangalore@gmail.com
 X-Google-Original-From: sprasad@microsoft.com
 To: linux-cifs@vger.kernel.org,
@@ -80,9 +80,9 @@ To: linux-cifs@vger.kernel.org,
 	bharathsm@microsoft.com,
 	dhowells@redhat.com
 Cc: Shyam Prasad N <sprasad@microsoft.com>
-Subject: [PATCH 2/4] netfs: avoid double increment of retry_count in subreq
-Date: Tue, 20 Jan 2026 11:51:35 +0530
-Message-ID: <20260120062152.628822-2-sprasad@microsoft.com>
+Subject: [PATCH 3/4] cifs: Initialize cur_sleep value if not already done
+Date: Tue, 20 Jan 2026 11:51:36 +0530
+Message-ID: <20260120062152.628822-3-sprasad@microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260120062152.628822-1-sprasad@microsoft.com>
 References: <20260120062152.628822-1-sprasad@microsoft.com>
@@ -96,29 +96,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Shyam Prasad N <sprasad@microsoft.com>
 
-This change fixes the instance of double incrementing of
-retry_count. The increment of this count already happens
-when netfs_reissue_write gets called. Incrementing this
-value before is not necessary.
+A value of 0 for cur_sleep is not a valid one. By checking for
+a zero value and explicitly setting it to 1, we avoid the added
+dependency on the callers.
 
-Cc: David Howells <dhowells@redhat.com>
 Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
 ---
- fs/netfs/write_retry.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/smb/client/smb2ops.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/netfs/write_retry.c b/fs/netfs/write_retry.c
-index fc9c3e0d34d81..29489a23a2209 100644
---- a/fs/netfs/write_retry.c
-+++ b/fs/netfs/write_retry.c
-@@ -98,7 +98,6 @@ static void netfs_retry_write_stream(struct netfs_io_request *wreq,
- 			subreq->start	= start;
- 			subreq->len	= len;
- 			__clear_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags);
--			subreq->retry_count++;
- 			trace_netfs_sreq(subreq, netfs_sreq_trace_retry);
+diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+index a16ded46b5a26..a7e06d175f899 100644
+--- a/fs/smb/client/smb2ops.c
++++ b/fs/smb/client/smb2ops.c
+@@ -2774,6 +2774,8 @@ bool smb2_should_replay(struct cifs_tcon *tcon,
+ 		return false;
  
- 			/* Renegotiate max_len (wsize) */
+ 	if (tcon->retry || (*pretries)++ < tcon->ses->server->retrans) {
++		if (!(*pcur_sleep))
++			(*pcur_sleep) = 1;
+ 		msleep(*pcur_sleep);
+ 		(*pcur_sleep) = ((*pcur_sleep) << 1);
+ 		if ((*pcur_sleep) > CIFS_MAX_SLEEP)
 -- 
 2.43.0
 
