@@ -1,68 +1,68 @@
-Return-Path: <linux-cifs+bounces-9026-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9027-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KA4KM3lBcWn2fgAAu9opvQ
-	(envelope-from <linux-cifs+bounces-9026-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 22:13:29 +0100
+	id wEe0L7JBcWn2fgAAu9opvQ
+	(envelope-from <linux-cifs+bounces-9027-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 22:14:26 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7226B5DDE5
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 22:13:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 688755DE28
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 22:14:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B60587CB8A6
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 19:51:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 231D680498E
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 19:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FF9392C59;
-	Wed, 21 Jan 2026 19:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E407D33D4E5;
+	Wed, 21 Jan 2026 19:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="Kcj1Xy+D"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="Ki7iVQif"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072E7296BCB;
-	Wed, 21 Jan 2026 19:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E4E331219
+	for <linux-cifs@vger.kernel.org>; Wed, 21 Jan 2026 19:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769025104; cv=none; b=PahaeFXIJneNDmMlN5hRk2ZXQNvGa12kMmaPSD2OZ86p9mNMVnJs0VjASjsvs59jm0pBUiS89NDWKzk9jKdQlH0H03hgQziWnRIjFGJR9ApPzxlja5Ss011lb/yfPzeYAxEzSqVg3BgjHpCjF8qxRKFHOExumTilQCl0Hdo+vXA=
+	t=1769025113; cv=none; b=eoTccy40IAr6SQkKwtUupAQmd2kZBgag+cxYoB4YqVImvX361bhlGrREFVSQuQCwyrWMfp3NZOjRYa9Sx961gQXFEldt83y3iwbrT2jg2eivisrSeEEkiYJ148D2oLK1tkH+II+V9EAMhPKP/IAJ4QMtVW2mow0Wwn+8kbB9kiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769025104; c=relaxed/simple;
-	bh=YKjVdlxgX+k07RFxcJp6qev4ppXt6i2yFYvMHLcm9cY=;
+	s=arc-20240116; t=1769025113; c=relaxed/simple;
+	bh=zvfBSqzWdMJxQB/NtmzTyuilF3mISA5qKXGjBfYO6kA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EMAhgtfyOFFwy9W3xUNna7syYxeUbKzvCoKNg20AqPmXfH8MWm2R/7keaWbxsBLFU/22zwphmPjK8kuZz0uAxzLwgPGUgLYcV/fjsckVh/4Im5Ip5b/GZgLkLvgNpYQgCHh+nonfyRNtGauJ00XJ4GsyX3XPsBF7/Fi2v72EL6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=Kcj1Xy+D; arc=none smtp.client-ip=144.76.82.148
+	 MIME-Version; b=inERuHu1yC3OPPayM9ja93ZjT/boGq3IKnxIGA9rF0nOJP8zm79s9ZIvJvToR3lO+0ko1HDG5l7ESuH4jeF5Kc9hSCsCYAJGYVIjBoXCwGehubHABoq0hWrE6pIqxangA3xNAV56wCVKPmWqIkEtzorJwSgTrLm2KTfalwhNBLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=Ki7iVQif; arc=none smtp.client-ip=144.76.82.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
 	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=/wzSvU1gIr44MtYwR8Jcfl+CclA6K5KajKRwe3nfuiM=; b=Kcj1Xy+DUKR3fj+MXDf4r5ZkaV
-	reYIeym6bG2QLetAZjjQ/fGXeNIebZLKKStJJjsj87A/2s0hckQWkjOMcIhqNX3Sy5tBACkqEKG3C
-	VUtXXTm8hVEkEgBpEb9WYusRO92sD/GLFW5jlEfV/xapIucupRnLCE3AnjKA97LUlXRbJEKJVUPDb
-	15/kktg6eufmDZTWtfhy/T1rGxs71WBUf+maJWsAdodADke6bDrT6bRGqbQz3baAVrgxHfeLon71S
-	uJpZaJmR+TsJf7QtIbNjM0aqNNn+aFfm47943CJHP70AUe/O9wCpLlQTVG+0pIZEI3DqByCXh3pMB
-	ee9ry86tuzF8EhJIHG+2EGE78mm5EJfZDgCrzFXHBbp6erEb4uBEOPl/XPboBDtOf8MP/D9FIKZTe
-	eOt2uz9JIXCCfonEagJ8bP2xc/u5FQINURPQxJqnisb4j2+axsd8AieUdVHR0zIid8bKLVjERzDyR
-	BI+XhdO6DcyEqxb7hmR2Um2N;
+	bh=Xge18jOfHry7lIFiZsNCjADIj2Kb1EH5QrsdXKSoAss=; b=Ki7iVQifVgHwAD9ZV6VFioE8da
+	8uGi1cTOaX8nCgid0TDdrDrc4XfQrqrNUrdaapC2p4sAj9XOCO3PPnfmmsk8zngleP0lUPgrde2N5
+	kxcdPMB74DXYWproyd8zlPjvQI+fy5Pd4+ZlKaCBZIOC3HAnERkX6gXt2IPHeZMqOJQ3DwRJ+7FDY
+	5wtM/I9F/sFkwCqixjdq13ebm5NPjAF+d5lfqh1k2dafxzCfd418cdl+2EbwLn+N9RRxsmq59yOuC
+	X0dox/VpN4/CPTFW+/pNtOjxBESJB5GcNvUUpIWuWfBGIyhaTrYHt9+HKAF2DdeXbfV0xS7NWZfNL
+	f0SgeGbNxdrfh0IRs19mJlvBvAS7JwDixiQD9MyrwExIXItVydJkCMxkTDGpWbZpW1EE37q/TeJ2C
+	DDAwHQYANeYbTtblsOuzWkcSgdn0RvoNT35dLIHDD10ZHU+DAXKPEhAS0eIw89DAIy+cnKI7QNVlz
+	HcKafJxb9P7r97NdOkjoQ+N5;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
 	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
 	(Exim)
-	id 1vieEt-00000001e3E-204n;
-	Wed, 21 Jan 2026 19:51:39 +0000
+	id 1vieEz-00000001e4g-3wjM;
+	Wed, 21 Jan 2026 19:51:46 +0000
 From: Stefan Metzmacher <metze@samba.org>
 To: linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org
 Cc: metze@samba.org,
-	stable@vger.kernel.org,
 	Steve French <smfrench@gmail.com>,
 	Tom Talpey <tom@talpey.com>,
 	Long Li <longli@microsoft.com>,
-	Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 09/19] smb: client: let recv_done() queue a refill when the peer is low on credits
-Date: Wed, 21 Jan 2026 20:50:19 +0100
-Message-ID: <d99a54d035d8e0f6b1a6a0eea14b29c6bc2c114d.1769024269.git.metze@samba.org>
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <stfrench@microsoft.com>
+Subject: [PATCH 10/19] smb: client: let smbd_post_send() make use of request->wr
+Date: Wed, 21 Jan 2026 20:50:20 +0100
+Message-ID: <89ba36dd68324c70f72c9df433a3d04ead254cdf.1769024269.git.metze@samba.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1769024269.git.metze@samba.org>
 References: <cover.1769024269.git.metze@samba.org>
@@ -82,12 +82,12 @@ X-Spamd-Result: default: False [8.84 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[samba.org,vger.kernel.org,gmail.com,talpey.com,microsoft.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-9026-lists,linux-cifs=lfdr.de];
+	FREEMAIL_CC(0.00)[samba.org,gmail.com,talpey.com,microsoft.com,kernel.org];
+	TAGGED_FROM(0.00)[bounces-9027-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	R_DKIM_ALLOW(0.00)[samba.org:s=42];
 	RCVD_COUNT_THREE(0.00)[4];
-	GREYLIST(0.00)[pass,body];
+	GREYLIST(0.00)[pass,meta];
 	MIME_TRACE(0.00)[0:+];
 	DMARC_POLICY_ALLOW(0.00)[samba.org,quarantine];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -101,23 +101,16 @@ X-Spamd-Result: default: False [8.84 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
 	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,talpey.com:email,samba.org:email,samba.org:dkim,samba.org:mid]
-X-Rspamd-Queue-Id: 7226B5DDE5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,talpey.com:email,samba.org:email,samba.org:dkim,samba.org:mid,send_wr.next:url]
+X-Rspamd-Queue-Id: 688755DE28
 X-Rspamd-Action: add header
 X-Rspamd-Server: lfdr
 X-Spam: Yes
 
-In captures I saw that Windows was granting 191 credits in a batch
-when its peer posted a lot of messages. We are asking for a
-credit target of 255 and 191 is 252*3/4.
+We don't need a stack variable in addition.
 
-So we also use that logic in order to fill the
-recv buffers available to the peer.
-
-Fixes: 02548c477a90 ("smb: client: queue post_recv_credits_work also if the peer raises the credit target")
-Cc: <stable@vger.kernel.org> # 6.18.x
 Cc: Steve French <smfrench@gmail.com>
 Cc: Tom Talpey <tom@talpey.com>
 Cc: Long Li <longli@microsoft.com>
@@ -125,42 +118,45 @@ Cc: Namjae Jeon <linkinjeon@kernel.org>
 Cc: linux-cifs@vger.kernel.org
 Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/smb/client/smbdirect.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/smb/client/smbdirect.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index 797dcf6e29bc..826fe7cc6ab6 100644
+index 826fe7cc6ab6..dc1e6656051a 100644
 --- a/fs/smb/client/smbdirect.c
 +++ b/fs/smb/client/smbdirect.c
-@@ -663,6 +663,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 		container_of(wc->wr_cqe, struct smbdirect_recv_io, cqe);
- 	struct smbdirect_socket *sc = response->socket;
- 	struct smbdirect_socket_parameters *sp = &sc->parameters;
-+	int current_recv_credits;
- 	u16 old_recv_credit_target;
- 	u32 data_offset = 0;
- 	u32 data_length = 0;
-@@ -747,7 +748,8 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 		}
+@@ -1105,7 +1105,6 @@ static int manage_keep_alive_before_sending(struct smbdirect_socket *sc)
+ static int smbd_post_send(struct smbdirect_socket *sc,
+ 		struct smbdirect_send_io *request)
+ {
+-	struct ib_send_wr send_wr;
+ 	int rc, i;
  
- 		atomic_dec(&sc->recv_io.posted.count);
--		atomic_dec(&sc->recv_io.credits.count);
-+		current_recv_credits = atomic_dec_return(&sc->recv_io.credits.count);
-+
- 		old_recv_credit_target = sc->recv_io.credits.target;
- 		sc->recv_io.credits.target =
- 			le16_to_cpu(data_transfer->credits_requested);
-@@ -783,7 +785,8 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 		 * reassembly queue and wake up the reading thread
- 		 */
- 		if (data_length) {
--			if (sc->recv_io.credits.target > old_recv_credit_target)
-+			if (current_recv_credits <= (sc->recv_io.credits.target / 4) ||
-+			    sc->recv_io.credits.target > old_recv_credit_target)
- 				queue_work(sc->workqueue, &sc->recv_io.posted.refill_work);
+ 	for (i = 0; i < request->num_sge; i++) {
+@@ -1121,14 +1120,14 @@ static int smbd_post_send(struct smbdirect_socket *sc,
  
- 			enqueue_reassembly(sc, response, data_length);
+ 	request->cqe.done = send_done;
+ 
+-	send_wr.next = NULL;
+-	send_wr.wr_cqe = &request->cqe;
+-	send_wr.sg_list = request->sge;
+-	send_wr.num_sge = request->num_sge;
+-	send_wr.opcode = IB_WR_SEND;
+-	send_wr.send_flags = IB_SEND_SIGNALED;
++	request->wr.next = NULL;
++	request->wr.wr_cqe = &request->cqe;
++	request->wr.sg_list = request->sge;
++	request->wr.num_sge = request->num_sge;
++	request->wr.opcode = IB_WR_SEND;
++	request->wr.send_flags = IB_SEND_SIGNALED;
+ 
+-	rc = ib_post_send(sc->ib.qp, &send_wr, NULL);
++	rc = ib_post_send(sc->ib.qp, &request->wr, NULL);
+ 	if (rc) {
+ 		log_rdma_send(ERR, "ib_post_send failed rc=%d\n", rc);
+ 		smbd_disconnect_rdma_connection(sc);
 -- 
 2.43.0
 
