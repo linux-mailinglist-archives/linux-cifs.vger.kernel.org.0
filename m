@@ -1,213 +1,156 @@
-Return-Path: <linux-cifs+bounces-9016-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9017-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QAa/DnUkcWl8eQAAu9opvQ
-	(envelope-from <linux-cifs+bounces-9016-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 20:09:41 +0100
+	id WIxnBB04cWnKfQAAu9opvQ
+	(envelope-from <linux-cifs+bounces-9017-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 21:33:33 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B24AD5BDC8
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 20:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0A925D500
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 21:33:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B44B7E57B0
-	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 19:00:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 925DD7A1DF6
+	for <lists+linux-cifs@lfdr.de>; Wed, 21 Jan 2026 19:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CA2341ACB;
-	Wed, 21 Jan 2026 19:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60B6387379;
+	Wed, 21 Jan 2026 19:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ke3b0iRs"
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="SpjA9enW"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E023C36B05B
-	for <linux-cifs@vger.kernel.org>; Wed, 21 Jan 2026 19:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769022013; cv=pass; b=Ww2JVWc9MzVWTGLoyYCrgaQEx/KP28vfw0ol8lO6LEMm8DwWeXwik9yxuLYRgt8erU6/kkwvZfhVvRnVxTIar+uG+k54ZZYS730sL3YqBBDjOMfLeG35kjjNEXoIJCGVkYQUL+HUnJ43DH4MBaP2XHaWWds2MK6i/rbN+4Q90yE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769022013; c=relaxed/simple;
-	bh=P50vKKEGRcti/ilk0zXXEyTeAkMnj2pLP0nOzx4jcho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lyzON5uLaYJ4YHtAKDdKhZeymxwrCU/kQyhiIewdg0Yrk/ZH/6VGYxX7DCxlaluQj0M04WgxsACJj5UDrcUULM7mXiYe/7tvFszbHbKUvSD51ouXHRpVcmVbqNGdWqBwMj9XpnKb4MwpGVhiNk3oUWpFlXC91aGODE7P4ogCMHo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ke3b0iRs; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-658072a4e56so379730a12.0
-        for <linux-cifs@vger.kernel.org>; Wed, 21 Jan 2026 11:00:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769022008; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ICNgK/vVE1+LigmTC+nS2RcB8tnvgRzZNp3opTry7R3kg33wCXKht2oEvkAIXqrZca
-         Zh4O+iXVJQaGoeXqpNuiaS+U8zCEwQnNavmeRHkJewsBJgza/ytqs9ng4fRqXbWBzda+
-         1UROnD4Q+FXGvzPfB4qFKvXBitVa+42/QJ9GzctyoEmhKlPbFct/+YSOc/Y8Wbq9z2A9
-         G2lHBJDzFjfsGs39MnTvAXWtCXR263LUHtCZHIJ/9JxsHu0UWONYxvqDfSFPaiJ3WDQE
-         mCzu5zhe8rpSb/ewcW4Gymp9OfMnSHTrkAfwjZBv415vwSWqZimtuj2DeVUBzwgajVYZ
-         TBRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=P50vKKEGRcti/ilk0zXXEyTeAkMnj2pLP0nOzx4jcho=;
-        fh=sG7aJquoe5F/zQZy/z889PGjt7VAYK9mtLxmvurU7z0=;
-        b=L35NCpQRCXFRXk9riJg+eiD1fLIPfG1m9HFs28AaoTmUOfnm+HEnOywTYlYQY+l0C/
-         sSNlehYN3BnB3FX+ljsS3ytAyUlOKt9e991uYvYbt63wg8mkN4EI58NUIqKSAJFjtRjQ
-         XD+66DSNxDR1hEt9zn0YzJ4WQOxiOBaWY2vfJKfpa8ne/B/pudNgUOIWXMPVHiFXtgiW
-         iNlA+964vm68bDKFcukfOcrgTr26l/13igZWXQ9oFFgykITTL8f5sa6qnZ0Itrn2MmN5
-         N5ewoM9/gmMBIYJqXUrfaUYFgfH7EZ/IgiIcVYThON4j2GypqAnh+iFg5oJLsD8aw2QG
-         acpA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769022008; x=1769626808; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P50vKKEGRcti/ilk0zXXEyTeAkMnj2pLP0nOzx4jcho=;
-        b=ke3b0iRsOPGdb9oGItiqf3p2ocGTfsItthso0F5B2fak03CUA0liWLn/Ve+kCx5qdQ
-         JombE0ayrWVRZQXIZl23qp9IKs0OR39m8RilvLRQvVGHRFm30KkpG++OotWZ92AwuCGc
-         mfAvUOj8NIFwo25zttpr2t9oiEAh7Td8L4n9JqF49lbt65BYqwZMpd8IuL+pjuR3w7Cx
-         uwF7vQXLdVLV63Ny5cgNkQ66Jb7r0JOenkZbCMRNua5Ow/a8OGWNheD6DVKMa3a6U1VX
-         hddDJM9Nq2Z5pHCrVaA1w4AG9WOs41axr0x1rUqjUrhki3bUl8DCRQXOnsnH+8mR9kKE
-         KgeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769022008; x=1769626808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=P50vKKEGRcti/ilk0zXXEyTeAkMnj2pLP0nOzx4jcho=;
-        b=oYUhrpTyGBMw3xL25mE3c/TDCQjaySRhU21XXkC7TGGHQCEwEakm07A663vtzovZyU
-         TJ1XaK+5ycns13dh6LfT35YHw8OY2ymmFCH+JIo9tOCQ9qKpmcvwMfs96rca/bDjA9M/
-         DblH6omjgfN7VDGpF7QDEvD9BhJdJyduLuc8Uk7LuRQoJGQUv2wPry3K0kq1ofzE/ruQ
-         ZRxWhAeSRbg67ZcZ48Jj+YMgAUcvzQylbJLshHrQ2XrY79WZQgCqMNdVqU3TD7ArrEIA
-         xvKFRiuMohJ2Qgzdh6Q+JU1JnsVrSjBGh/jRPmZln/8NvYMgQ23i/192epVpI3pE/UmR
-         iRiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVmmcmgKnetHx9qXhQ+pAGjc7dlZY9gLwwwA1J5geYVmd5jzXqM/HpYbs3VyUoToNw19CE6OyBIoWt/@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRY4u5S1Mp8uiBP5KkKEBHjZdsUqBfPu+yeD26GwDu97pkfaM3
-	4VbJq5UQLSc7uryfabmtFL6R09mIAEDKhI+4uYEXU6VMAb9FEzZIISrYWHlvkTWRa8DOTRD6vD2
-	0hiA6ljLjISWjM6N4oKSi/Zi1emswqdo=
-X-Gm-Gg: AZuq6aIqxj7Rh53vCGQxag1Q/lCZ3I+io8hZH1oUBpp+avNzas4EFaEt7s9UUKvQZqE
-	o6IeO0azEKa3BOSjSxRG9dVASW574EzIxUqCzFl+jKYRXTSXXmJ7UMk5qY6CS3kFUeiBexOr8kQ
-	RWhcspgegvKFMliFMz4Ya0JUZWtR+1KM3YrpLdU+z/obBgsMfEWNT3OAefBtakOXCTLqxdoQ5em
-	zI7c98AMNb3P7/nrlI89pTspvvnBF1XfznmlXnUDfVr79ftDQ/YAS8yX2o8OTHGdxeUHNMxUb0n
-	TNb66694KrOWicj1Fz75TiJmftw=
-X-Received: by 2002:a17:906:6a13:b0:b87:206a:a23b with SMTP id
- a640c23a62f3a-b8792f79852mr1477117366b.34.1769022007470; Wed, 21 Jan 2026
- 11:00:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445801A304A
+	for <linux-cifs@vger.kernel.org>; Wed, 21 Jan 2026 19:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769025061; cv=none; b=eC5KfKizz+3qk++YcsdcRbq7qIG7ocFPWP4a3pObO94cqZnm67sqGcBRIDMVoGnw9gYX9n7JdbBdxMbWxl8n4nlX480W4lfUisGGvcLywl3BYWV3zHr6yWuRri7bSkLIS2uqmWw6AqjfZa7tEvcB7K2I0eGoUIE8e97Vx9Cil+M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769025061; c=relaxed/simple;
+	bh=BbRnWw8AJdz+bETdw8UxM6gVPwuSaT9ZZjM/8JV1wzk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mTJwob+NKQ7DhV0r2iWKMQiysZHmkDRxVBzLMKNZxaCY0kdUrG+Q3MaPy57sKqMTpQyLr4j3jvLutEdhHlyiNSbDzlgfIz07kw7wGOz3V7ajGwNR7e8czmyvHqqrZEyBUZD1Rtn7vuwurbFtciGWhYgxD+gA5waHg1FOb7j4Dz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=SpjA9enW; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=Message-ID:Date:Cc:To:From;
+	bh=TxWdd1Zak7k8vMrWiVWxuR5svvGFrjDSr7/fodQ2bJg=; b=SpjA9enWBr2q8QNgG9sPONbkq1
+	MDkfOQWat9fuUPwcZr4USYLyDpY81B+zUmleWJ8U34PmmP3wyon9ncgsughsTY5CuYBve9fSIluNh
+	WUmSXsgt1d9r+4v0/LPzvmhqtKSOhpOG3S1vBxOv1CEixbRhODgHo4kCEpsdvkK8O2Im7nuDkwrwp
+	l8k6UW9JrSQ+dqwOZBeIPxHajWHnOiPy9uANHJMudfEhYII8XXmx10aPk6GwFi1fT4LYFTZzgEC2I
+	eqrtP8eWXnY6n8L8Y8n1tjudHEQoCQ3JsciWIz3pfnc8orfxat5uGiKOiC8PRxj3U87Bw9D+S8n2O
+	vS+z96+TtC4rgAklVZXdlxhCt1rKSPK8BBguNXMFQUzbZv3WE35HcVR/AtOfQimvXsjNhf1uaPQiC
+	kt+YGIhVehuM9D7fj3TSL7sG4ffQWz2SB8WEPUxPKoXvhrDZHDeO/fw0jIXBrdI0LiAsrgFebSNW5
+	3M2EPbh4Vb74Q1zDYAMqm882;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1vieE5-00000001dyO-1X1G;
+	Wed, 21 Jan 2026 19:50:49 +0000
+From: Stefan Metzmacher <metze@samba.org>
+To: linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Cc: metze@samba.org,
+	Steve French <smfrench@gmail.com>,
+	Tom Talpey <tom@talpey.com>,
+	Long Li <longli@microsoft.com>,
+	Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 00/19] smbdirect client/server credit fixes
+Date: Wed, 21 Jan 2026 20:50:10 +0100
+Message-ID: <cover.1769024269.git.metze@samba.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115-exportfs-nfsd-v1-0-8e80160e3c0c@kernel.org>
- <CAOQ4uxjOJMwv_hRVTn3tJHDLMQHbeaCGsdLupiZYcwm7M2rm3g@mail.gmail.com>
- <9c99197dde2eafa55a1b55dce2f0d4d02c77340a.camel@kernel.org>
- <176877859306.16766.15009835437490907207@noble.neil.brown.name>
- <aW3SAKIr_QsnEE5Q@infradead.org> <176880736225.16766.4203157325432990313@noble.neil.brown.name>
- <20260119-kanufahren-meerjungfrau-775048806544@brauner> <176885553525.16766.291581709413217562@noble.neil.brown.name>
- <20260120-entmilitarisieren-wanken-afd04b910897@brauner> <176890211061.16766.16354247063052030403@noble.neil.brown.name>
- <20260120-hacken-revision-88209121ac2c@brauner> <a35ac736d9ebc6c92a6e7d61aeb5198234102442.camel@kernel.org>
- <176896790525.16766.11792073987699294594@noble.neil.brown.name> <ccb32c576cc4ebf943d5ec35e3d7ba4ae8892acd.camel@kernel.org>
-In-Reply-To: <ccb32c576cc4ebf943d5ec35e3d7ba4ae8892acd.camel@kernel.org>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 21 Jan 2026 19:59:56 +0100
-X-Gm-Features: AZwV_Qh050IhjThhArfxNo-53HjJR0uLCcITEQOtntS-75Lw875opD6ONQssxps
-Message-ID: <CAOQ4uxg+dC1o+6V7Nvxf8UW3H=0OvsGjEe76LNY6q8ZcpGDDJw@mail.gmail.com>
-Subject: Re: [PATCH 00/29] fs: require filesystems to explicitly opt-in to
- nfsd export support
-To: Jeff Layton <jlayton@kernel.org>
-Cc: NeilBrown <neil@brown.name>, Christian Brauner <brauner@kernel.org>, 
-	Christoph Hellwig <hch@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Chuck Lever <chuck.lever@oracle.com>, Olga Kornievskaia <okorniev@redhat.com>, 
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
-	Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, Yue Hu <zbestahu@gmail.com>, 
-	Jeffle Xu <jefflexu@linux.alibaba.com>, Sandeep Dhavale <dhavale@google.com>, 
-	Hongbo Li <lihongbo22@huawei.com>, Chunhai Guo <guochunhai@vivo.com>, 
-	Carlos Maiolino <cem@kernel.org>, Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	Phillip Lougher <phillip@squashfs.org.uk>, Steve French <sfrench@samba.org>, 
-	Paulo Alcantara <pc@manguebit.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Mike Marshall <hubcap@omnibond.com>, 
-	Martin Brandenburg <martin@omnibond.com>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
-	Joseph Qi <joseph.qi@linux.alibaba.com>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, 
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>, Trond Myklebust <trondmy@kernel.org>, 
-	Anna Schumaker <anna@kernel.org>, Dave Kleikamp <shaggy@kernel.org>, 
-	David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>, Jan Kara <jack@suse.cz>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, linux-nfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-ext4@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
-	linux-xfs@vger.kernel.org, ceph-devel@vger.kernel.org, 
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, devel@lists.orangefs.org, 
-	ocfs2-devel@lists.linux.dev, ntfs3@lists.linux.dev, 
-	linux-nilfs@vger.kernel.org, jfs-discussion@lists.sourceforge.net, 
-	linux-mtd@lists.infradead.org, gfs2@lists.linux.dev, 
-	linux-f2fs-devel@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[samba.org:s=42];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[brown.name,kernel.org,infradead.org,zeniv.linux.org.uk,oracle.com,redhat.com,talpey.com,google.com,linux.alibaba.com,linux-foundation.org,mit.edu,dilger.ca,suse.com,gmail.com,huawei.com,vivo.com,dubeyko.com,fb.com,squashfs.org.uk,samba.org,manguebit.org,microsoft.com,szeredi.hu,omnibond.com,fasheh.com,evilplan.org,paragon-software.com,nod.at,suse.cz,mail.parknet.co.jp,vger.kernel.org,kvack.org,lists.ozlabs.org,lists.orangefs.org,lists.linux.dev,lists.sourceforge.net,lists.infradead.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9016-lists,linux-cifs=lfdr.de];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
+	TAGGED_FROM(0.00)[bounces-9017-lists,linux-cifs=lfdr.de];
+	FREEMAIL_CC(0.00)[samba.org,gmail.com,talpey.com,microsoft.com,kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amir73il@gmail.com,linux-cifs@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[samba.org,quarantine];
+	DKIM_TRACE(0.00)[samba.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[72];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: B24AD5BDC8
+	FROM_NEQ_ENVFROM(0.00)[metze@samba.org,linux-cifs@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samba.org:mid,samba.org:dkim,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: B0A925D500
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Jan 21, 2026 at 12:56=E2=80=AFPM Jeff Layton <jlayton@kernel.org> w=
-rote:
->
-...
-> > But if you really really want to set this new flag on almost every
-> > export_operations, can I ask that you please set it on EVERY export
-> > operations, then allow maintainers to remove it as they see fit.
-> > I think that approach would be much easier to review.
-> >
->
-> We could probably do that, but I think the main ones that excludes it
-> are kernfs, pidfs and nsfs. ovl and fuse also have export ops in
-> certain modes that exclude NFS access, so the flag was left off of
-> those as well.
->
+Hi,
 
-For the record, my comments regarding fuse_export_fid_operations
-and ovl_export_fid_operations variants were purely semantic -
-it did not make sense to mark them as _STABLE_HANDLE, but
-it does not matter if you set a flag on those ops, because they do
-not implement ->fh_to_dentry(), on purpose, they are not
-exportfs_can_decode_fh() by design.
+here is my current state of the regression
+fixes we have in 6.18 and 6.19-rc6.
 
-Thanks,
-Amir.
+The generic and server patches were tested
+in as is, but without this 07/19
+smb: server: let send_done handle a completionwithout IB_SEND_SIGNALED,
+but the related logic was tested on my branch with common code.
+
+The client patches are not tested yet,
+but they compile and I want to make it possible
+to include in linux-next for testing.
+
+I also need to add some more Fixes tags.
+
+I'll do more tests with this tomorrow.
+
+Stefan Metzmacher (19):
+  smb: smbdirect: introduce smbdirect_socket.recv_io.credits.available
+  smb: smbdirect: introduce smbdirect_socket.send_io.bcredits.*
+  smb: server: make use of smbdirect_socket.recv_io.credits.available
+  smb: server: let recv_done() queue a refill when the peer is low on
+    credits
+  smb: server: make use of smbdirect_socket.send_io.bcredits
+  smb: server: fix last send credit problem causing disconnects
+  smb: server: let send_done handle a completion without
+    IB_SEND_SIGNALED
+  smb: client: make use of smbdirect_socket.recv_io.credits.available
+  smb: client: let recv_done() queue a refill when the peer is low on
+    credits
+  smb: client: let smbd_post_send() make use of request->wr
+  smb: client: remove pointless sc->recv_io.credits.count rollback
+  smb: client: remove pointless sc->send_io.pending handling in
+    smbd_post_send_iter()
+  smb: client: port and use the wait_for_credits logic used by server
+  smb: client: split out smbd_ib_post_send()
+  smb: client: introduce and use smbd_{alloc,free}_send_io()
+  smb: client: use smbdirect_send_batch processing
+  smb: client: make use of smbdirect_socket.send_io.bcredits
+  smb: client: fix last send credit problem causing disconnects
+  smb: client: let send_done handle a completion without
+    IB_SEND_SIGNALED
+
+ fs/smb/client/smbdirect.c                  | 491 ++++++++++++++++-----
+ fs/smb/common/smbdirect/smbdirect_socket.h |  18 +
+ fs/smb/server/transport_rdma.c             | 147 +++++-
+ 3 files changed, 545 insertions(+), 111 deletions(-)
+
+-- 
+2.43.0
+
 
