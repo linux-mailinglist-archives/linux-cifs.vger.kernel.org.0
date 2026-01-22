@@ -1,52 +1,52 @@
-Return-Path: <linux-cifs+bounces-9054-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9055-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uF8yH8+0cWkzLgAAu9opvQ
-	(envelope-from <linux-cifs+bounces-9054-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 06:25:35 +0100
+	id AKsOLee0cWkzLgAAu9opvQ
+	(envelope-from <linux-cifs+bounces-9055-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 06:25:59 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C3A61F94
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 06:25:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D8D861FB2
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 06:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E289F4EA3A3
-	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 05:25:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BEE0E465FA0
+	for <lists+linux-cifs@lfdr.de>; Thu, 22 Jan 2026 05:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197D828D8D0;
-	Thu, 22 Jan 2026 05:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7545E2248B4;
+	Thu, 22 Jan 2026 05:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O08UPdkt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w1bdFXbr"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFD530E0F2
-	for <linux-cifs@vger.kernel.org>; Thu, 22 Jan 2026 05:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899ED42EEDF
+	for <linux-cifs@vger.kernel.org>; Thu, 22 Jan 2026 05:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769059529; cv=none; b=CwxHra1KL6eJImC/ljx5IhNdY/ILUOkb6YDMcInJlyuxKagDjDOOBEjTUf/y/Nc0RjM+fReW5p4Q75eRRbfeQCaxq9SqSXMgR8EEQLONu1YITQAfXWwziLXEZ4P11qxpcSQWHvuu4NgOCMuBnTlfSw1S85jV4Z010/y6bjAIjmI=
+	t=1769059532; cv=none; b=AquVesasCi/7pJpiPN9z0XdlFmioHyhZXtEBh/L7kCCFtY+OYgqaNhb/XUMsen06wVwjtf3qWcFkz8T85Kb7+z8ifit2uRarKUkmXFi0krbruLGnc+7MuAUbrxgOeN3H5D8kWRDx/vYw6UESlUaBH5VJ0ywMnREDjfTb74HGl50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769059529; c=relaxed/simple;
-	bh=THoD9dxVSMhKe8JgHK5z53X12TzaTAVpv6D1iT1ttBo=;
+	s=arc-20240116; t=1769059532; c=relaxed/simple;
+	bh=2ZTAh/Bxg6I9qNBx9oxh83hTKb1+1Reb8qvV9GMZcjI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J/Rf6si/MPxCDYAFmZA2Gpx+Lv1lRGNtxwYYyjwRz74ESjkUqcdMPUq/l9e0UYejKPCtiQoYoTz+nRg+ZCM+d4zJmxdlFrBdTAsVCyxvkH5wxfjhideGR4OJ1p/m3WydS/PHTYwfuQy2Xgx7BJN0SLx248e1Jg0aZpXLrJ630/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O08UPdkt; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=GyVloo8q2WQe7ITEN9keZWq46RSSBe80mbRtP+NVtIdDVnVUaFve1a9KJ4Tce6jW1rqwmYOpf90uBjCMocb2NIU0H0lgthzi3eThPSxyOFWylWAbmLAc55cP/563MKBrZGXN9Msldj/DTmhxRVIZBR2Re0oQaWJC8UZO+QfmNlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w1bdFXbr; arc=none smtp.client-ip=95.215.58.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769059525;
+	t=1769059528;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OlJyllVuSrVbdF5v8454B1nTqvzBAzF3GjO2cOUXCek=;
-	b=O08UPdktw+qURncW/iw59WG2yavmDty82RJHaGkkNILLrujZEbm6tc9VbTmR9vpzPx9NXg
-	tlZe0FWbRKEXrCzU3shqjjFKOSzvFQTgRGM1F1HcockeqQHnSeRAfpRk+LikyI726PapIC
-	oqvBMS6zEyoM+fwfe8t2mwXTDXbpjvI=
+	bh=wArkXbktEi/QFiA506L3060oy20HX8XLs4ajUsMwhGU=;
+	b=w1bdFXbrtagxF27ZXc06Aeb8sWBqFqHTOt6AvgCAJujn0TSK5GJADfCl/l4T1SSaq8EFon
+	0TNYMItzxXA9+bWKOVJ8mEau2Pk6XNAckcsW1aHtKmvYHzDGpGItogOJuyyMvGFoCdoBtu
+	YZdCgxeNLgAwqLPxg4W3yd1Bv4gTjwI=
 From: chenxiaosong.chenxiaosong@linux.dev
 To: smfrench@gmail.com,
 	linkinjeon@kernel.org,
@@ -59,9 +59,9 @@ To: smfrench@gmail.com,
 	dhowells@redhat.com
 Cc: linux-cifs@vger.kernel.org,
 	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH 3/7] smb/client: map NT_STATUS_MORE_PROCESSING_REQUIRED
-Date: Thu, 22 Jan 2026 13:23:58 +0800
-Message-ID: <20260122052402.2209206-4-chenxiaosong.chenxiaosong@linux.dev>
+Subject: [PATCH 4/7] smb/client: map NT_STATUS_PRIVILEGE_NOT_HELD
+Date: Thu, 22 Jan 2026 13:23:59 +0800
+Message-ID: <20260122052402.2209206-5-chenxiaosong.chenxiaosong@linux.dev>
 In-Reply-To: <20260122052402.2209206-1-chenxiaosong.chenxiaosong@linux.dev>
 References: <20260122052402.2209206-1-chenxiaosong.chenxiaosong@linux.dev>
 Precedence: bulk
@@ -83,7 +83,7 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9054-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9055-lists,linux-cifs=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[3];
 	FREEMAIL_TO(0.00)[gmail.com,kernel.org,manguebit.org,microsoft.com,talpey.com,chromium.org,redhat.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -96,17 +96,17 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	TAGGED_RCPT(0.00)[linux-cifs];
 	RCPT_COUNT_SEVEN(0.00)[11];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
 	MISSING_XM_UA(0.00)[];
 	FROM_NO_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: 20C3A61F94
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:email,linux.dev:mid,linux.dev:dkim,ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6D8D861FB2
 X-Rspamd-Action: no action
 
 From: ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-See MS-CIFS 2.2.2.4 STATUS_MORE_PROCESSING_REQUIRED.
+See MS-CIFS 2.2.2.4 STATUS_PRIVILEGE_NOT_HELD.
 
 Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
 ---
@@ -114,14 +114,14 @@ Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
  1 file changed, 1 insertion(+)
 
 diff --git a/fs/smb/client/smb1maperror.c b/fs/smb/client/smb1maperror.c
-index c1330d32ef09..421a7ab7bdfb 100644
+index 421a7ab7bdfb..ceba8754f03b 100644
 --- a/fs/smb/client/smb1maperror.c
 +++ b/fs/smb/client/smb1maperror.c
-@@ -115,6 +115,7 @@ static const struct {
- 	{
+@@ -116,6 +116,7 @@ static const struct {
  	ERRSRV, ERR_NOTIFY_ENUM_DIR, NT_STATUS_NOTIFY_ENUM_DIR}, {
  	ERRDOS, ERRmoredata, NT_STATUS_BUFFER_OVERFLOW}, {
-+	ERRDOS, ERRmoredata, NT_STATUS_MORE_PROCESSING_REQUIRED}, {
+ 	ERRDOS, ERRmoredata, NT_STATUS_MORE_PROCESSING_REQUIRED}, {
++	ERRDOS, ERRnoaccess, NT_STATUS_PRIVILEGE_NOT_HELD}, {
  	ERRDOS, ERRgeneral, NT_STATUS_UNSUCCESSFUL}, {
  	ERRDOS, ERRbadfunc, NT_STATUS_NOT_IMPLEMENTED}, {
  	ERRDOS, ERRbadpipe, NT_STATUS_INVALID_INFO_CLASS}, {
