@@ -1,158 +1,165 @@
-Return-Path: <linux-cifs+bounces-9112-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9113-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EBqHF212c2kEwAAAu9opvQ
-	(envelope-from <linux-cifs+bounces-9112-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 14:23:57 +0100
+	id UPKlOiqXc2lgxQAAu9opvQ
+	(envelope-from <linux-cifs+bounces-9113-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 16:43:38 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A5667631A
-	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 14:23:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6625E77E92
+	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 16:43:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 89379302EAA0
-	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 13:23:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D70F3303A856
+	for <lists+linux-cifs@lfdr.de>; Fri, 23 Jan 2026 15:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1096D2F60B2;
-	Fri, 23 Jan 2026 13:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167AD2DC763;
+	Fri, 23 Jan 2026 15:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NkoyQRiZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="miIdbsrx"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEE52D877E
-	for <linux-cifs@vger.kernel.org>; Fri, 23 Jan 2026 13:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769174601; cv=pass; b=mtL/U/iZAM9VbmwHNBMHdvW4W7m74iHXBp7RJuzUUvA/o/NGc+H/rZo9GtUs2Fj/phJPFtNVpaqh0CTSrTBhFkPBChJsh5E6WbPvJIEZHpLGl9JKHkHpkWjpSasYqPnIyRaMEqF59fg3T0ff5lJjkNJXI8ZpXliZe2ptNmmL11A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769174601; c=relaxed/simple;
-	bh=2yMX4KMIacTi5G1FaT6jVtT+6BVY1UFvsXDRT1eQCDg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=on5qKvMoUNnPAI0GDbLp+evoqA7pWjljZ4vfUvjbT5lM3V8rmMWMGbnN2xDke7HK6XgpFnOMlf48ak9H5F0iYoOzpQRc/RX+ltSmsLjIZGmP2r2W4Yxgl79ZuDa8dNWfBO1txtB2eJksbFYkGZ8Oo07njcFtCOy99ZxxNBNYrJY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NkoyQRiZ; arc=pass smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-5eeaae02888so640840137.1
-        for <linux-cifs@vger.kernel.org>; Fri, 23 Jan 2026 05:23:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769174599; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jfJlKkTbtK8BG3iZk2xXLLQtjtrmDlZf9Ed7y5LlujMkB9SrLN7YFAgxLMAFahSRss
-         +xtDNf+luTTuS/VVRMDbjGxu4BWQaowMXFxRAZW+zHmciPgPJs3PPFnIXHdN9R9RaQbZ
-         +40JviyhKR5QPJzlPBIJw5N7u7Tcb8OfKBr33q3YDnd4M1wzWznR59ZJlShluDySG1t/
-         5CKB6FGEGSY6n1NImmyB6kILOgK54aOVNasZHDTGzJCwIb78Btmy4KPRYTiHATlr4xX5
-         TsmYWKTUAC79GVCUpYqS7ZAUU8EmXR2FAKS/yg7Dx2v6CGT5n8URb68HdKbbsM32mOkP
-         UHfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :dkim-signature;
-        bh=an5pupjXgIQPeCf/UmDnIpSea/cRkdaOPzIbp8qXmEc=;
-        fh=8eUXjq+P/fg2mTFjf4b2ZMO8AcRNufsf5T02WOZIgWc=;
-        b=gcmrQGruH2+iveyeFFWA5suDgqnhjDjlD2GrNmCAQQPt7lH3tdZ3q+4d3QCmO1HUa7
-         DX4VmeIPvhSz6m4HrwgVwyyBNnYHvKC10EASFnZC2cnurAY8GxTlUTFPqeQkvtsQJLjg
-         yU3xIFCVTwfVLm/dmL3n8w3DQ7STuMUq+aaUP94MtR64elebQHsD+fwSsjtb/IQyzIIH
-         kIee3Zj4Bht1ic3JZPk0Ko+lM89wFThroABw9PtgKMUH6Fzl4GZWfBgcXGe2vqsmITzI
-         sUIor7QEuk0eQCiOAWF22WWrIWNqh5s36pQu/aVSF1FCGRpHrO6GZM//3cuk1mLqCEwv
-         lZ5g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769174599; x=1769779399; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=an5pupjXgIQPeCf/UmDnIpSea/cRkdaOPzIbp8qXmEc=;
-        b=NkoyQRiZO9++ahzHH1OJ5cCT3E2o0WVv3qA2Qem70FoCG8ghW61cHe4bSRBatgsOm5
-         A9UVv1hPLOdqS7Om0j7zlcMFFBFxVAx1uBlswhWJlXn3OASJqKNdFhdsiFhkTqg9kX7H
-         xjegM32LrT1LO+E+NmFwksOsoU/PioZNNfbxLms6YJ73QwTqql0xy6uHu8v6t5HbKdX1
-         i9yLP0dUZ+jNxtpqiNPKX3OTx+CZM48wY44I/D/1o6pVuDZ/7wY+Jlkug/UcX9Oi+mCW
-         OqBmRXD2GC/fp3HrUbK+h4svEPIprnXIEdwdawESvoKrh/ycipkVN9urALaU/ZPu6A9e
-         gyBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769174599; x=1769779399;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=an5pupjXgIQPeCf/UmDnIpSea/cRkdaOPzIbp8qXmEc=;
-        b=sVBph/ST7IJFDRoW/XWTWLElFerSrbV0+afdjv0s/GEe6IGONWFA5aA0JoPWSwL6jM
-         XNB70IZO5zVGVWPFjszWG0QBTqne7eZNH5TkztCy1qg0HCGiYo2GLI+U1RASLPunMiJ7
-         2Y4NliYO7ollWms/dIcDxThrMl8+TU8ubKaY15RvHOHYVT7+U4IyNhHfsahRNdRu2hoN
-         zMdv1NnBOQK/G+CcPwXU5suAuKE2mZJ7bzcp5oOdEzY/B/jWTpc2Sv/S2b3l2oChYopH
-         j4qeNjuKrcmjzlpqzLac6QlzbDOo4Tb/13Hj7FlssjGPoeXzVTz2Z7+F7NmqGXxG7d2I
-         cz3w==
-X-Forwarded-Encrypted: i=1; AJvYcCWLK4C3z6aMaFgId4gYx+U8u6QsWDHOgQAynKKrRDWjePWdSVopgKY/SibB2YKgrfqTfV2bBsucmJHP@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT4pama3mzogkt0JZOdSWqaO+ICZ91ZPdYekTABt6EZndza616
-	ddzPNK5I1buWSxHmvMvphcfbJi+PFQB/7E5uhA+fWgo2A8W00P6F2mn36fW//rNQF/QzhE5HuQY
-	7XVmgwRDfJim5BWg3/7ZHLtQQ4uJrHG8=
-X-Gm-Gg: AZuq6aJxnD7Kpy5hWTejq3zSjdq64M54pOzCn62VkqTFM9g/2jcgOWZHxXE0EGSSvko
-	RBKZZ+lJ2It2Y5H8tXC/2lMxnuhxTuWufY6VD/sdBtRNuq8CfTn6fC68rCpJVUnAV0q4B+sWdjt
-	VuSNA8X1LGHK5drb8J0cj2L+gsdJmv7DmOmMyzf2oXo5/ifFhpcIAXiubEnF1dgGFmWax2jTT3R
-	YNy8kSNUfH7Td+jcPknvGgdBFPmDWxPUQRMW8zQ17g1ir8V3YPQ5qHTT6rQ1L1i6swU31Q=
-X-Received: by 2002:a05:6102:38cb:b0:5ef:7220:bca6 with SMTP id
- ada2fe7eead31-5f54bcbc2c0mr848495137.33.1769174599222; Fri, 23 Jan 2026
- 05:23:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A6F2BEC23;
+	Fri, 23 Jan 2026 15:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769182823; cv=none; b=DbtWwHDIzdUGOP/bNUEfggHzrYLAXvlpe1XDORdB8uRIkCtbhomxYm0uKjkTzZx52ukUXjBE6BBNeRJMEuE9VYBJT8BugPnahRj/oQ5EBe7xIL1TAl8/frzXStvgBBQR5wvRh7rTS83cUP/b0TPpK2i/WVZdU1ZFe7oGVNq3Sx8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769182823; c=relaxed/simple;
+	bh=ca5OUABJIUQw1awy0GFCz8SroFNXoro22G2gLfwRU4M=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=c1kTF92IRFnyX366jtOytycnlJQcE6DaNuNhz3DUE1cPhPJB1xUE3QGT5t1ZyLuKAFHh2r7XancFOdW7oYpARPbLVpAKLTe19ps+G+a7hUpUdYvWo+F+nQWdQYYl1QqkPezzq4ksAoRoSToVFRTT20dM0RaUtesn9S30CId/2Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=miIdbsrx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4D3C19421;
+	Fri, 23 Jan 2026 15:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769182822;
+	bh=ca5OUABJIUQw1awy0GFCz8SroFNXoro22G2gLfwRU4M=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=miIdbsrx/xWo97HXz/jQd5ViuIINwShbYv5Qx6eRXNyIG8yB3gaG3qsEC3ec3NRue
+	 Durj4sBrnWWjXrQrr5xH6oIcmO56O5emUyNuGLQ8a1IWEydvOmOU7kqM01t5OPceT1
+	 zG+0Ch1oWfduzSY0eJogyMLwv7U+uD29e7I3+kxKFCUuVj61KD4huJQI4bRL4FGdwB
+	 Q0StbeWgJeXcRI2z9tt9kiNhB6Ahm8RhACQTzrDS2k1KVc0bsvE5bborNt5lu65RPV
+	 j5N2SB7OE7hU/qBLJ7DVZz/2L5F8OHd/T1wd9v6yrKjTyhly4GgIB3PxfkGUIhbvit
+	 OSujpWPpFXXCg==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 99424F40068;
+	Fri, 23 Jan 2026 10:40:20 -0500 (EST)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Fri, 23 Jan 2026 10:40:20 -0500
+X-ME-Sender: <xms:ZJZzaa9eivV6ZLC2S1VvjVQPBCkkSu4KwoG1yY5mRgNIWyYur9Ck5Q>
+    <xme:ZJZzaVhe3sND8MoOXWzM6KbGKNU-wl2QbyrVMYOgilup7QoUs0_xsBDCg8xWETr0h
+    3G1z6reNUTw9_CJt2iyf6fO5CBWZsC9dMjullwIvYdK7XZ5z1-MxMD6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugeelgedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedfvehhuhgt
+    khcunfgvvhgvrhdfuceotggvlheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrh
+    hnpefhffekffeftdfgheeiveekudeuhfdvjedvfedvueduvdegleekgeetgfduhfefleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegthhhutg
+    hklhgvvhgvrhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudeifeegleel
+    leehledqfedvleekgeegvdefqdgtvghlpeepkhgvrhhnvghlrdhorhhgsehfrghsthhmrg
+    hilhdrtghomhdpnhgspghrtghpthhtohepfedupdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehsvghnohiihhgrthhskhihsegthhhrohhmihhumhdrohhrghdprhgtphhtth
+    hopegrughilhhgvghrrdhkvghrnhgvlhesughilhhgvghrrdgtrgdprhgtphhtthhopehs
+    lhgrvhgrseguuhgsvgihkhhordgtohhmpdhrtghpthhtoheprhhonhhnihgvshgrhhhlsg
+    gvrhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnnhgrsehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    gtvghmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegthhgroheskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtohephhgrnhhsgheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ZJZzaUw-i5v04Oo4fuTDYQJ6fy5P88Zbs1MBvOy8w-xobwZu_7vEZg>
+    <xmx:ZJZzaSq2wkh834Up5x5kLjRlIaDqOo5FWP-tWiZw1Fd0qfJBikQpKQ>
+    <xmx:ZJZzaR7NIuH_l3ADDuDheAkeN4vFEAcw0T7KC-Ayt0CDPdHImRMmgQ>
+    <xmx:ZJZzacgEYomzp6qZbIscHRcBPtxblNQkyJKtMbmaPLb7bORokH1X7w>
+    <xmx:ZJZzaf1KoDZBtl7IdcWtFdAYuDM1ZCLx7M3GXs9B37KKxuKtytwrRpxO>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 68382780075; Fri, 23 Jan 2026 10:40:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120142439.1821554-1-cel@kernel.org> <20260123-zwirn-verfassen-c93175b7a1ee@brauner>
+X-ThreadId: AdRvsg_UpIrR
+Date: Fri, 23 Jan 2026 10:39:55 -0500
+From: "Chuck Lever" <cel@kernel.org>
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
+ linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+ "OGAWA Hirofumi" <hirofumi@mail.parknet.co.jp>,
+ "Namjae Jeon" <linkinjeon@kernel.org>,
+ "Sungjong Seo" <sj1557.seo@samsung.com>,
+ "Yuezhang Mo" <yuezhang.mo@sony.com>,
+ almaz.alexandrovich@paragon-software.com,
+ "Viacheslav Dubeyko" <slava@dubeyko.com>, glaubitz@physik.fu-berlin.de,
+ frank.li@vivo.com, "Theodore Tso" <tytso@mit.edu>,
+ adilger.kernel@dilger.ca, "Carlos Maiolino" <cem@kernel.org>,
+ "Steve French" <sfrench@samba.org>, "Paulo Alcantara" <pc@manguebit.org>,
+ "Ronnie Sahlberg" <ronniesahlberg@gmail.com>,
+ "Shyam Prasad N" <sprasad@microsoft.com>,
+ "Trond Myklebust" <trondmy@kernel.org>,
+ "Anna Schumaker" <anna@kernel.org>, "Jaegeuk Kim" <jaegeuk@kernel.org>,
+ "Chao Yu" <chao@kernel.org>, "Hans de Goede" <hansg@kernel.org>,
+ senozhatsky@chromium.org, "Chuck Lever" <chuck.lever@oracle.com>
+Message-Id: <41b1274b-0720-451d-80db-210697cdb6ac@app.fastmail.com>
 In-Reply-To: <20260123-zwirn-verfassen-c93175b7a1ee@brauner>
-From: Cedric Blancher <cedric.blancher@gmail.com>
-Date: Fri, 23 Jan 2026 14:22:43 +0100
-X-Gm-Features: AZwV_QjeaJNq0W-Cpcx_JErnCmrcMqvA53IgZ6NSy4KMyZ7YPDQ4CrxDdLy3saQ
-Message-ID: <CALXu0Uc3gkrCmFApP1xswew9AmfotgZXR4uZXr_RetyEtC2pPA@mail.gmail.com>
+References: <20260120142439.1821554-1-cel@kernel.org>
+ <20260123-zwirn-verfassen-c93175b7a1ee@brauner>
 Subject: Re: [PATCH v6 00/16] Exposing case folding behavior
-To: linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	linux-nfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [-2.15 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9112-lists,linux-cifs=lfdr.de];
+	XM_UA_NO_VERSION(0.01)[];
+	TAGGED_FROM(0.00)[bounces-9113-lists,linux-cifs=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[31];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,suse.cz,vger.kernel.org,lists.sourceforge.net,mail.parknet.co.jp,kernel.org,samsung.com,sony.com,paragon-software.com,dubeyko.com,physik.fu-berlin.de,vivo.com,mit.edu,dilger.ca,samba.org,manguebit.org,gmail.com,microsoft.com,chromium.org,oracle.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cedricblancher@gmail.com,linux-cifs@vger.kernel.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,app.fastmail.com:mid];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cel@kernel.org,linux-cifs@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 0A5667631A
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 6625E77E92
 X-Rspamd-Action: no action
 
-On Fri, 23 Jan 2026 at 13:12, Christian Brauner <brauner@kernel.org> wrote:
->
-> > Series based on v6.19-rc5.
+
+
+On Fri, Jan 23, 2026, at 7:12 AM, Christian Brauner wrote:
+>> Series based on v6.19-rc5.
 >
 > We're starting to cut it close even with the announced -rc8.
 > So my current preference would be to wait for the 7.1 merge window.
 
-My preference would be to move forward with 6.19 as a target, as there
-are requests to have this in some distros using 6.x LTS kernels (Bosch
-for example).
+Hi Christian -
 
-Ced
+Do you have a preference about continuing to post this series
+during the merge window? I ask because netdev generally likes
+a quiet period during the merge window.
+
+
 -- 
-Cedric Blancher <cedric.blancher@gmail.com>
-[https://plus.google.com/u/0/+CedricBlancher/]
-Institute Pasteur
+Chuck Lever
 
