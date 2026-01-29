@@ -1,188 +1,674 @@
-Return-Path: <linux-cifs+bounces-9161-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9162-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJ+xOYiQe2nOGAIAu9opvQ
-	(envelope-from <linux-cifs+bounces-9161-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 17:53:28 +0100
+	id CI3bB/mae2nOGAIAu9opvQ
+	(envelope-from <linux-cifs+bounces-9162-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 18:38:01 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 638D4B2783
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 17:53:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2CBEB2FFD
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 18:38:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EDD8C3001821
-	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 16:53:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 97667300B589
+	for <lists+linux-cifs@lfdr.de>; Thu, 29 Jan 2026 17:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7BA33ADAF;
-	Thu, 29 Jan 2026 16:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E11353ECB;
+	Thu, 29 Jan 2026 17:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a/MNHPCX";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cx4bKnN2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P3mUrD7J"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B34345754
-	for <linux-cifs@vger.kernel.org>; Thu, 29 Jan 2026 16:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB982EA15C
+	for <linux-cifs@vger.kernel.org>; Thu, 29 Jan 2026 17:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769705605; cv=none; b=lOljOamM0mUPQQuMkHUOW0SJ3nQKchfc5JcAkJ6orUDflEymcwjzEP52NsbsvzvIM738fa7ymUZUPxeFqUM8+c8a7DdW6qkmcJR5c3t3CVNupnaXXJ7GGdVDqbSCvcj9v+oECGD718sfxuhasnu077zWsd4Cqqr78gsgTOiPlpY=
+	t=1769708275; cv=none; b=BBt6FF2wM2VAVqigP6ePsUJcscK+79U5FXXThje4Gp8zJ9fRpbHBNLKmSPjlIkfBfCzuAp7fIq5Ah4PAgFczZx/DKWN5PeYathAUtLF0FlHIjwexzkvlmsfK/KzlakQTOUto+2pxVnADYW7JlCBLolm4mk7gIAIT/KKKiz9YzrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769705605; c=relaxed/simple;
-	bh=WOGhGhsnQIX0JLxRhL6uuprL7CVf0Nxffn2Etmsupas=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BK6wMYFtk2EuR6jHNBwcgLxOVKddHtyWYlBEIv5GXbbmOr5c+087Za41k9zOEEWlNQv26mlb26XiwIpy9MJAIcUKl6Rzyw8S8lo64BeZUMBv4nAOADpiJAHmSosT8wb8ZD4KXkKs5jJJVeVnczX7DbeYhLn3qQ+4oytcQa2+KhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a/MNHPCX; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cx4bKnN2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769705603;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bxsJZ4lY7/i7NTzxVza1t8bxhbR1O4VQ7g3k6JdX5O0=;
-	b=a/MNHPCXAOieH2EuOzbb1eWwaCIuAq6rPmj127bwxtwly9V6Z+FTt5jQuEWd6a7nKnnIfk
-	B5HYVADOtfUdRyfKbOc9qKhsEVPXoQFMX6SKuy+Nwai80ZnFTkmzBK9et7pT3Zqrr/eqvW
-	QoUIIUAmvh5/cv2DWxvK98jg7FuTE9g=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-615-ZPCVX6liO-idzw6cTT1Wog-1; Thu, 29 Jan 2026 11:53:20 -0500
-X-MC-Unique: ZPCVX6liO-idzw6cTT1Wog-1
-X-Mimecast-MFC-AGG-ID: ZPCVX6liO-idzw6cTT1Wog_1769705599
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-48079ae1001so7835545e9.0
-        for <linux-cifs@vger.kernel.org>; Thu, 29 Jan 2026 08:53:19 -0800 (PST)
+	s=arc-20240116; t=1769708275; c=relaxed/simple;
+	bh=U+/sQ2qiipyrRvEFiZ16gEV53mt1oevkZ+CauXGSfcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JHSabyVQYcWIUkLDJ3s4gDwr498JZ9y2BowQfynZnhYLu/v8aD+cS+RhLCStP2ITGRYQSSqLJNpHB4aZMQzZxcaQyjLLLjNPIcfz2HEOinsfKntlm/ip3R93n5Sp1E1Sk0BHUm/KuP8X4ieEqyuM9HU26eUn6eEcVisaYdiB2jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P3mUrD7J; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-81e93c5961cso1037258b3a.0
+        for <linux-cifs@vger.kernel.org>; Thu, 29 Jan 2026 09:37:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769705599; x=1770310399; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bxsJZ4lY7/i7NTzxVza1t8bxhbR1O4VQ7g3k6JdX5O0=;
-        b=cx4bKnN23xNlNPkjVSliGWzQOYhrdEjGo2U01yQ5oJXM6nDK7FrqQbEw4KDWMbSk08
-         bR3+ek+VXil+s00UnNPRv6+QKZzNxMLNEWhRz2R3CcHpYaPRo+o8EUemjhBeeFdzmLfU
-         5NF4++VOTJduSzXEHlqTHcLqyR/8dRh0YHiGRW9vJmokPJPkV8eKRsm83Te9ZS90gqQ5
-         wRf5zYhxkI2iBORHx7LclJLjcn5+6+5b0abcYIZQBj5TgS3GI/IUPT/bMLPemLu1EAua
-         1AbVcKX6gfKFSpIrpUPeeClvtI/C0NtqJznrCy087PXVC+jQA8vhH72HHBop3PsQH8tV
-         a1Eg==
+        d=gmail.com; s=20230601; t=1769708272; x=1770313072; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pz8KOMRUdZpwJ3SHr+b3TUTtRSoX01cBksCKzpsL5vE=;
+        b=P3mUrD7Jxe+5uki8dGvDB1bzq9DOOe4Kg1GUFwiLjnv9FjVoSimJ5YxXzQJXEUIYyP
+         6CHGuIiCsnTiPWPqdEl441L5yy07WpT/zv9LvR1kvaSdLq3tNqPRDXXI0uSQWthh90+2
+         B9Lkr1xjt9MGKxJcTxhG5xJwrTzvZZbjttufanFlsCOMG2m90UC9XukLh3Icr5XXt9hq
+         B0vQypwfhXGxE+n2VOEdnayr4dTIWeDUVl6IOTMY2AfIjS6/QAVDuwcCf0egcAecnHED
+         dGTTHhMslGCrQsUs4QjwXBXfCr0KWj0t9h3Vk7YTfo3TQRsX+HGa8rFAwYd4HxQzNFCf
+         9ozQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769705599; x=1770310399;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bxsJZ4lY7/i7NTzxVza1t8bxhbR1O4VQ7g3k6JdX5O0=;
-        b=c37FnoaViChxM6wyiHR+mWdrxK5o/PPDdfZsP7ac9WzuLbQLp/kTj8GdRKKDx5+GGR
-         GJiwlHtD5JK+CQbYT1qFegX04ts4nfrbybL8JOVPXUe82GWQkyU4AJtloSfXtvVfsv8f
-         Qw7CiJDfGv+30C3pWbdcwOr66+kGYW9N2Q/2UeYs13x9Z/+f5OCDXB5HqT6V9xWDQsxU
-         hLtaA2YEUSKiuAGGToCXWtZjEnq3rlc+koopf60bsulC49u3ukAE33P4aQ3l6+Yppi7W
-         70KAPjnkai7SqeTZgi3xAkqYnBy15XdkqVL/MY0Emuu+MJ7u38Ps8TvkyP/nXzN0ciss
-         Vezg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpiKZ2HV/pYsFe1Qqwy3+dAF5lmsIUS1dUSvpT0SvtIdhCmg+p5ru5Obi+DFE5yOA16EILw6QhWsnm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw63Ae68X11JHwZeRSA/s0jycSMaRujdwT5rmkzCT/XobGjgZ6+
-	30sPOAxAlR8wpNs86gGQT/+HLoeHWuOduqkAQUCv7lbYPk52OpH7aiqLwEYn/EuqOkWgkxdQhst
-	Pg5/lfSGhIKNt03OmTCXTsHmtb9QzyybYjmcV6RuXsl1lod1ci5B8GlNLTZJw8g4=
-X-Gm-Gg: AZuq6aJPu/CdMia2NBW0AFNMIsWG1ESblw0IfK8BujQnoNPXrQsTng4iY1dJyahtsKW
-	kvQg1sxN6uevzFZDQ3QjaU1EuStb5YcNQUrgHsupvK9UZC2635SocRtfw/rgZU/KnKRjTGWUJW8
-	hDPjgPmiaYPVR1A2pQHSSGegCynDjElgpx7HiMgTk2LIOuh1EnMBxQ6P2DODdl1n8jTy2OQc4/U
-	y32VYNMW5UQZEW/+6UByqgIxKJKDX+j2s5yhs64DIA9oDady2Rp0CHO/nOelyrRwpcPScdhWJvJ
-	cadSMqRjDx4T1zZBESyQUFhDm3/o1MI0Sio8jASnlfoZn/yWHqQbO2yD0MJC2lzXyWo95+pQJY3
-	ALp2t+6DGBNI1
-X-Received: by 2002:a05:600c:4e90:b0:477:582e:7a81 with SMTP id 5b1f17b1804b1-48069c2a907mr105133585e9.4.1769705598732;
-        Thu, 29 Jan 2026 08:53:18 -0800 (PST)
-X-Received: by 2002:a05:600c:4e90:b0:477:582e:7a81 with SMTP id 5b1f17b1804b1-48069c2a907mr105133265e9.4.1769705598230;
-        Thu, 29 Jan 2026 08:53:18 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.153.56])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-481a5e195ecsm793975e9.4.2026.01.29.08.53.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 08:53:17 -0800 (PST)
-Message-ID: <bbbaf4e5-1c31-4c84-adb4-dbb94b8d07f4@redhat.com>
-Date: Thu, 29 Jan 2026 17:53:14 +0100
+        d=1e100.net; s=20230601; t=1769708272; x=1770313072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pz8KOMRUdZpwJ3SHr+b3TUTtRSoX01cBksCKzpsL5vE=;
+        b=oe/QUP1NSWDGNoIBnivTcuUCLhQgruxuc75qxXSogZud4Uoo3OjdWjKqNeS/oiSHf4
+         67rowYjTAWpERwj+N64UOtwYukG/fqOjKMGsz37hn5ppWSCvBIHTKXEFSJMe5GqTx4zW
+         1Uo6LxR8WDoqJ6XCgvVBCHIK5BsvuW/gVgbpbqJcWPB6e+RE7Rav5g7orjKyXv6oAOUy
+         dAocDGflE03J6xVaTfm/6nKRJMplD+ZPJ6qUTCKdp+0aOTgoHA6DF6FTJEt0LKgwNXJ9
+         afMV98ZdSkEkBJR9CinOc6cXhc90Dsi8noA/GJ/rOJ0K1MelYfPJnGd8GmrJ56jlgLbj
+         04/g==
+X-Gm-Message-State: AOJu0YyDT7h4LcijC1msiuP/l7o0WpAdzRGdLIEVkX/LhrrQfmyFSbY3
+	NmzHXb5xrU0eKidgqDG6xH64HPjYcGVwP920XmFiFk35ogJ6TbuzpG3nUccWUg==
+X-Gm-Gg: AZuq6aIstYuNTrML04BMcw7rb11M5PoeBeSlr/XUAFLQ8b0w3dJSnfgdTgPZe2C0LMw
+	y0RuBlu8ihnIKPEa+kSvBeGtLV8zOvkm5fEHfK9hbdDgWV8jMP3tgcJs1+rw697d/ES33Erhh1o
+	alkEuDAewZ5H0v+SItKFrjOmEOVEw1pEoLzgwQWnyxNiDAnuNhP0fBE/zYdpr7p3N2+Z/TMH6a6
+	ii+0eOsQX4mDS7dTPQU6vZRswsicA7Xslh+LC6ED70LqHOtw0g4WF5KMOOquBLpwATNtdZVBRI3
+	c0ZaQ0l3o5kwbLSYETBUeQ3IRs1oknHwQR74HRxBgGlYRXC88JOAlms07aG5s1100Mg88QnuqtB
+	WWxTpSN3P6Pvsud/zJ0vAivXZis+1Bj42RFDHK81/E1zI2SzuFhGiV7HtRPAX+QMJbaSZUqfmUK
+	3UsTuBaxZ/pI2totMzuIonHzLjz6FwApL4zVetZQeM
+X-Received: by 2002:a05:6a00:148f:b0:81a:b183:44fc with SMTP id d2e1a72fcca58-8236919a05bmr10076865b3a.23.1769708272037;
+        Thu, 29 Jan 2026 09:37:52 -0800 (PST)
+Received: from sprasad-dev1.corp.microsoft.com ([167.220.110.200])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b6a5desm5512659b3a.28.2026.01.29.09.37.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 09:37:51 -0800 (PST)
+From: nspmangalore@gmail.com
+X-Google-Original-From: sprasad@microsoft.com
+To: linux-cifs@vger.kernel.org,
+	smfrench@gmail.com,
+	pc@manguebit.org,
+	bharathsm@microsoft.com,
+	dhowells@redhat.com,
+	netfs@lists.linux.dev
+Cc: Shyam Prasad N <sprasad@microsoft.com>
+Subject: [PATCH v3 1/4] cifs: on replayable errors back-off before replay, not after
+Date: Thu, 29 Jan 2026 23:07:08 +0530
+Message-ID: <20260129173725.887651-1-sprasad@microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v8 15/15] quic: add packet parser base
-To: Xin Long <lucien.xin@gmail.com>, network dev <netdev@vger.kernel.org>,
- quic@lists.linux.dev
-Cc: davem@davemloft.net, kuba@kernel.org, Eric Dumazet <edumazet@google.com>,
- Simon Horman <horms@kernel.org>, Stefan Metzmacher <metze@samba.org>,
- Moritz Buhl <mbuhl@openbsd.org>, Tyler Fanelli <tfanelli@redhat.com>,
- Pengtao He <hepengtao@xiaomi.com>, Thomas Dreibholz <dreibh@simula.no>,
- linux-cifs@vger.kernel.org, Steve French <smfrench@gmail.com>,
- Namjae Jeon <linkinjeon@kernel.org>, Paulo Alcantara <pc@manguebit.com>,
- Tom Talpey <tom@talpey.com>, kernel-tls-handshake@lists.linux.dev,
- Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>,
- Steve Dickson <steved@redhat.com>, Hannes Reinecke <hare@suse.de>,
- Alexander Aring <aahringo@redhat.com>, David Howells <dhowells@redhat.com>,
- Matthieu Baerts <matttbe@kernel.org>, John Ericson <mail@johnericson.me>,
- Cong Wang <xiyou.wangcong@gmail.com>, "D . Wythe"
- <alibuda@linux.alibaba.com>, Jason Baron <jbaron@akamai.com>,
- illiliti <illiliti@protonmail.com>, Sabrina Dubroca <sd@queasysnail.net>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Daniel Stenberg <daniel@haxx.se>,
- Andy Gospodarek <andrew.gospodarek@broadcom.com>
-References: <cover.1769439073.git.lucien.xin@gmail.com>
- <46f93cbee41da1e1f7b7f408b17915fd93b39ec1.1769439073.git.lucien.xin@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <46f93cbee41da1e1f7b7f408b17915fd93b39ec1.1769439073.git.lucien.xin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9161-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9162-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org,lists.linux.dev];
+	FREEMAIL_TO(0.00)[vger.kernel.org,gmail.com,manguebit.org,microsoft.com,redhat.com,lists.linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,samba.org,openbsd.org,redhat.com,xiaomi.com,simula.no,vger.kernel.org,gmail.com,manguebit.com,talpey.com,lists.linux.dev,oracle.com,suse.de,johnericson.me,linux.alibaba.com,akamai.com,protonmail.com,queasysnail.net,haxx.se,broadcom.com];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pabeni@redhat.com,linux-cifs@vger.kernel.org];
-	DKIM_TRACE(0.00)[redhat.com:+];
+	FROM_NEQ_ENVFROM(0.00)[nspmangalore@gmail.com,linux-cifs@vger.kernel.org];
+	FROM_NO_DN(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 638D4B2783
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E2CBEB2FFD
 X-Rspamd-Action: no action
 
-On 1/26/26 3:51 PM, Xin Long wrote:
-> +/* Lookup listening socket for Client Initial packet (in process context). */
-> +static struct sock *quic_packet_get_listen_sock(struct sk_buff *skb)
-> +{
-> +	union quic_addr daddr, saddr;
-> +	struct quic_data alpns = {};
-> +	struct sock *sk;
-> +
-> +	quic_get_msg_addrs(skb, &daddr, &saddr);
-> +
-> +	if (quic_packet_parse_alpn(skb, &alpns))
-> +		return NULL;
-> +
-> +	local_bh_disable();
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-Is this really needed? If so, it needs some comment explaining the
-rationale, otherwise please drop it.
+On replayable errors, we call smb2_should_replays that does these
+things today:
+1. decide if we need to replay the command again
+2. sleep to back-off the failed request
+3. update the next sleep value
 
-/P
+We will not be able to use this for async requests, when this is
+processed in callbacks (as this will be called in cifsd threads that
+should not sleep in response processing).
+
+Modify the behaviour by taking the sleep out of smb2_should_replay
+and performing the sleep for back-off just before actually
+performing the replay.
+
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+---
+ fs/smb/client/cached_dir.c |   6 +-
+ fs/smb/client/smb2inode.c  |  21 +++++--
+ fs/smb/client/smb2ops.c    |  32 ++++++++---
+ fs/smb/client/smb2pdu.c    | 112 +++++++++++++++++++++++++++----------
+ 4 files changed, 129 insertions(+), 42 deletions(-)
+
+diff --git a/fs/smb/client/cached_dir.c b/fs/smb/client/cached_dir.c
+index 1db7ab6c2529c..df9977030d199 100644
+--- a/fs/smb/client/cached_dir.c
++++ b/fs/smb/client/cached_dir.c
+@@ -154,7 +154,7 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	struct cached_fid *cfid;
+ 	struct cached_fids *cfids;
+ 	const char *npath;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 	__le32 lease_flags = 0;
+ 
+ 	if (cifs_sb->root == NULL)
+@@ -304,6 +304,10 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	smb2_set_related(&rqst[1]);
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
++
+ 		smb2_set_replay(server, &rqst[0]);
+ 		smb2_set_replay(server, &rqst[1]);
+ 	}
+diff --git a/fs/smb/client/smb2inode.c b/fs/smb/client/smb2inode.c
+index 2ded3246600c0..498a26a7bd415 100644
+--- a/fs/smb/client/smb2inode.c
++++ b/fs/smb/client/smb2inode.c
+@@ -188,7 +188,7 @@ static int smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct reparse_data_buffer *rbuf;
+ 	struct TCP_Server_Info *server;
+ 	int resp_buftype[MAX_COMPOUND];
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 	__u8 delete_pending[8] = {1,};
+ 	struct kvec *rsp_iov, *iov;
+ 	struct inode *inode = NULL;
+@@ -638,18 +638,26 @@ static int smb2_compound_op(const unsigned int xid, struct cifs_tcon *tcon,
+ 	num_rqst++;
+ 
+ 	if (cfile) {
+-		if (retries)
++		if (retries) {
++			/* Back-off before retry */
++			if (cur_sleep)
++				msleep(cur_sleep);
+ 			for (i = 1; i < num_rqst - 2; i++)
+ 				smb2_set_replay(server, &rqst[i]);
++		}
+ 
+ 		rc = compound_send_recv(xid, ses, server,
+ 					flags, num_rqst - 2,
+ 					&rqst[1], &resp_buftype[1],
+ 					&rsp_iov[1]);
+ 	} else {
+-		if (retries)
++		if (retries) {
++			/* Back-off before retry */
++			if (cur_sleep)
++				msleep(cur_sleep);
+ 			for (i = 0; i < num_rqst; i++)
+ 				smb2_set_replay(server, &rqst[i]);
++		}
+ 
+ 		rc = compound_send_recv(xid, ses, server,
+ 					flags, num_rqst,
+@@ -1180,7 +1188,7 @@ smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+ {
+ 	struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
+ 	__le16 *utf16_path __free(kfree) = NULL;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 	struct TCP_Server_Info *server;
+ 	struct cifs_open_parms oparms;
+ 	struct smb2_create_req *creq;
+@@ -1242,6 +1250,9 @@ smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+ 		goto err_free;
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		for (int i = 0; i < ARRAY_SIZE(rqst);  i++)
+ 			smb2_set_replay(server, &rqst[i]);
+ 	}
+@@ -1262,7 +1273,7 @@ smb2_unlink(const unsigned int xid, struct cifs_tcon *tcon, const char *name,
+ 	if (rc == -EINVAL && dentry) {
+ 		dentry = NULL;
+ 		retries = 0;
+-		cur_sleep = 1;
++		cur_sleep = 0;
+ 		goto again;
+ 	}
+ 	/*
+diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+index a16ded46b5a26..7980c6f80730f 100644
+--- a/fs/smb/client/smb2ops.c
++++ b/fs/smb/client/smb2ops.c
+@@ -1184,7 +1184,7 @@ smb2_set_ea(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct smb2_file_full_ea_info *ea;
+ 	struct smb2_query_info_rsp *rsp;
+ 	int rc, used_len = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -1314,6 +1314,9 @@ smb2_set_ea(const unsigned int xid, struct cifs_tcon *tcon,
+ 	smb2_set_related(&rqst[2]);
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst[0]);
+ 		smb2_set_replay(server, &rqst[1]);
+ 		smb2_set_replay(server, &rqst[2]);
+@@ -1582,7 +1585,7 @@ smb2_ioctl_query_info(const unsigned int xid,
+ 	void *data[2];
+ 	int create_options = is_dir ? CREATE_NOT_FILE : CREATE_NOT_DIR;
+ 	void (*free_req1_func)(struct smb_rqst *r);
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -1731,6 +1734,9 @@ smb2_ioctl_query_info(const unsigned int xid,
+ 	smb2_set_related(&rqst[2]);
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst[0]);
+ 		smb2_set_replay(server, &rqst[1]);
+ 		smb2_set_replay(server, &rqst[2]);
+@@ -2440,7 +2446,7 @@ smb2_query_dir_first(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct smb2_query_directory_rsp *qd_rsp = NULL;
+ 	struct smb2_create_rsp *op_rsp = NULL;
+ 	struct TCP_Server_Info *server;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -2498,6 +2504,9 @@ smb2_query_dir_first(const unsigned int xid, struct cifs_tcon *tcon,
+ 	smb2_set_related(&rqst[1]);
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst[0]);
+ 		smb2_set_replay(server, &rqst[1]);
+ 	}
+@@ -2774,10 +2783,14 @@ bool smb2_should_replay(struct cifs_tcon *tcon,
+ 		return false;
+ 
+ 	if (tcon->retry || (*pretries)++ < tcon->ses->server->retrans) {
+-		msleep(*pcur_sleep);
+-		(*pcur_sleep) = ((*pcur_sleep) << 1);
+-		if ((*pcur_sleep) > CIFS_MAX_SLEEP)
+-			(*pcur_sleep) = CIFS_MAX_SLEEP;
++		/* Update sleep time for exponential backoff */
++		if (!(*pcur_sleep))
++			(*pcur_sleep) = 1;
++		else {
++			(*pcur_sleep) = ((*pcur_sleep) << 1);
++			if ((*pcur_sleep) > CIFS_MAX_SLEEP)
++				(*pcur_sleep) = CIFS_MAX_SLEEP;
++		}
+ 		return true;
+ 	}
+ 
+@@ -2808,7 +2821,7 @@ smb2_query_info_compound(const unsigned int xid, struct cifs_tcon *tcon,
+ 	int rc;
+ 	__le16 *utf16_path;
+ 	struct cached_fid *cfid;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -2898,6 +2911,9 @@ smb2_query_info_compound(const unsigned int xid, struct cifs_tcon *tcon,
+ 	smb2_set_related(&rqst[2]);
+ 
+ 	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		if (!cfid) {
+ 			smb2_set_replay(server, &rqst[0]);
+ 			smb2_set_replay(server, &rqst[2]);
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index 5d57c895ca37a..7d75ba675f774 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -2904,7 +2904,7 @@ int smb311_posix_mkdir(const unsigned int xid, struct inode *inode,
+ 	unsigned int total_len;
+ 	__le16 *utf16_path = NULL;
+ 	struct TCP_Server_Info *server;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -3016,8 +3016,12 @@ int smb311_posix_mkdir(const unsigned int xid, struct inode *inode,
+ 	trace_smb3_posix_mkdir_enter(xid, tcon->tid, ses->Suid, full_path, CREATE_NOT_FILE,
+ 				    FILE_WRITE_ATTRIBUTES);
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	/* resource #4: response buffer */
+ 	rc = cifs_send_recv(xid, ses, server,
+@@ -3265,7 +3269,7 @@ SMB2_open(const unsigned int xid, struct cifs_open_parms *oparms, __le16 *path,
+ 	int resp_buftype = CIFS_NO_BUFFER;
+ 	int rc = 0;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -3293,8 +3297,12 @@ SMB2_open(const unsigned int xid, struct cifs_open_parms *oparms, __le16 *path,
+ 	trace_smb3_open_enter(xid, tcon->tid, tcon->ses->Suid, oparms->path,
+ 		oparms->create_options, oparms->desired_access);
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags,
+@@ -3478,7 +3486,7 @@ SMB2_ioctl(const unsigned int xid, struct cifs_tcon *tcon, u64 persistent_fid,
+ 	int resp_buftype = CIFS_NO_BUFFER;
+ 	int rc = 0;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ 	if (!tcon)
+ 		return smb_EIO(smb_eio_trace_null_pointers);
+@@ -3518,8 +3526,12 @@ SMB2_ioctl(const unsigned int xid, struct cifs_tcon *tcon, u64 persistent_fid,
+ 	if (rc)
+ 		goto ioctl_exit;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags,
+@@ -3675,7 +3687,7 @@ __SMB2_close(const unsigned int xid, struct cifs_tcon *tcon,
+ 	int rc = 0;
+ 	int flags = 0;
+ 	bool query_attrs = false;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -3707,8 +3719,12 @@ __SMB2_close(const unsigned int xid, struct cifs_tcon *tcon,
+ 	if (rc)
+ 		goto close_exit;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -3878,7 +3894,7 @@ query_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct TCP_Server_Info *server;
+ 	int flags = 0;
+ 	bool allocated = false;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ 	cifs_dbg(FYI, "Query Info\n");
+ 
+@@ -3912,8 +3928,12 @@ query_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	trace_smb3_query_info_enter(xid, persistent_fid, tcon->tid,
+ 				    ses->Suid, info_class, (__u32)info_type);
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -4069,7 +4089,7 @@ SMB2_change_notify(const unsigned int xid, struct cifs_tcon *tcon,
+ 	int resp_buftype = CIFS_NO_BUFFER;
+ 	int flags = 0;
+ 	int rc = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -4100,8 +4120,12 @@ SMB2_change_notify(const unsigned int xid, struct cifs_tcon *tcon,
+ 	trace_smb3_notify_enter(xid, persistent_fid, tcon->tid, ses->Suid,
+ 				(u8)watch_tree, completion_filter);
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -4405,7 +4429,7 @@ SMB2_flush(const unsigned int xid, struct cifs_tcon *tcon, u64 persistent_fid,
+ 	int resp_buftype = CIFS_NO_BUFFER;
+ 	int flags = 0;
+ 	int rc = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -4431,8 +4455,12 @@ SMB2_flush(const unsigned int xid, struct cifs_tcon *tcon, u64 persistent_fid,
+ 
+ 	trace_smb3_flush_enter(xid, persistent_fid, tcon->tid, ses->Suid);
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -5190,7 +5218,7 @@ SMB2_write(const unsigned int xid, struct cifs_io_parms *io_parms,
+ 	int flags = 0;
+ 	unsigned int total_len;
+ 	struct TCP_Server_Info *server;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -5238,8 +5266,12 @@ SMB2_write(const unsigned int xid, struct cifs_io_parms *io_parms,
+ 	rqst.rq_iov = iov;
+ 	rqst.rq_nvec = n_vec + 1;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, io_parms->tcon->ses, server,
+ 			    &rqst,
+@@ -5590,7 +5622,7 @@ SMB2_query_directory(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct cifs_ses *ses = tcon->ses;
+ 	struct TCP_Server_Info *server;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -5615,8 +5647,12 @@ SMB2_query_directory(const unsigned int xid, struct cifs_tcon *tcon,
+ 	if (rc)
+ 		goto qdir_exit;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -5725,7 +5761,7 @@ send_set_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct cifs_ses *ses = tcon->ses;
+ 	struct TCP_Server_Info *server;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -5758,8 +5794,12 @@ send_set_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 		return rc;
+ 	}
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags,
+@@ -5838,7 +5878,7 @@ SMB2_oplock_break(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct kvec iov[1];
+ 	struct kvec rsp_iov;
+ 	int resp_buf_type;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -5868,8 +5908,12 @@ SMB2_oplock_break(const unsigned int xid, struct cifs_tcon *tcon,
+ 	rqst.rq_iov = iov;
+ 	rqst.rq_nvec = 1;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buf_type, flags, &rsp_iov);
+@@ -5971,7 +6015,7 @@ SMB311_posix_qfs_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct TCP_Server_Info *server;
+ 	FILE_SYSTEM_POSIX_INFO *info = NULL;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -5992,8 +6036,12 @@ SMB311_posix_qfs_info(const unsigned int xid, struct cifs_tcon *tcon,
+ 	rqst.rq_iov = &iov;
+ 	rqst.rq_nvec = 1;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -6036,7 +6084,7 @@ SMB2_QFS_attr(const unsigned int xid, struct cifs_tcon *tcon,
+ 	struct TCP_Server_Info *server;
+ 	unsigned int rsp_len, offset;
+ 	int flags = 0;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -6073,8 +6121,12 @@ SMB2_QFS_attr(const unsigned int xid, struct cifs_tcon *tcon,
+ 	rqst.rq_iov = &iov;
+ 	rqst.rq_nvec = 1;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, ses, server,
+ 			    &rqst, &resp_buftype, flags, &rsp_iov);
+@@ -6136,7 +6188,7 @@ smb2_lockv(const unsigned int xid, struct cifs_tcon *tcon,
+ 	int flags = CIFS_NO_RSP_BUF;
+ 	unsigned int total_len;
+ 	struct TCP_Server_Info *server;
+-	int retries = 0, cur_sleep = 1;
++	int retries = 0, cur_sleep = 0;
+ 
+ replay_again:
+ 	/* reinitialize for possible replay */
+@@ -6172,8 +6224,12 @@ smb2_lockv(const unsigned int xid, struct cifs_tcon *tcon,
+ 	rqst.rq_iov = iov;
+ 	rqst.rq_nvec = 2;
+ 
+-	if (retries)
++	if (retries) {
++		/* Back-off before retry */
++		if (cur_sleep)
++			msleep(cur_sleep);
+ 		smb2_set_replay(server, &rqst);
++	}
+ 
+ 	rc = cifs_send_recv(xid, tcon->ses, server,
+ 			    &rqst, &resp_buf_type, flags,
+-- 
+2.43.0
 
 
