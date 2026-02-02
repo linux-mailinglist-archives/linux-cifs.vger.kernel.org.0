@@ -1,162 +1,153 @@
-Return-Path: <linux-cifs+bounces-9214-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9216-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EHfTJxp7gGnE8wIAu9opvQ
-	(envelope-from <linux-cifs+bounces-9214-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Mon, 02 Feb 2026 11:23:22 +0100
+	id aPI7FICXgGnL/gIAu9opvQ
+	(envelope-from <linux-cifs+bounces-9216-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Mon, 02 Feb 2026 13:24:32 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6627CAD15
-	for <lists+linux-cifs@lfdr.de>; Mon, 02 Feb 2026 11:23:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6162CC50D
+	for <lists+linux-cifs@lfdr.de>; Mon, 02 Feb 2026 13:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CDACA3003813
-	for <lists+linux-cifs@lfdr.de>; Mon,  2 Feb 2026 10:10:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 92A0A30031F8
+	for <lists+linux-cifs@lfdr.de>; Mon,  2 Feb 2026 12:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEEF284B36;
-	Mon,  2 Feb 2026 10:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90BA2359704;
+	Mon,  2 Feb 2026 12:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PEG4X1H8"
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="JrCm5ppG"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974152DCF58
-	for <linux-cifs@vger.kernel.org>; Mon,  2 Feb 2026 10:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770027043; cv=pass; b=gr5aXVEx9ExVXJsiB+Gpi53ZjpUhnfwPkEshocQhi0vcUjQtq1bb0g42QEdT1BvChunvEE5nhD6mocnvyNt+I6ZFygY+cFgoUiZZhh90nVWU+lLwKkomGb5KxG5Ekf0FwEXWgznFiZndyf+2UlnSLIc+gvtL4CikWrWMTQh0oqI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770027043; c=relaxed/simple;
-	bh=I6tM94QX/j+8uhYVsw+or5HVEm/RHkykFFpr3qh9QwM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=YFcstpM1i4/nRFA8AKV71tMt9HfAxOuszJn0GZt8Bj9kzdP6UvAOxHoaD1EWzwbP0ATNELDRwZwUWBMyhdtz06+MQVwP4Oz1hrgwFm6VWUy6bDBFeYblsFpZex6zonN/60OY5BdhnPVwSYZ6lOjjTt1aTb0lpzLQv+bA1biMeDA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PEG4X1H8; arc=pass smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b883787268fso608216366b.3
-        for <linux-cifs@vger.kernel.org>; Mon, 02 Feb 2026 02:10:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770027040; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DK6po9nJWmplah0kM61+9z+xBqDeuMynYfoBkK3diDhcz2U/4Bo5PTXZCv+e5cz2bk
-         QevEOlKn86sG7EYdOyMOFP2RdHapWBJkJEYcVpFe/HLBkTz8CgCwJWoGF468aOYUJVqx
-         bxigCSGQ+IdHQAfJsJzNn6QryBmVZhlPHQ7tmVWg5iqTomrzHHTy0ei9TekGAP4+0QK6
-         TvZIMlTng7rQPJtlvLFOk4L6740BGhW6351q7D1z3Qz1DqKs90uCAHVjcWMpObzB5qoD
-         hX12l7zNNL7wIZrwKj/icy3TNgNjbIhzTPAYH6CWinw3DeMeFOWmqhHKYGmRzBFjhQGl
-         xigw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=/6MFvnCRz3BDXvFjnswSNYTS+lpc6rtVPo8GC046Tv4=;
-        fh=enYNyi5wjFBH1Ev2npg2+F9VAj9tNjuiMhd+CsW5Hzs=;
-        b=asUY83QgUrA0J9Fqv0m1yyl3ih6QkD1DalLBKVt6ZPriuamnVESWDlnlTM02F5SuFz
-         mYlqvRM5Bj3KUaz0oy7EvZCG6/8P7AAsOmMYBOaJc/1836QbPzNWlC/0NftkGOe+S/pg
-         /r1WDpm+wGNFu8RYTsSDjNKQYeYX4dVvs36pWWboHLJw1F5dwTuIExzZED0AwtiL3BKI
-         uS/KnSvwJcS0EaMNSXN+VPBuHeD0n7yBB9t0B9ljhzSV7cWreUueT6p4t3pxm5u3SutQ
-         KhS0sZAwwVzAZM5YeHE6CPWmANe256PYzEAiqn8qSOGlvPjoIkp8K6wxzF+Jang896bZ
-         GErw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770027040; x=1770631840; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/6MFvnCRz3BDXvFjnswSNYTS+lpc6rtVPo8GC046Tv4=;
-        b=PEG4X1H8LYddEjGxlYfj6mthbSr8tGMdEaMbHZNXII/gAegM36bY3NrnEMJUSszw06
-         9ny+8aAuc7DqeRD7k1hC2JMcjIPS3AF21NIiPN5VzE09VOnzVOWRQ0nwJDA0dg78THiO
-         RSoNIOTxQhDtGVdrcDAqE4zsX58nqB5XwZSnqK+cEfk3+5Iwg1A4/scTxQV9VuUcHMWe
-         lTEn6RLp23x3O90ADJKgrnXzP7O2MPk/58eakYRZUs5wGRohMbRp0dSMOkDCsrYvJkW3
-         WQyKUxdE5ZkRkPh1XflLlYZSOdM+1uQRp3M/yBZrHyvl+Wi12NIFCS1EgTbcPTkZF8Pv
-         wirQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770027040; x=1770631840;
-        h=to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/6MFvnCRz3BDXvFjnswSNYTS+lpc6rtVPo8GC046Tv4=;
-        b=xLsi1q1vILefelUwlMW0wkSltg77DWIpszIOrRxSpR4LrkbcmmMdJgOa9m7OUmawSI
-         +KriE+pfK2b7pQGoiG2P/9sOzhdazjIkMZPNTSTGtte1zh9OtGwvYFW8B1eTApg/kigf
-         yncmUDICDCpIzmA5Iy5ZyL18x7pSS28Refhon6y4pXlStuv/6HCyfJV7V2BqBR/qK9LP
-         3ewm8xSS9algoVg1qyD/dJMIBYBuGJ8zMbh97ux0lSjHIIDJgdUW40Xl97f5WPQy5b4N
-         EVlb+VGxngcazwjsXsIr4AWY4uIMFkM60/mIXw1lDHQiEsLoMYtfeadsqmZcHC0BqorA
-         ZSZw==
-X-Gm-Message-State: AOJu0Yye9xt+yBB0K7LCarHNtz6PGkPMZhfldMkUo1ZIrCEsFUWdrPGG
-	ftaTILMntQ8RbMRijZM/fnm1zn2D+tkciS1rn/ckvbk/dZPmNcEzVHFpIgZ9vCSNh30E4B6FQFM
-	FBOc5n4Q4b7BsnNpbgwT3B5sOH3iaj9AQ4A==
-X-Gm-Gg: AZuq6aK2zZCrQ7sQEL/b3++YZ5LepT4+ipv2BvY4FTDtIgCXGs3axJH5YyRn8cQVYRb
-	Mx2+/CNk0nlstukRYneGT3IX2NE5KghGtXNOra3+8h97sbTwvwNZvDWDMF4SlnW0EyEUpqdirYn
-	WU9kGmv7iuIuI0JJzr1Wv4KrgLC6UlJk4oytdKMmsPq549AYsEclcyPDtr5oLR4zBWfqgCR8Rax
-	+j7XhW4Y26DtbkWoK1is8TDnjaugKhAzmlnQgAFrfTTUjq36pin0D/zJJiF7X5a+mwauA==
-X-Received: by 2002:a17:906:d54e:b0:b87:6af7:c186 with SMTP id
- a640c23a62f3a-b8dff8674d3mr751698266b.54.1770027039366; Mon, 02 Feb 2026
- 02:10:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAB8364EA6
+	for <linux-cifs@vger.kernel.org>; Mon,  2 Feb 2026 12:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770035068; cv=none; b=U6ZaNjDBJmK1nnc/Q968fh6rpjRLoouNppxTLy2IQkDs0iOa8zoNzCN4uxoVO4Di4RgDPP4UZVCIfVbZaZw1Y6F7fIB2V0Ym4bk0RVW42aAwHaWr0Ilouln+tUTVCIC9ScngAAixPInb9xa9RWNCvWAExheJjnfWZl99ZW/4+sc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770035068; c=relaxed/simple;
+	bh=XLInijexvCsMsVqbceK+qEJM2ek4Uvx4dGdCJYvK7mE=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=n5HicwIO0IZAygafrnHwETMZOkXiX8CFwkB5AK7mmh6J7btx6NVRthqFpRjYszjfmnM+g5Vuj++IT8opGm0kTXuZfuZmQkEiesmQVUwCiEwmDptfxzvZnNJw0EURkPhFNeM4wX+jq2Sd/GwuraluJttBgUDFM6sSpxtzG/qbSpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=JrCm5ppG; arc=none smtp.client-ip=143.255.12.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=manguebit.org; s=dkim; h=Content-Type:MIME-Version:Date:References:
+	In-Reply-To:Subject:Cc:To:From:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=H+M5nSsXdUI3mvfDWn0rKtb3gVWDWwlIVIW5xLNTBHE=; b=JrCm5ppG1xHnU4I4avJKwi8R+M
+	zlIPNafZiCb3gmkPLayK74yVNy1C4ekwHiJYKqk4b3sCmOID0I+41Ar2nKk7XRWF/xhmukb4BeCLU
+	neoDrb4dFLQNlvDAPuI6fM7CEgrkV2UMITq4MDKN6vIvKO2TB1jNi2fsf5YlKgfThJgK/Ez+Ms3tM
+	G9gXMgMCRDwgsycST5RYEuF67z9ei2quKKmoqzlqrxfnLELIFAKpw+eQSf052x7MtJMCDPOYfh0Sw
+	I4sa68QFRfoOaF7zUAzvsivUw5LUHt20uuRp2aQFUNp4621iHKuAaDr46bF5CVsQ+bLkT3SQo9ttL
+	AUB6RANw==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.99)
+	id 1vmsrh-00000001UUR-3qMi;
+	Mon, 02 Feb 2026 09:17:13 -0300
+Message-ID: <9d1cf884bff0ed167a73f957ded11de2@manguebit.org>
+From: Paulo Alcantara <pc@manguebit.org>
+To: chenxiaosong.chenxiaosong@linux.dev, smfrench@gmail.com,
+ linkinjeon@kernel.org, ronniesahlberg@gmail.com, sprasad@microsoft.com,
+ tom@talpey.com, bharathsm@microsoft.com, senozhatsky@chromium.org,
+ dhowells@redhat.com, nspmangalore@gmail.com, henrique.carvalho@suse.com,
+ meetakshisetiyaoss@gmail.com, ematsumiya@suse.de, pali@kernel.org
+Cc: linux-cifs@vger.kernel.org, ChenXiaoSong
+ <chenxiaosong@chenxiaosong.com>, ChenXiaoSong <chenxiaosong@kylinos.cn>
+Subject: Re: [PATCH v3 1/1] smb/client: fix memory leak in SendReceive()
+In-Reply-To: <20260202094906.1933479-2-chenxiaosong.chenxiaosong@linux.dev>
+References: <20260202094906.1933479-1-chenxiaosong.chenxiaosong@linux.dev>
+ <20260202094906.1933479-2-chenxiaosong.chenxiaosong@linux.dev>
+Date: Mon, 02 Feb 2026 09:17:13 -0300
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Shyam Prasad N <nspmangalore@gmail.com>
-Date: Mon, 2 Feb 2026 15:40:27 +0530
-X-Gm-Features: AZwV_QhprKRuM4_bMDA0gR2rzjrF9gh1yT2MZfZ04T8X1UnpUbF4uAxxxHaiZ88
-Message-ID: <CANT5p=oDUoq0JgTReUazFds5iLc+-gfiwL1iJXbeF-+YReXfSg@mail.gmail.com>
-Subject: Problem with existing SMB client mount code
-To: CIFS <linux-cifs@vger.kernel.org>, Steve French <smfrench@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[manguebit.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[manguebit.org:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9214-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[vger.kernel.org,gmail.com,redhat.com,manguebit.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9216-lists,linux-cifs=lfdr.de];
+	FREEMAIL_TO(0.00)[linux.dev,gmail.com,kernel.org,microsoft.com,talpey.com,chromium.org,redhat.com,suse.com,suse.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nspmangalore@gmail.com,linux-cifs@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-cifs];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[manguebit.org:+];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C6627CAD15
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pc@manguebit.org,linux-cifs@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-cifs];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,manguebit.org:email,manguebit.org:dkim,manguebit.org:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B6162CC50D
 X-Rspamd-Action: no action
 
-Hi all,
+chenxiaosong.chenxiaosong@linux.dev writes:
 
-There's a problem that I noted with SMB client mounting code
-(cifs_smb3_do_mount). In this function, we first setup a cifs_sb, do
-the cifs_mount, and then check to see if an existing sb can be reused
-with sget. If it can be reused, we free the cifs_sb we allocated using
-cifs_umount and happily share the superblock that sget returned us. We
-leave the task of superblock maintenance completely up to VFS. The
-problem comes when we get a remount call on one of the mounts sharing
-a superblock. Today, we do not have any way to tell whether the mount
-for which the remount call has come is being shared with another
-mount. So any remount changes will reflect for all the mounts that
-share the sb. This might not be what the user intends to do.
+> From: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+>
+> Reproducer:
+>
+>   1. server: supports SMB1, directories are exported read-only
+>   2. client: mount -t cifs -o vers=1.0 //${server_ip}/export /mnt
+>   3. client: dd if=/dev/zero of=/mnt/file bs=512 count=1000 oflag=direct
+>   4. client: umount /mnt
+>   5. client: sleep 1
+>   6. client: modprobe -r cifs
+>
+> The error message is as follows:
+>
+>   =============================================================================
+>   BUG cifs_small_rq (Not tainted): Objects remaining on __kmem_cache_shutdown()
+>   -----------------------------------------------------------------------------
+>
+>   Object 0x00000000d34491e6 @offset=896
+>   Object 0x00000000bde9fab3 @offset=4480
+>   Object 0x00000000104a1f70 @offset=6272
+>   Object 0x0000000092a51bb5 @offset=7616
+>   Object 0x000000006714a7db @offset=13440
+>   ...
+>   WARNING: mm/slub.c:1251 at __kmem_cache_shutdown+0x379/0x3f0, CPU#7: modprobe/712
+>   ...
+>   Call Trace:
+>    <TASK>
+>    kmem_cache_destroy+0x69/0x160
+>    cifs_destroy_request_bufs+0x39/0x40 [cifs]
+>    cleanup_module+0x43/0xfc0 [cifs]
+>    __se_sys_delete_module+0x1d5/0x300
+>    __x64_sys_delete_module+0x1a/0x30
+>    x64_sys_call+0x2299/0x2ff0
+>    do_syscall_64+0x6e/0x270
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>   ...
+>   kmem_cache_destroy cifs_small_rq: Slab cache still has objects when called from cifs_destroy_request_bufs+0x39/0x40 [cifs]
+>   WARNING: mm/slab_common.c:532 at kmem_cache_destroy+0x142/0x160, CPU#7: modprobe/712
+>
+> Link: https://lore.kernel.org/linux-cifs/9751f02d-d1df-4265-a7d6-b19761b21834@linux.dev/T/#mf14808c144448b715f711ce5f0477a071f08eaf6
+> Fixes: 6be09580df5c ("cifs: Make smb1's SendReceive() wrap cifs_send_recv()")
+> Reported-by: Paulo Alcantara <pc@manguebit.org>
+> Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
+> ---
+>  fs/smb/client/cifstransport.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-I did a quick check of which filesystems make use of sget, and there
-are not a lot. Other than SMB client, there's ext4 that seems to use
-this for their testing, and 9p who do not provide a test function (SMB
-client provides a test function in cifs_match_super).
-
-I think this maybe a problem for users. I propose calling sget without
-the test function, so that we do not end up sharing superblock
-instances. Please let me know your opinion on this.
-
--- 
-Regards,
-Shyam
+Reviewed-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
 
