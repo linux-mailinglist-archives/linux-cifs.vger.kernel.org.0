@@ -1,106 +1,167 @@
-Return-Path: <linux-cifs+bounces-9274-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9275-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AA4tBjDrhGkj6gMAu9opvQ
-	(envelope-from <linux-cifs+bounces-9274-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 20:10:40 +0100
+	id qLpAIEXshGkj6gMAu9opvQ
+	(envelope-from <linux-cifs+bounces-9275-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 20:15:17 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70FCFF6BB1
-	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 20:10:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FA7F6C18
+	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 20:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E94F03003739
-	for <lists+linux-cifs@lfdr.de>; Thu,  5 Feb 2026 19:10:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 726F73016925
+	for <lists+linux-cifs@lfdr.de>; Thu,  5 Feb 2026 19:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A581D313E0A;
-	Thu,  5 Feb 2026 19:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187073161BC;
+	Thu,  5 Feb 2026 19:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QT6ohywU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2B6Qagv"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A9C279DB3
-	for <linux-cifs@vger.kernel.org>; Thu,  5 Feb 2026 19:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770318633; cv=none; b=imViJPqmoFFm9boDbMdlNvjbYEp2P8YLOcZtthkDkSveH9RYDWSI9rrIoAEVPhqf6gEJqrt/TjFfrvb4x3vPc3BFIGe8H8OydurzOmfMqL2XcoOGRbWP3wVBRGnTS3mKo8xi4XyFdWz/vCzC8/yhOre2v1B+PAdB/6wuJGUl7FQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770318633; c=relaxed/simple;
-	bh=SHaffgVQ3AfsAhH09BHidOacnI+0PzatJgcx+DGvBUU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nBOYdEXjwp66vw+bDwBYzBN53IKVBWhLWZS25GaxS+VGDC4g9xUfqvqG/uvFmi6nCy+G0/BpZ+80QOzXXKBbW6DQDJD2rDwAA9wG+fVD5ZddrI8+YVOe3eG+hRctF64mxW7D+Gfz1/JuHvNMAyOxbaLaHcbqkLvODopGhO+qUTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QT6ohywU; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <bfa4a0be-8429-4ea1-8bd6-691c3a47ff00@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770318631;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SHaffgVQ3AfsAhH09BHidOacnI+0PzatJgcx+DGvBUU=;
-	b=QT6ohywUWxVKWBRmDDcVulFl+N/cUIc67XYMirTIHRY3aol296YYq5GDbzXaQIaBBHjuEd
-	dV5oZSQh8dLMp517yv3a0UZz3lyL66rYV809HWMeKxYn1UjuW/3yVpnJ0M4GAPjNbwdU2z
-	V5oNdQfVVp3Pbxz0BrZ9ILiCT4215r4=
-Date: Fri, 6 Feb 2026 03:10:20 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAEF315D5D
+	for <linux-cifs@vger.kernel.org>; Thu,  5 Feb 2026 19:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770318915; cv=pass; b=a32qx6yGeqxGcBU9QB6Bd2GPG2JC9lvlkJaEZ3CasuBZquWbq+ihsNUjhLPmM6sp736Pt6W8sbFr4DZLlEq+udVVt7+e/aCAnN5RwlG/XEI/w+CeS9lNXwubZEyIc7XU5Q7h4xxp875OJB2kEsaJV5gWM7/4CYZWp18Im8Dxhrs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770318915; c=relaxed/simple;
+	bh=SPqknecDtjTTtuhNB/QrDHa9ciYC3ivCmhIhHPgnGq8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gWGqgx6cAVdpWzZMPb+MWCSfNO79AMXjZdjVN1ZzGrjIrfLUyXWUL2p6L6m6yFmtTQn5RpDBsvlhayzzAXxZkESM504lzT3oIFUyMsg2IVlCvoedzCie0oRVXZ6Cx0Ve3m4iPIM+mmBuEcvY6L5byVhBW2Z+JpY85CjtrFDZJhg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2B6Qagv; arc=pass smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8947e17968eso16636956d6.0
+        for <linux-cifs@vger.kernel.org>; Thu, 05 Feb 2026 11:15:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770318913; cv=none;
+        d=google.com; s=arc-20240605;
+        b=K6M4QgjolNF/39agGIDWaJ5T5vZoI2rCtj4UgBdA5ODXbCh/tbo+PuI1ZW6G5FHfjp
+         7Zm48rTzXfQJEN2hWcPCue+YmtO9OTyzn3VJtAU4XH858M4n8h547Zl426VvqPw7QTUF
+         rXvXTe4RZRBE/SDye1E7al+4jCQMbMKEoeegzDkwAnxrjfxLZvqzNhOmauAqSO9xP9W+
+         xg0ki4mDv6LfwTBRtkBaFXb8Epp7Tt1Jx2ePxdvYide0DAizMfGcoIe8khrSW6ttWNOn
+         XF12RLuvUZvdMZg5jUs7xWzsWUpCH8x4dM9Y0ylSRTLHJ018WP44nQqnHcmH8Rko6ibr
+         mFoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SPqknecDtjTTtuhNB/QrDHa9ciYC3ivCmhIhHPgnGq8=;
+        fh=tXlXfFzseOhfehmSmsLTIAm6In1J1ul1aoxHCHPKqrc=;
+        b=X1gXR8S+8cB+ix83XliOoQc8k5znncWKPQcSQzhuUr7v4HdRdC9G+z1kt3CGnvnKga
+         veJXkLyoGsSYxpNu6IXNOA2iCEEydm64Z38OITWtXQV3xp5ksYKYuy63Cv7xOwl9CAPl
+         JVWqz//zy0H1+fRr3/O6DhBtVWF3qN4X2DvKxaJWZP7W3mzCsBoDHefnZxeknEXGNl6G
+         xFJai5Sd5U4BaR+SExN+ly4FJ6TAI4K6Y/YKibgOS/qzO5WbDqaGijMUsC9SbJ8K7AxP
+         DEn6UTdBtTD+/z0SmKMFZwL4nEycATdFEc0Y7FE8eD+BDe22uVUU0G+DiBxsY+jT+W1O
+         /8Cw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770318913; x=1770923713; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SPqknecDtjTTtuhNB/QrDHa9ciYC3ivCmhIhHPgnGq8=;
+        b=g2B6Qagvm3VbCeKnFjxKXDqGPO8fpedqvKcCdggjG1hQ9ah04fpCNAy5zvs9idEdKX
+         o+Ev5rMKWHXyzB2qUg3/Asbpmv681sXVFAwGoYZAF/qYhDPg3eg2EaP7j5c/F1tt72Xe
+         O7nCVpxJPNzMCKRJbdTgXlXXjfq35J5KwXsozSGiqwgurZ/ppg7M6AQExBoFq130lG7N
+         BzBkOq1Mun+5E7XryIfpL0GTlXveGAjoj/r2r++XGU2AEmTtj/hvKS6PCRrShk6vyjmy
+         tGfTiFeh/tQRRi4j/tfe1tf0paGnWxOkPf9/1/iYd0ClYx+USWxyqrwTlxW55R5D6nFy
+         tSaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770318913; x=1770923713;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SPqknecDtjTTtuhNB/QrDHa9ciYC3ivCmhIhHPgnGq8=;
+        b=pSrOnoR4Iad38vwGHZqbjp7y6Ap9cmcKTMOo8K7o6g50OLAuDmzVBCx2eM9OGKiKhT
+         9VKaCU9DQMv4kRVtoDQCkrroYN4GRWDR1SBrEGWAZIZIvu1NBLAw3B6g8T3ZM6etpxVo
+         s65OGeGU/ZDwc3U19oz5F8RJ5rdSVzxv8fLAk00L1Gp+b/zgxPMRaIYwl/Wo7ghnanFb
+         6qjU2npuyUxxjJ9wconF+Jdq16jBnzw4Gl9YAaz+DhcmO/Y1U4iBPOxUu410peR6Xacn
+         5q+RIjMk76zqpq3THyMauGYlEGy8WZtVXGM4S+koaZr19WNy/3gaYD7t7caMuLE/xH4b
+         g5Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJYDlesTu2RyWY142UBjsNUkC6kADROvRPRC1FzvKxDdt/Osd5mut4CeLpaqCJJ+Mj43E2wNRtYGJX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyquT82Kq/W4juhWT0tK5Wdp6ecWhw12tqMrS3Z6qVoheDKzITQ
+	MiV+kG+dpQ6Rrp0A1p+LU/8mqcTXOtYMrGhQWU5/UgzqYcepQmVO6SqmU4XjwiP0ialy1NGOhWU
+	YC4OyoZaYSrIOWlfCcYtPn2vVFsjo8Q4=
+X-Gm-Gg: AZuq6aJOdzwfnf11/DD2RkhZXTyeigQl1o3VNza4K2aybBDGvXx0reZm6CRz/CrTgnw
+	tfXwQM+MlZ3LcJEUcaHLu8/z3cHaDwoPpc0GZU/lbt0V9q3Uj+8VoDQXcUj3w8gNXFuISlq3WOe
+	EeeDU5ibEsayaisf/puh85HP7ippylSVlG/TyqUlUmWnYNy3mOVphzV8NzHgSW4hhKw0q395BNQ
+	0p/Ja9aXaRPyI842CpD9JRUnF5hJc9VOFugpYlMtIcNCiZEze8UcIWoLqQ6BzWhUrmXOwA4tnLR
+	0m9YmeEtJC8iL2XXLq2GneYV0Wo5fJ3u58iR4/OYVMn9hU6KNBnbATvv+pWX/4/3tHiA6fAk5S/
+	T6vrt3tOD+v/J9DiXnSXgABxkhsCca3oJyoz9Uv+x62B7DhNtAmu5BN7oiUukl6oNPLJuhr55MF
+	tucX4qbV9S
+X-Received: by 2002:a05:6214:20a1:b0:88f:e333:4a9c with SMTP id
+ 6a1803df08f44-8953ce9e945mr2451476d6.51.1770318913303; Thu, 05 Feb 2026
+ 11:15:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] smb: client: fix potential UAF and double free it
- smb2_open_file()
-To: Paulo Alcantara <pc@manguebit.org>, smfrench@gmail.com
-Cc: David Howells <dhowells@redhat.com>, linux-cifs@vger.kernel.org
-References: <20260205161952.245146-1-pc@manguebit.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
-In-Reply-To: <20260205161952.245146-1-pc@manguebit.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260205161952.245146-1-pc@manguebit.org> <bfa4a0be-8429-4ea1-8bd6-691c3a47ff00@linux.dev>
+In-Reply-To: <bfa4a0be-8429-4ea1-8bd6-691c3a47ff00@linux.dev>
+From: Steve French <smfrench@gmail.com>
+Date: Thu, 5 Feb 2026 13:15:01 -0600
+X-Gm-Features: AZwV_QgM8P0ub1iillZ7k0qMYELtrL1BfSVtPYMp8qKEP1PcXH0cdqLoiv8lZQM
+Message-ID: <CAH2r5mtUEYTWb4m5aN0TiTkXdSA0UMbeQxOdViLXkUCZcT6WyA@mail.gmail.com>
+Subject: Re: [PATCH] smb: client: fix potential UAF and double free it smb2_open_file()
+To: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
+Cc: Paulo Alcantara <pc@manguebit.org>, David Howells <dhowells@redhat.com>, linux-cifs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9274-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9275-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FREEMAIL_TO(0.00)[manguebit.org,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenxiaosong.chenxiaosong@linux.dev,linux-cifs@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[smfrench@gmail.com,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:mid,linux.dev:dkim]
-X-Rspamd-Queue-Id: 70FCFF6BB1
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: D6FA7F6C18
 X-Rspamd-Action: no action
 
-Is there a typo in the subject? Should it be "in ..." instead of "it ..."?
+On Thu, Feb 5, 2026 at 1:10=E2=80=AFPM ChenXiaoSong
+<chenxiaosong.chenxiaosong@linux.dev> wrote:
+>
+> Is there a typo in the subject? Should it be "in ..." instead of "it ..."=
+?
 
+Yes - I will fix the typo
+
+> Thanks,
+> ChenXiaoSong <chenxiaosong@kylinos.cn>
+>
+> On 2/6/26 12:19 AM, Paulo Alcantara wrote:
+> > [PATCH] smb: client: fix potential UAF and double free it smb2_open_fil=
+e()
+>
+
+
+--=20
 Thanks,
-ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-On 2/6/26 12:19 AM, Paulo Alcantara wrote:
-> [PATCH] smb: client: fix potential UAF and double free it smb2_open_file()
-
+Steve
 
