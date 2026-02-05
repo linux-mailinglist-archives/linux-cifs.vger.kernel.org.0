@@ -1,67 +1,61 @@
-Return-Path: <linux-cifs+bounces-9266-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9267-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KGrqGf/BhGnG4wMAu9opvQ
-	(envelope-from <linux-cifs+bounces-9266-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 17:14:55 +0100
+	id cJ7wMtbDhGk45QMAu9opvQ
+	(envelope-from <linux-cifs+bounces-9267-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 17:22:46 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48A77F5157
-	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 17:14:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AE9DF529B
+	for <lists+linux-cifs@lfdr.de>; Thu, 05 Feb 2026 17:22:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 68CDD30054D5
-	for <lists+linux-cifs@lfdr.de>; Thu,  5 Feb 2026 16:14:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33E75302DF5D
+	for <lists+linux-cifs@lfdr.de>; Thu,  5 Feb 2026 16:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156C234B40C;
-	Thu,  5 Feb 2026 16:14:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E5D1426D05;
+	Thu,  5 Feb 2026 16:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="ow66QOyR"
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="XErSpN9V"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817353382EB
-	for <linux-cifs@vger.kernel.org>; Thu,  5 Feb 2026 16:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B48734BA42
+	for <linux-cifs@vger.kernel.org>; Thu,  5 Feb 2026 16:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770308093; cv=none; b=bY25aYk0NRkNaW6C7mkHBFkDRzSH94PyRTBbDEFjzQKKj8tftOVkF1lerfpGlhR8iXRGrtPOWOemvPoLVTKpYL5HgznqR1l4dv0XfdObn3AkJL8zbC3NfXhcCGvWYZouwxxUIBCiXIeBssJhmIZaX8Lj1YIarcBLAm/Mo1x8ph0=
+	t=1770308403; cv=none; b=IQAnHUjMHejsT6jb2fXU9nPd8cutX4UwrKq93X2cTDQHgBpMghfP4S+847z/FrjNOhzKnHlU6f223QWnjuB5tDTXJJWC2hO2qDJQMwKX8cgJdzwRz0u7SM7OVcOiyD3Uj9xoEcLhzuzwk+k51BZSz2aJ8vxhn08BjJgQtxm327c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770308093; c=relaxed/simple;
-	bh=oWG/rMve+wgn0ZJzdr9e/SN6oGIye22icKKha+rdY7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RL3SryiU9wxvV1GFeAYxmDiMs6YSasZmkeFqcBYqyNX1/mGsSR2Wp3+e8NN/7QKd2/ZYCMA9ByVUbPeFQ0t8J7aAB9cqfRtrqvGVzSTyVCz8SI+uPjh0YPQyKBkzHw9E1Ma+YK0NI+6Cg/zoS/asUV2BhwtjCsF67bYBhGl/D/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=ow66QOyR; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=RFKStCJZsASx65u2G/IUSqzCYQWNBZAs0nX6YYBICSM=; b=ow66QOyRER68urPktj8xrbTfvl
-	jIHBWE/tLamXd4AQlHrJpNk1rIhl1DDEVHSEPf3yoRGZa/MSvQ4GmtqHneJ2cQYlDDndD2dvfcoco
-	5JS+B+BJ3O3SP7J7qTmhbWr+up45OHxajm0mhs+vL69xlK6iartn3x4//agehWerjcGB2Dey5p88S
-	WvNyk4inAKO7IPAK639HKdzEnpJrPIfRkPpoDDntBsCf0Y06cIFG/2wS87Ast2EwbWBEMzTpHQVNs
-	LB6L/jJHbcOW8IIQo3cN5KmJeHhLe7sH7lC+tIbh+VZaAJnZYM3uTGDEpmnADAHC2lJWvh8zX0QPw
-	7D9eg76Vu8vxwRX0YjVPp/VduOXpmKKdCXXxZo+wamxqUQMSVLv72sQTtRdXgaBsh5KNTcle0kWVu
-	Vuz5OpQn9InjbT9cNfShwhRvDJwE14KB6Xc9VOmgN1ccgQsT9UYeAu7oXqjWFrTE81fjIr69MbiMC
-	UJxJGg5eYanpsc5RWaovjT/V;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1vo20H-00000004THv-3Qtd;
-	Thu, 05 Feb 2026 16:14:49 +0000
-From: Stefan Metzmacher <metze@samba.org>
-To: linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org
-Cc: metze@samba.org,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>
-Subject: [PATCH 2/2] smb: server: correct value for smb_direct_max_fragmented_recv_size
-Date: Thu,  5 Feb 2026 17:14:15 +0100
-Message-ID: <2e28ef145e4d88216e52f156ad592085adc55e61.1770307237.git.metze@samba.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1770307237.git.metze@samba.org>
-References: <cover.1770307237.git.metze@samba.org>
+	s=arc-20240116; t=1770308403; c=relaxed/simple;
+	bh=KsJgsRhHzPdytIkHNFoXpJysSdA39rPEyS46AzoH/a4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gfVkyqq1LjGy4mh7XYzKgUwi7I5kmaY1vjB/hRW0d+d6XQ4o5mkvBC5QGLisL0pJ5HWMN3p5/MHIbwqCEnRPH2M8KK4D2/UNONC3j0bwnvGHAZ8IOk6VnxR5CMpwEAdfBvVsJ/j1FGUV4TDNW1A132E3RCeVYvngzJSrimLDfsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=XErSpN9V; arc=none smtp.client-ip=143.255.12.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=manguebit.org; s=dkim; h=Content-Transfer-Encoding:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:Sender:Content-Type:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=2FRaqs3F+abORQ0SEpROYKzEvfetPcgCE3c9vJvEVKE=; b=XErSpN9VYz9kAV+7f0ktHnyfr8
+	3qTP1prErL65JLKrbb+hcDmpUBw+3nBaj5sVHLq+KFRuK3TdWmEwMuDjSqyYzFGcQxERsMPbvOu8H
+	qXNm29bqODtjs/3vFjWGYsJO9eQZGLnQH+Mn/95qBU0YAMoP4Pppn5foKuTD/+Bw4mjw8YRJGSQlu
+	B88ucsNUsI4YcuwFEG/fDUPTc6wKszTxHcuy82Yf2jf9qARivkcEje6H6+3+59VtXBeP+j8tj26LB
+	hCoc1MU3OEoaDAWTERfj2LJhND8Qq9daFHIiYkw8yliYo/0XbLpLR7P7LhWezPC+VgwI5A0SBDX87
+	jj5fm+EQ==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.99)
+	id 1vo25A-00000001gyR-1iuY;
+	Thu, 05 Feb 2026 13:19:52 -0300
+From: Paulo Alcantara <pc@manguebit.org>
+To: smfrench@gmail.com
+Cc: David Howells <dhowells@redhat.com>,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	ChenXiaoSong <chenxiaosong@kylinos.cn>,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH] smb: client: fix potential UAF and double free it smb2_open_file()
+Date: Thu,  5 Feb 2026 13:19:52 -0300
+Message-ID: <20260205161952.245146-1-pc@manguebit.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -73,118 +67,61 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[manguebit.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[samba.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[samba.org:s=42];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[manguebit.org:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[samba.org,kernel.org,gmail.com,talpey.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9266-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9267-lists,linux-cifs=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[metze@samba.org,linux-cifs@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[pc@manguebit.org,linux-cifs@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[samba.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[manguebit.org:+];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 48A77F5157
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:email]
+X-Rspamd-Queue-Id: 1AE9DF529B
 X-Rspamd-Action: no action
 
-We should make it clear that we use this strange value
-instead of hiding it in same code flow.
+Zero out @err_iov and @err_buftype before retrying SMB2_open() to
+prevent an UAF bug if @data != NULL, otherwise a double free.
 
-Note this value is mainly ignored currently,
-as we do the calculation again with
-the negotiated max_recv_size in smb_direct_prepare().
-So this is only a cosmetic change in order to
-avoid confusion.
-
-In future we may change the logic and
-adjust the number of recv buffers instead
-of the max_fragmented_recv_size.
-
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Steve French <smfrench@gmail.com>
-Cc: Tom Talpey <tom@talpey.com>
+Fixes: e3a43633023e ("smb/client: fix memory leak in smb2_open_file()")
+Reported-by: David Howells <dhowells@redhat.com>
+Closes: https://lore.kernel.org/r/2892312.1770306653@warthog.procyon.org.uk
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Reviewed-by: David Howells <dhowells@redhat.com>
+Cc: ChenXiaoSong <chenxiaosong@kylinos.cn>
 Cc: linux-cifs@vger.kernel.org
-Cc: samba-technical@lists.samba.org
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
 ---
- fs/smb/server/transport_rdma.c | 42 ++++++++++++++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 2 deletions(-)
+ fs/smb/client/smb2file.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/smb/server/transport_rdma.c b/fs/smb/server/transport_rdma.c
-index 188f6c9c07d6..fb36fb9d5214 100644
---- a/fs/smb/server/transport_rdma.c
-+++ b/fs/smb/server/transport_rdma.c
-@@ -70,8 +70,23 @@ static int smb_direct_send_credit_target = 255;
- /* The maximum single message size can be sent to remote peer */
- static int smb_direct_max_send_size = 1364;
- 
--/*  The maximum fragmented upper-layer payload receive size supported */
--static int smb_direct_max_fragmented_recv_size = 1024 * 1024;
-+/*
-+ * The maximum fragmented upper-layer payload receive size supported
-+ *
-+ * Assume max_payload_per_credit is
-+ * smb_direct_receive_credit_max - 24 = 1340
-+ *
-+ * The maximum number would be
-+ * smb_direct_receive_credit_max * max_payload_per_credit
-+ *
-+ *                       1340 * 255 = 341700 (0x536C4)
-+ *
-+ * The minimum value from the spec is 131072 (0x20000)
-+ *
-+ * For now we use the logic we used before:
-+ *                 (1364 * 255) / 2 = 173910 (0x2A756)
-+ */
-+static int smb_direct_max_fragmented_recv_size = (1364 * 255) / 2;
- 
- /*  The maximum single-message size which can be received */
- static int smb_direct_max_receive_size = 1364;
-@@ -2531,6 +2546,29 @@ static int smb_direct_prepare(struct ksmbd_transport *t)
- 				  le32_to_cpu(req->max_receive_size));
- 	sp->max_fragmented_send_size =
- 		le32_to_cpu(req->max_fragmented_size);
-+	/*
-+	 * The maximum fragmented upper-layer payload receive size supported
-+	 *
-+	 * Assume max_payload_per_credit is
-+	 * smb_direct_receive_credit_max - 24 = 1340
-+	 *
-+	 * The maximum number would be
-+	 * smb_direct_receive_credit_max * max_payload_per_credit
-+	 *
-+	 *                       1340 * 255 = 341700 (0x536C4)
-+	 *
-+	 * The minimum value from the spec is 131072 (0x20000)
-+	 *
-+	 * For now we use the logic we used before:
-+	 *                 (1364 * 255) / 2 = 173910 (0x2A756)
-+	 *
-+	 * We need to adjust this here in case the peer
-+	 * lowered sp->max_recv_size.
-+	 *
-+	 * TODO: instead of adjusting max_fragmented_recv_size
-+	 * we should adjust the number of available buffers,
-+	 * but for now we keep the current logic.
-+	 */
- 	sp->max_fragmented_recv_size =
- 		(sp->recv_credit_max * sp->max_recv_size) / 2;
- 	sc->recv_io.credits.target = le16_to_cpu(req->credits_requested);
+diff --git a/fs/smb/client/smb2file.c b/fs/smb/client/smb2file.c
+index 2dd08388ea87..1f7f284a7844 100644
+--- a/fs/smb/client/smb2file.c
++++ b/fs/smb/client/smb2file.c
+@@ -179,6 +179,8 @@ int smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms,
+ 		       &err_buftype);
+ 	if (rc == -EACCES && retry_without_read_attributes) {
+ 		free_rsp_buf(err_buftype, err_iov.iov_base);
++		memset(&err_iov, 0, sizeof(err_iov));
++		err_buftype = CIFS_NO_BUFFER;
+ 		oparms->desired_access &= ~FILE_READ_ATTRIBUTES;
+ 		rc = SMB2_open(xid, oparms, smb2_path, &smb2_oplock, smb2_data, NULL, &err_iov,
+ 			       &err_buftype);
 -- 
-2.43.0
+2.52.0
 
 
