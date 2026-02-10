@@ -1,179 +1,161 @@
-Return-Path: <linux-cifs+bounces-9305-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9306-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CP9FCO4Li2lXPQAAu9opvQ
-	(envelope-from <linux-cifs+bounces-9305-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 11:43:58 +0100
+	id ONPsAhcRi2nAPQAAu9opvQ
+	(envelope-from <linux-cifs+bounces-9306-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 12:05:59 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id B74B3119BF6
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 11:43:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04BA4119FC0
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 12:05:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2CD903008D7E
-	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 10:43:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 553F1307D4FA
+	for <lists+linux-cifs@lfdr.de>; Tue, 10 Feb 2026 11:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3243F341666;
-	Tue, 10 Feb 2026 10:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5385634CFDA;
+	Tue, 10 Feb 2026 11:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nZKsnHJa"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61573246F8
-	for <linux-cifs@vger.kernel.org>; Tue, 10 Feb 2026 10:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7003612DB
+	for <linux-cifs@vger.kernel.org>; Tue, 10 Feb 2026 11:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770720236; cv=none; b=o+AcGUWIaU34iVWRP7FUGkaXYdtYzw9lR8gZO3hgcDx4lvEZIn6toscHGsOEfjMv18MUt/C3oJA+9bAhpoKSgyRJ8JLNnFOVxy0Rd7Ml4fwvVjnfbKsdTbxcGJFliB2XJZoHhyJnoKyvERhNRfCUufz/hY9Whn70npBCF69sUM0=
+	t=1770721476; cv=none; b=jhe0SDaM+LqSUAAn56v1hAxpdqAKoHhwxR6zXROsDYuPqbrCK+eQ5ttB+5JFWfK9KRd4eqJbyibg3whgLF0HD3O1vHbJRk374uVsXwKAKZpblvY4cjQmIPEFpvQ41N0RggQOdHTt3TB9bcWvSkIGuaVUK2S3SMZxrANgjb0HjDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770720236; c=relaxed/simple;
-	bh=94aHYOw2nX2XxrPNHDYFWnWPEoP2v2C9z1A5yLmc9Kg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BcQv9SFhnVFVyOEbo1EYPZVSqz/KRgqo2eQZi4Mj596ltoZ7cTVNr33/oEnPMg8yL5likhr+Nqk47sPL5LadMgXMf59MS4Us+kU8R56MQD0t8AGj6Er1mtVvDBi4oW01ENQ7CNm5qJGUCO6X8NvroUp1YBRkvc0oIjYSKTTqgoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-896fd2c5337so5633406d6.2
-        for <linux-cifs@vger.kernel.org>; Tue, 10 Feb 2026 02:43:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770720234; x=1771325034;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wxTZChuQvYnYAfchI6rKnpLi7lD4JzDEprV4DeGLhBs=;
-        b=CJpZtN7MRGD9GNa9U2vXJv7sadzMzfik/jJ8cXrTaA51/ZCD/UgnO93j/5Miusmig1
-         9GfyPjnyYG/U6SZhxFvLDQLZUI0KFEa7ZB7FYre6Xrs9UdJB+gWsP4wLuc7mYPirvSt7
-         3Ra1Q9pLjxppLVX8SqxZEBr6z66LbxHbKGvcV7GKmWq9c7SeF2MirY1MaktSxJoMxG/w
-         bq+zaHk+KKYiZPqNiEt6EDaem+pkaXphXAQ2ZNkcY2jJQSjyUMt4V9cemLyZY+eRsDEk
-         YuYUaxebGv8pjIUhQvCJCq2GHGzKT7ofUr+SFDChMeQXDP/6SGo7wuOCuH4KpSBFwhQg
-         nLhg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDf6K6no6xivMlnKpPu/g3xy8ggphE5bkuk5fyrWrDfr49UUyg1Dz1EhLMWUDDxlv+JWtxsFmPp+2p@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywi0vxgqQIZMIT64DO9YWYIHFoUh47wYv32Vb118mwwqUNEkoM
-	TRQoVzz2hZeWbq+G4559hqD/livB++uxYf31EhR6DlLIfEjSxHRTzRtBNU8/HBR8
-X-Gm-Gg: AZuq6aIUYxn1Z8eulFih5a348u1LCSRbQB9BcuEi5Mx3+R30a7sYMib37x3WOaeu3YP
-	ejD/EdYtstLYNwn9TGjmOXPUC1DmVJFSbfDnHJPJnOszZ9OOGofBKJUXPm5TuZj3PtPEtxCyNYX
-	ri9HlwTMy87dlLuHnils2AMsJC649D33lelLHTUSBE9+2Y6mf/JwH7klBJTqXY7bljew6mE75KC
-	jC+c4illzk+udGh5124lrrGAzL6XL2zAOqJyxXiLnV6OaFIJLlQUASEQXkXyrlK+jYYHfnLMjFu
-	9yZv22EMr2/aZFJsbk9WkvJM6wGDkPnucIsZ15uHkkwWc1MHQgVxMDJxaOmVMI7mB1lI224BWf7
-	abjtN9n0uAto+AeWuBI/C+cLv7X4N99wetGvRpIPPtGKpYmevlObl/0f0+TOTC2ySEkp97HWW3R
-	7YceF/WekPfrwPPgR9dRuSyzm4D5S63Biu2a7QNMvEYqlF4ao9B/1WyCD90vP9UulD
-X-Received: by 2002:ad4:5be4:0:b0:896:fc9f:3744 with SMTP id 6a1803df08f44-896fc9f3f5fmr100334436d6.64.1770720233580;
-        Tue, 10 Feb 2026 02:43:53 -0800 (PST)
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com. [209.85.222.180])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8caf77f6982sm1012336885a.6.2026.02.10.02.43.53
-        for <linux-cifs@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Feb 2026 02:43:53 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c5389c3cd2so71213085a.0
-        for <linux-cifs@vger.kernel.org>; Tue, 10 Feb 2026 02:43:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW3RO/qnzYtfZNqC6LOdSseIgFDPheA8xejXpmpgX0miF57fZU8ELYYKDxAEBqEJUoO7rwzZBe9uDnk@vger.kernel.org
-X-Received: by 2002:a05:6102:3713:b0:5ee:a03c:8782 with SMTP id
- ada2fe7eead31-5fae8c05a23mr4360465137.21.1770719930578; Tue, 10 Feb 2026
- 02:38:50 -0800 (PST)
+	s=arc-20240116; t=1770721476; c=relaxed/simple;
+	bh=LG7YbVmhhGFwNk/Q0/CFSlgIHlx5jtDXvc+QsYLGRLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gy7XtULNXOEgzJmXa0EipKx/8f3+Td3EbE4jCxD0zmI5PYw2JMy9Qg38zPsUAbzcTQm8TH3MGwLSw2eeZWAA3dz4VzUbcfx39lbT4Y9RrZUB8r6vfGrx7sUbP8GveclhE1oyK+AQLCbzyg07JIlUDLF8uyuZBL0I+XMHwzSSYVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nZKsnHJa; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <3f24a647-6133-4d45-b71e-6ede06bab02e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770721472;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c+PiHpBIgKkKo8SVoWPoVfzBO73+OGk74HdhlYR3zR4=;
+	b=nZKsnHJa/jwOE1X4NjbZkJ9+S/5xmk3vRtHKyVQwBe0u/jP6aIAniO+zW6NsR1uedtryzY
+	giXgA5eWve391cDt+1/KdvzMErCQd/pGOLQe0IElFQSuei7a6xOWKBgLsa6On/B1hU0zfW
+	476mgo+X/JJik21H6pCxmribiPml/Vg=
+Date: Tue, 10 Feb 2026 19:03:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260118091313.1988168-1-chenxiaosong.chenxiaosong@linux.dev>
- <20260210081040.4156383-1-geert@linux-m68k.org> <5c4bbbea-d68c-4089-b3aa-adb4b05696ba@linux.dev>
-In-Reply-To: <5c4bbbea-d68c-4089-b3aa-adb4b05696ba@linux.dev>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 10 Feb 2026 11:38:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXBBCzWK8HPQ8zQYJ1_Pxim3_ku4_2-CnWXm3M4ysnQ+w@mail.gmail.com>
-X-Gm-Features: AZwV_QjCZ0dsEnS1lBtbxtndXEm6HBL8E2zwBOjjm9WbKYhgkBIIkBh1X1XBuDg
-Message-ID: <CAMuHMdXBBCzWK8HPQ8zQYJ1_Pxim3_ku4_2-CnWXm3M4ysnQ+w@mail.gmail.com>
 Subject: Re: [PATCH v9 1/1] smb/client: introduce KUnit test to check search
  result of smb2_error_map_table
-To: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
-Cc: bharathsm@microsoft.com, chenxiaosong@kylinos.cn, dhowells@redhat.com, 
-	linkinjeon@kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-cifs@vger.kernel.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
-	senozhatsky@chromium.org, smfrench@gmail.com, sprasad@microsoft.com, 
-	tom@talpey.com
-Content-Type: text/plain; charset="UTF-8"
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: bharathsm@microsoft.com, chenxiaosong@kylinos.cn, dhowells@redhat.com,
+ linkinjeon@kernel.org, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-cifs@vger.kernel.org, pc@manguebit.org, ronniesahlberg@gmail.com,
+ senozhatsky@chromium.org, smfrench@gmail.com, sprasad@microsoft.com,
+ tom@talpey.com
+References: <20260118091313.1988168-1-chenxiaosong.chenxiaosong@linux.dev>
+ <20260210081040.4156383-1-geert@linux-m68k.org>
+ <5c4bbbea-d68c-4089-b3aa-adb4b05696ba@linux.dev>
+ <CAMuHMdXBBCzWK8HPQ8zQYJ1_Pxim3_ku4_2-CnWXm3M4ysnQ+w@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
+In-Reply-To: <CAMuHMdXBBCzWK8HPQ8zQYJ1_Pxim3_ku4_2-CnWXm3M4ysnQ+w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[microsoft.com,kylinos.cn,redhat.com,kernel.org,linux.dev,google.com,gmail.com,vger.kernel.org,googlegroups.com,manguebit.org,chromium.org,talpey.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9305-lists,linux-cifs=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_FROM(0.00)[bounces-9306-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[microsoft.com,kylinos.cn,redhat.com,kernel.org,linux.dev,google.com,gmail.com,vger.kernel.org,googlegroups.com,manguebit.org,chromium.org,talpey.com];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-cifs@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[chenxiaosong.chenxiaosong@linux.dev,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linux-m68k.org:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.dev:email]
-X-Rspamd-Queue-Id: B74B3119BF6
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:email]
+X-Rspamd-Queue-Id: 04BA4119FC0
 X-Rspamd-Action: no action
 
-Hi ChenXiaoSong,
+Thanks for your suggestions, these are really helpful. I will make the 
+changes as soon as possible.
 
-On Tue, 10 Feb 2026 at 10:53, ChenXiaoSong
-<chenxiaosong.chenxiaosong@linux.dev> wrote:
-> The KUnit test cases are only executed when the CONFIG_SMB_KUNIT_TESTS
-> is enabled.
+Thanks,
+ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-... which defaults to KUNIT_ALL_TESTS, so if KUNIT_ALL_TESTS is enabled,
-the test is enabled by default, too.
+On 2/10/26 6:38 PM, Geert Uytterhoeven wrote:
+> Hi ChenXiaoSong,
+> 
+> On Tue, 10 Feb 2026 at 10:53, ChenXiaoSong
+> <chenxiaosong.chenxiaosong@linux.dev> wrote:
+>> The KUnit test cases are only executed when the CONFIG_SMB_KUNIT_TESTS
+>> is enabled.
+> 
+> ... which defaults to KUNIT_ALL_TESTS, so if KUNIT_ALL_TESTS is enabled,
+> the test is enabled by default, too.
+> 
+>> Making it a separate test module would require exporting local variables
+>> and functions so that the test code can access them. However, exporting
+>> local variables and functions would likely make the code much uglier, as
+>> it would require adding "#if" conditionals into the production code to
+>> isolate the test code.
+>>
+>> Geert, please let me know if you have a better idea.
+>>
+>> I am also discussing this with the ext4 community, and we all hope to
+>> find a way to make the tests a separate module.
+> 
+> There are ways to restrict exported symbols to test modules only,
+> see EXPORT_SYMBOL_FOR_TESTS_ONLY(), EXPORT_SYMBOL_FOR_MODULES(),
+> and EXPORT_SYMBOL_NS().
+> 
+> If it is really hard to convert the tests into a separate module,
+> you can add a new kernel/module parameter, which needs to be specified
+> explicitly to run the test. That would avoid running the tests when just
+> (auto)loading cifs.ko.
+> 
+>> On 2/10/26 4:10 PM, Geert Uytterhoeven wrote:
+>>> Thanks for your patch, which is now commit 480afcb19b61385d
+>>> ("smb/client: introduce KUnit test to check search result of
+>>> smb2_error_map_table") in linus/master
+>>>
+>>>> The KUnit test are executed when cifs.ko is loaded.
+>>> This means the tests are_always_ executed when cifs.ko is loaded,
+>>> which is different from how most other test modules work.
+>>> Please make it a separate test module, so it can be loaded independently
+>>> of the main cifs module.  That way people can enable all tests in
+>>> production kernels, without affecting the system unless a test module
+>>> is actually loaded.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
 
-> Making it a separate test module would require exporting local variables
-> and functions so that the test code can access them. However, exporting
-> local variables and functions would likely make the code much uglier, as
-> it would require adding "#if" conditionals into the production code to
-> isolate the test code.
->
-> Geert, please let me know if you have a better idea.
->
-> I am also discussing this with the ext4 community, and we all hope to
-> find a way to make the tests a separate module.
-
-There are ways to restrict exported symbols to test modules only,
-see EXPORT_SYMBOL_FOR_TESTS_ONLY(), EXPORT_SYMBOL_FOR_MODULES(),
-and EXPORT_SYMBOL_NS().
-
-If it is really hard to convert the tests into a separate module,
-you can add a new kernel/module parameter, which needs to be specified
-explicitly to run the test. That would avoid running the tests when just
-(auto)loading cifs.ko.
-
-> On 2/10/26 4:10 PM, Geert Uytterhoeven wrote:
-> > Thanks for your patch, which is now commit 480afcb19b61385d
-> > ("smb/client: introduce KUnit test to check search result of
-> > smb2_error_map_table") in linus/master
-> >
-> >> The KUnit test are executed when cifs.ko is loaded.
-> > This means the tests are_always_ executed when cifs.ko is loaded,
-> > which is different from how most other test modules work.
-> > Please make it a separate test module, so it can be loaded independently
-> > of the main cifs module.  That way people can enable all tests in
-> > production kernels, without affecting the system unless a test module
-> > is actually loaded.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
