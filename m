@@ -1,182 +1,186 @@
-Return-Path: <linux-cifs+bounces-9368-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9373-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLEXFOwsj2ksLgEAu9opvQ
-	(envelope-from <linux-cifs+bounces-9368-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Feb 2026 14:53:48 +0100
+	id UH2fH4AhkGm+WQEAu9opvQ
+	(envelope-from <linux-cifs+bounces-9373-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Sat, 14 Feb 2026 08:17:20 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AF65136AA4
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Feb 2026 14:53:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCF5213B4AF
+	for <lists+linux-cifs@lfdr.de>; Sat, 14 Feb 2026 08:17:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B69E9300C7E4
-	for <lists+linux-cifs@lfdr.de>; Fri, 13 Feb 2026 13:53:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AC9B43015A59
+	for <lists+linux-cifs@lfdr.de>; Sat, 14 Feb 2026 07:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C484335FF49;
-	Fri, 13 Feb 2026 13:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C4723E330;
+	Sat, 14 Feb 2026 07:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XRzOkOrd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lrdizb9w"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B8D35CBD8;
-	Fri, 13 Feb 2026 13:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770990794; cv=none; b=HCFoAWsmIaqvmU/EQkYUqxP9NOXIOJF49IGER8z2NoRghFwutILjLDPU8bKiXclRkRnvPdaxpeafeVKRq9ZTMIWNK4NdOh3ouWTiXPb0W9bEFdHyh7B7wQcm1X/XSsbl4GGIj+fpsH15VQ9Ndy4lF68qpmklvI3XxCdCL9+QIME=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770990794; c=relaxed/simple;
-	bh=vhIKdRitTp2/uDmOXA3pm7uVlowRzSAeNutU9SD1iCw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZiCulFSh7TBqoWtcdvwDvglzZpjhj4v3ajV0177Puf+JIRP4BMnCdfnWQNXWllfQjVrCpfyF6Pq8INIYKLjm4i8fbVYTH+IYNjRgdHZB6GOpBsS4BfrsUu286a/8qZrYfh3cO7aGJBEfgW/hC7/mOowqPl6uNR0DOzGUcixbFk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XRzOkOrd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17D3C116C6;
-	Fri, 13 Feb 2026 13:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1770990794;
-	bh=vhIKdRitTp2/uDmOXA3pm7uVlowRzSAeNutU9SD1iCw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XRzOkOrdr4iyoSWaKmtRr00MuZwFuAqtU6mIxdJIcisgFB9ELcrTx2Tl1THhdLsXr
-	 +tY3fh6vNCxHCA9N0FbDYfBF9tQ8mK189B0fmt74dE8U0gdZmYJKCGqFS72JoYKQ8v
-	 uvQGZIySxkvtD2L1wORg3GQW7KVnkbEqYwZpfrj0=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Steve French <smfrench@gmail.com>,
-	Tom Talpey <tom@talpey.com>,
-	Long Li <longli@microsoft.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	Stefan Metzmacher <metze@samba.org>,
-	Steve French <stfrench@microsoft.com>
-Subject: [PATCH 6.18 26/49] smb: client: let send_done handle a completion without IB_SEND_SIGNALED
-Date: Fri, 13 Feb 2026 14:48:10 +0100
-Message-ID: <20260213134709.844563012@linuxfoundation.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260213134708.885500854@linuxfoundation.org>
-References: <20260213134708.885500854@linuxfoundation.org>
-User-Agent: quilt/0.69
-X-stable: review
-X-Patchwork-Hint: ignore
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E8E21CC71
+	for <linux-cifs@vger.kernel.org>; Sat, 14 Feb 2026 07:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771053436; cv=pass; b=jbANacLM3E1xbKgtvZwo+xjUcBZM/x9ziadyo/RGYvMn4xLpc85aWAhhHeRdqFPTIZmFwPTNZQJEY9KB5deZ2TqOUV1nAanXDTegKzdYfOzuWySbJRZEIpsYvuVi8kCH7qeO9fwHm/lqRG/ES+OiIt8/1uvXA0GNmz5CUOlIehE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771053436; c=relaxed/simple;
+	bh=gQNoXCleUVB/GQPpd4WrtiebRYMrChKNbKymArpDsoI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kEEYnRpZ84fdkJg2cgEqpXGvHIsJqziPpgA9iAdlfRo6jv4xYbANPUk7Pwa3gN2xzNKTQWf2IXgj1zukb4qhUAcW4Cn3AU9+egxea0OyG3ErzE/BB1ImhxWf7LozzKvu9qu0jiWR8xxV0JfybQrnVrz9nN9qHBuVjc8cYE5Hk98=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lrdizb9w; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b885a18f620so218358166b.3
+        for <linux-cifs@vger.kernel.org>; Fri, 13 Feb 2026 23:17:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771053433; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W2nY9pF5wfPunXxcmdfkhOiRi+ITrU0eCfjN1xuY6CYMD0htJKccKHunqGMoqbh9d/
+         z3XFmsYDINQDfiyDfdgfF7EE0YB1Zhk5tXZu3iwxsfw1+2DZfWf82i8SbsHdz2n+D0A1
+         bd5nzPtZhCiclvo1OwnnA7LKwRgWM9DaqVdDNzxrKenzOA9ZYMJ/RVXo60emVZIHlN+7
+         pmsCfsg+6YzcYoec6muzNYGsn5AFja7jQ2qddLjr9f3zBhu9pXgqDuq8SKmC18UgHj7/
+         Fvz73FXARwBSDvYbcoR6uGM5sMV7UdylT47h67vfqfwrT4H1Vwj7PSthGeVm9jlC/LsM
+         rkRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PXOCxnckoWaD3Jt8dx7GoM00kL4FtZQ5Um1imPSB1Zs=;
+        fh=iYtOLZCZpwbqfWMOmPKG9pVjqSbbfrKng1F0YwjpMBY=;
+        b=lgpuchR7lQ5cCq8S6B3PDFoNXYPgrAQYZh2F/F1zjRaHWzOhOA18OkR2BJnZdAgf9f
+         iYF04+l1kDh4La/REmHXjjM7y/FHDM1UagZ6lx69fdgZIQ8ahM/y2Rw5+w3RaNoiI2j+
+         0mWeKmu4o5yGv16LbPcYy/1zq9Wut3roxcV25CN8E7V1ivOe6m1qih8zSBUrn7h12r//
+         AvffncN+cCsY5nQHFCAI/LhsLNJY+EmtpydSBvOcrglnypGZ9ytzSOIxLz+EK1rko7n0
+         F0bT3rmyCFz/HQyR+j8+xmF+kvfGMf83mhs5rZVeqiedepvV6l+RxyP4KqPQOkQWFiHr
+         X6Cg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771053433; x=1771658233; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PXOCxnckoWaD3Jt8dx7GoM00kL4FtZQ5Um1imPSB1Zs=;
+        b=Lrdizb9wJS90t/PVU7zcjPjgm8kKV8kPyx9S5yHdu+OIET3HFxcIQuStiY+a8b3KTv
+         UuHwxMTtlvAtPVmDm9K7UzD0C8dwaepjENQnzqVCr4+NQLF4UeWGqdo+XMp0Lc836ZUd
+         hPArXtF1Q2jCPTRY9Hflep3vjZLb9Czys/fjO2yyTGAWZ0ul3QaLNVhRoqJkzNESnVBF
+         79RdCmd/NcS/royXAqzwMvkuy6iE5JkdW7GDjAJi6bE28iQtSe3cNCndTJvx+po+duKG
+         2xpbbO/mz/zaIXkGrjm8eC5VgFsT5gOlsNs0uTXKW8Wm6ajd5tZn+WFOv7x6+cbLIQr7
+         FIYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771053433; x=1771658233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PXOCxnckoWaD3Jt8dx7GoM00kL4FtZQ5Um1imPSB1Zs=;
+        b=Ziwwh7Lgp/ayr7pmUgWhys4EqRyBVwPSXWOX3rCVuY/3cJDPAPHdjlfjkYzKpyxe6l
+         R+Uukv6nmTbD1aNWpLpyihTDhwV1c+EUIYNzr6cxL/uJqlAScR1aExrJpNaNtjDVhJSX
+         TSaCSTDJEXkqyOi8iv1x0MziRJzRxDwvw4zpa6vsqE5ku4Ar2/Ezik5N7fkf24eSgAZJ
+         habRXQOOYi2KAHQ1zX/FpneOEThJXXf9w/899iVjSFZtFILs5JiF3nxSgComQm4a9Kyn
+         XLN90ksAORlh3qt1xKrahHF1olth8QqL9XLF1GxU6JmvU8FMFd5bQZ0gfOjXIne8axc5
+         VqyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqtgrgFm8mXWGUTbW6SVlfF9kvjqrbc5JQy65AxaQ6n1W7nj/OxITrGQzeATXvRSzIFzjr7xvEfgn4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww97HgwlqwqGAfCsAOF390yyZOQPweraQifbK+rDYgSmKlI4eW
+	MRj5zjEdhvaxgHK0Ed0ENJ1rFDex2TylDf5sw3pj6MkN+VkNre0v0JnsBfe1rwEdnWQujll71Yq
+	sfg7/UTQt9+WhunyObW17R792iRM2iOo=
+X-Gm-Gg: AZuq6aJXeMS/zt4tj55glEk9F5pc/CiTUbNgBnVMkMRFHog4Ic7fSTSjAjjzYi1wbSy
+	8YJt1CL7EwaQYuXJ5UTTMd4b/prJl2v6aB/n0+MBhA/NKZwML6RpDAdfgYsiDCnhGd89QeHeD0m
+	dc4dOXi4i9EB/SqgIe3W3wZrAUqnDIxrCLBytQGryKtKuKOoLEfG5FUY0EfnOmuuA2ObUHhG2ix
+	kPInSVpZf1SxL9HFTMo0GBRKQhJbAppowRlj/t73b60yZ4bS9trk4ChKF+Q22aOxpd68bfPXLQ1
+	KeyC8Q==
+X-Received: by 2002:a17:907:747:b0:b8e:8874:8398 with SMTP id
+ a640c23a62f3a-b8facd3d887mr304112466b.27.1771053433145; Fri, 13 Feb 2026
+ 23:17:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CANT5p=oDUoq0JgTReUazFds5iLc+-gfiwL1iJXbeF-+YReXfSg@mail.gmail.com>
+ <2463050.1770046784@warthog.procyon.org.uk> <1475df6b259c785c9a00e5ea496712fd@manguebit.org>
+In-Reply-To: <1475df6b259c785c9a00e5ea496712fd@manguebit.org>
+From: Shyam Prasad N <nspmangalore@gmail.com>
+Date: Sat, 14 Feb 2026 12:47:01 +0530
+X-Gm-Features: AZwV_QhKdUhmaXbxHYsP1AuqF1_Z06T6u57w2WDUfBiFYMkA8gifZi858eAmVJc
+Message-ID: <CANT5p=qpdk4Qf9vJAdzWtw7JF=vnWBHnvSzqNAo2W+Bj+z-_wA@mail.gmail.com>
+Subject: Re: Problem with existing SMB client mount code
+To: Paulo Alcantara <pc@manguebit.org>
+Cc: David Howells <dhowells@redhat.com>, CIFS <linux-cifs@vger.kernel.org>, 
+	Steve French <smfrench@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9368-lists,linux-cifs=lfdr.de];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,lists.linux.dev,gmail.com,talpey.com,microsoft.com,kernel.org,vger.kernel.org,lists.samba.org,samba.org];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-cifs@vger.kernel.org];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_FROM(0.00)[bounces-9373-lists,linux-cifs=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[redhat.com,vger.kernel.org,gmail.com];
+	RCPT_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nspmangalore@gmail.com,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samba.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,talpey.com:email,linuxfoundation.org:mid,linuxfoundation.org:dkim,linuxfoundation.org:email]
-X-Rspamd-Queue-Id: 7AF65136AA4
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,manguebit.org:email]
+X-Rspamd-Queue-Id: DCF5213B4AF
 X-Rspamd-Action: no action
 
-6.18-stable review patch.  If anyone has any objections, please let me know.
+On Mon, Feb 2, 2026 at 10:51=E2=80=AFPM Paulo Alcantara <pc@manguebit.org> =
+wrote:
+>
+> David Howells <dhowells@redhat.com> writes:
+>
+> > The problem with not sharing the superblock is that you don't share any=
+ of the
+> > caches - not pagecache, not fscache.
+>
+> Yes, that would be a waste of system resources.  Not to mention that DFS
+> and multiuser mounts would end up duplicating a lot of connections
+> because they could no longer share superblocks.
 
-------------------
+My main problem is not the reuse of superblocks, but the filesystem
+not having an ability to split them when necessary.
+It is a case where user A and B both mount a share independently with
+the same mount opts on two different mount points. Since the
+filesystem sees that the superblocks can be reused, it does so.
+Later, user B decides to change some mount option with remount. That
+change will unfortunately affect user A mount too.
 
-From: Stefan Metzmacher <metze@samba.org>
+>
+> Besides, what about existing users that rely on the following to happen:
+>
+> mount.cifs //srv/share /mnt/1 -o ${opts}
+> mount.cifs //srv/share /mnt/1 -o ${opts} -> EBUSY
+> ...
+> mount.cifs //srv/share /mnt/1 -o ${opts} -> EBUSY
+Not sure that I understand this. If you run these commands today, do
+you get EBUSY?
+>
+> Instead of changing default behavior, what about using 'nosharesock'?
+> This way you'll guarantee that every mount has an unique superblock, so
+> your remount usecase will work.
 
-commit cf74fcdc43b322b6188a0750b5ee79e38be6d078 upstream.
+Yes. That can be done.
 
-With smbdirect_send_batch processing we likely have requests without
-IB_SEND_SIGNALED, which will be destroyed in the final request
-that has IB_SEND_SIGNALED set.
-
-If the connection is broken all requests are signaled
-even without explicit IB_SEND_SIGNALED.
-
-Cc: <stable@vger.kernel.org> # 6.18.x
-Cc: Steve French <smfrench@gmail.com>
-Cc: Tom Talpey <tom@talpey.com>
-Cc: Long Li <longli@microsoft.com>
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: linux-cifs@vger.kernel.org
-Cc: samba-technical@lists.samba.org
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- fs/smb/client/smbdirect.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index 88fefb901c27..01d55bcc6d0f 100644
---- a/fs/smb/client/smbdirect.c
-+++ b/fs/smb/client/smbdirect.c
-@@ -554,6 +554,32 @@ static void send_done(struct ib_cq *cq, struct ib_wc *wc)
- 	log_rdma_send(INFO, "smbdirect_send_io 0x%p completed wc->status=%s\n",
- 		request, ib_wc_status_msg(wc->status));
- 
-+	if (unlikely(!(request->wr.send_flags & IB_SEND_SIGNALED))) {
-+		/*
-+		 * This happens when smbdirect_send_io is a sibling
-+		 * before the final message, it is signaled on
-+		 * error anyway, so we need to skip
-+		 * smbdirect_connection_free_send_io here,
-+		 * otherwise is will destroy the memory
-+		 * of the siblings too, which will cause
-+		 * use after free problems for the others
-+		 * triggered from ib_drain_qp().
-+		 */
-+		if (wc->status != IB_WC_SUCCESS)
-+			goto skip_free;
-+
-+		/*
-+		 * This should not happen!
-+		 * But we better just close the
-+		 * connection...
-+		 */
-+		log_rdma_send(ERR,
-+			"unexpected send completion wc->status=%s (%d) wc->opcode=%d\n",
-+			ib_wc_status_msg(wc->status), wc->status, wc->opcode);
-+		smbd_disconnect_rdma_connection(sc);
-+		return;
-+	}
-+
- 	/*
- 	 * Free possible siblings and then the main send_io
- 	 */
-@@ -567,6 +593,7 @@ static void send_done(struct ib_cq *cq, struct ib_wc *wc)
- 	lcredits += 1;
- 
- 	if (wc->status != IB_WC_SUCCESS || wc->opcode != IB_WC_SEND) {
-+skip_free:
- 		if (wc->status != IB_WC_WR_FLUSH_ERR)
- 			log_rdma_send(ERR, "wc->status=%s wc->opcode=%d\n",
- 				ib_wc_status_msg(wc->status), wc->opcode);
--- 
-2.53.0
-
-
-
+--=20
+Regards,
+Shyam
 
