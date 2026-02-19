@@ -1,151 +1,233 @@
-Return-Path: <linux-cifs+bounces-9466-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9468-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SmMYJN0Ml2mTuAIAu9opvQ
-	(envelope-from <linux-cifs+bounces-9466-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:15:09 +0100
+	id SNFnAVg1l2kCvwIAu9opvQ
+	(envelope-from <linux-cifs+bounces-9468-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 17:07:52 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C068A15EF37
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:15:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A92216080B
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 17:07:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 252BE300914F
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 13:15:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B23030115AB
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 16:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A49F33B6E7;
-	Thu, 19 Feb 2026 13:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A42A33EB17;
+	Thu, 19 Feb 2026 16:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZskyMHzO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRJxstH7"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F2D33D6CA
-	for <linux-cifs@vger.kernel.org>; Thu, 19 Feb 2026 13:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771506906; cv=none; b=RGBZttoqovDjUuc/BiQKKLgdLoyM/K6shr7PaCIz7fItRWhAfEbTZFJ0jE6xIOU8j2hvSjpkvBHtQjxVF4SimjHJqo3oySLMomcEr901FXlRA/P5mKOuFkoxv50gIX+Hb8k+efuHdSHwitT28HvetmaOHi9Zrf1gJzBQ3FC7v1c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771506906; c=relaxed/simple;
-	bh=5FVTPDm2pZdt52OH7lr+CjIg4i6h8onW0mwQridLJNk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B29kwyUYFu2ik3StB/G+/d0SEgl/d9LAVJfWj4ilMuOdN4RZk7gimDigEgshcj5H7pW2I0soM57oPYwEIzljeQNZdfEtbtbjhuOoif+UpF21fIPr8SdahBm199Jh/b+ZLmE06FnoaSmyQkAWT0SEe9/q8SlBNF3kYgZKXIVHJts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZskyMHzO; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <c9d1c233-facd-4387-bed2-b2c1dbc88cbe@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771506901;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uLrq27h05lmKjTp5bF+P86u7rqg517vyNgKJuCmp1S8=;
-	b=ZskyMHzOPZLcSysmKPI+oxVXyCf3ldbiB/d8BjkYOnaklqUILImp5m6LMHekl6gpRUBPac
-	Npuid8eyzxaAHJX+cib0N4yBwbpPaU9aIcZdvXvwo4wcnm8wH2/W0DnDdgOYWaF5X3SOK1
-	/me/yDw/ISJ6QxTbpssrKW449c3ldgs=
-Date: Thu, 19 Feb 2026 21:14:52 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316C32D3ECF
+	for <linux-cifs@vger.kernel.org>; Thu, 19 Feb 2026 16:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771517269; cv=pass; b=Tci7N7oLmfl7cB8N+JQogeuM9qB7Y8Hqt2zk58CZmTNcpALloqnalgKSLXb6oJz91obJGrpdy5iuhxeNx9k8iMabE1yxGiykEO+MtkH5iwlxeciiVPYt2zmDmblkdHaEELCO2sFN4d7kidF378bTP+j5xdQMVfz/E3OyY+mRNbg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771517269; c=relaxed/simple;
+	bh=s33d5q8PF0qbSw8A373yA78fZ24lbbhVmFTFnEaTPvs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P3gRRNdf50hgjBeHqbI/sMaXXou2gFkYP9QZaslSEnbzVpQtKboZgDv/pwQmTfzZ5Zg20dBsZWaXebFQi+SE1PvdVnPe3UolAVtK4NQA3cobOur3Wdb/HHEotmWKz0bgWK4Nzp4dl4XYl1TfpJM/Zo0WAwsQ1oj2lOk0EM5M0Hw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SRJxstH7; arc=pass smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-897002b7576so13812786d6.3
+        for <linux-cifs@vger.kernel.org>; Thu, 19 Feb 2026 08:07:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771517267; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VDbheIqrfMyFTvZhjyYRa4KINC2nrn3Pk0oKy/d3ZNcSPlkToRjwVQpFQTJJjH1xpG
+         79Rsu68Tx11a3QFgYGa2QmTRz6MlOo5Nae9SS9HhsSKgVui2X2O8wrPtlkkoSl4K6SJZ
+         JmW/YFHwBOUmUVwsW14yIBpJg8rUYjFB4ePO0/WIYtH1MfA5Z9V2RBlWrhFKiyXfK53F
+         mdiwlc90ggnRz6DezLsUKBdD/PU4MqEEd+qrVW70iCblGswFF6O4bNr0zrCJqLR9IHm7
+         uE/HmJeO9WR6ttctUwd4B94tPQtHXVYeI+5s2axsxMPb2uaW/70RhBeD386w1ybvpdlO
+         xAeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=87d7Hv2bQcpQQT95ywR2SjHEEcC7loTpsx1pjgmaVVw=;
+        fh=67tHa2+95eAmSJXjaXOR+X2vOxKGpB4VcyfjAEMgyoM=;
+        b=GaLTmsrPic8oBMV2NshKI8Hfg2qZIVcW4KuN0LIa1YFDFTc0CbXM6XK75oBtqQ/0z8
+         MO1jVSwG8wBo8kHYcg9QXn8omZ6011K4jHlstmNdmVo+lHuXhOrGx95RsKvvtLYMyI/r
+         cc+w8RBHDDlj2F2qsG+t0+XzQ6NShnjIJaXCh4R11cfuP1E4N6T52Tfac9BMR4roDd5n
+         c1H/byoUD1u5Ene5GSpXtxAqjdVWakx+jet4QyI85KFAePTvuJO+1+amdZNVQhuAL3In
+         aGfAowvd70AP71LFQRdlZJVsmjRPPMLHn3POyqSnF/GR0/2REN3194h2+X+D7YIjjsai
+         V5Mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771517267; x=1772122067; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=87d7Hv2bQcpQQT95ywR2SjHEEcC7loTpsx1pjgmaVVw=;
+        b=SRJxstH7Smb3vjAS+oAeAcb9KpcnneY/wAlXnNdtqe58PC1RyjFTW8Rra7B3SROiEU
+         eFa5YxpuY9P8sXnKIDy4Nfz8R5DoEyLdH9vb2ohPzwAd/ZHxn5mKvSBydItK4+pDZ7VG
+         x63Sl5JnJ+/p7A1IZ+PQgEyrFnIZivc0L01klUbPv8ezJDNChIxdkYHirizKHQ/VmoQL
+         UKgRbMfnZaJDX6mmZBgrTkxdJhiqZ87YbpCoacdwyS6TKTr6UU99uPKl2cvjrmNOaMu+
+         vIbKce++Bz2w7a6R8aWxPPOcSfxi63+pIQ6gnlQ8XIHoIjNKq/mYl7K8Z+WSek/0VhQB
+         KdVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771517267; x=1772122067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=87d7Hv2bQcpQQT95ywR2SjHEEcC7loTpsx1pjgmaVVw=;
+        b=ahgn/d9JNpsckB8ruTUMGJmdgpOuKhOCo5GtWM9Z3TxGajz5TimV5EH1Q2uhI2J1+r
+         HUz+U6CWlKOjeKqPGLsuFEV9a6uHUa3OFeQFg4udtArK4ThHKxei96bChhk8wCNQQX1E
+         MbydSh5jRum0M5/ZShAOEx7SNwdY7DRh+Pq23ilIlC8LRUimBz8f0+4wjPU3DCoGjOB+
+         geKCbZNDoZ24jCTvqxdn3a517RZ7MUbndThRhNGpHoM4SPV3bXxzMAk7Ace+dMzsi6mH
+         91j1U8ZU+2hM5a0N118g13hYEU5PUNnegnsd9lE+UeX5ts7Q3hEpOG39wOFp0VOE5/gc
+         j3Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWec/wJ1eQ4EmX2/TVfuQSt0NQtpcZWqX/b+wUISBJaROLroepJPCNTwCnjBjOe5MilIyc7xxLXr1pX@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPRRiJqOVcAyqVry0OBDL0yPMRxobtRZ4Kj7mre7aTI6mGFJWX
+	7k6aEb6KmjDaky9DjkSItSHuZio/RkYQv5FjSi0myBg0lyXj9F5Z7DmqLgnR0vM5D+LRUhTumML
+	9cMxxB6t65M+s+0GxhwHHkNASDw7DsDbS4g==
+X-Gm-Gg: AZuq6aJVUw4q1qVvp05QGYRfMTpY5ykfl2ARK77l8r87MOfb3HucOO+ioaRcX5YsAws
+	DbQSZXegx72FBJMQ/FZxYkZPg/F8v0pqQEECq203haelv9Moz+7qqgnDLorhP7plF4CZcN8mkDh
+	NGgsOhLpH26pCNqr1YKVSZa5TN5m56ILv6VGMwVNWJx+z7+9pvH1upRFukRZQc6LbG98IIINJkw
+	GMbkr989G+UmUjYlkmEAAa1IVp5DGSR74GBfH9XSM3LJ5aWUj7PtAvlGxLRmrO3b/b8H80hMneD
+	pdxdj7pixO55tVGCnalklS4YdQSCtUT3zzCv9qHH6BAf9Bu9vtleKweY/oRF+BIweTcmSEBtcAv
+	wZGD0SSxFdypwmyabZVEKTxS+gCb6xzMgUfLODV5atRP8+KC92g1qWAajhhK+FTfgz25UnUOdIY
+	OhIwfSRf2J3XL+PsIP7mFCAw==
+X-Received: by 2002:a05:6214:27cf:b0:896:fb19:97fe with SMTP id
+ 6a1803df08f44-899580d934cmr78990826d6.51.1771517266665; Thu, 19 Feb 2026
+ 08:07:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 4/5] smb: introduce struct create_posix_ctxt_rsp
-To: ZhangGuoDong <zhang.guodong@linux.dev>, Steve French <smfrench@gmail.com>
-Cc: linux-cifs@vger.kernel.org, chenxiaosong@kylinos.cn
-References: <20260216082018.156695-5-zhang.guodong@linux.dev>
- <202602170244.C33LgPOh-lkp@intel.com>
- <db00bf7d-7c48-48be-8c82-f4de18dab0cb@linux.dev>
- <CAH2r5muK5WrHkJsJ=Rix7ceFFZNzpQkUZSaSsHi8PMXVpw88pw@mail.gmail.com>
- <b840459a-8a31-46e7-817a-3b80e9ed1353@linux.dev>
- <CAH2r5muScb7NmeJa1BNwAt8Qzb7WmwVfvskZ=9LEV6WWyO5HyQ@mail.gmail.com>
- <d6149e9f-9607-4379-a74d-c4bbe12fef00@linux.dev>
- <75cc11b4-f459-454f-a733-a2f25ee76287@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
-In-Reply-To: <75cc11b4-f459-454f-a733-a2f25ee76287@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260120201822.2218308-1-henrique.carvalho@suse.com> <CANT5p=rWExftaNObvdueWpL97C0CEAUzx5G6cwKrd6ZhfjNRnw@mail.gmail.com>
+In-Reply-To: <CANT5p=rWExftaNObvdueWpL97C0CEAUzx5G6cwKrd6ZhfjNRnw@mail.gmail.com>
+From: Steve French <smfrench@gmail.com>
+Date: Thu, 19 Feb 2026 10:07:34 -0600
+X-Gm-Features: AaiRm50629mCYVQ4fKsx1b9uoZ1uVJc2lUmJPx02X2HIpq5LQqTKMjQx6wupZXc
+Message-ID: <CAH2r5mtpPrbZazwSQfMQRjTauHC5zPv3e=NLAUpqY0pTyqDutA@mail.gmail.com>
+Subject: Re: [PATCH] smb: client: fix cifs_pick_channel when channels are
+ equally loaded
+To: Shyam Prasad N <nspmangalore@gmail.com>
+Cc: Henrique Carvalho <henrique.carvalho@suse.com>, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, ematsumiya@suse.de, linux-cifs@vger.kernel.org, 
+	Meetakshi Setiya <meetakshisetiyaoss@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9466-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9468-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FREEMAIL_TO(0.00)[linux.dev,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[suse.com,samba.org,manguebit.org,gmail.com,microsoft.com,talpey.com,suse.de,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.998];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenxiaosong.chenxiaosong@linux.dev,linux-cifs@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[smfrench@gmail.com,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,kylinos.cn:email]
-X-Rspamd-Queue-Id: C068A15EF37
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,suse.com:email]
+X-Rspamd-Queue-Id: 5A92216080B
 X-Rspamd-Action: no action
 
-Hi GuoDong,
+merged into cifs-2.6.git for-next
 
-The changes to patch 04 should be as follows:
+On Wed, Jan 28, 2026 at 6:05=E2=80=AFAM Shyam Prasad N <nspmangalore@gmail.=
+com> wrote:
+>
+> On Thu, Jan 22, 2026 at 8:13=E2=80=AFAM Henrique Carvalho
+> <henrique.carvalho@suse.com> wrote:
+> >
+> > cifs_pick_channel uses (start % chan_count) when channels are equally
+> > loaded, but that can return a channel that failed the eligibility
+> > checks.
+> >
+> > Drop the fallback and return the scan-selected channel instead. If none
+> > is eligible, keep the existing behavior of using the primary channel.
+> >
+> > Signed-off-by: Henrique Carvalho <henrique.carvalho@suse.com>
+> > ---
+> >  fs/smb/client/transport.c | 17 +++++++++--------
+> >  1 file changed, 9 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+> > index 75697f6d2566..26987f261850 100644
+> > --- a/fs/smb/client/transport.c
+> > +++ b/fs/smb/client/transport.c
+> > @@ -807,11 +807,16 @@ cifs_cancelled_callback(struct TCP_Server_Info *s=
+erver, struct mid_q_entry *mid)
+> >  }
+> >
+> >  /*
+> > - * Return a channel (master if none) of @ses that can be used to send
+> > - * regular requests.
+> > + * cifs_pick_channel - pick an eligible channel for network operations
+> >   *
+> > - * If we are currently binding a new channel (negprot/sess.setup),
+> > - * return the new incomplete channel.
+> > + * @ses: session reference
+> > + *
+> > + * Select an eligible channel (not terminating and not marked as needi=
+ng
+> > + * reconnect), preferring the least loaded one. If no eligible channel=
+ is
+> > + * found, fall back to the primary channel (index 0).
+> > + *
+> > + * Return: TCP_Server_Info pointer for the chosen channel, or NULL if =
+@ses is
+> > + * NULL.
+> >   */
+> >  struct TCP_Server_Info *cifs_pick_channel(struct cifs_ses *ses)
+> >  {
+> > @@ -850,10 +855,6 @@ struct TCP_Server_Info *cifs_pick_channel(struct c=
+ifs_ses *ses)
+> >                         max_in_flight =3D server->in_flight;
+> >         }
+> >
+> > -       /* if all channels are equally loaded, fall back to round-robin=
+ */
+> > -       if (min_in_flight =3D=3D max_in_flight)
+> > -               index =3D (uint)start % ses->chan_count;
+> > -
+> >         server =3D ses->chans[index].server;
+> >         spin_unlock(&ses->chan_lock);
+> >
+> > --
+> > 2.50.1
+> >
+> >
+>
+> Had a discussion with Henrique in another email (couldn't find this
+> one initially).
+> Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+>
+> --
+> Regards,
+> Shyam
+>
 
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -2362,9 +2362,9 @@ parse_posix_ctxt(struct create_context *cc, struct
--       posix->ctxt_rsp.nlink = le32_to_cpu(*(__le32 *)(beg + 0));
--       posix->ctxt_rsp.reparse_tag = le32_to_cpu(*(__le32 *)(beg + 4));
--       posix->ctxt_rsp.mode = le32_to_cpu(*(__le32 *)(beg + 8));
-+       posix->ctxt_rsp.nlink = *(__le32 *)(beg + 0);
-+       posix->ctxt_rsp.reparse_tag = *(__le32 *)(beg + 4);
-+       posix->ctxt_rsp.mode = *(__le32 *)(beg + 8);
 
+--=20
 Thanks,
-ChenXiaoSong <chenxiaosong@kylinos.cn>
 
-On 2026/2/19 16:16, ChenXiaoSong wrote:
-> The changes in parse_posix_ctxt() seem to be fixing a bug. Perhaps we 
-> should submit it as a separate bugfix patch (add Reported-by: kernel 
-> test robot).
-> 
-> Steve, what do you think?
-> 
-> Thanks,
-> ChenXiaoSong <chenxiaosong@kylinos.cn>
-> 
-> On 2026/2/19 15:19, ZhangGuoDong wrote:
->> I can now see these warnings. We should make the following changes, 
->> what do you think?
->>
->> --- a/fs/smb/client/cifsglob.h
->> +++ b/fs/smb/client/cifsglob.h
->> @@ -1270,7 +1270,7 @@ struct cifs_tcon {
->> -       __u32 vol_serial_number;
->> +       __le32 vol_serial_number;
->>
->> --- a/fs/smb/client/smb2pdu.c
->> +++ b/fs/smb/client/smb2pdu.c
->> @@ -2362,9 +2362,9 @@ parse_posix_ctxt(struct create_context *cc, 
->> struct smb2_file_all_info *info,
->> -       posix->ctxt_rsp.nlink = le32_to_cpu(*(__le32 *)(beg + 0));
->> -       posix->ctxt_rsp.reparse_tag = le32_to_cpu(*(__le32 *)(beg + 4));
->> -       posix->ctxt_rsp.mode = le32_to_cpu(*(__le32 *)(beg + 8));
->> +       posix->ctxt_rsp.nlink = cpu_to_le32(*(u32 *)(beg + 0));
->> +       posix->ctxt_rsp.reparse_tag = cpu_to_le32(*(u32 *)(beg + 4));
->> +       posix->ctxt_rsp.mode = cpu_to_le32(*(u32 *)(beg + 8));
+Steve
 
