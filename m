@@ -1,128 +1,151 @@
-Return-Path: <linux-cifs+bounces-9467-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9466-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EU+EiQNl2mTuAIAu9opvQ
-	(envelope-from <linux-cifs+bounces-9467-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:16:20 +0100
+	id SmMYJN0Ml2mTuAIAu9opvQ
+	(envelope-from <linux-cifs+bounces-9466-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:15:09 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAAEC15EF6A
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:16:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C068A15EF37
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 14:15:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4B976300CFE8
-	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 13:16:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 252BE300914F
+	for <lists+linux-cifs@lfdr.de>; Thu, 19 Feb 2026 13:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912AE24B45;
-	Thu, 19 Feb 2026 13:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A49F33B6E7;
+	Thu, 19 Feb 2026 13:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="QMseGHyh"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZskyMHzO"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418CA3009DE
-	for <linux-cifs@vger.kernel.org>; Thu, 19 Feb 2026 13:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F2D33D6CA
+	for <linux-cifs@vger.kernel.org>; Thu, 19 Feb 2026 13:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771506976; cv=none; b=NNs5Dn4ycA7f+qndv8MHTkofLwVEbVGSNoLQzCaLMWhPqcU6vJqWGTY2MDlGkb/C9UnqwXJ+oszXe48bDSEvoVxLHG4RcKESxdQgeDcDP8zfVIzf5G2OUwI0+qTvrGUu+J6v1/WKdFUlsgYEdGphTotssr5SF7nb+aK5cZLqFJY=
+	t=1771506906; cv=none; b=RGBZttoqovDjUuc/BiQKKLgdLoyM/K6shr7PaCIz7fItRWhAfEbTZFJ0jE6xIOU8j2hvSjpkvBHtQjxVF4SimjHJqo3oySLMomcEr901FXlRA/P5mKOuFkoxv50gIX+Hb8k+efuHdSHwitT28HvetmaOHi9Zrf1gJzBQ3FC7v1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771506976; c=relaxed/simple;
-	bh=DbA0pVvkD81yH1UFr/+teBp0AtmqQoNA59E1qisFcRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MynrTfZsPkO5STCiskqGool/9+Viu81D787EdvnSZftlInnc8mBFTNDrb9w20vCMy2XeDk83Bc656xkXSwVw7z06qQ4robpfItx9ZM9FSDovkobhvLP9eoBYnTwOTT2xQ9L367KwDiORHzC3nOtXVt3xTnW7PmP6KB9DPwj132k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=QMseGHyh; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
-Received: from macsyma.thunk.org (pool-173-48-113-47.bstnma.fios.verizon.net [173.48.113.47])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 61JDEfrH015259
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Feb 2026 08:14:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1771506893; bh=YvzVGXRA9tq4Mexi8H81CMjCPQQmDTjjwr0q5r4ZxjY=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=QMseGHyhfBaFWPX10hbUsMCruhrhgp9Y/y2cMCXsfRSODON0B5P+fIp1gbQDE498j
-	 3kKA0mEvpnBkxC4fOP6ZE400XvESf8AzQ8W4hQYtEoVmenggeiuCZAsgDBp1wUb2cT
-	 X6xiagrW3q1RCtta1iKSfDQKms5OjV5lnfxVAv8Q2AfkIOYoMk37GhEy8mDWLba8oU
-	 +wzfcZxoHjbivvm4nlALGSOE0Sgx0+Y+qu96lZShmvpLYtEHFmEOzfCJdgvL6N1a6T
-	 adL+YMa067AgExO/2xBFBiPTBuMQzJwlEaf6kQsPMFWsEHJLIbYxEGHfhvJQevk+z6
-	 +8ydG6It0w42g==
-Received: by macsyma.thunk.org (Postfix, from userid 15806)
-	id 51D465919577; Thu, 19 Feb 2026 08:14:41 -0500 (EST)
-Date: Thu, 19 Feb 2026 08:14:41 -0500
-From: "Theodore Tso" <tytso@mit.edu>
-To: Chuck Lever <cel@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
-        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        hirofumi@mail.parknet.co.jp, linkinjeon@kernel.org,
-        sj1557.seo@samsung.com, yuezhang.mo@sony.com,
-        almaz.alexandrovich@paragon-software.com, slava@dubeyko.com,
-        glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
-        adilger.kernel@dilger.ca, cem@kernel.org, sfrench@samba.org,
-        pc@manguebit.org, ronniesahlberg@gmail.com, sprasad@microsoft.com,
-        trondmy@kernel.org, anna@kernel.org, jaegeuk@kernel.org,
-        chao@kernel.org, hansg@kernel.org, senozhatsky@chromium.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: Re: [PATCH v8 08/17] ext4: Report case sensitivity in fileattr_get
-Message-ID: <20260219131441.GA69183@macsyma-wired.lan>
-References: <20260217214741.1928576-1-cel@kernel.org>
- <20260217214741.1928576-9-cel@kernel.org>
+	s=arc-20240116; t=1771506906; c=relaxed/simple;
+	bh=5FVTPDm2pZdt52OH7lr+CjIg4i6h8onW0mwQridLJNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B29kwyUYFu2ik3StB/G+/d0SEgl/d9LAVJfWj4ilMuOdN4RZk7gimDigEgshcj5H7pW2I0soM57oPYwEIzljeQNZdfEtbtbjhuOoif+UpF21fIPr8SdahBm199Jh/b+ZLmE06FnoaSmyQkAWT0SEe9/q8SlBNF3kYgZKXIVHJts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZskyMHzO; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <c9d1c233-facd-4387-bed2-b2c1dbc88cbe@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771506901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uLrq27h05lmKjTp5bF+P86u7rqg517vyNgKJuCmp1S8=;
+	b=ZskyMHzOPZLcSysmKPI+oxVXyCf3ldbiB/d8BjkYOnaklqUILImp5m6LMHekl6gpRUBPac
+	Npuid8eyzxaAHJX+cib0N4yBwbpPaU9aIcZdvXvwo4wcnm8wH2/W0DnDdgOYWaF5X3SOK1
+	/me/yDw/ISJ6QxTbpssrKW449c3ldgs=
+Date: Thu, 19 Feb 2026 21:14:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260217214741.1928576-9-cel@kernel.org>
+Subject: Re: [PATCH v3 4/5] smb: introduce struct create_posix_ctxt_rsp
+To: ZhangGuoDong <zhang.guodong@linux.dev>, Steve French <smfrench@gmail.com>
+Cc: linux-cifs@vger.kernel.org, chenxiaosong@kylinos.cn
+References: <20260216082018.156695-5-zhang.guodong@linux.dev>
+ <202602170244.C33LgPOh-lkp@intel.com>
+ <db00bf7d-7c48-48be-8c82-f4de18dab0cb@linux.dev>
+ <CAH2r5muK5WrHkJsJ=Rix7ceFFZNzpQkUZSaSsHi8PMXVpw88pw@mail.gmail.com>
+ <b840459a-8a31-46e7-817a-3b80e9ed1353@linux.dev>
+ <CAH2r5muScb7NmeJa1BNwAt8Qzb7WmwVfvskZ=9LEV6WWyO5HyQ@mail.gmail.com>
+ <d6149e9f-9607-4379-a74d-c4bbe12fef00@linux.dev>
+ <75cc11b4-f459-454f-a733-a2f25ee76287@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
+In-Reply-To: <75cc11b4-f459-454f-a733-a2f25ee76287@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mit.edu,none];
-	R_DKIM_ALLOW(-0.20)[mit.edu:s=outgoing];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9467-lists,linux-cifs=lfdr.de];
-	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,vger.kernel.org,lists.sourceforge.net,mail.parknet.co.jp,samsung.com,sony.com,paragon-software.com,dubeyko.com,physik.fu-berlin.de,vivo.com,dilger.ca,samba.org,manguebit.org,gmail.com,microsoft.com,chromium.org,oracle.com];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9466-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[mit.edu:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tytso@mit.edu,linux-cifs@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[3];
+	FREEMAIL_TO(0.00)[linux.dev,gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-0.998];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chenxiaosong.chenxiaosong@linux.dev,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,macsyma-wired.lan:mid,suse.cz:email]
-X-Rspamd-Queue-Id: AAAEC15EF6A
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,kylinos.cn:email]
+X-Rspamd-Queue-Id: C068A15EF37
 X-Rspamd-Action: no action
 
-On Tue, Feb 17, 2026 at 04:47:32PM -0500, Chuck Lever wrote:
-> From: Chuck Lever <chuck.lever@oracle.com>
-> 
-> Report ext4's case sensitivity behavior via the FS_XFLAG_CASEFOLD
-> flag. ext4 always preserves case at rest.
-> 
-> Case sensitivity is a per-directory setting in ext4. If the queried
-> inode is a casefolded directory, report case-insensitive; otherwise
-> report case-sensitive (standard POSIX behavior).
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Hi GuoDong,
 
-Acked-by: Theodore Ts'o <tytso@mit.edu>
+The changes to patch 04 should be as follows:
+
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -2362,9 +2362,9 @@ parse_posix_ctxt(struct create_context *cc, struct
+-       posix->ctxt_rsp.nlink = le32_to_cpu(*(__le32 *)(beg + 0));
+-       posix->ctxt_rsp.reparse_tag = le32_to_cpu(*(__le32 *)(beg + 4));
+-       posix->ctxt_rsp.mode = le32_to_cpu(*(__le32 *)(beg + 8));
++       posix->ctxt_rsp.nlink = *(__le32 *)(beg + 0);
++       posix->ctxt_rsp.reparse_tag = *(__le32 *)(beg + 4);
++       posix->ctxt_rsp.mode = *(__le32 *)(beg + 8);
+
+Thanks,
+ChenXiaoSong <chenxiaosong@kylinos.cn>
+
+On 2026/2/19 16:16, ChenXiaoSong wrote:
+> The changes in parse_posix_ctxt() seem to be fixing a bug. Perhaps we 
+> should submit it as a separate bugfix patch (add Reported-by: kernel 
+> test robot).
+> 
+> Steve, what do you think?
+> 
+> Thanks,
+> ChenXiaoSong <chenxiaosong@kylinos.cn>
+> 
+> On 2026/2/19 15:19, ZhangGuoDong wrote:
+>> I can now see these warnings. We should make the following changes, 
+>> what do you think?
+>>
+>> --- a/fs/smb/client/cifsglob.h
+>> +++ b/fs/smb/client/cifsglob.h
+>> @@ -1270,7 +1270,7 @@ struct cifs_tcon {
+>> -       __u32 vol_serial_number;
+>> +       __le32 vol_serial_number;
+>>
+>> --- a/fs/smb/client/smb2pdu.c
+>> +++ b/fs/smb/client/smb2pdu.c
+>> @@ -2362,9 +2362,9 @@ parse_posix_ctxt(struct create_context *cc, 
+>> struct smb2_file_all_info *info,
+>> -       posix->ctxt_rsp.nlink = le32_to_cpu(*(__le32 *)(beg + 0));
+>> -       posix->ctxt_rsp.reparse_tag = le32_to_cpu(*(__le32 *)(beg + 4));
+>> -       posix->ctxt_rsp.mode = le32_to_cpu(*(__le32 *)(beg + 8));
+>> +       posix->ctxt_rsp.nlink = cpu_to_le32(*(u32 *)(beg + 0));
+>> +       posix->ctxt_rsp.reparse_tag = cpu_to_le32(*(u32 *)(beg + 4));
+>> +       posix->ctxt_rsp.mode = cpu_to_le32(*(u32 *)(beg + 8));
 
