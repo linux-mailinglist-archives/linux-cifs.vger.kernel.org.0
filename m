@@ -1,114 +1,161 @@
-Return-Path: <linux-cifs+bounces-9488-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9489-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EAMnOf35mWmuXgMAu9opvQ
-	(envelope-from <linux-cifs+bounces-9488-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 19:31:25 +0100
+	id HiuMJsNDmmm6aAMAu9opvQ
+	(envelope-from <linux-cifs+bounces-9489-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Feb 2026 00:46:11 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 625FB16D825
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 19:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDBF916E451
+	for <lists+linux-cifs@lfdr.de>; Sun, 22 Feb 2026 00:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3749B30459FA
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 18:31:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 388EE301227A
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 23:46:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0F11FC7C5;
-	Sat, 21 Feb 2026 18:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6492C0F93;
+	Sat, 21 Feb 2026 23:46:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1WiqWkZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxWuCmMl"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC30114A4F9;
-	Sat, 21 Feb 2026 18:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327B7347C6
+	for <linux-cifs@vger.kernel.org>; Sat, 21 Feb 2026 23:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771698676; cv=none; b=rWU5H4fyhWpOLjafpTfYU+bqVYNew/npB1Lniri8iCPaU3n9/oU3jMpFmEHpai+65V0nXZs7yx2PNypolMZvCOxq/sgoWwmuHGgww43el6NpEIdln5B12U9c7aqoop/fqwKjSrkE4TLJ3L6cl0AbIGFZ9ofJ+Du4GsGrB8Sd2xo=
+	t=1771717567; cv=none; b=bKC1vB3ePE8dRO0X8KbwPC/STVqTksMOViWegTuWrOIrfJzik2nhAUISwYxz+gBljeAhqoRHyQTgFpxWqtxbBhnaAy9W3dSxlBzaXYIT9/bO6fyP/1NpYtA0yFqoXy1TlCbmcRanuJ2/wSQALBVUVGo66gFK48aWbpuO7IIfJ/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771698676; c=relaxed/simple;
-	bh=Qx9RX9bB27dMy7iOcR7k2AYzJrr4qc83DkUlpytpeQY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dczU3U8EqstG07/t1ichF7f71SVpaviXJkNyCHBFLr0/HNbrRPD8r5fifrRaMir26zOQx3zHf6iVyNQcar+++F/HwS39NDFg3MWeK87o4ZQHMFLp4/H2YeCqz6o79M7moEiV4NysHJ/fdz46X07N3g/KjYzyv1yjb3HKW8cis1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1WiqWkZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B30C19421;
-	Sat, 21 Feb 2026 18:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771698676;
-	bh=Qx9RX9bB27dMy7iOcR7k2AYzJrr4qc83DkUlpytpeQY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=K1WiqWkZHrC2T36LYQGL2X8dybNjqAbxZc8r8MdpozRS6RMd0pqCSw9DU5TseJnsP
-	 Fy56BNPUAfG4g88NKmh2shFJ7igTX08IdFP4+AU5Cy6gp6OSlpIjrrrAs1ap7U18df
-	 GWBOXX9Q7PhfZSN9bhIFd1fhoiu96zHaMqBWM+WKyBJ1CbOpsXIh0PM+0/XSQa4yFA
-	 iVkB1GPed7hXPE7R/L5SNjw8C7L/UGCHhX25ZVKqHKR7dUn9TZ2hOYrVBsKUfXW+UO
-	 g4ISUFR18hHWA6sRHOUGoNcZnWIrvFMotDxND3Sd3AjQpHKEz+j/DwFz4eW8329KvO
-	 zGm30pwWPGXAA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DB63808200;
-	Sat, 21 Feb 2026 18:31:25 +0000 (UTC)
-Subject: Re: [GIT PULL] ksmbd server fixes
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mv80H+O0VYjCuUk6ipVTMOiESAiMpZ-rYffnc=szacFfg@mail.gmail.com>
-References: <CAH2r5mv80H+O0VYjCuUk6ipVTMOiESAiMpZ-rYffnc=szacFfg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mv80H+O0VYjCuUk6ipVTMOiESAiMpZ-rYffnc=szacFfg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/v7.0-rc-part2-ksmbd-server-fixes
-X-PR-Tracked-Commit-Id: a09dc10d1353f0e92c21eae2a79af1c2b1ddcde8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8eb604d4ee8bf6183b00b8a96f0007b1be28ca9d
-Message-Id: <177169868365.1180555.13758278104710150200.pr-tracker-bot@kernel.org>
-Date: Sat, 21 Feb 2026 18:31:23 +0000
-To: Steve French <smfrench@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Namjae Jeon <linkinjeon@kernel.org>, LKML <linux-kernel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>
+	s=arc-20240116; t=1771717567; c=relaxed/simple;
+	bh=D8wEA4P1R/wLC0WQ2gaxmvJV8Zid0j4uMfM8HtVxkhE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Txbe4BPIYiY4rEd06Io32cWgN/EVyCaGGpD2ehqwM4f2y2YBg7Etaw19yfLUeBIEkABybdgRNGURiHEwupLsNkUZ7liTPQih9sXzlRfs2/gGjFBFVLQ9xhCtxsFwhOkn2KMP4/bxuz05/9O+yH7moQkERCW7OsyK6kSDz96SDg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxWuCmMl; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso24009385e9.3
+        for <linux-cifs@vger.kernel.org>; Sat, 21 Feb 2026 15:46:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771717564; x=1772322364; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
+        b=hxWuCmMlxuj3d20al60XWs0jh2KLvmk0/jpM7jG8sjLtUj+ARfwmScdZLER6DpfOAs
+         J8nWVO9IM04A+Qm71FNtsxpTM5ftoWYuG5CoE6iS+dCZ9RSZYYoP+pmhOyAgz70sC2iv
+         LDvuveFZpQZy2/IC/wLc5I7ZkcufMPCm48xDHV18rMz3EllbndGCICEYY+zKzP925M1P
+         L1j7TU5F2mxburUB6vGNMZfdQFHuZXWbh2ZEHD6D3l3MvO7SPXGiDAny7QDzYV1siVBQ
+         FXjjbYA1cLCF3c7I92iQNDo0U9X7Emu0pfWIOGTBeLkAV5YK+VPmQv02ynK/DYnajvGz
+         T9UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771717564; x=1772322364;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
+        b=ZFQS1kGRxlF/3bKEZottstrxzVPQt2RKjaGPbzN1ZY6SUk+eF4Uj//EN2A2eAs6G40
+         qEGLhDCxNQOqwI3c+DZOLJiwGBkoTj8Yv/YYBFUJH8GHcRDb7AuVUHklIs0vW+PvE90X
+         Iqqp+gJI8Z8hhhTU2H1MmH+gacKe4DADqNIgU6YTw8xqEoSOo+wBj3xP7J05/stZiCP+
+         VCz6Tb6wf+K+kLTUVqlkl+0In65szW32dyd+e2slADeVDv9Wd7fVFnuLAdXbWYGW/O7d
+         T2QKIGv+ZCeRihQyk4qCUBujw38zb8QIqy+05N8GOYyO4ck28yaCFF5k0fb45nr+7twG
+         nKiw==
+X-Forwarded-Encrypted: i=1; AJvYcCXveU5KaFCx5Z5mrD2PJkHaSJq0lxb5/bNt1B+c/OHwj0NOEXzWklLMprgSINWg4178iqEFy4OUIp5S@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJS03wBqR+KImtw3FQUUCkJpTXRzjHU5QL5O6KmD9adeewVNz8
+	gmmkk4GFG7E14xV17uFka5qeX+YMMJyx6g6bT7Dmy0SJr3KMIgnag8U2
+X-Gm-Gg: AZuq6aIPudwZ4d0EZMYt7uscsqfFGFbGC8alToVt2C1aCcrrFxNi4rPa1nLao928Jos
+	XcgowaduDzMMr8ffQ4Uctc1nw1gpK8MnMtUAAdOJj/EzDVT5V6Np31hqWY0QGQdHFWHtZ3QQVmh
+	Vii1AxbzdvEXiDcixARIh2gvmc7K2IqeCPBi2qLU4UXzbZABlLp1RwtZzLVRjf3azVpnGb3YZR1
+	zRDYILtmWq4F073bJy/nmwisJ1gjX8/SinlFw2hoAUNypbpi89hBVUhXWoMSwYMFxfJzfY2RxzX
+	CJYUdqIWK6XYlP3JZqaFq1UUbpF+zCSzV8aMcvIr7l5P+dAiZrf909pTO5z1KmG4Zhe4K5Cn24l
+	pSG9yvSi/bc3rJcLpPzUyYTzRkCnZKm1daJkStf2gHIIpgM2hIyauzgJJ7I7KSJ3RKCFOA1aQnO
+	JQhKx6txnBMQJt/hnI3fQVYfaeO7TGvA==
+X-Received: by 2002:a05:600c:4749:b0:480:69b6:dfed with SMTP id 5b1f17b1804b1-483a95e5ab8mr72338125e9.24.1771717564334;
+        Sat, 21 Feb 2026 15:46:04 -0800 (PST)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-483a31c56d8sm251620925e9.8.2026.02.21.15.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Feb 2026 15:46:03 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: dorjoychy111@gmail.com
+Cc: ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-cifs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	v9fs@lists.linux.dev
+Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+Date: Sun, 22 Feb 2026 02:45:53 +0300
+Message-ID: <20260221234553.2024832-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
+References: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9488-lists,linux-cifs=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_ALL(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_NO_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9489-lists,linux-cifs=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-cifs@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[safinaskar@gmail.com,linux-cifs@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	RCPT_COUNT_FIVE(0.00)[5];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 625FB16D825
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:url,get_maintainers.pl:url]
+X-Rspamd-Queue-Id: DDBF916E451
 X-Rspamd-Action: no action
 
-The pull request you sent on Fri, 20 Feb 2026 19:33:47 -0600:
+Dorjoy Chowdhury <dorjoychy111@gmail.com>:
+> I am not sure if my patch series made it properly to the mailing
+> lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
+> series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
+> The patch series does have a big cc list (what I got from
+> get_maintainers.pl excluding commit-signers) and I used git send-email
+> to send to everyone. It's also showing properly in my gmail inbox. Is
+> it just the website that's not showing it properly? Should I prune the
+> cc list and resend? is there any limitations to sending patches to
+> mailing lists with many cc-s via gmail?
 
-> git://git.samba.org/ksmbd.git tags/v7.0-rc-part2-ksmbd-server-fixes
+I see all 5 emails on
+https://lore.kernel.org/linux-fsdevel/CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com/T/#t .
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8eb604d4ee8bf6183b00b8a96f0007b1be28ca9d
+So this was some temporary problem on lore.kernel.org .
 
-Thank you!
+Sometimes gmail indeed rejects mails if you try to send too many emails
+to too many people. So I suggest adding "--batch-size=1 --relogin-delay=20"
+to your send-email invocation. I hope this will make probability of
+rejection by gmail less. I usually add these flags.
+
+If you still expirence some problems with gmail, then you may apply
+for linux.dev email (go to linux.dev). They are free for Linux contributors.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Askar Safin
 
