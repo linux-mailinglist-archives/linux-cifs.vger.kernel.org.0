@@ -1,64 +1,125 @@
-Return-Path: <linux-cifs+bounces-9481-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9487-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id usWsJfdnmWm+TgMAu9opvQ
-	(envelope-from <linux-cifs+bounces-9481-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 09:08:23 +0100
+	id iG4nMingmWnMXAMAu9opvQ
+	(envelope-from <linux-cifs+bounces-9487-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 17:41:13 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0266316C652
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 09:08:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC21516D49C
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 17:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5ADDC3004D13
-	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 08:08:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2171B303BCC3
+	for <lists+linux-cifs@lfdr.de>; Sat, 21 Feb 2026 16:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686CE2FE044;
-	Sat, 21 Feb 2026 08:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3B14329E6D;
+	Sat, 21 Feb 2026 16:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dKLRh47o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7N1c/zO"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E91257825
-	for <linux-cifs@vger.kernel.org>; Sat, 21 Feb 2026 08:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D08329E52
+	for <linux-cifs@vger.kernel.org>; Sat, 21 Feb 2026 16:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771661301; cv=none; b=SgF+MgAhX/FW+hAk9v0zC9ALsYO5Bp78y6iBkypsxFs9g5i2pqAQ6x2joVVFP5/Jdb3zrWS9jl8ZtlP3QXfr4envFcRunuUCUCp9QWoIodaH/OGFx90MCd/91IY/g7hjz+UIs3EBI5ENgsatIYeeNBIlhI4nW/Su4cHRcQNWI/A=
+	t=1771692067; cv=none; b=ntMC8RNeS+WXP0FGqfrCc8Fd8rxcOjtHgZDf3KaJjtqqss/yF82eT9OPdHOPzddA1JXMyNGgSvpld+0+1zDygucKgClqalZkt3VLqwUQ6qCPpZuXBXMdUOL6pEYoalOOwIxImExWyA+TnB+RI7yBtbl9pGyZ+iELMrSbDF4/Wus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771661301; c=relaxed/simple;
-	bh=6fZiLqPakru4wihcRraIcXzlUgcEh8FNVn8kU9+FJb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RjhAxogiUS+JRpYUPXEOpLpyrIcGIvLUfvbjQ21axUx+Ke3MOdo030Fgy8gHFu/rxA29OWuwFMHnQXvy8eZCOM77A6soVEsa4/T5cWr/fNWGEZ8+BWj1wOjV94/YJMjCyfO6hfzoK5sJK54Y+C3U4WhUjYb/m//z3U5iQVfdNaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dKLRh47o; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771661296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=kB5wkLlLL4Q8JcSwSpRRkWZf+bzURTT2yEPXEZOtjV0=;
-	b=dKLRh47oNimg8sC2hREhB+/mW0PV/srKRDGgQ+UAIxVTKX+auMD4L1r2cTRxc2Jra9g04E
-	OTdSf7DSb5TJDc1ScE9mjykykdJHD++yRgU3Jc70HyEB8RfY8I8Prg+HvkkgI3Sbi6FFMS
-	aUHfA9mI8QvEQH1Uzh5musWzowMWRz4=
-From: chenxiaosong.chenxiaosong@linux.dev
-To: smfrench@gmail.com,
-	linkinjeon@kernel.org,
+	s=arc-20240116; t=1771692067; c=relaxed/simple;
+	bh=Q8LjG5w0LfBzA+qqIJUKX9oy/FN75Vn0W7VHoH69Qv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qTln/zbiaKIE/sbuQglSIKWJybsLvjvlgiXbU1wLHHxVXFnIhIHnr2pM6blAnYzcp8LNBCKzA1mQZvNqldCfSRU4LrFRp8cyp19lL4/KgYedQLJ38vaH43ktNkSInH/HVKnHbKvJWPd3cp6+7ub5G9KIyEaPKiyGzxrKaWWgF9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7N1c/zO; arc=none smtp.client-ip=209.85.217.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5fd05e8d317so1939126137.1
+        for <linux-cifs@vger.kernel.org>; Sat, 21 Feb 2026 08:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771692065; x=1772296865; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dchZpIBGjK9hFXqFYovVVV/bmoJVWZnsrs7zJJ1McUQ=;
+        b=e7N1c/zOH82mkRI8UtTY+OapIXMoTudqptRYtxYHw9kjMqyVDQ4OqCT7QD0xhYEk9/
+         FIubjQXkkXLzcyXTp1tywGJooHOZ2nZ4n/akH45Tncx/yzny3k2mQ2DdRPPJZb3Pmz9J
+         T5e/VfOBfdwZo7wvtVwPSlE43R410GyoPlEe9f4kMvgKkeMTuRh+cjV0DCWNHX3L4dvR
+         rGLdF970sI6OUDbr3FhHs5I5Bx57EhmzT3Fza21/22ffAJRLnQY6HTXEPupnUbJG4CbZ
+         iLf1zT89kCzAinibjLxhhkC6c1HoRVXU7yfQfHwmIsEDB4HA2Y5TDJ3mEVlP44oAFbzv
+         xMMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771692065; x=1772296865;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dchZpIBGjK9hFXqFYovVVV/bmoJVWZnsrs7zJJ1McUQ=;
+        b=aZrBZrIixkbYDsPNl54hGGtZeRaM79QqH6eKT8MvFRbk6/46jDT71bjT5Gqil8eAjQ
+         S5ae1/FPY7nc2vcTyQJmDCBHQuAKGp3kJhE5YjkupGP/3LLXcY3Fuob+cUgraw6YoNnx
+         Fu+uk5yjfqVFnOdKWfsrUAWuIUv5fn1rbFH+qHFitgXVr7xpCbd5wSundyvB5rgjg9mX
+         MMy0s8JYkBqhg2816ry2eBupheR+BXRLvH27tkA+iLCadibh7SY+/ngBOJsLXNNeQIhe
+         bKvXOyd3jxKsxIi1/uPTJ4VNsYB4deb+o2pgwNjVc3vlMZOFHUfI6lCEQVYOzNFimIDk
+         QExw==
+X-Forwarded-Encrypted: i=1; AJvYcCXk6J9WPhHXN9kmGebydq4VMvIudkSj3mMYokUZy0lSnAk/vy553GkMacIrmBPe1V6TD+JBfEeue6aL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNm7tZRmQeDuZZ4uWqTRyQT3ntBjpPOVSpT9ABwawri42215RC
+	YhJqN5pBlHEr2U7Q/1PPc1t/K4iuJVRZcaLjPZLTasMHkiQqiWOVYhE3vZ4D7A==
+X-Gm-Gg: AZuq6aJhyaUKuH5zn3HbckZhBPoNUu2UnOdkrjtZ+MJ8BaSsZVdzT0o7Q+CSJOGXPsn
+	tpoBfpr+7cBH//dWUOkrFEbQh4zf8F3r1EjxfnaWSZg22enJaWzBgpghDsVOcR++UiJj/7/McQl
+	+J2BZKxoZEoJ3I9fJIygOsoJ6aOW/IVvAQl8zs5Qb0jdN1MPvNgzCOkpRw8LYLxvOMrUTY9S4dx
+	EZ7wEhRJ8cUSyhPnb5ea2ETU0HZQuTBj83EFIKd5geOT2A2goOTzRkYkp8zTjYQXPRdy3LMAQDp
+	vmg2rY4XcF2WNevrnjfh5aLK829w8hdE6BIG/3/ecgGYnPkOyiFo4/lLRVEeF7k/dzQMgQ2A70/
+	Ft80EkHqOpdCfrLIsW8yNMlPYjHbOoPoyZ38Nw7QgkAoWqwIcUeV447WWImBsnSqlqQSWuLBQVv
+	emvtxglGNaEAhvij1vnpmJWzTXjh0Lqar4a0SkkfGi6H6m9FzPE79qRQ4=
+X-Received: by 2002:a17:903:1d2:b0:295:24ab:fb06 with SMTP id d9443c01a7336-2ad74458fa3mr31285505ad.22.1771685983010;
+        Sat, 21 Feb 2026 06:59:43 -0800 (PST)
+Received: from toolbx ([103.230.182.3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7503f4a4sm23730205ad.79.2026.02.21.06.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Feb 2026 06:59:42 -0800 (PST)
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	v9fs@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	chuck.lever@oracle.com,
+	alex.aring@gmail.com,
+	arnd@arndb.de,
+	adilger@dilger.ca,
+	mjguzik@gmail.com,
+	smfrench@gmail.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	tsbogend@alpha.franken.de,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	idryomov@gmail.com,
+	amarkuze@redhat.com,
+	slava@dubeyko.com,
+	agruenba@redhat.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	sfrench@samba.org,
 	pc@manguebit.org,
 	ronniesahlberg@gmail.com,
 	sprasad@microsoft.com,
 	tom@talpey.com,
 	bharathsm@microsoft.com,
-	senozhatsky@chromium.org,
-	dhowells@redhat.com,
-	geert@linux-m68k.org
-Cc: linux-cifs@vger.kernel.org,
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Subject: [PATCH] smb/client: make SMB2 maperror KUnit tests a separate module
-Date: Sat, 21 Feb 2026 08:07:12 +0000
-Message-ID: <20260221080712.491144-1-chenxiaosong.chenxiaosong@linux.dev>
+	shuah@kernel.org,
+	miklos@szeredi.hu,
+	hansg@kernel.org
+Subject: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+Date: Sat, 21 Feb 2026 20:45:42 +0600
+Message-ID: <20260221145915.81749-1-dorjoychy111@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
@@ -66,177 +127,119 @@ List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9481-lists,linux-cifs=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_TWELVE(0.00)[41];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,zeniv.linux.org.uk,kernel.org,suse.cz,oracle.com,gmail.com,arndb.de,dilger.ca,linaro.org,alpha.franken.de,HansenPartnership.com,gmx.de,davemloft.net,gaisler.com,redhat.com,dubeyko.com,samba.org,manguebit.org,microsoft.com,talpey.com,szeredi.hu];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,manguebit.org,microsoft.com,talpey.com,chromium.org,redhat.com,linux-m68k.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_FROM(0.00)[bounces-9487-lists,linux-cifs=lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenxiaosong.chenxiaosong@linux.dev,linux-cifs@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.dev:+];
+	FROM_NEQ_ENVFROM(0.00)[dorjoychy111@gmail.com,linux-cifs@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	FROM_NO_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.dev:mid,linux.dev:dkim]
-X-Rspamd-Queue-Id: 0266316C652
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,uapi-group.org:url,get_maintainers.pl:url]
+X-Rspamd-Queue-Id: DC21516D49C
 X-Rspamd-Action: no action
 
-From: ChenXiaoSong <chenxiaosong@kylinos.cn>
+Hi,
 
-Build the SMB2 maperror KUnit tests as `smb2maperror_test.ko`.
+I came upon this "Ability to only open regular files" uapi feature suggestion
+from https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
+and thought it would be something I could do as a first patch and get to
+know the kernel code a bit better.
 
-Link: https://lore.kernel.org/linux-cifs/20260210081040.4156383-1-geert@linux-m68k.org/
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: ChenXiaoSong <chenxiaosong@kylinos.cn>
----
- fs/smb/client/Makefile            |  2 ++
- fs/smb/client/smb2glob.h          | 12 ++++++++++++
- fs/smb/client/smb2maperror.c      | 28 +++++++++++++++-------------
- fs/smb/client/smb2maperror_test.c | 12 +++++++++---
- 4 files changed, 38 insertions(+), 16 deletions(-)
+I only tested this new flag on my local system (fedora btrfs).
 
-diff --git a/fs/smb/client/Makefile b/fs/smb/client/Makefile
-index 3abd357d6df6..26b6105f04d1 100644
---- a/fs/smb/client/Makefile
-+++ b/fs/smb/client/Makefile
-@@ -56,4 +56,6 @@ $(obj)/smb2maperror.o: $(obj)/smb2_mapping_table.c
- quiet_cmd_gen_smb2_mapping = GEN     $@
-       cmd_gen_smb2_mapping = perl $(src)/gen_smb2_mapping $< $@
- 
-+obj-$(CONFIG_SMB_KUNIT_TESTS) += smb2maperror_test.o
-+
- clean-files	+= smb2_mapping_table.c
-diff --git a/fs/smb/client/smb2glob.h b/fs/smb/client/smb2glob.h
-index e56e4d402f13..19da74b1edab 100644
---- a/fs/smb/client/smb2glob.h
-+++ b/fs/smb/client/smb2glob.h
-@@ -46,4 +46,16 @@ enum smb2_compound_ops {
- #define END_OF_CHAIN 4
- #define RELATED_REQUEST 8
- 
-+/*
-+ *****************************************************************
-+ * Struct definitions go here
-+ *****************************************************************
-+ */
-+
-+struct status_to_posix_error {
-+	__u32 smb2_status;
-+	int posix_error;
-+	char *status_string;
-+};
-+
- #endif	/* _SMB2_GLOB_H */
-diff --git a/fs/smb/client/smb2maperror.c b/fs/smb/client/smb2maperror.c
-index cd036365201f..f4cff44e2796 100644
---- a/fs/smb/client/smb2maperror.c
-+++ b/fs/smb/client/smb2maperror.c
-@@ -8,7 +8,6 @@
-  *
-  */
- #include <linux/errno.h>
--#include "cifsglob.h"
- #include "cifsproto.h"
- #include "cifs_debug.h"
- #include "smb2proto.h"
-@@ -16,12 +15,6 @@
- #include "../common/smb2status.h"
- #include "trace.h"
- 
--struct status_to_posix_error {
--	__u32 smb2_status;
--	int posix_error;
--	char *status_string;
--};
--
- static const struct status_to_posix_error smb2_error_map_table[] = {
- /*
-  * Automatically generated by the `gen_smb2_mapping` script,
-@@ -115,10 +108,19 @@ int __init smb2_init_maperror(void)
- 	return 0;
- }
- 
--#define SMB_CLIENT_KUNIT_AVAILABLE \
--	((IS_MODULE(CONFIG_CIFS) && IS_ENABLED(CONFIG_KUNIT)) || \
--	 (IS_BUILTIN(CONFIG_CIFS) && IS_BUILTIN(CONFIG_KUNIT)))
-+#if IS_ENABLED(CONFIG_SMB_KUNIT_TESTS)
-+/* Previous prototype for eliminating the build warning. */
-+const struct status_to_posix_error *smb2_get_err_map_test(__u32 smb2_status);
-+
-+const struct status_to_posix_error *smb2_get_err_map_test(__u32 smb2_status)
-+{
-+	return smb2_get_err_map(smb2_status);
-+}
-+EXPORT_SYMBOL_GPL(smb2_get_err_map_test);
-+
-+const struct status_to_posix_error *smb2_error_map_table_test = smb2_error_map_table;
-+EXPORT_SYMBOL_GPL(smb2_error_map_table_test);
- 
--#if SMB_CLIENT_KUNIT_AVAILABLE && IS_ENABLED(CONFIG_SMB_KUNIT_TESTS)
--#include "smb2maperror_test.c"
--#endif /* CONFIG_SMB_KUNIT_TESTS */
-+unsigned int smb2_error_map_num = ARRAY_SIZE(smb2_error_map_table);
-+EXPORT_SYMBOL_GPL(smb2_error_map_num);
-+#endif
-diff --git a/fs/smb/client/smb2maperror_test.c b/fs/smb/client/smb2maperror_test.c
-index 38ea6b846a99..8c47dea7a2c1 100644
---- a/fs/smb/client/smb2maperror_test.c
-+++ b/fs/smb/client/smb2maperror_test.c
-@@ -9,13 +9,18 @@
-  */
- 
- #include <kunit/test.h>
-+#include "smb2glob.h"
-+
-+const struct status_to_posix_error *smb2_get_err_map_test(__u32 smb2_status);
-+extern const struct status_to_posix_error *smb2_error_map_table_test;
-+extern unsigned int smb2_error_map_num;
- 
- static void
- test_cmp_map(struct kunit *test, const struct status_to_posix_error *expect)
- {
- 	const struct status_to_posix_error *result;
- 
--	result = smb2_get_err_map(expect->smb2_status);
-+	result = smb2_get_err_map_test(expect->smb2_status);
- 	KUNIT_EXPECT_PTR_NE(test, NULL, result);
- 	KUNIT_EXPECT_EQ(test, expect->smb2_status, result->smb2_status);
- 	KUNIT_EXPECT_EQ(test, expect->posix_error, result->posix_error);
-@@ -26,8 +31,8 @@ static void maperror_test_check_search(struct kunit *test)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < ARRAY_SIZE(smb2_error_map_table); i++)
--		test_cmp_map(test, &smb2_error_map_table[i]);
-+	for (i = 0; i < smb2_error_map_num; i++)
-+		test_cmp_map(test, &smb2_error_map_table_test[i]);
- }
- 
- static struct kunit_case maperror_test_cases[] = {
-@@ -43,3 +48,4 @@ static struct kunit_suite maperror_suite = {
- kunit_test_suite(maperror_suite);
- 
- MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("KUnit tests of SMB2 maperror");
+Note that I had submitted a v4 previously (that had -EINVAL for the atomic_open
+code paths) but did not do a get_maintainers.pl. It didn't get any review and
+please ignore that one anyway. In this version, I have tried to properly update
+the filesystems that provide atomic_open (fs/ceph, fs/nfs, fs/smb, fs/gfs2,
+fs/fuse, fs/vboxsf, fs/9p) for the new OPENAT2_REGULAR flag. Some of them
+(fs/fuse, fs/vboxsf, fs/9p) didn't need any changing. As far as I see, most of
+the filesystems do finish_no_open for ~O_CREAT and have file->f_mode |= FMODE_CREATED
+for the O_CREAT code path which I assume means they always create new file which
+is a regular file. OPENAT2_REGULAR | O_DIRECTORY returns -EINVAL (instead of working
+if path is either a directory or regular file) as it was easier to reason about when
+making changes in all the filesystems.
+
+Changes in v4:
+- changed O_REGULAR to OPENAT2_REGULAR
+- OPENAT2_REGULAR does not affect O_PATH
+- atomic_open codepaths updated to work properly for OPENAT2_REGULAR
+- commit message includes the uapi-group URL
+- v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-dorjoychy111@gmail.com/T/
+
+Changes in v3:
+- included motivation about O_REGULAR flag in commit message e.g., programs not wanting to be tricked into opening device nodes
+- fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
+- fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 060000000 to 0100000000
+- added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O_* macros from hex to octal
+- v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-dorjoychy111@gmail.com/T/
+
+Changes in v2:
+- rename ENOTREGULAR to ENOTREG
+- define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) and in arch/*/include/uapi/asm/errno.h files
+- override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.h due to clash with include/uapi/asm-generic/fcntl.h
+- I have kept the kselftest but now that O_REGULAR and ENOTREG can have different value on different architectures I am not sure if it's right
+- v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-dorjoychy111@gmail.com/T/
+
+Thanks.
+
+Regards,
+Dorjoy
+
+Dorjoy Chowdhury (4):
+  openat2: new OPENAT2_REGULAR flag support
+  kselftest/openat2: test for OPENAT2_REGULAR flag
+  sparc/fcntl.h: convert O_* flag macros from hex to octal
+  mips/fcntl.h: convert O_* flag macros from hex to octal
+
+ arch/alpha/include/uapi/asm/errno.h           |  2 +
+ arch/alpha/include/uapi/asm/fcntl.h           |  1 +
+ arch/mips/include/uapi/asm/errno.h            |  2 +
+ arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
+ arch/parisc/include/uapi/asm/errno.h          |  2 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  1 +
+ arch/sparc/include/uapi/asm/errno.h           |  2 +
+ arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
+ fs/ceph/file.c                                |  4 ++
+ fs/gfs2/inode.c                               |  2 +
+ fs/namei.c                                    |  4 ++
+ fs/nfs/dir.c                                  |  4 +-
+ fs/open.c                                     |  4 +-
+ fs/smb/client/dir.c                           | 11 +++++-
+ include/linux/fcntl.h                         |  2 +
+ include/uapi/asm-generic/errno.h              |  2 +
+ include/uapi/asm-generic/fcntl.h              |  4 ++
+ tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
+ tools/arch/mips/include/uapi/asm/errno.h      |  2 +
+ tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
+ tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
+ tools/include/uapi/asm-generic/errno.h        |  2 +
+ .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
+ 23 files changed, 119 insertions(+), 32 deletions(-)
+
 -- 
-2.52.0
+2.53.0
 
 
