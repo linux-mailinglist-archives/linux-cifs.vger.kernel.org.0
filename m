@@ -1,46 +1,46 @@
-Return-Path: <linux-cifs+bounces-9508-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9511-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IGuYEzVQnmlIUgQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9508-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 02:28:21 +0100
+	id wMKLKOFVnmnyUgQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9511-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 02:52:33 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8EE318EB0E
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 02:28:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C90B319012B
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 02:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 98A7130D3EA3
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 01:27:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 557DD314EFEE
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 01:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D742494FE;
-	Wed, 25 Feb 2026 01:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5E32727FA;
+	Wed, 25 Feb 2026 01:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BS8UJfp5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yLnj0O+k"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F24C1D5ABA;
-	Wed, 25 Feb 2026 01:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACFB19FA93;
+	Wed, 25 Feb 2026 01:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771982841; cv=none; b=iF4H2dd6RjAlYUNB7Qnnjv7D5cfkRf51jLQaXWtg1lQfCm3I93iIFH26FXvcdcx1oymbBTKwJmq9v87kMOoKTeQzZmTloJwhKdn0WfL4+JreTWWFLz+VdHISl72bdzXnu9tZjJJMXWuqEJPDQKZpaNXY57H8g8n9MFv9lAmN8gw=
+	t=1771983739; cv=none; b=oyi6WAlaGHoDUdirznc8Zo951nHIjluQfhXh6cN8BYOxup1bBpAkcCVucYglqS4p56td/0+pLWlNZpTKoROvs5fDvLRkq2CmjDdxGF1Hn30/oDqK1fVdL5dZzJ2uUDr5Xg2cGIGwU4bEHXqB8ufE4DpgpVOvikATJJ9lfk0FDG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771982841; c=relaxed/simple;
-	bh=tT0GO0+iu3OG6ayOPJ42YszUOOsYD5i0ba682GVLIXk=;
+	s=arc-20240116; t=1771983739; c=relaxed/simple;
+	bh=mRDWBMAnhqCSP1o0aGyE9V6vYclyjrcECZ/0SvrOfmU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ICaZDGoz9agBUz/+RZb5vO6GMrP9lA2+x8XUKu0xUXGOXDaLp5edG8ufSIjjFbpx9Ez5T6fOUA4HERKjW9vfYP+5lyChoiGCJvtPbllduC1S3ytdg3ZWa1DBbIH6XQntxlRstcnfqQpb5PUvhAOnhclHICW7GRaqADp60KM4W5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BS8UJfp5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071ABC116D0;
-	Wed, 25 Feb 2026 01:27:21 +0000 (UTC)
+	 MIME-Version; b=lUy65egoKTReOgKtntH+72PG0ruW9XNA7yopIanql+kJm4a+IBEKDduKGH/yfcd4GR2HlcQQ+Xb5e5eFm+lbyjv7nmYrE3Wge32OvXTXCR9KJrv3a4LxR4omlmC7Ehq8tqbJlwN7eLikWbekxdaiBpNk7bqWxs04+mFmg8rmKLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yLnj0O+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F2AC116D0;
+	Wed, 25 Feb 2026 01:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1771982841;
-	bh=tT0GO0+iu3OG6ayOPJ42YszUOOsYD5i0ba682GVLIXk=;
+	s=korg; t=1771983739;
+	bh=mRDWBMAnhqCSP1o0aGyE9V6vYclyjrcECZ/0SvrOfmU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BS8UJfp5Vdh0MHVb8B4VsAMaA4UQb0t52D9HYBEZ1aaAXX2qL6AUVHEM3zxK4NKxY
-	 QjWs0LQjOCV00LmE+cekZYrIR19Hn7O2nk6e/X/CYToRk3D0fonQM8R4Zljd++WKuy
-	 C61/LO/aGN8iOdmLJ9W2W2TgyWhdp6z7v3MBQIMk=
+	b=yLnj0O+k3PQ10JacVxQnBqkSlsqrC5N6jdu1SzXaVDzrI8W4zOTgeDY571yrHUcFx
+	 4uBI/dEkuUIEAgPVUe29k1wucSRmT5pT7tOEbbfALAzNQt4bPpVNxYrpVtSpWbZreE
+	 L30plxhgG6YR+AoGN2dxM5+AN6iClGfiRVEA8Y2o=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -51,12 +51,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-cifs@vger.kernel.org,
 	Steve French <stfrench@microsoft.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.19 033/781] smb: client: fix potential UAF and double free in smb2_open_file()
-Date: Tue, 24 Feb 2026 17:12:22 -0800
-Message-ID: <20260225012400.515913903@linuxfoundation.org>
+Subject: [PATCH 6.18 032/641] smb: client: fix potential UAF and double free in smb2_open_file()
+Date: Tue, 24 Feb 2026 17:15:58 -0800
+Message-ID: <20260225012349.769920463@linuxfoundation.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260225012359.695468795@linuxfoundation.org>
-References: <20260225012359.695468795@linuxfoundation.org>
+In-Reply-To: <20260225012348.915798704@linuxfoundation.org>
+References: <20260225012348.915798704@linuxfoundation.org>
 User-Agent: quilt/0.69
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -72,32 +72,33 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9508-lists,linux-cifs=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-cifs@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9511-lists,linux-cifs=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-cifs];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: C8EE318EB0E
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-cifs@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-cifs];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:mid,linuxfoundation.org:dkim,kylinos.cn:email,manguebit.org:email]
+X-Rspamd-Queue-Id: C90B319012B
 X-Rspamd-Action: no action
 
-6.19-stable review patch.  If anyone has any objections, please let me know.
+6.18-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -122,10 +123,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/fs/smb/client/smb2file.c b/fs/smb/client/smb2file.c
-index 2dd08388ea873..1f7f284a78449 100644
+index 03f90553d8319..e6cdf2efc7f4f 100644
 --- a/fs/smb/client/smb2file.c
 +++ b/fs/smb/client/smb2file.c
-@@ -179,6 +179,8 @@ int smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms,
+@@ -178,6 +178,8 @@ int smb2_open_file(const unsigned int xid, struct cifs_open_parms *oparms, __u32
  		       &err_buftype);
  	if (rc == -EACCES && retry_without_read_attributes) {
  		free_rsp_buf(err_buftype, err_iov.iov_base);
