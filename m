@@ -1,82 +1,82 @@
-Return-Path: <linux-cifs+bounces-9529-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9519-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UNFcE3F4nmkOVgQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9529-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 05:20:01 +0100
+	id 0JL8IqhgnmmaUwQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9519-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 03:38:32 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D902B1918B3
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 05:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF14190FC7
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 03:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 46F9E30432FE
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 04:19:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9FDD73167C24
+	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 02:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06951280338;
-	Wed, 25 Feb 2026 04:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2BC28C871;
+	Wed, 25 Feb 2026 02:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ORGV9hld"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PCNdm3eq"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC9629AAFA
-	for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 04:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C731290DBB
+	for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 02:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771993197; cv=none; b=lm94UOEKOCK3UjvmCNGAjvEXv5FySBLd2vZpa3NxjfDvQBwu4tVxI0Vv7LVZyNdtVLu52aDs+vwJlx/9R895CDiD1aSHdkXWWgmQm14QQY6u+LbHDwYwc6mdTaXf9QGA3bcDfY4SEWK+k5YBryaptNgaLyHYyLHoCJN0fxNRz8s=
+	t=1771986958; cv=none; b=tqOydRW95jDZmgJykQRi18NLBMuQ+MVtaWTehzvs+ClmNg9ShGvrjubjttpQaa87+bm58TOBcZYEgCiPvcDOOg1QUjUNyNheWEHEXZSUDbW41IZEdN5lhVLM9T0dItsyw9mH7S4maCYxFaA8rvMtqyP7JU+e2KSkCrQkN0M7KrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771993197; c=relaxed/simple;
-	bh=bn88wMnM1xbpqotcLjjrvUDC86mH2VGzM6psEKDPIKU=;
+	s=arc-20240116; t=1771986958; c=relaxed/simple;
+	bh=NwbLtqY420pRzsNCuqLMttvcjogdC/iAIhSNhhGPXLU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ljBnouV3bXgxTaoAevWU5NQmV7sriA3cqJzarGSSJSuuELB4EdsH5KqsViBK+YDAjqfwKSmViDIPWi3CuZQw9pOe9bC9KjdCX4/jBeY1qRicC0wSN1yBhcxB48PvS4VUOfs1ouultwyI8rMS3rDeWJlmoQ1H29se9gPnftbl5Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ORGV9hld; arc=none smtp.client-ip=209.85.219.51
+	 MIME-Version; b=fhX4Y4c4VFvev+T24vTSqtYmU2wewwgvp/rfVNSjFIIh3fJgQmCb7l7mGbnJzZmBQLxyKFGTb+MvLpWGYh21zrkh+wC9s2KyQNzh4ismB6kyHH6LvmWfraIHRrGYd/4WOwQVMTXKr6TNs+KrMoMc2BpMo2Jg9kIH3BZ2U9uRLJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PCNdm3eq; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-896f5af3d8aso89013996d6.1
-        for <linux-cifs@vger.kernel.org>; Tue, 24 Feb 2026 20:19:56 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8c711959442so42255585a.0
+        for <linux-cifs@vger.kernel.org>; Tue, 24 Feb 2026 18:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771993195; x=1772597995; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771986954; x=1772591754; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B4PuZyXnKwTS0epzNqDICuHBDdpM4bAySzL/nDufbjs=;
-        b=ORGV9hldkFipphtjS9x0ZmSpjFV1uryNnkQQiszhJqkpDRLNNnacx563/lqMePYes1
-         4YYGgvJ8Hyj59stfIKSEl+ip0WN6UTaV0DUXKYdkngKxHILFsgqe0NDK4aMEDXWsm+R/
-         g6B4SsolUN/k+WngsFx0GLlcfXdpfK/GFhjwyvPvI1sh9EE7YMw8cAsYsCQqSuK7elMw
-         lGqXf6GZUvPDOB4b0y2gAhWheRsjYbBUNWVZf8iWYapUUEc8MzrAiFnteP5Kk4GaWgdi
-         lcHu6Bj4Vtf9i1TelfymmNViN47g9dMeewvvYixhMIplBFLp4n6HA+fZaYDuN5+DQmZl
-         WVdg==
+        bh=+lh/AJowNVRtShNqaTx7Q1o6UXCzkVF8rVq6ouPwces=;
+        b=PCNdm3eqByIKum+/laBDZ8rhhAO/wYK9cNfI7OlNhreBnfN1bKfGXZGEcIpvCrGrJE
+         eI+7xTZ6bCZIf3ZhNqzgWRjd0Qqm7xOdtAxOHm2tlmk8PanT4UUoU9PUmayjAhPAlepB
+         hwfokGBsOwUBSHOpkwMvusP6QVJ8K9O1khgIsl9f8YYBEoh5pA5V2KMFWQJ2eLAUQKxf
+         MrpFSL9fu5X1hW4AmtKoJIpBDX9hZCSEGuL7ni3xIVFLCFuptvviLKj+G1n0PQTAYt3L
+         yXPik4JbOXGtqcYeYZ896zjM48QywV4IsBZ79R2wu67TaQMuHH7cu//6JTeVKIcZCsUR
+         WyGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771993195; x=1772597995;
+        d=1e100.net; s=20230601; t=1771986954; x=1772591754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=B4PuZyXnKwTS0epzNqDICuHBDdpM4bAySzL/nDufbjs=;
-        b=Qy2p4t13kEvIAjyfks9PlPHKx0nihfcYrOd7Uk5Z5G0rctKwY4GwXWldLjOsyCzCj0
-         dOXb+RB0cQsEJ8af3uW67dVsuWofeodejfOa8YRIw9/XNHXUyQX3NtCmqsxd4HJHtv2z
-         khNb50b7v86TU1p1GpMNczTJbBufhx1fpWlxP7NQEByLHjifPmFqNc5nUCxncJtgNfBF
-         +LMHKH5WdZMbqpDfnxuQ8zV9WPeuCVSd/CObmUHL6OKzdcFgOJvNaaAL4E9ZcVUO7zn/
-         e1a9GVohvNDbu9x0sxF5ZZFxaF7wVjvxabYmLTtd8llA7Y2xu0O0iJQnYxiNmdIjPwzf
-         XcSw==
-X-Forwarded-Encrypted: i=1; AJvYcCVS0iTnq7uyEQGJzlDRAEvMB6KisJ6Lhaobvnlz8ieeImS4SIXPUzaea7+VDY8K1UsPe/wgMWQIue+P@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH6eNO+v6bdy0F8wxTG5uB7QJHcIWW03yh1Szs/DEWmS80x0A8
-	uH5JphD8PtrY7QWlfXuA2GEL6hMQDru2jgJeg2vapRebTTfgqZHooArNlitECnXB
-X-Gm-Gg: ATEYQzwr4Qm0NDlmfpWvJRhjV00LsbT7fOxIgNibD8rnEbXyqUJYoTy3AD9w99aGBzo
-	ec726I6if41i/3atZUSYWgHs7Xmmf2QFx/4GfixTeMVcqpGvepbvqO5Cxsyh3+XrFEEQoCuZ+f5
-	11xv0abbqi0boxQ/esLQrMNRXoSiqP7UC1giTGjpZALTO7GWLees4/jJXaFzBjLcdw8Pglnm2dD
-	Ltr91e5JsW5dy470+57PRic+sP9er6aqTpIWlGu9dYwDnNnwEsy4J06Pkc3TXYrQKbQ5ABnEbK7
-	l6SpgmPpnd+oYeGYjT6wCuqCOY7pzovBuRsYxKBF0D7ughhhMpu0ipQncEpAKbeS4FATOHWiYOf
-	PxbGCk7CjcqIA2ejZLp0A8Rwf84Zr81eQwvR6v7QN2m+KDEReo5z/bru3UTqMuaRYdIa8M0xs9o
-	xoKJrp8mxbst/Il+s8DXjhEiprIzr0JVD2FILyFlDEJj96HNCZXsnp5SbnnAcWQm2odgjtN7XhV
-	Grvl1o89L5Qft/3QLbQOaBbPQre36UH5cHeRzzl5/oQPBuQlh4TYoWYDt3uOX9BF4TqIFHa5fZP
-X-Received: by 2002:ac8:5fc1:0:b0:501:5233:2a6f with SMTP id d75a77b69052e-5070bba4d14mr212557311cf.14.1771986952528;
-        Tue, 24 Feb 2026 18:35:52 -0800 (PST)
+        bh=+lh/AJowNVRtShNqaTx7Q1o6UXCzkVF8rVq6ouPwces=;
+        b=pLkQIMk4TiIEVLoJXDUjnREAJLAzFQUjZXgfx+EC+R0++fLnV+sQtbLRHnOu4bEwbm
+         /4RswyYSyw5NU2E/LMmijGARWNOtbEChUwMiO6/6kJpo3m7NKHg3yAeLXfktuE0zQXfh
+         cLkVGcvbhfH7hAiLuBKIR2F1mMcvLg3S38eLuDzShQRqyG8eQwv7Dun8LWgeix7aUfu8
+         eEfl0xAQ/RTDOeKZM6Uc0AbsnbHTIEwvGSyim7zcaHp4xX1B9GuCanMRcUAEAlrdPM0q
+         PNijOQpTJH3Tvi1OxnO3oy7FlqZNoKIlUYjQ6uJM2NDOpkyJv7F+ltVlkdvwI5w07V+G
+         Amjw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4y8JFxWdJKxpzLz4x6ovCmocm9xhnzeGinmzS2dMMfShioFZ5bh/ac0p8CXW4xZetBOFHyxQwSt0r@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQNZBjKa0G6YgiX92IdRgLF5pRwNYvSNVRttqntOmmFKNiCIb/
+	0MB2gFIgto6lZUvge+ulYBF3nBE428cwa9sBlKUI8hQtFHszBL1utINB
+X-Gm-Gg: ATEYQzwrn3umtKPOdRYhAgwFwlAfPURQ+Y6BxMRbVezYmUKPJlj1GnfyQUbUnd4BH6e
+	A5uxiqcKdoWJNe0KYgI0kM11BH3nBVtIeXQHBOw7fp8R02ryPaExvuaFT2EdZXXKLyoihmapEGy
+	4QWTB55B2g/6cupsR+uUCbSv6dRyvLIHlVBLUSQ/52j7/M962R4L6gm26k68b8iL7fP40vB7KLo
+	9+eyiABUXm+fM4nCqRTDQrvjAFf/aqDSeK6Bypb8inchzkOF92zi/CZZdE3ztk3yeePM8bovUNc
+	GG/8PmAf92sOyBlFAy5PSx5xYoDbTQMCKX632UU+Ee36rDyUx02hKrAUWiGmR8UixTKbhpx4TN9
+	9IxiihypTckLJv+s2SMp0Pdyv02yZRglGNz1Am+nfOo/dt/e9KR0t/pi/xTeJIgLzCjSaOoNdSJ
+	O7UfAtVtrbq3bI1CHKFeSENciv+BtB3D/w44qEFIRhOV7/rtWzUlRtB7QNOUWv2PkhuNcc7/Ngb
+	lbHcXptaef35uOn6jYPsN4ezlOu4CLKpjVJU7dbB0MsNvgXcfhwSFmuGWTbDrEZOg==
+X-Received: by 2002:a05:620a:4549:b0:8c8:82cd:1a85 with SMTP id af79cd13be357-8cbb2097873mr305412685a.21.1771986953947;
+        Tue, 24 Feb 2026 18:35:53 -0800 (PST)
 Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997e62f453sm112363586d6.36.2026.02.24.18.35.51
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997e62f453sm112363586d6.36.2026.02.24.18.35.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 18:35:52 -0800 (PST)
+        Tue, 24 Feb 2026 18:35:53 -0800 (PST)
 From: Xin Long <lucien.xin@gmail.com>
 To: network dev <netdev@vger.kernel.org>,
 	quic@lists.linux.dev
@@ -113,9 +113,9 @@ Cc: davem@davemloft.net,
 	Daniel Stenberg <daniel@haxx.se>,
 	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
 	"Marc E . Fiuczynski" <marc@fiuczynski.com>
-Subject: [PATCH net-next v10 13/15] quic: add timer management
-Date: Tue, 24 Feb 2026 21:34:19 -0500
-Message-ID: <bffaab8d4727991c8dd46c8b57a08507545a25a4.1771986861.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next v10 14/15] quic: add packet builder base
+Date: Tue, 24 Feb 2026 21:34:20 -0500
+Message-ID: <e49a24b97a25a9c25bd33411b8212978dd566bd3.1771986861.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1771986861.git.lucien.xin@gmail.com>
 References: <cover.1771986861.git.lucien.xin@gmail.com>
@@ -142,7 +142,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,samba.org,openbsd.org,xiaomi.com,simula.no,vger.kernel.org,gmail.com,manguebit.com,talpey.com,lists.linux.dev,oracle.com,suse.de,johnericson.me,linux.alibaba.com,akamai.com,protonmail.com,queasysnail.net,haxx.se,broadcom.com,fiuczynski.com];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9529-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9519-lists,linux-cifs=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
@@ -157,185 +157,96 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D902B1918B3
+X-Rspamd-Queue-Id: DFF14190FC7
 X-Rspamd-Action: no action
 
-This patch introduces 'quic_timer' to unify and manage the five main
-timers used in QUIC: loss detection, delayed ACK, path validation,
-PMTU probing, and pacing. These timers are critical for driving
-retransmissions, connection liveness, and flow control.
+This patch introduces 'quic_packet' to handle packing of QUIC packets on
+the transmit (TX) path.
 
-Each timer type is initialized, started, reset, or stopped using a common
-set of operations.
+It provides functionality for frame packing and packet construction. The
+packet configuration includes setting the path, calculating overhead,
+and verifying routing. Frames are appended to the packet before it is
+created with the queued frames.
 
-- quic_timer_reset(): Reset a timer with type and timeout
+Once assembled, the packet is encrypted, bundled, and sent out. There
+is also support to flush the packet when no additional frames remain.
+Functions to create application (short) and handshake (long) packets
+are currently placeholders for future implementation.
 
-- quic_timer_start(): Start a timer with type and timeout
+- quic_packet_config(): Set the path, compute overhead, and verify routing.
 
-- quic_timer_stop(): Stop a timer with type
+- quic_packet_create_and_xmit(): Create and send the packet with the queued
+  frames.
 
-Although handler functions for each timer are defined, they are currently
-placeholders; their logic will be implemented in upcoming patches for
-packet transmission and outqueue handling.
+- quic_packet_xmit(): Encrypt, bundle, and send out the packet.
 
-Deferred timer actions are also integrated through quic_release_cb(),
-which dispatches to the appropriate handler when timers expire.
+- quic_packet_flush(): Send the packet if there's nothing left to bundle.
 
-Signed-off-by: Tyler Fanelli <tfanelli@redhat.com>
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
 ---
+v3:
+  - Adjust global connection and listen socket hashtable operations
+    based on the new hashtable type.
+  - Introduce quic_packet_backlog_schedule() to enqueue Initial packets
+    to quic_net.backlog_list and defer their decryption for ALPN demux
+    to quic_packet_backlog_work() on quic_net.work, since
+    quic_crypto_initial_keys_install()/crypto_aead_setkey() must run
+    in process context.
+v4:
+  - Update quic_(listen_)sock_lookup() to support lockless socket
+    lookup using hlist_nulls_node APIs.
+  - Use quic_wq for QUIC packet backlog processing work.
 v5:
-  - Rename QUIC_TSQ_DEFERRED to QUIC_PACE_DEFERRED.
+  - Rename quic_packet_create() to quic_packet_create_and_xmit()
+    (suggested by Paolo).
+  - Move the packet parser base code to a separate patch, keeping only
+    the packet builder base in this patch (suggested by Paolo).
+  - Change sent_time timestamp from u32 to u64 to improve accuracy.
+v8:
+  - Remove the dependency on struct quic_frame by returning NULL in
+    quic_packet_handshake/app_create() and dropping quic_packet_tail()
+    and struct quic_packet_sent. This effectively strips out patch 14
+    (suggested by Paolo).
+v9:
+  - Warn on oversized header length in quic_packet_config() (suggested by
+    Paolo).
+  - Factor bundle initialization into a common 'init' goto label in
+    quic_packet_bundle() (suggested by Paolo).
+  - Clarify comment for packet->ipfragok in quic_packet_config().
+v10:
+  - Set MSS to QUIC_MIN_UDP_PAYLOAD in quic_packet_init(); it serves only
+    as a default for procfs dumps before a connection exists.
+  - Introduce QUIC_PACKET_INVALID as a return value for invalid packet
+    types used in the later patch.
+  - quic_sock.config.plpmtud_probe_interval has been moved to
+    quic_path_group.plpmtud_interval, so update its usage in
+    quic_packet_route() and quic_packet_config() accordingly.
 ---
  net/quic/Makefile |   2 +-
- net/quic/socket.c |  33 ++++++++
- net/quic/socket.h |  33 ++++++++
- net/quic/timer.c  | 196 ++++++++++++++++++++++++++++++++++++++++++++++
- net/quic/timer.h  |  47 +++++++++++
- 5 files changed, 310 insertions(+), 1 deletion(-)
- create mode 100644 net/quic/timer.c
- create mode 100644 net/quic/timer.h
+ net/quic/packet.c | 255 ++++++++++++++++++++++++++++++++++++++++++++++
+ net/quic/packet.h | 109 ++++++++++++++++++++
+ net/quic/socket.c |   1 +
+ net/quic/socket.h |   8 ++
+ 5 files changed, 374 insertions(+), 1 deletion(-)
+ create mode 100644 net/quic/packet.c
+ create mode 100644 net/quic/packet.h
 
 diff --git a/net/quic/Makefile b/net/quic/Makefile
-index 58bb18f7926d..2ccf01ad9e22 100644
+index 2ccf01ad9e22..0f903f4a7ff1 100644
 --- a/net/quic/Makefile
 +++ b/net/quic/Makefile
 @@ -6,4 +6,4 @@
  obj-$(CONFIG_IP_QUIC) += quic.o
  
  quic-y := common.o family.o protocol.o socket.o stream.o connid.o path.o \
--	  cong.o pnspace.o crypto.o
-+	  cong.o pnspace.o crypto.o timer.o
-diff --git a/net/quic/socket.c b/net/quic/socket.c
-index 74e3e3939c61..93a7abefc226 100644
---- a/net/quic/socket.c
-+++ b/net/quic/socket.c
-@@ -50,6 +50,8 @@ static int quic_init_sock(struct sock *sk)
- 	quic_conn_id_set_init(quic_dest(sk), 0);
- 	quic_cong_init(quic_cong(sk));
- 
-+	quic_timer_init(sk);
-+
- 	if (quic_stream_init(quic_streams(sk)))
- 		return -ENOMEM;
- 
-@@ -65,6 +67,8 @@ static void quic_destroy_sock(struct sock *sk)
- {
- 	u8 i;
- 
-+	quic_timer_free(sk);
-+
- 	for (i = 0; i < QUIC_PNSPACE_MAX; i++)
- 		quic_pnspace_free(quic_pnspace(sk, i));
- 	for (i = 0; i < QUIC_CRYPTO_MAX; i++)
-@@ -191,6 +195,35 @@ static int quic_getsockopt(struct sock *sk, int level, int optname,
- 
- static void quic_release_cb(struct sock *sk)
- {
-+	/* Similar to tcp_release_cb(). */
-+	unsigned long nflags, flags = smp_load_acquire(&sk->sk_tsq_flags);
-+
-+	do {
-+		if (!(flags & QUIC_DEFERRED_ALL))
-+			return;
-+		nflags = flags & ~QUIC_DEFERRED_ALL;
-+	} while (!try_cmpxchg(&sk->sk_tsq_flags, &flags, nflags));
-+
-+	if (flags & QUIC_F_LOSS_DEFERRED) {
-+		quic_timer_loss_handler(sk);
-+		__sock_put(sk);
-+	}
-+	if (flags & QUIC_F_SACK_DEFERRED) {
-+		quic_timer_sack_handler(sk);
-+		__sock_put(sk);
-+	}
-+	if (flags & QUIC_F_PATH_DEFERRED) {
-+		quic_timer_path_handler(sk);
-+		__sock_put(sk);
-+	}
-+	if (flags & QUIC_F_PMTU_DEFERRED) {
-+		quic_timer_pmtu_handler(sk);
-+		__sock_put(sk);
-+	}
-+	if (flags & QUIC_F_PACE_DEFERRED) {
-+		quic_timer_pace_handler(sk);
-+		__sock_put(sk);
-+	}
- }
- 
- static int quic_disconnect(struct sock *sk, int flags)
-diff --git a/net/quic/socket.h b/net/quic/socket.h
-index d7811391cc8b..c5654fdc06b5 100644
---- a/net/quic/socket.h
-+++ b/net/quic/socket.h
-@@ -21,6 +21,7 @@
- #include "cong.h"
- 
- #include "protocol.h"
-+#include "timer.h"
- 
- extern struct proto quic_prot;
- extern struct proto quicv6_prot;
-@@ -32,6 +33,31 @@ enum quic_state {
- 	QUIC_SS_ESTABLISHED	= TCP_ESTABLISHED,
- };
- 
-+enum quic_tsq_enum {
-+	QUIC_MTU_REDUCED_DEFERRED,
-+	QUIC_LOSS_DEFERRED,
-+	QUIC_SACK_DEFERRED,
-+	QUIC_PATH_DEFERRED,
-+	QUIC_PMTU_DEFERRED,
-+	QUIC_PACE_DEFERRED,
-+};
-+
-+enum quic_tsq_flags {
-+	QUIC_F_MTU_REDUCED_DEFERRED	= BIT(QUIC_MTU_REDUCED_DEFERRED),
-+	QUIC_F_LOSS_DEFERRED		= BIT(QUIC_LOSS_DEFERRED),
-+	QUIC_F_SACK_DEFERRED		= BIT(QUIC_SACK_DEFERRED),
-+	QUIC_F_PATH_DEFERRED		= BIT(QUIC_PATH_DEFERRED),
-+	QUIC_F_PMTU_DEFERRED		= BIT(QUIC_PMTU_DEFERRED),
-+	QUIC_F_PACE_DEFERRED		= BIT(QUIC_PACE_DEFERRED),
-+};
-+
-+#define QUIC_DEFERRED_ALL (QUIC_F_MTU_REDUCED_DEFERRED |	\
-+			   QUIC_F_LOSS_DEFERRED |		\
-+			   QUIC_F_SACK_DEFERRED |		\
-+			   QUIC_F_PATH_DEFERRED |		\
-+			   QUIC_F_PMTU_DEFERRED |		\
-+			   QUIC_F_PACE_DEFERRED)
-+
- struct quic_sock {
- 	struct inet_sock		inet;
- 	struct list_head		reqs;
-@@ -47,6 +73,8 @@ struct quic_sock {
- 	struct quic_cong		cong;
- 	struct quic_pnspace		space[QUIC_PNSPACE_MAX];
- 	struct quic_crypto		crypto[QUIC_CRYPTO_MAX];
-+
-+	struct quic_timer		timers[QUIC_TIMER_MAX];
- };
- 
- struct quic6_sock {
-@@ -119,6 +147,11 @@ static inline struct quic_crypto *quic_crypto(const struct sock *sk, u8 level)
- 	return &quic_sk(sk)->crypto[level];
- }
- 
-+static inline void *quic_timer(const struct sock *sk, u8 type)
-+{
-+	return (void *)&quic_sk(sk)->timers[type];
-+}
-+
- static inline bool quic_is_establishing(struct sock *sk)
- {
- 	return sk->sk_state == QUIC_SS_ESTABLISHING;
-diff --git a/net/quic/timer.c b/net/quic/timer.c
+-	  cong.o pnspace.o crypto.o timer.o
++	  cong.o pnspace.o crypto.o timer.o packet.o
+diff --git a/net/quic/packet.c b/net/quic/packet.c
 new file mode 100644
-index 000000000000..6f957385a341
+index 000000000000..a56edc745bb1
 --- /dev/null
-+++ b/net/quic/timer.c
-@@ -0,0 +1,196 @@
++++ b/net/quic/packet.c
+@@ -0,0 +1,255 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/* QUIC kernel implementation
 + * (C) Copyright Red Hat Corp. 2023
@@ -350,194 +261,253 @@ index 000000000000..6f957385a341
 +
 +#include "socket.h"
 +
-+void quic_timer_sack_handler(struct sock *sk)
++#define QUIC_HLEN		1
++
++/* Make these fixed for easy coding. */
++#define QUIC_PACKET_NUMBER_LEN	QUIC_PN_MAX_LEN
++#define QUIC_PACKET_LENGTH_LEN	4
++
++static struct sk_buff *quic_packet_handshake_create(struct sock *sk)
 +{
++	return NULL;
 +}
 +
-+static void quic_timer_sack_timeout(struct timer_list *t)
++static int quic_packet_number_check(struct sock *sk)
 +{
-+	struct quic_sock *qs = container_of(t, struct quic_sock, timers[QUIC_TIMER_SACK].t);
-+	struct sock *sk = &qs->inet.sk;
-+
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		if (!test_and_set_bit(QUIC_SACK_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
-+	}
-+
-+	quic_timer_sack_handler(sk);
-+out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
++	return 0;
 +}
 +
-+void quic_timer_loss_handler(struct sock *sk)
++static struct sk_buff *quic_packet_app_create(struct sock *sk)
 +{
++	return NULL;
 +}
 +
-+static void quic_timer_loss_timeout(struct timer_list *t)
++/* Update the MSS and inform congestion control. */
++void quic_packet_mss_update(struct sock *sk, u32 mss)
 +{
-+	struct quic_sock *qs = container_of(t, struct quic_sock, timers[QUIC_TIMER_LOSS].t);
-+	struct sock *sk = &qs->inet.sk;
-+
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		if (!test_and_set_bit(QUIC_LOSS_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
-+	}
-+
-+	quic_timer_loss_handler(sk);
-+out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
-+}
-+
-+void quic_timer_path_handler(struct sock *sk)
-+{
-+}
-+
-+static void quic_timer_path_timeout(struct timer_list *t)
-+{
-+	struct quic_sock *qs = container_of(t, struct quic_sock, timers[QUIC_TIMER_PATH].t);
-+	struct sock *sk = &qs->inet.sk;
-+
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		if (!test_and_set_bit(QUIC_PATH_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
-+	}
-+
-+	quic_timer_path_handler(sk);
-+out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
-+}
-+
-+void quic_timer_reset_path(struct sock *sk)
-+{
++	struct quic_packet *packet = quic_packet(sk);
 +	struct quic_cong *cong = quic_cong(sk);
-+	u64 timeout = cong->pto * 2;
 +
-+	/* Calculate timeout based on cong.pto, but enforce a lower bound. */
-+	if (timeout < QUIC_MIN_PATH_TIMEOUT)
-+		timeout = QUIC_MIN_PATH_TIMEOUT;
-+	quic_timer_reset(sk, QUIC_TIMER_PATH, timeout);
++	packet->mss[0] = (u16)mss;
++	quic_cong_set_mss(cong, packet->mss[0] - packet->taglen[0]);
 +}
 +
-+void quic_timer_pmtu_handler(struct sock *sk)
++/* Perform routing for the QUIC packet on the specified path, update header length and MSS
++ * accordingly, reset path and start PMTU timer.
++ */
++int quic_packet_route(struct sock *sk)
 +{
++	struct quic_path_group *paths = quic_paths(sk);
++	struct quic_packet *packet = quic_packet(sk);
++	union quic_addr *sa, *da;
++	u32 pmtu;
++	int err;
++
++	da = quic_path_daddr(paths, packet->path);
++	sa = quic_path_saddr(paths, packet->path);
++	err = quic_flow_route(sk, da, sa, &paths->fl);
++	if (err)
++		return err;
++
++	packet->hlen = quic_encap_len(da);
++	pmtu = min_t(u32, dst_mtu(__sk_dst_get(sk)), QUIC_PATH_MAX_PMTU);
++	quic_packet_mss_update(sk, pmtu - packet->hlen);
++
++	quic_path_pl_reset(paths);
++	quic_timer_reset(sk, QUIC_TIMER_PMTU, paths->plpmtud_interval);
++	return 0;
 +}
 +
-+static void quic_timer_pmtu_timeout(struct timer_list *t)
++/* Configure the QUIC packet header and routing based on encryption level and path. */
++int quic_packet_config(struct sock *sk, u8 level, u8 path)
 +{
-+	struct quic_sock *qs = container_of(t, struct quic_sock, timers[QUIC_TIMER_PMTU].t);
-+	struct sock *sk = &qs->inet.sk;
++	struct quic_conn_id_set *dest = quic_dest(sk), *source = quic_source(sk);
++	struct quic_packet *packet = quic_packet(sk);
++	u32 hlen = QUIC_HLEN;
 +
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		if (!test_and_set_bit(QUIC_PMTU_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
++	/* If packet already has data, no need to reconfigure. */
++	if (!quic_packet_empty(packet))
++		return 0;
++
++	packet->ack_eliciting = 0;
++	packet->frame_len = 0;
++	packet->ipfragok = 0;
++	packet->padding = 0;
++	packet->frames = 0;
++	hlen += QUIC_PACKET_NUMBER_LEN; /* Packet number length. */
++	hlen += quic_conn_id_choose(dest, path)->len; /* DCID length. */
++	if (level) {
++		hlen += 1; /* Length byte for DCID. */
++		hlen += 1 + quic_conn_id_active(source)->len; /* Length byte + SCID length. */
++		if (level == QUIC_CRYPTO_INITIAL) /* Include token for Initial packets. */
++			hlen += quic_var_len(quic_token(sk)->len) + quic_token(sk)->len;
++		hlen += QUIC_VERSION_LEN; /* Version length. */
++		hlen += QUIC_PACKET_LENGTH_LEN; /* Packet length field length. */
++		/* Allow fragmentation for handshake packets before PLPMTUD probing starts.
++		 * MTU discovery does not rely on ICMP Packet Too Big once PLPMTUD is enabled.
++		 */
++		packet->ipfragok = !!quic_paths(sk)->plpmtud_interval;
++	}
++	packet->level = level;
++	packet->len = (u16)hlen;
++	packet->overhead = (u8)hlen;
++	DEBUG_NET_WARN_ON_ONCE(hlen > 255);
++
++	if (packet->path != path) { /* If the path changed, update and reset routing cache. */
++		packet->path = path;
++		__sk_dst_reset(sk);
 +	}
 +
-+	quic_timer_pmtu_handler(sk);
-+out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
++	/* Perform routing and MSS update for the configured packet. */
++	if (quic_packet_route(sk) < 0)
++		return -1;
++	return 0;
 +}
 +
-+void quic_timer_pace_handler(struct sock *sk)
++static void quic_packet_encrypt_done(struct sk_buff *skb, int err)
 +{
++	/* Free it for now, future patches will implement the actual deferred transmission logic. */
++	kfree_skb(skb);
 +}
 +
-+static enum hrtimer_restart quic_timer_pace_timeout(struct hrtimer *hr)
++/* Coalescing Packets. */
++static int quic_packet_bundle(struct sock *sk, struct sk_buff *skb)
 +{
-+	struct quic_sock *qs = container_of(hr, struct quic_sock, timers[QUIC_TIMER_PACE].hr);
-+	struct sock *sk = &qs->inet.sk;
++	struct quic_skb_cb *head_cb, *cb = QUIC_SKB_CB(skb);
++	struct quic_packet *packet = quic_packet(sk);
++	struct sk_buff *p;
 +
-+	bh_lock_sock(sk);
-+	if (sock_owned_by_user(sk)) {
-+		if (!test_and_set_bit(QUIC_PACE_DEFERRED, &sk->sk_tsq_flags))
-+			sock_hold(sk);
-+		goto out;
++	if (!packet->head) /* First packet to bundle: initialize the head. */
++		goto init;
++
++	/* If bundling would exceed MSS, flush the current bundle. */
++	if (packet->head->len + skb->len >= packet->mss[0]) {
++		quic_packet_flush(sk);
++		goto init;
 +	}
++	/* Bundle it and update metadata for the aggregate skb. */
++	p = packet->head;
++	head_cb = QUIC_SKB_CB(p);
++	if (head_cb->last == p)
++		skb_shinfo(p)->frag_list = skb;
++	else
++		head_cb->last->next = skb;
++	p->data_len += skb->len;
++	p->truesize += skb->truesize;
++	p->len += skb->len;
++	head_cb->last = skb;
++	head_cb->ecn |= cb->ecn;  /* Merge ECN flags. */
 +
-+	quic_timer_pace_handler(sk);
 +out:
-+	bh_unlock_sock(sk);
-+	sock_put(sk);
-+	return HRTIMER_NORESTART;
++	/* rfc9000#section-12.2:
++	 *   Packets with a short header (Section 17.3) do not contain a Length field and so
++	 *   cannot be followed by other packets in the same UDP datagram.
++	 *
++	 * so Return 1 to flush if it is a Short header packet.
++	 */
++	return !cb->level;
++init:
++	packet->head = skb;
++	cb->last = skb;
++	goto out;
 +}
 +
-+void quic_timer_reset(struct sock *sk, u8 type, u64 timeout)
++/* Transmit a QUIC packet, possibly encrypting and bundling it. */
++int quic_packet_xmit(struct sock *sk, struct sk_buff *skb)
 +{
-+	struct timer_list *t = quic_timer(sk, type);
++	struct quic_packet *packet = quic_packet(sk);
++	struct quic_skb_cb *cb = QUIC_SKB_CB(skb);
++	struct net *net = sock_net(sk);
++	int err;
 +
-+	if (timeout && !mod_timer(t, jiffies + usecs_to_jiffies(timeout)))
-+		sock_hold(sk);
-+}
++	/* Skip encryption if taglen == 0 (e.g., disable_1rtt_encryption). */
++	if (!packet->taglen[quic_hdr(skb)->form])
++		goto xmit;
 +
-+void quic_timer_start(struct sock *sk, u8 type, u64 timeout)
-+{
-+	struct timer_list *t;
-+	struct hrtimer *hr;
-+
-+	if (type == QUIC_TIMER_PACE) {
-+		hr = quic_timer(sk, type);
-+
-+		if (!hrtimer_is_queued(hr)) {
-+			hrtimer_start(hr, ns_to_ktime(timeout), HRTIMER_MODE_ABS_PINNED_SOFT);
-+			sock_hold(sk);
++	cb->crypto_done = quic_packet_encrypt_done;
++	/* Associate skb with sk to ensure sk is valid during async encryption completion. */
++	WARN_ON(!skb_set_owner_sk_safe(skb, sk));
++	err = quic_crypto_encrypt(quic_crypto(sk, packet->level), skb);
++	if (err) {
++		if (err != -EINPROGRESS) {
++			QUIC_INC_STATS(net, QUIC_MIB_PKT_ENCDROP);
++			kfree_skb(skb);
++			return err;
 +		}
-+		return;
++		QUIC_INC_STATS(net, QUIC_MIB_PKT_ENCBACKLOGS);
++		return err;
++	}
++	if (!cb->resume) /* Encryption completes synchronously. */
++		QUIC_INC_STATS(net, QUIC_MIB_PKT_ENCFASTPATHS);
++
++xmit:
++	if (quic_packet_bundle(sk, skb))
++		quic_packet_flush(sk);
++	return 0;
++}
++
++/* Create and transmit a new QUIC packet. */
++int quic_packet_create_and_xmit(struct sock *sk)
++{
++	struct quic_packet *packet = quic_packet(sk);
++	struct sk_buff *skb;
++	int err;
++
++	err = quic_packet_number_check(sk);
++	if (err)
++		goto err;
++
++	if (packet->level)
++		skb = quic_packet_handshake_create(sk);
++	else
++		skb = quic_packet_app_create(sk);
++	if (!skb) {
++		err = -ENOMEM;
++		goto err;
 +	}
 +
-+	t = quic_timer(sk, type);
-+	if (timeout && !timer_pending(t)) {
-+		if (!mod_timer(t, jiffies + usecs_to_jiffies(timeout)))
-+			sock_hold(sk);
++	err = quic_packet_xmit(sk, skb);
++	if (err && err != -EINPROGRESS)
++		goto err;
++
++	/* Return 1 if at least one ACK-eliciting (non-PING) frame was sent. */
++	return !!packet->frames;
++err:
++	pr_debug("%s: err: %d\n", __func__, err);
++	return 0;
++}
++
++/* Flush any coalesced/bundled QUIC packets. */
++void quic_packet_flush(struct sock *sk)
++{
++	struct quic_path_group *paths = quic_paths(sk);
++	struct quic_packet *packet = quic_packet(sk);
++
++	if (packet->head) {
++		quic_lower_xmit(sk, packet->head,
++				quic_path_daddr(paths, packet->path), &paths->fl);
++		packet->head = NULL;
 +	}
 +}
 +
-+void quic_timer_stop(struct sock *sk, u8 type)
++void quic_packet_init(struct sock *sk)
 +{
-+	if (type == QUIC_TIMER_PACE) {
-+		if (hrtimer_try_to_cancel(quic_timer(sk, type)) == 1)
-+			sock_put(sk);
-+		return;
-+	}
-+	if (timer_delete(quic_timer(sk, type)))
-+		sock_put(sk);
-+}
++	struct quic_packet *packet = quic_packet(sk);
 +
-+void quic_timer_init(struct sock *sk)
-+{
-+	timer_setup(quic_timer(sk, QUIC_TIMER_LOSS), quic_timer_loss_timeout, 0);
-+	timer_setup(quic_timer(sk, QUIC_TIMER_SACK), quic_timer_sack_timeout, 0);
-+	timer_setup(quic_timer(sk, QUIC_TIMER_PATH), quic_timer_path_timeout, 0);
-+	timer_setup(quic_timer(sk, QUIC_TIMER_PMTU), quic_timer_pmtu_timeout, 0);
-+	/* Use hrtimer for pace timer, ensuring precise control over send timing. */
-+	hrtimer_setup(quic_timer(sk, QUIC_TIMER_PACE), quic_timer_pace_timeout,
-+		      CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED_SOFT);
-+}
++	INIT_LIST_HEAD(&packet->frame_list);
++	packet->taglen[0] = QUIC_TAG_LEN;
++	packet->taglen[1] = QUIC_TAG_LEN;
++	packet->mss[0] = QUIC_MIN_UDP_PAYLOAD;
++	packet->mss[1] = QUIC_MIN_UDP_PAYLOAD;
 +
-+void quic_timer_free(struct sock *sk)
-+{
-+	quic_timer_stop(sk, QUIC_TIMER_LOSS);
-+	quic_timer_stop(sk, QUIC_TIMER_SACK);
-+	quic_timer_stop(sk, QUIC_TIMER_PATH);
-+	quic_timer_stop(sk, QUIC_TIMER_PMTU);
-+	quic_timer_stop(sk, QUIC_TIMER_PACE);
++	packet->version = QUIC_VERSION_V1;
 +}
-diff --git a/net/quic/timer.h b/net/quic/timer.h
+diff --git a/net/quic/packet.h b/net/quic/packet.h
 new file mode 100644
-index 000000000000..61b094325334
+index 000000000000..8c23be386207
 --- /dev/null
-+++ b/net/quic/timer.h
-@@ -0,0 +1,47 @@
++++ b/net/quic/packet.h
+@@ -0,0 +1,109 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/* QUIC kernel implementation
 + * (C) Copyright Red Hat Corp. 2023
@@ -548,43 +518,150 @@ index 000000000000..61b094325334
 + *    Xin Long <lucien.xin@gmail.com>
 + */
 +
-+enum {
-+	QUIC_TIMER_LOSS,	/* Loss detection timer: triggers retransmission on packet loss */
-+	QUIC_TIMER_SACK,	/* ACK delay timer, also used as idle timer alias */
-+	QUIC_TIMER_PATH,	/* Path validation timer: verifies network path connectivity */
-+	QUIC_TIMER_PMTU,	/* Packetization Layer Path MTU Discovery probing timer */
-+	QUIC_TIMER_PACE,	/* Pacing timer: controls packet transmission pacing */
-+	QUIC_TIMER_MAX,
-+	QUIC_TIMER_IDLE = QUIC_TIMER_SACK,
++struct quic_packet {
++	struct quic_conn_id dcid;	/* Dest Connection ID from received packet */
++	struct quic_conn_id scid;	/* Source Connection ID from received packet */
++	union quic_addr daddr;		/* Dest address from received packet */
++	union quic_addr saddr;		/* Source address from received packet */
++
++	struct list_head frame_list;	/* List of frames to pack into packet for send */
++	struct sk_buff *head;		/* Head skb for packet bundling on send */
++	u16 frame_len;		/* Length of all ack-eliciting frames excluding PING */
++	u8 taglen[2];		/* Tag length for short and long packets */
++	u32 version;		/* QUIC version used/selected during handshake */
++	u8 errframe;		/* Frame type causing packet processing failure */
++	u8 overhead;		/* QUIC header length excluding frames */
++	u16 errcode;		/* Error code on packet processing failure */
++	u16 frames;		/* Number of ack-eliciting frames excluding PING */
++	u16 mss[2];		/* MSS for datagram and non-datagram packets */
++	u16 hlen;		/* UDP + IP header length for sending */
++	u16 len;		/* QUIC packet length excluding taglen for sending */
++
++	u8 ack_eliciting:1;	/* Packet contains ack-eliciting frames to send */
++	u8 ack_requested:1;	/* Packet contains ack-eliciting frames received */
++	u8 ack_immediate:1;	/* Send ACK immediately (skip ack_delay timer) */
++	u8 non_probing:1;	/* Packet has ack-eliciting frames excluding NEW_CONNECTION_ID */
++	u8 has_sack:1;		/* Packet has ACK frames received */
++	u8 ipfragok:1;		/* Allow IP fragmentation */
++	u8 padding:1;		/* Packet has padding frames */
++	u8 path:1;		/* Path identifier used to send this packet */
++	u8 level;		/* Encryption level used */
 +};
 +
-+struct quic_timer {
-+	union {
-+		struct timer_list t;
-+		struct hrtimer hr;
-+	};
-+};
++#define QUIC_PACKET_INITIAL_V1		0
++#define QUIC_PACKET_0RTT_V1		1
++#define QUIC_PACKET_HANDSHAKE_V1	2
++#define QUIC_PACKET_RETRY_V1		3
 +
-+#define QUIC_MIN_PROBE_TIMEOUT	5000000
++#define QUIC_PACKET_INITIAL_V2		1
++#define QUIC_PACKET_0RTT_V2		2
++#define QUIC_PACKET_HANDSHAKE_V2	3
++#define QUIC_PACKET_RETRY_V2		0
 +
-+#define QUIC_MIN_PATH_TIMEOUT	1500000
++#define QUIC_PACKET_INITIAL		QUIC_PACKET_INITIAL_V1
++#define QUIC_PACKET_0RTT		QUIC_PACKET_0RTT_V1
++#define QUIC_PACKET_HANDSHAKE		QUIC_PACKET_HANDSHAKE_V1
++#define QUIC_PACKET_RETRY		QUIC_PACKET_RETRY_V1
 +
-+#define QUIC_MIN_IDLE_TIMEOUT	1000000
-+#define QUIC_DEF_IDLE_TIMEOUT	30000000
++#define QUIC_PACKET_INVALID		0xff
 +
-+void quic_timer_reset(struct sock *sk, u8 type, u64 timeout);
-+void quic_timer_start(struct sock *sk, u8 type, u64 timeout);
-+void quic_timer_stop(struct sock *sk, u8 type);
-+void quic_timer_init(struct sock *sk);
-+void quic_timer_free(struct sock *sk);
++#define QUIC_VERSION_LEN		4
 +
-+void quic_timer_reset_path(struct sock *sk);
++static inline u8 quic_packet_taglen(struct quic_packet *packet)
++{
++	return packet->taglen[!!packet->level];
++}
 +
-+void quic_timer_loss_handler(struct sock *sk);
-+void quic_timer_pace_handler(struct sock *sk);
-+void quic_timer_path_handler(struct sock *sk);
-+void quic_timer_sack_handler(struct sock *sk);
-+void quic_timer_pmtu_handler(struct sock *sk);
++static inline void quic_packet_set_taglen(struct quic_packet *packet, u8 taglen)
++{
++	packet->taglen[0] = taglen;
++}
++
++static inline u32 quic_packet_mss(struct quic_packet *packet)
++{
++	return packet->mss[0] - packet->taglen[!!packet->level];
++}
++
++static inline u32 quic_packet_max_payload(struct quic_packet *packet)
++{
++	return packet->mss[0] - packet->overhead - packet->taglen[!!packet->level];
++}
++
++static inline u32 quic_packet_max_payload_dgram(struct quic_packet *packet)
++{
++	return packet->mss[1] - packet->overhead - packet->taglen[!!packet->level];
++}
++
++static inline int quic_packet_empty(struct quic_packet *packet)
++{
++	return list_empty(&packet->frame_list);
++}
++
++static inline void quic_packet_reset(struct quic_packet *packet)
++{
++	packet->level = 0;
++	packet->errcode = 0;
++	packet->errframe = 0;
++	packet->has_sack = 0;
++	packet->non_probing = 0;
++	packet->ack_requested = 0;
++	packet->ack_immediate = 0;
++}
++
++int quic_packet_config(struct sock *sk, u8 level, u8 path);
++
++int quic_packet_xmit(struct sock *sk, struct sk_buff *skb);
++int quic_packet_create_and_xmit(struct sock *sk);
++int quic_packet_route(struct sock *sk);
++
++void quic_packet_mss_update(struct sock *sk, u32 mss);
++void quic_packet_flush(struct sock *sk);
++void quic_packet_init(struct sock *sk);
+diff --git a/net/quic/socket.c b/net/quic/socket.c
+index 93a7abefc226..4607f3ae8a7b 100644
+--- a/net/quic/socket.c
++++ b/net/quic/socket.c
+@@ -51,6 +51,7 @@ static int quic_init_sock(struct sock *sk)
+ 	quic_cong_init(quic_cong(sk));
+ 
+ 	quic_timer_init(sk);
++	quic_packet_init(sk);
+ 
+ 	if (quic_stream_init(quic_streams(sk)))
+ 		return -ENOMEM;
+diff --git a/net/quic/socket.h b/net/quic/socket.h
+index c5654fdc06b5..1efc76ec2033 100644
+--- a/net/quic/socket.h
++++ b/net/quic/socket.h
+@@ -20,6 +20,8 @@
+ #include "path.h"
+ #include "cong.h"
+ 
++#include "packet.h"
++
+ #include "protocol.h"
+ #include "timer.h"
+ 
+@@ -74,6 +76,7 @@ struct quic_sock {
+ 	struct quic_pnspace		space[QUIC_PNSPACE_MAX];
+ 	struct quic_crypto		crypto[QUIC_CRYPTO_MAX];
+ 
++	struct quic_packet		packet;
+ 	struct quic_timer		timers[QUIC_TIMER_MAX];
+ };
+ 
+@@ -147,6 +150,11 @@ static inline struct quic_crypto *quic_crypto(const struct sock *sk, u8 level)
+ 	return &quic_sk(sk)->crypto[level];
+ }
+ 
++static inline struct quic_packet *quic_packet(const struct sock *sk)
++{
++	return &quic_sk(sk)->packet;
++}
++
+ static inline void *quic_timer(const struct sock *sk, u8 type)
+ {
+ 	return (void *)&quic_sk(sk)->timers[type];
 -- 
 2.47.1
 
