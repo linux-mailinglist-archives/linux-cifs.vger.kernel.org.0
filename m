@@ -1,118 +1,166 @@
-Return-Path: <linux-cifs+bounces-9666-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9667-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHvKOP+9oGkDmQQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9666-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 22:41:19 +0100
+	id CKW4IdG/oGk1mQQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9667-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 22:49:05 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7941AFEF2
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 22:41:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1F8E1B00CC
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 22:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 469D0300DE05
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 21:41:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AECA73020EBC
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 21:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417144279EC;
-	Thu, 26 Feb 2026 21:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221A6466B57;
+	Thu, 26 Feb 2026 21:49:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="C8lgxWNg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcjIXeLg"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED182395274;
-	Thu, 26 Feb 2026 21:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED01436379
+	for <linux-cifs@vger.kernel.org>; Thu, 26 Feb 2026 21:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772142076; cv=none; b=m2ic1Auh1B0ID3nIwqH/rFOiY2lObyWZKtGlYqoeVYr25F3PB/HlkiQS0RuE7T3nWwVI5n5apYHQm/2IZsyovCDgrBcS1NJcCu74/xn4sSskOrUjsLEcBqFPDusGbR2WzgPDqxI+8OfUda6dGQnzMmaL7tNme33JQEwiP6Mf0aQ=
+	t=1772142540; cv=none; b=cFiQwBVwg1rn8ByaAVOBiaf03N+7OMsZxad7/TBACmhYwv2dJL69C0ugteTM5PEuWRcM7GHtEA3hDJnJcCW6Ybj5DzdxNYToPTxhy11M/wIrOgomvH0XYeUSrRg46OcSzMRQApDTs0qSFPgoIjcKZObJdN+bRlVTAMZklZodroI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772142076; c=relaxed/simple;
-	bh=bjrQY/5YEHkk932/5+YfzU0/mm4cX89YjtImf6JCcTY=;
-	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
-	 MIME-Version:Content-Type; b=KqqBMrS9n6cuSbbPCyfQjDRaQ12Gqby+7CtGogM275FutuiSPMlmw/kZPpj9kihX+KlplWUxgWaY0tTvrbk+IxhcAIhVNK0ar4QqRsOD69wX9RP2t9eSDJgA14+H/nh7Xldf/Q0C0IRSiWK7D2YHIjHFALyMqWYw4miWIqnTu2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=C8lgxWNg; arc=none smtp.client-ip=143.255.12.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=manguebit.org; s=dkim; h=Content-Type:MIME-Version:Date:References:
-	In-Reply-To:Subject:Cc:To:From:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Sj9a7yvXPZTsexmNw13k08Y6XmT9sbAg3WMWHrD1uuw=; b=C8lgxWNgIevTw8/MgOLsJ7NfEn
-	YFgYXI5naYlPUV42o7wFB3UThCx8zGDrCWAlAilv4dwAjR0DKHwmU26azIE/O9axjkhSmpzVH8jWR
-	f0ixW5s2JIt7VW2T9RI7nEvnI2kKVaLAmewiAd/gqh+5YAal+5TZk21s4G3vL6Oh04IYBLhjGo+RL
-	qgXJs1jbuo27/Sam6NnkCT4iwuiycZ6VrQelwIQAXZCIns47dtva6J/AUr3thnAtsvSES8MRVgQk1
-	eOT1347hmV2VJVThl++jJQzFVVHfWkxeC6ZqUQnXAl9dvDfAvaToqg2q8DaYbvV+SgiqLlhCZt3b4
-	bHMoh/Vw==;
-Received: from pc by mx1.manguebit.org with local (Exim 4.99.1)
-	id 1vvj6b-00000000tP2-3cV1;
-	Thu, 26 Feb 2026 18:41:09 -0300
-Message-ID: <03d69afbe9fa3ec36dc39d6864a97b35@manguebit.org>
-From: Paulo Alcantara <pc@manguebit.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>, Steve French
- <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam
- Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, Bharath SM
- <bharathsm@microsoft.com>, Jeff Layton <jlayton@kernel.org>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>, stable@vger.kernel.org, Steve
- French <smfrench@gmail.com>, linux-cifs@vger.kernel.org,
- samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] smb: client: Don't log plaintext credentials in
- cifs_set_cifscreds
-In-Reply-To: <20260226212845.784172-2-thorsten.blum@linux.dev>
-References: <20260226212845.784172-2-thorsten.blum@linux.dev>
-Date: Thu, 26 Feb 2026 18:41:09 -0300
+	s=arc-20240116; t=1772142540; c=relaxed/simple;
+	bh=LF4bwcYv1+PfMspbbpqO2VzfLK8CTRaCpOj6mQJxZGw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aBIUD2B3GF+IVzmlcGjM/dCI5e+XHKeTrralu+/yfRR9RAGl0Rcb9cygu4kJn+EzqwdUfqKyMY6/dV4AXBtUArYAxW6lgIo9AH4Wd/r72wYatyUihZ1T13MlwcDasUodGVRAX+mUgRUPZoggHc3xOnTW4XlP4CVhgDVEPU9pNGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcjIXeLg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65431C2BCB0
+	for <linux-cifs@vger.kernel.org>; Thu, 26 Feb 2026 21:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772142540;
+	bh=LF4bwcYv1+PfMspbbpqO2VzfLK8CTRaCpOj6mQJxZGw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DcjIXeLgrxqUYwwv+2hZCBu8T09MVdaj4sSw8in+d9ikwiv6jPM/YXPBL00H8vz+L
+	 ThBlz0nE8Lf5ETYcNtggwxUpTaTtpxvJzo6zuFsbRb8XoqlA9Fh9yjWBh0hxolp6uP
+	 F4RBlPeM6zLgUqIIeXrHHNM23II286EyJloqnQZQDeWWJH6pSFZ/PCtkdKVacnfQjO
+	 j39CTWgFGDhh9HZ9An7My+BGm7MDURWMkjqHI10HW8SaosV01xNYbdS9uJSRV+fDJ+
+	 jhAZOaOllUvBy/kqKwJuum3OskFoy2GeMvvV0xHQSbc+35MVaFPFbyqJ1+b6Gwa1RP
+	 ewnbRhbSJ1htQ==
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-64c9a6d68e5so968395d50.3
+        for <linux-cifs@vger.kernel.org>; Thu, 26 Feb 2026 13:49:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXPy/VL+GbeDmY8djMxFSzDYkz1EzZ8AJCHpZgoMkPqnnZbllKRDMITN3bVDRQ5J/W7zsOqaxkxpRvy@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFsbN+Dn7qYsJh0UDP/W9gUk7VUrPSTKU2P1HIdwQQsv/rdsSN
+	Z/3UFEqrAhGDvkv/O5w8ZG7YUGy9WAQtgOUDWF36rEySZVsgfvsC9xrqihj9+hqLuJqBCy4dKnX
+	e5wodrBDIzn6MfFEYPT4ipmKm90PooicmVZ+R/4h4HA==
+X-Received: by 2002:a53:e8c9:0:b0:64c:a81e:f2b2 with SMTP id
+ 956f58d0204a3-64cc211f150mr699646d50.27.1772142538704; Thu, 26 Feb 2026
+ 13:48:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260225-pagevec_cleanup-v2-0-716868cc2d11@columbia.edu> <20260225-pagevec_cleanup-v2-2-716868cc2d11@columbia.edu>
+In-Reply-To: <20260225-pagevec_cleanup-v2-2-716868cc2d11@columbia.edu>
+From: Chris Li <chrisl@kernel.org>
+Date: Thu, 26 Feb 2026 13:48:47 -0800
+X-Gmail-Original-Message-ID: <CACePvbX5Qm+kQLtCWynvO-2YtoW0mdR+V6rfq=buR6tfR1A9FQ@mail.gmail.com>
+X-Gm-Features: AaiRm50fP40RQkljlPLX-PI1NSM3iQnOuQQEi7r5tKbV7kaWVe_vUmPk2uGLYLk
+Message-ID: <CACePvbX5Qm+kQLtCWynvO-2YtoW0mdR+V6rfq=buR6tfR1A9FQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] fs: Remove unncessary pagevec.h includes
+To: Tal Zussman <tz2294@columbia.edu>
+Cc: David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Dan Williams <dan.j.williams@intel.com>, Jan Kara <jack@suse.cz>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	"Theodore Ts'o" <tytso@mit.edu>, Andreas Dilger <adilger.kernel@dilger.ca>, 
+	Paulo Alcantara <pc@manguebit.org>, Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, Steve French <sfrench@samba.org>, 
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam Prasad N <sprasad@microsoft.com>, 
+	Tom Talpey <tom@talpey.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
+	Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Andreas Gruenbacher <agruenba@redhat.com>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>, "Darrick J. Wong" <djwong@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, Brendan Jackman <jackmanb@google.com>, Zi Yan <ziy@nvidia.com>, 
+	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Qi Zheng <zhengqi.arch@bytedance.com>, 
+	linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	linux-ext4@vger.kernel.org, netfs@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, dri-devel@lists.freedesktop.org, 
+	intel-gfx@lists.freedesktop.org, linux-btrfs@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nilfs@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[manguebit.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[manguebit.org:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9666-lists,linux-cifs=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[linux.dev,vger.kernel.org,gmail.com,lists.samba.org];
-	FREEMAIL_TO(0.00)[linux.dev,samba.org,gmail.com,microsoft.com,talpey.com,kernel.org];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pc@manguebit.org,linux-cifs@vger.kernel.org];
+	FREEMAIL_CC(0.00)[redhat.com,auristor.com,kernel.org,linux-foundation.org,oracle.com,google.com,suse.com,tencent.com,huaweicloud.com,gmail.com,infradead.org,intel.com,suse.cz,zeniv.linux.org.uk,mit.edu,dilger.ca,manguebit.org,fasheh.com,evilplan.org,linux.alibaba.com,samba.org,microsoft.com,talpey.com,linux.intel.com,suse.de,ffwll.ch,ursulin.net,fb.com,dubeyko.com,linux.dev,brown.name,ziepe.ca,nvidia.com,cmpxchg.org,bytedance.com,lists.infradead.org,vger.kernel.org,lists.sourceforge.net,kvack.org,lists.linux.dev,lists.samba.org,lists.freedesktop.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[manguebit.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-cifs];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9667-lists,linux-cifs=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email]
-X-Rspamd-Queue-Id: 4D7941AFEF2
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chrisl@kernel.org,linux-cifs@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[96];
+	TAGGED_RCPT(0.00)[linux-cifs];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,columbia.edu:email]
+X-Rspamd-Queue-Id: C1F8E1B00CC
 X-Rspamd-Action: no action
 
-Thorsten Blum <thorsten.blum@linux.dev> writes:
-
-> When debug logging is enabled, cifs_set_cifscreds() logs the key
-> payload and exposes the plaintext username and password. Remove the
-> debug log to avoid exposing credentials.
+On Wed, Feb 25, 2026 at 3:44=E2=80=AFPM Tal Zussman <tz2294@columbia.edu> w=
+rote:
 >
-> Fixes: 8a8798a5ff90 ("cifs: fetch credentials out of keyring for non-krb5 auth multiuser mounts")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  fs/smb/client/connect.c | 1 -
->  1 file changed, 1 deletion(-)
+> Remove unused pagevec.h includes from .c files. These were found with
+> the following command:
+>
+>   grep -rl '#include.*pagevec\.h' --include=3D'*.c' | while read f; do
+>         grep -qE 'PAGEVEC_SIZE|folio_batch' "$f" || echo "$f"
+>   done
+>
+> There are probably more removal candidates in .h files, but those are
+> more complex to analyze.
+>
+> Signed-off-by: Tal Zussman <tz2294@columbia.edu>
 
-Acked-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Acked-by: Chris Li <chrisl@kernel.org>
+
+Chris
 
