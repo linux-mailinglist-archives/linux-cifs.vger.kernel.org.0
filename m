@@ -1,404 +1,165 @@
-Return-Path: <linux-cifs+bounces-9550-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9552-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WPzuG3OKn2nYcgQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9550-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 00:49:07 +0100
+	id qGvfILWVn2k9cwQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9552-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 01:37:09 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2403719F169
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 00:49:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0063F19F7C3
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 01:37:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4429731026C4
-	for <lists+linux-cifs@lfdr.de>; Wed, 25 Feb 2026 23:45:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8154C306B7A1
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 00:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5C4389449;
-	Wed, 25 Feb 2026 23:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FF9165F1A;
+	Thu, 26 Feb 2026 00:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="b/yB3FO8"
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="lEZQ8Nle"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from mx0a-00364e01.pphosted.com (mx0a-00364e01.pphosted.com [148.163.135.74])
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0055E3876A6
-	for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 23:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA7646BF
+	for <linux-cifs@vger.kernel.org>; Thu, 26 Feb 2026 00:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772063095; cv=none; b=OuSUk2kBRxGaOZNcUS5Smr8HuNdqdnjPEqx+9o2NB+62USCvYlgdHd+lzciH1sqass59cd0b1cYiUK3rb4w6XJJzA3oM12sW7iyPqjPQwHtc4qtBtgs67K1DXCgHC0Z9HxM6iz00vIOWfaomxXfKIhrHkBMLWqefzK7Nie37AK0=
+	t=1772066106; cv=none; b=swV3GHY3mhbu2b5sEnwH32J2HBzCgUZnMEAq5B+9UL/KfeAi8idVPfr3SlEXLVetv2uDLtYTDiCCX4ADp/wGmJnXqHJtZdUy72aw+X9iUVil+oxHbVz+utxkxehuW+gK47kCEeXBCB2eMCYe6i9+99/sqwQwLZ3A9TYF2NW7/+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772063095; c=relaxed/simple;
-	bh=zO7GBjiuOn5Q+h+zA8UgP1+Klsw8MQQTt1O0svxg4WA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pGGlSwZcaGMULI91d6VKi5Hq7lubx6lHGsl7gcRahan2p8aUfryoyMJ3jcRISh0OVdzMaNf14qrRHe/xm85H0AliGN+8acmP++fPlfAjAUG57J1FPJAcFa9OMpWIwO/I/AVK8DDZfO+tQ3dhVpaf7dsTK7EFM2iY02hmxxF5G2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=b/yB3FO8; arc=none smtp.client-ip=148.163.135.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
-Received: from pps.filterd (m0167069.ppops.net [127.0.0.1])
-	by mx0a-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61PNNMkB1400023
-	for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 18:44:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps01; bh=TE8Z
-	hYBQf9fiNswnOLiD0snqyySTRxN7Ufk+GD8fw6E=; b=b/yB3FO8kwgXmET281Jv
-	XP+tAXlRZIOQ6OAFR2YSS+792EIr83nP+nakYz8tKWh86IL9kbOyLkg2yn8b3g/q
-	S5VPNh8sAcmAlprkg2Cw/wyQbawj3NLSALIkGLq2K8V4kIRt4aYXHS/DHlGsM8fs
-	H8cCC3+JhbwQsrjnzdcgeRxONcJg4TG6TN/qWF72MSX7O8ZGhKSU3I2BfZEDoisK
-	t1LvqQr0puhEkmBwjqopiEjNDjB9vH7tXsjnfmo+oQfclWfz01qggxeWH6r8fgsq
-	rZ0/3X3DzNuyvGFcD+vq2Q7XNExoHO+FQm1lfYBwrgA16DwNSuwMZae97gH/dVl+
-	jg==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 4chx6v6bca-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 18:44:51 -0500 (EST)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-506c0231e63so29612491cf.1
-        for <linux-cifs@vger.kernel.org>; Wed, 25 Feb 2026 15:44:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772063090; x=1772667890;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TE8ZhYBQf9fiNswnOLiD0snqyySTRxN7Ufk+GD8fw6E=;
-        b=oKPR5VDBU8M/CNoyHjMd0/mxlG8gNZalGEjVMWj72Ys6fxg0BTK/aSjrYoRjFvHUdN
-         EfhtadgQG6VOW13Fw9P85sO8DPurxMCB5sriKTNZIYJ9A9wfQaOi2Gypke9UP7eFg6rY
-         QwNnjcm9V3st1b7XZ04jupPr54IB9kathuRqz+1ONhZF+ya3bqhJlhPeIM4nN/KEs54S
-         NDiQNyvncmKbb+jRi/CjqDcCXdYMWNf9hy+/4iNxfBN2rVLiMI7AFIGKzhpTU3A92BVQ
-         67g1eiIHiyTM54UEMJT+psnv67FEouHfGjHv9PHPp6OMBfReYIFCQOJc9yuJDsJr9iNE
-         OoKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYF5P6nAUNWPES4zGB+njQk45Q3LAlRwTrUumX0R6CeuRpw/mJr8L92DoqqxWvRbhe+uLxc9eiJyd4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTcTvgjV7zC/dUvvY2HRJXCZtlvHgQqdIKeW9N7Wr1QHgTRpIY
-	/OJk3nuXckCcHoEdatI1GB03L+3LEFnBc2k4uUagRyBofYJxR5RdYDoEq1W+7mN8lb1MPQW6dP1
-	jePHU1C8GPJY+cc7AYU5c+whAAkBbCM/KY9N79Nar2HDyMHg0y6GY7FIMBxo=
-X-Gm-Gg: ATEYQzx4ZmhcBfMz7DyhE/qPA2EZ+jK9VwwcYy/0aQfI6QVFm/D85M3poKxTMqE+6Hl
-	iCDG4dirYcVbBWQ5xQKb7lO6TkW+uwWivO9MGa59iBT/ih7enKQddH79rnM5StU6xZlMNl0gvj0
-	8/9Bd9ddk/YhzD/uMXwGHzpGMi+PoYxBkC9HcZ1X5SZUL87hFJvWaYC9+ICvaJJUdm6fYclK8Y4
-	sWZjOKrNGW69S0heOkHLU4HBKjkcXCdHXLLhtGDK4px2Bhq25brTRwFTO0MTY3lh1Iaf/j3oeG8
-	FGdTknTIz1suIFBt8Hz8hU7Vpxv5s+xobDGUgv2Axe6cv+XJdE9/7hMKpeEwdmcgMeYjLgEP2nV
-	NQItp/6bVn+KHGHX2rIKTy5Wox3sv8d9o
-X-Received: by 2002:ac8:5ac5:0:b0:503:2fe5:f380 with SMTP id d75a77b69052e-507441df64fmr13263621cf.0.1772063090075;
-        Wed, 25 Feb 2026 15:44:50 -0800 (PST)
-X-Received: by 2002:ac8:5ac5:0:b0:503:2fe5:f380 with SMTP id d75a77b69052e-507441df64fmr13262341cf.0.1772063089401;
-        Wed, 25 Feb 2026 15:44:49 -0800 (PST)
-Received: from [127.0.1.1] ([216.158.158.246])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899c738d80bsm3357606d6.41.2026.02.25.15.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 15:44:49 -0800 (PST)
-From: Tal Zussman <tz2294@columbia.edu>
-Date: Wed, 25 Feb 2026 18:44:28 -0500
-Subject: [PATCH v2 4/4] folio_batch: Rename PAGEVEC_SIZE to
- FOLIO_BATCH_SIZE
+	s=arc-20240116; t=1772066106; c=relaxed/simple;
+	bh=XGKUDsPOl9as3tiOowXkWTjAjP/AsKmQKJwG5Th+c0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aCwHNfku8SBykg+foVhIsz8ifUymXQh1zv1EejCzkbK7QQHJlkf+zSCSYMll8+E6vQegeBi0alMQCbj8DRIJYwFRlKLjKHxCTj+1gkGnqvPeRd3gck8Bh0Ep2f3OwrWbHywEhUBgFGT4CK/A0gINR/Seb1G4en3HtswY6Km56lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=lEZQ8Nle; arc=none smtp.client-ip=143.255.12.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=manguebit.org; s=dkim; h=Content-Transfer-Encoding:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:Sender:Content-Type:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=dagXK1ZKwMbMHXC7wWItm0VOoo33AapfcOGvsneSdJ0=; b=lEZQ8Nlezcmf3yn725/Cq1/SrL
+	RsgANXK3oX7iI4PhmA8MFV+D1xaCEQrYJCzv0KhbC0+hOKu1SnMYDmA1ii4os8PnP5u350fzxtfcl
+	EcymSSWw2nSkrRmI1O4uPscsga+4J6vXrl376br1bYdbHbOKs4OZO28YLG2jdoo6Ecg0u4rRK9MRH
+	uUwZ1fgVHJ34yKuJgRGG1IIsjvGMuILgE+uA1HQIRC5X/dMLWh4+570Eljdu0suESTIhxydztPpr4
+	17+Fkxero3WV2NtaPsY7W71hwgSJmrU27NZsnwUXL4KAI0mKVR+Eob1mxDLJgrQ1ZwnCyhtcasRWJ
+	hCXB67BA==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.99.1)
+	id 1vvPLD-00000000nhr-1DDg;
+	Wed, 25 Feb 2026 21:34:55 -0300
+From: Paulo Alcantara <pc@manguebit.org>
+To: smfrench@gmail.com
+Cc: Xiaoli Feng <xifeng@redhat.com>,
+	"Paulo Alcantara (Red Hat)" <pc@manguebit.org>,
+	David Howells <dhowells@redhat.com>,
+	linux-cifs@vger.kernel.org
+Subject: [PATCH] smb: client: fix broken multichannel with krb5+signing
+Date: Wed, 25 Feb 2026 21:34:55 -0300
+Message-ID: <20260226003455.1699030-1-pc@manguebit.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260225-pagevec_cleanup-v2-4-716868cc2d11@columbia.edu>
-References: <20260225-pagevec_cleanup-v2-0-716868cc2d11@columbia.edu>
-In-Reply-To: <20260225-pagevec_cleanup-v2-0-716868cc2d11@columbia.edu>
-To: David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
-        Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Theodore Ts'o <tytso@mit.edu>
-Cc: Andreas Dilger <adilger.kernel@dilger.ca>,
-        Paulo Alcantara <pc@manguebit.org>,
-        Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
-        Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Steve French <sfrench@samba.org>,
-        Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-        Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-        Bharath SM <bharathsm@microsoft.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>, Chris Mason <clm@fb.com>,
-        David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
-        Alex Markuze <amarkuze@redhat.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Oscar Salvador <osalvador@suse.de>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>,
-        NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
-        Dai Ngo <Dai.Ngo@oracle.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>,
-        Pedro Falcato <pfalcato@suse.de>,
-        Brendan Jackman <jackmanb@google.com>, Zi Yan <ziy@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-ext4@vger.kernel.org,
-        netfs@lists.linux.dev, linux-nfs@vger.kernel.org,
-        ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, gfs2@lists.linux.dev,
-        linux-nilfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        cgroups@vger.kernel.org, Tal Zussman <tz2294@columbia.edu>
-X-Mailer: b4 0.14.3-dev-d7477
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772063077; l=5814;
- i=tz2294@columbia.edu; s=20250528; h=from:subject:message-id;
- bh=zO7GBjiuOn5Q+h+zA8UgP1+Klsw8MQQTt1O0svxg4WA=;
- b=KCL19WgRUDAqH63IGvAc3KncLR0mQnluCE5DMTx+wx8s1EMvm5gWiID7it4982lNgTaHXaECH
- ClIpdW+IjPxAETpUADJ+80YGkvu3AQ4uNneZg/M0Lj8/3I89nOh73yK
-X-Developer-Key: i=tz2294@columbia.edu; a=ed25519;
- pk=BIj5KdACscEOyAC0oIkeZqLB3L94fzBnDccEooxeM5Y=
-X-Proofpoint-GUID: 4JydmZWOq1Ti15q2_ASUMVFWTCJUtoZV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDIyNyBTYWx0ZWRfX4WbpxiNMMdTm
- 6utApaM1jMgynXzSIKM8krMRVrr1MQbUA28lsHCs0k2nKqJj6Jss9VtP7uB/7QA+NtPFE1seSv+
- OsMp9PvO9bJqK7jD0RmH1me04Ysoe+BdrpUsden5AiYEWoYKKJympyDIRhjOiXbJrNc+6ekhE0A
- /ppYulIofswRtynaIvyd51aTxesaSSEd7Uotn012Ch5GIsK39T7NRsLqPvYtulf8UEnQb7NU6BM
- MZXNhykfzu1U4Ipn7GVo+rnRuatihkuYP4d/U6v+Bv9P723hJNEehX3GLlgFHXYKiWn0/zwoUb8
- uQ0kbBbicQAa+sUHeeF39bO72VCcka0MYupUtAAhBEyZezJoBiyDpYsE1A4wijemN7vmJWcrshz
- UvOCnJTOeGNEDakT2R+3BigvygXoczGoCeaYsytyKdDMNUA5+j3aLx8U2YYsGI3BbrihDBKh0Qb
- D8Z38x+ZP4aov0PBQIg==
-X-Authority-Analysis: v=2.4 cv=FqMIPmrq c=1 sm=1 tr=0 ts=699f8973 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=mD05b5UW6KhLIDvowZ5dSQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=x7bEGLp0ZPQA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=JR4YdQiviy7OQf72WyZ1:22
- a=960X5KZuJcz03JLduyoA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-ORIG-GUID: 4JydmZWOq1Ti15q2_ASUMVFWTCJUtoZV
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11712
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=10
- spamscore=0 bulkscore=10 lowpriorityscore=10 clxscore=1015 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602250227
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[columbia.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[columbia.edu:s=pps01];
+	DMARC_POLICY_ALLOW(-0.50)[manguebit.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[manguebit.org:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[dilger.ca,manguebit.org,kernel.org,fasheh.com,evilplan.org,linux.alibaba.com,samba.org,gmail.com,microsoft.com,talpey.com,linux.intel.com,suse.de,ffwll.ch,intel.com,ursulin.net,fb.com,suse.com,redhat.com,dubeyko.com,linux.dev,oracle.com,brown.name,ziepe.ca,nvidia.com,cmpxchg.org,google.com,bytedance.com,lists.infradead.org,vger.kernel.org,lists.sourceforge.net,kvack.org,lists.linux.dev,lists.samba.org,lists.freedesktop.org,columbia.edu];
-	FREEMAIL_TO(0.00)[redhat.com,auristor.com,kernel.org,linux-foundation.org,oracle.com,google.com,suse.com,tencent.com,huaweicloud.com,gmail.com,infradead.org,intel.com,suse.cz,zeniv.linux.org.uk,mit.edu];
+	TAGGED_FROM(0.00)[bounces-9552-lists,linux-cifs=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9550-lists,linux-cifs=lfdr.de];
-	DKIM_TRACE(0.00)[columbia.edu:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,columbia.edu:mid,columbia.edu:dkim,columbia.edu:email];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tz2294@columbia.edu,linux-cifs@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[pc@manguebit.org,linux-cifs@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_GT_50(0.00)[97];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[manguebit.org:+];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 2403719F169
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0063F19F7C3
 X-Rspamd-Action: no action
 
-struct pagevec no longer exists. Rename the macro appropriately.
+When mounting a share with 'multichannel,max_channels=n,sec=krb5i',
+the client was duplicating signing key for all secondary channels,
+thus making the server fail all commands sent from secondary channels
+due to bad signatures.
 
-Signed-off-by: Tal Zussman <tz2294@columbia.edu>
+Every channel has its own signing key, so when establishing a new
+channel with krb5 auth, make sure to use the new session key as the
+derived key to generate channel's signing key in SMB2_auth_kerberos().
+
+Repro:
+
+$ mount.cifs //srv/share /mnt -o multichannel,max_channels=4,sec=krb5i
+$ sleep 5
+$ umount /mnt
+$ dmesg
+  ...
+  CIFS: VFS: sign fail cmd 0x5 message id 0x2
+  CIFS: VFS: \\srv SMB signature verification returned error = -13
+  CIFS: VFS: sign fail cmd 0x5 message id 0x2
+  CIFS: VFS: \\srv SMB signature verification returned error = -13
+  CIFS: VFS: sign fail cmd 0x4 message id 0x2
+  CIFS: VFS: \\srv SMB signature verification returned error = -13
+
+Reported-by: Xiaoli Feng <xifeng@redhat.com>
+Signed-off-by: Paulo Alcantara (Red Hat) <pc@manguebit.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: linux-cifs@vger.kernel.org
 ---
- fs/btrfs/extent_io.c        | 4 ++--
- include/linux/folio_batch.h | 6 +++---
- include/linux/folio_queue.h | 6 +++---
- mm/shmem.c                  | 4 ++--
- mm/swap.c                   | 2 +-
- mm/swap_state.c             | 2 +-
- mm/truncate.c               | 6 +++---
- 7 files changed, 15 insertions(+), 15 deletions(-)
+ fs/smb/client/smb2pdu.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index c373d113f1e7..d82ca509503f 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -2095,13 +2095,13 @@ static void buffer_tree_tag_for_writeback(struct btrfs_fs_info *fs_info,
- struct eb_batch {
- 	unsigned int nr;
- 	unsigned int cur;
--	struct extent_buffer *ebs[PAGEVEC_SIZE];
-+	struct extent_buffer *ebs[FOLIO_BATCH_SIZE];
- };
+diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
+index a2a96d817717..04e361ed2356 100644
+--- a/fs/smb/client/smb2pdu.c
++++ b/fs/smb/client/smb2pdu.c
+@@ -1714,19 +1714,17 @@ SMB2_auth_kerberos(struct SMB2_sess_data *sess_data)
+ 	is_binding = (ses->ses_status == SES_GOOD);
+ 	spin_unlock(&ses->ses_lock);
  
- static inline bool eb_batch_add(struct eb_batch *batch, struct extent_buffer *eb)
- {
- 	batch->ebs[batch->nr++] = eb;
--	return (batch->nr < PAGEVEC_SIZE);
-+	return (batch->nr < FOLIO_BATCH_SIZE);
- }
+-	/* keep session key if binding */
+-	if (!is_binding) {
+-		kfree_sensitive(ses->auth_key.response);
+-		ses->auth_key.response = kmemdup(msg->data, msg->sesskey_len,
+-						 GFP_KERNEL);
+-		if (!ses->auth_key.response) {
+-			cifs_dbg(VFS, "Kerberos can't allocate (%u bytes) memory\n",
+-				 msg->sesskey_len);
+-			rc = -ENOMEM;
+-			goto out_put_spnego_key;
+-		}
+-		ses->auth_key.len = msg->sesskey_len;
++	kfree_sensitive(ses->auth_key.response);
++	ses->auth_key.response = kmemdup(msg->data,
++					 msg->sesskey_len,
++					 GFP_KERNEL);
++	if (!ses->auth_key.response) {
++		cifs_dbg(VFS, "%s: can't allocate (%u bytes) memory\n",
++			 __func__, msg->sesskey_len);
++		rc = -ENOMEM;
++		goto out_put_spnego_key;
+ 	}
++	ses->auth_key.len = msg->sesskey_len;
  
- static inline void eb_batch_init(struct eb_batch *batch)
-diff --git a/include/linux/folio_batch.h b/include/linux/folio_batch.h
-index a2f3d3043f7e..b45946adc50b 100644
---- a/include/linux/folio_batch.h
-+++ b/include/linux/folio_batch.h
-@@ -12,7 +12,7 @@
- #include <linux/types.h>
- 
- /* 31 pointers + header align the folio_batch structure to a power of two */
--#define PAGEVEC_SIZE	31
-+#define FOLIO_BATCH_SIZE	31
- 
- struct folio;
- 
-@@ -29,7 +29,7 @@ struct folio_batch {
- 	unsigned char nr;
- 	unsigned char i;
- 	bool percpu_pvec_drained;
--	struct folio *folios[PAGEVEC_SIZE];
-+	struct folio *folios[FOLIO_BATCH_SIZE];
- };
- 
- /**
-@@ -58,7 +58,7 @@ static inline unsigned int folio_batch_count(const struct folio_batch *fbatch)
- 
- static inline unsigned int folio_batch_space(const struct folio_batch *fbatch)
- {
--	return PAGEVEC_SIZE - fbatch->nr;
-+	return FOLIO_BATCH_SIZE - fbatch->nr;
- }
- 
- /**
-diff --git a/include/linux/folio_queue.h b/include/linux/folio_queue.h
-index 0d3765fa9d1d..f6d5f1f127c9 100644
---- a/include/linux/folio_queue.h
-+++ b/include/linux/folio_queue.h
-@@ -29,12 +29,12 @@
-  */
- struct folio_queue {
- 	struct folio_batch	vec;		/* Folios in the queue segment */
--	u8			orders[PAGEVEC_SIZE]; /* Order of each folio */
-+	u8			orders[FOLIO_BATCH_SIZE]; /* Order of each folio */
- 	struct folio_queue	*next;		/* Next queue segment or NULL */
- 	struct folio_queue	*prev;		/* Previous queue segment of NULL */
- 	unsigned long		marks;		/* 1-bit mark per folio */
- 	unsigned long		marks2;		/* Second 1-bit mark per folio */
--#if PAGEVEC_SIZE > BITS_PER_LONG
-+#if FOLIO_BATCH_SIZE > BITS_PER_LONG
- #error marks is not big enough
- #endif
- 	unsigned int		rreq_id;
-@@ -70,7 +70,7 @@ static inline void folioq_init(struct folio_queue *folioq, unsigned int rreq_id)
-  */
- static inline unsigned int folioq_nr_slots(const struct folio_queue *folioq)
- {
--	return PAGEVEC_SIZE;
-+	return FOLIO_BATCH_SIZE;
- }
- 
- /**
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 149fdb051170..5e7dcf5bc5d3 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1113,7 +1113,7 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
- 	pgoff_t start = (lstart + PAGE_SIZE - 1) >> PAGE_SHIFT;
- 	pgoff_t end = (lend + 1) >> PAGE_SHIFT;
- 	struct folio_batch fbatch;
--	pgoff_t indices[PAGEVEC_SIZE];
-+	pgoff_t indices[FOLIO_BATCH_SIZE];
- 	struct folio *folio;
- 	bool same_folio;
- 	long nr_swaps_freed = 0;
-@@ -1510,7 +1510,7 @@ static int shmem_unuse_inode(struct inode *inode, unsigned int type)
- 	struct address_space *mapping = inode->i_mapping;
- 	pgoff_t start = 0;
- 	struct folio_batch fbatch;
--	pgoff_t indices[PAGEVEC_SIZE];
-+	pgoff_t indices[FOLIO_BATCH_SIZE];
- 	int ret = 0;
- 
- 	do {
-diff --git a/mm/swap.c b/mm/swap.c
-index 2e517ede6561..78b4aa811fc6 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -1018,7 +1018,7 @@ EXPORT_SYMBOL(folios_put_refs);
- void release_pages(release_pages_arg arg, int nr)
- {
- 	struct folio_batch fbatch;
--	int refs[PAGEVEC_SIZE];
-+	int refs[FOLIO_BATCH_SIZE];
- 	struct encoded_page **encoded = arg.encoded_pages;
- 	int i;
- 
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index a0c64db2b275..6313b59d7eab 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -385,7 +385,7 @@ void free_folio_and_swap_cache(struct folio *folio)
- void free_pages_and_swap_cache(struct encoded_page **pages, int nr)
- {
- 	struct folio_batch folios;
--	unsigned int refs[PAGEVEC_SIZE];
-+	unsigned int refs[FOLIO_BATCH_SIZE];
- 
- 	folio_batch_init(&folios);
- 	for (int i = 0; i < nr; i++) {
-diff --git a/mm/truncate.c b/mm/truncate.c
-index df0b7a7e6aff..2931d66c16d0 100644
---- a/mm/truncate.c
-+++ b/mm/truncate.c
-@@ -369,7 +369,7 @@ void truncate_inode_pages_range(struct address_space *mapping,
- 	pgoff_t		start;		/* inclusive */
- 	pgoff_t		end;		/* exclusive */
- 	struct folio_batch fbatch;
--	pgoff_t		indices[PAGEVEC_SIZE];
-+	pgoff_t		indices[FOLIO_BATCH_SIZE];
- 	pgoff_t		index;
- 	int		i;
- 	struct folio	*folio;
-@@ -534,7 +534,7 @@ EXPORT_SYMBOL(truncate_inode_pages_final);
- unsigned long mapping_try_invalidate(struct address_space *mapping,
- 		pgoff_t start, pgoff_t end, unsigned long *nr_failed)
- {
--	pgoff_t indices[PAGEVEC_SIZE];
-+	pgoff_t indices[FOLIO_BATCH_SIZE];
- 	struct folio_batch fbatch;
- 	pgoff_t index = start;
- 	unsigned long ret;
-@@ -672,7 +672,7 @@ int folio_unmap_invalidate(struct address_space *mapping, struct folio *folio,
- int invalidate_inode_pages2_range(struct address_space *mapping,
- 				  pgoff_t start, pgoff_t end)
- {
--	pgoff_t indices[PAGEVEC_SIZE];
-+	pgoff_t indices[FOLIO_BATCH_SIZE];
- 	struct folio_batch fbatch;
- 	pgoff_t index;
- 	int i;
-
+ 	sess_data->iov[1].iov_base = msg->data + msg->sesskey_len;
+ 	sess_data->iov[1].iov_len = msg->secblob_len;
 -- 
-2.39.5
+2.53.0
 
 
