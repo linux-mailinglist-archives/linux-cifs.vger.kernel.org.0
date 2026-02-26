@@ -1,147 +1,151 @@
-Return-Path: <linux-cifs+bounces-9563-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9564-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QJ/oN5kToGlAfgQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9563-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 10:34:17 +0100
+	id WAWuMOEboGmzfgQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9564-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 11:09:37 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856281A3773
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 10:34:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64DEC1A40AF
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 11:09:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8E61630788ED
-	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 09:32:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 992A330185EE
+	for <lists+linux-cifs@lfdr.de>; Thu, 26 Feb 2026 10:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A291E2749E6;
-	Thu, 26 Feb 2026 09:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9219F396B86;
+	Thu, 26 Feb 2026 10:09:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="PTuZuxEO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jHMSzxOo"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B96262FC0;
-	Thu, 26 Feb 2026 09:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F3143939B8;
+	Thu, 26 Feb 2026 10:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098358; cv=none; b=ZlAB7cf6lbQpY/13L4s4WpxGq8rfBdaf2P6yHyVxIoRSzJ3IlqEpidhOsJCh3lCa403dpm2jHkXmWk5jnI7BYSkdBxMG5xMFtJmcL04ec4qwOMer5mGGRb3R3E6x6y7X5/f2/zvrKX5rj139zMTa746h2DwUpxQD3tn9fzRBkRM=
+	t=1772100573; cv=none; b=OXSTytWiako47w/fsnBvPg5TsPVCOPIpzrNllXFn5CIL6czj1g5bWzBvcS0GBGS1BD9XNIymiGyzpbMsdYVUdYO70hM3rZcBugs8IfAt1T+4uS79aM0xgeaA4YMpbeW4dbB3mij1RtpmRdDJeJenqV7gFe6pLiRlDelQ92b5AkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098358; c=relaxed/simple;
-	bh=tVQ1Tla0WZftYQlJplXdMjAqBqpf8EtLKK3BzXz5Szw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ngOQlRrea2/KWTL/PKYYoyokIrsvoYHvu+Fn523XvYSjFeJdmHLKki4lvzoTkwlcQbxffMpN5mxw6aijONg88eQNDhtKTtCFnWcVIdGpJNsuYK1btiSLPiZHwxT/cTQw0TBBW0R6eJVCVt5olIVYoQmoXWoITZS7xy12eMH48V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=PTuZuxEO; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=bgJobNO/XTwgsytGekJINzhShMgRvCBytOfe1cAppHs=; b=PTuZuxEOdvVMa+r5eevcZnDvx8
-	89iGipJiGFZO+ZZKPzabeqGO9hTzTGwVi/EdNWVdssLD1pgtwy4gXMFIlXsyq8IkM4QfAsYxzt5iu
-	pQnt8SXXEzCM+0ZrOoMUbIHwLNHCerns9rZLm2z3ggtWoFuI0M/Ih9FmJMcvX2LgUDX/LGy/MsBjY
-	MOu3jchTK0BkTkyK9KJ2dEk7Pee90kQYGgB4ZW0A4PLEv24FU8UzcDa2MyalpteazW4x/g7rAtcc4
-	MoXy7167REl7oNDJMIvVguLkQoQZn71VLjHCQhjnW5J3QehByQETOt/No677UGcMNlHsH7Jdqwtcw
-	7RXNnEJh7yx9UgwHEPHtKRXZikowGZo/Klqy1lPA774sjFXfREKwi2Bj2EZKyHVHsOmlLe2r4JDr8
-	Ayq1mncrUvuPjtowXeKiXzjqyyzQueaFwazCCXZxtcMQFtkykiypUrbfoHWC5gyecwoLA2kNKkKg2
-	Mr7+0oven5BHA1YUdBQW9JKO;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1vvXjQ-00000008eKL-1e62;
-	Thu, 26 Feb 2026 09:32:28 +0000
-Message-ID: <a8d20762-e4f7-41fd-b67e-803858655aad@samba.org>
-Date: Thu, 26 Feb 2026 10:32:27 +0100
+	s=arc-20240116; t=1772100573; c=relaxed/simple;
+	bh=/L7uHnYfyLDUJuVq/AVODK8KpxBgs9ylCdKPc23e5jo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HWW33gE1pvf7LFDPtddl1riLNtgrKP65uN+SgQa8IIjtsor63KPpjbpK4VXPWA5QJqrlWm/YUAKGtK46PJCk4bOkASbimnKGGvWAmOgzgjHUicBN91swKjuoSjhIZeN7ymLSzj99zeeNAE4d2N2FQNRMQJhGfloroUeOuPcXW3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jHMSzxOo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63488C19422;
+	Thu, 26 Feb 2026 10:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772100573;
+	bh=/L7uHnYfyLDUJuVq/AVODK8KpxBgs9ylCdKPc23e5jo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jHMSzxOonARmEsjVDNeo+/Q+Z5Y6USNxYuVTWTWnSvhMDZWSjVqiQB00VBO3W9elL
+	 cEg4fMbD2AM+VppJ45UORI7TIYRmYeSD0q1Bom13OWLiFkj+8yWLlbxe+Wq/DbHQId
+	 NxePysbFQJdMXkmYAQmlrmbYIscMZ9cL3Ya+7E49NiKwabdoIbs3W98sxR6ErUUhc7
+	 PXqxiXI/feUlQIjLCnjx6k5FbY/DPHzkiFIqs2kqTl65PUIRqgmQy1J2Qkg8c52HH4
+	 2sR/VzIhACqP4uSpbFLiIntGGAeoM65gAqHtsBfeJBa3UUbB0qS8JIqICTQIob6bvv
+	 ehGOek0CryxvQ==
+Date: Thu, 26 Feb 2026 12:09:29 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Stefan Metzmacher <metze@samba.org>
+Cc: linux-rdma@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+	Steve French <smfrench@gmail.com>,
+	Namjae Jeon <linkinjeon@kernel.org>, Tom Talpey <tom@talpey.com>,
+	Long Li <longli@microsoft.com>, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org
+Subject: Re: [PATCH] RDMA/core: check id_priv->restricted_node_type in
+ cma_listen_on_dev()
+Message-ID: <20260226100929.GI12611@unreal>
+References: <20260224165951.3582093-2-metze@samba.org>
+ <20260225125211.GE9541@unreal>
+ <a8d20762-e4f7-41fd-b67e-803858655aad@samba.org>
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] RDMA/core: check id_priv->restricted_node_type in
- cma_listen_on_dev()
-To: Leon Romanovsky <leon@kernel.org>
-Cc: linux-rdma@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
- Steve French <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>,
- Tom Talpey <tom@talpey.com>, Long Li <longli@microsoft.com>,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
-References: <20260224165951.3582093-2-metze@samba.org>
- <20260225125211.GE9541@unreal>
-Content-Language: en-US
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <20260225125211.GE9541@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8d20762-e4f7-41fd-b67e-803858655aad@samba.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samba.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[samba.org:s=42];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[vger.kernel.org,ziepe.ca,gmail.com,kernel.org,talpey.com,microsoft.com,lists.samba.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9563-lists,linux-cifs=lfdr.de];
-	DKIM_TRACE(0.00)[samba.org:+];
+	TAGGED_FROM(0.00)[bounces-9564-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[metze@samba.org,linux-cifs@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-cifs];
+	FROM_NEQ_ENVFROM(0.00)[leon@kernel.org,linux-cifs@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,samba.org:mid,samba.org:dkim,samba.org:email,ziepe.ca:email]
-X-Rspamd-Queue-Id: 856281A3773
+	TAGGED_RCPT(0.00)[linux-cifs];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,talpey.com:email,samba.org:email]
+X-Rspamd-Queue-Id: 64DEC1A40AF
 X-Rspamd-Action: no action
 
-Am 25.02.26 um 13:52 schrieb Leon Romanovsky:
-> On Tue, Feb 24, 2026 at 05:59:52PM +0100, Stefan Metzmacher wrote:
->> When listening on wildcard addresses we have a global list for
->> the application layer rdma_cm_id and for any existing
->> device or any device added in future we try to listen
->> on any wildcard listener.
->>
->> When the listener has a restricted_node_type we
->> should prevent listening on devices with a different
->> node type.
->>
->> While there fix the documentation comment of
->> rdma_restrict_node_type() to include rdma_resolve_addr()
->> instead of having rdma_bind_addr() twice.
->>
->> Fixes: a760e80e90f5 ("RDMA/core: introduce rdma_restrict_node_type()")
->> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Leon Romanovsky <leon@kernel.org>
->> Cc: Steve French <smfrench@gmail.com>
->> Cc: Namjae Jeon <linkinjeon@kernel.org>
->> Cc: Tom Talpey <tom@talpey.com>
->> Cc: Long Li <longli@microsoft.com>
->> Cc: linux-rdma@vger.kernel.org
->> Cc: linux-cifs@vger.kernel.org
->> Cc: samba-technical@lists.samba.org
->> Signed-off-by: Stefan Metzmacher <metze@samba.org>
->> ---
->>   drivers/infiniband/core/cma.c | 6 +++++-
->>   include/rdma/rdma_cm.h        | 2 +-
->>   2 files changed, 6 insertions(+), 2 deletions(-)
+On Thu, Feb 26, 2026 at 10:32:27AM +0100, Stefan Metzmacher wrote:
+> Am 25.02.26 um 13:52 schrieb Leon Romanovsky:
+> > On Tue, Feb 24, 2026 at 05:59:52PM +0100, Stefan Metzmacher wrote:
+> > > When listening on wildcard addresses we have a global list for
+> > > the application layer rdma_cm_id and for any existing
+> > > device or any device added in future we try to listen
+> > > on any wildcard listener.
+> > > 
+> > > When the listener has a restricted_node_type we
+> > > should prevent listening on devices with a different
+> > > node type.
+> > > 
+> > > While there fix the documentation comment of
+> > > rdma_restrict_node_type() to include rdma_resolve_addr()
+> > > instead of having rdma_bind_addr() twice.
+> > > 
+> > > Fixes: a760e80e90f5 ("RDMA/core: introduce rdma_restrict_node_type()")
+> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > Cc: Leon Romanovsky <leon@kernel.org>
+> > > Cc: Steve French <smfrench@gmail.com>
+> > > Cc: Namjae Jeon <linkinjeon@kernel.org>
+> > > Cc: Tom Talpey <tom@talpey.com>
+> > > Cc: Long Li <longli@microsoft.com>
+> > > Cc: linux-rdma@vger.kernel.org
+> > > Cc: linux-cifs@vger.kernel.org
+> > > Cc: samba-technical@lists.samba.org
+> > > Signed-off-by: Stefan Metzmacher <metze@samba.org>
+> > > ---
+> > >   drivers/infiniband/core/cma.c | 6 +++++-
+> > >   include/rdma/rdma_cm.h        | 2 +-
+> > >   2 files changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > Applied, thanks.
 > 
-> Applied, thanks.
+> Great!
+> 
+> Will this be scheduled for rc2?
 
-Great!
+I hope so, rdma-rc has a compilation fix which I would like to see in
+Linus's master as soon as possible.
 
-Will this be scheduled for rc2?
-Would be great as it fixes a regression in ksmbd
-with iwarp.
+> Would be great as it fixes a regression in ksmbd
+> with iwarp.
 
-Thanks!
-metze
+Thanks
+
+> 
+> Thanks!
+> metze
 
