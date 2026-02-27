@@ -1,152 +1,125 @@
-Return-Path: <linux-cifs+bounces-9683-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9684-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6NGJG+4goWn9qQQAu9opvQ
-	(envelope-from <linux-cifs+bounces-9683-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 05:43:26 +0100
+	id fXv+H0MjoWkiqgQAu9opvQ
+	(envelope-from <linux-cifs+bounces-9684-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 05:53:23 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D82E1B2BD4
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 05:43:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E411B2C09
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 05:53:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3016D30216D0
-	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 04:43:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A00A33076AFB
+	for <lists+linux-cifs@lfdr.de>; Fri, 27 Feb 2026 04:53:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01E426B756;
-	Fri, 27 Feb 2026 04:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF1D361DB5;
+	Fri, 27 Feb 2026 04:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MiSUwBMJ"
+	dkim=pass (2048-bit key) header.d=chenxiaosong.com header.i=@chenxiaosong.com header.b="Tsen3Sgm"
 X-Original-To: linux-cifs@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC5736164B
-	for <linux-cifs@vger.kernel.org>; Fri, 27 Feb 2026 04:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7AF3358DB
+	for <linux-cifs@vger.kernel.org>; Fri, 27 Feb 2026 04:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772167401; cv=none; b=OBDOwB0nBXuNhGnMVvGQLG+l3oZKroUiv287QngvZ5gQazIa5TeMfTWDigrZo5AbgI/1vBUfHCb68WiQyL2qmW0jy1aExDxdmGRiQLzm8M3gTlQYpMz1g/hyc8ZqFiBWLpQVT3bUuzTiYqpOr6BVeOLfdpEpXfVD0h6RnQOJeXo=
+	t=1772167997; cv=none; b=TAeiQBODODfkiJV+KpYgbHil7oTPrEwlgScPSsCozBqSgvI7eyz/X8P0ejnoW6FecMEma9FJwNT251cDoRt6jsMNOMIYJMtc9elssRk77Gg0V+mzQ+5mcKJEHzUPYov9FM/uE3+nW9bj/x8mSWp8/7kQR6kHJ0RgTkMMpFFoEus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772167401; c=relaxed/simple;
-	bh=sanhf0On8qaZeoHSuGMubY/IrnKYHLT5kw2Q2gOp7N8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M6sdfrBzYXjEM6sdFobo7/7ShcsFXbM7kThUQ5QuNZRq94TLsAxRA89nE3tloNvHhDEGhupeiokSebmC0Sx2CBszW9lfHUSe1lh8TENMoIElR7cNHY/3Mnt3BQaYgRLrdb/szdcWB6oc2aZyyLZ/13ZZ1iqBHMNQhSo6FUFsCpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MiSUwBMJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2C2C2BCB2
-	for <linux-cifs@vger.kernel.org>; Fri, 27 Feb 2026 04:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772167401;
-	bh=sanhf0On8qaZeoHSuGMubY/IrnKYHLT5kw2Q2gOp7N8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MiSUwBMJus8Ne0pSRAcSLQarlmTOaeEo1M+n6vCxY6wpqdC1y36KpfCdtNtLct0yQ
-	 hlUS8RIuEoSBIqHAXBeUsQUfcYwDZ4H5tNuy2QqcSXM2XtICOCZlYgd0REpRfS6j6v
-	 LcZr+qj7YR76X9gN3xF3o6du7iV3ZUMOAxXs7LA4H5cqZcv1m9t+oad7M7ykbeZPE7
-	 y4J+8634lnGLsJt3la2H+SAErGlUyIM87x41M+qwlwAvAcT8DELSVKvWigsv4+SLGb
-	 FF1IUgg7WqhqR7IweLh+Rq/+1NuKdzuveesIIzfRiNffLDI3q1raE+ThPfI/K72BKe
-	 ASlBmS4HHRetg==
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b904e1cd038so218325866b.1
-        for <linux-cifs@vger.kernel.org>; Thu, 26 Feb 2026 20:43:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXXQY28I8rWthV8Ean+dagPI71Ge/rfuM6Grf8YPxOQNUcduPIrSJTq6sxHtE/8VcWfYMT1S1GQSFUF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7f4bd3BtXz2TGPkBQlkhR56eD9DWYpqCICGoAxBLdDOxgzLwm
-	HmqfZCaMT1yInbpYKIq4sb9ijKAF8f5aRlPoJ5cte6+qSUDWdjkswbRGcKtJDYtYSibFU+PBCrm
-	I+oWCztEI+fxWpIz3t7heinNrDCihKYM=
-X-Received: by 2002:a17:907:3f0e:b0:b87:f6fc:aea9 with SMTP id
- a640c23a62f3a-b9376361393mr66167766b.9.1772167399431; Thu, 26 Feb 2026
- 20:43:19 -0800 (PST)
+	s=arc-20240116; t=1772167997; c=relaxed/simple;
+	bh=JtwmAbyNEEmo8vtYqAtOdIntGH/NkvGKPypjqiaULWg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fhDvI8KaRl1Wz+gVOHMxqS3bqYrY6jIWzcsvDNWBEC4fB1MbkRJWcCc4/JGM84Y4RgVp5ysKRPAf0AQHAf8mfEyYZR9tJHEkskr+N5/mU6kFfK2C3qP42MFIqGaThpBS6nbyYzmq2EucX01g8oril4T4VkbWFFWEL3nT4ULps6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chenxiaosong.com; spf=pass smtp.mailfrom=chenxiaosong.com; dkim=pass (2048-bit key) header.d=chenxiaosong.com header.i=@chenxiaosong.com header.b=Tsen3Sgm; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chenxiaosong.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chenxiaosong.com
+Message-ID: <739c9e8d-238a-4f2d-938c-ed0ab9706098@chenxiaosong.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chenxiaosong.com;
+	s=key1; t=1772167992;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5j8OLG7RvGxdPeUXucGehQ+0DC0FudAegj2hClQldVo=;
+	b=Tsen3Sgm8RCZY2DDCBWE7cnwFflGa8as7510ORvvCRTDRyIhSzSlLslrm1WRs3HEA7cxbl
+	o/lrpFCXSXi6/Pg3lbbppMxL9gAWAy5B9HUQYfWZJG9BhICEwW4z9v1yshOW96IPpCmvWU
+	UrO8Sr0vCeAl0cj5JBIqa0W83kX9MTFt0379Z9rKh5weZoq3fjH46syam2VcuWCpMayFZD
+	lQ2GV6bxcfh/bBvE3maqbCC21ykXu48ChftTdi5biXGU3ChQ1Ek/I8kzHR4AZ2YMHsNblU
+	R5lilVgPHyyumEaiPFZDsLr8LTG4thDwzpM7zqPznPFHoDQEzLKnvVq7ERFUIg==
+Date: Fri, 27 Feb 2026 12:53:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
 List-Id: <linux-cifs.vger.kernel.org>
 List-Subscribe: <mailto:linux-cifs+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-cifs+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2 1/1] smb/server: fix refcount leak in smb2_open()
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: smfrench@gmail.com, linkinjeon@kernel.org, pc@manguebit.org,
+ ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com,
+ bharathsm@microsoft.com, senozhatsky@chromium.org, dhowells@redhat.com,
+ linux-cifs@vger.kernel.org, ZhangGuoDong <zhangguodong@kylinos.cn>,
+ ChenXiaoSong <chenxiaosong@kylinos.cn>
 References: <20251229031518.1027240-1-chenxiaosong.chenxiaosong@linux.dev>
  <20251229031518.1027240-2-chenxiaosong.chenxiaosong@linux.dev>
- <97979f06-7dd2-46bd-9bdd-3a9c45fc5b1d@roeck-us.net> <d3d93c04-fdd1-4b96-90f2-293a2d45f647@chenxiaosong.com>
- <59d5c1a6-7a7f-464a-aa62-e53daff8870d@roeck-us.net> <f3604a74-3caa-4737-bfc0-d93feb988176@chenxiaosong.com>
- <90fdfba1-e0be-4656-87fc-1921d233da37@chenxiaosong.com>
-In-Reply-To: <90fdfba1-e0be-4656-87fc-1921d233da37@chenxiaosong.com>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Fri, 27 Feb 2026 13:43:07 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8AgR8PcCMsNm6LeCh3uqn3VBkF8+oDH2ffF=baNpMT_g@mail.gmail.com>
-X-Gm-Features: AaiRm53UaTQOrfPDsDKnSv2hM_qlgOUv1sDJoLHESf1Llk9KJ9DCwBANmp811TY
-Message-ID: <CAKYAXd8AgR8PcCMsNm6LeCh3uqn3VBkF8+oDH2ffF=baNpMT_g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] smb/server: fix refcount leak in smb2_open()
-To: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, smfrench@gmail.com, pc@manguebit.org, 
-	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
-	bharathsm@microsoft.com, senozhatsky@chromium.org, dhowells@redhat.com, 
-	linux-cifs@vger.kernel.org, ZhangGuoDong <zhangguodong@kylinos.cn>, 
-	ChenXiaoSong <chenxiaosong@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <97979f06-7dd2-46bd-9bdd-3a9c45fc5b1d@roeck-us.net>
+ <d3d93c04-fdd1-4b96-90f2-293a2d45f647@chenxiaosong.com>
+ <59d5c1a6-7a7f-464a-aa62-e53daff8870d@roeck-us.net>
+ <f3604a74-3caa-4737-bfc0-d93feb988176@chenxiaosong.com>
+ <a99db1ba-2b96-44ba-b4b2-11754f6c6aab@roeck-us.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+In-Reply-To: <a99db1ba-2b96-44ba-b4b2-11754f6c6aab@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[chenxiaosong.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[chenxiaosong.com:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9683-lists,linux-cifs=lfdr.de];
-	FREEMAIL_CC(0.00)[roeck-us.net,gmail.com,manguebit.org,microsoft.com,talpey.com,chromium.org,redhat.com,vger.kernel.org,kylinos.cn];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9684-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,manguebit.org,microsoft.com,talpey.com,chromium.org,redhat.com,vger.kernel.org,kylinos.cn];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linkinjeon@kernel.org,linux-cifs@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chenxiaosong@chenxiaosong.com,linux-cifs@vger.kernel.org];
+	DKIM_TRACE(0.00)[chenxiaosong.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-cifs];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chenxiaosong.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8D82E1B2BD4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[chenxiaosong.com:mid,chenxiaosong.com:dkim,chenxiaosong.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 73E411B2C09
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 1:13=E2=80=AFPM ChenXiaoSong
-<chenxiaosong@chenxiaosong.com> wrote:
->
-> Hi Namjae,
->
-> By the way, smb2_open() is over 900 lines long, and we have already
-> encountered several memory leaks in it, and there may be more. Perhaps
-> we should consider refactoring it to make it easier to maintain.
->
-> What do you think?
-Agreed, I think we need to factor it out with a helper function...
-Thanks.
->
-> Thanks,
-> ChenXiaoSong <chenxiaosong@chenxiaosong.com>
->
-> On 2026/2/27 12:07, ChenXiaoSong wrote:
-> > Hi Guenter,
-> >
-> > Sorry for the late reply. I had some family matters to take care of
-> > yesterday.
-> >
-> > Please see the following process:
-> >
-> > ```
-> > smb2_open
-> >    smb2_check_durable_oplock
-> >      opinfo_get(fp) // inc refcount
-> >    ksmbd_reopen_durable_fd
-> >      __open_id(&work->sess->file_table, fp,
-> >        idr_alloc_cyclic(ft->idr, fp, ...)
-> >        __open_id_set(fp, id, type); // insert into file table
-> >    ksmbd_override_fsids // fail
-> >    ksmbd_put_durable_fd
-> >      __ksmbd_close_fd
-> >        __ksmbd_remove_fd  // remove dh_info.fp from file table
-> >    // dh_info.fp has already been removed from the file table
-> >    ksmbd_fd_put(..., fp) // fp =3D=3D NULL
-> > ```
+Yes, you are correct. Thank you for pointing this out.
+
+Could you submit a patch to fix this?
+
+Thanks,
+ChenXiaoSong <chenxiaosong@chenxiaosong.com>
+
+On 2026/2/27 12:42, Guenter Roeck wrote:
+> 
+> void ksmbd_put_durable_fd(struct ksmbd_file *fp)
+> {
+>          if (!atomic_dec_and_test(&fp->refcount))
+>                  return;
+> 
+>          __ksmbd_close_fd(NULL, fp);    // first parameter (ft) is NULL
+> }
 
