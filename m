@@ -1,48 +1,48 @@
-Return-Path: <linux-cifs+bounces-9739-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9740-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UBiQDGOoo2mWJAUAu9opvQ
-	(envelope-from <linux-cifs+bounces-9739-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 03:45:55 +0100
+	id EAymLoabo2l4IAUAu9opvQ
+	(envelope-from <linux-cifs+bounces-9740-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 02:51:02 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A83881CDE41
-	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 03:45:54 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D561CBFF6
+	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 02:51:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4D6EC318AF39
-	for <lists+linux-cifs@lfdr.de>; Sun,  1 Mar 2026 01:38:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 36C7030266F1
+	for <lists+linux-cifs@lfdr.de>; Sun,  1 Mar 2026 01:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2EE42DB799;
-	Sun,  1 Mar 2026 01:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825992D837E;
+	Sun,  1 Mar 2026 01:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brXnjzeb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eb0nYU+L"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07D92773CC;
-	Sun,  1 Mar 2026 01:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBDE19CD19;
+	Sun,  1 Mar 2026 01:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772329041; cv=none; b=Zz//W9MwZdsM5cId0vtvCIv1gOGz/9Dpii1ChA7yK1PckZIChsG55N+qM/reA8IPnIfNXB6w0hrBHd+PjxRXyQGuzc9LzvwEodDza/qSFI3A7GJWnfGKZR0V54e42pVeFzPq+9w7Yuyz3Y4BYHhxKwcIoKUZLRdTYRSa75v3CMs=
+	t=1772329044; cv=none; b=WM1Tme2P8lH5RwFsLTs+DqMK55Loe7RmROe3rIXTkRVovjOls4lIbdIIHlajqBrOstWCvWLd7xw/JeCVgQRGGKyrwvXfL1zECQhioXhzu8c+GAYbdL+81/n6jGjAo1iUoUiByhOm6MoeZWX2R802gpEQulP8gEnD3whKEu2l02E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772329041; c=relaxed/simple;
-	bh=ivzyvJePGnS15bPL+oaLmHu5Y7CEyrjATi384iR5IGY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AwaKYpcm0oPeGNRxo+kU+cklM22sCt29kJww7iNI5X7uN/CybMfhPR7Fu8124o+YREgbTZPLroDWgV0tlJEw3Sbr5SlM29kXxCkHo2LaqaLfY05WeR9xAJEL2+HS5hpBlEs7b92cIR3UiQhvAYyMb+x1F0MZ2Oi6Brskzw1LBbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brXnjzeb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7399C19421;
-	Sun,  1 Mar 2026 01:37:20 +0000 (UTC)
+	s=arc-20240116; t=1772329044; c=relaxed/simple;
+	bh=Do1z+zMrnP2OhBfbCyVE1vKctjJdKfjjKH/IDc3JIUY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O4aIQQ7ZvxWqn8JXgiTTCIe+fsnSm49dz8+1HAZRaHoOynblKgWV79sOMco1R0a/RWtJiAI++X8NG/gmfg4oLkp7W3loF3zysdnjbhF+cKdtKtWaUclmu322wOAGH8/tITiUimWlCM+ESCw3YF+H18e5ZVi5lX7nIepJo22aKWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eb0nYU+L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD9FC19421;
+	Sun,  1 Mar 2026 01:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772329041;
-	bh=ivzyvJePGnS15bPL+oaLmHu5Y7CEyrjATi384iR5IGY=;
+	s=k20201202; t=1772329044;
+	bh=Do1z+zMrnP2OhBfbCyVE1vKctjJdKfjjKH/IDc3JIUY=;
 	h=From:To:Cc:Subject:Date:From;
-	b=brXnjzebKWrV9NRqJldnu3j6ZyGyxkMJ9PtiPms6lCYA0cxdAnuOophbTP5+K+Yfy
-	 sSjPoiKqBd3PKHdNk0xnfQAS3968xEv9ZONzbBj/t4Uhvoz5qSCuPrncSmCH4Rydt6
-	 gFnbmWyuriQ3jExDWH2CtIPDfGI1q7KMCpKW5cdXtZSxGV2YsIuxh5VU2ggkE+h2qk
-	 vgjMd6KSXzGAx6tDzHUGkF9KvjFI6JBM0qz8wBTKgbvnvcimDwN2uqlVxXBTxeSZhD
-	 G+sM5CwU6rJloBEsrvBMstcgb9GEde+cp3BsYbFUFP+e/tbyPSdUeLl3OFrvhROh7X
-	 MKdoUQXw1Wheg==
+	b=eb0nYU+Lh6Xp1fHQrBXmn1Q3fh/qUcWaLne6f0yxCXfJBHiVba6a9ZmVR6072uFeV
+	 xgpC3IJe0IzkqpN3UfBNGDLUxlQ+xIhn2ygNs0Hep7zwjUJx7JOj3r/h2zpqvr7MZf
+	 5T5u0U9oxsMt+uZhrO+8BfmQq7rSXQeqX5tCXOrZPgFK7lDw6WX597ygnesEX/Ue/j
+	 xgno259eqT5Hgzg5wT49/R1NArE4RFZo1atuNHaiZEHHcikBQbsaq9bteYi4jQr3Ud
+	 W5dDHCJQqZwe7vHxK6UyhaHdvZfRk1B4meEcW/54zo9Tz+8CqrXPnnOBhnamjFcKuZ
+	 AVl+hbxNb+CrA==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	metze@samba.org
@@ -53,9 +53,9 @@ Cc: Steve French <smfrench@gmail.com>,
 	linux-cifs@vger.kernel.org,
 	samba-technical@lists.samba.org,
 	Steve French <stfrench@microsoft.com>
-Subject: FAILED: Patch "smb: client: remove pointless sc->send_io.pending handling in smbd_post_send_iter()" failed to apply to 6.6-stable tree
-Date: Sat, 28 Feb 2026 20:37:19 -0500
-Message-ID: <20260301013719.1697540-1-sashal@kernel.org>
+Subject: FAILED: Patch "smb: client: split out smbd_ib_post_send()" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:37:21 -0500
+Message-ID: <20260301013722.1697587-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
@@ -77,7 +77,7 @@ X-Spamd-Result: default: False [8.84 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[gmail.com,talpey.com,microsoft.com,kernel.org,vger.kernel.org,lists.samba.org];
 	GREYLIST(0.00)[pass,meta];
-	TAGGED_FROM(0.00)[bounces-9739-lists,linux-cifs=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9740-lists,linux-cifs=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -93,12 +93,12 @@ X-Spamd-Result: default: False [8.84 / 15.00];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-cifs];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_SPAM(0.00)[0.392];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_SPAM(0.00)[0.426];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c09:e001:a7::/64:c];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A83881CDE41
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,talpey.com:email,samba.org:email]
+X-Rspamd-Queue-Id: A5D561CBFF6
 X-Rspamd-Action: add header
 X-Spam: Yes
 
@@ -112,17 +112,14 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 8bfe3fd33f36b987c8200b112646732b5f5cd8b3 Mon Sep 17 00:00:00 2001
+From bf30515caec590316e0d08208e4252eed4c160df Mon Sep 17 00:00:00 2001
 From: Stefan Metzmacher <metze@samba.org>
-Date: Thu, 22 Jan 2026 18:16:52 +0100
-Subject: [PATCH] smb: client: remove pointless sc->send_io.pending handling in
- smbd_post_send_iter()
+Date: Thu, 22 Jan 2026 18:16:54 +0100
+Subject: [PATCH] smb: client: split out smbd_ib_post_send()
 
-If we reach this the connection is already broken as
-smbd_post_send() already called
-smbd_disconnect_rdma_connection().
-
-This will also simplify further changes.
+This is like smb_direct_post_send() in the server
+and will simplify porting the smbdirect_send_batch
+and credit related logic from the server.
 
 Cc: <stable@vger.kernel.org> # 6.18.x
 Cc: Steve French <smfrench@gmail.com>
@@ -134,25 +131,71 @@ Cc: samba-technical@lists.samba.org
 Signed-off-by: Stefan Metzmacher <metze@samba.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/smb/client/smbdirect.c | 5 -----
- 1 file changed, 5 deletions(-)
+ fs/smb/client/smbdirect.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
 diff --git a/fs/smb/client/smbdirect.c b/fs/smb/client/smbdirect.c
-index c9fcd35e0c77a..cfbe8ce0db422 100644
+index 405931ce3978f..75c0ac9cc65c7 100644
 --- a/fs/smb/client/smbdirect.c
 +++ b/fs/smb/client/smbdirect.c
-@@ -1274,11 +1274,6 @@ static int smbd_post_send_iter(struct smbdirect_socket *sc,
+@@ -1101,11 +1101,26 @@ static int manage_keep_alive_before_sending(struct smbdirect_socket *sc)
+ 	return 0;
+ }
+ 
++static int smbd_ib_post_send(struct smbdirect_socket *sc,
++			     struct ib_send_wr *wr)
++{
++	int ret;
++
++	atomic_inc(&sc->send_io.pending.count);
++	ret = ib_post_send(sc->ib.qp, wr, NULL);
++	if (ret) {
++		pr_err("failed to post send: %d\n", ret);
++		smbd_disconnect_rdma_connection(sc);
++		ret = -EAGAIN;
++	}
++	return ret;
++}
++
+ /* Post the send request */
+ static int smbd_post_send(struct smbdirect_socket *sc,
+ 		struct smbdirect_send_io *request)
+ {
+-	int rc, i;
++	int i;
+ 
+ 	for (i = 0; i < request->num_sge; i++) {
+ 		log_rdma_send(INFO,
+@@ -1126,15 +1141,7 @@ static int smbd_post_send(struct smbdirect_socket *sc,
+ 	request->wr.num_sge = request->num_sge;
+ 	request->wr.opcode = IB_WR_SEND;
+ 	request->wr.send_flags = IB_SEND_SIGNALED;
+-
+-	rc = ib_post_send(sc->ib.qp, &request->wr, NULL);
+-	if (rc) {
+-		log_rdma_send(ERR, "ib_post_send failed rc=%d\n", rc);
+-		smbd_disconnect_rdma_connection(sc);
+-		rc = -EAGAIN;
+-	}
+-
+-	return rc;
++	return smbd_ib_post_send(sc, &request->wr);
+ }
+ 
+ static int wait_for_credits(struct smbdirect_socket *sc,
+@@ -1280,12 +1287,6 @@ static int smbd_post_send_iter(struct smbdirect_socket *sc,
+ 		     le32_to_cpu(packet->data_length),
+ 		     le32_to_cpu(packet->remaining_data_length));
+ 
+-	/*
+-	 * Now that we got a local and a remote credit
+-	 * we add us as pending
+-	 */
+-	atomic_inc(&sc->send_io.pending.count);
+-
+ 	rc = smbd_post_send(sc, request);
  	if (!rc)
  		return 0;
- 
--	if (atomic_dec_and_test(&sc->send_io.pending.count))
--		wake_up(&sc->send_io.pending.zero_wait_queue);
--
--	wake_up(&sc->send_io.pending.dec_wait_queue);
--
- err_dma:
- 	for (i = 0; i < request->num_sge; i++)
- 		if (request->sge[i].addr)
 -- 
 2.51.0
 
