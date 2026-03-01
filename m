@@ -1,58 +1,57 @@
-Return-Path: <linux-cifs+bounces-9789-lists+linux-cifs=lfdr.de@vger.kernel.org>
+Return-Path: <linux-cifs+bounces-9790-lists+linux-cifs=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-cifs@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yPqKG1Oeo2k3IQUAu9opvQ
-	(envelope-from <linux-cifs+bounces-9789-lists+linux-cifs=lfdr.de@vger.kernel.org>)
-	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 03:02:59 +0100
+	id SP23KjSto2kmJwUAu9opvQ
+	(envelope-from <linux-cifs+bounces-9790-lists+linux-cifs=lfdr.de@vger.kernel.org>)
+	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 04:06:28 +0100
 X-Original-To: lists+linux-cifs@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AF811CCB7A
-	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 03:02:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F2191CE36A
+	for <lists+linux-cifs@lfdr.de>; Sun, 01 Mar 2026 04:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6F3563037263
-	for <lists+linux-cifs@lfdr.de>; Sun,  1 Mar 2026 01:58:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A957831C0A01
+	for <lists+linux-cifs@lfdr.de>; Sun,  1 Mar 2026 01:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169E82D5937;
-	Sun,  1 Mar 2026 01:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B8F2F3C19;
+	Sun,  1 Mar 2026 01:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsfbNcH6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTB10FQ+"
 X-Original-To: linux-cifs@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77311DF271;
-	Sun,  1 Mar 2026 01:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CDA2F39BE;
+	Sun,  1 Mar 2026 01:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330305; cv=none; b=q48uBx1huyw4arAAmBGoWvBvOD+D0M43M0cTZL/nDlhn6sMhuK1B8GUX8HsAgI4qn9tP2Hg6ap/rpXGVPv75iKIH8nwtXgOR8HP+9Nvn1O5N5akodpOw8/XkNojrjluxpjlPnLEySCvudgK5UnvlB37kMf9rVVdN+KLBZgtzy58=
+	t=1772330309; cv=none; b=npi8Q9MfuWPZVDMg3vd3XmYZ73jNhpzPbmnCGUJHlY4xafOo7N6EAirTyfH19btpCl8+d8xL/6tKyXrH6Ewwmx+gfYnxLSZ592LWhuvQ0veS+rXz2mDhwyNiYrv+QlgryloglHiRAb5iBL7RTy5pEpnrhsoPdtH748rOJcbcSmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330305; c=relaxed/simple;
-	bh=Gvk1cjAx29i0Q4E/fc6cuVzXwwWyuIrM0O/6FEBxeQ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iOGUJdfTz+qgV5VV5GIfn9lNcPgmmZ/0gp/M55VNJCCCb2REZ3X/8ANX4yNCLL5j1zZgS31Dc7Xt6oQLZ7QEfd8nrjTxNpu8OOZXxwGG4HihClDoZlzeSbC0GObFFv26NV264k8JfwLJgVOSNAozTpUo1Hg+fXMY7kAOLORDvOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsfbNcH6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFA1C19421;
-	Sun,  1 Mar 2026 01:58:23 +0000 (UTC)
+	s=arc-20240116; t=1772330309; c=relaxed/simple;
+	bh=CBvrVGrisF1eaZCNAte3uVqkWp8PdJvKBBzdl3js/RQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dZ+/M1q4iBn/JJD8GCI8dMY8IqLaQJonYQtg+u/pJNddKoOuDYAOwC99H245k/oRf//Kstasv/SYRdV5l/KYn29z7a96FON4Hf/nYEnLQfOer6ze+azgr4C95grQoiR4S40DuMwpH+LodfbNrvyov0ZILBMVK1lrhsmpIqiODLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTB10FQ+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E58C2BCB3;
+	Sun,  1 Mar 2026 01:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772330304;
-	bh=Gvk1cjAx29i0Q4E/fc6cuVzXwwWyuIrM0O/6FEBxeQ0=;
+	s=k20201202; t=1772330309;
+	bh=CBvrVGrisF1eaZCNAte3uVqkWp8PdJvKBBzdl3js/RQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=MsfbNcH6hisWWye7Ja0xh/KmAzLe41xC4uXTCI0tnrGwK2bG5yA9lyUzcsDqj/YT/
-	 lVPHlUGmRiIwBtJjYPK8I9AwcRytMExrJbO6wWyOQy2QshfmTs2MsrbhtYovITSmdf
-	 9ujdDTef4rp3DmG06lDPK59mP35s2uQOd8OGyhX5qg51o4Sb0WBIaqDcr+No/y8ppS
-	 XXHXnOtY6FtAj1pFw9SbwoWYak62o1YL5QqWCYZwVTO0bKXeG00Z1DV1OJa755KHde
-	 vKUIu9EEp8ZDrI/TISsHQO2+AJ32gQtB5yp5kEdNOyE7OEgHjn0aGYRkoDg8YyqGQu
-	 EFedvsW49/gBA==
+	b=fTB10FQ+t3VlRgl8+vBMTOcQMOegaxPqxvXTJMTOseb9yqaeFcWcLxI7nTU8PezWw
+	 R8VKtx8HxqeNVke/LkQxaMH3iL9VTKl/cLpertxnXxNaxBF051Dx8/13MnQ1JLtS2p
+	 3zqKPJh+jZZRnABESS9L/cY43LIjBGAPDAeUWmik7NZrULLxrhZRoXr0g1JzSqe3oq
+	 UajKWAXbQ+vDvZCoELcJPFwiS/2L6dWI+r8SGr9AzTaBfD+O1Jqrvm6yaj4eyCWg1n
+	 I3We0LprUUHrcQMuaGKqFBX8lsjDZwltNQJRYVL1F0/TSfSR6zip6vk2C6JTbf65XL
+	 XO6jyNC5+hJaw==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	sprasad@microsoft.com
-Cc: Yuchan Nam <entropy1110@gmail.com>,
+	pchelkin@ispras.ru
+Cc: Namjae Jeon <linkinjeon@kernel.org>,
 	Steve French <stfrench@microsoft.com>,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org
-Subject: FAILED: Patch "cifs: some missing initializations on replay" failed to apply to 5.15-stable tree
-Date: Sat, 28 Feb 2026 20:58:22 -0500
-Message-ID: <20260301015822.1723820-1-sashal@kernel.org>
+	linux-cifs@vger.kernel.org
+Subject: FAILED: Patch "ksmbd: call ksmbd_vfs_kern_path_end_removing() on some error paths" failed to apply to 5.15-stable tree
+Date: Sat, 28 Feb 2026 20:58:27 -0500
+Message-ID: <20260301015827.1723912-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-cifs@vger.kernel.org
@@ -69,20 +68,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,microsoft.com,vger.kernel.org,lists.samba.org];
+	TAGGED_FROM(0.00)[bounces-9790-lists,linux-cifs=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9789-lists,linux-cifs=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-cifs@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -90,9 +88,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-cifs];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3AF811CCB7A
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxtesting.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ispras.ru:email]
+X-Rspamd-Queue-Id: 1F2191CE36A
 X-Rspamd-Action: no action
 
 The patch below does not apply to the 5.15-stable tree.
@@ -105,62 +103,67 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 14f66f44646333d2bfd7ece36585874fd72f8286 Mon Sep 17 00:00:00 2001
-From: Shyam Prasad N <sprasad@microsoft.com>
-Date: Sat, 14 Feb 2026 15:59:13 +0530
-Subject: [PATCH] cifs: some missing initializations on replay
+From a09dc10d1353f0e92c21eae2a79af1c2b1ddcde8 Mon Sep 17 00:00:00 2001
+From: Fedor Pchelkin <pchelkin@ispras.ru>
+Date: Sat, 14 Feb 2026 18:45:14 +0300
+Subject: [PATCH] ksmbd: call ksmbd_vfs_kern_path_end_removing() on some error
+ paths
 
-In several places in the code, we have a label to signify
-the start of the code where a request can be replayed if
-necessary. However, some of these places were missing the
-necessary reinitializations of certain local variables
-before replay.
+There are two places where ksmbd_vfs_kern_path_end_removing() needs to be
+called in order to balance what the corresponding successful call to
+ksmbd_vfs_kern_path_start_removing() has done, i.e. drop inode locks and
+put the taken references.  Otherwise there might be potential deadlocks
+and unbalanced locks which are caught like:
 
-This change makes sure that these variables get initialized
-after the label.
+BUG: workqueue leaked lock or atomic: kworker/5:21/0x00000000/7596
+     last function: handle_ksmbd_work
+2 locks held by kworker/5:21/7596:
+ #0: ffff8881051ae448 (sb_writers#3){.+.+}-{0:0}, at: ksmbd_vfs_kern_path_locked+0x142/0x660
+ #1: ffff888130e966c0 (&type->i_mutex_dir_key#3/1){+.+.}-{4:4}, at: ksmbd_vfs_kern_path_locked+0x17d/0x660
+CPU: 5 PID: 7596 Comm: kworker/5:21 Not tainted 6.1.162-00456-gc29b353f383b #138
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-debian-1.17.0-1 04/01/2014
+Workqueue: ksmbd-io handle_ksmbd_work
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x44/0x5b
+ process_one_work.cold+0x57/0x5c
+ worker_thread+0x82/0x600
+ kthread+0x153/0x190
+ ret_from_fork+0x22/0x30
+ </TASK>
 
+Found by Linux Verification Center (linuxtesting.org).
+
+Fixes: d5fc1400a34b ("smb/server: avoid deadlock when linking with ReplaceIfExists")
 Cc: stable@vger.kernel.org
-Reported-by: Yuchan Nam <entropy1110@gmail.com>
-Tested-by: Yuchan Nam <entropy1110@gmail.com>
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 ---
- fs/smb/client/smb2ops.c | 2 ++
- fs/smb/client/smb2pdu.c | 1 +
- 2 files changed, 3 insertions(+)
+ fs/smb/server/smb2pdu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-index 61c521712f863..7370d7a18cd0c 100644
---- a/fs/smb/client/smb2ops.c
-+++ b/fs/smb/client/smb2ops.c
-@@ -1185,6 +1185,7 @@ smb2_set_ea(const unsigned int xid, struct cifs_tcon *tcon,
- 
- replay_again:
- 	/* reinitialize for possible replay */
-+	used_len = 0;
- 	flags = CIFS_CP_CREATE_CLOSE_OP;
- 	oplock = SMB2_OPLOCK_LEVEL_NONE;
- 	server = cifs_pick_channel(ses);
-@@ -1588,6 +1589,7 @@ smb2_ioctl_query_info(const unsigned int xid,
- 
- replay_again:
- 	/* reinitialize for possible replay */
-+	buffer = NULL;
- 	flags = CIFS_CP_CREATE_CLOSE_OP;
- 	oplock = SMB2_OPLOCK_LEVEL_NONE;
- 	server = cifs_pick_channel(ses);
-diff --git a/fs/smb/client/smb2pdu.c b/fs/smb/client/smb2pdu.c
-index 4602b4dfe8322..7f3edf42b9c3f 100644
---- a/fs/smb/client/smb2pdu.c
-+++ b/fs/smb/client/smb2pdu.c
-@@ -2908,6 +2908,7 @@ int smb311_posix_mkdir(const unsigned int xid, struct inode *inode,
- 
- replay_again:
- 	/* reinitialize for possible replay */
-+	pc_buf = NULL;
- 	flags = 0;
- 	n_iov = 2;
- 	server = cifs_pick_channel(ses);
+diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
+index cbb31efdbaa2e..2782eea214d0d 100644
+--- a/fs/smb/server/smb2pdu.c
++++ b/fs/smb/server/smb2pdu.c
+@@ -6115,14 +6115,14 @@ static int smb2_create_link(struct ksmbd_work *work,
+ 				rc = -EINVAL;
+ 				ksmbd_debug(SMB, "cannot delete %s\n",
+ 					    link_name);
+-				goto out;
+ 			}
+ 		} else {
+ 			rc = -EEXIST;
+ 			ksmbd_debug(SMB, "link already exists\n");
+-			goto out;
+ 		}
+ 		ksmbd_vfs_kern_path_end_removing(&path);
++		if (rc)
++			goto out;
+ 	}
+ 	rc = ksmbd_vfs_link(work, target_name, link_name);
+ 	if (rc)
 -- 
 2.51.0
 
